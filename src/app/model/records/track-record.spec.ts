@@ -1,12 +1,12 @@
-import {Track} from './track';
+import {TrackRecord} from './track-record';
 
-describe('Track', () => {
+describe('TrackRecord', () => {
   it('should create an instance', () => {
-    expect(new Track()).toBeTruthy();
+    expect(new TrackRecord()).toBeTruthy();
   });
 
   it('should accept values in the constructor', () => {
-    const track = new Track({
+    const track = new TrackRecord({
       name: 'hello',
       type: 1
     });

@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Track} from '../../../model/track';
+import {TrackRecord} from '../../../model/records/track-record';
 import {TrackDataService} from '../../../services/track-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-track-editpage',
@@ -10,7 +11,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class TrackEditpageComponent implements OnInit, OnDestroy {
   private sub: any;
-  public track: Track;
+  public track: TrackRecord;
 
   constructor(private trackDataService: TrackDataService, private route: ActivatedRoute, private router: Router) {
   }
@@ -19,7 +20,9 @@ export class TrackEditpageComponent implements OnInit, OnDestroy {
     // Subscribe to route params
     this.sub = this.route.params.subscribe(params => {
       const trackId = params['trackId'];
-      this.track = this.trackDataService.getTrackById(trackId);
+      this.trackDataService.getTrackById(trackId).then((track) => {
+        this.track = track;
+      });
     });
   }
 
@@ -29,8 +32,9 @@ export class TrackEditpageComponent implements OnInit, OnDestroy {
   }
 
   onSaveTrack(values: {}) {
-    this.trackDataService.updateTrackById(values['id'], values);
-    this.router.navigateByUrl('/track/list');
+    this.trackDataService.updateTrackById(values['id'], values).then((track) => {
+      this.router.navigateByUrl('/track/list');
+    });
   }
 
 }

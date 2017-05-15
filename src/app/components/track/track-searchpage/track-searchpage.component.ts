@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
-import {Track} from '../../../model/track';
+import {TrackRecord} from '../../../model/records/track-record';
 import {Router} from '@angular/router';
 
 @Component({
@@ -9,17 +9,18 @@ import {Router} from '@angular/router';
   styleUrls: ['./track-searchpage.component.css']
 })
 export class TrackSearchpageComponent implements OnInit {
-
-  tracks: Track[];
+  tracks: TrackRecord[];
 
   constructor(private trackDataService: TrackDataService, private router: Router) {
   }
 
   ngOnInit() {
-    this.tracks = this.trackDataService.getAllTracks();
+    this.trackDataService.getAllTracks().then((tracks) => {
+      this.tracks = tracks;
+    });
   }
 
-  onEditTrack(track: Track) {
+  onEditTrack(track: TrackRecord) {
     this.router.navigateByUrl('/track/edit/' + track.id);
   }
 }

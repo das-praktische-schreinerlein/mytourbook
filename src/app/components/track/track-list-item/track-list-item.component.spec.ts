@@ -2,7 +2,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackListItemComponent} from './track-list-item.component';
-import {Track} from '../../../model/track';
+import {TrackRecord} from '../../../model/records/track-record';
 
 describe('TrackListItemComponent', () => {
   let component: TrackListItemComponent;
@@ -19,7 +19,7 @@ describe('TrackListItemComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TrackListItemComponent);
     component = fixture.componentInstance;
-    component.track = new Track({ id: 1, name: 'Test' });
+    component.track = new TrackRecord({ id: 1, name: 'Test' });
     fixture.detectChanges();
   });
 

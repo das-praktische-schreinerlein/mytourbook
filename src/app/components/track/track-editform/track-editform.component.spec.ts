@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {TrackEditformComponent} from './track-editform.component';
-import {Track} from '../../../model/track';
+import {TrackRecord} from '../../../model/records/track-record';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 
@@ -21,7 +21,7 @@ describe('TrackEditformComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TrackEditformComponent);
     component = fixture.componentInstance;
-    component.track = new Track({ id: 1, name: 'Test' });
+    component.track = new TrackRecord({ id: 1, name: 'Test' });
     fixture.detectChanges();
   });
 

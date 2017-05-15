@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Track} from '../../../model/track';
+import {TrackRecord} from '../../../model/records/track-record';
 
 @Component({
   selector: 'app-track-list',
@@ -9,15 +9,15 @@ import {Track} from '../../../model/track';
 export class TrackListComponent {
 
   @Input()
-  tracks: Track[];
+  tracks: TrackRecord[];
 
   @Output()
-  edit: EventEmitter<Track> = new EventEmitter();
+  edit: EventEmitter<TrackRecord> = new EventEmitter();
 
   constructor() {
   }
 
-  onEditTrack(track: Track) {
+  onEditTrack(track: TrackRecord) {
     this.edit.emit(track);
   }
 

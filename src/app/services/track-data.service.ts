@@ -1,52 +1,50 @@
 import {Injectable} from '@angular/core';
-import {Track} from '../model/track';
+import {TrackRecord} from '../model/records/track-record';
+import {TrackDataStore} from './track-data.store';
 
 @Injectable()
 export class TrackDataService {
-  // Placeholder for last id so we can simulate
-  // automatic incrementing of id's
-  lastId: number = 3;
+    trackDataStore: TrackDataStore = new TrackDataStore();
 
-  // Placeholder for track's
-  tracks: Track[] = [
-  ];
-
-  constructor() {
-  }
-
-  // Simulate POST /tracks
-  addTrack(track: Track): TrackDataService {
-    if (!track.id) {
-      track.id = ++this.lastId;
+    constructor() {
     }
-    this.tracks.push(track);
-    return this;
-  }
 
-  // Simulate DELETE /tracks/:id
-  deleteTrackById(id: number): TrackDataService {
-    this.tracks = this.tracks
-      .filter(track => track.id != id);
-    return this;
-  }
-
-  // Simulate PUT /tracks/:id
-  updateTrackById(id: number, values: Object = {}): Track {
-    const track = this.getTrackById(id);
-    if (!track) {
-      return null;
+    createRecord(props, opts): TrackRecord {
+      return this.trackDataStore.createRecord('track', props, opts);
     }
-    Object.assign(track, values);
-    return track;
-  }
 
-  // Simulate GET /tracks
-  getAllTracks(): Track[] {
-    return this.tracks;
-  }
+    // Simulate POST /tracks
+    addTrack(track: TrackRecord): Promise<TrackRecord> {
+      return this.trackDataStore.create('track', track);
+    }
 
-  // Simulate GET /tracks/:id
-  getTrackById(id: number): Track {
-    return this.tracks.filter(track => track.id == id).pop();
-  }
+    // Simulate POST /tracks
+    addTracks(tracks: TrackRecord[]): Promise<TrackRecord[]> {
+        return this.trackDataStore.createMany('track', tracks);
+    }
+
+    // Simulate DELETE /tracks/:id
+    deleteTrackById(id: number): Promise<TrackRecord> {
+        return this.trackDataStore.destroy('track', id);
+    }
+
+    // Simulate PUT /tracks/:id
+    updateTrackById(id: number, values: Object = {}): Promise<TrackRecord> {
+        return this.trackDataStore.update('track', id, values);
+    }
+
+    // Simulate GET /tracks
+    getAllTracks(): Promise<TrackRecord[]> {
+        return this.trackDataStore.findAll('track', null, {
+            limit: -1,
+            offset: 0,
+            // We want the newest posts first
+            orderBy: [['created_at', 'desc']]
+        });
+    }
+
+    // Simulate GET /tracks/:id
+    getTrackById(id: number): Promise<TrackRecord> {
+        return this.trackDataStore.find('track', id);
+    }
 }

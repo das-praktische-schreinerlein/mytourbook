@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Track} from '../../../model/track';
+import {TrackRecord} from '../../../model/records/track-record';
 
 @Component({
   selector: 'app-track-list-footer',
@@ -9,7 +9,7 @@ import {Track} from '../../../model/track';
 export class TrackListFooterComponent {
 
   @Input()
-  tracks: Track[];
+  tracks: TrackRecord[];
 
   constructor() {
   }

@@ -1,4 +1,4 @@
-<section class="main" *ngIf="tracks.length > 0">
+<section class="main" *ngIf="tracks != undefined && tracks.length > 0">
   <ul class="track-list">
     <li *ngFor="let track of tracks">
       <app-track-list-item [track]="track" (edit)="onEditTrack($event)"></app-track-list-item>

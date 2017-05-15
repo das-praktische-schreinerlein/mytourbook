@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {Track} from '../../../model/track';
+import {TrackRecord} from '../../../model/records/track-record';
 import {FormBuilder, Validators} from '@angular/forms';
 
 @Component({
@@ -10,10 +10,10 @@ import {FormBuilder, Validators} from '@angular/forms';
 export class TrackEditformComponent implements OnInit {
 
   @Input()
-  public track: Track;
+  public track: TrackRecord;
 
   @Output()
-  save: EventEmitter<Track> = new EventEmitter();
+  save: EventEmitter<TrackRecord> = new EventEmitter();
 
   // empty default
   editTrackForm = this.fb.group({
