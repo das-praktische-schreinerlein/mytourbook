@@ -5,27 +5,27 @@ import {TrackListComponent} from './track-list.component';
 import {TrackRecord} from '../../../model/records/track-record';
 
 describe('TrackListComponent', () => {
-  let component: TrackListComponent;
-  let fixture: ComponentFixture<TrackListComponent>;
+    let component: TrackListComponent;
+    let fixture: ComponentFixture<TrackListComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TrackListComponent ],
-      schemas: [ NO_ERRORS_SCHEMA ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [TrackListComponent],
+            schemas: [NO_ERRORS_SCHEMA]
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TrackListComponent);
-    component = fixture.componentInstance;
-    component.tracks = [
-      new TrackRecord({ id: 1, name: 'Test' })
-    ];
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TrackListComponent);
+        component = fixture.componentInstance;
+        component.tracks = [
+            new TrackRecord({id: 1, name: 'Test'})
+        ];
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

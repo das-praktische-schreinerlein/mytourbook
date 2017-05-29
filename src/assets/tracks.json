@@ -1,0 +1,52 @@
+{
+    "tracks": [
+        {
+            "id": 1,
+            "name": "Testtrack1",
+            "images": [
+                {
+                    "id": 1,
+                    "name": "testImage1",
+                    "fileName": "test1.jpg",
+                    "track_id": 1
+                },
+                {
+                    "id": 2,
+                    "name": "testImage2",
+                    "fileName": "test2.jpg",
+                    "track_id": 1
+                },
+                {
+                    "id": 3,
+                    "name": "testImage3",
+                    "fileName": "test3.jpg",
+                    "track_id": 1
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Testtrack2",
+            "images": [
+                {
+                    "id": 4,
+                    "name": "testImage4",
+                    "fileName": "test4.jpg",
+                    "track_id": 2
+                },
+                {
+                    "id": 5,
+                    "name": "testImage5",
+                    "fileName": "test5.jpg",
+                    "track_id": 2
+                },
+                {
+                    "id": 6,
+                    "name": "testImage6",
+                    "fileName": "test6.jpg",
+                    "track_id": 2
+                }
+            ]
+        }
+    ]
+}

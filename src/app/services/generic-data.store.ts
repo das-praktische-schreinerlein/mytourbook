@@ -1,12 +1,11 @@
 // DataStore is mostly recommended for use in the browser
-import {DataStore, utils} from 'js-data';
+import {DataStore, Record, Schema, utils} from 'js-data';
 import {Adapter} from 'js-data-adapter';
-import {TrackRecord} from '../model/records/track-record';
-import {TrackRecordSchema} from '../model/schemas/track-record-schema';
 import {Injectable} from '@angular/core';
 
 @Injectable()
-export class TrackDataStore {
+export class GenericDataStore {
+
     private adapter: Adapter;
     private store: DataStore;
 
@@ -26,27 +25,32 @@ export class TrackDataStore {
                 // objects
                 createRecord (props, opts) {
                     const result = this.constructor.prototype.createRecord.call(this, props, opts);
-                    if (Array.isArray(result)) {
+                    /**                    if (Array.isArray(result)) {
                         result.forEach(this.convertToDate);
                     } else if (this.is(result)) {
-                        TrackDataStore.convertToDate(result);
+                        GenericDataStore.convertToDate(result);
                     }
+                     **/
                     return result;
                 }
             }
         });
-        this.store.defineMapper('track', {
-            recordClass: TrackRecord,
+    }
+
+    public defineMapper(mapperName: string, recordClass: any, schema: Schema, relations: any) {
+        this.store.defineMapper(mapperName, {
+            recordClass: recordClass,
             applySchema: true,
-            schema: TrackRecordSchema
+            schema: schema,
+            relations: relations
         });
     }
 
-    public createRecord(mapperName: string, props, opts): any {
-        return this.store.createRecord(mapperName, props, opts);
+    public createRecord<T extends Record>(mapperName: string, props, opts): T {
+        return <T>this.store.createRecord(mapperName, props, opts);
     }
 
-    public create(mapperName: string, record: any, opts?: any): Promise<any> {
+    public create<T extends Record>(mapperName: string, record: any, opts?: any): Promise<T> {
         if (this.adapter === undefined) {
             return utils.Promise.resolve(this.store.add(mapperName, record, opts));
         } else {
@@ -54,7 +58,7 @@ export class TrackDataStore {
         }
     }
 
-    public createMany(mapperName: string, records: any[], opts?: any): Promise<any[]> {
+    public createMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
         if (this.adapter === undefined) {
             return utils.Promise.resolve(this.store.add(mapperName, records, opts));
         } else {
@@ -62,7 +66,7 @@ export class TrackDataStore {
         }
     }
 
-    public update(mapperName: string, id: any, record: any, opts?: any): Promise<any> {
+    public update<T extends Record>(mapperName: string, id: any, record: any, opts?: any): Promise<T> {
         if (this.adapter === undefined) {
             if (id === undefined || id === null) {
                 return utils.Promise.reject('cant update records without id');
@@ -79,7 +83,7 @@ export class TrackDataStore {
         }
     }
 
-    public updateMany(mapperName: string, records: any[], opts?: any): Promise<any[]> {
+    public updateMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
         if (this.adapter === undefined) {
             return utils.Promise.reject('cant do update many without adapter');
         } else {
@@ -87,7 +91,7 @@ export class TrackDataStore {
         }
     }
 
-    public updateAll(mapperName: string, props: any, query?: any, opts?: any): Promise<any[]> {
+    public updateAll<T extends Record>(mapperName: string, props: any, query?: any, opts?: any): Promise<T[]> {
         if (this.adapter === undefined) {
             return utils.Promise.reject('cant do update all without adapter');
         } else {
@@ -95,7 +99,7 @@ export class TrackDataStore {
         }
     }
 
-    public find(mapperName: string, id: any, opts?: any): Promise<any> {
+    public find<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
         if (this.adapter === undefined) {
             return utils.Promise.resolve(this.store.get(mapperName, id));
         } else {
@@ -103,7 +107,7 @@ export class TrackDataStore {
         }
     }
 
-    public findAll(mapperName: string, query?: any, opts?: any): Promise<any[]> {
+    public findAll<T extends Record>(mapperName: string, query?: any, opts?: any): Promise<T[]> {
         if (this.adapter === undefined) {
             return utils.Promise.resolve(this.store.filter(mapperName, query));
         } else {
@@ -111,7 +115,7 @@ export class TrackDataStore {
         }
     }
 
-    public destroy(mapperName: string, id: any, opts?: any): Promise<any> {
+    public destroy<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
         if (this.adapter === undefined) {
             return utils.Promise.resolve(this.store.remove(mapperName, id, opts));
         } else {

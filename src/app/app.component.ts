@@ -1,20 +1,18 @@
-import {Component} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {TrackDataService} from './services/track-data.service';
-import {TrackRecord} from './model/records/track-record';
+import {AppService} from './services/app.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers: []
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    providers: []
 })
+@Injectable()
 export class AppComponent {
-  title = 'MyTourBook';
+    title = 'MyTourBook';
 
-  constructor(private router: Router, private trackDataService: TrackDataService) {
-    trackDataService.addTrack(new TrackRecord({id: 1, name: 'Testtrack1'}));
-    trackDataService.addTrack(new TrackRecord({id: 2, name: 'Testtrack2'}));
-  }
-
+    constructor(private router: Router, private appService: AppService) {
+        appService.initApp();
+    }
 }

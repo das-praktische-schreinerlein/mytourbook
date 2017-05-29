@@ -16,3 +16,14 @@ export class TrackRecord extends BaseEntityRecord {
             '}';
     }
 }
+
+export let TrackRecordRelation: any = {
+    hasMany: {
+        image: {
+            // database column, e.g. console.log(post.user_id) // 2
+            foreignKey: 'track_id',
+            // reference to related objects in memory, e.g. user.posts
+            localField: 'images'
+        },
+    }
+};

@@ -11,25 +11,28 @@ import {TrackEditformComponent} from './components/track/track-editform/track-ed
 import {TrackSearchpageComponent} from './components/track/track-searchpage/track-searchpage.component';
 import {routing} from './app.router';
 import {TrackEditpageComponent} from './components/track/track-editpage/track-editpage.component';
+import {GenericDataStore} from './services/generic-data.store';
+import {AppService} from './services/app.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TrackListComponent,
-    TrackListItemComponent,
-    TrackListFooterComponent,
-    TrackEditformComponent,
-    TrackSearchpageComponent,
-    TrackEditpageComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule,
-    routing
-  ],
-  providers: [TrackDataService],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        TrackListComponent,
+        TrackListItemComponent,
+        TrackListFooterComponent,
+        TrackEditformComponent,
+        TrackSearchpageComponent,
+        TrackEditpageComponent
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpModule,
+        routing
+    ],
+    providers: [GenericDataStore, TrackDataService, AppService],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,4 +1,9 @@
 <div class="view">
-  <label>{{track.name}}</label>
-  <button class="edit" (click)="editTrack(track)"></button>
+    <label>{{track.name}}</label>
+    <ul class="image-list" *ngIf="track.images != undefined && track.images.length > 0">
+        <li *ngFor="let image of track.images">
+            <img src="{{image.fileName}}"> {{image.name}}
+        </li>
+    </ul>
+    <button class="edit" (click)="editTrack(track)"></button>
 </div>

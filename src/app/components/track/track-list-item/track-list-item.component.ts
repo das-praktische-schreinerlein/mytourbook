@@ -1,24 +1,24 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {TrackRecord} from '../../../model/records/track-record';
 
 @Component({
-  selector: 'app-track-list-item',
-  templateUrl: './track-list-item.component.html',
-  styleUrls: ['./track-list-item.component.css']
+    selector: 'app-track-list-item',
+    templateUrl: './track-list-item.component.html',
+    styleUrls: ['./track-list-item.component.css']
 })
 export class TrackListItemComponent {
 
-  @Input()
-  public track: TrackRecord;
+    @Input()
+    public track: TrackRecord;
 
-  @Output()
-  edit: EventEmitter<TrackRecord> = new EventEmitter();
+    @Output()
+    edit: EventEmitter<TrackRecord> = new EventEmitter();
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  editTrack(track: TrackRecord) {
-    this.edit.emit(track);
-  }
+    editTrack(track: TrackRecord) {
+        this.edit.emit(track);
+    }
 
 }

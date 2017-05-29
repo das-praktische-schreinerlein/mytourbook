@@ -1,4 +1,4 @@
-import { Schema } from 'js-data';
+import {Schema} from 'js-data';
 import {BaseEntityRecord} from '../records/base-entity-record';
 
 export const BaseEntityRecordSchema = new Schema({
