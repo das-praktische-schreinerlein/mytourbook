@@ -5,7 +5,6 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
 import {Router, RouterModule} from '@angular/router';
 import {GenericDataStore} from '../../../services/generic-data.store';
-import {AppService} from '../../../services/app.service';
 
 describe('TrackSearchpageComponent', () => {
     let component: TrackSearchpageComponent;
@@ -16,12 +15,10 @@ describe('TrackSearchpageComponent', () => {
             declarations: [TrackSearchpageComponent],
             providers: [GenericDataStore,
                 TrackDataService,
-                AppService,
                 {provide: Router, useClass: RouterModule}
             ],
             schemas: [NO_ERRORS_SCHEMA]
-        })
-            .compileComponents();
+        }).compileComponents();
     }));
 
     beforeEach(() => {

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
 import {TrackRecord} from '../../../model/records/track-record';
 import {Router} from '@angular/router';
-import {AppService} from '../../../services/app.service';
 
 @Component({
     selector: 'app-track-searchpage',
@@ -12,7 +11,7 @@ import {AppService} from '../../../services/app.service';
 export class TrackSearchpageComponent implements OnInit {
     tracks: TrackRecord[];
 
-    constructor(private appService: AppService, private trackDataService: TrackDataService, private router: Router) {
+    constructor(private trackDataService: TrackDataService, private router: Router) {
     }
 
     ngOnInit() {
@@ -24,7 +23,7 @@ export class TrackSearchpageComponent implements OnInit {
     }
 
     private initData() {
-        const getTracks = this.trackDataService.getAllTracks();
+        const getTracks = this.trackDataService.getCurTrackList();
         getTracks.subscribe(
             tracks => {
                 console.log('ngOnInit update tracks', tracks);

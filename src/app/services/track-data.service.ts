@@ -45,15 +45,15 @@ export class TrackDataService {
 
     // Simulate GET /tracks
     getAllTracks(): Observable<TrackRecord[]> {
-        Observable.fromPromise(this.dataStore.findAll('track', null, {
+        const result: Observable<TrackRecord[]> = Observable.fromPromise(this.dataStore.findAll('track', null, {
             limit: -1,
             offset: 0,
             // We want the newest posts first
             orderBy: [['created_at', 'desc']]
-        })).subscribe(tracks => {
-                console.log('ngOnInit update tracks', tracks);
-                const bla: TrackRecord[] = <TrackRecord[]>tracks;
-                this.curTrackList.next(bla);
+        }));
+        result.subscribe(tracks => {
+                console.log('getAllTracks tracks', tracks);
+                this.curTrackList.next(<TrackRecord[]>tracks);
             },
             error => {
                 console.error('getAllTracks failed:' + error);
@@ -61,7 +61,7 @@ export class TrackDataService {
             () => {
             });
 
-        return this.curTrackList.asObservable();
+        return result;
     }
 
     // Simulate GET /tracks/:id
@@ -69,5 +69,7 @@ export class TrackDataService {
         return Observable.fromPromise(this.dataStore.find('track', id));
     }
 
-
+    getCurTrackList(): Observable<TrackRecord[]> {
+        return this.curTrackList.asObservable();
+    }
 }

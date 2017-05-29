@@ -13,6 +13,7 @@ export class AppService {
                 const tracks: any[] = res.json().tracks;
                 this.trackDataService.addTracks(tracks).subscribe(
                     tracksRecords => {
+                        console.log('loaded tracks from assets', tracksRecords);
                         this.trackDataService.getAllTracks();
                     },
                     error => {
