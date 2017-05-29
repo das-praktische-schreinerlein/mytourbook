@@ -19,11 +19,10 @@ export class ImageRecord extends BaseEntityRecord {
 
 export let ImageRecordRelation: any = {
     belongsTo: {
-        // comment belongsTo user
         track: {
-            // database column, e.g. console.log(comment.user_id) // 2
+            // database column
             foreignKey: 'track_id',
-            // reference to related object in memory, e.g. post.user
+            // reference to related object in memory
             localField: 'track'
         }
     }
