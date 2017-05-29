@@ -6,25 +6,27 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from './services/track-data.service';
 import {Router, RouterModule} from '@angular/router';
 import {GenericDataStore} from './services/generic-data.store';
-import {ConnectionBackend, Http, HttpModule, RequestOptions} from '@angular/http';
 import {AppService} from './services/app.service';
+
+class MockAppService {
+    public initApp(): void {
+    }
+}
 
 describe('AppComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-                FormsModule,
-                HttpModule
+                FormsModule
             ],
             declarations: [
                 AppComponent
             ],
             providers: [
                 {provide: Router, useClass: RouterModule},
-                Http, ConnectionBackend, RequestOptions, HttpModule,
                 GenericDataStore,
                 TrackDataService,
-                AppService
+                {provide: AppService, useClass: MockAppService}
             ],
             schemas: [
                 NO_ERRORS_SCHEMA
