@@ -3,21 +3,20 @@ import {TrackRecord} from '../../../model/records/track-record';
 import {FormBuilder, Validators} from '@angular/forms';
 
 @Component({
-    selector: 'app-track-editform',
-    templateUrl: './track-editform.component.html',
-    styleUrls: ['./track-editform.component.css']
+    selector: 'app-track-createform',
+    templateUrl: './track-createform.component.html',
+    styleUrls: ['./track-createform.component.css']
 })
-export class TrackEditformComponent implements OnInit {
+export class TrackCreateformComponent implements OnInit {
 
     @Input()
     public track: TrackRecord;
 
     @Output()
-    save: EventEmitter<TrackRecord> = new EventEmitter();
+    create: EventEmitter<TrackRecord> = new EventEmitter();
 
     // empty default
-    editTrackForm = this.fb.group({
-        id: '',
+    createTrackForm = this.fb.group({
         name: '',
         desc: ''
     });
@@ -27,15 +26,14 @@ export class TrackEditformComponent implements OnInit {
 
     ngOnInit() {
         if (this.track) {
-            this.editTrackForm = this.fb.group({
-                id: this.track.id,
+            this.createTrackForm = this.fb.group({
                 name: [this.track.name, Validators.required],
                 desc: [this.track.desc, Validators.required]
             });
         }
     }
 
-    saveTrack() {
-        this.save.emit(this.editTrackForm.getRawValue());
+    createTrack() {
+        this.create.emit(this.createTrackForm.getRawValue());
     }
 }

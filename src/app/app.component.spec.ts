@@ -7,6 +7,7 @@ import {TrackDataService} from './services/track-data.service';
 import {Router, RouterModule} from '@angular/router';
 import {GenericDataStore} from './services/generic-data.store';
 import {AppService} from './services/app.service';
+import {TrackDataStore} from './services/track-data.store';
 
 class MockAppService {
     public initApp(): void {
@@ -24,7 +25,7 @@ describe('AppComponent', () => {
             ],
             providers: [
                 {provide: Router, useClass: RouterModule},
-                GenericDataStore,
+                TrackDataStore,
                 TrackDataService,
                 {provide: AppService, useClass: MockAppService}
             ],

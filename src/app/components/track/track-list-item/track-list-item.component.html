@@ -1,9 +1,11 @@
 <div class="view">
     <label>{{track.name}}</label>
+    <p>{{track.desc}}</p>
     <ul class="image-list" *ngIf="track.images != undefined && track.images.length > 0">
         <li *ngFor="let image of track.images">
             <img src="{{image.fileName}}"> {{image.name}}
         </li>
     </ul>
     <button class="edit" (click)="editTrack(track)"></button>
+    <button class="delete" (click)="deleteTrack(track)"></button>
 </div>

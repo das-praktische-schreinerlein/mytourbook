@@ -42,6 +42,7 @@ export class TrackEditpageComponent implements OnInit, OnDestroy {
                 this.router.navigateByUrl('/track/list');
             },
             error => {
+                console.error('updateTrackById failed:' + error);
             },
             () => {
             }

@@ -5,6 +5,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
 import {Router, RouterModule} from '@angular/router';
 import {GenericDataStore} from '../../../services/generic-data.store';
+import {TrackDataStore} from '../../../services/track-data.store';
 
 describe('TrackSearchpageComponent', () => {
     let component: TrackSearchpageComponent;
@@ -13,7 +14,7 @@ describe('TrackSearchpageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [TrackSearchpageComponent],
-            providers: [GenericDataStore,
+            providers: [TrackDataStore,
                 TrackDataService,
                 {provide: Router, useClass: RouterModule}
             ],

@@ -1,13 +1,14 @@
 // DataStore is mostly recommended for use in the browser
-import {DataStore, Record, Schema, utils} from 'js-data';
+import {DataStore, Mapper, Record, Schema, utils} from 'js-data';
 import {Adapter} from 'js-data-adapter';
 import {Injectable} from '@angular/core';
 
 @Injectable()
 export class GenericDataStore {
 
-    private adapter: Adapter;
     private store: DataStore;
+    private mappers = new Map<string, Mapper>();
+    private mapperAdapters = new Map<string, Adapter>();
 
     public static convertToDate(record) {
         if (typeof record.created_at === 'string') {
@@ -37,13 +38,24 @@ export class GenericDataStore {
         });
     }
 
-    public defineMapper(mapperName: string, recordClass: any, schema: Schema, relations: any) {
-        this.store.defineMapper(mapperName, {
+    public defineMapper(mapperName: string, recordClass: any, schema: Schema, relations: any): Mapper {
+        this.mappers.set(mapperName, this.store.defineMapper(mapperName, {
             recordClass: recordClass,
             applySchema: true,
             schema: schema,
             relations: relations
-        });
+        }));
+        return this.mappers.get(mapperName);
+    }
+
+    public setAdapter(adapterName: string, adapter: Adapter, mapperName: string, options: any) {
+        if (mapperName === undefined || mapperName === '') {
+            this.store.registerAdapter(adapterName, adapter, { 'default': true });
+            this.mapperAdapters.set('', adapter);
+        } else {
+            this.mappers.get(mapperName).registerAdapter(adapterName, adapter, { 'default': true });
+            this.mapperAdapters.set(mapperName, adapter);
+        }
     }
 
     public createRecord<T extends Record>(mapperName: string, props, opts): T {
@@ -51,7 +63,7 @@ export class GenericDataStore {
     }
 
     public create<T extends Record>(mapperName: string, record: any, opts?: any): Promise<T> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.resolve(this.store.add(mapperName, record, opts));
         } else {
             return this.store.create(mapperName, record, opts);
@@ -59,7 +71,7 @@ export class GenericDataStore {
     }
 
     public createMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.resolve(this.store.add(mapperName, records, opts));
         } else {
             return this.store.createMany(mapperName, records, opts);
@@ -67,7 +79,7 @@ export class GenericDataStore {
     }
 
     public update<T extends Record>(mapperName: string, id: any, record: any, opts?: any): Promise<T> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             if (id === undefined || id === null) {
                 return utils.Promise.reject('cant update records without id');
             }
@@ -84,7 +96,7 @@ export class GenericDataStore {
     }
 
     public updateMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.reject('cant do update many without adapter');
         } else {
             return this.store.updateMany(mapperName, records, opts);
@@ -92,7 +104,7 @@ export class GenericDataStore {
     }
 
     public updateAll<T extends Record>(mapperName: string, props: any, query?: any, opts?: any): Promise<T[]> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.reject('cant do update all without adapter');
         } else {
             return this.store.updateAll(mapperName, props, query, opts);
@@ -100,7 +112,7 @@ export class GenericDataStore {
     }
 
     public find<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.resolve(this.store.get(mapperName, id));
         } else {
             return this.store.find(mapperName, id, opts);
@@ -108,7 +120,7 @@ export class GenericDataStore {
     }
 
     public findAll<T extends Record>(mapperName: string, query?: any, opts?: any): Promise<T[]> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.resolve(this.store.filter(mapperName, query));
         } else {
             return this.store.findAll(mapperName, query, opts);
@@ -116,11 +128,18 @@ export class GenericDataStore {
     }
 
     public destroy<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
-        if (this.adapter === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.resolve(this.store.remove(mapperName, id, opts));
         } else {
             return this.store.destroy(mapperName, id, opts);
         }
     }
 
+    private getAdapterForMapper(mapperName: string): Adapter {
+        if (this.mapperAdapters.get(mapperName) !== undefined) {
+            return this.mapperAdapters.get(mapperName);
+        }
+
+        return this.mapperAdapters.get('');
+    }
 }

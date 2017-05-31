@@ -1,2 +1,3 @@
-<app-track-list [tracks]="tracks" (edit)="onEditTrack($event)"></app-track-list>
+<app-track-searchform [trackSearchForm]="trackSearchForm" (search)="onSearchTrack($event)"></app-track-searchform>
+<app-track-list [tracks]="tracks" (edit)="onEditTrack($event)" (delete)="onDeleteTrack($event)"></app-track-list>
 <app-track-list-footer [tracks]="tracks"></app-track-list-footer>

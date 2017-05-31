@@ -3,7 +3,7 @@ import {getTestBed, TestBed} from '@angular/core/testing';
 import {TrackRecord} from '../model/records/track-record';
 import {TrackDataService} from './track-data.service';
 import {Observable} from 'rxjs';
-import {GenericDataStore} from './generic-data.store';
+import {TrackDataStore} from './track-data.store';
 
 describe('TrackDataService', () => {
     let track1: TrackRecord = undefined;
@@ -12,7 +12,7 @@ describe('TrackDataService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                GenericDataStore,
+                TrackDataStore,
                 TrackDataService
             ]
         });

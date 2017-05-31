@@ -1,19 +1,19 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {TrackEditpageComponent} from './track-editpage.component';
+import {TrackCreatepageComponent} from './track-createpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {Observable} from 'rxjs';
 import {TrackDataStore} from '../../../services/track-data.store';
 
-describe('TrackEditpageComponent', () => {
-    let component: TrackEditpageComponent;
-    let fixture: ComponentFixture<TrackEditpageComponent>;
+describe('TrackCreatepageComponent', () => {
+    let component: TrackCreatepageComponent;
+    let fixture: ComponentFixture<TrackCreatepageComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TrackEditpageComponent],
+            declarations: [TrackCreatepageComponent],
             providers: [TrackDataStore,
                 TrackDataService,
                 {
@@ -30,7 +30,7 @@ describe('TrackEditpageComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TrackEditpageComponent);
+        fixture = TestBed.createComponent(TrackCreatepageComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

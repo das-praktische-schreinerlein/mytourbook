@@ -14,6 +14,9 @@ export class TrackListItemComponent {
     @Output()
     edit: EventEmitter<TrackRecord> = new EventEmitter();
 
+    @Output()
+    delete: EventEmitter<TrackRecord> = new EventEmitter();
+
     constructor() {
     }
 
@@ -21,4 +24,7 @@ export class TrackListItemComponent {
         this.edit.emit(track);
     }
 
+    deleteTrack(track: TrackRecord) {
+        this.delete.emit(track);
+    }
 }

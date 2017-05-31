@@ -6,17 +6,23 @@ import {TrackRecordSchema} from '../model/schemas/track-record-schema';
 import {ImageRecord, ImageRecordRelation} from '../model/records/image-record';
 import {ImageRecordSchema} from '../model/schemas/image-record-schema';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {TrackDataStore} from './track-data.store';
+import {TrackSearchForm} from '../model/forms/track-searchform';
 
 @Injectable()
 export class TrackDataService {
     curTrackList: BehaviorSubject<TrackRecord[]>;
-    dataStore: GenericDataStore = new GenericDataStore();
+    dataStore: GenericDataStore;
 
-    constructor(dataStore: GenericDataStore) {
+    constructor(dataStore: TrackDataStore) {
         this.dataStore = dataStore;
         this.dataStore.defineMapper('track', TrackRecord, TrackRecordSchema, TrackRecordRelation);
         this.dataStore.defineMapper('image', ImageRecord, ImageRecordSchema, ImageRecordRelation);
         this.curTrackList = <BehaviorSubject<TrackRecord[]>>new BehaviorSubject([]);
+    }
+
+    generateNewId(): number {
+        return (new Date()).getTime();
     }
 
     createRecord(props, opts): TrackRecord {
@@ -45,7 +51,22 @@ export class TrackDataService {
 
     // Simulate GET /tracks
     getAllTracks(): Observable<TrackRecord[]> {
-        const result: Observable<TrackRecord[]> = Observable.fromPromise(this.dataStore.findAll('track', null, {
+        return this.findCurTrackList(undefined);
+    }
+
+    // Simulate GET /tracks
+    findCurTrackList(trackSearchForm: TrackSearchForm): Observable<TrackRecord[]> {
+        const query = {};
+
+        if (trackSearchForm !== undefined && trackSearchForm.fulltext !== undefined && trackSearchForm.fulltext.length > 0) {
+            query['where'] = {
+                name: {
+                    'likei': '%' + trackSearchForm.fulltext + '%'
+                }
+            };
+        }
+
+        const result: Observable<TrackRecord[]> = Observable.fromPromise(this.dataStore.findAll('track', query, {
             limit: -1,
             offset: 0,
             // We want the newest posts first
