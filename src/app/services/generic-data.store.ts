@@ -60,7 +60,7 @@ export class GenericDataStore {
 
     public count(mapperName: string, query?: any, opts?: any): Promise<number> {
         if (this.getAdapterForMapper(mapperName) === undefined) {
-            // return utils.Promise.resolve(this.store.(mapperName, query, opts));
+            return utils.Promise.resolve(this.store.filter(mapperName, query).length);
         } else {
             return this.getAdapterForMapper(mapperName).count(this.store.getMapper(mapperName), query, opts);
         }
