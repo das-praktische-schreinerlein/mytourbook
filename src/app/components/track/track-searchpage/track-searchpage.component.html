@@ -4,6 +4,10 @@
                               (search)="onSearchTrack($event)"></app-track-searchform>
     </div>
     <div class="container">
+        <app-track-list-header [trackSearchResult]="trackSearchResult"
+                               (pageChange)="onPageChange($event)" ></app-track-list-header>
+    </div>
+    <div class="container">
         <app-track-list [trackSearchResult]="trackSearchResult"
                         (edit)="onEditTrack($event)"
                         (delete)="onDeleteTrack($event)"></app-track-list>

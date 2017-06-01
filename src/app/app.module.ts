@@ -17,12 +17,14 @@ import {routing} from './app.router';
 import {TrackCreateformComponent} from './components/track/track-createform/track-createform.component';
 import {TrackCreatepageComponent} from './components/track/track-createpage/track-createpage.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {TrackListHeaderComponent} from './components/track/track-list-header/track-list-header.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         TrackListComponent,
         TrackListItemComponent,
+        TrackListHeaderComponent,
         TrackListFooterComponent,
         TrackEditformComponent,
         TrackCreateformComponent,
