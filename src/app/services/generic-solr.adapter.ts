@@ -1,7 +1,6 @@
 import {HttpAdapter, IDict} from 'js-data-http';
 import {Injectable} from '@angular/core';
 import {Mapper, Record, utils} from 'js-data';
-import {encode} from '@angular/router/src/url_tree';
 import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
 
 @Injectable()
@@ -159,7 +158,7 @@ export class GenericSolrAdapter extends HttpAdapter {
 
     afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
         console.log('destroyd', id);
-        return utils.Promise.resolve();
+        return utils.Promise.resolve(<Record>undefined);
     }
 
     _create (mapper: Mapper, props: any, opts: any) {
@@ -365,7 +364,7 @@ export class GenericSolrAdapter extends HttpAdapter {
                 } else if (utils.isObject(v)) {
                     v = utils.toJson(v).trim();
                 }
-                parts.push(encode(key) + '=' + encode(v));
+                parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(v));
             });
         });
 

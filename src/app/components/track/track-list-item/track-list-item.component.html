@@ -1,11 +1,31 @@
-<div class="view">
-    <label>{{track.name}}</label>
-    <p>{{track.desc}}</p>
-    <ul class="image-list" *ngIf="track.images != undefined && track.images.length > 0">
-        <li *ngFor="let image of track.images">
-            <img src="{{image.fileName}}"> {{image.name}}
-        </li>
-    </ul>
-    <button class="edit" (click)="editTrack(track)"></button>
-    <button class="delete" (click)="deleteTrack(track)"></button>
+<div class="card-block">
+    <ngb-carousel *ngIf="track.images != undefined && track.images.length > 0">
+        <ng-template ngbSlide *ngFor="let image of track.images">
+            <img class="track-image" src="{{image.fileName}}" alt="{{image.name}}">
+            <div class="carousel-caption">
+                <h3>{{image.name}}</h3>
+                <p>{{image.name}}.</p>
+            </div>
+        </ng-template>
+    </ngb-carousel>
+    <h5 class="card-title">{{track.name}}</h5>
+    <p class="card-text">
+        {{track.desc}}
+        <!--
+                <ngb-accordion #acc="ngbAccordion" activeIds="">
+                    <ngb-panel title="Bescheibung">
+                        <ng-template ngbPanelContent>
+                            <p>{{track.desc}}</p>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+        -->
+    </p>
+</div>
+<div class="card-footer">
+    <small class="text-muted">bla</small>
+    <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+        <button class="edit btn-primary" (click)="editTrack(track)">Edit</button>
+        <button class="delete btn-primary" (click)="deleteTrack(track)">Delete</button>
+    </div>
 </div>

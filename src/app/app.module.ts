@@ -16,6 +16,7 @@ import {TrackDataStore} from './services/track-data.store';
 import {routing} from './app.router';
 import {TrackCreateformComponent} from './components/track/track-createform/track-createform.component';
 import {TrackCreatepageComponent} from './components/track/track-createpage/track-createpage.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import {TrackCreatepageComponent} from './components/track/track-createpage/trac
         ReactiveFormsModule,
         HttpModule,
         JsonpModule,
-        routing
+        routing,
+        NgbModule.forRoot()
     ],
     providers: [TrackDataStore, TrackDataService, AppService],
     bootstrap: [AppComponent]

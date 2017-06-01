@@ -1,7 +1,3 @@
-<section class="main" *ngIf="tracks != undefined && tracks.length > 0">
-    <ul class="track-list">
-        <li *ngFor="let track of tracks">
-            <app-track-list-item [track]="track" (edit)="onEditTrack($event)" (delete)="onDeleteTrack($event)"></app-track-list-item>
-        </li>
-    </ul>
+<section class="row card-deck" *ngIf="tracks != undefined && tracks.length > 0">
+    <app-track-list-item style="min-width: 300px;" class="card app-track-list-item" [track]="track" (edit)="onEditTrack($event)" (delete)="onDeleteTrack($event)" *ngFor="let track of tracks"></app-track-list-item>
 </section>

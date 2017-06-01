@@ -1,0 +1,20 @@
+div.card-block img.track-image {
+    width: 50px;
+    max-height: 50px;
+    overflow: hidden;
+}
+
+div.card-block ngb-carousel {
+    width: 60px;
+    height: 60px;
+    float: left;
+}
+
+div.card-block h5 {
+    font-size: 0.75rem;
+}
+
+div.card-footer div.card-action-buttons {
+    float: right;
+}
+
