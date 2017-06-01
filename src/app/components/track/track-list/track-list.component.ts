@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {TrackRecord} from '../../../model/records/track-record';
+import {TrackSearchResult} from '../../../model/container/track-searchresult';
 
 @Component({
     selector: 'app-track-list',
@@ -9,7 +10,7 @@ import {TrackRecord} from '../../../model/records/track-record';
 export class TrackListComponent {
 
     @Input()
-    tracks: TrackRecord[];
+    trackSearchResult: TrackSearchResult;
 
     @Output()
     edit: EventEmitter<TrackRecord> = new EventEmitter();

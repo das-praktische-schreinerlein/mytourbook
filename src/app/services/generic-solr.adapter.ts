@@ -148,6 +148,10 @@ export class GenericSolrAdapter extends HttpAdapter {
         throw new Error('updateMany not implemented');
     }
 
+    afterCount(mapper: Mapper, props: IDict, opts: any, result: any): Promise<number> {
+        return utils.Promise.resolve(result);
+    }
+
     afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
         return this.find(mapper, props['add']['doc']['id'], opts);
     }
@@ -157,7 +161,6 @@ export class GenericSolrAdapter extends HttpAdapter {
     }
 
     afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        console.log('destroyd', id);
         return utils.Promise.resolve(<Record>undefined);
     }
 
@@ -232,6 +235,13 @@ export class GenericSolrAdapter extends HttpAdapter {
         if (response.data.response === undefined) {
             return undefined;
         }
+
+        // count
+        if (opts.solrCount) {
+            return response.data.response.numFound;
+        }
+
+        // search records
         if (response.data.response.docs === undefined) {
             return undefined;
         }

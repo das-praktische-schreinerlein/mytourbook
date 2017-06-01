@@ -13,7 +13,6 @@ describe('TrackEditpageComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TrackEditpageComponent],
             providers: [TrackDataStore,
                 TrackDataService,
                 {
@@ -24,6 +23,7 @@ describe('TrackEditpageComponent', () => {
                 },
                 {provide: Router, useClass: RouterModule}
             ],
+            declarations: [TrackEditpageComponent],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();

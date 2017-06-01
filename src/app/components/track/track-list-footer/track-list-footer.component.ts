@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {TrackRecord} from '../../../model/records/track-record';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {TrackSearchResult} from '../../../model/container/track-searchresult';
 
 @Component({
     selector: 'app-track-list-footer',
@@ -9,9 +9,15 @@ import {TrackRecord} from '../../../model/records/track-record';
 export class TrackListFooterComponent {
 
     @Input()
-    tracks: TrackRecord[];
+    trackSearchResult: TrackSearchResult;
+
+    @Output()
+    pageChange: EventEmitter<number> = new EventEmitter();
 
     constructor() {
     }
 
+    onPageChange(page: number) {
+        this.pageChange.emit(page);
+    }
 }

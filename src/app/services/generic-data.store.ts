@@ -58,6 +58,14 @@ export class GenericDataStore {
         }
     }
 
+    public count(mapperName: string, query?: any, opts?: any): Promise<number> {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
+            // return utils.Promise.resolve(this.store.(mapperName, query, opts));
+        } else {
+            return this.getAdapterForMapper(mapperName).count(this.store.getMapper(mapperName), query, opts);
+        }
+    }
+
     public createRecord<T extends Record>(mapperName: string, props, opts): T {
         return <T>this.store.createRecord(mapperName, props, opts);
     }

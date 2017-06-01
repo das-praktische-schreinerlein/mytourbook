@@ -1,3 +1,9 @@
 <footer class="footer">
-    <span class="track-count" *ngIf="tracks != undefined"><strong>{{tracks.length}}</strong> {{tracks.length == 1 ? 'item' : 'items'}}</span>
+    <ngb-pagination (pageChange)="onPageChange($event)"
+                    [collectionSize]="trackSearchResult.recordCount"
+                    [(page)]="trackSearchResult.trackSearchForm.pageNum"
+                    [maxSize]="5"
+                    [rotate]="true"
+                    [ellipses]="false"
+                    [boundaryLinks]="true" ></ngb-pagination>
 </footer>

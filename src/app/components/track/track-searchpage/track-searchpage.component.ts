@@ -3,7 +3,7 @@ import {TrackDataService} from '../../../services/track-data.service';
 import {TrackRecord} from '../../../model/records/track-record';
 import {Router} from '@angular/router';
 import {TrackSearchForm} from '../../../model/forms/track-searchform';
-import {browser} from 'protractor';
+import {TrackSearchResult} from '../../../model/container/track-searchresult';
 
 @Component({
     selector: 'app-track-searchpage',
@@ -11,7 +11,7 @@ import {browser} from 'protractor';
     styleUrls: ['./track-searchpage.component.css']
 })
 export class TrackSearchpageComponent implements OnInit {
-    tracks: TrackRecord[];
+    trackSearchResult: TrackSearchResult;
     trackSearchForm: TrackSearchForm = new TrackSearchForm({});
 
     constructor(private trackDataService: TrackDataService, private router: Router) {
@@ -41,6 +41,11 @@ export class TrackSearchpageComponent implements OnInit {
         }
     }
 
+    onPageChange(page: number) {
+        this.trackSearchForm.pageNum = page;
+        this.trackDataService.findCurTrackList(this.trackSearchForm);
+    }
+
     onSearchTrack(trackSearchForm: TrackSearchForm) {
         this.trackDataService.findCurTrackList(trackSearchForm);
     }
@@ -49,9 +54,9 @@ export class TrackSearchpageComponent implements OnInit {
         this.trackDataService.findCurTrackList(this.trackSearchForm);
         const getTracks = this.trackDataService.getCurTrackList();
         getTracks.subscribe(
-            tracks => {
-                console.log('ngOnInit update tracks', tracks);
-                this.tracks = tracks;
+            trackSearchResult => {
+                console.log('ngOnInit update trackSearchResult', trackSearchResult);
+                this.trackSearchResult = trackSearchResult;
             },
             error => {
                 console.error('getCurTrackList failed:' + error);

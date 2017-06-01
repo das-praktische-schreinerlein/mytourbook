@@ -9,6 +9,13 @@ export class TrackSolrAdapter extends GenericSolrAdapter {
         super(config, jsonP);
     }
 
+    count(mapper: Mapper, query: any, opts?: any): Promise<number> {
+        opts = opts || {};
+        opts.endpoint = 'select?';
+
+        return super.count(mapper, query, opts);
+    }
+
     create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
         opts = opts || {};
         opts.endpoint = 'update?';
