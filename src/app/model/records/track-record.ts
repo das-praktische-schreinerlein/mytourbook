@@ -5,6 +5,10 @@ export class TrackRecord extends BaseEntityRecord {
     name: string;
     persons: string;
     type: number;
+    html: string;
+    keywords: string;
+    gpstracksBasefile: string;
+    datevon: Date;
 
     toString() {
         return 'TrackRecord Record {\n' +

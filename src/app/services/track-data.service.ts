@@ -64,7 +64,7 @@ export class TrackDataService {
         }
         if (trackSearchForm.fulltext !== undefined && trackSearchForm.fulltext.length > 0) {
             query['where'] = {
-                name: {
+                html: {
                     'likei': '%' + trackSearchForm.fulltext + '%'
                 }
             };
