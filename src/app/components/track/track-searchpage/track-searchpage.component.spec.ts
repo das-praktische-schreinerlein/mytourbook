@@ -5,8 +5,16 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TrackDataStore} from '../../../services/track-data.store';
-import {RouterTestingModule} from '@angular/router/testing';
 import {Observable} from 'rxjs';
+
+class RouterStub {
+    public routerState: {} = {
+        snapshot: {
+            url: 'track'
+        }
+    };
+    navigateByUrl(url: string) { return url; }
+}
 
 describe('TrackSearchpageComponent', () => {
     let component: TrackSearchpageComponent;
@@ -20,14 +28,10 @@ describe('TrackSearchpageComponent', () => {
                 {
                     provide: ActivatedRoute,
                     useValue: {
-                        url: Observable.of({}),
-                        params: Observable.of({})
+                        params: Observable.of({id: 1})
                     }
                 },
-                {
-                    provide: Router,
-                    useClass: RouterTestingModule
-                }
+                {provide: Router, useValue: new RouterStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();
