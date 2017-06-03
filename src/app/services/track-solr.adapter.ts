@@ -77,8 +77,10 @@ export class TrackSolrAdapter extends GenericSolrAdapter {
         values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
         values['id'] = Number(this.getSolrValue(doc, 'id', undefined));
         values['desc'] = this.getSolrValue(doc, 'html_txt', undefined);
-        console.log('mapSolrDocument:', values);
-        return mapper.createRecord(values);
+        // console.log('mapSolrDocument values:', values);
+        const record: Record = mapper.createRecord(values);
+        //  console.log('mapSolrDocument record:', record);
+        return record;
     }
 }
 

@@ -21,7 +21,6 @@ export class AppService {
         };
         const httpAdapter = new TrackSolrAdapter(options, this.jsonp);
         this.trackDataStore.setAdapter('http', httpAdapter, '', {});
-        this.trackDataService.getAllTracks();
     }
 
     initStaticData() {
@@ -31,7 +30,6 @@ export class AppService {
                 this.trackDataService.addTracks(tracks).subscribe(
                     tracksRecords => {
                         console.log('loaded tracks from assets', tracksRecords);
-                        this.trackDataService.getAllTracks();
                     },
                     error => {
                         console.error('parsing appdata failed:' + error);

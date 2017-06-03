@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TrackRecord} from '../../../model/records/track-record';
 import {TrackDataService} from '../../../services/track-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-track-editpage',
@@ -9,7 +10,7 @@ import {ActivatedRoute, Router} from '@angular/router';
     styleUrls: ['./track-editpage.component.css']
 })
 export class TrackEditpageComponent implements OnInit, OnDestroy {
-    private sub: any;
+    private routeSubscription: Subscription;
     public track: TrackRecord;
 
     constructor(private trackDataService: TrackDataService, private route: ActivatedRoute, private router: Router) {
@@ -17,7 +18,7 @@ export class TrackEditpageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // Subscribe to route params
-        this.sub = this.route.params.subscribe(params => {
+        this.routeSubscription = this.route.params.subscribe(params => {
             const trackId = params['trackId'];
             this.trackDataService.getTrackById(trackId).subscribe(
                 track => {
@@ -33,7 +34,7 @@ export class TrackEditpageComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         // Clean sub to avoid memory leak
-        this.sub.unsubscribe();
+        this.routeSubscription.unsubscribe();
     }
 
     onSaveTrack(values: {}) {

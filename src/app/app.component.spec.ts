@@ -4,10 +4,10 @@ import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from './services/track-data.service';
-import {Router, RouterModule} from '@angular/router';
-import {GenericDataStore} from './services/generic-data.store';
+import {Router} from '@angular/router';
 import {AppService} from './services/app.service';
 import {TrackDataStore} from './services/track-data.store';
+import {RouterTestingModule} from '@angular/router/testing';
 
 class MockAppService {
     public initApp(): void {
@@ -24,7 +24,7 @@ describe('AppComponent', () => {
                 AppComponent
             ],
             providers: [
-                {provide: Router, useClass: RouterModule},
+                {provide: Router, useClass: RouterTestingModule},
                 TrackDataStore,
                 TrackDataService,
                 {provide: AppService, useClass: MockAppService}

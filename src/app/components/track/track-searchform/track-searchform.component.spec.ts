@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {TrackSearchformComponent} from './track-searchform.component';
-import {TrackRecord} from '../../../model/records/track-record';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TrackSearchForm} from '../../../model/forms/track-searchform';

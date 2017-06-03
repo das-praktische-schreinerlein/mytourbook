@@ -1,9 +1,10 @@
-<footer class="footer">
-    <ngb-pagination (pageChange)="onPageChange($event)"
-                    [collectionSize]="trackSearchResult.recordCount"
-                    [(page)]="trackSearchResult.trackSearchForm.pageNum"
-                    [maxSize]="5"
-                    [rotate]="true"
-                    [ellipses]="false"
-                    [boundaryLinks]="true" ></ngb-pagination>
+<footer class="footer" >
+        <ngb-pagination (pageChange)="onPageChange($event)"
+                        [collectionSize]="trackSearchResult.recordCount"
+                        [page]="trackSearchResult.trackSearchForm.pageNum"
+                        [maxSize]="5"
+                        [rotate]="true"
+                        [ellipses]="false"
+                        [boundaryLinks]="true"
+                        *ngIf="trackSearchResult.recordCount > 0"></ngb-pagination>
 </footer>

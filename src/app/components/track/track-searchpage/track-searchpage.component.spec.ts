@@ -3,9 +3,10 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {TrackSearchpageComponent} from './track-searchpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
-import {Router, RouterModule} from '@angular/router';
-import {GenericDataStore} from '../../../services/generic-data.store';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TrackDataStore} from '../../../services/track-data.store';
+import {RouterTestingModule} from '@angular/router/testing';
+import {Observable} from 'rxjs';
 
 describe('TrackSearchpageComponent', () => {
     let component: TrackSearchpageComponent;
@@ -16,7 +17,17 @@ describe('TrackSearchpageComponent', () => {
             declarations: [TrackSearchpageComponent],
             providers: [TrackDataStore,
                 TrackDataService,
-                {provide: Router, useClass: RouterModule}
+                {
+                    provide: ActivatedRoute,
+                    useValue: {
+                        url: Observable.of({}),
+                        params: Observable.of({})
+                    }
+                },
+                {
+                    provide: Router,
+                    useClass: RouterTestingModule
+                }
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

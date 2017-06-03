@@ -19,7 +19,7 @@ export class TrackDataService {
         this.dataStore = dataStore;
         this.dataStore.defineMapper('track', TrackRecord, TrackRecordSchema, TrackRecordRelation);
         this.dataStore.defineMapper('image', ImageRecord, ImageRecordSchema, ImageRecordRelation);
-        this.curTrackList = <BehaviorSubject<TrackSearchResult>>new BehaviorSubject(new TrackSearchResult(new TrackSearchForm({}), 0, []));
+        this.curTrackList = <BehaviorSubject<TrackSearchResult>>new BehaviorSubject(undefined);
     }
 
     generateNewId(): number {
@@ -70,6 +70,7 @@ export class TrackDataService {
             };
         }
 
+        console.log('findCurTrackList for form', trackSearchForm);
         const trackSearchResult = new TrackSearchResult(trackSearchForm, 0, []);
 
         const result: Observable<TrackRecord[]> = Observable.fromPromise(this.dataStore.findAll('track', query, {
@@ -79,12 +80,12 @@ export class TrackDataService {
             orderBy: [['created_at', 'desc']]
         }));
         result.subscribe(tracks => {
-                console.log('getAllTracks tracks', tracks);
+                console.log('findCurTrackList tracks', tracks);
                 trackSearchResult.currentRecords = tracks;
                 this.curTrackList.next(trackSearchResult);
             },
             error => {
-                console.error('getAllTracks failed:' + error);
+                console.error('findCurTrackList failed:' + error);
             },
             () => {
             });

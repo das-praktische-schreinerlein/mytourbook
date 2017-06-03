@@ -6,8 +6,10 @@ import {TrackCreatepageComponent} from './components/track/track-createpage/trac
 
 // Route Configuration
 export const routes: Routes = [
-    {path: '', redirectTo: '/track/list', pathMatch: 'full'},
-    {path: 'track/list', component: TrackSearchpageComponent},
+    {path: '', redirectTo: 'tracks', pathMatch: 'full'},
+    {path: 'track/list', redirectTo: 'tracks'},
+    {path: 'tracks', component: TrackSearchpageComponent, pathMatch: 'full'},
+    {path: 'tracks/:when/:where/:what/:fulltext/:moreFilter/:sort/:perPage/:pageNum', component: TrackSearchpageComponent},
     {path: 'track/create', component: TrackCreatepageComponent},
     {path: 'track/edit/:trackId', component: TrackEditpageComponent}
 ];

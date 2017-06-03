@@ -2,9 +2,10 @@
     <span class="track-count" *ngIf="trackSearchResult.recordCount != undefined"><strong>{{trackSearchResult.recordCount}}</strong> {{trackSearchResult.recordCount == 1 ? 'item' : 'items'}} found</span>
     <ngb-pagination (pageChange)="onPageChange($event)"
                     [collectionSize]="trackSearchResult.recordCount"
-                    [(page)]="trackSearchResult.trackSearchForm.pageNum"
+                    [page]="trackSearchResult.trackSearchForm.pageNum"
                     [maxSize]="5"
                     [rotate]="true"
                     [ellipses]="false"
-                    [boundaryLinks]="true" ></ngb-pagination>
+                    [boundaryLinks]="true"
+                    *ngIf="trackSearchResult.recordCount > 0"></ngb-pagination>
 </header>

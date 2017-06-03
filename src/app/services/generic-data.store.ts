@@ -131,6 +131,10 @@ export class GenericDataStore {
         if (this.getAdapterForMapper(mapperName) === undefined) {
             return utils.Promise.resolve(this.store.filter(mapperName, query));
         } else {
+            opts = opts || {};
+
+            // bypass cache
+            opts.force = true;
             return this.store.findAll(mapperName, query, opts);
         }
     }

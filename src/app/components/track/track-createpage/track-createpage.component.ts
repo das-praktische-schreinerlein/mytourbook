@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TrackRecord} from '../../../model/records/track-record';
 import {TrackDataService} from '../../../services/track-data.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {timestamp} from 'rxjs/operator/timestamp';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-track-createpage',
@@ -12,7 +11,7 @@ import {timestamp} from 'rxjs/operator/timestamp';
 export class TrackCreatepageComponent implements OnInit, OnDestroy {
     public track: TrackRecord;
 
-    constructor(private trackDataService: TrackDataService, private route: ActivatedRoute, private router: Router) {
+    constructor(private trackDataService: TrackDataService, private router: Router) {
     }
 
     ngOnInit() {

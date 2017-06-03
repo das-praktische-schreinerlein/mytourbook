@@ -3,9 +3,9 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {TrackCreatepageComponent} from './track-createpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TrackDataService} from '../../../services/track-data.service';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
 import {TrackDataStore} from '../../../services/track-data.store';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('TrackCreatepageComponent', () => {
     let component: TrackCreatepageComponent;
@@ -16,13 +16,7 @@ describe('TrackCreatepageComponent', () => {
             declarations: [TrackCreatepageComponent],
             providers: [TrackDataStore,
                 TrackDataService,
-                {
-                    provide: ActivatedRoute,
-                    useValue: {
-                        params: Observable.of({id: 123})
-                    }
-                },
-                {provide: Router, useClass: RouterModule}
+                {provide: Router, useClass: RouterTestingModule}
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

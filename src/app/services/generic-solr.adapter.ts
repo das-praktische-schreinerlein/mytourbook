@@ -215,7 +215,7 @@ export class GenericSolrAdapter extends HttpAdapter {
 
     deserializeSolr(mapper: Mapper, response: any, opts: any) {
         // solr-result
-        console.log('deserializeSolr:', response);
+        // console.log('deserializeSolr:', response);
 
         // check response
         if (response === undefined) {
@@ -252,7 +252,7 @@ export class GenericSolrAdapter extends HttpAdapter {
         for (const doc of docs) {
             records.push(this.mapSolrDocument(mapper, doc));
         }
-        console.log('deserializeSolr:', records);
+        // console.log('deserializeSolr:', records);
 
         return records;
 
@@ -261,7 +261,7 @@ export class GenericSolrAdapter extends HttpAdapter {
     mapSolrDocument(mapper: Mapper, doc: any): Record {
         const values = {};
         values['id'] = Number(this.getSolrValue(doc, 'id', undefined));
-        console.log('mapSolrDocument values:', values);
+        // console.log('mapSolrDocument values:', values);
         return mapper.createRecord(values);
     }
 
@@ -300,11 +300,12 @@ export class GenericSolrAdapter extends HttpAdapter {
         return value;
     }
 
-    private queryTransformToSolrQuery(mapper: Mapper, params: any, opts: Object): any {
-        console.log('queryTransformToSolrQuery params:', params);
+    private queryTransformToSolrQuery(mapper: Mapper, params: any, opts: any): any {
+        // console.log('queryTransformToSolrQuery params:', params);
+        // console.log('queryTransformToSolrQuery opts:', opts);
         if (params.where === undefined) {
-            const query = {'q': '*:*'};
-            console.log('queryTransformToSolrQuery result:', query);
+            const query = {'q': '*:*', 'start': opts.offset, 'rows': opts.limit};
+            // console.log('queryTransformToSolrQuery result:', query);
             return query;
         }
 
@@ -316,8 +317,8 @@ export class GenericSolrAdapter extends HttpAdapter {
             newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
         }
 
-        const query = {'q': newParams.join(' ')};
-        console.log('queryTransformToSolrQuery result:', query);
+        const query = {'q': newParams.join(' '), 'start': opts.offset, 'rows': opts.limit};
+        // console.log('queryTransformToSolrQuery result:', query);
         return query;
     }
 
