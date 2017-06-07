@@ -3,6 +3,8 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemComponent} from './sdoc-list-item.component';
 import {SDocRecord} from '../../../model/records/sdoc-record';
+import {DomSanitizer} from '@angular/platform-browser';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 describe('SDocListItemComponent', () => {
     let component: SDocListItemComponent;
@@ -11,7 +13,9 @@ describe('SDocListItemComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocListItemComponent],
-            schemas: [NO_ERRORS_SCHEMA]
+            providers: [DomSanitizer],
+            schemas: [NO_ERRORS_SCHEMA],
+            imports: [NgbModule.forRoot()]
         })
             .compileComponents();
     }));
