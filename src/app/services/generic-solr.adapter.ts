@@ -4,7 +4,7 @@ import {Mapper, Record, utils} from 'js-data';
 import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
 
 @Injectable()
-export class GenericSolrAdapter extends HttpAdapter {
+export abstract class GenericSolrAdapter extends HttpAdapter {
     static configureSolrHttpProvider(jsonP: Jsonp): any {
         return function makeHttpRequest(httpConfig) {
             const headers: Headers = new Headers();
@@ -47,6 +47,7 @@ export class GenericSolrAdapter extends HttpAdapter {
         query = query || {};
         opts = opts || {};
 
+        opts.endpoint = this.getSolrEndpoint('count');
         opts.solrQuery = true;
         opts.solrCount = true;
         const me = this;
@@ -58,6 +59,7 @@ export class GenericSolrAdapter extends HttpAdapter {
     create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
         opts = opts || {};
 
+        opts.endpoint = this.getSolrEndpoint('create');
         opts.solrQuery = true;
         opts.params = this.getParams(opts);
         opts.params = this.queryTransform(mapper, opts.params, opts);
@@ -78,6 +80,7 @@ export class GenericSolrAdapter extends HttpAdapter {
     destroy(mapper: Mapper, id: string | number, opts?: any): Promise<any> {
         opts = opts || {};
 
+        opts.endpoint = this.getSolrEndpoint('destroy');
         opts.solrQuery = true;
         opts.params = this.getParams(opts);
         opts.params = this.queryTransform(mapper, opts.params, opts);
@@ -99,6 +102,7 @@ export class GenericSolrAdapter extends HttpAdapter {
     find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
         opts = opts || {};
 
+        opts.endpoint = this.getSolrEndpoint('find');
         opts.solrQuery = true;
         const me = this;
         opts.params = opts.params || {};
@@ -113,6 +117,7 @@ export class GenericSolrAdapter extends HttpAdapter {
         query = query || {};
         opts = opts || {};
 
+        opts.endpoint = this.getSolrEndpoint('findAll');
         opts.solrQuery = true;
         const me = this;
         opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
@@ -127,6 +132,7 @@ export class GenericSolrAdapter extends HttpAdapter {
     update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts: any): Promise<T> {
         opts = opts || {};
 
+        opts.endpoint = this.getSolrEndpoint('update');
         opts.solrQuery = true;
         opts.params = this.getParams(opts);
         opts.params = this.queryTransform(mapper, opts.params, opts);
@@ -283,9 +289,9 @@ export class GenericSolrAdapter extends HttpAdapter {
         return fieldName;
     }
 
-    mapToSolrDocument(props: any): any {
-        return undefined;
-    }
+    abstract mapToSolrDocument(props: any): any;
+
+    abstract getSolrEndpoint(method: string): string;
 
     getSolrValue(solrDocument: any, solrFieldName: string, defaultValue: any): string {
         let value = defaultValue;
@@ -298,6 +304,38 @@ export class GenericSolrAdapter extends HttpAdapter {
         }
 
         return value;
+    }
+
+    buildUrl(url, params) {
+        if (!params) {
+            return url;
+        }
+
+        const parts = [];
+
+        utils.forOwn(params, function (val, key) {
+            if (val === null || typeof val === 'undefined') {
+                return;
+            }
+            if (!utils.isArray(val)) {
+                val = [val];
+            }
+
+            val.forEach(function (v) {
+                if (window.toString.call(v) === '[object Date]') {
+                    v = v.toISOString().trim();
+                } else if (utils.isObject(v)) {
+                    v = utils.toJson(v).trim();
+                }
+                parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(v));
+            });
+        });
+
+        if (parts.length > 0) {
+            url += (url.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
+        }
+
+        return url;
     }
 
     private queryTransformToSolrQuery(mapper: Mapper, params: any, opts: any): any {
@@ -340,7 +378,7 @@ export class GenericSolrAdapter extends HttpAdapter {
             query = this.mapToSolrFieldName(fieldName) + ': [ * TO ' + this.escapeSolrValue(value) + ' ]';
         } else if (action === 'in') {
             query = this.mapToSolrFieldName(fieldName) + ': (' + value.map(
-                inValue => this.escapeSolrValue(value)
+                    inValue => this.escapeSolrValue(value)
                 ).join(' OR ') + ' )';
         } else if (action === 'notin') {
             query = this.mapToSolrFieldName(fieldName) + ': (-' + value.map(
@@ -352,38 +390,6 @@ export class GenericSolrAdapter extends HttpAdapter {
 
     private escapeSolrValue(value: any): string {
         return value;
-    }
-
-    buildUrl(url, params) {
-        if (!params) {
-            return url;
-        }
-
-        const parts = [];
-
-        utils.forOwn(params, function (val, key) {
-            if (val === null || typeof val === 'undefined') {
-                return;
-            }
-            if (!utils.isArray(val)) {
-                val = [val];
-            }
-
-            val.forEach(function (v) {
-                if (window.toString.call(v) === '[object Date]') {
-                    v = v.toISOString().trim();
-                } else if (utils.isObject(v)) {
-                    v = utils.toJson(v).trim();
-                }
-                parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(v));
-            });
-        });
-
-        if (parts.length > 0) {
-            url += (url.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
-        }
-
-        return url;
     }
 }
 

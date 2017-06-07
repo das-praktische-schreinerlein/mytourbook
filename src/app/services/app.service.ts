@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {TrackDataService} from './track-data.service';
-import {TrackSolrAdapter} from './track-solr.adapter';
+import {SDocDataService} from './sdoc-data.service';
+import {SDocSolrAdapter} from './sdoc-solr.adapter';
 import {Http, Jsonp} from '@angular/http';
-import {TrackDataStore} from './track-data.store';
+import {SDocDataStore} from './sdoc-data.store';
 
 @Injectable()
 export class AppService {
-    constructor(private trackDataService: TrackDataService, private trackDataStore: TrackDataStore,
+    constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private http: Http, private jsonp: Jsonp) {
     }
 
@@ -19,17 +19,18 @@ export class AppService {
             basePath: 'http://192.168.99.100:8983/solr/mat/',
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
         };
-        const httpAdapter = new TrackSolrAdapter(options, this.jsonp);
-        this.trackDataStore.setAdapter('http', httpAdapter, '', {});
+        const httpAdapter = new SDocSolrAdapter(options, this.jsonp);
+        this.sdocDataStore.setAdapter('http', httpAdapter, '', {});
     }
 
     initStaticData() {
-        this.http.request('./assets/tracks.json').subscribe(
+        this.http.request('./assets/sdocs.json').subscribe(
             res => {
-                const tracks: any[] = res.json().tracks;
-                this.trackDataService.addTracks(tracks).subscribe(
-                    tracksRecords => {
-                        console.log('loaded tracks from assets', tracksRecords);
+                const sdocs: any[] = res.json().sdocs;
+                this.sdocDataService.addMany(sdocs).subscribe(
+                    sdocsRecords => {
+                        console.log('loaded sdocs from assets', sdocsRecords);
+                        this.sdocDataService.getAll();
                     },
                     error => {
                         console.error('parsing appdata failed:' + error);

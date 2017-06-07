@@ -1,0 +1,7 @@
+<section class="row card-deck" *ngIf="searchResult.currentRecords != undefined && searchResult.currentRecords.length > 0">
+    <app-sdoc-list-item style="min-width: 300px;" class="card app-sdoc-list-item"
+                         [record]="record"
+                         (edit)="onEdit($event)"
+                         (delete)="onDelete($event)"
+                         *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item>
+</section>

@@ -1,0 +1,35 @@
+<div class="card-block">
+    <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+        <ng-template ngbSlide *ngFor="let sdocimage of record.sdocimages">
+            <img class="sdoc-image" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+            <div class="carousel-caption">
+                <h3>{{sdocimage.name}}</h3>
+                <p>{{sdocimage.name}}.</p>
+            </div>
+        </ng-template>
+    </ngb-carousel>
+    <h5 class="card-title">{{record.name}}</h5>
+    <br />
+    <ul class="card-text">
+        <li><label>Personen:</label><span>{{record.persons}}</span></li>
+        <li><label>Keywords:</label><span>{{record.keywords}}</span></li>
+    </ul>
+    <p class="card-text">
+        {{record.desc}}
+        <ngb-accordion #acc="ngbAccordion" activeIds="">
+            <ngb-panel title="Karte">
+                <ng-template ngbPanelContent>
+                    <iframe [src]="getMapUrl(record)"
+                            width="200" height="150" align="right" scrolling="no" marginheight="5" marginwidth="0" frameborder="0"></iframe>
+                </ng-template>
+            </ngb-panel>
+        </ngb-accordion>
+    </p>
+</div>
+<div class="card-footer">
+    <small class="text-muted">{{record.datevon}}</small>
+    <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+        <button class="edit btn-primary" (click)="submitEdit(record)">Edit</button>
+        <button class="delete btn-primary" (click)="submitDelete(record)">Delete</button>
+    </div>
+</div>

@@ -3,10 +3,10 @@ import {async, TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {TrackDataService} from './services/track-data.service';
+import {SDocDataService} from './services/sdoc-data.service';
 import {Router} from '@angular/router';
 import {AppService} from './services/app.service';
-import {TrackDataStore} from './services/track-data.store';
+import {SDocDataStore} from './services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
 
 class MockAppService {
@@ -25,8 +25,8 @@ describe('AppComponent', () => {
             ],
             providers: [
                 {provide: Router, useClass: RouterTestingModule},
-                TrackDataStore,
-                TrackDataService,
+                SDocDataStore,
+                SDocDataService,
                 {provide: AppService, useClass: MockAppService}
             ],
             schemas: [

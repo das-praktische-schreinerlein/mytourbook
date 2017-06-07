@@ -1,0 +1,4 @@
+<div *ngIf="record != undefined && record.id  > 0">
+    <app-sdoc-editform [record]="record" (save)="submitSave($event)"></app-sdoc-editform>
+</div>
+

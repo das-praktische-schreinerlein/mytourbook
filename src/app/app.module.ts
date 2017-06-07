@@ -3,35 +3,35 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {AppComponent} from './app.component';
-import {TrackDataService} from './services/track-data.service';
-import {TrackListComponent} from './components/track/track-list/track-list.component';
-import {TrackListItemComponent} from './components/track/track-list-item/track-list-item.component';
-import {TrackListFooterComponent} from './components/track/track-list-footer/track-list-footer.component';
-import {TrackEditformComponent} from './components/track/track-editform/track-editform.component';
-import {TrackSearchformComponent} from './components/track/track-searchform/track-searchform.component';
-import {TrackSearchpageComponent} from './components/track/track-searchpage/track-searchpage.component';
-import {TrackEditpageComponent} from './components/track/track-editpage/track-editpage.component';
+import {SDocDataService} from './services/sdoc-data.service';
+import {SDocListComponent} from './components/sdoc/sdoc-list/sdoc-list.component';
+import {SDocListItemComponent} from './components/sdoc/sdoc-list-item/sdoc-list-item.component';
+import {SDocListFooterComponent} from './components/sdoc/sdoc-list-footer/sdoc-list-footer.component';
+import {SDocEditformComponent} from './components/sdoc/sdoc-editform/sdoc-editform.component';
+import {SDocSearchformComponent} from './components/sdoc/sdoc-searchform/sdoc-searchform.component';
+import {SDocSearchpageComponent} from './components/sdoc/sdoc-searchpage/sdoc-searchpage.component';
+import {SDocEditpageComponent} from './components/sdoc/sdoc-editpage/sdoc-editpage.component';
 import {AppService} from './services/app.service';
-import {TrackDataStore} from './services/track-data.store';
+import {SDocDataStore} from './services/sdoc-data.store';
 import {routing} from './app.router';
-import {TrackCreateformComponent} from './components/track/track-createform/track-createform.component';
-import {TrackCreatepageComponent} from './components/track/track-createpage/track-createpage.component';
+import {SDocCreateformComponent} from './components/sdoc/sdoc-createform/sdoc-createform.component';
+import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-createpage.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {TrackListHeaderComponent} from './components/track/track-list-header/track-list-header.component';
+import {SDocListHeaderComponent} from './components/sdoc/sdoc-list-header/sdoc-list-header.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        TrackListComponent,
-        TrackListItemComponent,
-        TrackListHeaderComponent,
-        TrackListFooterComponent,
-        TrackEditformComponent,
-        TrackCreateformComponent,
-        TrackSearchformComponent,
-        TrackSearchpageComponent,
-        TrackCreatepageComponent,
-        TrackEditpageComponent
+        SDocListComponent,
+        SDocListItemComponent,
+        SDocListHeaderComponent,
+        SDocListFooterComponent,
+        SDocEditformComponent,
+        SDocCreateformComponent,
+        SDocSearchformComponent,
+        SDocSearchpageComponent,
+        SDocCreatepageComponent,
+        SDocEditpageComponent
     ],
     imports: [
         BrowserModule,
@@ -42,7 +42,7 @@ import {TrackListHeaderComponent} from './components/track/track-list-header/tra
         routing,
         NgbModule.forRoot()
     ],
-    providers: [TrackDataStore, TrackDataService, AppService],
+    providers: [SDocDataStore, SDocDataService, AppService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

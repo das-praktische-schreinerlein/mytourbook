@@ -1,0 +1,10 @@
+<footer class="footer" >
+        <ngb-pagination (pageChange)="onPageChange($event)"
+                        [collectionSize]="searchResult.recordCount"
+                        [page]="searchResult.searchForm.pageNum"
+                        [maxSize]="5"
+                        [rotate]="true"
+                        [ellipses]="false"
+                        [boundaryLinks]="true"
+                        *ngIf="searchResult.recordCount > 0"></ngb-pagination>
+</footer>

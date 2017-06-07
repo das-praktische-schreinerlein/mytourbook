@@ -1,17 +1,17 @@
 import {ModuleWithProviders} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {TrackSearchpageComponent} from './components/track/track-searchpage/track-searchpage.component';
-import {TrackEditpageComponent} from './components/track/track-editpage/track-editpage.component';
-import {TrackCreatepageComponent} from './components/track/track-createpage/track-createpage.component';
+import {SDocSearchpageComponent} from './components/sdoc/sdoc-searchpage/sdoc-searchpage.component';
+import {SDocEditpageComponent} from './components/sdoc/sdoc-editpage/sdoc-editpage.component';
+import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-createpage.component';
 
 // Route Configuration
 export const routes: Routes = [
-    {path: '', redirectTo: 'tracks', pathMatch: 'full'},
-    {path: 'track/list', redirectTo: 'tracks'},
-    {path: 'tracks', component: TrackSearchpageComponent, pathMatch: 'full'},
-    {path: 'tracks/:when/:where/:what/:fulltext/:moreFilter/:sort/:perPage/:pageNum', component: TrackSearchpageComponent},
-    {path: 'track/create', component: TrackCreatepageComponent},
-    {path: 'track/edit/:trackId', component: TrackEditpageComponent}
+    {path: '', redirectTo: 'sdocs', pathMatch: 'full'},
+    {path: 'sdoc/list', redirectTo: 'sdocs'},
+    {path: 'sdocs', component: SDocSearchpageComponent, pathMatch: 'full'},
+    {path: 'sdocs/:when/:where/:what/:fulltext/:moreFilter/:sort/:perPage/:pageNum', component: SDocSearchpageComponent},
+    {path: 'sdoc/create', component: SDocCreatepageComponent},
+    {path: 'sdoc/edit/:id', component: SDocEditpageComponent}
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(routes);

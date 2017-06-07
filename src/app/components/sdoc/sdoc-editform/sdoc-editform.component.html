@@ -1,0 +1,5 @@
+<form [formGroup]="editFormGroup" (ngSubmit)="submitSave($event)">
+    <input formControlName="name" type="text" placeholder="Name">
+    <input formControlName="desc" type="text" placeholder="Beschreibung">
+    <button type="submit">Save</button>
+</form>
