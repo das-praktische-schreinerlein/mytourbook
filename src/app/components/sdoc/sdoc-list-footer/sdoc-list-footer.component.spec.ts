@@ -22,7 +22,7 @@ describe('SDocListFooterComponent', () => {
         fixture = TestBed.createComponent(SDocListFooterComponent);
         component = fixture.componentInstance;
         component.searchResult = new SDocSearchResult(
-            new SDocSearchForm({}), 1, [ new SDocRecord({id: 1, name: 'Test'})]);
+            new SDocSearchForm({}), 1, [ new SDocRecord({id: '1', name: 'Test'})]);
         fixture.detectChanges();
     });
 

@@ -3,6 +3,7 @@ import {SDocDataService} from './sdoc-data.service';
 import {SDocSolrAdapter} from './sdoc-solr.adapter';
 import {Http, Jsonp} from '@angular/http';
 import {SDocDataStore} from './sdoc-data.store';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AppService {
@@ -16,7 +17,7 @@ export class AppService {
 
     initSolrData() {
         const options = {
-            basePath: 'http://192.168.99.100:8983/solr/mat/',
+            basePath: environment.solrBasePath,
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
         };
         const httpAdapter = new SDocSolrAdapter(options, this.jsonp);

@@ -1,6 +1,6 @@
 <div class="card-block">
     <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-        <ng-template ngbSlide *ngFor="let sdocimage of record.sdocimages">
+        <ng-template ngbSlide *ngFor="let sdocimage of getThumbnails(record);">
             <img class="sdoc-image" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
             <div class="carousel-caption">
                 <h3>{{sdocimage.name}}</h3>
@@ -16,7 +16,7 @@
     </ul>
     <p class="card-text">
         {{record.desc}}
-        <ngb-accordion #acc="ngbAccordion" activeIds="">
+        <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
             <ngb-panel title="Karte">
                 <ng-template ngbPanelContent>
                     <iframe [src]="getMapUrl(record)"

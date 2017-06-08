@@ -4,5 +4,6 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 export const environment = {
-    production: false
+    production: false,
+    solrBasePath: 'http://192.168.99.100:8983/solr/mytb/'
 };

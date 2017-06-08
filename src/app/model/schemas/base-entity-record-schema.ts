@@ -8,7 +8,7 @@ export const BaseEntityRecordSchema = new Schema({
     type: 'object',
     properties: {
         id: {
-            type: 'number',
+            type: 'string',
         },
         createdBy: {
             type: 'string'

@@ -4,7 +4,7 @@ export class SDocImageRecord extends BaseEntityRecord {
     desc: string;
     fileName: string;
     name: string;
-    sdoc_id: number;
+    sdoc_id: string;
 
     toString() {
         return 'SDocImageRecord Record {\n' +

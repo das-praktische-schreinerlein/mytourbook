@@ -11,6 +11,6 @@ export const SDocImageRecordSchema = new Schema({
         desc: {type: 'string'},
         fileName: {type: 'string'},
         name: {type: 'string'},
-        sdoc_id: {type: 'number', indexed: true}
+        sdoc_id: {type: 'string', indexed: true}
     }
 });

@@ -17,8 +17,8 @@ describe('SDocDataService', () => {
             ]
         });
 
-        sdoc1 = new SDocRecord({desc: '', name: 'Testsdoc1', persons: '', id: 1});
-        sdoc2 = new SDocRecord({desc: '', name: 'Testsdoc2', persons: '', id: 2});
+        sdoc1 = new SDocRecord({desc: '', name: 'Testsdoc1', persons: '', id: '1'});
+        sdoc2 = new SDocRecord({desc: '', name: 'Testsdoc2', persons: '', id: '2'});
     });
 
     it('should ...', done => {
@@ -114,9 +114,9 @@ describe('SDocDataService', () => {
             Observable.forkJoin(
                 service.addMany([sdoc1, sdoc2]),
                 service.getAll(),
-                service.deleteById(1),
+                service.deleteById('1'),
                 service.getAll(),
-                service.deleteById(2),
+                service.deleteById('2'),
                 service.getAll()
             ).subscribe(
                 results => {
@@ -145,7 +145,7 @@ describe('SDocDataService', () => {
             Observable.forkJoin(
                 service.addMany([sdoc1, sdoc2]),
                 service.getAll(),
-                service.deleteById(3),
+                service.deleteById('3'),
                 service.getAll()
             ).subscribe(
                 results => {
@@ -175,7 +175,7 @@ describe('SDocDataService', () => {
             Observable.forkJoin(
                 service.addMany([sdoc1, sdoc2]),
                 service.getAll(),
-                service.updateById(1, {
+                service.updateById('1', {
                     name: 'new name'
                 }),
                 service.getById(1)
@@ -204,7 +204,7 @@ describe('SDocDataService', () => {
             Observable.forkJoin(
                 service.addMany([sdoc1, sdoc2]),
                 service.getAll(),
-                service.updateById(26, {
+                service.updateById('26', {
                     name: 'new name'
                 }),
                 service.getById(26)

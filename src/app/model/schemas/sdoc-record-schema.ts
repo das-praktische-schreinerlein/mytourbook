@@ -10,6 +10,6 @@ export const SDocRecordSchema = new Schema({
     properties: {
         desc: {type: 'string'},
         name: {type: 'string'},
-        type: {type: 'number'}
+        type: {type: 'string'}
     }
 });

@@ -1,12 +1,19 @@
 import {BaseEntityRecord} from './base-entity-record';
 
 export class SDocRecord extends BaseEntityRecord {
-    desc: string;
-    name: string;
-    type: number;
-    keywords: string;
-    gpssdocsBasefile: string;
+    locId: number;
+    routeId: number;
+    trackId: number;
+
     datevon: Date;
+    desc: string;
+    geoLon: string;
+    geoLat: string;
+    geoLoc: string;
+    gpsTrackBasefile: string;
+    keywords: string;
+    name: string;
+    type: string;
 
     toString() {
         return 'SDocRecord Record {\n' +

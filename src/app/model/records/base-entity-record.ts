@@ -1,7 +1,7 @@
 import {Record} from 'js-data';
 
 export class BaseEntityRecord extends Record {
-    id: number;
+    id: string;
     createdBy: string;
 
     toString(useWrapper, includeId) {

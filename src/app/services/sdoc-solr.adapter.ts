@@ -38,32 +38,53 @@ export class SDocSolrAdapter extends GenericSolrAdapter {
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
 
         const values = {};
-        values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
-        values['id'] = Number(this.getSolrValue(doc, 'id', undefined));
-        values['html'] = this.getSolrValue(doc, 'html_txt', undefined);
+        values['id'] = this.getSolrValue(doc, 'id', undefined);
+
+        values['locId'] = Number(this.getSolrValue(doc, 'loc_id_i', undefined));
+        values['routeId'] = Number(this.getSolrValue(doc, 'route_id_i', undefined));
+        values['trackId'] = Number(this.getSolrValue(doc, 'track_id_i', undefined));
 
         values['datevon'] = this.getSolrValue(doc, 'date_dt', undefined);
         values['desc'] = this.getSolrValue(doc, 'desc_txt', undefined);
-        values['keywords'] = this.getSolrValue(doc, 'keywords_txt', undefined).split(',,').join(', ').replace(/KW_/g, '');
-        values['persons'] = this.getSolrValue(doc, 'personen_txt', undefined).split(',,').join(', ');
-        values['gpssdocsBasefile'] = this.getSolrValue(doc, 'gpssdocs_basefile_txt', undefined);
+        values['geoLon'] = this.getSolrValue(doc, 'geo_lon_txt', undefined);
+        values['geoLat'] = this.getSolrValue(doc, 'geo_lat_txt', undefined);
+        values['geoLoc'] = this.getSolrValue(doc, 'geo_loc', undefined);
+        values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_txt', undefined);
+        values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
+        values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
+        values['type'] = this.getSolrValue(doc, 'type_txt', undefined);
+
+        values['persons'] = this.getSolrValue(doc, 'personen_txt', '').split(',,').join(', ');
         // console.log('mapSolrDocument values:', values);
 
         const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
 
         const images: SDocImageRecord[] = [];
-        let id = record.id * 100000;
-        for (const imageDoc of doc['i_url_txt']) {
-            const imageValues = {};
-            imageValues['name'] = values['name'];
-            imageValues['id'] = id++;
-            imageValues['desc'] = values['desc'];
-            imageValues['fileName'] = imageDoc;
-            const imageRecord = imageMapper.createRecord(imageValues);
-            images.push(imageRecord);
+        const imageField = doc['i_fav_url_txt'];
+        if (imageField !== undefined && Array.isArray(imageField)) {
+            let id = 1;
+            if (record.type === 'TRACK') {
+                id = Number(record.trackId);
+            } else if (record.type === 'ROUTE') {
+                id = Number(record.routeId);
+            } else if (record.type === 'LOCATION') {
+                id = Number(record.locId);
+            } else if (record.type === 'IMAGE') {
+                id = Number(record.trackId);
+            }
+            id = id * 100000;
+
+            for (const imageDoc of imageField) {
+                const imageValues = {};
+                imageValues['name'] = values['name'];
+                imageValues['id'] = (id++).toString();
+                imageValues['fileName'] = imageDoc;
+                const imageRecord = imageMapper.createRecord(imageValues);
+                images.push(imageRecord);
+            }
         }
         record.set('sdocimages', images);
-        // console.log('mapSolrDocument record:', record);
+        // console.log('mapSolrDocument record full:', record);
 
         return record;
     }

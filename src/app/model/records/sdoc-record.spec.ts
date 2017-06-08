@@ -8,9 +8,9 @@ describe('SDocRecord', () => {
     it('should accept values in the constructor', () => {
         const sdoc = new SDocRecord({
             name: 'hello',
-            type: 1
+            type: 'TRACK'
         });
         expect(sdoc.name).toEqual('hello');
-        expect(sdoc.type).toEqual(1);
+        expect(sdoc.type).toEqual('TRACK');
     });
 });

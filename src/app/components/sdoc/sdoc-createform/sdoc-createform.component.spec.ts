@@ -21,7 +21,7 @@ describe('SDocCreateformComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocCreateformComponent);
         component = fixture.componentInstance;
-        component.record = new SDocRecord({id: 1, name: 'Test'});
+        component.record = new SDocRecord({id: '1', name: 'Test'});
         fixture.detectChanges();
     });
 

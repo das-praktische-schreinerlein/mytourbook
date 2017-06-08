@@ -18,8 +18,8 @@ export class SDocDataService extends SDocSearchService {
         this.dataStore.defineMapper('sdocimage', SDocImageRecord, SDocImageRecordSchema, SDocImageRecordRelation);
     }
 
-    generateNewId(): number {
-        return (new Date()).getTime();
+    generateNewId(): string {
+        return (new Date()).getTime().toString();
     }
 
     createRecord(props, opts): SDocRecord {
@@ -37,12 +37,12 @@ export class SDocDataService extends SDocSearchService {
     }
 
     // Simulate DELETE /sdocs/:id
-    deleteById(id: number): Observable<SDocRecord> {
+    deleteById(id: string): Observable<SDocRecord> {
         return Observable.fromPromise(this.dataStore.destroy('sdoc', id));
     }
 
     // Simulate PUT /sdocs/:id
-    updateById(id: number, values: Object = {}): Observable<SDocRecord> {
+    updateById(id: string, values: Object = {}): Observable<SDocRecord> {
         return Observable.fromPromise(this.dataStore.update('sdoc', id, values));
     }
 }

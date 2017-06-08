@@ -355,7 +355,7 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
             newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
         }
 
-        const query = {'q': newParams.join(' '), 'start': opts.offset, 'rows': opts.limit};
+        const query = {'q': newParams.join(' '), 'start': opts.offset * opts.limit, 'rows': opts.limit};
         // console.log('queryTransformToSolrQuery result:', query);
         return query;
     }

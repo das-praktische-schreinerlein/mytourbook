@@ -33,9 +33,46 @@ export class SDocListItemComponent {
     }
 
     getMapUrl(record: SDocRecord): SafeUrl {
+        switch (record.type) {
+            case 'TRACK':
+                return this.getMapUrlTrack(record);
+            case 'ROUTE':
+                return this.getMapUrlRoute(record);
+            default:
+                break;
+        }
+
+        return this.getMapUrlLocation(record);
+    }
+
+    getMapUrlTrack(record: SDocRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(
-            'http://www.michas-ausflugstipps.de/gmap.php?LAT=39.539649963378906&LONG=2.446817636489868&K_ID='
-            + record.id + '&FORMAT=KATINLINE&FLAGCENTERTRACK=1');
+            'http://www.michas-ausflugstipps.de/gmap.php?' +
+            'LAT=' + record.geoLat + '&' +
+            'LONG=' + record.geoLon + '&' +
+            'K_ID=' + record.trackId + '&' +
+            'FORMAT=KATINLINE&FLAGCENTERTRACK=1');
+    }
+
+    getMapUrlRoute(record: SDocRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(
+            'http://www.michas-ausflugstipps.de/gmap.php?' +
+            'LAT=' + record.geoLat + '&' +
+            'LONG=' + record.geoLon + '&' +
+            'T_ID=' + record.routeId + '&' +
+            'FORMAT=KATINLINE&FLAGCENTERTOUR=1');
+    }
+
+    getMapUrlLocation(record: SDocRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(
+            'http://www.michas-ausflugstipps.de/gmap.php?' +
+            'LAT=' + record.geoLat + '&' +
+            'LONG=' + record.geoLon + '&' +
+            'FORMAT=KATINLINE');
+    }
+
+    getThumbnails(record: SDocRecord): SDocImageRecord[] {
+        return record['sdocimages'].filter((item, index) => index < 10);
     }
 
     getThumbnailUrl(image: SDocImageRecord): SafeUrl {
