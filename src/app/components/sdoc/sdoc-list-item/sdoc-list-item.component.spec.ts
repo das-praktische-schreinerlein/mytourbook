@@ -5,6 +5,7 @@ import {SDocListItemComponent} from './sdoc-list-item.component';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {TruncatePipe} from '../../../pipes/truncate.pipe';
 
 describe('SDocListItemComponent', () => {
     let component: SDocListItemComponent;
@@ -12,7 +13,7 @@ describe('SDocListItemComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SDocListItemComponent],
+            declarations: [TruncatePipe, SDocListItemComponent],
             providers: [DomSanitizer],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot()]

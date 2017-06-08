@@ -1,21 +1,29 @@
 <div class="card-block">
-    <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-        <ng-template ngbSlide *ngFor="let sdocimage of getThumbnails(record);">
-            <img class="sdoc-image" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
-            <div class="carousel-caption">
-                <h3>{{sdocimage.name}}</h3>
-                <p>{{sdocimage.name}}.</p>
-            </div>
-        </ng-template>
-    </ngb-carousel>
-    <h5 class="card-title">{{record.name}}</h5>
-    <br />
-    <ul class="card-text">
-        <li><label>Personen:</label><span>{{record.persons}}</span></li>
-        <li><label>Keywords:</label><span>{{record.keywords}}</span></li>
+    <div>
+        <div style="width: 100px; float: left">
+            <h5>{{record.type}}</h5>
+            <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                <ng-template ngbSlide *ngFor="let sdocimage of getThumbnails(record);">
+                    <img class="sdoc-image" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                    <div class="carousel-caption">
+                        <h3>{{sdocimage.name}}</h3>
+                        <p>{{sdocimage.name}}.</p>
+                    </div>
+                </ng-template>
+            </ngb-carousel>
+        </div>
+        <h5 class="card-title">{{record.name}}</h5>
+        <p class="card-text">
+            {{record.desc | truncate : 300 }}
+        </p>
+    </div>
+    <br clear="all" />
+    <ul class="" style="float: left; list-style: none">
+        <li *ngIf="record.persons !== ''"><label>Personen:</label><span>{{record.persons}}</span></li>
+        <li *ngIf="record.keywords !== ''"><label>Keywords:</label><span>{{record.keywords}}</span></li>
     </ul>
+    <br clear="all" />
     <p class="card-text">
-        {{record.desc}}
         <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
             <ngb-panel title="Karte">
                 <ng-template ngbPanelContent>

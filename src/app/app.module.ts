@@ -18,6 +18,7 @@ import {SDocCreateformComponent} from './components/sdoc/sdoc-createform/sdoc-cr
 import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-createpage.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SDocListHeaderComponent} from './components/sdoc/sdoc-list-header/sdoc-list-header.component';
+import {TruncatePipe} from './pipes/truncate.pipe';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import {SDocListHeaderComponent} from './components/sdoc/sdoc-list-header/sdoc-l
         SDocSearchformComponent,
         SDocSearchpageComponent,
         SDocCreatepageComponent,
-        SDocEditpageComponent
+        SDocEditpageComponent,
+        TruncatePipe
     ],
     imports: [
         BrowserModule,
