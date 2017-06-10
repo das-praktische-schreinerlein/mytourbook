@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {BehaviorSubject, Subscription} from 'rxjs';
+import {Facets} from '../../../model/container/facets';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -24,7 +25,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     constructor(private sdocDataService: SDocDataService, private route: ActivatedRoute, private router: Router) {
         this.searchForm = new SDocSearchForm({});
-        this.searchResult = new SDocSearchResult(this.searchForm, 0, []);
+        this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.searchFormObervable = <BehaviorSubject<SDocSearchForm>>new BehaviorSubject(this.searchForm);
         this.searchResultObervable = <BehaviorSubject<SDocSearchResult>>new BehaviorSubject(this.searchResult);
     }

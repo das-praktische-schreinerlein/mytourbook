@@ -5,6 +5,7 @@ import {SDocRecord} from '../../../model/records/sdoc-record';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {SDocListHeaderComponent} from './sdoc-list-header.component';
+import {Facets} from '../../../model/container/facets';
 
 describe('SDocListHeaderComponent', () => {
     let component: SDocListHeaderComponent;
@@ -22,7 +23,7 @@ describe('SDocListHeaderComponent', () => {
         fixture = TestBed.createComponent(SDocListHeaderComponent);
         component = fixture.componentInstance;
         component.searchResult = new SDocSearchResult(
-            new SDocSearchForm({}), 1, [ new SDocRecord({id: '1', name: 'Test'})]);
+            new SDocSearchForm({}), 1, [ new SDocRecord({id: '1', name: 'Test'})], new Facets());
         fixture.detectChanges();
     });
 

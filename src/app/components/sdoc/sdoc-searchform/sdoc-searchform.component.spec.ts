@@ -4,6 +4,9 @@ import {SDocSearchformComponent} from './sdoc-searchform.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
+import {SDocRecord} from '../../../model/records/sdoc-record';
+import {Facets} from '../../../model/container/facets';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -21,7 +24,8 @@ describe('SDocSearchformComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocSearchformComponent);
         component = fixture.componentInstance;
-        component.searchForm = new SDocSearchForm({fulltext: 'Test1'});
+        component.searchResult = new SDocSearchResult(
+            new SDocSearchForm({ fulltext: 'Test'}), 1, [ new SDocRecord({id: '1', name: 'Test'})], new Facets());
         fixture.detectChanges();
     });
 

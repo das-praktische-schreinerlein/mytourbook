@@ -48,7 +48,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter {
         values['desc'] = this.getSolrValue(doc, 'desc_txt', undefined);
         values['geoLon'] = this.getSolrValue(doc, 'geo_lon_txt', undefined);
         values['geoLat'] = this.getSolrValue(doc, 'geo_lat_txt', undefined);
-        values['geoLoc'] = this.getSolrValue(doc, 'geo_loc', undefined);
+        values['geoLoc'] = this.getSolrValue(doc, 'geo_loc_p', undefined);
         values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_txt', undefined);
         values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
@@ -88,6 +88,50 @@ export class SDocSolrAdapter extends GenericSolrAdapter {
 
         return record;
     }
+
+    getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
+        return ['id', 'loc_id_i', 'route_id_i', 'track_id_i', 'date_dt', 'desc_txt', 'geo_lon_txt', 'geo_lat_txt', 'geo_loc_p',
+            'gpstracks_basefile_txt', 'keywords_txt', 'name_txt', 'type_txt', 'personen_txt', 'i_fav_url_txt'];
+    };
+
+    getFacetParams(mapper: Mapper, params: any, opts: any): Map<string, any> {
+        const facetParams = new Map<string, any>();
+
+        // TODO
+        if (opts.facet === true) {
+            facetParams.set('fq', '{!geofilt cache=false}');
+            facetParams.set('sfield', 'geo_loc_p');
+            facetParams.set('pt', '52.2657,13.5357');
+            facetParams.set('d', '5');
+        }
+
+        return facetParams;
+    };
+
+    getSpatialParams(mapper: Mapper, params: any, opts: any): Map<string, any> {
+        const spatialParams = new Map<string, any>();
+        spatialParams.set('facet', 'on');
+
+        spatialParams.set('facet.field', ['loc_id_i',
+            'personen_txt',
+            'loc_lochirarchie_txt',
+            'keywords_txt', 'month_i',
+            'week_i',
+            'type_txt']);
+
+        spatialParams.set('f.keywords_txt.facet.prefix', 'kw_');
+        spatialParams.set('f.keywords_txt.facet.limit', '-1');
+        spatialParams.set('f.keywords_txt.facet.sort', 'count');
+
+        spatialParams.set('f.month_i.facet.limit', '-1');
+        spatialParams.set('f.month_i.facet.sort', 'count');
+
+        spatialParams.set('f.week_i.facet.limit', '-1');
+        spatialParams.set('f.week_i.facet.sort', 'count');
+
+        return spatialParams;
+    };
+
 
     getSolrEndpoint(method: string): string {
         const updateMethods = ['create', 'destroy', 'update'];

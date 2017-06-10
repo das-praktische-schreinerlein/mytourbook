@@ -1,4 +1,24 @@
 <form [formGroup]="searchFormGroup" (ngSubmit)="submitSearch($event)">
+    <label>Volltextsuche:</label>
     <input formControlName="fulltext" type="text" placeholder="Suchtext">
+
+    <label>Wann:</label>
+    <select formControlName="when" type="text" >
+        <option *ngFor="let obj of getWhenValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
+        <option value="">jederzeit</option>
+    </select>
+
+    <label>Wo:</label>
+    <select formControlName="where" type="text" >
+        <option *ngFor="let obj of getWhereValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
+        <option value="">überall</option>
+    </select>
+
+    <label>Was:</label>
+    <select formControlName="what" type="text" >
+        <option *ngFor="let obj of getWhatValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
+        <option value="">alles</option>
+    </select>
+
     <button class="btn btn-primary" type="submit">Search</button>
 </form>

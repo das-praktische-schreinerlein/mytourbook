@@ -2,6 +2,14 @@ import {HttpAdapter, IDict} from 'js-data-http';
 import {Injectable} from '@angular/core';
 import {Mapper, Record, utils} from 'js-data';
 import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
+import {Facet, Facets} from '../model/container/facets';
+
+function Response (data, meta, op) {
+    meta = meta || {};
+    this.data = data;
+    utils.fillIn(this, meta);
+    this.op = op;
+}
 
 @Injectable()
 export abstract class GenericSolrAdapter extends HttpAdapter {
@@ -125,6 +133,45 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
         return super.findAll(mapper, query, opts);
     }
 
+    facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+        let op;
+        query = query || {};
+        opts = opts || {};
+
+        opts.endpoint = this.getSolrEndpoint('findAll');
+        opts.solrQuery = true;
+        opts.solrFacet = true;
+        const me = this;
+        opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
+
+        opts.params = this.getParams(opts);
+        opts.params.count = true;
+        opts.suffix = this.getSuffix(mapper, opts);
+        utils.deepMixIn(opts.params, query);
+        opts.params = this.queryTransform(mapper, opts.params, opts);
+
+        // beforeCount lifecycle hook
+        op = opts.op = 'beforeFacets';
+        return utils.resolve(this[op](mapper, query, opts))
+            .then(() => {
+                // Allow for re-assignment from lifecycle hook
+                op = opts.op = 'count';
+                this.dbg(op, mapper, query, opts);
+                return utils.resolve(this._count(mapper, query, opts));
+            })
+            .then((results) => {
+                let [data, result] = results;
+                result = result || {};
+                let response = new Response(data, result, op);
+                response = this.respond(response, opts);
+
+                // afterCount lifecycle hook
+                op = opts.op = 'afterFacets';
+                return utils.resolve(this[op](mapper, query, opts, response))
+                    .then((_response) => _response === undefined ? response : _response);
+            });
+    }
+
     sum (mapper: Mapper, field: string, query: any, opts?: any): Promise<any> {
         throw new Error('sum not implemented');
     }
@@ -152,6 +199,27 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
 
     updateMany<T extends Record>(mapper: Mapper, records: T[], opts?: any): Promise<any> {
         throw new Error('updateMany not implemented');
+    }
+
+    beforeFacets(mapper: Mapper, query: IDict, opts: IDict): any {
+        return utils.Promise.resolve(true);
+    }
+
+    afterFacets(mapper: Mapper, props: IDict, opts: any, result: any): Promise<Facets> {
+        if (result.facet_counts === undefined ||
+            result.facet_counts.facet_fields === undefined) {
+            return utils.Promise.resolve(new Facets());
+        }
+
+        const facets = new Facets();
+        for (const field in result.facet_counts.facet_fields) {
+            const values = this.splitPairs(result.facet_counts.facet_fields[field]);
+            const facet = new Facet();
+            facet.facet = values;
+            facets.facets.set(field, facet);
+        }
+
+        return utils.Promise.resolve(facets);
     }
 
     afterCount(mapper: Mapper, props: IDict, opts: any, result: any): Promise<number> {
@@ -247,6 +315,21 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
             return response.data.response.numFound;
         }
 
+        // facet
+        if (opts.solrFacet) {
+            if (response.data.facet_counts === undefined) {
+                return undefined;
+            }
+            if (response.data.facet_counts.facet_queries === undefined) {
+                return undefined;
+            }
+            if (response.data.facet_counts.facet_queries.facet_fields === undefined) {
+                return undefined;
+            }
+
+            return response.data.facet_counts.facet_queries.facet_fields;
+        }
+
         // search records
         if (response.data.response.docs === undefined) {
             return undefined;
@@ -292,6 +375,12 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
     abstract mapToSolrDocument(props: any): any;
 
     abstract getSolrEndpoint(method: string): string;
+
+    abstract getSolrFields(mapper: Mapper, params: any, opts: any): string[];
+
+    abstract getFacetParams(mapper: Mapper, params: any, opts: any): Map<string, any>;
+
+    abstract getSpatialParams(mapper: Mapper, params: any, opts: any): Map<string, any>;
 
     getSolrValue(solrDocument: any, solrFieldName: string, defaultValue: any): string {
         let value = defaultValue;
@@ -339,6 +428,31 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
     }
 
     private queryTransformToSolrQuery(mapper: Mapper, params: any, opts: any): any {
+        const query = this.createSolrQuery(mapper, params, opts);
+
+        const fields = this.getSolrFields(mapper, params, opts);
+        if (fields !== undefined && fields.length > 0) {
+            query.fl = fields.join(' ');
+        }
+
+        const facetParams = this.getFacetParams(mapper, params, opts);
+        if (facetParams !== undefined && facetParams.size > 0) {
+            facetParams.forEach(function (value, key) {
+                query[key] = value;
+            });
+        }
+
+        const spatialParams = this.getSpatialParams(mapper, params, opts);
+        if (spatialParams !== undefined && spatialParams.size > 0) {
+            spatialParams.forEach(function (value, key) {
+                query[key] = value;
+            });
+        }
+
+        return query;
+    }
+
+    private createSolrQuery(mapper: Mapper, params: any, opts: any): any {
         // console.log('queryTransformToSolrQuery params:', params);
         // console.log('queryTransformToSolrQuery opts:', opts);
         if (params.where === undefined) {
@@ -355,7 +469,7 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
             newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
         }
 
-        const query = {'q': newParams.join(' '), 'start': opts.offset * opts.limit, 'rows': opts.limit};
+        const query = {'q': newParams.join(' AND '), 'start': opts.offset * opts.limit, 'rows': opts.limit};
         // console.log('queryTransformToSolrQuery result:', query);
         return query;
     }
@@ -390,6 +504,18 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
 
     private escapeSolrValue(value: any): string {
         return value;
+    }
+
+    private splitPairs(arr: Array<any>): Array<Array<any>> {
+        const pairs = [];
+        for (let i = 0; i < arr.length; i += 2) {
+            if (arr[i + 1] !== undefined) {
+                pairs.push([arr[i], arr[i + 1]]);
+            } else {
+                pairs.push([arr[i]]);
+            }
+        }
+        return pairs;
     }
 }
 

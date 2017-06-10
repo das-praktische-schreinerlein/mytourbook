@@ -4,6 +4,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {Record} from 'js-data';
+import {Facets} from '../model/container/facets';
 
 export abstract class GenericSearchService <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> {
@@ -27,7 +28,7 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         const query = this.createQueryFromForm(searchForm);
 
         console.log('findCurList for form', searchForm);
-        const searchResult = this.createSearchResult(searchForm, 0, []);
+        const searchResult = this.createSearchResult(searchForm, 0, [], new Facets());
 
         const result: Observable<R[]> = Observable.fromPromise(this.dataStore.findAll(this.searchMapperName, query, {
             limit: searchForm.perPage,
@@ -64,6 +65,24 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
             }
         );
 
+        const facetsResult = Observable.fromPromise(this.dataStore.facets(this.searchMapperName, query, {
+            limit: searchForm.perPage,
+            offset: searchForm.pageNum - 1,
+            // We want the newest posts first
+            orderBy: [['created_at', 'desc']]
+        }));
+        facetsResult.subscribe(facets => {
+                console.log('findCurList facets', facets);
+                searchResult.facets = facets;
+                this.curList.next(searchResult);
+            },
+            error => {
+                console.error('findCurList facets failed:' + error);
+            },
+            () => {
+            }
+        );
+
         return result;
     }
 
@@ -79,5 +98,5 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
 
     abstract createDefaultSearchForm(): F;
 
-    abstract createSearchResult(searchForm: F, recordCount: number, records: R[]): S;
+    abstract createSearchResult(searchForm: F, recordCount: number, records: R[], facets: Facets): S;
 }

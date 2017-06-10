@@ -5,5 +5,5 @@
 
 export const environment = {
     production: false,
-    solrBasePath: 'http://192.168.99.100:8983/solr/mytb/'
+    solrBasePath: 'http://localhost:8983/solr/mytb/'
 };

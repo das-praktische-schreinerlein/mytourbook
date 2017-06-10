@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {BehaviorSubject} from 'rxjs';
+import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
+import {Facets} from '../../../model/container/facets';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -10,17 +12,17 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class SDocSearchformComponent implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
-    private _searchForm = new BehaviorSubject<SDocSearchForm>(new SDocSearchForm({}));
+    private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
 
     @Input()
-    public set searchForm(value: SDocSearchForm) {
+    public set searchResult(value: SDocSearchResult) {
         // set the latest value for _data BehaviorSubject
-        this._searchForm.next(value);
+        this._searchResult.next(value);
     };
 
-    public get searchForm(): SDocSearchForm {
+    public get searchResult(): SDocSearchResult {
         // get the latest value from _data BehaviorSubject
-        return this._searchForm.getValue();
+        return this._searchResult.getValue();
     }
     @Output()
     search: EventEmitter<SDocSearchForm> = new EventEmitter();
@@ -40,14 +42,65 @@ export class SDocSearchformComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._searchForm.subscribe(
-            sdocSearchForm => {
-                const values: SDocSearchForm = sdocSearchForm;
+        this._searchResult.subscribe(
+            sdocSearchSearchResult => {
+                const values: SDocSearchForm = sdocSearchSearchResult.searchForm;
                 this.searchFormGroup = this.fb.group({
-                    fulltext: values.fulltext
+                    fulltext: values.fulltext,
+                    when: values.when,
+                    what: values.what,
+                    where: values.where
                 });
             },
         );
+    }
+
+    getWhenValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        const values = [].concat(
+            this.extractFacetValues(searchResult, 'month_i', 'month', 'Monat'),
+            this.extractFacetValues(searchResult, 'week_i', 'week', 'Woche'));
+
+        return values;
+    }
+
+    getWhereValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        const values = [].concat(
+            this.extractFacetValues(searchResult, 'loc_lochirarchie_txt', '', ''));
+
+        return values;
+    }
+
+    getWhatValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        const values = [].concat(
+            this.extractFacetValues(searchResult, 'keywords_txt', '', ''));
+
+        return values;
+    }
+
+    extractFacetValues(searchResult: SDocSearchResult, facetName: string, valuePrefix: string, labelPrefix: string): any[] {
+        const values = [];
+        const facet = searchResult.facets.facets.get(facetName);
+        if (facet !== undefined &&
+            facet.facet !== undefined) {
+            for (const idx in searchResult.facets.facets.get(facetName).facet) {
+                const facetValue = searchResult.facets.facets.get(facetName).facet[idx];
+                values.push([labelPrefix, facetValue[0], valuePrefix, facetValue[1]]);
+            }
+        }
+
+        return values;
     }
 
     submitSearch() {

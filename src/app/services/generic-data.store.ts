@@ -2,6 +2,8 @@
 import {DataStore, Mapper, Record, Schema, utils} from 'js-data';
 import {Adapter} from 'js-data-adapter';
 import {Injectable} from '@angular/core';
+import {Facets} from '../model/container/facets';
+import {GenericSolrAdapter} from './generic-solr.adapter';
 
 @Injectable()
 export class GenericDataStore {
@@ -136,6 +138,21 @@ export class GenericDataStore {
             // bypass cache
             opts.force = true;
             return this.store.findAll(mapperName, query, opts);
+        }
+    }
+
+    public facets(mapperName: string, query?: any, opts?: any): Promise<Facets> {
+        if (this.getAdapterForMapper(mapperName) === undefined ||
+            (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter))) {
+            return utils.Promise.resolve(undefined);
+        } else {
+            opts = opts || {};
+
+            // bypass cache
+            opts.force = true;
+
+            const mapper = this.store.getMapper(mapperName);
+            return (<GenericSolrAdapter>this.getAdapterForMapper(mapperName)).facets(mapper, query, opts);
         }
     }
 
