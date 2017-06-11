@@ -31,8 +31,8 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         const result = new Promise<R[]>((resolve, reject) => {
             searchResultObs.then(function doneSearch(searchResultData: S) {
                     console.log('findCurList searchResultData', searchResultData);
-                    resolve(<R[]>searchResultData.currentRecords);
                     me.curList.next(searchResultData);
+                    resolve(<R[]>searchResultData.currentRecords);
                 },
                 function errorSearch(reason) {
                     console.error('findCurList failed:' + reason);

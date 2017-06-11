@@ -1,8 +1,9 @@
 import {HttpAdapter, IDict} from 'js-data-http';
-import {Injectable} from '@angular/core';
 import {Mapper, Record, utils} from 'js-data';
 import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
 import {Facet, Facets} from '../model/container/facets';
+import {GenericSearchResult} from '../model/container/generic-searchresult';
+import {GenericSearchForm} from '../model/forms/generic-searchform';
 
 function Response (data, meta, op) {
     meta = meta || {};
@@ -11,8 +12,8 @@ function Response (data, meta, op) {
     this.op = op;
 }
 
-@Injectable()
-export abstract class GenericSolrAdapter extends HttpAdapter {
+export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm,
+    S extends GenericSearchResult<R, F>> extends HttpAdapter {
     static configureSolrHttpProvider(jsonP: Jsonp): any {
         return function makeHttpRequest(httpConfig) {
             const headers: Headers = new Headers();
@@ -174,6 +175,45 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
             });
     }
 
+    search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+        let op;
+        query = query || {};
+        opts = opts || {};
+
+        opts.endpoint = this.getSolrEndpoint('findAll');
+        opts.solrQuery = true;
+        opts.solrFacet = true;
+        const me = this;
+        opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
+
+        opts.params = this.getParams(opts);
+        opts.params.count = true;
+        opts.suffix = this.getSuffix(mapper, opts);
+        utils.deepMixIn(opts.params, query);
+        opts.params = this.queryTransform(mapper, opts.params, opts);
+
+        // beforeCount lifecycle hook
+        op = opts.op = 'beforeSearch';
+        return utils.resolve(this[op](mapper, query, opts))
+            .then(() => {
+                // Allow for re-assignment from lifecycle hook
+                op = opts.op = 'count';
+                this.dbg(op, mapper, query, opts);
+                return utils.resolve(this._count(mapper, query, opts));
+            })
+            .then((results) => {
+                let [data, result] = results;
+                result = result || {};
+                let response = new Response(data, result, op);
+                response = this.respond(response, opts);
+
+                // afterCount lifecycle hook
+                op = opts.op = 'afterSearch';
+                return utils.resolve(this[op](mapper, query, opts, response))
+                    .then((_response) => _response === undefined ? response : _response);
+            });
+    }
+
     sum (mapper: Mapper, field: string, query: any, opts?: any): Promise<any> {
         throw new Error('sum not implemented');
     }
@@ -207,21 +247,20 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
         return utils.Promise.resolve(true);
     }
 
+    beforeSearch(mapper: Mapper, query: IDict, opts: IDict): any {
+        return utils.Promise.resolve(true);
+    }
+
     afterFacets(mapper: Mapper, props: IDict, opts: any, result: any): Promise<Facets> {
-        if (result.facet_counts === undefined ||
-            result.facet_counts.facet_fields === undefined) {
-            return utils.Promise.resolve(new Facets());
-        }
+        return utils.Promise.resolve(this.extractFacetsFromSolrResult(mapper, result));
+    }
 
-        const facets = new Facets();
-        for (const field in result.facet_counts.facet_fields) {
-            const values = this.splitPairs(result.facet_counts.facet_fields[field]);
-            const facet = new Facet();
-            facet.facet = values;
-            facets.facets.set(field, facet);
-        }
-
-        return utils.Promise.resolve(facets);
+    afterSearch(mapper: Mapper, props: IDict, opts: any, result: any): Promise<S> {
+        const count: number = this.extractCountFromSolrResult(mapper, result);
+        const records: R[] = this.extractRecordsFromSolrResult(mapper, result);
+        const facets: Facets = this.extractFacetsFromSolrResult(mapper, result);
+        const searchResult = new GenericSearchResult(undefined, count, records, facets);
+        return utils.Promise.resolve(searchResult);
     }
 
     afterCount(mapper: Mapper, props: IDict, opts: any, result: any): Promise<number> {
@@ -314,7 +353,7 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
 
         // count
         if (opts.solrCount) {
-            return response.data.response.numFound;
+            return this.extractCountFromSolrResult(mapper, response.data);
         }
 
         // facet
@@ -329,7 +368,7 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
                 return undefined;
             }
 
-            return response.data.facet_counts.facet_queries.facet_fields;
+            return this.extractFacetsFromSolrResult(mapper, response.data);
         }
 
         // search records
@@ -337,8 +376,17 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
             return undefined;
         }
 
+        return this.extractRecordsFromSolrResult(mapper, response.data);
+
+    }
+
+    extractCountFromSolrResult(mapper: Mapper, result: any): number {
+        return result.response.numFound;
+    }
+
+    extractRecordsFromSolrResult(mapper: Mapper, result: any): R[] {
         // got documents
-        const docs = response.data.response.docs;
+        const docs = result.response.docs;
         const records = [];
         for (const doc of docs) {
             records.push(this.mapSolrDocument(mapper, doc));
@@ -346,8 +394,25 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
         // console.log('deserializeSolr:', records);
 
         return records;
-
     }
+
+    extractFacetsFromSolrResult(mapper: Mapper, result: any): Facets {
+        if (result.facet_counts === undefined ||
+            result.facet_counts.facet_fields === undefined) {
+            return new Facets();
+        }
+
+        const facets = new Facets();
+        for (const field in result.facet_counts.facet_fields) {
+            const values = this.splitPairs(result.facet_counts.facet_fields[field]);
+            const facet = new Facet();
+            facet.facet = values;
+            facets.facets.set(field, facet);
+        }
+
+        return facets;
+    }
+
 
     mapSolrDocument(mapper: Mapper, doc: any): Record {
         const values = {};

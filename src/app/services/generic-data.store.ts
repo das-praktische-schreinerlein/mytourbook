@@ -108,7 +108,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
             opts.force = true;
 
             const mapper = this.store.getMapper(mapperName);
-            return (<GenericSolrAdapter>this.getAdapterForMapper(mapperName)).facets(mapper, query, opts);
+            return (<GenericSolrAdapter<R, F, S>>this.getAdapterForMapper(mapperName)).facets(mapper, query, opts);
         }
     }
 
@@ -138,33 +138,24 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         console.log('findCurList for form', searchForm);
         const searchResult = this.createSearchResult(searchForm, 0, [], new Facets());
 
-        const bla = true;
-        if (bla || this.getAdapterForMapper(mapperName) === undefined ||
-            (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter))) {
-            const me = this;
-            const result = new Promise<S>((resolve, reject) => {
+        const me = this;
+        const result = new Promise<S>((resolve, reject) => {
+            const options = {
+                force: false,
+                limit: searchForm.perPage,
+                offset: searchForm.pageNum - 1,
+                // We want the newest posts first
+                orderBy: [['created_at', 'desc']]
+            };
+            if (this.getAdapterForMapper(mapperName) === undefined ||
+                (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter))) {
                 // the resolve / reject functions control the fate of the promise
-                me.findAll(mapperName, query, {
-                    limit: searchForm.perPage,
-                    offset: searchForm.pageNum - 1,
-                    // We want the newest posts first
-                    orderBy: [['created_at', 'desc']]
-                }).then(function doneFindAll(documents: R[]) {
+                me.findAll(mapperName, query, options).then(function doneFindAll(documents: R[]) {
                     searchResult.currentRecords = documents;
-                    return me.count(mapperName, query, {
-                        limit: searchForm.perPage,
-                        offset: searchForm.pageNum - 1,
-                        // We want the newest posts first
-                        orderBy: [['created_at', 'desc']]
-                    });
+                    return me.count(mapperName, query, options);
                 }).then(function doneCount(count: number) {
                     searchResult.recordCount = count;
-                    return me.facets(mapperName, query, {
-                        limit: searchForm.perPage,
-                        offset: searchForm.pageNum - 1,
-                        // We want the newest posts first
-                        orderBy: [['created_at', 'desc']]
-                    });
+                    return me.facets(mapperName, query, options);
                 }).then(function doneFacets(facets: Facets) {
                     searchResult.facets = facets;
                     resolve(searchResult);
@@ -172,18 +163,25 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     console.error('findCurList failed:' + reason);
                     reject(reason);
                 });
-            });
+            } else {
+                opts = opts || {};
+                options.force = true;
 
-            return result;
-        } else {
-            opts = opts || {};
+                const mapper = this.store.getMapper(mapperName);
+                (<GenericSolrAdapter<R, F, S>>me.getAdapterForMapper(mapperName)).search(mapper, query, options)
+                    .then(function doneSearch(genericSearchResult: S) {
+                    searchResult.facets = genericSearchResult.facets;
+                    searchResult.currentRecords = genericSearchResult.currentRecords;
+                    searchResult.recordCount = genericSearchResult.recordCount;
+                    resolve(searchResult);
+                }).catch(function errorHandling(reason) {
+                    console.error('findCurList failed:' + reason);
+                    reject(reason);
+                });
+            }
+        });
 
-            // bypass cache
-            opts.force = true;
-
-            const mapper = this.store.getMapper(mapperName);
-            // return (<GenericSolrAdapter>this.getAdapterForMapper(mapperName)).search(mapper, searchForm, opts);
-        }
+        return result;
     }
 
 

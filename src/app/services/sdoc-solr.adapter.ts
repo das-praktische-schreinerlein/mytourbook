@@ -4,9 +4,11 @@ import {GenericSolrAdapter} from './generic-solr.adapter';
 import {Mapper, Record} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocImageRecord} from '../model/records/sdocimage-record';
+import {SDocSearchForm} from '../model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 
 @Injectable()
-export class SDocSolrAdapter extends GenericSolrAdapter {
+export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     constructor(config: any, jsonP: Jsonp) {
         super(config, jsonP);
     }
