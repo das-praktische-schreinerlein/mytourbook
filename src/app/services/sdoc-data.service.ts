@@ -1,9 +1,6 @@
 import {Injectable} from '@angular/core';
 import {SDocRecord, SDocRecordRelation} from '../model/records/sdoc-record';
-import {Observable} from 'rxjs/Rx';
 import {SDocDataStore} from './sdoc-data.store';
-import {SDocSearchForm} from '../model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 import {SDocSearchService} from './sdoc-search.service';
 import {SDocImageRecord, SDocImageRecordRelation} from '../model/records/sdocimage-record';
 import {SDocImageRecordSchema} from '../model/schemas/sdocimage-record-schema';
@@ -27,22 +24,22 @@ export class SDocDataService extends SDocSearchService {
     }
 
     // Simulate POST /sdocs
-    add(sdoc: SDocRecord): Observable<SDocRecord> {
-        return Observable.fromPromise(this.dataStore.create('sdoc', sdoc));
+    add(sdoc: SDocRecord): Promise<SDocRecord> {
+        return this.dataStore.create('sdoc', sdoc);
     }
 
     // Simulate POST /sdocs
-    addMany(sdocs: SDocRecord[]): Observable<SDocRecord[]> {
-        return Observable.fromPromise(this.dataStore.createMany('sdoc', sdocs));
+    addMany(sdocs: SDocRecord[]): Promise<SDocRecord[]> {
+        return this.dataStore.createMany('sdoc', sdocs);
     }
 
     // Simulate DELETE /sdocs/:id
-    deleteById(id: string): Observable<SDocRecord> {
-        return Observable.fromPromise(this.dataStore.destroy('sdoc', id));
+    deleteById(id: string): Promise<SDocRecord> {
+        return this.dataStore.destroy('sdoc', id);
     }
 
     // Simulate PUT /sdocs/:id
-    updateById(id: string, values: Object = {}): Observable<SDocRecord> {
-        return Observable.fromPromise(this.dataStore.update('sdoc', id, values));
+    updateById(id: string, values: Object = {}): Promise<SDocRecord> {
+        return this.dataStore.update('sdoc', id, values);
     }
 }

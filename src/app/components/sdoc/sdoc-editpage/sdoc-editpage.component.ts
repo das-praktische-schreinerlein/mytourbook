@@ -18,15 +18,14 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // Subscribe to route params
+        const me = this;
         this.routeSubscription = this.route.params.subscribe(params => {
             const id = params['id'];
-            this.sdocDataService.getById(id).subscribe(
-                sdoc => {
-                    this.record = sdoc;
+            me.sdocDataService.getById(id).then(function doneGetById(sdoc: SDocRecord) {
+                    me.record = sdoc;
                 },
-                error => {
-                },
-                () => {
+                function errorCreate(reason: any) {
+                    console.error('edit getById failed:' + reason);
                 }
             );
         });
@@ -38,14 +37,12 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     }
 
     submitSave(values: {}) {
-        this.sdocDataService.updateById(values['id'], values).subscribe(
-            sdoc => {
-                this.router.navigateByUrl('/sdoc/list');
+        const me = this;
+        this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
+                me.router.navigateByUrl('/sdoc/list');
             },
-            error => {
-                console.error('updateById failed:' + error);
-            },
-            () => {
+            function errorCreate(reason: any) {
+                console.error('edit updateById failed:' + reason);
             }
         );
     }

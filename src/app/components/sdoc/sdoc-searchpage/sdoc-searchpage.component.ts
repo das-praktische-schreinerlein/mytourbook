@@ -85,15 +85,13 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     onDeleteSDoc(sdoc: SDocRecord) {
         if (window.confirm('SDoc wirklich löschen?')) {
-            this.sdocDataService.deleteById(sdoc.id).subscribe(
-                () => {
+            const me = this;
+            this.sdocDataService.deleteById(sdoc.id).then(function doneDeleteById() {
                     console.log('SDoc deleted', sdoc);
-                    this.redirectToSearch();
+                    me.redirectToSearch();
                 },
-                error => {
-                    console.error('deleteSDocById failed:' + error);
-                },
-                () => {
+                function errorCreate(reason: any) {
+                    console.error('deleteSDocById failed:' + reason);
                 }
             );
         }
@@ -132,7 +130,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             +this.searchForm.perPage || 10,
             +this.searchForm.pageNum || 1
         ];
-        url += params.join('/');
+        url += params.join('/') + '?' + new Date().getTime();
         console.log('redirectToSearch: redirect to ', url);
         this.router.navigateByUrl(url);
         return;

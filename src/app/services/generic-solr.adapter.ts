@@ -116,6 +116,8 @@ export abstract class GenericSolrAdapter extends HttpAdapter {
         opts.params = opts.params || {};
         opts.params.where = opts.params.where || {};
         opts.params.where.id = { '==': id};
+        opts.offset = 0;
+        opts.limit = 10;
         opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
 
         return super.find(mapper, id, opts);

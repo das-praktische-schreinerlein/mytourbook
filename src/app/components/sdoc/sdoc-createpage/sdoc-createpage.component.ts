@@ -23,13 +23,12 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
     onCreate(values: {}) {
         this.record = this.sdocDataService.createRecord(values, undefined);
         this.record.id = this.sdocDataService.generateNewId();
-        this.sdocDataService.add(this.record).subscribe(
-            sdoc => {
-                this.router.navigateByUrl('/record/list');
+        const me = this;
+        this.sdocDataService.add(this.record).then(function doneCreate(sDoc: SDocRecord) {
+                me.router.navigateByUrl('/record/list');
             },
-            error => {
-            },
-            () => {
+            function errorCreate(reason: any) {
+                console.error('create failed:' + reason);
             }
         );
     }

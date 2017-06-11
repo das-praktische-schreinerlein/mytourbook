@@ -4,6 +4,7 @@ import {SDocSolrAdapter} from './sdoc-solr.adapter';
 import {Http, Jsonp} from '@angular/http';
 import {SDocDataStore} from './sdoc-data.store';
 import {environment} from '../../environments/environment';
+import {SDocRecord} from '../model/records/sdoc-record';
 
 @Injectable()
 export class AppService {
@@ -25,17 +26,18 @@ export class AppService {
     }
 
     initStaticData() {
+        const me = this;
         this.http.request('./assets/sdocs.json').subscribe(
             res => {
                 const sdocs: any[] = res.json().sdocs;
-                this.sdocDataService.addMany(sdocs).subscribe(
-                    sdocsRecords => {
+                this.sdocDataService.addMany(sdocs).then(function doneAddMany(sdocsRecords: SDocRecord[]) {
                         console.log('loaded sdocs from assets', sdocsRecords);
-                        this.sdocDataService.getAll();
+                        me.sdocDataService.getAll();
                     },
-                    error => {
-                        console.error('parsing appdata failed:' + error);
-                    });
+                    function errorCreate(reason: any) {
+                        console.error('loading appdata failed:' + reason);
+                    }
+                );
             },
             error => {
                 console.error('loading appdata failed:' + error);

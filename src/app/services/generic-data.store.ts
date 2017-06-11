@@ -1,12 +1,13 @@
 // DataStore is mostly recommended for use in the browser
 import {DataStore, Mapper, Record, Schema, utils} from 'js-data';
 import {Adapter} from 'js-data-adapter';
-import {Injectable} from '@angular/core';
 import {Facets} from '../model/container/facets';
 import {GenericSolrAdapter} from './generic-solr.adapter';
+import {GenericSearchResult} from '../model/container/generic-searchresult';
+import {GenericSearchForm} from '../model/forms/generic-searchform';
 
-@Injectable()
-export class GenericDataStore {
+export abstract class GenericDataStore <R extends Record, F extends GenericSearchForm,
+    S extends GenericSearchResult<R, F>> {
 
     private store: DataStore;
     private mappers = new Map<string, Mapper>();
@@ -88,36 +89,26 @@ export class GenericDataStore {
         }
     }
 
-    public update<T extends Record>(mapperName: string, id: any, record: any, opts?: any): Promise<T> {
+    public destroy<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
         if (this.getAdapterForMapper(mapperName) === undefined) {
-            if (id === undefined || id === null) {
-                return utils.Promise.reject('cant update records without id');
-            }
-            const readRecord: any = this.store.get(mapperName, id);
-            if (readRecord === undefined || readRecord === null) {
-                return utils.Promise.resolve(null);
-            }
-
-            record.id = id;
-            return utils.Promise.resolve(this.store.add(mapperName, record, opts));
+            return utils.Promise.resolve(this.store.remove(mapperName, id, opts));
         } else {
-            return this.store.update(mapperName, id, record, opts);
+            return this.store.destroy(mapperName, id, opts);
         }
     }
 
-    public updateMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
-            return utils.Promise.reject('cant do update many without adapter');
+    public facets(mapperName: string, query?: any, opts?: any): Promise<Facets> {
+        if (this.getAdapterForMapper(mapperName) === undefined ||
+            (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter))) {
+            return utils.Promise.resolve(undefined);
         } else {
-            return this.store.updateMany(mapperName, records, opts);
-        }
-    }
+            opts = opts || {};
 
-    public updateAll<T extends Record>(mapperName: string, props: any, query?: any, opts?: any): Promise<T[]> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
-            return utils.Promise.reject('cant do update all without adapter');
-        } else {
-            return this.store.updateAll(mapperName, props, query, opts);
+            // bypass cache
+            opts.force = true;
+
+            const mapper = this.store.getMapper(mapperName);
+            return (<GenericSolrAdapter>this.getAdapterForMapper(mapperName)).facets(mapper, query, opts);
         }
     }
 
@@ -141,10 +132,49 @@ export class GenericDataStore {
         }
     }
 
-    public facets(mapperName: string, query?: any, opts?: any): Promise<Facets> {
-        if (this.getAdapterForMapper(mapperName) === undefined ||
+    public search(mapperName: string, searchForm: F, opts?: any): Promise<S> {
+        const query = this.createQueryFromForm(searchForm);
+
+        console.log('findCurList for form', searchForm);
+        const searchResult = this.createSearchResult(searchForm, 0, [], new Facets());
+
+        const bla = true;
+        if (bla || this.getAdapterForMapper(mapperName) === undefined ||
             (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter))) {
-            return utils.Promise.resolve(undefined);
+            const me = this;
+            const result = new Promise<S>((resolve, reject) => {
+                // the resolve / reject functions control the fate of the promise
+                me.findAll(mapperName, query, {
+                    limit: searchForm.perPage,
+                    offset: searchForm.pageNum - 1,
+                    // We want the newest posts first
+                    orderBy: [['created_at', 'desc']]
+                }).then(function doneFindAll(documents: R[]) {
+                    searchResult.currentRecords = documents;
+                    return me.count(mapperName, query, {
+                        limit: searchForm.perPage,
+                        offset: searchForm.pageNum - 1,
+                        // We want the newest posts first
+                        orderBy: [['created_at', 'desc']]
+                    });
+                }).then(function doneCount(count: number) {
+                    searchResult.recordCount = count;
+                    return me.facets(mapperName, query, {
+                        limit: searchForm.perPage,
+                        offset: searchForm.pageNum - 1,
+                        // We want the newest posts first
+                        orderBy: [['created_at', 'desc']]
+                    });
+                }).then(function doneFacets(facets: Facets) {
+                    searchResult.facets = facets;
+                    resolve(searchResult);
+                }).catch(function errorHandling(reason) {
+                    console.error('findCurList failed:' + reason);
+                    reject(reason);
+                });
+            });
+
+            return result;
         } else {
             opts = opts || {};
 
@@ -152,17 +182,48 @@ export class GenericDataStore {
             opts.force = true;
 
             const mapper = this.store.getMapper(mapperName);
-            return (<GenericSolrAdapter>this.getAdapterForMapper(mapperName)).facets(mapper, query, opts);
+            // return (<GenericSolrAdapter>this.getAdapterForMapper(mapperName)).search(mapper, searchForm, opts);
         }
     }
 
-    public destroy<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
+
+    public update<T extends Record>(mapperName: string, id: any, record: any, opts?: any): Promise<T> {
         if (this.getAdapterForMapper(mapperName) === undefined) {
-            return utils.Promise.resolve(this.store.remove(mapperName, id, opts));
+            if (id === undefined || id === null) {
+                return utils.Promise.reject('cant update records without id');
+            }
+            const readRecord: any = this.store.get(mapperName, id);
+            if (readRecord === undefined || readRecord === null) {
+                return utils.Promise.resolve(null);
+            }
+
+            record.id = id;
+            return utils.Promise.resolve(this.store.add(mapperName, record, opts));
         } else {
-            return this.store.destroy(mapperName, id, opts);
+            return this.store.update(mapperName, id, record, opts);
         }
     }
+
+
+    public updateAll<T extends Record>(mapperName: string, props: any, query?: any, opts?: any): Promise<T[]> {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
+            return utils.Promise.reject('cant do update all without adapter');
+        } else {
+            return this.store.updateAll(mapperName, props, query, opts);
+        }
+    }
+
+    public updateMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
+        if (this.getAdapterForMapper(mapperName) === undefined) {
+            return utils.Promise.reject('cant do update many without adapter');
+        } else {
+            return this.store.updateMany(mapperName, records, opts);
+        }
+    }
+
+    abstract createQueryFromForm(searchForm: F): Object;
+
+    abstract createSearchResult(searchForm: F, recordCount: number, records: R[], facets: Facets): S;
 
     private getAdapterForMapper(mapperName: string): Adapter {
         if (this.mapperAdapters.get(mapperName) !== undefined) {

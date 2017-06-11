@@ -36,7 +36,7 @@ describe('SDocDataService', () => {
             const service: SDocDataService = getTestBed().get(SDocDataService);
 
             // WHEN
-            service.getAll().subscribe(
+            Observable.fromPromise(service.getAll()).subscribe(
                 sdocs => {
                     // THEN
                     expect(sdocs).toEqual([]);
