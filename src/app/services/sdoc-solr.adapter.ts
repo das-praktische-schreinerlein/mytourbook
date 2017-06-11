@@ -115,19 +115,19 @@ export class SDocSolrAdapter extends GenericSolrAdapter {
         spatialParams.set('facet.field', ['loc_id_i',
             'personen_txt',
             'loc_lochirarchie_txt',
-            'keywords_txt', 'month_i',
-            'week_i',
+            'keywords_txt', 'month_is',
+            'week_is',
             'type_txt']);
 
         spatialParams.set('f.keywords_txt.facet.prefix', 'kw_');
         spatialParams.set('f.keywords_txt.facet.limit', '-1');
         spatialParams.set('f.keywords_txt.facet.sort', 'count');
 
-        spatialParams.set('f.month_i.facet.limit', '-1');
-        spatialParams.set('f.month_i.facet.sort', 'count');
+        spatialParams.set('f.month_is.facet.limit', '-1');
+        spatialParams.set('f.month_is.facet.sort', 'count');
 
-        spatialParams.set('f.week_i.facet.limit', '-1');
-        spatialParams.set('f.week_i.facet.sort', 'count');
+        spatialParams.set('f.week_is.facet.limit', '-1');
+        spatialParams.set('f.week_is.facet.sort', 'count');
 
         return spatialParams;
     };

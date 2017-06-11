@@ -20,5 +20,11 @@
         <option value="">alles</option>
     </select>
 
+    <label>Typen:</label>
+    <select formControlName="type" type="text">
+        <option *ngFor="let obj of getTypeValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
+        <option value="">alles</option>
+    </select>
+
     <button class="btn btn-primary" type="submit">Search</button>
 </form>

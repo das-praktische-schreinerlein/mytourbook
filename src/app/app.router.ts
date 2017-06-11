@@ -9,7 +9,7 @@ export const routes: Routes = [
     {path: '', redirectTo: 'sdocs', pathMatch: 'full'},
     {path: 'sdoc/list', redirectTo: 'sdocs'},
     {path: 'sdocs', component: SDocSearchpageComponent, pathMatch: 'full'},
-    {path: 'sdocs/:when/:where/:what/:fulltext/:moreFilter/:sort/:perPage/:pageNum', component: SDocSearchpageComponent},
+    {path: 'sdocs/:when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum', component: SDocSearchpageComponent},
     {path: 'sdoc/create', component: SDocCreatepageComponent},
     {path: 'sdoc/edit/:id', component: SDocEditpageComponent}
 ];

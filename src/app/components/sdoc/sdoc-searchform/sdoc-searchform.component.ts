@@ -33,6 +33,7 @@ export class SDocSearchformComponent implements OnInit {
         where: '',
         what: '',
         fulltext: '',
+        type: '',
         sort: '',
         perPage: 10,
         pageNum: 1
@@ -46,10 +47,11 @@ export class SDocSearchformComponent implements OnInit {
             sdocSearchSearchResult => {
                 const values: SDocSearchForm = sdocSearchSearchResult.searchForm;
                 this.searchFormGroup = this.fb.group({
-                    fulltext: values.fulltext,
                     when: values.when,
                     what: values.what,
-                    where: values.where
+                    where: values.where,
+                    fulltext: values.fulltext,
+                    type: values.type
                 });
             },
         );
@@ -61,8 +63,8 @@ export class SDocSearchformComponent implements OnInit {
         }
 
         const values = [].concat(
-            this.extractFacetValues(searchResult, 'month_i', 'month', 'Monat'),
-            this.extractFacetValues(searchResult, 'week_i', 'week', 'Woche'));
+            this.extractFacetValues(searchResult, 'month_is', 'month', 'Monat'),
+            this.extractFacetValues(searchResult, 'week_is', 'week', 'Woche'));
 
         return values;
     }
@@ -85,6 +87,17 @@ export class SDocSearchformComponent implements OnInit {
 
         const values = [].concat(
             this.extractFacetValues(searchResult, 'keywords_txt', '', ''));
+
+        return values;
+    }
+
+    getTypeValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        const values = [].concat(
+            this.extractFacetValues(searchResult, 'type_txt', '', ''));
 
         return values;
     }

@@ -29,12 +29,12 @@ export class SDocSearchService extends GenericSearchService <SDocRecord, SDocSea
         if (searchForm.when !== undefined && searchForm.when.length > 0) {
             if (searchForm.when.startsWith('week')) {
                 filter = filter || {};
-                filter['week_i'] = {
+                filter['week_is'] = {
                     '==': searchForm.when.replace('week', '')
                 };
             } else if (searchForm.when.startsWith('month')) {
                 filter = filter || {};
-                filter['month_i'] = {
+                filter['month_is'] = {
                     '==': searchForm.when.replace('month', '')
                 };
             }
@@ -56,6 +56,12 @@ export class SDocSearchService extends GenericSearchService <SDocRecord, SDocSea
             filter = filter || {};
             filter['keywords_txt'] = {
                 '==': searchForm.what
+            };
+        }
+        if (searchForm.type !== undefined && searchForm.type.length > 0) {
+            filter = filter || {};
+            filter['type_txt'] = {
+                '==': searchForm.type
             };
         }
 

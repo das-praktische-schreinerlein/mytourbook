@@ -128,6 +128,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             this.searchForm.fulltext || 'egal',
             'ungefiltert',
             this.searchForm.sort || 'relevanz',
+            this.searchForm.type || 'alle',
             +this.searchForm.perPage || 10,
             +this.searchForm.pageNum || 1
         ];
@@ -144,6 +145,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.searchForm.what = (params['what'] || '').replace(/^alles/, '');
         this.searchForm.fulltext = (params['fulltext'] || '').replace(/^egal$/, '');
         this.searchForm.sort = params['sort'] || '';
+        this.searchForm.type = (params['type'] || '').replace(/^alle/, '');
         this.searchForm.perPage = +params['perPage'] || 10;
         this.searchForm.pageNum = +params['pageNum'] || 1;
         this.sdocDataService.findCurList(this.searchForm);
