@@ -24,6 +24,7 @@ export class SDocSearchformComponent implements OnInit {
         // get the latest value from _data BehaviorSubject
         return this._searchResult.getValue();
     }
+
     @Output()
     search: EventEmitter<SDocSearchForm> = new EventEmitter();
 

@@ -29,11 +29,26 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     }
 
     mapToSolrDocument(props: any): any {
-        return {
+        const values = {
             id: props.id,
+            loc_id_i: props.locId,
+            route_id_i: props.routeId,
+            track_id_i: props.trackId,
+            date_dt: props.datevon,
+            desc_txt: props.desc,
+            geo_lon_txt: props.geoLon,
+            geo_lat_txt: props.geoLat,
+            geo_loc_p: props.geoLoc,
+            gpstracks_basefile_txt: props.gpsTrackBasefile,
+            keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
             name_txt: props.name,
-            html_txt: props.desc
+            type_txt: props.type,
+
         };
+
+        values['html_txt'] = [values.desc_txt, values.name_txt, values.keywords_txt, values.type_txt].join(' ');
+
+        return values;
     }
 
     mapSolrDocument(mapper: Mapper, doc: any): Record {

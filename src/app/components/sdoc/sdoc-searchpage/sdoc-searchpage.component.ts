@@ -1,11 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../services/sdoc-data.service';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
-import {BehaviorSubject, Subscription} from 'rxjs';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {Subscription} from 'rxjs/Subscription';
 import {Facets} from '../../../model/container/facets';
+import {AppService, AppState} from '../../../services/app.service';
+import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -14,6 +18,7 @@ import {Facets} from '../../../model/container/facets';
 })
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
+    private appStateSubscription: Subscription;
     private routeSubscription: Subscription;
     private routeUrlSubscription: Subscription;
     private curListSubcription: Subscription;
@@ -23,11 +28,14 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private searchForm: SDocSearchForm;
     searchFormObervable: BehaviorSubject<SDocSearchForm>;
 
-    constructor(private sdocDataService: SDocDataService, private route: ActivatedRoute, private router: Router) {
+    constructor(private appService: AppService, private route: ActivatedRoute, private router: Router,
+                private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
+                private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.searchFormObervable = <BehaviorSubject<SDocSearchForm>>new BehaviorSubject(this.searchForm);
         this.searchResultObervable = <BehaviorSubject<SDocSearchResult>>new BehaviorSubject(this.searchResult);
+        this.toastr.setRootViewContainerRef(vcr);
     }
 
     ngOnInit() {
@@ -43,26 +51,30 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
         // do search
         console.log('ngOnInit: search for ', url);
-        this.curListSubcription = this.sdocDataService.getCurList().subscribe(
-            sdocSearchResult => {
-                if (sdocSearchResult === undefined) {
-                    console.log('empty searchResult', sdocSearchResult);
-                } else {
-                    console.log('update searchResult', sdocSearchResult);
-                    this.initialized = true;
-                    this.searchResult = sdocSearchResult;
-                    this.searchResultObervable.next(sdocSearchResult);
-                    this.searchForm = sdocSearchResult.searchForm;
-                    this.searchFormObervable.next(this.searchForm);
-                }
-            },
-            error => {
-                console.error('getCurSDocList failed:' + error);
-            },
-            () => {
-            });
-        this.routeSubscription = this.route.params.subscribe(params => {
-            return this.doSearchWithParams(params);
+        this.appStateSubscription = this.appService.getAppState().subscribe(appState => {
+            if (appState === AppState.Ready) {
+                this.routeSubscription = this.route.params.subscribe(params => {
+                    return this.doSearchWithParams(params);
+                });
+                this.curListSubcription = this.sdocDataService.getCurList().subscribe(
+                    sdocSearchResult => {
+                        if (sdocSearchResult === undefined) {
+                            console.log('empty searchResult', sdocSearchResult);
+                        } else {
+                            console.log('update searchResult', sdocSearchResult);
+                            this.initialized = true;
+                            this.searchResult = sdocSearchResult;
+                            this.searchResultObervable.next(sdocSearchResult);
+                            this.searchForm = sdocSearchResult.searchForm;
+                            this.searchFormObervable.next(this.searchForm);
+                        }
+                    },
+                    error => {
+                        console.error('getCurSDocList failed:' + error);
+                    },
+                    () => {
+                    });
+            }
         });
     }
 
@@ -80,7 +92,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     onEditSDoc(sdoc: SDocRecord) {
-        this.router.navigateByUrl('/sdoc/edit/' + sdoc.id);
+        this.router.navigateByUrl(this.searchFormConverter.searchFormToUrl('/sdoc/edit/' + sdoc.id + '?from=/sdocs/', this.searchForm));
     }
 
     onDeleteSDoc(sdoc: SDocRecord) {
@@ -118,34 +130,21 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         // reset initialized
         this.initialized = false;
 
-        let url = '/sdocs/';
-        const params: Object[] = [
-            this.searchForm.when || 'jederzeit',
-            this.searchForm.where || 'ueberall',
-            this.searchForm.what || 'alles',
-            this.searchForm.fulltext || 'egal',
-            'ungefiltert',
-            this.searchForm.sort || 'relevanz',
-            this.searchForm.type || 'alle',
-            +this.searchForm.perPage || 10,
-            +this.searchForm.pageNum || 1
-        ];
-        url += params.join('/') + '?' + new Date().getTime();
+        const url = this.searchFormConverter.searchFormToUrl('/sdocs/', this.searchForm) + '?' + new Date().getTime();
         console.log('redirectToSearch: redirect to ', url);
+
         this.router.navigateByUrl(url);
         return;
     }
 
     private doSearchWithParams(params: any) {
         console.log('doSearchWithParams params:', params);
-        this.searchForm.when = (params['when'] || '').replace(/^jederzeit/, '');
-        this.searchForm.where = (params['where'] || '').replace(/^ueberall/, '');
-        this.searchForm.what = (params['what'] || '').replace(/^alles/, '');
-        this.searchForm.fulltext = (params['fulltext'] || '').replace(/^egal$/, '');
-        this.searchForm.sort = params['sort'] || '';
-        this.searchForm.type = (params['type'] || '').replace(/^alle/, '');
-        this.searchForm.perPage = +params['perPage'] || 10;
-        this.searchForm.pageNum = +params['pageNum'] || 1;
-        this.sdocDataService.findCurList(this.searchForm);
+        this.searchFormConverter.paramsToSearchForm(params, this.searchForm);
+
+        const me = this;
+        this.sdocDataService.search(this.searchForm).catch(function errorSearch(reason) {
+            me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oops!');
+            console.error('doSearchWithParams failed:' + reason);
+        });
     }
 }

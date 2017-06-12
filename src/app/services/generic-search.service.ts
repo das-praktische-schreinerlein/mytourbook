@@ -25,17 +25,34 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
 
     findCurList(searchForm: F): Promise<R[]> {
         console.log('findCurList for form', searchForm);
-        const searchResultObs = this.dataStore.search(this.searchMapperName, searchForm, {});
 
-        const me = this;
         const result = new Promise<R[]>((resolve, reject) => {
-            searchResultObs.then(function doneSearch(searchResultData: S) {
+            this.search(searchForm).then(function doneSearch(searchResultData: S) {
                     console.log('findCurList searchResultData', searchResultData);
-                    me.curList.next(searchResultData);
                     resolve(<R[]>searchResultData.currentRecords);
                 },
                 function errorSearch(reason) {
                     console.error('findCurList failed:' + reason);
+                    reject(reason);
+                });
+        });
+
+        return result;
+    }
+
+    search(searchForm: F): Promise<S> {
+        console.log('search for form', searchForm);
+        const searchResultObs = this.dataStore.search(this.searchMapperName, searchForm, {});
+
+        const me = this;
+        const result = new Promise<S>((resolve, reject) => {
+            searchResultObs.then(function doneSearch(searchResultData: S) {
+                    console.log('search searchResultData', searchResultData);
+                    me.curList.next(searchResultData);
+                    resolve(searchResultData);
+                },
+                function errorSearch(reason) {
+                    console.error('search failed:' + reason);
                     reject(reason);
                 });
         });

@@ -1,6 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {FormBuilder, Validators} from '@angular/forms';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {SDocRecordSchema} from '../../../model/schemas/sdoc-record-schema';
+import {ToastsManager} from 'ng2-toastr';
+import {SchemaValidationError} from 'js-data';
+import set = Reflect.set;
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -8,9 +13,19 @@ import {FormBuilder, Validators} from '@angular/forms';
     styleUrls: ['./sdoc-editform.component.css']
 })
 export class SDocEditformComponent implements OnInit {
+    // initialize a private variable _record, it's a BehaviorSubject
+    private _record = new BehaviorSubject<SDocRecord>(new SDocRecord({}));
 
     @Input()
-    public record: SDocRecord;
+    public set record(value: SDocRecord) {
+        // set the latest value for _data BehaviorSubject
+        this._record.next(value);
+    };
+
+    public get record(): SDocRecord {
+        // get the latest value from _data BehaviorSubject
+        return this._record.getValue();
+    }
 
     @Output()
     save: EventEmitter<SDocRecord> = new EventEmitter();
@@ -22,20 +37,51 @@ export class SDocEditformComponent implements OnInit {
         desc: ''
     });
 
-    constructor(public fb: FormBuilder) {
+    constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef) {
+        this.toastr.setRootViewContainerRef(vcr);
     }
 
     ngOnInit() {
-        if (this.record) {
-            this.editFormGroup = this.fb.group({
-                id: this.record.id,
-                name: [this.record.name, Validators.required],
-                desc: [this.record.desc, Validators.required]
+        this._record.subscribe(
+            sdocRecord => {
+                const record: SDocRecord = sdocRecord;
+
+                const config = {
+                    id: [record.id, Validators.required],
+                    name: [record.name, Validators.required],
+                    desc: [record.desc, Validators.required],
+                    keywords: [record.keywords]
+                };
+                const fields = record.toJSON();
+                for (const key in fields) {
+                    if (fields.hasOwnProperty(key) && !config.hasOwnProperty(key)) {
+                        config[key] = [fields[key]];
+                    }
+                }
+                this.editFormGroup = this.fb.group(config);
             });
-        }
     }
 
     submitSave() {
-        this.save.emit(this.editFormGroup.getRawValue());
+        const values = this.editFormGroup.getRawValue();
+
+        // delete empty key
+        for (const key in values) {
+            if (values.hasOwnProperty(key) && values[key] === undefined || values[key] === null) {
+                delete values[key];
+            }
+        }
+
+        const errors: SchemaValidationError[] = SDocRecordSchema.validate(values);
+        if (errors !== undefined && errors.length > 0) {
+            let msg = '';
+            errors.map((value: SchemaValidationError, index, array) => {
+                msg += '- ' + value.path + ':' + value.expected + '<br>';
+            });
+            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oops!');
+            return;
+        }
+
+        this.save.emit(values);
     }
 }

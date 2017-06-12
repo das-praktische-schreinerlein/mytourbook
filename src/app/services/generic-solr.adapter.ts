@@ -275,6 +275,17 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return this.find(mapper, id, opts);
     }
 
+    afterFind<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
+        if (! (result instanceof Array)) {
+            return utils.Promise.reject('no array as result');
+        }
+        if (result.length !== 1) {
+            return utils.Promise.reject('result is not unique');
+        }
+
+        return utils.Promise.resolve(result[0]);
+    }
+
     afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
         return utils.Promise.resolve(<Record>undefined);
     }

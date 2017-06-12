@@ -19,6 +19,9 @@ import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-cr
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SDocListHeaderComponent} from './components/sdoc/sdoc-list-header/sdoc-list-header.component';
 import {TruncatePipe} from './pipes/truncate.pipe';
+import {SDocSearchFormConverter} from './services/sdoc-searchform-converter.service';
+import {ToastModule} from 'ng2-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -37,14 +40,16 @@ import {TruncatePipe} from './pipes/truncate.pipe';
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
         JsonpModule,
         routing,
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        ToastModule.forRoot()
     ],
-    providers: [SDocDataStore, SDocDataService, AppService],
+    providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter],
     bootstrap: [AppComponent]
 })
 export class AppModule {

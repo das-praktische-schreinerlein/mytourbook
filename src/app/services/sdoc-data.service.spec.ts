@@ -2,7 +2,7 @@
 import {getTestBed, TestBed} from '@angular/core/testing';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocDataService} from './sdoc-data.service';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {SDocDataStore} from './sdoc-data.store';
 
 describe('SDocDataService', () => {

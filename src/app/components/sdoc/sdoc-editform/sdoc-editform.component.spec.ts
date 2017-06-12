@@ -4,6 +4,7 @@ import {SDocEditformComponent} from './sdoc-editform.component';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
+import {ToastModule, ToastsManager} from 'ng2-toastr';
 
 describe('SDocEditformComponent', () => {
     let component: SDocEditformComponent;
@@ -12,7 +13,8 @@ describe('SDocEditformComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocEditformComponent],
-            imports: [ReactiveFormsModule],
+            imports: [ReactiveFormsModule, ToastModule.forRoot()],
+            providers: [ToastsManager],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();

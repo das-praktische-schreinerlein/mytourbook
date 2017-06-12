@@ -8,17 +8,18 @@ import {Router} from '@angular/router';
 import {AppService} from './services/app.service';
 import {SDocDataStore} from './services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
-
-class MockAppService {
-    public initApp(): void {
-    }
-}
+import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {AppServiceStub} from '../testing/appservice-stubs';
+import {ToastsManagerStub} from '../testing/toasts-stubs';
 
 describe('AppComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
-                FormsModule
+                FormsModule,
+                NoopAnimationsModule,
+                ToastModule.forRoot()
             ],
             declarations: [
                 AppComponent
@@ -27,7 +28,8 @@ describe('AppComponent', () => {
                 {provide: Router, useClass: RouterTestingModule},
                 SDocDataStore,
                 SDocDataService,
-                {provide: AppService, useClass: MockAppService}
+                {provide: AppService, useValue: new AppServiceStub() },
+                {provide: ToastsManager, useValue: new ToastsManagerStub() }
             ],
             schemas: [
                 NO_ERRORS_SCHEMA

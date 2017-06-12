@@ -4,9 +4,12 @@ import {SDocEditpageComponent} from './sdoc-editpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataService} from '../../../services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable} from 'rxjs/Observable';
 import {SDocDataStore} from '../../../services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
+import {AppService} from '../../../services/app.service';
+import {AppServiceStub} from '../../../../testing/appservice-stubs';
+import {ToastModule, ToastsManager} from 'ng2-toastr';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -15,7 +18,9 @@ describe('SDocEditpageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocEditpageComponent],
+            imports: [ToastModule.forRoot()],
             providers: [SDocDataStore,
+                {provide: AppService, useValue: new AppServiceStub() },
                 SDocDataService,
                 {
                     provide: ActivatedRoute,
@@ -23,8 +28,10 @@ describe('SDocEditpageComponent', () => {
                         params: Observable.of({id: 123})
                     }
                 },
-                {provide: Router, useClass: RouterTestingModule}
-            ],
+                {provide: Router, useClass: RouterTestingModule},
+                ToastsManager
+
+        ],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
