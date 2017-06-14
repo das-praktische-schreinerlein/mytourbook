@@ -39,6 +39,9 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         if (value === undefined || value === null || value === '') {
             return defaultValue;
         }
+        if (value instanceof Array && (value.length === 0 || (value.length === 1 && value[0] === ''))) {
+            return [defaultValue];
+        }
 
         return value;
     }
