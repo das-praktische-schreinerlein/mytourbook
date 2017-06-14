@@ -555,26 +555,31 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     private mapFilterToSolrQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
         let query = '';
 
-        value = value.toString().replace(/%/g, '');
         if (action === 'likei' || action === 'like') {
+            value = value.toString().replace(/%/g, '');
             query = this.mapToSolrFieldName(fieldName) + ':' + this.escapeSolrValue(value);
         } else if (action === '==' || action === 'eq') {
+            value = value.toString().replace(/%/g, '');
             query = this.mapToSolrFieldName(fieldName) + ':' + this.escapeSolrValue(value);
         } else if (action === '>') {
+            value = value.toString().replace(/%/g, '');
             query = this.mapToSolrFieldName(fieldName) + ': {' + this.escapeSolrValue(value) + ' TO * }';
         } else if (action === '>=') {
+            value = value.toString().replace(/%/g, '');
             query = this.mapToSolrFieldName(fieldName) + ': [' + this.escapeSolrValue(value) + ' TO *]';
         } else if (action === '<') {
+            value = value.toString().replace(/%/g, '');
             query = this.mapToSolrFieldName(fieldName) + ': { * TO ' + this.escapeSolrValue(value) + ' }';
         } else if (action === '<=') {
+            value = value.toString().replace(/%/g, '');
             query = this.mapToSolrFieldName(fieldName) + ': [ * TO ' + this.escapeSolrValue(value) + ' ]';
         } else if (action === 'in') {
             query = this.mapToSolrFieldName(fieldName) + ': (' + value.map(
-                    inValue => this.escapeSolrValue(value)
+                    inValue => this.escapeSolrValue(inValue.toString().replace(/%/g, ''))
                 ).join(' OR ') + ' )';
         } else if (action === 'notin') {
             query = this.mapToSolrFieldName(fieldName) + ': (-' + value.map(
-                    inValue => this.escapeSolrValue(value)
+                    inValue => this.escapeSolrValue(inValue.toString().replace(/%/g, ''))
                 ).join(' AND -') + ' )';
         }
         return query;

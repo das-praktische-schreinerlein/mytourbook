@@ -35,5 +35,6 @@ export class SDocCreateformComponent implements OnInit {
 
     submitCreate() {
         this.create.emit(this.createFormGroup.getRawValue());
+        return false;
     }
 }

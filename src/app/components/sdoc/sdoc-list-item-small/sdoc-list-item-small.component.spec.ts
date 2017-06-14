@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocListItemComponent} from './sdoc-list-item.component';
+import {SDocListItemSmallComponent} from './sdoc-list-item-small.component';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -12,13 +12,13 @@ import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-convert
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 import {RouterTestingModule} from '@angular/router/testing';
 
-describe('SDocListItemComponent', () => {
-    let component: SDocListItemComponent;
-    let fixture: ComponentFixture<SDocListItemComponent>;
+describe('SDocListItemSmallComponent', () => {
+    let component: SDocListItemSmallComponent;
+    let fixture: ComponentFixture<SDocListItemSmallComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TruncatePipe, SDocListItemComponent],
+            declarations: [TruncatePipe, SDocListItemSmallComponent],
             providers: [DomSanitizer,
                 {
                     provide: ActivatedRoute,
@@ -36,7 +36,7 @@ describe('SDocListItemComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SDocListItemComponent);
+        fixture = TestBed.createComponent(SDocListItemSmallComponent);
         component = fixture.componentInstance;
         component.record = new SDocRecord({id: '1', name: 'Test'});
         fixture.detectChanges();

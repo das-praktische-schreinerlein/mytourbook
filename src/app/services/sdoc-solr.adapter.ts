@@ -31,6 +31,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     mapToSolrDocument(props: any): any {
         const values = {
             id: props.id,
+            image_id_i: props.imageId,
             loc_id_i: props.locId,
             route_id_i: props.routeId,
             track_id_i: props.trackId,
@@ -41,6 +42,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             geo_loc_p: props.geoLoc,
             gpstracks_basefile_txt: props.gpsTrackBasefile,
             keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
+            loc_lochirarchie_txt: (props.locHirarchie ? props.locHirarchie
+                .toLowerCase()
+                .replace(/[ ]*->[ ]*/g, ',,')
+                .replace(/ /g, '_') : ''),
             name_txt: props.name,
             type_txt: props.type,
 
@@ -57,6 +62,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const values = {};
         values['id'] = this.getSolrValue(doc, 'id', undefined);
 
+        values['imageId'] = Number(this.getSolrValue(doc, 'image_id_i', undefined));
         values['locId'] = Number(this.getSolrValue(doc, 'loc_id_i', undefined));
         values['routeId'] = Number(this.getSolrValue(doc, 'route_id_i', undefined));
         values['trackId'] = Number(this.getSolrValue(doc, 'track_id_i', undefined));
@@ -70,9 +76,14 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
         values['type'] = this.getSolrValue(doc, 'type_txt', undefined);
+        values['locHirarchie'] = this.getSolrValue(doc, 'loc_lochirarchie_txt', '')
+            .replace(/,,/g, ' -> ')
+            .replace(/,/g, ' ')
+            .replace(/_/g, ' ')
+            .trim();
 
         values['persons'] = this.getSolrValue(doc, 'personen_txt', '').split(',,').join(', ');
-        // console.log('mapSolrDocument values:', values);
+        console.log('mapSolrDocument values:', values);
 
         const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
 
@@ -87,9 +98,9 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             } else if (record.type === 'LOCATION') {
                 id = Number(record.locId);
             } else if (record.type === 'IMAGE') {
-                id = Number(record.trackId);
+                id = Number(record.imageId);
             }
-            id = id * 100000;
+            id = id * 1000000;
 
             for (const imageDoc of imageField) {
                 const imageValues = {};
@@ -101,14 +112,15 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             }
         }
         record.set('sdocimages', images);
-        // console.log('mapSolrDocument record full:', record);
+        console.log('mapSolrDocument record full:', record);
 
         return record;
     }
 
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
-        return ['id', 'loc_id_i', 'route_id_i', 'track_id_i', 'date_dt', 'desc_txt', 'geo_lon_txt', 'geo_lat_txt', 'geo_loc_p',
-            'gpstracks_basefile_txt', 'keywords_txt', 'name_txt', 'type_txt', 'personen_txt', 'i_fav_url_txt'];
+        return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i',
+            'date_dt', 'desc_txt', 'geo_lon_txt', 'geo_lat_txt', 'geo_loc_p',
+            'gpstracks_basefile_txt', 'keywords_txt', 'loc_lochirarchie_txt', 'name_txt', 'type_txt', 'personen_txt', 'i_fav_url_txt'];
     };
 
     getFacetParams(mapper: Mapper, params: any, opts: any): Map<string, any> {

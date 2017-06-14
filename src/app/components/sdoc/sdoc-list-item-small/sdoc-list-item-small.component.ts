@@ -7,11 +7,11 @@ import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 
 @Component({
-    selector: 'app-sdoc-list-item',
-    templateUrl: './sdoc-list-item.component.html',
-    styleUrls: ['./sdoc-list-item.component.css']
+    selector: 'app-sdoc-list-item-small',
+    templateUrl: './sdoc-list-item-small.component.html',
+    styleUrls: ['./sdoc-list-item-small.component.css']
 })
-export class SDocListItemComponent {
+export class SDocListItemSmallComponent {
     sanitizer: DomSanitizer;
 
     @Input()

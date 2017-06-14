@@ -9,6 +9,9 @@
     </div>
     <div class="container">
         <app-sdoc-list [searchResult]="searchResult"
+                       [adminMode]="adminMode"
+                       [layout]="Layout.BIG"
+                       (show)="onShowSDoc($event)"
                        (edit)="onEditSDoc($event)"
                        (delete)="onDeleteSDoc($event)"></app-sdoc-list>
     </div>

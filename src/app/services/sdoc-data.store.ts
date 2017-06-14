@@ -8,6 +8,15 @@ import {Facets} from '../model/container/facets';
 
 @Injectable()
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {
+
+    private validMoreFilterNames = {
+        track_id_i: true,
+        loc_id_i: true,
+        image_id_i: true,
+        route_id_i: true,
+        loc_parent_id_i: true
+    };
+
     createQueryFromForm(searchForm: SDocSearchForm): Object {
         const query = {};
 
@@ -26,12 +35,12 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             if (searchForm.when.startsWith('week')) {
                 filter = filter || {};
                 filter['week_is'] = {
-                    '==': searchForm.when.replace('week', '')
+                    'in': searchForm.when.replace('week', '').split(/,/)
                 };
             } else if (searchForm.when.startsWith('month')) {
                 filter = filter || {};
                 filter['month_is'] = {
-                    '==': searchForm.when.replace('month', '')
+                    'in': searchForm.when.replace('month', '').split(/,/)
                 };
             }
         }
@@ -51,14 +60,27 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         if (searchForm.what !== undefined && searchForm.what.length > 0) {
             filter = filter || {};
             filter['keywords_txt'] = {
-                '==': searchForm.what
+                'in': searchForm.what.split(/,/)
             };
         }
         if (searchForm.type !== undefined && searchForm.type.length > 0) {
             filter = filter || {};
             filter['type_txt'] = {
-                '==': searchForm.type
+                'in': searchForm.type.split(/,/)
             };
+        }
+        if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
+            filter = filter || {};
+            const moreFilters = searchForm.moreFilter.split(/;/);
+            for (const index in moreFilters) {
+                const moreFilter = moreFilters[index];
+                const [filterName, values] = moreFilter.split(/:/);
+                if (filterName && values && this.validMoreFilterNames[filterName] === true) {
+                    filter[filterName] = {
+                        'in': values.split(/,/)
+                    };
+                }
+            }
         }
 
         if (filter !== undefined) {

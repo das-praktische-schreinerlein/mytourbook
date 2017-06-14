@@ -4,6 +4,7 @@ export class SDocRecord extends BaseEntityRecord {
     locId: number;
     routeId: number;
     trackId: number;
+    imageId: number;
 
     datevon: Date;
     desc: string;
@@ -12,6 +13,7 @@ export class SDocRecord extends BaseEntityRecord {
     geoLoc: string;
     gpsTrackBasefile: string;
     keywords: string;
+    locHirarchie: string;
     name: string;
     type: string;
 

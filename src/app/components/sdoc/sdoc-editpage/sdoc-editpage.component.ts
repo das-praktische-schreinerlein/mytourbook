@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {AppService, AppState} from '../../../services/app.service';
 import * as util from 'util';
 import {ToastsManager} from 'ng2-toastr';
+import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 
 @Component({
     selector: 'app-sdoc-editpage',
@@ -18,7 +19,8 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     public record: SDocRecord;
 
     constructor(private appService: AppService, private router: Router, private route: ActivatedRoute,
-                private sdocDataService: SDocDataService, private toastr: ToastsManager, vcr: ViewContainerRef) {
+                private sdocDataService: SDocDataService, private sdocRoutingService: SDocRoutingService,
+                private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -56,17 +58,13 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
         const me = this;
 
         this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
-                let redirectUrl = '/sdoc/list';
-                const from = me.route.snapshot.queryParamMap.get('from');
-                if (from !== undefined && from.startsWith('/sdocs/')) {
-                    redirectUrl = from;
-                }
-                me.router.navigateByUrl(redirectUrl);
+                me.sdocRoutingService.navigateBackToFrom(me.route);
             },
             function errorCreate(reason: any) {
                 console.error('edit updateById failed:' + reason);
                 me.toastr.error('Es gibt leider Probleme bei der Speichern - am besten noch einmal probieren :-(', 'Oops!');
             }
         );
+        return false;
     }
 }

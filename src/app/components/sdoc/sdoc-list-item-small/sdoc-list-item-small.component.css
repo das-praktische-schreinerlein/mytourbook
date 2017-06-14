@@ -4,11 +4,6 @@ div.card-block img.sdoc-image {
     overflow: hidden;
 }
 
-div.card-block img.sdoc-image-main {
-    float: left;
-    overflow: hidden;
-}
-
 div.card-block ngb-carousel {
     width: 60px;
     height: 60px;

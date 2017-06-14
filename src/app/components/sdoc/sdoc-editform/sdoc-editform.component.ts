@@ -79,9 +79,10 @@ export class SDocEditformComponent implements OnInit {
                 msg += '- ' + value.path + ':' + value.expected + '<br>';
             });
             this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oops!');
-            return;
+            return false;
         }
 
         this.save.emit(values);
+        return false;
     }
 }

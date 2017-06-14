@@ -31,5 +31,6 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
                 console.error('create failed:' + reason);
             }
         );
+        return false;
     }
 }

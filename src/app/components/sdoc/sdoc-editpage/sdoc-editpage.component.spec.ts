@@ -10,6 +10,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {AppService} from '../../../services/app.service';
 import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {SDocRoutingService} from '../../../services/sdoc-routing.service';
+import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -29,6 +31,8 @@ describe('SDocEditpageComponent', () => {
                     }
                 },
                 {provide: Router, useClass: RouterTestingModule},
+                SDocRoutingService,
+                SDocSearchFormConverter,
                 ToastsManager
 
         ],

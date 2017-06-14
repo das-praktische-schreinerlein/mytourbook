@@ -3,6 +3,7 @@ export class SDocSearchForm extends GenericSearchForm {
     when: string;
     where: string;
     what: string;
+    moreFilter: string;
     type: string;
 
     constructor(values: {}) {

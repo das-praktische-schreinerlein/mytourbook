@@ -1,0 +1,32 @@
+<div>
+    <div class="container">
+        <a [href]="getBackToSearchUrl()" (click)="submitBackToSearch()">Zurück zur Suche</a>
+        <ng-container *ngIf="record != undefined && record.id != undefined">
+            <section class="row card-deck">
+                <app-sdoc-list-item style="min-width: 300px;" class="card app-sdoc-list-item"
+                                    [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                    [adminMode]="adminMode"
+                                    (edit)="onEditSDoc($event)"
+                                    (delete)="onDeleteSDoc($event)"
+                                    [layout]="Layout.BIG"
+                                    [record]="record"></app-sdoc-list-item>
+            </section>
+            <ng-container [ngSwitch]="record.type">
+                <ng-container *ngSwitchCase="'LOCATION'">
+                        <app-sdoc-inline-searchpage [label]="'Unterregionen'" [params]="getFiltersForType(record, 'LOCATION')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                        <app-sdoc-inline-searchpage [label]="'Routen'" [params]="getFiltersForType(record, 'ROUTE')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                        <app-sdoc-inline-searchpage [label]="'Bilder'" [params]="getFiltersForType(record, 'IMAGE')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                        <app-sdoc-inline-searchpage [label]="'Tracks'" [params]="getFiltersForType(record, 'TRACK')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                </ng-container>
+                <ng-container *ngSwitchCase="'ROUTE'">
+                        <app-sdoc-inline-searchpage [label]="'Tracks'" [params]="getFiltersForType(record, 'TRACK')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                        <app-sdoc-inline-searchpage [label]="'Bilder'" [params]="getFiltersForType(record, 'IMAGE')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                </ng-container>
+                <ng-container *ngSwitchCase="'TRACK'">
+                        <app-sdoc-inline-searchpage [label]="'Routen'" [params]="getFiltersForType(record, 'ROUTE')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                        <app-sdoc-inline-searchpage [label]="'Bilder'" [params]="getFiltersForType(record, 'IMAGE')" [showForm]="false" [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+</div>

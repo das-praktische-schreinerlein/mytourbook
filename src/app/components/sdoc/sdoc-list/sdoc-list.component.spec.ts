@@ -6,6 +6,7 @@ import {SDocRecord} from '../../../model/records/sdoc-record';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {Facets} from '../../../model/container/facets';
+import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -14,6 +15,7 @@ describe('SDocListComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocListComponent],
+            providers: [SDocSearchFormConverter],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();

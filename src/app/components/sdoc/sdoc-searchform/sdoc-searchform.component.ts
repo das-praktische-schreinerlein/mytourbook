@@ -34,7 +34,7 @@ export class SDocSearchformComponent implements OnInit {
         where: '',
         what: '',
         fulltext: '',
-        type: '',
+        type: [],
         sort: '',
         perPage: 10,
         pageNum: 1
@@ -52,7 +52,7 @@ export class SDocSearchformComponent implements OnInit {
                     what: values.what,
                     where: values.where,
                     fulltext: values.fulltext,
-                    type: values.type
+                    type: [(values.type ? values.type.split(/,/) : [])]
                 });
             },
         );
@@ -103,6 +103,14 @@ export class SDocSearchformComponent implements OnInit {
         return values;
     }
 
+    getSelectValuesFromExtractedFacetValuesList(values: any): string[] {
+        return values.map(function (value) { return value[2] + value[1]; });
+    }
+
+    getSelectTextsFromExtractedFacetValuesList(values: any): string[] {
+        return values.map(function (value) { return value[0] + value[1]; });
+    }
+
     extractFacetValues(searchResult: SDocSearchResult, facetName: string, valuePrefix: string, labelPrefix: string): any[] {
         const values = [];
         const facet = searchResult.facets.facets.get(facetName);
@@ -119,5 +127,6 @@ export class SDocSearchformComponent implements OnInit {
 
     submitSearch() {
         this.search.emit(this.searchFormGroup.getRawValue());
+        return false;
     }
 }

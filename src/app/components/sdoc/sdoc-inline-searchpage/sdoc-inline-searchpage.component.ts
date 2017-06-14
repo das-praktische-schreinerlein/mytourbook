@@ -1,7 +1,6 @@
-import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../services/sdoc-data.service';
 import {SDocRecord} from '../../../model/records/sdoc-record';
-import {ActivatedRoute, Router} from '@angular/router';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {Subscription} from 'rxjs/Subscription';
@@ -11,24 +10,52 @@ import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-convert
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
-    selector: 'app-sdoc-searchpage',
-    templateUrl: './sdoc-searchpage.component.html',
-    styleUrls: ['./sdoc-searchpage.component.css']
+    selector: 'app-sdoc-inline-searchpage',
+    templateUrl: './sdoc-inline-searchpage.component.html',
+    styleUrls: ['./sdoc-inline-searchpage.component.css']
 })
-export class SDocSearchpageComponent implements OnInit, OnDestroy {
+export class SDocInlineSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
     private appStateSubscription: Subscription;
-    private routeSubscription: Subscription;
-    private routeUrlSubscription: Subscription;
-    adminMode = true;
+    adminMode = false;
     Layout = Layout;
 
     private searchResult: SDocSearchResult;
     private searchForm: SDocSearchForm;
 
-    constructor(private appService: AppService, private route: ActivatedRoute, private router: Router,
+    // initialize a private variable _record, it's a BehaviorSubject
+    private _paramsObservable = new BehaviorSubject<any>({});
+    private _params = {};
+
+    @Input()
+    public set params(value: any) {
+        // set the latest value for _data BehaviorSubject
+        this._paramsObservable.next(value);
+        this._params = value;
+    };
+
+    public get params(): any {
+        // get the latest value from _data BehaviorSubject
+        // return this._params.getValue();
+        return this._params;
+    }
+
+    @Input()
+    showForm = false;
+
+    @Input()
+    showOnlyIfRecordsFound = true;
+
+    @Input()
+    label: string;
+
+    @Output()
+    show: EventEmitter<SDocRecord> = new EventEmitter();
+
+    constructor(private appService: AppService,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.searchForm = new SDocSearchForm({});
@@ -40,58 +67,27 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         // reset initialized
         this.initialized = false;
 
-        // check for route
-        const url = this.router.routerState.snapshot.url;
-        if (url === 'sdocs' || url === '/sdocs') {
-            console.log('ngOnInit: redirect for ', url);
-            return this.redirectToSearch();
-        }
-
         // do search
-        console.log('ngOnInit: search for ', url);
         this.appStateSubscription = this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
-                this.routeSubscription = this.route.params.subscribe(params => {
-                    return this.doSearchWithParams(params);
-                });
+                return this.doSearchWithParams(this.params);
             }
         });
+/**
+        this._paramsObservable.subscribe(
+            params => {
+                console.error("doNewSearchWithparams", params);
+                return this.doSearchWithParams(params);
+            });
+**/
     }
 
     ngOnDestroy() {
         // Clean sub to avoid memory leak
-        if (this.routeSubscription) {
-            this.routeSubscription.unsubscribe();
-        }
-        if (this.routeUrlSubscription) {
-            this.routeUrlSubscription.unsubscribe();
-        }
     }
 
     onShowSDoc(sdoc: SDocRecord) {
         this.sdocRoutingService.navigateToShowFromSearch(sdoc, this.searchForm);
-        return false;
-    }
-
-    onEditSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToEditFromSearch(sdoc.id, this.searchForm);
-        return false;
-    }
-
-    onDeleteSDoc(sdoc: SDocRecord) {
-        if (window.confirm('SDoc wirklich löschen?')) {
-            const me = this;
-            this.sdocDataService.deleteById(sdoc.id).then(function doneDeleteById() {
-                    console.log('SDoc deleted', sdoc);
-                    me.toastr.info('Datesatz wurde gelöscht.', 'Fertig');
-                    me.doSearch();
-                },
-                function errorCreate(reason: any) {
-                    console.error('deleteSDocById failed:' + reason);
-                    me.toastr.error('Es gab leider ein Problem bei der Löschen - am besten noch einmal probieren :-(', 'Oops!');
-                }
-            );
-        }
         return false;
     }
 
@@ -102,26 +98,13 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.searchForm.pageNum = +page;
-        console.log('onPageChange: redirect to page', page);
-        this.redirectToSearch();
+        this.doSearch();
         return false;
     }
 
     onSearchSDoc(sdocSearchForm: SDocSearchForm) {
         this.searchForm = sdocSearchForm;
-        console.log('onSearchSDoc: redirect to ', sdocSearchForm);
-        this.redirectToSearch();
-        return false;
-    }
-
-    private redirectToSearch() {
-        // reset initialized
-        this.initialized = false;
-
-        const url = this.searchFormConverter.searchFormToUrl('/sdocs/', this.searchForm) + '?' + new Date().getTime();
-        console.log('redirectToSearch: redirect to ', url);
-
-        this.router.navigateByUrl(url);
+        this.doSearch();
         return false;
     }
 

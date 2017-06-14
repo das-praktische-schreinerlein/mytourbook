@@ -8,6 +8,7 @@ export const SDocRecordSchema = new Schema({
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
+        imageId: {type: 'number'},
         locId: {type: 'number'},
         routeId: {type: 'number'},
         trackId: {type: 'number'},
@@ -20,7 +21,8 @@ export const SDocRecordSchema = new Schema({
         geoLoc: {type: 'string'},
         gpsTrackBasefile: {type: 'string'},
         keywords: {type: 'string'},
-        name: {type: 'string', minLength: 4, maxLength: 255},
+        locHirarchie: {type: 'string'},
+        name: {type: 'string', minLength: 1, maxLength: 255},
         type: {type: 'string'}
     }
 });

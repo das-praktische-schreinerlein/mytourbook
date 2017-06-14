@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {SDocSearchpageComponent} from './sdoc-searchpage.component';
+import {SDocInlineSearchpageComponent} from './sdoc-inline-searchpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataService} from '../../../services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -21,13 +21,13 @@ class RouterStub {
     navigateByUrl(url: string) { return url; }
 }
 
-describe('SDocSearchpageComponent', () => {
-    let component: SDocSearchpageComponent;
-    let fixture: ComponentFixture<SDocSearchpageComponent>;
+describe('SDocInlineSearchpageComponent', () => {
+    let component: SDocInlineSearchpageComponent;
+    let fixture: ComponentFixture<SDocInlineSearchpageComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SDocSearchpageComponent],
+            declarations: [SDocInlineSearchpageComponent],
             imports: [ToastModule.forRoot()],
             providers: [SDocDataStore,
                 {provide: AppService, useValue: new AppServiceStub() },
@@ -48,8 +48,9 @@ describe('SDocSearchpageComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SDocSearchpageComponent);
+        fixture = TestBed.createComponent(SDocInlineSearchpageComponent);
         component = fixture.componentInstance;
+        component.params = {};
         fixture.detectChanges();
     });
 

@@ -1,19 +1,15 @@
 import {GenericDataStore} from './generic-data.store';
-import {Observable} from 'rxjs/Rx';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {Record} from 'js-data';
 
 export abstract class GenericSearchService <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> {
-    curList: BehaviorSubject<S>;
     dataStore: GenericDataStore<R, F, S>;
     searchMapperName: string;
 
     constructor(dataStore: GenericDataStore<R, F, S>, mapperName: string) {
         this.dataStore = dataStore;
-        this.curList = <BehaviorSubject<S>>new BehaviorSubject(undefined);
         this.searchMapperName = mapperName;
     }
 
@@ -48,7 +44,6 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         const result = new Promise<S>((resolve, reject) => {
             searchResultObs.then(function doneSearch(searchResultData: S) {
                     console.log('search searchResultData', searchResultData);
-                    me.curList.next(searchResultData);
                     resolve(searchResultData);
                 },
                 function errorSearch(reason) {
@@ -62,10 +57,6 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
 
     getById(id: number): Promise<R> {
         return this.dataStore.find(this.searchMapperName, id);
-    }
-
-    getCurList(): Observable<S> {
-        return this.curList.asObservable();
     }
 
     abstract createDefaultSearchForm(): F;

@@ -22,12 +22,17 @@ import {TruncatePipe} from './pipes/truncate.pipe';
 import {SDocSearchFormConverter} from './services/sdoc-searchform-converter.service';
 import {ToastModule} from 'ng2-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SDocShowpageComponent} from './components/sdoc/sdoc-showpage/sdoc-showpage.component';
+import {SDocRoutingService} from './services/sdoc-routing.service';
+import {SDocInlineSearchpageComponent} from './components/sdoc/sdoc-inline-searchpage/sdoc-inline-searchpage.component';
+import {SDocListItemSmallComponent} from './components/sdoc/sdoc-list-item-small/sdoc-list-item-small.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         SDocListComponent,
         SDocListItemComponent,
+        SDocListItemSmallComponent,
         SDocListHeaderComponent,
         SDocListFooterComponent,
         SDocEditformComponent,
@@ -36,6 +41,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
         SDocSearchpageComponent,
         SDocCreatepageComponent,
         SDocEditpageComponent,
+        SDocShowpageComponent,
+        SDocInlineSearchpageComponent,
         TruncatePipe
     ],
     imports: [
@@ -49,7 +56,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
         NgbModule.forRoot(),
         ToastModule.forRoot()
     ],
-    providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter],
+    providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
