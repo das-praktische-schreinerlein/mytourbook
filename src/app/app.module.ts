@@ -26,6 +26,7 @@ import {SDocShowpageComponent} from './components/sdoc/sdoc-showpage/sdoc-showpa
 import {SDocRoutingService} from './services/sdoc-routing.service';
 import {SDocInlineSearchpageComponent} from './components/sdoc/sdoc-inline-searchpage/sdoc-inline-searchpage.component';
 import {SDocListItemSmallComponent} from './components/sdoc/sdoc-list-item-small/sdoc-list-item-small.component';
+import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import {SDocListItemSmallComponent} from './components/sdoc/sdoc-list-item-small
         JsonpModule,
         routing,
         NgbModule.forRoot(),
-        ToastModule.forRoot()
+        ToastModule.forRoot(),
+        MultiselectDropdownModule
     ],
     providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService],
     bootstrap: [AppComponent]

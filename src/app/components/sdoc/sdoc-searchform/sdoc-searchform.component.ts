@@ -4,6 +4,7 @@ import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {BehaviorSubject} from 'rxjs';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {Facets} from '../../../model/container/facets';
+import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -30,9 +31,9 @@ export class SDocSearchformComponent implements OnInit {
 
     // empty default
     searchFormGroup = this.fb.group({
-        when: '',
-        where: '',
-        what: '',
+        when: [],
+        where: [],
+        what: [],
         fulltext: '',
         type: [],
         sort: '',
@@ -48,9 +49,9 @@ export class SDocSearchformComponent implements OnInit {
             sdocSearchSearchResult => {
                 const values: SDocSearchForm = sdocSearchSearchResult.searchForm;
                 this.searchFormGroup = this.fb.group({
-                    when: values.when,
-                    what: values.what,
-                    where: values.where,
+                    when: [(values.when ? values.when.split(/,/) : [])],
+                    what: [(values.what ? values.what.split(/,/) : [])],
+                    where: [(values.where ? values.where.split(/,/) : [])],
                     fulltext: values.fulltext,
                     type: [(values.type ? values.type.split(/,/) : [])]
                 });
@@ -103,12 +104,21 @@ export class SDocSearchformComponent implements OnInit {
         return values;
     }
 
-    getSelectValuesFromExtractedFacetValuesList(values: any): string[] {
-        return values.map(function (value) { return value[2] + value[1]; });
-    }
+    getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean, removements: string[]): IMultiSelectOption[] {
+        return values.map(function (value) {
+            let label: string = value[1];
+            if (removements && (Array.isArray(removements))) {
+                for (const replacement of removements) {
+                    label = label.replace(replacement, '');
+                }
+            }
 
-    getSelectTextsFromExtractedFacetValuesList(values: any): string[] {
-        return values.map(function (value) { return value[0] + value[1]; });
+            const result = {id: value[2] + value[1], name: value[0] + label};
+            if (withCount && value[3] > 0) {
+                result.name += ' (' + value[3] + ')';
+            }
+            return result;
+        });
     }
 
     extractFacetValues(searchResult: SDocSearchResult, facetName: string, valuePrefix: string, labelPrefix: string): any[] {

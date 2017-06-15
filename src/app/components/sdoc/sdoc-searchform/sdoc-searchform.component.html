@@ -1,31 +1,50 @@
-<form [formGroup]="searchFormGroup" (ngSubmit)="submitSearch($event)">
-    <label>Volltextsuche:</label>
-    <input formControlName="fulltext" type="text" placeholder="Suchtext">
+<form [formGroup]="searchFormGroup" (ngSubmit)="submitSearch($event)" class="form-control-sm">
+    <div class="row">
+        <div class="col-sm-3">
+            <label class="col-xs-3 col-form-label mr-2">Wann:</label>
+            <ss-multiselect-dropdown [options]="getIMultiSelectOptionsFromExtractedFacetValuesList(getWhenValues(searchResult), true, [])"
+                                     formControlName="when"
+                                     (ngModelChange)="submitSearch()"
+                                     (onRemoved)="submitSearch()"
+                                     [settings]="{dynamicTitleMaxItems: 5, enableSearch: true, showUncheckAll:true}"
+                                     [texts]="{ checkAll: 'Alle auswählen',uncheckAll: 'Alle abwählen',checked: 'Zeit ausgewählt', checkedPlural: 'Zeiten ausgewählt', searchPlaceholder: 'Find', defaultTitle: 'Zeiten', allSelected: 'Jederzeit'}"></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-3">
+            <label class="col-xs-3 col-form-label mr-2">Wo:</label>
+            <ss-multiselect-dropdown [options]="getIMultiSelectOptionsFromExtractedFacetValuesList(getWhereValues(searchResult), true, [])"
+                                     formControlName="where"
+                                     (ngModelChange)="submitSearch()"
+                                     (onRemoved)="submitSearch()"
+                                     [settings]="{dynamicTitleMaxItems: 5, enableSearch: true, showUncheckAll:true}"
+                                     [texts]="{ checkAll: 'Alle auswählen',uncheckAll: 'Alle abwählen',checked: 'Region ausgewählt', checkedPlural: 'Regionen ausgewählt', searchPlaceholder: 'Find', defaultTitle: 'Regionen', allSelected: 'Überall'}"></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-3">
+            <label class="col-xs-3 col-form-label mr-2">Was:</label>
+            <ss-multiselect-dropdown [options]="getIMultiSelectOptionsFromExtractedFacetValuesList(getWhatValues(searchResult), true, ['KW_', 'kw_'])"
+                                     formControlName="what"
+                                     (ngModelChange)="submitSearch()"
+                                     (onRemoved)="submitSearch()"
+                                     [settings]="{dynamicTitleMaxItems: 5, enableSearch: true, showUncheckAll:true}"
+                                     [texts]="{ checkAll: 'Alle auswählen',uncheckAll: 'Alle abwählen',checked: 'Eigenschaft ausgewählt', checkedPlural: 'Eigenschaften ausgewählt', searchPlaceholder: 'Find', defaultTitle: 'Eigenschaften', allSelected: 'alles'}"></ss-multiselect-dropdown>
 
-    <label>Wann:</label>
-    <select formControlName="when" type="text" >
-        <option *ngFor="let obj of getWhenValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
-        <option value="">jederzeit</option>
-    </select>
-
-    <label>Wo:</label>
-    <select formControlName="where" type="text" >
-        <option *ngFor="let obj of getWhereValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
-        <option value="">überall</option>
-    </select>
-
-    <label>Was:</label>
-    <select formControlName="what" type="text" >
-        <option *ngFor="let obj of getWhatValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
-        <option value="">alles</option>
-    </select>
-
-    <label>Typen:</label>
-
-    <select formControlName="type" type="text" multiple class="">
-        <option *ngFor="let obj of getTypeValues(searchResult)" value="{{obj[2]}}{{obj[1]}}">{{obj[0]}} {{obj[1]}}</option>
-        <option value="">alles</option>
-    </select>
-
-    <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+        <div class="col-sm-3">
+            <label class="col-xs-3 col-form-label mr-2">Typen:</label>
+            <ss-multiselect-dropdown [options]="getIMultiSelectOptionsFromExtractedFacetValuesList(getTypeValues(searchResult, true, []))"
+                                     formControlName="type"
+                                     (ngModelChange)="submitSearch()"
+                                     (onRemoved)="submitSearch()"
+                                     [settings]="{dynamicTitleMaxItems: 5, enableSearch: false, showCheckAll:true, showUncheckAll:true}"
+                                     [texts]="{ checkAll: 'Alle auswählen',uncheckAll: 'Alle abwählen',checked: 'Typ ausgewählt', checkedPlural: 'Typen ausgewählt', searchPlaceholder: 'Find', defaultTitle: 'Typen', allSelected: 'Alle'}"></ss-multiselect-dropdown>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8 form-inline">
+            <label class="">Volltextsuche:</label>
+            <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control">
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </div>
 </form>

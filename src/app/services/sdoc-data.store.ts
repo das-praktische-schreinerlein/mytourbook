@@ -32,28 +32,32 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             };
         }
         if (searchForm.when !== undefined && searchForm.when.length > 0) {
-            if (searchForm.when.startsWith('week')) {
+            const whenValues = this.splitValuesByPrefixes(searchForm.when, ',', ['week', 'month']);
+            if (whenValues.has('week')) {
                 filter = filter || {};
                 filter['week_is'] = {
-                    'in': searchForm.when.replace('week', '').split(/,/)
+                    'in': this.joinValuesAndReplacePrefix(whenValues.get('week'), 'week', ',').split(/,/)
                 };
-            } else if (searchForm.when.startsWith('month')) {
+            }
+            if (whenValues.has('month')) {
                 filter = filter || {};
                 filter['month_is'] = {
-                    'in': searchForm.when.replace('month', '').split(/,/)
+                    'in': this.joinValuesAndReplacePrefix(whenValues.get('month'), 'month', ',').split(/,/)
                 };
             }
         }
         if (searchForm.where !== undefined && searchForm.where.length > 0) {
-            if (searchForm.where.startsWith('locId')) {
+            const whenValues = this.splitValuesByPrefixes(searchForm.where, ',', ['locId']);
+            if (whenValues.has('locId')) {
                 filter = filter || {};
                 filter['loc_id_i'] = {
-                    '==': searchForm.where.replace('locId', '')
+                    'in': this.joinValuesAndReplacePrefix(whenValues.get('locId'), 'locId', ',').split(/,/)
                 };
-            } else {
+            }
+            if (whenValues.has('unknown')) {
                 filter = filter || {};
                 filter['loc_lochirarchie_txt'] = {
-                    '==': searchForm.where
+                    'in': this.joinValuesAndReplacePrefix(whenValues.get('unknown'), '', ',').split(/,/)
                 };
             }
         }
@@ -92,5 +96,45 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
 
     createSearchResult(searchForm: SDocSearchForm, recordCount: number, records: SDocRecord[], facets: Facets): SDocSearchResult {
         return new SDocSearchResult(searchForm, recordCount, records, facets);
+    }
+
+    splitValuesByPrefixes(src: string, splitter: string, prefixes: string[]): Map<string, string[]> {
+        const result = new Map<string, string[]>();
+        const values = src.split(splitter);
+        for (const value of values) {
+            let found = false;
+            for (const prefix of prefixes) {
+                if (value.startsWith(prefix)) {
+                    let list: string[];
+                    if (result.has(prefix)) {
+                        list = result.get(prefix);
+                    } else {
+                        list = [];
+                    }
+                    list.push(value);
+                    result.set(prefix, list);
+                    found = true;
+                    continue;
+                }
+            }
+
+            if (!found) {
+                const prefix = 'unknown';
+                let list: string[];
+                if (result.has(prefix)) {
+                    list = result.get(prefix);
+                } else {
+                    list = [];
+                }
+                list.push(value);
+                result.set(prefix, list);
+            }
+        }
+
+        return result;
+    }
+
+    joinValuesAndReplacePrefix(values: string[], prefix: string, joiner: string): string {
+        return values.map(function (value) { return value.replace(prefix, ''); }).join(joiner);
     }
 }
