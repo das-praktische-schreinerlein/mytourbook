@@ -198,7 +198,7 @@
       </trans-unit>
       <trans-unit id="text.search.sdoc.result" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {no result} =1 {one result} other {<x id="START_TAG_STRONG" ctype="x-strong"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRONG" ctype="x-strong"/> results} }</source>
-        <target>{VAR_PLURAL, plural, =0 {leider kein Treffer :-(} =1 {GENAU ein Treffer :-))} other {UiUiUi <x id="START_TAG_STRONG" ctype="x-strong"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRONG" ctype="x-strong"/> Treffer :-)} }</target>
+        <target>{VAR_PLURAL, plural, =0 {leider kein Treffer :-(} =1 {GENAU ein Treffer :-)} other {UiUiUi <x id="START_TAG_STRONG" ctype="x-strong"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRONG" ctype="x-strong"/> Treffer :-)} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-header/sdoc-list-header.component.ts</context>
           <context context-type="linenumber">2</context>

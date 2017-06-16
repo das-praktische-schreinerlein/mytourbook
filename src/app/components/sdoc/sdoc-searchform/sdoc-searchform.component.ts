@@ -181,7 +181,8 @@ export class SDocSearchformComponent implements OnInit {
     private doSearch() {
         const values = this.searchFormGroup.getRawValue();
         const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
-        if (lat && lon && dist) {
+        values.nearby = '';
+        if (lat && lon && dist && values.nearbyAddress) {
             values.nearby = [lat, lon, values.nearbyDistance].join('_');
         }
         this.searchFormGroup.patchValue({'nearby': values.nearby});
