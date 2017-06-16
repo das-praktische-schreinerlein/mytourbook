@@ -20,15 +20,22 @@
                                      (onAdded)="onChangeSelect()"
                                      (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
-        <div class="col-sm-4 form-inline">
-            <label class="col-xs-4 col-form-label mr-2" i18n="nearby label|Label for filter: nearby@@label.searchform.sdoc.nearby">Nahe:</label>
-            <input formControlName="nearby" type="text" placeholder="Nahe" class="form-control" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.sdoc.nearby">
+        <div class="col-sm-3">
+            <label class="col-xs-3 col-form-label mr-2" i18n="nearby label|Label for filter: nearby@@label.searchform.sdoc.nearby">Nahe:</label>
+            <input formControlName="nearbyAddress" type="text" placeholder="Nahe" class="form-control nearbyAddressAutocomplete" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.sdoc.nearby">
+            <input formControlName="nearby" type="text" style="display: none">
+        </div>
+        <div class="col-sm-1">
+            <label class="col-xs-1 col-form-label mr-2" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.sdoc.nearbyDistance">Umkreis:</label>
+            <input formControlName="nearbyDistance" type="number" placeholder="Umkreis in im" class="form-control"
+                   i18n-placeholder="nearbyDistance placeholder|Placeholder for nearbyDistance@@placeholder.searchform.sdoc.nearbyDistance">
         </div>
     </div>
     <div class="row">
         <div class="col-sm-4 form-inline">
             <label class="col-xs-4 col-form-label mr-2" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
-            <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control" i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
+            <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control"
+                   i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
         </div>
         <div class="col-sm-4">
             <label class="col-xs-4 col-form-label mr-2" i18n="what label|Label for filter: what@@label.searchform.sdoc.what">What:</label>

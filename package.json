@@ -31,6 +31,7 @@
     "@ngx-translate/http-loader": "^0.1.0",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
+    "geo-coder": "^0.2.1",
     "jquery": "^3.2.1",
     "js-data": "^3.0.0-rc.9",
     "js-data-http": "^3.0.0-rc.2",

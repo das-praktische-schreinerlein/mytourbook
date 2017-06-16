@@ -6,6 +6,7 @@ import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {Facets} from '../../../model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../../services/sdoc-searchform-utils.service';
+import {GeoCoder} from 'geo-coder';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -15,6 +16,8 @@ import {SDocSearchFormUtils} from '../../../services/sdoc-searchform-utils.servi
 export class SDocSearchformComponent implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
+
+    private geoCoder = new GeoCoder({ provider: 'osm' });
 
     public optionsSelectWhen: IMultiSelectOption[] = [];
     public optionsSelectWhere: IMultiSelectOption[] = [];
@@ -85,6 +88,8 @@ export class SDocSearchformComponent implements OnInit {
         when: [],
         where: [],
         nearby: '',
+        nearbyAddress: '',
+        nearbyDistance: '10',
         what: [],
         fulltext: '',
         type: [],
@@ -99,36 +104,101 @@ export class SDocSearchformComponent implements OnInit {
     ngOnInit() {
         this._searchResult.subscribe(
             sdocSearchSearchResult => {
-                const values: SDocSearchForm = sdocSearchSearchResult.searchForm;
-                this.searchFormGroup = this.fb.group({
-                    when: [(values.when ? values.when.split(/,/) : [])],
-                    what: [(values.what ? values.what.split(/,/) : [])],
-                    where: [(values.where ? values.where.split(/,/) : [])],
-                    nearby: values.nearby,
-                    fulltext: values.fulltext,
-                    type: [(values.type ? values.type.split(/,/) : [])]
-                });
-                this.optionsSelectWhen = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true);
-                this.optionsSelectWhere = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [], false);
-                this.optionsSelectWhat = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
-                this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true);
+                this.updateSearchForm(sdocSearchSearchResult);
             },
         );
+
+        this.initGeoCodeAutoComplete();
     }
 
 
     public onSubmitSearch(event: any) {
-        this.search.emit(this.searchFormGroup.getRawValue());
+        this.doSearch();
         return false;
     }
 
     public onChangeSelect() {
-        this.search.emit(this.searchFormGroup.getRawValue());
+        this.doSearch();
         return false;
     }
 
+    private updateSearchForm(sdocSearchSearchResult: SDocSearchResult): void {
+        const me = this;
+        const values: SDocSearchForm = sdocSearchSearchResult.searchForm;
+
+        this.searchFormGroup = this.fb.group({
+            when: [(values.when ? values.when.split(/,/) : [])],
+            what: [(values.what ? values.what.split(/,/) : [])],
+            where: [(values.where ? values.where.split(/,/) : [])],
+            nearbyAddress: '',
+            nearbyDistance: '10',
+            nearby: values.nearby,
+            fulltext: values.fulltext,
+            type: [(values.type ? values.type.split(/,/) : [])]
+        });
+
+        this.optionsSelectWhen = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectWhere = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [], false);
+        this.optionsSelectWhat = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
+        this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true);
+
+        const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
+        if (lat && lon) {
+            this.doReverseLookUpForNearBy(lat, lon).then(function (result: any) {
+                me.searchFormGroup.patchValue({'nearbyAddress': result.address});
+            });
+        }
+        if (dist) {
+            me.searchFormGroup.patchValue({'nearbyDistance': dist});
+        }
+    }
+
+    private doReverseLookUpForNearBy(lat: any, lon: any): Promise<string> {
+        if (! (lat && lon)) {
+            return Promise.reject('no coordinates - lat:' + lat + ' lon:' + lon);
+        }
+
+        return this.geoCoder.reverse(lat, lon).then(result => {
+            return Promise.resolve(result);
+        });
+    }
+
+    private initGeoCodeAutoComplete(): void {
+        const inputEl = document.querySelector('.nearbyAddressAutocomplete');
+        this.geoCoder.autocomplete(inputEl);
+        inputEl.addEventListener('place_changed', (event: any) => {
+            const distance = this.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
+            this.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
+            this.doSearch();
+            return false;
+        });
+    }
+
+    private doSearch() {
+        const values = this.searchFormGroup.getRawValue();
+        const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
+        if (lat && lon && dist) {
+            values.nearby = [lat, lon, values.nearbyDistance].join('_');
+        }
+        this.searchFormGroup.patchValue({'nearby': values.nearby});
+        this.search.emit(values);
+        return false;
+    }
+
+    private extractNearbyPos(nearby: string): any[] {
+        if (!nearby || nearby.length <= 0) {
+            return [];
+        }
+
+        const [lat, lon, dist] = nearby.split('_');
+        if (! (lat && lon && dist)) {
+            return [];
+        }
+
+        return [lat, lon, dist];
+    }
 }
