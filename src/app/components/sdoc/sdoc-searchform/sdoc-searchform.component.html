@@ -1,7 +1,7 @@
 <form [formGroup]="searchFormGroup" (ngSubmit)="onSubmitSearch($event)" class="form-control-sm">
     <div class="row">
-        <div class="col-sm-3">
-            <label class="col-xs-3 col-form-label mr-2" i18n="when label|Label for filter: when@@label.searchform.sdoc.when">When:</label>
+        <div class="col-sm-4">
+            <label class="col-form-label" i18n="when label|Label for filter: when@@label.searchform.sdoc.when">When:</label>
             <ss-multiselect-dropdown [options]="optionsSelectWhen"
                                      [settings]="settingsSelectWhen"
                                      [texts]="textsSelectWhen"
@@ -10,7 +10,7 @@
                                      (onAdded)="onChangeSelect()"
                                      (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
             <ss-multiselect-dropdown [options]="optionsSelectWhere"
                                      [settings]="settingsSelectWhere"
@@ -20,8 +20,18 @@
                                      (onAdded)="onChangeSelect()"
                                      (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
-        <div class="col-sm-3">
-            <label class="col-xs-3 col-form-label mr-2" i18n="what label|Label for filter: what@@label.searchform.sdoc.what">What:</label>
+        <div class="col-sm-4 form-inline">
+            <label class="col-xs-4 col-form-label mr-2" i18n="nearby label|Label for filter: nearby@@label.searchform.sdoc.nearby">Nahe:</label>
+            <input formControlName="nearby" type="text" placeholder="Nahe" class="form-control" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.sdoc.nearby">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 form-inline">
+            <label class="col-xs-4 col-form-label mr-2" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
+            <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control" i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
+        </div>
+        <div class="col-sm-4">
+            <label class="col-xs-4 col-form-label mr-2" i18n="what label|Label for filter: what@@label.searchform.sdoc.what">What:</label>
             <ss-multiselect-dropdown [options]="optionsSelectWhat"
                                      [settings]="settingsSelectWhat"
                                      [texts]="textsSelectWhat"
@@ -30,8 +40,8 @@
                                      (onAdded)="onChangeSelect()"
                                      (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
-        <div class="col-sm-3">
-            <label class="col-xs-3 col-form-label mr-2" i18n="type label|Label for filter: type@@label.searchform.sdoc.type">Types:</label>
+        <div class="col-sm-2">
+            <label class="col-xs-2 col-form-label mr-2" i18n="type label|Label for filter: type@@label.searchform.sdoc.type">Types:</label>
             <ss-multiselect-dropdown [options]="optionsSelectType"
                                      [settings]="settingsSelectType"
                                      [texts]="textsSelectType"
@@ -40,13 +50,7 @@
                                      (onAdded)="onChangeSelect()"
                                      (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-8 form-inline">
-            <label class="" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
-            <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control" i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
-        </div>
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <button class="btn btn-primary" type="submit" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
         </div>
     </div>

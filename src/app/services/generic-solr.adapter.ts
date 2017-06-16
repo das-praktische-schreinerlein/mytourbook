@@ -4,6 +4,8 @@ import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
 import {Facet, Facets} from '../model/container/facets';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
 
 function Response (data, meta, op) {
     meta = meta || {};
@@ -30,15 +32,25 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             let result, request;
             request = jsonP.get(httpConfig.url, requestConfig);
             result = request.map((res) => {
-                console.log('result makeHttpRequest:' + httpConfig.url, res);
-                const json = res.json();
-                return {
-                    headers: res.headers,
-                    method: httpConfig.method,
-                    data: json,
-                    status: res.status,
-                    statusMsg: res.statusText
-                };
+                    console.log('response makeHttpRequest:' + httpConfig.url, res);
+                    const json = res.json();
+                    return {
+                        headers: res.headers,
+                        method: httpConfig.method,
+                        data: json,
+                        status: res.status,
+                        statusMsg: res.statusText
+                    };
+                },
+                (error) => {
+                    console.error('error makeHttpRequest:' + httpConfig.url, error);
+                    return {
+                        headers: [],
+                        method: httpConfig.method,
+                        data: {},
+                        status: 300,
+                        statusMsg: error
+                    };
             });
 
             return result.toPromise();
@@ -456,9 +468,9 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     abstract getSolrFields(mapper: Mapper, params: any, opts: any): string[];
 
-    abstract getFacetParams(mapper: Mapper, params: any, opts: any): Map<string, any>;
+    abstract getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
-    abstract getSpatialParams(mapper: Mapper, params: any, opts: any): Map<string, any>;
+    abstract getSpatialParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
     getSolrValue(solrDocument: any, solrFieldName: string, defaultValue: any): string {
         let value = defaultValue;
@@ -513,14 +525,14 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             query.fl = fields.join(' ');
         }
 
-        const facetParams = this.getFacetParams(mapper, params, opts);
+        const facetParams = this.getFacetParams(mapper, params, opts, query);
         if (facetParams !== undefined && facetParams.size > 0) {
             facetParams.forEach(function (value, key) {
                 query[key] = value;
             });
         }
 
-        const spatialParams = this.getSpatialParams(mapper, params, opts);
+        const spatialParams = this.getSpatialParams(mapper, params, opts, query);
         if (spatialParams !== undefined && spatialParams.size > 0) {
             spatialParams.forEach(function (value, key) {
                 query[key] = value;

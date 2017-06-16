@@ -123,40 +123,42 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'gpstracks_basefile_txt', 'keywords_txt', 'loc_lochirarchie_txt', 'name_txt', 'type_txt', 'personen_txt', 'i_fav_url_txt'];
     };
 
-    getFacetParams(mapper: Mapper, params: any, opts: any): Map<string, any> {
+    getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const facetParams = new Map<string, any>();
+        facetParams.set('facet', 'on');
 
-        // TODO
-        if (opts.facet === true) {
-            facetParams.set('fq', '{!geofilt cache=false}');
-            facetParams.set('sfield', 'geo_loc_p');
-            facetParams.set('pt', '52.2657,13.5357');
-            facetParams.set('d', '5');
-        }
-
-        return facetParams;
-    };
-
-    getSpatialParams(mapper: Mapper, params: any, opts: any): Map<string, any> {
-        const spatialParams = new Map<string, any>();
-        spatialParams.set('facet', 'on');
-
-        spatialParams.set('facet.field', ['loc_id_i',
+        facetParams.set('facet.field', ['loc_id_i',
             'personen_txt',
             'loc_lochirarchie_txt',
             'keywords_txt', 'month_is',
             'week_is',
             'type_txt']);
 
-        spatialParams.set('f.keywords_txt.facet.prefix', 'kw_');
-        spatialParams.set('f.keywords_txt.facet.limit', '-1');
-        spatialParams.set('f.keywords_txt.facet.sort', 'count');
+        facetParams.set('f.keywords_txt.facet.prefix', 'kw_');
+        facetParams.set('f.keywords_txt.facet.limit', '-1');
+        facetParams.set('f.keywords_txt.facet.sort', 'count');
 
-        spatialParams.set('f.month_is.facet.limit', '-1');
-        spatialParams.set('f.month_is.facet.sort', 'count');
+        facetParams.set('f.month_is.facet.limit', '-1');
+        facetParams.set('f.month_is.facet.sort', 'count');
 
-        spatialParams.set('f.week_is.facet.limit', '-1');
-        spatialParams.set('f.week_is.facet.sort', 'count');
+        facetParams.set('f.week_is.facet.limit', '-1');
+        facetParams.set('f.week_is.facet.sort', 'count');
+
+        return facetParams;
+    };
+
+    getSpatialParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+        const spatialParams = new Map<string, any>();
+
+        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
+            params.spatial.geo_loc_p.nearby !== undefined) {
+            const [lat, lon, distance] = params.spatial.geo_loc_p.nearby.split(/_/);
+
+            spatialParams.set('fq', '{!geofilt cache=false}');
+            spatialParams.set('sfield', 'geo_loc_p');
+            spatialParams.set('pt', lat + ',' + lon);
+            spatialParams.set('d', distance);
+        }
 
         return spatialParams;
     };

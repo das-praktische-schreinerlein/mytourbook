@@ -29,6 +29,7 @@ import {SDocListItemSmallComponent} from './components/sdoc/sdoc-list-item-small
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {SDocSearchFormUtils} from './services/sdoc-searchform-utils.service';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -72,7 +73,7 @@ export function createTranslateLoader(http: Http) {
             }
         })
     ],
-    providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService],
+    providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService, SDocSearchFormUtils],
     bootstrap: [AppComponent]
 })
 export class AppModule {

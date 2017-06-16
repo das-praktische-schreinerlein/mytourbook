@@ -25,6 +25,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         }
 
         let filter = undefined;
+        let spatial = undefined;
         if (searchForm.fulltext !== undefined && searchForm.fulltext.length > 0) {
             filter = filter || {};
             filter['html'] = {
@@ -46,18 +47,32 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
                 };
             }
         }
-        if (searchForm.where !== undefined && searchForm.where.length > 0) {
-            const whenValues = this.splitValuesByPrefixes(searchForm.where, ',', ['locId']);
-            if (whenValues.has('locId')) {
-                filter = filter || {};
-                filter['loc_id_i'] = {
-                    'in': this.joinValuesAndReplacePrefix(whenValues.get('locId'), 'locId', ',').split(/,/)
+        if (searchForm.nearby !== undefined) {
+            if (searchForm.nearby) {
+                spatial = spatial || {};
+                spatial['geo_loc_p'] = {
+                    'nearby': searchForm.nearby
                 };
             }
-            if (whenValues.has('unknown')) {
+        }
+        if (searchForm.where !== undefined && searchForm.where.length > 0) {
+            const whereValues = this.splitValuesByPrefixes(searchForm.where, ',', ['locId', 'nearby']);
+            if (whereValues.has('locId')) {
+                filter = filter || {};
+                filter['loc_id_i'] = {
+                    'in': this.joinValuesAndReplacePrefix(whereValues.get('locId'), 'locId', ',').split(/,/)
+                };
+            }
+            if (whereValues.has('nearby')) {
+                spatial = spatial || {};
+                spatial['geo_loc_p'] = {
+                    'nearby': this.joinValuesAndReplacePrefix(whereValues.get('nearby'), 'nearby:', ',')
+                };
+            }
+            if (whereValues.has('unknown')) {
                 filter = filter || {};
                 filter['loc_lochirarchie_txt'] = {
-                    'in': this.joinValuesAndReplacePrefix(whenValues.get('unknown'), '', ',').split(/,/)
+                    'in': this.joinValuesAndReplacePrefix(whereValues.get('unknown'), '', ',').split(/,/)
                 };
             }
         }
@@ -89,6 +104,9 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
 
         if (filter !== undefined) {
             query['where'] = filter;
+        }
+        if (spatial !== undefined) {
+            query['spatial'] = spatial;
         }
 
         return query;

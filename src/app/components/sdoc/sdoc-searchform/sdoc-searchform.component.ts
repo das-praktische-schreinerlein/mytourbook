@@ -5,7 +5,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {Facets} from '../../../model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
-import {TranslateService} from '@ngx-translate/core';
+import {SDocSearchFormUtils} from '../../../services/sdoc-searchform-utils.service';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -84,6 +84,7 @@ export class SDocSearchformComponent implements OnInit {
     public searchFormGroup = this.fb.group({
         when: [],
         where: [],
+        nearby: '',
         what: [],
         fulltext: '',
         type: [],
@@ -92,7 +93,7 @@ export class SDocSearchformComponent implements OnInit {
         pageNum: 1
     });
 
-    constructor(public fb: FormBuilder, private translateService: TranslateService) {
+    constructor(public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils) {
     }
 
     ngOnInit() {
@@ -103,108 +104,22 @@ export class SDocSearchformComponent implements OnInit {
                     when: [(values.when ? values.when.split(/,/) : [])],
                     what: [(values.what ? values.what.split(/,/) : [])],
                     where: [(values.where ? values.where.split(/,/) : [])],
+                    nearby: values.nearby,
                     fulltext: values.fulltext,
                     type: [(values.type ? values.type.split(/,/) : [])]
                 });
-                this.optionsSelectWhen = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.getWhenValues(sdocSearchSearchResult), true, [], true);
-                this.optionsSelectWhere = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.getWhereValues(sdocSearchSearchResult), true, [], false);
-                this.optionsSelectWhat = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
-                this.optionsSelectType = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    this.getTypeValues(sdocSearchSearchResult), true, [], true);
+                this.optionsSelectWhen = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true);
+                this.optionsSelectWhere = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [], false);
+                this.optionsSelectWhat = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
+                this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true);
             },
         );
     }
 
-    public getWhenValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        const values = [].concat(
-            this.extractFacetValues(searchResult, 'month_is', 'month', 'Monat'),
-            this.extractFacetValues(searchResult, 'week_is', 'week', 'Woche'));
-
-        return values;
-    }
-
-    public getWhereValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        const values = [].concat(
-            this.extractFacetValues(searchResult, 'loc_lochirarchie_txt', '', ''));
-
-        return values;
-    }
-
-    public getWhatValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        const values = [].concat(
-            this.extractFacetValues(searchResult, 'keywords_txt', '', ''));
-
-        return values;
-    }
-
-    public getTypeValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        const values = [].concat(
-            this.extractFacetValues(searchResult, 'type_txt', '', ''));
-
-        return values;
-    }
-
-    public getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,
-                                                              removements: string[], translate: boolean): IMultiSelectOption[] {
-        const me = this;
-        return values.map(function (value) {
-            let name: string = value[1];
-            if (translate) {
-                name = me.translateService.instant(name) || name;
-            }
-            if (removements && (Array.isArray(removements))) {
-                for (const replacement of removements) {
-                    name = name.replace(replacement, '');
-                }
-            }
-            if (translate) {
-                name = me.translateService.instant(name) || name;
-            }
-            let label = value[0] + name;
-            if (translate) {
-                label = me.translateService.instant(label) || label;
-            }
-
-            const result = {id: value[2] + value[1], name: label};
-            if (withCount && value[3] > 0) {
-                result.name += ' (' + value[3] + ')';
-            }
-            return result;
-        });
-    }
-
-    extractFacetValues(searchResult: SDocSearchResult, facetName: string, valuePrefix: string, labelPrefix: string): any[] {
-        const values = [];
-        const facet = searchResult.facets.facets.get(facetName);
-        if (facet !== undefined &&
-            facet.facet !== undefined) {
-            for (const idx in searchResult.facets.facets.get(facetName).facet) {
-                const facetValue = searchResult.facets.facets.get(facetName).facet[idx];
-                values.push([labelPrefix, facetValue[0], valuePrefix, facetValue[1]]);
-            }
-        }
-
-        return values;
-    }
 
     public onSubmitSearch(event: any) {
         this.search.emit(this.searchFormGroup.getRawValue());
@@ -214,10 +129,6 @@ export class SDocSearchformComponent implements OnInit {
     public onChangeSelect() {
         this.search.emit(this.searchFormGroup.getRawValue());
         return false;
-    }
-
-    public getIMultiSelectSettings1(value: {}): IMultiSelectSettings {
-        return <IMultiSelectSettings>value;
     }
 
 }
