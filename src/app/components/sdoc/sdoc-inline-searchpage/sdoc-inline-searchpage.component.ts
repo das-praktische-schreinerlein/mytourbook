@@ -23,8 +23,8 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy {
     adminMode = false;
     Layout = Layout;
 
-    private searchResult: SDocSearchResult;
-    private searchForm: SDocSearchForm;
+    searchResult: SDocSearchResult;
+    searchForm: SDocSearchForm;
 
     // initialize a private variable _record, it's a BehaviorSubject
     private _paramsObservable = new BehaviorSubject<any>({});

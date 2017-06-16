@@ -5,11 +5,15 @@
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --watch --aot true --locale de --i18n-format xlf --i18n-file src/locales/messages.de.xlf",
+    "start-en": "ng serve --watch --aot true --locale en --i18n-format xlf --i18n-file src/locales/messages.en.xlf",
+    "build": "ng build --aot true --output-path dist/de --locale de --i18n-format xlf --i18n-file src/locales/messages.de.xlf",
+    "build-en": "ng build --aot true --output-path dist/en --locale en --i18n-format xlf --i18n-file src/locales/messages.en.xlf",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "xi18n": "ng xi18n --locale de --out-file messages.de.xlf --output-path src/locales/ --i18n-format xlf --verbose --progress",
+    "xi18n-en": "ng xi18n --locale en --out-file messages.en.xlf --output-path src/locales/ --i18n-format xlf --verbose --progress"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +27,8 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.26",
+    "@ngx-translate/core": "^7.0.0",
+    "@ngx-translate/http-loader": "^0.1.0",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
     "jquery": "^3.2.1",

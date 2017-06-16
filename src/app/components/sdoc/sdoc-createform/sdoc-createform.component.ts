@@ -13,10 +13,10 @@ export class SDocCreateformComponent implements OnInit {
     public record: SDocRecord;
 
     @Output()
-    create: EventEmitter<SDocRecord> = new EventEmitter();
+    public create: EventEmitter<SDocRecord> = new EventEmitter();
 
     // empty default
-    createFormGroup = this.fb.group({
+    public createFormGroup = this.fb.group({
         name: '',
         desc: ''
     });
@@ -33,7 +33,7 @@ export class SDocCreateformComponent implements OnInit {
         }
     }
 
-    submitCreate() {
+    submitCreate(event: Event) {
         this.create.emit(this.createFormGroup.getRawValue());
         return false;
     }

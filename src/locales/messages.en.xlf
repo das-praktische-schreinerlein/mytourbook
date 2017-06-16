@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="accordion.map.sdoc.title" datatype="html">
+        <source>Map</source>
+        <target>map</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+        <note priority="1" from="description">Title for map accordion</note>
+        <note priority="1" from="meaning">title accordion map</note>
+      </trans-unit>
+      <trans-unit id="button.listitemaction.sdoc.show" datatype="html">
+        <source>Show</source>
+        <target>show</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+        <note priority="1" from="description">Buttontext to listitemaction:show sdoc</note>
+        <note priority="1" from="meaning">button listitemaction show sdoc</note>
+      </trans-unit>
+      <trans-unit id="button.listitemaction.sdoc.edit" datatype="html">
+        <source>Edit</source>
+        <target>edit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+        <note priority="1" from="description">Buttontext to listitemaction:edit sdoc</note>
+        <note priority="1" from="meaning">button listitemaction edit sdoc</note>
+      </trans-unit>
+      <trans-unit id="button.listitemaction.sdoc.delete" datatype="html">
+        <source>Delete</source>
+        <target>delete</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+        <note priority="1" from="description">Buttontext to listitemaction:delete sdoc</note>
+        <note priority="1" from="meaning">button listitemaction delete sdoc</note>
+      </trans-unit>
+      <trans-unit id="accordion.details.sdoc.title" datatype="html">
+        <source>Details</source>
+        <target>details</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-item/sdoc-list-item.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <note priority="1" from="description">Title for details accordion</note>
+        <note priority="1" from="meaning">title accordion details</note>
+      </trans-unit>
+      <trans-unit id="placeholder.form.sdoc.name" datatype="html">
+        <source>name</source>
+        <target>title</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-editform/sdoc-editform.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-createform/sdoc-createform.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Placeholder for name</note>
+        <note priority="1" from="meaning">name placeholder</note>
+      </trans-unit>
+      <trans-unit id="placeholder.form.sdoc.desc" datatype="html">
+        <source>description</source>
+        <target>description</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-editform/sdoc-editform.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-createform/sdoc-createform.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <note priority="1" from="description">Placeholder for desc</note>
+        <note priority="1" from="meaning">desc placeholder</note>
+      </trans-unit>
+      <trans-unit id="button.form.sdoc.edit" datatype="html">
+        <source>Save</source>
+        <target>save</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-editform/sdoc-editform.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Buttontext to edit sdoc</note>
+        <note priority="1" from="meaning">button edit sdoc</note>
+      </trans-unit>
+      <trans-unit id="label.searchform.sdoc.when" datatype="html">
+        <source>When:</source>
+        <target>when:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-searchform/sdoc-searchform.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Label for filter: when</note>
+        <note priority="1" from="meaning">when label</note>
+      </trans-unit>
+      <trans-unit id="label.searchform.sdoc.where" datatype="html">
+        <source>Where:</source>
+        <target>where:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-searchform/sdoc-searchform.component.ts</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <note priority="1" from="description">Label for filter: where</note>
+        <note priority="1" from="meaning">where label</note>
+      </trans-unit>
+      <trans-unit id="label.searchform.sdoc.what" datatype="html">
+        <source>What:</source>
+        <target>what:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-searchform/sdoc-searchform.component.ts</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <note priority="1" from="description">Label for filter: what</note>
+        <note priority="1" from="meaning">what label</note>
+      </trans-unit>
+      <trans-unit id="label.searchform.sdoc.type" datatype="html">
+        <source>Types:</source>
+        <target>types:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-searchform/sdoc-searchform.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <note priority="1" from="description">Label for filter: type</note>
+        <note priority="1" from="meaning">type label</note>
+      </trans-unit>
+      <trans-unit id="label.searchform.sdoc.fulltext" datatype="html">
+        <source>Fulltext:</source>
+        <target>query:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-searchform/sdoc-searchform.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+        <note priority="1" from="description">Label for filter: fulltext</note>
+        <note priority="1" from="meaning">fulltext label</note>
+      </trans-unit>
+      <trans-unit id="placeholder.searchform.sdoc.fulltext" datatype="html">
+        <source>Suchtext</source>
+        <target>that's what I want to find</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-searchform/sdoc-searchform.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+        <note priority="1" from="description">Placeholder for fulltext</note>
+        <note priority="1" from="meaning">fulltext placeholder</note>
+      </trans-unit>
+      <trans-unit id="button.searchform.sdoc.search" datatype="html">
+        <source>Search</source>
+        <target>Let's Roll</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-searchform/sdoc-searchform.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <note priority="1" from="description">Buttontext to search sdoc</note>
+        <note priority="1" from="meaning">button search sdoc</note>
+      </trans-unit>
+      <trans-unit id="a.show.sdoc.back2search" datatype="html">
+        <source>Back to Search</source>
+        <target>back to search</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-showpage/sdoc-showpage.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Linktext back to search sdoc</note>
+        <note priority="1" from="meaning">link back2search sdoc</note>
+      </trans-unit>
+      <trans-unit id="button.form.sdoc.create" datatype="html">
+        <source>Create</source>
+        <target>create</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-createform/sdoc-createform.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <note priority="1" from="description">Buttontext to create sdoc</note>
+        <note priority="1" from="meaning">button create sdoc</note>
+      </trans-unit>
+      <trans-unit id="text.search.sdoc.result" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {no result} =1 {one result} other {<x id="START_TAG_STRONG" ctype="x-strong"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRONG" ctype="x-strong"/> results} }</source>
+        <target>{VAR_PLURAL, plural, =0 {no result :-(} =1 {EXACTLY one result :-)} other {UiUiUi <x id="START_TAG_STRONG" ctype="x-strong"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRONG" ctype="x-strong"/> results :-)} }</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">D:/Projekte/mytourbook/src/app/components/sdoc/sdoc-list-header/sdoc-list-header.component.ts</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <note priority="1" from="description">Text for searchresult sdoc</note>
+        <note priority="1" from="meaning">searchresult text sdoc</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

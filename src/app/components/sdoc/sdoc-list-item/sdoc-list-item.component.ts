@@ -12,7 +12,7 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
     styleUrls: ['./sdoc-list-item.component.css']
 })
 export class SDocListItemComponent {
-    sanitizer: DomSanitizer;
+    private sanitizer: DomSanitizer;
 
     @Input()
     public record: SDocRecord;
@@ -27,13 +27,13 @@ export class SDocListItemComponent {
     public layout: Layout;
 
     @Output()
-    show: EventEmitter<SDocRecord> = new EventEmitter();
+    public show: EventEmitter<SDocRecord> = new EventEmitter();
 
     @Output()
-    edit: EventEmitter<SDocRecord> = new EventEmitter();
+    public edit: EventEmitter<SDocRecord> = new EventEmitter();
 
     @Output()
-    delete: EventEmitter<SDocRecord> = new EventEmitter();
+    public delete: EventEmitter<SDocRecord> = new EventEmitter();
 
     constructor(sanitizer: DomSanitizer, private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService) {
         this.sanitizer = sanitizer;

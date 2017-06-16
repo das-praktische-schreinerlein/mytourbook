@@ -12,6 +12,7 @@ import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppServiceStub} from '../testing/appservice-stubs';
 import {ToastsManagerStub} from '../testing/toasts-stubs';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 describe('AppComponent', () => {
     beforeEach(() => {
@@ -19,7 +20,8 @@ describe('AppComponent', () => {
             imports: [
                 FormsModule,
                 NoopAnimationsModule,
-                ToastModule.forRoot()
+                ToastModule.forRoot(),
+                TranslateModule.forRoot()
             ],
             declarations: [
                 AppComponent
@@ -28,6 +30,7 @@ describe('AppComponent', () => {
                 {provide: Router, useClass: RouterTestingModule},
                 SDocDataStore,
                 SDocDataService,
+                TranslateService,
                 {provide: AppService, useValue: new AppServiceStub() },
                 {provide: ToastsManager, useValue: new ToastsManagerStub() }
             ],

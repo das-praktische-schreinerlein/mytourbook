@@ -9,10 +9,10 @@ import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 export class SDocListHeaderComponent {
 
     @Input()
-    searchResult: SDocSearchResult;
+    public searchResult: SDocSearchResult;
 
     @Output()
-    pageChange: EventEmitter<number> = new EventEmitter();
+    public pageChange: EventEmitter<number> = new EventEmitter();
 
     constructor() {
     }

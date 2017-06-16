@@ -1,7 +1,7 @@
 <section class="row card-deck" *ngIf="searchResult.currentRecords != undefined && searchResult.currentRecords.length > 0">
     <ng-container [ngSwitch]="layout">
         <ng-container *ngSwitchCase="Layout.SMALL">
-            <app-sdoc-list-item-small style="min-width: 100px; margin-bottom: 10px" class="card app-sdoc-list-item"
+            <app-sdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-sdoc-list-item"
                                 [record]="record"
                                 [adminMode]="adminMode"
                                 [layout]="layout"

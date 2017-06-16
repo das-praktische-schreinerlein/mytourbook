@@ -11,6 +11,7 @@ import {Observable} from 'rxjs/Observable';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 import {RouterTestingModule} from '@angular/router/testing';
+import {TranslateModule} from '@ngx-translate/core';
 
 describe('SDocListItemSmallComponent', () => {
     let component: SDocListItemSmallComponent;
@@ -30,7 +31,8 @@ describe('SDocListItemSmallComponent', () => {
                 SDocRoutingService,
                 SDocSearchFormConverter],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot()]
+            imports: [NgbModule.forRoot(),
+                TranslateModule.forRoot()]
         })
             .compileComponents();
     }));

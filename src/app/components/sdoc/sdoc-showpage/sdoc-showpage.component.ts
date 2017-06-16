@@ -17,8 +17,9 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
 export class SDocShowpageComponent implements OnInit, OnDestroy {
     private routeSubscription: Subscription;
     private appStateSubscription: Subscription;
+
     public record: SDocRecord;
-    Layout = Layout;
+    public Layout = Layout;
 
     constructor(private appService: AppService, private router: Router, private route: ActivatedRoute,
                 private sdocDataService: SDocDataService, private sdocRoutingService: SDocRoutingService,

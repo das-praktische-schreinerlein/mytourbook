@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule, JsonpModule} from '@angular/http';
+import {Http, HttpModule, JsonpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {SDocDataService} from './services/sdoc-data.service';
 import {SDocListComponent} from './components/sdoc/sdoc-list/sdoc-list.component';
@@ -27,6 +27,13 @@ import {SDocRoutingService} from './services/sdoc-routing.service';
 import {SDocInlineSearchpageComponent} from './components/sdoc/sdoc-inline-searchpage/sdoc-inline-searchpage.component';
 import {SDocListItemSmallComponent} from './components/sdoc/sdoc-list-item-small/sdoc-list-item-small.component';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+
+// AoT requires an exported function for factories
+export function createTranslateLoader(http: Http) {
+    return new TranslateHttpLoader(http, './assets/locales/locale-', '.json');
+}
 
 @NgModule({
     declarations: [
@@ -56,7 +63,14 @@ import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
         routing,
         NgbModule.forRoot(),
         ToastModule.forRoot(),
-        MultiselectDropdownModule
+        MultiselectDropdownModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: (createTranslateLoader),
+                deps: [Http]
+            }
+        })
     ],
     providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService],
     bootstrap: [AppComponent]

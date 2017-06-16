@@ -25,8 +25,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     adminMode = true;
     Layout = Layout;
 
-    private searchResult: SDocSearchResult;
-    private searchForm: SDocSearchForm;
+    searchResult: SDocSearchResult;
+    searchForm: SDocSearchForm;
 
     constructor(private appService: AppService, private route: ActivatedRoute, private router: Router,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,

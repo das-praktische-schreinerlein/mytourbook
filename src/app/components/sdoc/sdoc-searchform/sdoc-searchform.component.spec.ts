@@ -7,6 +7,7 @@ import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {Facets} from '../../../model/container/facets';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -15,7 +16,9 @@ describe('SDocSearchformComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocSearchformComponent],
-            imports: [ReactiveFormsModule],
+            imports: [ReactiveFormsModule,
+                TranslateModule.forRoot()],
+            providers: [TranslateService],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();

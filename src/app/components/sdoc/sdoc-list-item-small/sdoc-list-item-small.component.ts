@@ -12,7 +12,7 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
     styleUrls: ['./sdoc-list-item-small.component.css']
 })
 export class SDocListItemSmallComponent {
-    sanitizer: DomSanitizer;
+    private sanitizer: DomSanitizer;
 
     @Input()
     public record: SDocRecord;
@@ -27,39 +27,39 @@ export class SDocListItemSmallComponent {
     public layout: Layout;
 
     @Output()
-    show: EventEmitter<SDocRecord> = new EventEmitter();
+    public show: EventEmitter<SDocRecord> = new EventEmitter();
 
     @Output()
-    edit: EventEmitter<SDocRecord> = new EventEmitter();
+    public edit: EventEmitter<SDocRecord> = new EventEmitter();
 
     @Output()
-    delete: EventEmitter<SDocRecord> = new EventEmitter();
+    public delete: EventEmitter<SDocRecord> = new EventEmitter();
 
     constructor(sanitizer: DomSanitizer, private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService) {
         this.sanitizer = sanitizer;
     }
 
-    submitShow(sdoc: SDocRecord) {
+    public submitShow(sdoc: SDocRecord) {
         this.show.emit(sdoc);
         return false;
     }
 
-    submitEdit(sdoc: SDocRecord) {
+    public submitEdit(sdoc: SDocRecord) {
         this.edit.emit(sdoc);
         return false;
     }
 
-    submitDelete(sdoc: SDocRecord) {
+    public submitDelete(sdoc: SDocRecord) {
         this.delete.emit(sdoc);
         return false;
     }
 
-    getShowUrl(record: SDocRecord): SafeUrl {
+    public getShowUrl(record: SDocRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustUrl(this.sdocRoutingService.getShowUrl(
             record) + (this.backToSearchUrl ? '?from=' + this.backToSearchUrl : ''));
     }
 
-    getMapUrl(record: SDocRecord): SafeUrl {
+    public getMapUrl(record: SDocRecord): SafeUrl {
         switch (record.type) {
             case 'TRACK':
                 return this.getMapUrlTrack(record);

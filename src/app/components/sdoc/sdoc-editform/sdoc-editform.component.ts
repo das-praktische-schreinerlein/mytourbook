@@ -28,10 +28,10 @@ export class SDocEditformComponent implements OnInit {
     }
 
     @Output()
-    save: EventEmitter<SDocRecord> = new EventEmitter();
+    public save: EventEmitter<SDocRecord> = new EventEmitter();
 
     // empty default
-    editFormGroup = this.fb.group({
+    public editFormGroup = this.fb.group({
         id: '',
         name: '',
         desc: ''
@@ -62,7 +62,7 @@ export class SDocEditformComponent implements OnInit {
             });
     }
 
-    submitSave() {
+    submitSave(event: Event) {
         const values = this.editFormGroup.getRawValue();
 
         // delete empty key

@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {Facets} from '../../../model/container/facets';
-import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
+import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -14,6 +15,56 @@ import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 export class SDocSearchformComponent implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
+
+    public optionsSelectWhen: IMultiSelectOption[] = [];
+    public optionsSelectWhere: IMultiSelectOption[] = [];
+    public optionsSelectWhat: IMultiSelectOption[] = [];
+    public optionsSelectType: IMultiSelectOption[] = [];
+
+    public settingsSelectWhen: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            enableSearch: true,
+            showUncheckAll: true};
+    public settingsSelectWhere: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            enableSearch: true,
+            showUncheckAll: true};
+    public settingsSelectWhat: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            enableSearch: true,
+            showUncheckAll: true};
+    public settingsSelectType: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            enableSearch: false};
+
+    public textsSelectWhen: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Zeit ausgewählt',
+        checkedPlural: 'Zeiten ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Zeiten',
+        allSelected: 'Jederzeit'};
+    public textsSelectWhere: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Region ausgewählt',
+        checkedPlural: 'Regionen ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Regionen',
+        allSelected: 'Überall'};
+    public textsSelectWhat: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Eigenschaft ausgewählt',
+        checkedPlural: 'Eigenschaften ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Eigenschaften',
+        allSelected: 'alles'};
+    public textsSelectType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Typ ausgewählt',
+        checkedPlural: 'Typen ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Typen',
+        allSelected: 'Alle'};
 
     @Input()
     public set searchResult(value: SDocSearchResult) {
@@ -27,10 +78,10 @@ export class SDocSearchformComponent implements OnInit {
     }
 
     @Output()
-    search: EventEmitter<SDocSearchForm> = new EventEmitter();
+    public search: EventEmitter<SDocSearchForm> = new EventEmitter();
 
     // empty default
-    searchFormGroup = this.fb.group({
+    public searchFormGroup = this.fb.group({
         when: [],
         where: [],
         what: [],
@@ -41,7 +92,7 @@ export class SDocSearchformComponent implements OnInit {
         pageNum: 1
     });
 
-    constructor(public fb: FormBuilder) {
+    constructor(public fb: FormBuilder, private translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -55,11 +106,19 @@ export class SDocSearchformComponent implements OnInit {
                     fulltext: values.fulltext,
                     type: [(values.type ? values.type.split(/,/) : [])]
                 });
+                this.optionsSelectWhen = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.getWhenValues(sdocSearchSearchResult), true, [], true);
+                this.optionsSelectWhere = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.getWhereValues(sdocSearchSearchResult), true, [], false);
+                this.optionsSelectWhat = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
+                this.optionsSelectType = this.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    this.getTypeValues(sdocSearchSearchResult), true, [], true);
             },
         );
     }
 
-    getWhenValues(searchResult: SDocSearchResult): any[] {
+    public getWhenValues(searchResult: SDocSearchResult): any[] {
         if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
             return [];
         }
@@ -71,7 +130,7 @@ export class SDocSearchformComponent implements OnInit {
         return values;
     }
 
-    getWhereValues(searchResult: SDocSearchResult): any[] {
+    public getWhereValues(searchResult: SDocSearchResult): any[] {
         if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
             return [];
         }
@@ -82,7 +141,7 @@ export class SDocSearchformComponent implements OnInit {
         return values;
     }
 
-    getWhatValues(searchResult: SDocSearchResult): any[] {
+    public getWhatValues(searchResult: SDocSearchResult): any[] {
         if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
             return [];
         }
@@ -93,7 +152,7 @@ export class SDocSearchformComponent implements OnInit {
         return values;
     }
 
-    getTypeValues(searchResult: SDocSearchResult): any[] {
+    public getTypeValues(searchResult: SDocSearchResult): any[] {
         if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
             return [];
         }
@@ -104,16 +163,28 @@ export class SDocSearchformComponent implements OnInit {
         return values;
     }
 
-    getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean, removements: string[]): IMultiSelectOption[] {
+    public getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,
+                                                              removements: string[], translate: boolean): IMultiSelectOption[] {
+        const me = this;
         return values.map(function (value) {
-            let label: string = value[1];
+            let name: string = value[1];
+            if (translate) {
+                name = me.translateService.instant(name) || name;
+            }
             if (removements && (Array.isArray(removements))) {
                 for (const replacement of removements) {
-                    label = label.replace(replacement, '');
+                    name = name.replace(replacement, '');
                 }
             }
+            if (translate) {
+                name = me.translateService.instant(name) || name;
+            }
+            let label = value[0] + name;
+            if (translate) {
+                label = me.translateService.instant(label) || label;
+            }
 
-            const result = {id: value[2] + value[1], name: value[0] + label};
+            const result = {id: value[2] + value[1], name: label};
             if (withCount && value[3] > 0) {
                 result.name += ' (' + value[3] + ')';
             }
@@ -135,8 +206,18 @@ export class SDocSearchformComponent implements OnInit {
         return values;
     }
 
-    submitSearch() {
+    public onSubmitSearch(event: any) {
         this.search.emit(this.searchFormGroup.getRawValue());
         return false;
     }
+
+    public onChangeSelect() {
+        this.search.emit(this.searchFormGroup.getRawValue());
+        return false;
+    }
+
+    public getIMultiSelectSettings1(value: {}): IMultiSelectSettings {
+        return <IMultiSelectSettings>value;
+    }
+
 }

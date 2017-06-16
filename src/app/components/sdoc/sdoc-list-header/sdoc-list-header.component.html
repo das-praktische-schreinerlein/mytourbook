@@ -1,5 +1,5 @@
 <header class="header">
-    <span class="sdoc-count" *ngIf="searchResult.recordCount != undefined"><strong>{{searchResult.recordCount}}</strong> {{searchResult.recordCount == 1 ? 'item' : 'items'}} found</span>
+    <span class="sdoc-count" *ngIf="searchResult.recordCount != undefined" i18n="searchresult text sdoc|Text for searchresult sdoc@@text.search.sdoc.result">{searchResult.recordCount, plural, =0 {no result} =1 {one result} other { <strong>{{searchResult.recordCount}}</strong> results}}</span>
     <ng-container *ngIf="searchResult.recordCount > searchResult.searchForm.perPage">
         <ngb-pagination (pageChange)="onPageChange($event)"
                         [pageSize]="searchResult.searchForm.perPage"

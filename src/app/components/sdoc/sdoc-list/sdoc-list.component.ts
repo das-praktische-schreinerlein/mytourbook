@@ -15,24 +15,24 @@ export enum Layout {
 })
 export class SDocListComponent {
     @Input()
-    searchResult: SDocSearchResult;
+    public searchResult: SDocSearchResult;
 
     @Input()
-    adminMode: boolean;
+    public adminMode: boolean;
 
     @Input()
-    layout: Layout;
+    public layout: Layout;
 
     @Output()
-    show: EventEmitter<SDocRecord> = new EventEmitter();
+    public show: EventEmitter<SDocRecord> = new EventEmitter();
 
     @Output()
-    edit: EventEmitter<SDocRecord> = new EventEmitter();
+    public edit: EventEmitter<SDocRecord> = new EventEmitter();
 
     @Output()
-    delete: EventEmitter<SDocRecord> = new EventEmitter();
+    public delete: EventEmitter<SDocRecord> = new EventEmitter();
 
-    Layout = Layout;
+    public Layout = Layout;
 
     constructor(private searchFormConverter: SDocSearchFormConverter) {
     }
