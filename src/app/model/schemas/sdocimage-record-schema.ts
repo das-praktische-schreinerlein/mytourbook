@@ -1,4 +1,4 @@
-import {BaseEntityRecordSchema} from './base-entity-record-schema';
+import {BaseEntityRecordSchema} from '../../../commons/model/schemas/base-entity-record-schema';
 import {Schema} from 'js-data';
 
 export const SDocImageRecordSchema = new Schema({

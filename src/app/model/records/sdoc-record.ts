@@ -1,4 +1,4 @@
-import {BaseEntityRecord} from './base-entity-record';
+import {BaseEntityRecord} from '../../../commons/model/records/base-entity-record';
 
 export class SDocRecord extends BaseEntityRecord {
     locId: number;

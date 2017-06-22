@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Jsonp} from '@angular/http';
-import {GenericSolrAdapter} from './generic-solr.adapter';
+import {GenericSolrAdapter} from '../../commons/services/generic-solr.adapter';
 import {Mapper, Record} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocImageRecord} from '../model/records/sdocimage-record';

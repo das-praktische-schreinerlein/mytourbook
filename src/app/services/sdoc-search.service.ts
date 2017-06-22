@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {GenericSearchService} from './generic-search.service';
+import {GenericSearchService} from '../../commons/services/generic-search.service';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocDataStore} from './sdoc-data.store';
 

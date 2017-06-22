@@ -1,10 +1,10 @@
 // DataStore is mostly recommended for use in the browser
 import {Injectable} from '@angular/core';
-import {GenericDataStore} from './generic-data.store';
+import {GenericDataStore} from '../../commons/services/generic-data.store';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocRecord} from '../model/records/sdoc-record';
-import {Facets} from '../model/container/facets';
+import {Facets} from '../../commons/model/container/facets';
 
 @Injectable()
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {

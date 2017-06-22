@@ -5,7 +5,7 @@ import {SDocRecord} from '../../../model/records/sdoc-record';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {SDocListHeaderComponent} from './sdoc-list-header.component';
-import {Facets} from '../../../model/container/facets';
+import {Facets} from '../../../../commons/model/container/facets';
 
 describe('SDocListHeaderComponent', () => {
     let component: SDocListHeaderComponent;

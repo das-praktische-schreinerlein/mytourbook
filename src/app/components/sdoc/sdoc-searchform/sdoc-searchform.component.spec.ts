@@ -6,8 +6,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {SDocRecord} from '../../../model/records/sdoc-record';
-import {Facets} from '../../../model/container/facets';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {Facets} from '../../../../commons/model/container/facets';
+import {TranslateModule} from '@ngx-translate/core';
 import {SDocSearchFormUtils} from '../../../services/sdoc-searchform-utils.service';
 
 describe('SDocSearchformComponent', () => {

@@ -18,7 +18,7 @@ import {SDocCreateformComponent} from './components/sdoc/sdoc-createform/sdoc-cr
 import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-createpage.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SDocListHeaderComponent} from './components/sdoc/sdoc-list-header/sdoc-list-header.component';
-import {TruncatePipe} from './pipes/truncate.pipe';
+import {TruncatePipe} from '../commons/pipes/truncate.pipe';
 import {SDocSearchFormConverter} from './services/sdoc-searchform-converter.service';
 import {ToastModule} from 'ng2-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';

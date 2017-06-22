@@ -4,7 +4,7 @@ import {SDocRecord} from '../../../model/records/sdoc-record';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {Subscription} from 'rxjs/Subscription';
-import {Facets} from '../../../model/container/facets';
+import {Facets} from '../../../../commons/model/container/facets';
 import {AppService, AppState} from '../../../services/app.service';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';

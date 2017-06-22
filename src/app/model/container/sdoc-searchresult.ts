@@ -1,7 +1,7 @@
 import {SDocSearchForm} from '../forms/sdoc-searchform';
 import {SDocRecord} from '../records/sdoc-record';
-import {GenericSearchResult} from './generic-searchresult';
-import {Facets} from './facets';
+import {GenericSearchResult} from '../../../commons/model/container/generic-searchresult';
+import {Facets} from '../../../commons/model/container/facets';
 export class SDocSearchResult extends GenericSearchResult <SDocRecord, SDocSearchForm> {
     constructor(sdocSearchForm: SDocSearchForm, recordCount: number, currentRecords: SDocRecord[], facets: Facets) {
         super(sdocSearchForm, recordCount, currentRecords, facets);

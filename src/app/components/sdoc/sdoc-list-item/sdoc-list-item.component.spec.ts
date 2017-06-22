@@ -5,7 +5,7 @@ import {SDocListItemComponent} from './sdoc-list-item.component';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {TruncatePipe} from '../../../pipes/truncate.pipe';
+import {TruncatePipe} from '../../../../commons/pipes/truncate.pipe';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';

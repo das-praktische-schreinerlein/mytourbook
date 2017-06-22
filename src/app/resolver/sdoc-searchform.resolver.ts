@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {SDocSearchFormConverter} from '../services/sdoc-searchform-converter.service';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {AppService, AppState} from '../services/app.service';

@@ -5,7 +5,7 @@ import {SDocListComponent} from './sdoc-list.component';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
-import {Facets} from '../../../model/container/facets';
+import {Facets} from '../../../../commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 
 describe('SDocListComponent', () => {
