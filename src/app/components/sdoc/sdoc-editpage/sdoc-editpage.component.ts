@@ -1,10 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocRecord} from '../../../model/records/sdoc-record';
 import {SDocDataService} from '../../../services/sdoc-data.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from 'rxjs/Subscription';
-import {AppService, AppState} from '../../../services/app.service';
-import * as util from 'util';
+import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 
@@ -14,11 +11,9 @@ import {SDocRoutingService} from '../../../services/sdoc-routing.service';
     styleUrls: ['./sdoc-editpage.component.css']
 })
 export class SDocEditpageComponent implements OnInit, OnDestroy {
-    private routeSubscription: Subscription;
-    private appStateSubscription: Subscription;
     public record: SDocRecord;
 
-    constructor(private appService: AppService, private router: Router, private route: ActivatedRoute,
+    constructor(private route: ActivatedRoute,
                 private sdocDataService: SDocDataService, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.toastr.setRootViewContainerRef(vcr);
@@ -27,31 +22,18 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Subscribe to route params
         const me = this;
-        this.routeSubscription = this.route.params.subscribe(params => {
-            const id = params['id'];
-            me.appStateSubscription = me.appService.getAppState().subscribe(appState => {
-                if (appState === AppState.Ready) {
-                    me.sdocDataService.getById(id).then(function doneGetById(sdoc: SDocRecord) {
-                            me.record = sdoc;
-                        },
-                        function errorGetById(reason: any) {
-                            me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oops!');
-                            console.error('edit getById failed:' + reason);
-                        }
-                    );
-                }
-            });
-        });
+        this.route.data.subscribe(
+            (data: { record: SDocRecord }) => {
+                me.record = data.record;
+            },
+            (error: {reason: any}) => {
+                me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oops!');
+                console.error('edit getById failed:' + error.reason);
+            }
+        );
     }
 
     ngOnDestroy() {
-        // Clean sub to avoid memory leak
-        if (!util.isUndefined(this.routeSubscription)) {
-            this.routeSubscription.unsubscribe();
-        }
-        if (!util.isUndefined(this.appStateSubscription)) {
-            this.appStateSubscription.unsubscribe();
-        }
     }
 
     submitSave(values: {}) {

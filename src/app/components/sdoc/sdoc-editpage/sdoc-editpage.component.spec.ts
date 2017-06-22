@@ -12,6 +12,7 @@ import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
+import {SDocRecord} from '../../../model/records/sdoc-record';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -27,7 +28,8 @@ describe('SDocEditpageComponent', () => {
                 {
                     provide: ActivatedRoute,
                     useValue: {
-                        params: Observable.of({id: 123})
+                        params: Observable.of({id: 123}),
+                        data: Observable.of({record: new SDocRecord({id: '1', name: 'Test'})})
                     }
                 },
                 {provide: Router, useClass: RouterTestingModule},

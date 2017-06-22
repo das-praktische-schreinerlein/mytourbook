@@ -11,6 +11,7 @@ import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
+import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 
 class RouterStub {
     public routerState: {} = {
@@ -35,7 +36,8 @@ describe('SDocSearchpageComponent', () => {
                 {
                     provide: ActivatedRoute,
                     useValue: {
-                        params: Observable.of({id: 1})
+                        params: Observable.of({id: 1}),
+                        data: Observable.of({searchForm: new SDocSearchForm({})}),
                     }
                 },
                 {provide: Router, useValue: new RouterStub() },

@@ -4,9 +4,7 @@ import {SDocRecord} from '../../../model/records/sdoc-record';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
-import {Subscription} from 'rxjs/Subscription';
 import {Facets} from '../../../model/container/facets';
-import {AppService, AppState} from '../../../services/app.service';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
@@ -19,16 +17,13 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
 })
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
-    private appStateSubscription: Subscription;
-    private routeSubscription: Subscription;
-    private routeUrlSubscription: Subscription;
     adminMode = true;
     Layout = Layout;
 
     searchResult: SDocSearchResult;
     searchForm: SDocSearchForm;
 
-    constructor(private appService: AppService, private route: ActivatedRoute, private router: Router,
+    constructor(private route: ActivatedRoute, private router: Router,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.searchForm = new SDocSearchForm({});
@@ -40,32 +35,25 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         // reset initialized
         this.initialized = false;
 
-        // check for route
-        const url = this.router.routerState.snapshot.url;
-        if (url === 'sdocs' || url === '/sdocs') {
-            console.log('ngOnInit: redirect for ', url);
-            return this.redirectToSearch();
-        }
+        this.route.data.subscribe(
+            (data: { searchForm: SDocSearchForm, flgDoSearch: true }) => {
+                if (!data.flgDoSearch) {
+                    console.log('ngOnInit: redirect for ', data);
+                    return this.redirectToSearch();
+                }
 
-        // do search
-        console.log('ngOnInit: search for ', url);
-        this.appStateSubscription = this.appService.getAppState().subscribe(appState => {
-            if (appState === AppState.Ready) {
-                this.routeSubscription = this.route.params.subscribe(params => {
-                    return this.doSearchWithParams(params);
-                });
+                console.log('route: search for ', data.searchForm);
+                this.searchForm = data.searchForm;
+                return this.doSearch();
+            },
+            (error: {reason: any}) => {
+                    console.error('deleteSDocById failed:' + error.reason);
+                    this.toastr.error('Es gab leider ein Problem bei der Suche - am besten noch einmal probieren :-(', 'Oops!');
             }
-        });
+        );
     }
 
     ngOnDestroy() {
-        // Clean sub to avoid memory leak
-        if (this.routeSubscription) {
-            this.routeSubscription.unsubscribe();
-        }
-        if (this.routeUrlSubscription) {
-            this.routeUrlSubscription.unsubscribe();
-        }
     }
 
     onShowSDoc(sdoc: SDocRecord) {
@@ -83,12 +71,12 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             const me = this;
             this.sdocDataService.deleteById(sdoc.id).then(function doneDeleteById() {
                     console.log('SDoc deleted', sdoc);
-                    me.toastr.info('Datesatz wurde gelöscht.', 'Fertig');
+                    me.toastr.info('Datensatz wurde gelöscht.', 'Fertig');
                     me.doSearch();
                 },
                 function errorCreate(reason: any) {
                     console.error('deleteSDocById failed:' + reason);
-                    me.toastr.error('Es gab leider ein Problem bei der Löschen - am besten noch einmal probieren :-(', 'Oops!');
+                    me.toastr.error('Es gab leider ein Problem beim Löschen - am besten noch einmal probieren :-(', 'Oops!');
                 }
             );
         }
@@ -123,12 +111,6 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
         this.router.navigateByUrl(url);
         return false;
-    }
-
-    private doSearchWithParams(params: any) {
-        console.log('doSearchWithParams params:', params);
-        this.searchFormConverter.paramsToSearchForm(params, this.searchForm);
-        this.doSearch();
     }
 
     private doSearch() {

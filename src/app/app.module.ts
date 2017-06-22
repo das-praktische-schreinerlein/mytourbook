@@ -30,6 +30,8 @@ import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {SDocSearchFormUtils} from './services/sdoc-searchform-utils.service';
+import {SDocSearchFormResolver} from './resolver/sdoc-searchform.resolver';
+import {SDocRecordResolver} from './resolver/sdoc-details.resolver';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -73,7 +75,8 @@ export function createTranslateLoader(http: Http) {
             }
         })
     ],
-    providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService, SDocSearchFormUtils],
+    providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService,
+        SDocSearchFormUtils, SDocSearchFormResolver, SDocRecordResolver],
     bootstrap: [AppComponent]
 })
 export class AppModule {

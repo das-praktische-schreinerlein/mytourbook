@@ -289,10 +289,10 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     afterFind<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
         if (! (result instanceof Array)) {
-            return utils.Promise.reject('no array as result');
+            return utils.Promise.reject('generic-solr-adapter.afterFind: no array as result');
         }
         if (result.length !== 1) {
-            return utils.Promise.reject('result is not unique');
+            return utils.Promise.reject('generic-solr-adapter.afterFind: result is not unique');
         }
 
         return utils.Promise.resolve(result[0]);
