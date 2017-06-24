@@ -31,7 +31,8 @@ export const routes: Routes = [
                         pathMatch: 'full',
                         component: SDocSearchpageComponent,
                         data: {
-                            id: 'sdocs_default'
+                            id: 'sdocs_default',
+                            baseSearchUrl: 'sdoc/search/'
                         }
                     },
                     {
@@ -96,6 +97,15 @@ export const routes: Routes = [
                 path: 'klettern',
                 children: [
                     {
+                        path: '',
+                        pathMatch: 'full',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            id: 'theme_klettern_default',
+                            baseSearchUrl: 'theme/klettern/'
+                        }
+                    },
+                    {
                         path: ':when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
                         component: SDocSearchpageComponent,
                         data: {
@@ -116,6 +126,15 @@ export const routes: Routes = [
             {
                 path: 'berge',
                 children: [
+                    {
+                        path: '',
+                        pathMatch: 'full',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            id: 'theme_berge_default',
+                            baseSearchUrl: 'theme/berge/'
+                        }
+                    },
                     {
                         path: ':when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
                         component: SDocSearchpageComponent,
