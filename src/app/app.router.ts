@@ -1,12 +1,12 @@
 import {ModuleWithProviders} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {SDocSearchpageComponent} from './components/sdoc/sdoc-searchpage/sdoc-searchpage.component';
-import {SDocEditpageComponent} from './components/sdoc/sdoc-editpage/sdoc-editpage.component';
-import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-createpage.component';
-import {SDocShowpageComponent} from './components/sdoc/sdoc-showpage/sdoc-showpage.component';
-import {SDocRecordResolver} from './resolver/sdoc-details.resolver';
-import {SDocSearchFormResolver} from './resolver/sdoc-searchform.resolver';
-import {NavbarComponent} from './components/navigation/navbar/navbar.component';
+import {SDocSearchpageComponent} from './sdoc/components/sdoc-searchpage/sdoc-searchpage.component';
+import {SDocEditpageComponent} from './sdoc/components/sdoc-editpage/sdoc-editpage.component';
+import {SDocCreatepageComponent} from './sdoc/components/sdoc-createpage/sdoc-createpage.component';
+import {SDocShowpageComponent} from './sdoc/components/sdoc-showpage/sdoc-showpage.component';
+import {SDocRecordResolver} from './sdoc/resolver/sdoc-details.resolver';
+import {SDocSearchFormResolver} from './sdoc/resolver/sdoc-searchform.resolver';
+import {NavbarComponent} from './shared/components/navbar/navbar.component';
 
 // Route Configuration
 export const routes: Routes = [

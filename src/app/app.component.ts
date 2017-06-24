@@ -1,6 +1,6 @@
 import {Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
 import {Router} from '@angular/router';
-import {AppService, AppState} from './services/app.service';
+import {AppService, AppState} from './shared/services/app.service';
 import {ToastsManager} from 'ng2-toastr';
 import {TranslateService} from '@ngx-translate/core';
 

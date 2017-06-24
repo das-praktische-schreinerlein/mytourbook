@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AppState} from '../app/services/app.service';
+import {AppState} from '../app/shared/services/app.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Subject} from 'rxjs/Subject';
 
