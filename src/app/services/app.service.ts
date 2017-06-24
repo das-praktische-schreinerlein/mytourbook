@@ -18,6 +18,7 @@ export enum AppState {
 export class AppService {
     appState: AppState = AppState.Starting;
     appStateObservable = new ReplaySubject<AppState>();
+    lastSearchurl = '';
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private http: Http, private jsonp: Jsonp) {

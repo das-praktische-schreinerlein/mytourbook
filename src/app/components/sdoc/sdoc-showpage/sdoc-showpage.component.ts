@@ -39,7 +39,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     onEditSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToEdit(sdoc.id, this.route);
+        this.sdocRoutingService.navigateToEdit(sdoc.id, '');
         return false;
     }
 
@@ -62,12 +62,12 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     submitBackToSearch() {
-        this.sdocRoutingService.navigateBackToFrom(this.route);
+        this.sdocRoutingService.navigateBackToSearch();
         return false;
     }
 
     getBackToSearchUrl(): string {
-        return this.sdocRoutingService.getBackToFromUrl(this.route);
+        return this.sdocRoutingService.getLastSearchUrl();
     }
 
     getFiltersForType(record: SDocRecord, type: string): any {

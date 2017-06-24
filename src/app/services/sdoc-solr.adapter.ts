@@ -164,6 +164,17 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     };
 
 
+    getSortParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+        const sortParams = new Map<string, any>();
+
+        sortParams.set('bq', 'type_txt:ROUTE^1.4 type_txt:LOCATION^1.3 type_txt:TRACK^1.2 type_txt:IMAGE^1');
+        sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
+        sortParams.set('defType', 'edismax');
+        sortParams.set('boost', 'recip(rord(date_dts),1,1000,1000)');
+
+        return sortParams;
+    };
+
     getSolrEndpoint(method: string): string {
         const updateMethods = ['create', 'destroy', 'update'];
         if (updateMethods.indexOf(method.toLowerCase()) >= 0) {

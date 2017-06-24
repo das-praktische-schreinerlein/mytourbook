@@ -11,6 +11,8 @@ import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
+import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 class RouterStub {
     public routerState: {} = {
@@ -28,7 +30,9 @@ describe('SDocInlineSearchpageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocInlineSearchpageComponent],
-            imports: [ToastModule.forRoot()],
+            imports: [ToastModule.forRoot(),
+                TranslateModule.forRoot()
+            ],
             providers: [SDocDataStore,
                 {provide: AppService, useValue: new AppServiceStub() },
                 SDocDataService,
@@ -40,6 +44,8 @@ describe('SDocInlineSearchpageComponent', () => {
                 },
                 {provide: Router, useValue: new RouterStub() },
                 SDocSearchFormConverter,
+                SearchFormUtils,
+                TranslateService,
                 SDocRoutingService,
                 ToastsManager
             ],

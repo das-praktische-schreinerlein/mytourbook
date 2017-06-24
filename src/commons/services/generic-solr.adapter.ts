@@ -288,7 +288,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     }
 
     afterFind<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        if (! (result instanceof Array)) {
+        if (! (Array.isArray(result))) {
             return utils.Promise.reject('generic-solr-adapter.afterFind: no array as result');
         }
         if (result.length !== 1) {
@@ -472,10 +472,12 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     abstract getSpatialParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
+    abstract getSortParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+
     getSolrValue(solrDocument: any, solrFieldName: string, defaultValue: any): string {
         let value = defaultValue;
         if (solrDocument[solrFieldName] !== undefined) {
-            if (solrDocument[solrFieldName] instanceof Array) {
+            if (Array.isArray(solrDocument[solrFieldName])) {
                 value = solrDocument[solrFieldName][0];
             } else {
                 value = solrDocument[solrFieldName];
@@ -539,6 +541,13 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             });
         }
 
+        const sortParams = this.getSortParams(mapper, params, opts, query);
+        if (sortParams !== undefined && sortParams.size > 0) {
+            sortParams.forEach(function (value, key) {
+                query[key] = value;
+            });
+        }
+
         return query;
     }
 
@@ -575,24 +584,24 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             query = this.mapToSolrFieldName(fieldName) + ':' + this.escapeSolrValue(value);
         } else if (action === '>') {
             value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ': {' + this.escapeSolrValue(value) + ' TO * }';
+            query = this.mapToSolrFieldName(fieldName) + ':{' + this.escapeSolrValue(value) + ' TO *}';
         } else if (action === '>=') {
             value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ': [' + this.escapeSolrValue(value) + ' TO *]';
+            query = this.mapToSolrFieldName(fieldName) + ':[' + this.escapeSolrValue(value) + ' TO *]';
         } else if (action === '<') {
             value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ': { * TO ' + this.escapeSolrValue(value) + ' }';
+            query = this.mapToSolrFieldName(fieldName) + ':{ * TO ' + this.escapeSolrValue(value) + '}';
         } else if (action === '<=') {
             value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ': [ * TO ' + this.escapeSolrValue(value) + ' ]';
+            query = this.mapToSolrFieldName(fieldName) + ':[ * TO ' + this.escapeSolrValue(value) + ']';
         } else if (action === 'in') {
-            query = this.mapToSolrFieldName(fieldName) + ': (' + value.map(
+            query = this.mapToSolrFieldName(fieldName) + ':(' + value.map(
                     inValue => this.escapeSolrValue(inValue.toString().replace(/%/g, ''))
-                ).join(' OR ') + ' )';
+                ).join(' OR ') + ')';
         } else if (action === 'notin') {
-            query = this.mapToSolrFieldName(fieldName) + ': (-' + value.map(
+            query = this.mapToSolrFieldName(fieldName) + ':(-' + value.map(
                     inValue => this.escapeSolrValue(inValue.toString().replace(/%/g, ''))
-                ).join(' AND -') + ' )';
+                ).join(' AND -') + ')';
         }
         return query;
     }

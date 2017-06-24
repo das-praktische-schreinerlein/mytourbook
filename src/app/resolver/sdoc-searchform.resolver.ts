@@ -9,16 +9,14 @@ export class SDocSearchFormResolver implements Resolve<SDocSearchForm> {
     constructor(private appService: AppService, private searchFormConverter: SDocSearchFormConverter) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<SDocSearchForm> {
-        const result = new Promise<SDocSearchForm>((resolve, reject) => {
+        return new Promise<SDocSearchForm>((resolve, reject) => {
             const searchForm = new SDocSearchForm({});
             this.appService.getAppState().subscribe(appState => {
                 if (appState === AppState.Ready) {
-                    this.searchFormConverter.paramsToSearchForm(route.params, searchForm);
+                    this.searchFormConverter.paramsToSearchForm(route.params, route.data['searchFormDefaults'], searchForm);
                     resolve(<SDocSearchForm>searchForm);
                 }
             });
         });
-
-        return result;
     }
 }

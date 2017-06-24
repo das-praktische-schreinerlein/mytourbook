@@ -21,6 +21,9 @@ export class SDocListComponent {
     public adminMode: boolean;
 
     @Input()
+    public baseSearchUrl: string;
+
+    @Input()
     public layout: Layout;
 
     @Output()
@@ -53,6 +56,7 @@ export class SDocListComponent {
     }
 
     getBackToSearchUrl(searchResult: SDocSearchResult): string {
-        return (searchResult.searchForm ? this.searchFormConverter.searchFormToUrl('/sdocs/', searchResult.searchForm) : undefined);
+        return (searchResult.searchForm ?
+            this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, searchResult.searchForm) : undefined);
     }
 }

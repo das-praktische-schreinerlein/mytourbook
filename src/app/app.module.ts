@@ -18,6 +18,7 @@ import {SDocCreateformComponent} from './components/sdoc/sdoc-createform/sdoc-cr
 import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-createpage.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SDocListHeaderComponent} from './components/sdoc/sdoc-list-header/sdoc-list-header.component';
+import {NavbarComponent} from './components/navigation/navbar/navbar.component';
 import {TruncatePipe} from '../commons/pipes/truncate.pipe';
 import {SDocSearchFormConverter} from './services/sdoc-searchform-converter.service';
 import {ToastModule} from 'ng2-toastr';
@@ -32,6 +33,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {SDocSearchFormUtils} from './services/sdoc-searchform-utils.service';
 import {SDocSearchFormResolver} from './resolver/sdoc-searchform.resolver';
 import {SDocRecordResolver} from './resolver/sdoc-details.resolver';
+import {SearchFormUtils} from '../commons/services/searchform-utils.service';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -54,6 +56,7 @@ export function createTranslateLoader(http: Http) {
         SDocEditpageComponent,
         SDocShowpageComponent,
         SDocInlineSearchpageComponent,
+        NavbarComponent,
         TruncatePipe
     ],
     imports: [
@@ -76,7 +79,7 @@ export function createTranslateLoader(http: Http) {
         })
     ],
     providers: [SDocDataStore, SDocDataService, AppService, SDocSearchFormConverter, SDocRoutingService,
-        SDocSearchFormUtils, SDocSearchFormResolver, SDocRecordResolver],
+        SDocSearchFormUtils, SDocSearchFormResolver, SDocRecordResolver, SearchFormUtils],
     bootstrap: [AppComponent]
 })
 export class AppModule {

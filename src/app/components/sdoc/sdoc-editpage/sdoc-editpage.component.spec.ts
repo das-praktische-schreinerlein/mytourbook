@@ -13,6 +13,8 @@ import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
 import {SDocRecord} from '../../../model/records/sdoc-record';
+import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -21,7 +23,9 @@ describe('SDocEditpageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocEditpageComponent],
-            imports: [ToastModule.forRoot()],
+            imports: [ToastModule.forRoot(),
+                TranslateModule.forRoot()
+            ],
             providers: [SDocDataStore,
                 {provide: AppService, useValue: new AppServiceStub() },
                 SDocDataService,
@@ -35,6 +39,8 @@ describe('SDocEditpageComponent', () => {
                 {provide: Router, useClass: RouterTestingModule},
                 SDocRoutingService,
                 SDocSearchFormConverter,
+                SearchFormUtils,
+                TranslateService,
                 ToastsManager
 
         ],

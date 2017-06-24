@@ -87,7 +87,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy {
     }
 
     onShowSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToShowFromSearch(sdoc, this.searchForm);
+        this.sdocRoutingService.navigateToShow(sdoc, '');
         return false;
     }
 
@@ -110,7 +110,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy {
 
     private doSearchWithParams(params: any) {
         console.log('doSearchWithParams params:', params);
-        this.searchFormConverter.paramsToSearchForm(params, this.searchForm);
+        this.searchFormConverter.paramsToSearchForm(params, {}, this.searchForm);
         this.doSearch();
     }
 

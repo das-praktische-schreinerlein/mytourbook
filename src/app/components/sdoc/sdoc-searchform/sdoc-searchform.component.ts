@@ -7,6 +7,7 @@ import {Facets} from '../../../../commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../../services/sdoc-searchform-utils.service';
 import {GeoCoder} from 'geo-coder';
+import {isEmpty} from 'rxjs/operator/isEmpty';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -147,7 +148,7 @@ export class SDocSearchformComponent implements OnInit {
             this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true);
 
         const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
-        if (lat && lon) {
+        if (lat && lon && !(values.nearbyAddress === undefined || values.nearbyAddress === '')) {
             this.doReverseLookUpForNearBy(lat, lon).then(function (result: any) {
                 me.searchFormGroup.patchValue({'nearbyAddress': result.address});
             });
@@ -173,6 +174,7 @@ export class SDocSearchformComponent implements OnInit {
         inputEl.addEventListener('place_changed', (event: any) => {
             const distance = this.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
             this.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
+            this.searchFormGroup.patchValue({'nearbyAddress': event.detail.address});
             this.doSearch();
             return false;
         });

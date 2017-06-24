@@ -9,6 +9,7 @@ import {SDocRecord} from '../../../model/records/sdoc-record';
 import {Facets} from '../../../../commons/model/container/facets';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocSearchFormUtils} from '../../../services/sdoc-searchform-utils.service';
+import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -19,7 +20,7 @@ describe('SDocSearchformComponent', () => {
             declarations: [SDocSearchformComponent],
             imports: [ReactiveFormsModule,
                 TranslateModule.forRoot()],
-            providers: [SDocSearchFormUtils],
+            providers: [SDocSearchFormUtils, SearchFormUtils],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();

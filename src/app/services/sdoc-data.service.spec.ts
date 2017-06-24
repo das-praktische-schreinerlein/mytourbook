@@ -6,6 +6,8 @@ import {Observable} from 'rxjs/Observable';
 import {SDocDataStore} from './sdoc-data.store';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
+import {SearchFormUtils} from '../../commons/services/searchform-utils.service';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 describe('SDocDataService', () => {
     let sdoc1: SDocRecord = undefined;
@@ -13,9 +15,14 @@ describe('SDocDataService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
+            imports: [
+                TranslateModule.forRoot()
+            ],
             providers: [
                 SDocDataStore,
-                SDocDataService
+                SDocDataService,
+                SearchFormUtils,
+                TranslateService
             ]
         });
 

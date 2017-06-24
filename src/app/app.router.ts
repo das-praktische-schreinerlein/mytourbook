@@ -6,48 +6,57 @@ import {SDocCreatepageComponent} from './components/sdoc/sdoc-createpage/sdoc-cr
 import {SDocShowpageComponent} from './components/sdoc/sdoc-showpage/sdoc-showpage.component';
 import {SDocRecordResolver} from './resolver/sdoc-details.resolver';
 import {SDocSearchFormResolver} from './resolver/sdoc-searchform.resolver';
+import {NavbarComponent} from './components/navigation/navbar/navbar.component';
 
 // Route Configuration
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'sdocs'
-    },
-    {
-        path: 'sdocs',
-        children: [
-            {
-                path: '',
-                pathMatch: 'full',
-                component: SDocSearchpageComponent,
-                data: {
-                    id: 'sdocs_default'
-                }
-            },
-            {
-                path: ':when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
-                component: SDocSearchpageComponent,
-                data: {
-                    flgDoSearch: true,
-                    id: 'sdocs_search'
-                },
-                resolve: {
-                    searchForm: SDocSearchFormResolver
-                }
-            },
-            {
-                path: '**',
-                component: SDocSearchpageComponent,
-                data: {
-                    id: 'sdocs_fallback'
-                }
-            }
-        ]
+        redirectTo: 'sdoc/search'
     },
     {
         path: 'sdoc',
         children: [
+            {
+                path: '',
+                outlet: 'navbar',
+                component: NavbarComponent
+            },
+            {
+                path: 'search',
+                children: [
+                    {
+                        path: '',
+                        pathMatch: 'full',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            id: 'sdocs_default'
+                        }
+                    },
+                    {
+                        path: ':when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            flgDoSearch: true,
+                            id: 'sdocs_search',
+                            searchFormDefaults: {},
+                            baseSearchUrl: 'sdoc/search/'
+                        },
+                        resolve: {
+                            searchForm: SDocSearchFormResolver
+                        }
+                    },
+                    {
+                        path: '**',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            id: 'sdocs_fallback',
+                            baseSearchUrl: 'sdoc/search/'
+                        }
+                    }
+                ]
+            },
             {
                 path: 'create',
                 component: SDocCreatepageComponent
@@ -68,7 +77,7 @@ export const routes: Routes = [
             },
             {
                 path: '**',
-                redirectTo: 'sdocs',
+                redirectTo: 'sdoc/search',
                 data: {
                     id: 'sdoc_fallback'
                 }
@@ -76,8 +85,60 @@ export const routes: Routes = [
         ]
     },
     {
+        path: 'theme',
+        children: [
+            {
+                path: '',
+                outlet: 'navbar',
+                component: NavbarComponent
+            },
+            {
+                path: 'klettern',
+                children: [
+                    {
+                        path: ':when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            flgDoSearch: true,
+                            id: 'themen_klettern_search',
+                            searchFormDefaults: {
+                                theme: 'klettern',
+                                what: 'kw_klettern'
+                            },
+                            baseSearchUrl: 'theme/klettern/'
+                        },
+                        resolve: {
+                            searchForm: SDocSearchFormResolver
+                        }
+                    },
+                ]
+            },
+            {
+                path: 'berge',
+                children: [
+                    {
+                        path: ':when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            flgDoSearch: true,
+                            id: 'themen_berge_search',
+                            searchFormDefaults: {
+                                theme: 'berge',
+                                what: 'kw_berge'
+                            },
+                            baseSearchUrl: 'theme/berge/'
+                        },
+                        resolve: {
+                            searchForm: SDocSearchFormResolver
+                        }
+                    },
+                ]
+            }
+        ]
+    },
+    {
         path: '**',
-        redirectTo: 'sdocs',
+        redirectTo: 'sdoc/search',
         data: {
             id: 'global_fallback'
         }

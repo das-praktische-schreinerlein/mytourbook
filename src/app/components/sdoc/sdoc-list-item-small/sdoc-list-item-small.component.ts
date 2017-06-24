@@ -55,8 +55,7 @@ export class SDocListItemSmallComponent {
     }
 
     public getShowUrl(record: SDocRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustUrl(this.sdocRoutingService.getShowUrl(
-            record) + (this.backToSearchUrl ? '?from=' + this.backToSearchUrl : ''));
+        return this.sanitizer.bypassSecurityTrustUrl(this.sdocRoutingService.getShowUrl(record, ''));
     }
 
     public getMapUrl(record: SDocRecord): SafeUrl {

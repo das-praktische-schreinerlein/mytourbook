@@ -12,6 +12,7 @@ import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-convert
 import {SDocRoutingService} from '../../../services/sdoc-routing.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
+import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
 
 describe('SDocListItemSmallComponent', () => {
     let component: SDocListItemSmallComponent;
@@ -29,7 +30,7 @@ describe('SDocListItemSmallComponent', () => {
                 },
                 {provide: Router, useClass: RouterTestingModule},
                 SDocRoutingService,
-                SDocSearchFormConverter],
+                SDocSearchFormConverter, SearchFormUtils],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot()]

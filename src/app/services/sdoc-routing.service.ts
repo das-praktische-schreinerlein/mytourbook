@@ -6,59 +6,58 @@ import {SDocRecord} from '../model/records/sdoc-record';
 
 @Injectable()
 export class SDocRoutingService {
+    private lastSearchUrl = '/sdoc/search/';
+
     constructor(private router: Router, private searchFormConverter: SDocSearchFormConverter) {
     }
 
+    setLastSearchUrl(lastSearchUrl: string): void {
+        this.lastSearchUrl = lastSearchUrl;
+    }
+
+    getLastSearchUrl(): string {
+        return this.lastSearchUrl;
+    }
+
     getBackToFromUrl(route: ActivatedRoute): string {
-        let redirectUrl = '/sdoc/list';
+        let redirectUrl = this.getLastSearchUrl();
         const from = this.getFromRoute(route);
-        if (from !== undefined && from !== null && from.startsWith('/sdocs/')) {
+        if (from !== undefined && from !== null && !from.startsWith('http://')) {
             redirectUrl = from;
         }
         return redirectUrl;
     }
 
-    getEditUrl(sDocId: string, route: ActivatedRoute): string {
-        const from = this.getFromRoute(route);
+    getEditUrl(sDocId: string, from: string): string {
         return '/sdoc/edit/' + sDocId + (from ? '?from=' + from : '');
     }
 
-    getShowUrl(sDoc: SDocRecord): string {
+    getShowUrl(sDoc: SDocRecord, from: string): string {
         const name = (sDoc.name ? sDoc.name : '')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
             .replace(/ +/g, ' ').replace(/ /g, '-').trim();
-        return '/sdoc/show/' + name + '/' + sDoc.id;
-    }
-
-    getShowUrlFromSearch(sDoc: SDocRecord, searchForm: SDocSearchForm): string {
-        const from = (searchForm ? this.searchFormConverter.searchFormToUrl('?from=/sdocs/', searchForm) : undefined);
-        return this.getShowUrl(sDoc) + (from ? from : '');
-    }
-
-    getEditUrlFromSearch(sDocId: string, searchForm: SDocSearchForm): string {
-        const from = (searchForm ? this.searchFormConverter.searchFormToUrl('?from=/sdocs/', searchForm) : undefined);
-        return '/sdoc/edit/' + sDocId + (from ? from : '');
+        return '/sdoc/show/' + name + '/' + sDoc.id + (from ? '?from=' + from : '');
     }
 
     navigateBackToFrom(route: ActivatedRoute): Promise<boolean> {
         return this.router.navigateByUrl(this.getBackToFromUrl(route));
     }
 
-    navigateToEdit(sDocId: string, route: ActivatedRoute): Promise<boolean> {
-        return this.router.navigateByUrl(this.getEditUrl(sDocId, route));
+    navigateBackToSearch(): Promise<boolean> {
+        return this.router.navigateByUrl(this.getLastSearchUrl());
     }
 
-    navigateToShowFromSearch(sDoc: SDocRecord, searchForm: SDocSearchForm): Promise<boolean> {
-        return this.router.navigateByUrl(this.getShowUrlFromSearch(sDoc, searchForm));
+    navigateToEdit(sDocId: string, from: string): Promise<boolean> {
+        return this.router.navigateByUrl(this.getEditUrl(sDocId, from));
     }
 
-    navigateToEditFromSearch(sDocId: string, searchForm: SDocSearchForm): Promise<boolean> {
-        return this.router.navigateByUrl(this.getEditUrlFromSearch(sDocId, searchForm));
+    navigateToShow(sDoc: SDocRecord, from: string): Promise<boolean> {
+        return this.router.navigateByUrl(this.getShowUrl(sDoc, from));
     }
 
     getFromRoute(route: ActivatedRoute): string {
         const from = route.snapshot.queryParamMap.get('from');
-        if (from !== undefined && from !== null && from.startsWith('/sdocs/')) {
+        if (from !== undefined && from !== null && !from.startsWith('http://')) {
             return from;
         }
 

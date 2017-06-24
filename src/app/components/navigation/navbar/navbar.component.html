@@ -1,0 +1,31 @@
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded mdl-navigation">
+    <a class="navbar-brand mdl-navigation__link" routerLink="/" routerLinkActive="active">
+        <img src="http://www.michas-ausflugstipps.de/images/index_banner-harry2.jpg" width="30" height="30" class="d-inline-block align-top">
+        MyTourBook
+    </a>
+    <ul class="navbar-nav navbar-toggleable-md" role="menu">
+        <li class="nav-item">
+            <a class="nav-link mdl-navigation__link" routerLink="/sdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevanz/alle/10/1" routerLinkActive="active">
+                Alles
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link mdl-navigation__link" routerLink="/theme/" routerLinkActive="active">
+                Themen
+            </a>
+        </li>
+        <li class="nav-item dropdown" ngbDropdown>
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkThemen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkThemen" role="menu">
+                <li class="dropdown-item"><a class="nav-link mdl-navigation__link" routerLink="/theme/klettern/jederzeit/ueberall/alles/egal/ungefiltert/relevanz/alle/10/1" routerLinkActive="active">
+                    Klettern</a></li>
+                <li class="dropdown-item"><a class="nav-link mdl-navigation__link" routerLink="/theme/berge/jederzeit/ueberall/alles/egal/ungefiltert/relevanz/alle/10/1" routerLinkActive="active">
+                    Berge</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link mdl-navigation__link" routerLink="/sdoc/create" routerLinkActive="active">New SDoc</a>
+        </li>
+    </ul>
+</nav>

@@ -9,7 +9,7 @@ export class SDocRecordResolver implements Resolve<SDocRecord> {
     constructor(private appService: AppService, private sdocDataService: SDocDataService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<SDocRecord> {
-        const result = new Promise<SDocRecord>((resolve, reject) => {
+        return new Promise<SDocRecord>((resolve, reject) => {
             this.appService.getAppState().subscribe(appState => {
                 if (appState === AppState.Ready) {
                     const id = route.params['id'];
@@ -24,7 +24,5 @@ export class SDocRecordResolver implements Resolve<SDocRecord> {
                 }
             });
         });
-
-        return result;
     }
 }

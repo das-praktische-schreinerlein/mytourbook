@@ -22,6 +22,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     searchResult: SDocSearchResult;
     searchForm: SDocSearchForm;
+    baseSearchUrl = '/sdoc/search/';
 
     constructor(private route: ActivatedRoute, private router: Router,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -36,7 +37,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.initialized = false;
 
         this.route.data.subscribe(
-            (data: { searchForm: SDocSearchForm, flgDoSearch: true }) => {
+            (data: { searchForm: SDocSearchForm, flgDoSearch: boolean, baseSearchUrl: string }) => {
+                this.baseSearchUrl = (data.baseSearchUrl ? data.baseSearchUrl : this.baseSearchUrl);
                 if (!data.flgDoSearch) {
                     console.log('ngOnInit: redirect for ', data);
                     return this.redirectToSearch();
@@ -57,12 +59,12 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     onShowSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToShowFromSearch(sdoc, this.searchForm);
+        this.sdocRoutingService.navigateToShow(sdoc, this.sdocRoutingService.getLastSearchUrl());
         return false;
     }
 
     onEditSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToEditFromSearch(sdoc.id, this.searchForm);
+        this.sdocRoutingService.navigateToEdit(sdoc.id, this.sdocRoutingService.getLastSearchUrl());
         return false;
     }
 
@@ -106,7 +108,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         // reset initialized
         this.initialized = false;
 
-        const url = this.searchFormConverter.searchFormToUrl('/sdocs/', this.searchForm) + '?' + new Date().getTime();
+        const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm) + '?' + new Date().getTime();
         console.log('redirectToSearch: redirect to ', url);
 
         this.router.navigateByUrl(url);
@@ -115,6 +117,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     private doSearch() {
         console.log('doSearch form:', this.searchForm);
+        this.sdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
         const me = this;
         this.sdocDataService.search(this.searchForm).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult === undefined) {

@@ -7,6 +7,8 @@ import {SDocSearchResult} from '../../../model/container/sdoc-searchresult';
 import {SDocSearchForm} from '../../../model/forms/sdoc-searchform';
 import {Facets} from '../../../../commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../services/sdoc-searchform-converter.service';
+import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -15,7 +17,10 @@ describe('SDocListComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocListComponent],
-            providers: [SDocSearchFormConverter],
+            imports: [
+                TranslateModule.forRoot()
+            ],
+            providers: [SDocSearchFormConverter, SearchFormUtils, TranslateService],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();

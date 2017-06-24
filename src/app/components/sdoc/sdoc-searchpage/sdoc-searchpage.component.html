@@ -10,6 +10,7 @@
     <div class="container">
         <app-sdoc-list [searchResult]="searchResult"
                        [adminMode]="adminMode"
+                       [baseSearchUrl]="baseSearchUrl"
                        [layout]="Layout.BIG"
                        (show)="onShowSDoc($event)"
                        (edit)="onEditSDoc($event)"
