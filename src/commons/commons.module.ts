@@ -4,10 +4,9 @@ import {NgModule} from '@angular/core';
     declarations: [
         TruncatePipe
     ],
-    imports: [
-    ],
-    providers: [
-]
+    exports: [
+        TruncatePipe
+    ]
 })
 export class CommonsModule {
 }
