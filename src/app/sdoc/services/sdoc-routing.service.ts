@@ -7,7 +7,7 @@ import {SDocRecord} from '../../sdocshared/model/records/sdoc-record';
 export class SDocRoutingService {
     private lastSearchUrl = '/sdoc/search/';
 
-    constructor(private router: Router, private searchFormConverter: SDocSearchFormConverter) {
+    constructor(private router: Router) {
     }
 
     setLastSearchUrl(lastSearchUrl: string): void {

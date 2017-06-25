@@ -23,18 +23,14 @@ describe('SDocEditpageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocEditpageComponent],
-            imports: [ToastModule.forRoot(),
-                TranslateModule.forRoot()
+            imports: [
+                ToastModule.forRoot()
             ],
             providers: [SDocDataStore,
-                { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useClass: RouterTestingModule },
                 SDocRoutingService,
-                SDocSearchFormConverter,
-                SearchFormUtils,
-                TranslateService,
                 ToastsManager
 
         ],

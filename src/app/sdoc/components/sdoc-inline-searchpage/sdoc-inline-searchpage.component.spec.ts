@@ -41,7 +41,6 @@ describe('SDocInlineSearchpageComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 SDocSearchFormConverter,
                 SearchFormUtils,
-                TranslateService,
                 SDocRoutingService,
                 ToastsManager
             ],

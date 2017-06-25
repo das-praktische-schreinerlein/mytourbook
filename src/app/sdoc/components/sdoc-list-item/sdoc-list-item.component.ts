@@ -35,7 +35,7 @@ export class SDocListItemComponent {
     @Output()
     public delete: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(sanitizer: DomSanitizer, private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService) {
+    constructor(sanitizer: DomSanitizer, private sdocRoutingService: SDocRoutingService) {
         this.sanitizer = sanitizer;
     }
 

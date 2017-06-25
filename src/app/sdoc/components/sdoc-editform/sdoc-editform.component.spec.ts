@@ -13,7 +13,10 @@ describe('SDocEditformComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocEditformComponent],
-            imports: [ReactiveFormsModule, ToastModule.forRoot()],
+            imports: [
+                ReactiveFormsModule,
+                ToastModule.forRoot()]
+            ,
             providers: [ToastsManager],
             schemas: [NO_ERRORS_SCHEMA]
         })

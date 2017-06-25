@@ -23,7 +23,6 @@ describe('SDocListItemComponent', () => {
             declarations: [TruncatePipe, SDocListItemComponent],
             providers: [
                 DomSanitizer,
-                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useClass: RouterTestingModule },
                 SDocRoutingService,
                 SDocSearchFormConverter,

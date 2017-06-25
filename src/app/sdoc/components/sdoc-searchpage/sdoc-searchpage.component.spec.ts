@@ -31,9 +31,11 @@ describe('SDocSearchpageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocSearchpageComponent],
-            imports: [ToastModule.forRoot(), TranslateModule.forRoot()],
-            providers: [SDocDataStore,
-                { provide: GenericAppService, useValue: new AppServiceStub() },
+            imports: [
+                ToastModule.forRoot(),
+                TranslateModule.forRoot()
+            ],
+            providers: [
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },

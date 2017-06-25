@@ -15,7 +15,6 @@ describe('SDocCreatepageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                TranslateModule.forRoot()
             ],
             declarations: [SDocCreatepageComponent],
             providers: [
