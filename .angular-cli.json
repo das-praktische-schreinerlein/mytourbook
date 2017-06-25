@@ -2,11 +2,12 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
     "version": "1.0.0-beta.28.3",
-    "name": "image-import-editor-app"
+    "name": "mytb"
   },
   "apps": [
     {
-      "root": "src",
+      "name": "frontend",
+      "root": "src/frontend",
       "outDir": "dist",
       "assets": [
         "assets",
@@ -21,8 +22,8 @@
       "prefix": "app",
       "styles": [
         "styles.css",
-        "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
+        "../../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
@@ -34,15 +35,15 @@
   ],
   "e2e": {
     "protractor": {
-      "config": "./protractor.conf.js"
+      "config": "./frontend-protractor.conf.js"
     }
   },
   "lint": [
     {
-      "project": "src/tsconfig.app.json"
+      "project": "src/frontend/tsconfig.app.json"
     },
     {
-      "project": "src/tsconfig.spec.json"
+      "project": "src/frontend/tsconfig.spec.json"
     },
     {
       "project": "e2e/tsconfig.e2e.json"
@@ -50,7 +51,7 @@
   ],
   "test": {
     "karma": {
-      "config": "./karma.conf.js"
+      "config": "./frontend-karma.conf.js"
     }
   },
   "defaults": {
