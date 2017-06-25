@@ -1,31 +1,20 @@
 import {Injectable} from '@angular/core';
-import {SDocDataService} from '../../sdoc/services/sdoc-data.service';
-import {SDocSolrAdapter} from '../../sdoc/services/sdoc-solr.adapter';
+import {SDocDataService} from '../../sdocshared/services/sdoc-data.service';
+import {SDocSolrAdapter} from '../../sdocbackend/services/sdoc-solr.adapter';
 import {Http, Jsonp} from '@angular/http';
-import {SDocDataStore} from '../../sdoc/services/sdoc-data.store';
+import {SDocDataStore} from '../../sdocbackend/services/sdoc-data.store';
 import {environment} from '../../../environments/environment';
-import {SDocRecord} from '../../sdoc/model/records/sdoc-record';
-import {Subject} from 'rxjs/Subject';
-import {ReplaySubject} from 'rxjs/ReplaySubject';
-
-export enum AppState {
-    Starting = 1,
-    Ready = 5,
-    Failed = 10
-}
+import {SDocRecord} from '../../sdocshared/model/records/sdoc-record';
+import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
 
 @Injectable()
-export class AppService {
-    appState: AppState = AppState.Starting;
-    appStateObservable = new ReplaySubject<AppState>();
-    lastSearchurl = '';
-
+export class AppService extends GenericAppService {
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private http: Http, private jsonp: Jsonp) {
-        this.appStateObservable.next(this.appState);
+        super();
     }
 
-    initApp() {
+    initApp(): void {
         this.initSolrData();
     }
 
@@ -58,14 +47,5 @@ export class AppService {
                 console.error('loading appdata failed:' + error);
                 this.setAppState(AppState.Failed);
             });
-    }
-
-    getAppState(): Subject<AppState> {
-        return this.appStateObservable;
-    }
-
-    private setAppState(appState: AppState): void {
-        this.appState = appState;
-        this.appStateObservable.next(appState);
     }
 }

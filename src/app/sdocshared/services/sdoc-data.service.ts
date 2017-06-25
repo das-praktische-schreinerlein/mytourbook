@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {SDocRecord, SDocRecordRelation} from '../model/records/sdoc-record';
-import {SDocDataStore} from './sdoc-data.store';
+import {SDocDataStore} from '../../sdocbackend/services/sdoc-data.store';
 import {SDocSearchService} from './sdoc-search.service';
 import {SDocImageRecord, SDocImageRecordRelation} from '../model/records/sdocimage-record';
 import {SDocImageRecordSchema} from '../model/schemas/sdocimage-record-schema';

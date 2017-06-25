@@ -3,7 +3,7 @@ import {getTestBed, TestBed} from '@angular/core/testing';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocDataService} from './sdoc-data.service';
 import {Observable} from 'rxjs/Observable';
-import {SDocDataStore} from './sdoc-data.store';
+import {SDocDataStore} from '../../sdocbackend/services/sdoc-data.store';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
 import {SearchFormUtils} from '../../../commons/services/searchform-utils.service';

@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocRecord} from '../../model/records/sdoc-record';
-import {SDocSearchForm} from '../../model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../../model/container/sdoc-searchresult';
+import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
+import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
 import {SDocListHeaderComponent} from './sdoc-list-header.component';
 import {Facets} from '../../../../commons/model/container/facets';
 

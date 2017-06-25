@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SDocEditformComponent} from './sdoc-editform.component';
-import {SDocRecord} from '../../model/records/sdoc-record';
+import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ToastModule, ToastsManager} from 'ng2-toastr';

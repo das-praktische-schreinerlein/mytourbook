@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {SDocRecord} from '../../model/records/sdoc-record';
-import {SDocSearchResult} from '../../model/container/sdoc-searchresult';
+import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
+import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 
 export enum Layout {

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {SDocSearchResult} from '../model/container/sdoc-searchresult';
+import {SDocSearchResult} from '../../sdocshared/model/container/sdoc-searchresult';
 import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 import {SearchFormUtils} from '../../../commons/services/searchform-utils.service';
 

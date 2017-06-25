@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {AppState} from '../app/shared/services/app.service';
 import {ReplaySubject} from 'rxjs/ReplaySubject';
 import {Subject} from 'rxjs/Subject';
+import {AppState, GenericAppService} from '../commons/services/generic-app.service';
 
 @Injectable()
-
-export class AppServiceStub {
+export class AppServiceStub extends GenericAppService {
     appStateObservable = new ReplaySubject<AppState>();
 
     initApp(): void {

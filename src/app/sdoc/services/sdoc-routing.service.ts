@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchFormConverter} from './sdoc-searchform-converter.service';
-import {SDocRecord} from '../model/records/sdoc-record';
+import {SDocRecord} from '../../sdocshared/model/records/sdoc-record';
 
 @Injectable()
 export class SDocRoutingService {

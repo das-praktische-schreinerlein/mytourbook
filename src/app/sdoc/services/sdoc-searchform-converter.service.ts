@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {SDocSearchForm} from '../model/forms/sdoc-searchform';
+import {SDocSearchForm} from '../../sdocshared/model/forms/sdoc-searchform';
 import {GenericSearchFormSearchFormConverter} from '../../../commons/services/generic-searchform-converter.service';
 import {SearchFormUtils} from '../../../commons/services/searchform-utils.service';
 

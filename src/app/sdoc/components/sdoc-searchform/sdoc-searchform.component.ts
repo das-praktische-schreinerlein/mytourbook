@@ -1,13 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
-import {SDocSearchForm} from '../../model/forms/sdoc-searchform';
+import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {SDocSearchResult} from '../../model/container/sdoc-searchresult';
+import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
 import {Facets} from '../../../../commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoCoder} from 'geo-coder';
-import {isEmpty} from 'rxjs/operator/isEmpty';
 
 @Component({
     selector: 'app-sdoc-searchform',

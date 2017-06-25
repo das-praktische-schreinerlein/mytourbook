@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {Jsonp} from '@angular/http';
 import {GenericSolrAdapter} from '../../../commons/services/generic-solr.adapter';
 import {Mapper, Record} from 'js-data';
-import {SDocRecord} from '../model/records/sdoc-record';
-import {SDocImageRecord} from '../model/records/sdocimage-record';
-import {SDocSearchForm} from '../model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../model/container/sdoc-searchresult';
+import {SDocRecord} from '../../sdocshared/model/records/sdoc-record';
+import {SDocImageRecord} from '../../sdocshared/model/records/sdocimage-record';
+import {SDocSearchForm} from '../../sdocshared/model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../../sdocshared/model/container/sdoc-searchresult';
 
 @Injectable()
 export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {

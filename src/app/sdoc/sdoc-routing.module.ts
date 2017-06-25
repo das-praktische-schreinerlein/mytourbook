@@ -6,7 +6,6 @@ import {SDocShowpageComponent} from './components/sdoc-showpage/sdoc-showpage.co
 import {SDocCreatepageComponent} from './components/sdoc-createpage/sdoc-createpage.component';
 import {SDocSearchFormResolver} from './resolver/sdoc-searchform.resolver';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
-import {NavbarComponent} from '../components/navbar/navbar.component';
 
 const sdocRoutes: Routes = [
     {

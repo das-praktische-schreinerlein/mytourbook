@@ -2,9 +2,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListFooterComponent} from './sdoc-list-footer.component';
-import {SDocRecord} from '../../model/records/sdoc-record';
-import {SDocSearchForm} from '../../model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../../model/container/sdoc-searchresult';
+import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
+import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
 import {Facets} from '../../../../commons/model/container/facets';
 
 describe('SDocListFooterComponent', () => {

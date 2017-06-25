@@ -2,9 +2,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListComponent} from './sdoc-list.component';
-import {SDocRecord} from '../../model/records/sdoc-record';
-import {SDocSearchResult} from '../../model/container/sdoc-searchresult';
-import {SDocSearchForm} from '../../model/forms/sdoc-searchform';
+import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
+import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
+import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
 import {Facets} from '../../../../commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';

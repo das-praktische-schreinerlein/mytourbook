@@ -10,6 +10,10 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AppRoutingModule} from './app.router';
 import {SDocModule} from './sdoc/sdoc.module';
 import {CommonsModule} from '../commons/commons.module';
+import {SDocDataStore} from './sdocbackend/services/sdoc-data.store';
+import {SearchFormUtils} from '../commons/services/searchform-utils.service';
+import {GenericAppService} from '../commons/services/generic-app.service';
+import {SDocDataService} from './sdocshared/services/sdoc-data.service';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -37,7 +41,10 @@ export function createTranslateLoader(http: Http) {
         AppRoutingModule
     ],
     providers: [
-        AppService
+        {provide: GenericAppService, useClass: AppService },
+        SDocDataStore,
+        SDocDataService,
+        SearchFormUtils
     ],
     bootstrap: [AppComponent]
 })

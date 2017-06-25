@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
-import {SDocRecord} from '../../model/records/sdoc-record';
+import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
 import {FormBuilder, Validators} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {SDocRecordSchema} from '../../model/schemas/sdoc-record-schema';
+import {SDocRecordSchema} from '../../../sdocshared/model/schemas/sdoc-record-schema';
 import {ToastsManager} from 'ng2-toastr';
 import {SchemaValidationError} from 'js-data';
 import set = Reflect.set;

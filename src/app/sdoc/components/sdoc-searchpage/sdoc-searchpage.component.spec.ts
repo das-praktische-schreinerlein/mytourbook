@@ -2,18 +2,18 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SDocSearchpageComponent} from './sdoc-searchpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocDataService} from '../../services/sdoc-data.service';
+import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SDocDataStore} from '../../services/sdoc-data.store';
+import {SDocDataStore} from '../../../sdocbackend/services/sdoc-data.store';
 import {Observable} from 'rxjs/Observable';
-import {AppService} from '../../../shared/services/app.service';
 import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
-import {SDocSearchForm} from '../../model/forms/sdoc-searchform';
+import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
 import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {GenericAppService} from '../../../../commons/services/generic-app.service';
 
 class RouterStub {
     public routerState: {} = {
@@ -33,7 +33,7 @@ describe('SDocSearchpageComponent', () => {
             declarations: [SDocSearchpageComponent],
             imports: [ToastModule.forRoot(), TranslateModule.forRoot()],
             providers: [SDocDataStore,
-                {provide: AppService, useValue: new AppServiceStub() },
+                {provide: GenericAppService, useValue: new AppServiceStub() },
                 SDocDataService,
                 {
                     provide: ActivatedRoute,

@@ -1,8 +1,7 @@
 import {Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
-import {Router} from '@angular/router';
-import {AppService, AppState} from '../../shared/services/app.service';
 import {ToastsManager} from 'ng2-toastr';
 import {TranslateService} from '@ngx-translate/core';
+import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
 
 @Component({
     selector: 'app-root',
@@ -14,7 +13,7 @@ import {TranslateService} from '@ngx-translate/core';
 export class AppComponent {
     title = 'MyTourBook';
 
-    constructor(private router: Router, private appService: AppService, private toastr: ToastsManager, vcr: ViewContainerRef,
+    constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, @Inject(LOCALE_ID) locale: string) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(locale);

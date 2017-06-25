@@ -2,7 +2,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
-import {SDocDataService} from './services/sdoc-data.service';
 import {SDocListComponent} from './components/sdoc-list/sdoc-list.component';
 import {SDocListItemComponent} from './components/sdoc-list-item/sdoc-list-item.component';
 import {SDocListFooterComponent} from './components/sdoc-list-footer/sdoc-list-footer.component';
@@ -10,8 +9,6 @@ import {SDocEditformComponent} from './components/sdoc-editform/sdoc-editform.co
 import {SDocSearchformComponent} from './components/sdoc-searchform/sdoc-searchform.component';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
 import {SDocEditpageComponent} from './components/sdoc-editpage/sdoc-editpage.component';
-import {AppService} from '../shared/services/app.service';
-import {SDocDataStore} from './services/sdoc-data.store';
 import {SDocCreateformComponent} from './components/sdoc-createform/sdoc-createform.component';
 import {SDocCreatepageComponent} from './components/sdoc-createpage/sdoc-createpage.component';
 import {SDocListHeaderComponent} from './components/sdoc-list-header/sdoc-list-header.component';
@@ -25,7 +22,6 @@ import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from './services/sdoc-searchform-utils.service';
 import {SDocSearchFormResolver} from './resolver/sdoc-searchform.resolver';
 import {SDocRecordResolver} from './resolver/sdoc-details.resolver';
-import {SearchFormUtils} from '../../commons/services/searchform-utils.service';
 import {SDocRoutingModule} from './sdoc-routing.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {ToastModule} from 'ng2-toastr';
@@ -63,15 +59,11 @@ import {CommonsModule} from '../../commons/commons.module';
         SDocRoutingModule
     ],
     providers: [
-        SDocDataStore,
-        SDocDataService,
-        AppService,
         SDocSearchFormConverter,
         SDocRoutingService,
         SDocSearchFormUtils,
         SDocSearchFormResolver,
-        SDocRecordResolver,
-        SearchFormUtils
+        SDocRecordResolver
     ]
 })
 export class SDocModule {}
