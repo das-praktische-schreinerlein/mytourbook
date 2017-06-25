@@ -3,13 +3,10 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SDocSearchformComponent} from './sdoc-searchform.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
-import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
-import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
-import {Facets} from '../../../../commons/model/container/facets';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
+import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -18,9 +15,14 @@ describe('SDocSearchformComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocSearchformComponent],
-            imports: [ReactiveFormsModule,
-                TranslateModule.forRoot()],
-            providers: [SDocSearchFormUtils, SearchFormUtils],
+            imports: [
+                ReactiveFormsModule,
+                TranslateModule.forRoot()
+            ],
+            providers: [
+                SDocSearchFormUtils,
+                SearchFormUtils
+            ],
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
@@ -29,8 +31,7 @@ describe('SDocSearchformComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocSearchformComponent);
         component = fixture.componentInstance;
-        component.searchResult = new SDocSearchResult(
-            new SDocSearchForm({ fulltext: 'Test'}), 1, [ new SDocRecord({id: '1', name: 'Test'})], new Facets());
+        component.searchResult = SDocDataServiceStub.defaultSearchResult();
         fixture.detectChanges();
     });
 

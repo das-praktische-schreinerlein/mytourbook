@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SDocCreateformComponent} from './sdoc-createform.component';
-import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
+import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
 describe('SDocCreateformComponent', () => {
     let component: SDocCreateformComponent;
@@ -21,7 +21,7 @@ describe('SDocCreateformComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocCreateformComponent);
         component = fixture.componentInstance;
-        component.record = new SDocRecord({id: '1', name: 'Test'});
+        component.record = SDocDataServiceStub.defaultRecord();
         fixture.detectChanges();
     });
 

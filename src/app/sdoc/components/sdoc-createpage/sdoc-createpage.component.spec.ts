@@ -4,10 +4,9 @@ import {SDocCreatepageComponent} from './sdoc-createpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
 import {Router} from '@angular/router';
-import {SDocDataStore} from '../../../sdocbackend/services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
-import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
+import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
 describe('SDocCreatepageComponent', () => {
     let component: SDocCreatepageComponent;
@@ -19,11 +18,9 @@ describe('SDocCreatepageComponent', () => {
                 TranslateModule.forRoot()
             ],
             declarations: [SDocCreatepageComponent],
-            providers: [SDocDataStore,
-                SDocDataService,
-                SearchFormUtils,
-                TranslateService,
-                {provide: Router, useClass: RouterTestingModule}
+            providers: [
+                { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                { provide: Router, useClass: RouterTestingModule }
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

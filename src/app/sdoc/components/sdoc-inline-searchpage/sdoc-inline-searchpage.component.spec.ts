@@ -5,7 +5,6 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SDocDataStore} from '../../../sdocbackend/services/sdoc-data.store';
-import {Observable} from 'rxjs/Observable';
 import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {SDocSearchFormConverter} from '../../../sdoc/services/sdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
@@ -13,6 +12,8 @@ import {SDocRoutingService} from '../../../sdoc/services/sdoc-routing.service';
 import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '../../../../commons/services/generic-app.service';
+import {ActivatedRouteStub} from '../../../../testing/router-stubs';
+import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
 class RouterStub {
     public routerState: {} = {
@@ -34,15 +35,10 @@ describe('SDocInlineSearchpageComponent', () => {
                 TranslateModule.forRoot()
             ],
             providers: [SDocDataStore,
-                {provide: GenericAppService, useValue: new AppServiceStub() },
-                SDocDataService,
-                {
-                    provide: ActivatedRoute,
-                    useValue: {
-                        params: Observable.of({id: 1})
-                    }
-                },
-                {provide: Router, useValue: new RouterStub() },
+                { provide: GenericAppService, useValue: new AppServiceStub() },
+                { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+                { provide: Router, useValue: new RouterStub() },
                 SDocSearchFormConverter,
                 SearchFormUtils,
                 TranslateService,
