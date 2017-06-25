@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {Http, HttpModule} from '@angular/http';
-import {AppComponent} from './app.component';
+import {AppComponent} from './components/app/app.component';
 import {AppService} from './shared/services/app.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NavbarComponent} from './components/navbar/navbar.component';

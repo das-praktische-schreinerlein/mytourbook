@@ -3,15 +3,15 @@ import {async, TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocDataService} from './sdoc/services/sdoc-data.service';
+import {SDocDataService} from '../../sdoc/services/sdoc-data.service';
 import {Router} from '@angular/router';
-import {AppService} from './shared/services/app.service';
-import {SDocDataStore} from './sdoc/services/sdoc-data.store';
+import {AppService} from '../../shared/services/app.service';
+import {SDocDataStore} from '../../sdoc/services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {AppServiceStub} from '../testing/appservice-stubs';
-import {ToastsManagerStub} from '../testing/toasts-stubs';
+import {AppServiceStub} from '../../../testing/appservice-stubs';
+import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 describe('AppComponent', () => {
