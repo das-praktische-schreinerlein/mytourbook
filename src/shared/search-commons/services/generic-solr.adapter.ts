@@ -1,6 +1,5 @@
 import {IDict} from 'js-data-http';
 import {Mapper, Record, utils} from 'js-data';
-import {Jsonp} from '@angular/http';
 import {Facet, Facets} from '../model/container/facets';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
@@ -11,8 +10,8 @@ import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter'
 export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> extends GenericSearchHttpAdapter<R, F, S> {
 
-    constructor(config: any, jsonP: Jsonp) {
-        super(config, jsonP);
+    constructor(config: any) {
+        super(config);
     }
 
     count(mapper: Mapper, query: any, opts?: any): Promise<number> {

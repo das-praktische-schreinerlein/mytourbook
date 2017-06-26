@@ -29,7 +29,7 @@ const options = {
     suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
     http: axios
 };
-const httpAdapter = new SDocSolrAdapter(options, this.jsonp);
+const httpAdapter = new SDocSolrAdapter(options);
 sdocDataStore.setAdapter('http', httpAdapter, '', {});
 
 // configure express

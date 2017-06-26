@@ -5,7 +5,6 @@ import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
 
 export function Response (data, meta, op) {
     meta = meta || {};
@@ -16,51 +15,8 @@ export function Response (data, meta, op) {
 
 export abstract class GenericSearchHttpAdapter <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> extends HttpAdapter {
-    static configureHttpProvider(jsonP: Jsonp): any {
-        return function makeHttpRequest(httpConfig) {
-            const headers: Headers = new Headers();
-            headers.append('Content-Type', (httpConfig.contentType ? httpConfig.contentType : 'application/x-www-form-urlencoded'));
 
-            const requestConfig: RequestOptionsArgs = {
-                method: httpConfig.method.toLowerCase(),
-                url: httpConfig.url,
-                body: httpConfig.data,
-                headers: headers
-            };
-
-            console.log('makeHttpRequest:', httpConfig);
-            let result, request;
-            request = jsonP.get(httpConfig.url, requestConfig);
-            result = request.map((res) => {
-                    console.log('response makeHttpRequest:' + httpConfig.url, res);
-                    const json = res.json();
-                    return {
-                        headers: res.headers,
-                        method: httpConfig.method,
-                        data: json,
-                        status: res.status,
-                        statusMsg: res.statusText
-                    };
-                },
-                (error) => {
-                    console.error('error makeHttpRequest:' + httpConfig.url, error);
-                    return {
-                        headers: [],
-                        method: httpConfig.method,
-                        data: {},
-                        status: 300,
-                        statusMsg: error
-                    };
-                });
-
-            return result.toPromise();
-        };
-    }
-
-    constructor(config: any, jsonP: Jsonp) {
-        if (jsonP !== undefined) {
-            config.http = GenericSearchHttpAdapter.configureHttpProvider(jsonP);
-        }
+    constructor(config: any) {
         super(config);
     }
 

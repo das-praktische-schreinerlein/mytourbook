@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSolrAdapter} from '../../shared/sdoc-commons/services/sdoc-solr.adapter';
-import {Http, Jsonp} from '@angular/http';
+import {Headers, Http, Jsonp, RequestOptionsArgs} from '@angular/http';
 import {SDocDataStore} from '../../shared/sdoc-commons/services/sdoc-data.store';
 import {environment} from '../../environments/environment';
 import {SDocRecord} from '../../shared/sdoc-commons/model/records/sdoc-record';
@@ -10,6 +10,47 @@ import {SDocHttpAdapter} from '../../shared/sdoc-commons/services/sdoc-http.adap
 
 @Injectable()
 export class AppService extends GenericAppService {
+    static configureHttpProvider(jsonP: Jsonp): any {
+        return function makeHttpRequest(httpConfig) {
+            const headers: Headers = new Headers();
+            headers.append('Content-Type', (httpConfig.contentType ? httpConfig.contentType : 'application/x-www-form-urlencoded'));
+
+            const requestConfig: RequestOptionsArgs = {
+                method: httpConfig.method.toLowerCase(),
+                url: httpConfig.url,
+                body: httpConfig.data,
+                headers: headers
+            };
+
+            console.log('makeHttpRequest:', httpConfig);
+            let result, request;
+            request = jsonP.get(httpConfig.url, requestConfig);
+            result = request.map((res) => {
+                    console.log('response makeHttpRequest:' + httpConfig.url, res);
+                    const json = res.json();
+                    return {
+                        headers: res.headers,
+                        method: httpConfig.method,
+                        data: json,
+                        status: res.status,
+                        statusMsg: res.statusText
+                    };
+                },
+                (error) => {
+                    console.error('error makeHttpRequest:' + httpConfig.url, error);
+                    return {
+                        headers: [],
+                        method: httpConfig.method,
+                        data: {},
+                        status: 300,
+                        statusMsg: error
+                    };
+                });
+
+            return result.toPromise();
+        };
+    }
+
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private http: Http, private jsonp: Jsonp) {
         super();
@@ -23,8 +64,9 @@ export class AppService extends GenericAppService {
         const options = {
             basePath: environment.solrBasePath,
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
+            http: AppService.configureHttpProvider(this.jsonp)
         };
-        const httpAdapter = new SDocSolrAdapter(options, this.jsonp);
+        const httpAdapter = new SDocSolrAdapter(options);
         this.sdocDataStore.setAdapter('http', httpAdapter, '', {});
         this.setAppState(AppState.Ready);
     }
@@ -33,7 +75,7 @@ export class AppService extends GenericAppService {
         const options = {
             basePath: environment.backendBasePath
         };
-        const httpAdapter = new SDocHttpAdapter(options, undefined);
+        const httpAdapter = new SDocHttpAdapter(options);
         this.sdocDataStore.setAdapter('http', httpAdapter, '', {});
         this.setAppState(AppState.Ready);
     }
