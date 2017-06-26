@@ -3,9 +3,9 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListComponent} from './sdoc-list.component';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
-import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
+import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -19,8 +19,7 @@ describe('SDocListComponent', () => {
             ],
             providers: [
                 SDocSearchFormConverter,
-                SearchFormUtils,
-                TranslateService
+                { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {SDocSearchForm} from '../../sdocshared/model/forms/sdoc-searchform';
-import {GenericSearchFormSearchFormConverter} from '../../../commons/services/generic-searchform-converter.service';
-import {SearchFormUtils} from '../../../commons/services/searchform-utils.service';
+import {SDocSearchForm} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {GenericSearchFormSearchFormConverter} from '../../../shared/search-commons/services/generic-searchform.converter';
+import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
 
 @Injectable()
 export class SDocSearchFormConverter implements GenericSearchFormSearchFormConverter<SDocSearchForm> {
     private splitter = '_,_';
 
-    constructor(private searchFormUtils: SearchFormUtils) {
+    constructor(private searchParameterUtils: SearchParameterUtils) {
     }
 
     searchFormToUrl(baseUrl: string, sdocSearchForm: SDocSearchForm): string {
@@ -19,16 +19,16 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         whereMap.set('loc', searchForm.where);
         whereMap.set('nearby', searchForm.nearby);
         whereMap.set('nearbyAddress', searchForm.nearbyAddress);
-        const where = this.searchFormUtils.joinParamsToOneRouteParameter(whereMap, this.splitter);
+        const where = this.searchParameterUtils.joinParamsToOneRouteParameter(whereMap, this.splitter);
 
         const params: Object[] = [
-            this.searchFormUtils.useValueOrDefault(searchForm.when, 'jederzeit'),
-            this.searchFormUtils.useValueOrDefault(where, 'ueberall'),
-            this.searchFormUtils.useValueOrDefault(searchForm.what, 'alles'),
-            this.searchFormUtils.useValueOrDefault(searchForm.fulltext, 'egal'),
-            this.searchFormUtils.useValueOrDefault(searchForm.moreFilter, 'ungefiltert'),
-            this.searchFormUtils.useValueOrDefault(searchForm.sort, 'relevanz'),
-            this.searchFormUtils.useValueOrDefault(searchForm.type, 'alle'),
+            this.searchParameterUtils.useValueOrDefault(searchForm.when, 'jederzeit'),
+            this.searchParameterUtils.useValueOrDefault(where, 'ueberall'),
+            this.searchParameterUtils.useValueOrDefault(searchForm.what, 'alles'),
+            this.searchParameterUtils.useValueOrDefault(searchForm.fulltext, 'egal'),
+            this.searchParameterUtils.useValueOrDefault(searchForm.moreFilter, 'ungefiltert'),
+            this.searchParameterUtils.useValueOrDefault(searchForm.sort, 'relevanz'),
+            this.searchParameterUtils.useValueOrDefault(searchForm.type, 'alle'),
             +searchForm.perPage || 10,
             +searchForm.pageNum || 1
         ];
@@ -40,53 +40,53 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
     paramsToSearchForm(params: any, defaults: {}, searchForm: SDocSearchForm): void {
         params = params || {};
         defaults = defaults || {};
-        const whereValues = this.searchFormUtils.splitValuesByPrefixes(params.where, this.splitter,
+        const whereValues = this.searchParameterUtils.splitValuesByPrefixes(params.where, this.splitter,
             ['locId:', 'loc:', 'nearby:', 'nearbyAddress:']);
         let where = '';
         if (whereValues.has('loc:')) {
-           where = this.searchFormUtils.joinValuesAndReplacePrefix(whereValues.get('loc:'), 'loc:', ',');
+           where = this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('loc:'), 'loc:', ',');
         }
         if (whereValues.has('unknown')) {
-            where += ',' + this.searchFormUtils.joinValuesAndReplacePrefix(whereValues.get('unknown'), '', ',');
+            where += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('unknown'), '', ',');
         }
         where = where.replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
         const nearby: string = (whereValues.has('nearby:') ?
-            this.searchFormUtils.joinValuesAndReplacePrefix(whereValues.get('nearby:'), 'nearby:', ',') : '');
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('nearby:'), 'nearby:', ',') : '');
         const nearbyAddress: string = (whereValues.has('nearbyAddress:') ?
-            this.searchFormUtils.joinValuesAndReplacePrefix(whereValues.get('nearbyAddress:'), 'nearbyAddress:', ',') : '');
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('nearbyAddress:'), 'nearbyAddress:', ',') : '');
         const locId: string = (whereValues.has('locId:') ?
-            this.searchFormUtils.joinValuesAndReplacePrefix(whereValues.get('locId:'), 'locId:', ',') : '');
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId:'), 'locId:', ',') : '');
 
-        searchForm.theme = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
+        searchForm.theme = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
             defaults['theme'], '');
-        searchForm.when = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(params['when'], /^jederzeit$/, ''),
+        searchForm.when = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(params['when'], /^jederzeit$/, ''),
             defaults['when'], '');
-        searchForm.where = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(where, /^ueberall$/, ''),
+        searchForm.where = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(where, /^ueberall$/, ''),
             defaults['where'], '');
-        searchForm.locId = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(locId, /^ueberall$/, ''),
+        searchForm.locId = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(locId, /^ueberall$/, ''),
             defaults['locId'], '');
-        searchForm.nearby = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(nearby, /^ueberall$/, ''),
+        searchForm.nearby = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(nearby, /^ueberall$/, ''),
             defaults['nearby'], '');
-        searchForm.nearbyAddress = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(nearbyAddress, /^ueberall$/, ''),
+        searchForm.nearbyAddress = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(nearbyAddress, /^ueberall$/, ''),
             defaults['nearbyAddress'], '');
-        searchForm.what = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(params['what'], /^alles$/, ''),
+        searchForm.what = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(params['what'], /^alles$/, ''),
             defaults['what'], '');
-        searchForm.fulltext = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
+        searchForm.fulltext = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
             defaults['fulltext'], '');
-        searchForm.moreFilter = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(params['moreFilter'], /^ungefiltert$/, ''),
+        searchForm.moreFilter = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(params['moreFilter'], /^ungefiltert$/, ''),
             defaults['moreFilter'], '');
-        searchForm.sort = this.searchFormUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
-        searchForm.type = this.searchFormUtils.useValueDefaultOrFallback(
-            this.searchFormUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '');
+        searchForm.sort = this.searchParameterUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
+        searchForm.type = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '');
         searchForm.perPage = +params['perPage'] || 10;
         searchForm.pageNum = +params['pageNum'] || 1;
     }

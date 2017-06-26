@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {SDocSearchFormConverter} from '../services/sdoc-searchform-converter.service';
-import {SDocSearchForm} from '../../sdocshared/model/forms/sdoc-searchform';
-import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
+import {SDocSearchForm} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 
 @Injectable()
 export class SDocSearchFormResolver implements Resolve<SDocSearchForm> {

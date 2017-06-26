@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
+import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {FormBuilder, Validators} from '@angular/forms';
 
 @Component({

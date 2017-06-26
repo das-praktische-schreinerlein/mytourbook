@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
-import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
-import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
-import {Facets} from '../../../../commons/model/container/facets';
+import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
+import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';

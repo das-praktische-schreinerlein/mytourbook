@@ -13,7 +13,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "xi18n": "ng xi18n --locale de --out-file messages.de.xlf --app=frontend --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
-    "xi18n-en": "ng xi18n --locale en --out-file messages.en.xlf --app=frontend --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress"
+    "xi18n-en": "ng xi18n --locale en --out-file messages.en.xlf --app=frontend --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
+    "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js",
+    "backend-serve": "node dist/backend/backend.js"
   },
   "private": true,
   "dependencies": {
@@ -29,12 +31,17 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.26",
     "@ngx-translate/core": "^7.0.0",
     "@ngx-translate/http-loader": "^0.1.0",
+    "axios": "^0.13.1",
     "bootstrap": "^4.0.0-alpha.6",
     "core-js": "^2.4.1",
+    "cors": "^2.8.3",
+    "express": "4.15.3",
     "geo-coder": "^0.2.1",
     "jquery": "^3.2.1",
     "js-data": "^3.0.0-rc.9",
+    "js-data-express": "^1.0.0-rc.1",
     "js-data-http": "^3.0.0-rc.2",
+    "js-data-http-node": "^3.0.0-rc.2",
     "ng2-toastr": "^4.1.0",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"

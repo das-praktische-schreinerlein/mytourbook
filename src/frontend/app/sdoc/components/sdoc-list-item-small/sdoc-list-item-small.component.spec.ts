@@ -4,14 +4,12 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemSmallComponent} from './sdoc-list-item-small.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {TruncatePipe} from '../../../../commons/pipes/truncate.pipe';
-import {ActivatedRoute, Router} from '@angular/router';
+import {TruncatePipe} from '../../../../shared/angular-commons/pipes/truncate.pipe';
+import {Router} from '@angular/router';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
-import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
-import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
 describe('SDocListItemSmallComponent', () => {
@@ -25,8 +23,7 @@ describe('SDocListItemSmallComponent', () => {
                 DomSanitizer,
                 { provide: Router, useClass: RouterTestingModule },
                 SDocRoutingService,
-                SDocSearchFormConverter,
-                SearchFormUtils
+                SDocSearchFormConverter
             ],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),

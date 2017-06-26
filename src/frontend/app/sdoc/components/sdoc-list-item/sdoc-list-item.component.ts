@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
+import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {SDocImageRecord} from '../../../sdocshared/model/records/sdocimage-record';
-import {ActivatedRoute} from '@angular/router';
+import {SDocImageRecord} from '../../../../shared/sdoc-commons/model/records/sdocimage-record';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 

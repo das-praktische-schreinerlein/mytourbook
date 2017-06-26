@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {SDocSearchForm} from '../app/sdocshared/model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../app/sdocshared/model/container/sdoc-searchresult';
-import {Facets} from '../commons/model/container/facets';
-import {SDocRecord} from '../app/sdocshared/model/records/sdoc-record';
+import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../shared/sdoc-commons/model/container/sdoc-searchresult';
+import {Facets} from '../shared/search-commons/model/container/facets';
+import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 
 @Injectable()
 export class SDocDataServiceStub {

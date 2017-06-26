@@ -26,7 +26,8 @@ import {SDocRoutingModule} from './sdoc-routing.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {ToastModule} from 'ng2-toastr';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {CommonsModule} from '../../commons/commons.module';
+import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
+import {SearchParameterUtils} from '../../shared/search-commons/services/searchparameter.utils';
 
 @NgModule({
     declarations: [
@@ -55,13 +56,14 @@ import {CommonsModule} from '../../commons/commons.module';
         ReactiveFormsModule,
         HttpModule,
         JsonpModule,
-        CommonsModule,
+        AngularCommonsModule,
         SDocRoutingModule
     ],
     providers: [
         SDocSearchFormConverter,
         SDocRoutingService,
         SDocSearchFormUtils,
+        SearchParameterUtils,
         SDocSearchFormResolver,
         SDocRecordResolver
     ]

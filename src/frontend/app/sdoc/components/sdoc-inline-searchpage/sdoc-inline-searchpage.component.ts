@@ -1,16 +1,16 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef} from '@angular/core';
-import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
-import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
-import {SDocSearchForm} from '../../../sdocshared/model/forms/sdoc-searchform';
-import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
+import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Subscription} from 'rxjs/Subscription';
-import {Facets} from '../../../../commons/model/container/facets';
+import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {AppState, GenericAppService} from '../../../../commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-inline-searchpage',

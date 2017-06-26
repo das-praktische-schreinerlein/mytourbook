@@ -2,17 +2,12 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SDocShowpageComponent} from './sdoc-showpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SDocDataStore} from '../../../sdocbackend/services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
-import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
-import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
-import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {GenericAppService} from '../../../../commons/services/generic-app.service';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 

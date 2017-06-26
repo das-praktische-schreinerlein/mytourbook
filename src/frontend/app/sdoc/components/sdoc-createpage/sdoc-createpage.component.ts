@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {SDocRecord} from '../../../sdocshared/model/records/sdoc-record';
-import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
+import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {Router} from '@angular/router';
 
 @Component({

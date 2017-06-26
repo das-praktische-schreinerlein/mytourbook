@@ -8,7 +8,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppServiceStub} from '../../../testing/appservice-stubs';
 import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {GenericAppService} from '../../../commons/services/generic-app.service';
+import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 
 describe('AppComponent', () => {
     beforeEach(() => {

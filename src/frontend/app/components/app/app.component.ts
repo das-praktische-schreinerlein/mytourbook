@@ -1,7 +1,7 @@
 import {Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
 import {ToastsManager} from 'ng2-toastr';
 import {TranslateService} from '@ngx-translate/core';
-import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 
 @Component({
     selector: 'app-root',

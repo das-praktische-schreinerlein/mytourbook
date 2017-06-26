@@ -5,8 +5,9 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
-import {SearchFormUtils} from '../../../../commons/services/searchform-utils.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
+import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -21,7 +22,8 @@ describe('SDocSearchformComponent', () => {
             ],
             providers: [
                 SDocSearchFormUtils,
-                SearchFormUtils
+                SearchFormUtils,
+                { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

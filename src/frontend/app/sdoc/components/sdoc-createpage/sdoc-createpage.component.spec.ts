@@ -2,10 +2,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SDocCreatepageComponent} from './sdoc-createpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocDataService} from '../../../sdocshared/services/sdoc-data.service';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
 describe('SDocCreatepageComponent', () => {

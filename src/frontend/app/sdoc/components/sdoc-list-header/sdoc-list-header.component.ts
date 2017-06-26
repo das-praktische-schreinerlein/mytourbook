@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {SDocSearchResult} from '../../../sdocshared/model/container/sdoc-searchresult';
+import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 
 @Component({
     selector: 'app-sdoc-list-header',

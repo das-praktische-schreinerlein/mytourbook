@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {SDocRecord} from '../../sdocshared/model/records/sdoc-record';
-import {SDocDataService} from '../../sdocshared/services/sdoc-data.service';
-import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
+import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
+import {SDocDataService} from '../../../shared/sdoc-commons/services/sdoc-data.service';
+import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 
 @Injectable()
 export class SDocRecordResolver implements Resolve<SDocRecord> {

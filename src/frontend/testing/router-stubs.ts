@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {SDocRecord} from '../app/sdocshared/model/records/sdoc-record';
+import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 
 @Injectable()
 export class ActivatedRouteStub {
