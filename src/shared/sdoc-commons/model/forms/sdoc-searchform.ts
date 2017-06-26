@@ -14,12 +14,13 @@ export class SDocSearchForm extends GenericSearchForm {
         super(values);
         this.when = values['when'] || '';
         this.where = values['where'] || '';
+        this.locId = values['locId'] || '';
         this.nearby = values['nearby'] || '';
         this.nearbyAddress = values['nearbyAddress'] || '';
-        this.locId = values['locId'] || '';
         this.what = values['what'] || '';
-        this.type = values['type'] || '';
+        this.moreFilter = values['moreFilter'] || '';
         this.theme = values['theme'] || '';
+        this.type = values['type'] || '';
     }
 
     toString() {

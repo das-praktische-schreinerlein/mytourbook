@@ -8,11 +8,12 @@ import {SDocSolrAdapter} from './shared/sdoc-commons/services/sdoc-solr.adapter'
 import {SearchParameterUtils} from './shared/search-commons/services/searchparameter.utils';
 import {SDocSearchResult} from './shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facet} from './shared/search-commons/model/container/facets';
+import {SDocSearchForm} from './shared/sdoc-commons/model/forms/sdoc-searchform';
 let bodyParser = require('body-parser');
+let mycors = cors();
 
 // create server
 const app = express();
-let mycors = cors();
 mycors.origin = 'http://localhost:4200';
 app.use(mycors);
 app.use(bodyParser.json()); // for parsing application/json
@@ -54,7 +55,8 @@ app.route('/api/sdocs')
         next();
     })
     .get(function(req, res, next) {
-        sdocDataService.search(sdocDataService.createDefaultSearchForm()).then(
+        const searchForm = new SDocSearchForm(req.query);
+        sdocDataService.search(searchForm).then(
             function searchDone(sdocSearchResult: SDocSearchResult) {
                 const result = {
                     'recordCount': sdocSearchResult.recordCount,
