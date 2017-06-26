@@ -155,6 +155,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         const me = this;
         const result = new Promise<S>((resolve, reject) => {
             const options = {
+                originalSearchForm: searchForm,
                 force: false,
                 limit: searchForm.perPage,
                 offset: searchForm.pageNum - 1,

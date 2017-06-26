@@ -27,6 +27,9 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
 
         opts.endpoint = this.getHttpEndpoint('search');
 
+        const me = this;
+        opts['queryTransform'] = function(...args) { return me.queryTransformToHttpQuery.apply(me, args); };
+
         opts.params = this.getParams(opts);
         opts.suffix = this.getSuffix(mapper, opts);
         utils.deepMixIn(opts.params, query);
@@ -61,11 +64,12 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
 
         opts.endpoint = this.getHttpEndpoint('search');
 
+        const me = this;
+        opts['queryTransform'] = function(...args) { return me.queryTransformToHttpQuery.apply(me, args); };
+
         opts.params = this.getParams(opts);
         opts.suffix = this.getSuffix(mapper, opts);
         utils.deepMixIn(opts.params, query);
-
-        // TODO: do this as HttpQuery
         opts.params = this.queryTransform(mapper, opts.params, opts);
 
         // beforeCount lifecycle hook
@@ -161,6 +165,10 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
     }
 
     abstract getHttpEndpoint(method: string): string;
+
+    private queryTransformToHttpQuery(mapper: Mapper, params: any, opts: any): any {
+        return opts.originalSearchForm;
+    }
 
     buildUrl(url, params) {
         if (!params) {
