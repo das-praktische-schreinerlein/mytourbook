@@ -1,6 +1,6 @@
 import {IDict} from 'js-data-http';
 import {Mapper, Record, utils} from 'js-data';
-import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
+import {Jsonp} from '@angular/http';
 import {Facet, Facets} from '../model/container/facets';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';

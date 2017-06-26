@@ -7,7 +7,6 @@ import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service'
 import {SDocSolrAdapter} from './shared/sdoc-commons/services/sdoc-solr.adapter';
 import {SearchParameterUtils} from './shared/search-commons/services/searchparameter.utils';
 import {SDocSearchResult} from './shared/sdoc-commons/model/container/sdoc-searchresult';
-import {SDocRecord} from './shared/sdoc-commons/model/records/sdoc-record';
 import {Facet} from './shared/search-commons/model/container/facets';
 let bodyParser = require('body-parser');
 

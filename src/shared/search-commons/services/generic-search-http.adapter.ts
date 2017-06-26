@@ -5,7 +5,6 @@ import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {GenericSolrAdapter} from './generic-solr.adapter';
 import {Headers, Jsonp, RequestOptionsArgs} from '@angular/http';
 
 export function Response (data, meta, op) {
