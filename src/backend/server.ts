@@ -58,33 +58,15 @@ app.route('/api/sdocs')
         const searchForm = new SDocSearchForm(req.query);
         sdocDataService.search(searchForm).then(
             function searchDone(sdocSearchResult: SDocSearchResult) {
-                const result = {
-                    'recordCount': sdocSearchResult.recordCount,
-                    'searchForm': sdocSearchResult.searchForm,
-                    'currentRecords': [],
-                    'facets': {
-                        facets: {}
-                    }
-                };
-                for (let i = 0; i < sdocSearchResult.currentRecords.length; i++) {
-                    const record = {};
-                    for (const key in sdocSearchResult.currentRecords[i]) {
-                        record[key] = sdocSearchResult.currentRecords[i][key];
-                    }
-                    record['sdocimages'] = sdocSearchResult.currentRecords[i].get('sdocimages');
-                    result.currentRecords.push(record);
-                }
-                sdocSearchResult.facets.facets.forEach((value: Facet, key: string) => {
-                    result.facets.facets[key] = sdocSearchResult.facets.facets.get(key).facet;
-                });
-                res.json(result);
+                res.json(sdocSearchResult.toSerializableJsonObj());
             }
         );
     })
     .post(function(req, res, next) {
+        // TODO: Test it - untested
         sdocDataService.search(JSON.parse(req.body)).then(
             function searchDone(sdocSearchResult: SDocSearchResult) {
-                res.json(sdocSearchResult);
+                res.json(sdocSearchResult.toSerializableJsonObj());
             }
         );
     });
