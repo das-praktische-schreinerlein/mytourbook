@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import {json, urlencoded} from 'body-parser';
 import {SDocServerModule} from './modules/sdoc-server.module';
+import {PDocServerModule} from './modules/pdoc-server.module';
 
 // create server
 const app = express();
@@ -16,6 +17,7 @@ app.use(urlencoded({ extended: true })); // for parsing application/x-www-form-u
 
 // add routes
 SDocServerModule.configureRoutes(app, '/api/v1');
+PDocServerModule.configureRoutes(app, '/api/v1');
 
 // start server
 app.listen(3000, function () {
