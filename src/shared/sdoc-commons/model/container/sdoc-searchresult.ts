@@ -25,17 +25,21 @@ export class SDocSearchResult extends GenericSearchResult <SDocRecord, SDocSearc
                 facets: {}
             }
         };
-        for (let i = 0; i < this.currentRecords.length; i++) {
-            const record = {};
-            for (const key in this.currentRecords[i]) {
-                record[key] = this.currentRecords[i][key];
+        if (Array.isArray(this.currentRecords)) {
+            for (let i = 0; i < this.currentRecords.length; i++) {
+                const record = {};
+                for (const key in this.currentRecords[i]) {
+                    record[key] = this.currentRecords[i][key];
+                }
+                record['sdocimages'] = this.currentRecords[i].get('sdocimages');
+                result.currentRecords.push(record);
             }
-            record['sdocimages'] = this.currentRecords[i].get('sdocimages');
-            result.currentRecords.push(record);
         }
-        this.facets.facets.forEach((value: Facet, key: string) => {
-            result.facets.facets[key] = this.facets.facets.get(key).facet;
-        });
+        if (this.facets && this.facets.facets) {
+            this.facets.facets.forEach((value: Facet, key: string) => {
+                result.facets.facets[key] = this.facets.facets.get(key).facet;
+            });
+        }
         return result;
     }
 }
