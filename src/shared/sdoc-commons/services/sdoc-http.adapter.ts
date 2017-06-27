@@ -9,11 +9,11 @@ export class SDocHttpAdapter extends GenericSearchHttpAdapter<SDocRecord, SDocSe
     }
 
     getHttpEndpoint(method: string): string {
-        const updateMethods = ['create', 'destroy', 'update'];
+        const updateMethods = ['find', 'findAll', 'create', 'destroy', 'update'];
         if (updateMethods.indexOf(method.toLowerCase()) >= 0) {
-            return 'sdocs';
+            return 'sdoc';
         }
-        return 'sdocs';
+        return 'sdocsearch';
     }
 }
 

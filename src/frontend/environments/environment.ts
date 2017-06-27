@@ -6,5 +6,5 @@
 export const environment = {
     production: false,
     solrBasePath: 'http://localhost:8983/solr/mytb/',
-    backendBasePath: 'http://localhost:3000/api/'
+    backendBasePath: 'http://localhost:3000/api/v1/'
 };

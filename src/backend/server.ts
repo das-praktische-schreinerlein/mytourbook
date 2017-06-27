@@ -1,75 +1,21 @@
 import cors from 'cors';
-import axios from 'axios';
 import express from 'express';
-import {mount, queryParser, Router} from 'js-data-express';
-import {SDocDataStore} from './shared/sdoc-commons/services/sdoc-data.store';
-import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service';
-import {SDocSolrAdapter} from './shared/sdoc-commons/services/sdoc-solr.adapter';
-import {SearchParameterUtils} from './shared/search-commons/services/searchparameter.utils';
-import {SDocSearchResult} from './shared/sdoc-commons/model/container/sdoc-searchresult';
-import {Facet} from './shared/search-commons/model/container/facets';
-import {SDocSearchForm} from './shared/sdoc-commons/model/forms/sdoc-searchform';
-let bodyParser = require('body-parser');
-let mycors = cors();
+import {json, urlencoded} from 'body-parser';
+import {SDocServerModule} from './modules/sdoc-server.module';
 
 // create server
 const app = express();
-mycors.origin = 'http://localhost:4200';
+
+// configure server
+const mycors = cors();
+mycors.origin = '*';
 app.use(mycors);
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-// configure store
-const sdocDataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils());
-const sdocDataService: SDocDataService = new SDocDataService(sdocDataStore);
-const sdocMapper = sdocDataService.getMapper('sdoc');
+app.use(json()); // for parsing application/json
+app.use(urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-// configure solr-adapter
-const options = {
-    basePath: 'http://localhost:8983/solr/mytb/',
-    suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
-    http: axios
-};
-const httpAdapter = new SDocSolrAdapter(options);
-sdocDataStore.setAdapter('http', httpAdapter, '', {});
-
-// configure express
-const config = {
-    request: (req, res, next) => {
-        const userLoggedIn = true;
-
-        if (userLoggedIn) {
-            next();
-        } else {
-            res.sendStatus(403);
-        }
-    }
-};
-app.use('/api/sdoc', new Router(sdocMapper, config).router);
-
-// use own wrapper for search
-app.route('/api/sdocs')
-    .all(function(req, res, next) {
-        // runs for all HTTP verbs first
-        // think of it as route specific middleware!
-        next();
-    })
-    .get(function(req, res, next) {
-        const searchForm = new SDocSearchForm(req.query);
-        sdocDataService.search(searchForm).then(
-            function searchDone(sdocSearchResult: SDocSearchResult) {
-                res.json(sdocSearchResult.toSerializableJsonObj());
-            }
-        );
-    })
-    .post(function(req, res, next) {
-        // TODO: Test it - untested
-        sdocDataService.search(JSON.parse(req.body)).then(
-            function searchDone(sdocSearchResult: SDocSearchResult) {
-                res.json(sdocSearchResult.toSerializableJsonObj());
-            }
-        );
-    });
+// add routes
+SDocServerModule.configureRoutes(app, '/api/v1');
 
 // start server
 app.listen(3000, function () {
