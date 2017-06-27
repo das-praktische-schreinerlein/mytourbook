@@ -15,7 +15,7 @@
     "xi18n": "ng xi18n --locale de --out-file messages.de.xlf --app=frontend --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
     "xi18n-en": "ng xi18n --locale en --out-file messages.en.xlf --app=frontend --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
     "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js",
-    "backend-serve": "node dist/backend/backend.js"
+    "backend-serve": "tsc -p src/backend && webpack --config backend-webpack.config.js && node dist/backend/backend.js"
   },
   "private": true,
   "dependencies": {

@@ -1,0 +1,23 @@
+div.sdoc-list-item-flat {
+    width: 100%;
+}
+div.sdoc-list-item-flat img.sdoc-image {
+    width: 50px;
+    max-height: 50px;
+    overflow: hidden;
+}
+
+div.sdoc-list-item-flat ngb-carousel {
+    width: 60px;
+    height: 60px;
+    float: left;
+}
+
+div.sdoc-list-item-flat h5 {
+    font-size: 0.75rem;
+}
+
+div.sdoc-list-item-flat div.card-action-buttons {
+    float: right;
+}
+

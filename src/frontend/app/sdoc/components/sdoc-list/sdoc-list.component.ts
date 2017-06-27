@@ -4,6 +4,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 
 export enum Layout {
+    FLAT,
     SMALL,
     BIG
 }

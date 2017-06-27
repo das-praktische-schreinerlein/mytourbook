@@ -1,0 +1,26 @@
+<div class="row sdoc-list-item-flat">
+    <div class="col-1 image">
+        <ng-container [ngSwitch]="record.type">
+            <ng-container *ngSwitchCase="'IMAGE'">
+                <ng-container *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
+                    <img class="sdoc-image-main" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchDefault="">
+                <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <ng-template ngbSlide *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
+                        <img class="sdoc-image" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                        <div class="carousel-caption">
+                            <h3>{{sdocimage.name}}</h3>
+                            <p>{{sdocimage.name}}.</p>
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="col-1 type"><h5>{{record.type | translate }}</h5></div>
+    <div class="col-3 location"><h5>{{record.locHirarchie}}</h5></div>
+    <div class="col-1"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.datevon}}</h5></a></div>
+    <div class="col-4"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+</div>

@@ -23,6 +23,9 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     searchResult: SDocSearchResult;
     searchForm: SDocSearchForm;
     baseSearchUrl = '/sdoc/search/';
+    layout = Layout.FLAT;
+    sort = 'relevance';
+    perPage = 10;
 
     constructor(private route: ActivatedRoute, private router: Router,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -46,6 +49,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
                 console.log('route: search for ', data.searchForm);
                 this.searchForm = data.searchForm;
+                this.perPage = this.searchForm.perPage;
+                this.sort = this.searchForm.sort;
                 return this.doSearch();
             },
             (error: {reason: any}) => {
@@ -94,6 +99,42 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.searchForm.pageNum = +page;
         console.log('onPageChange: redirect to page', page);
         this.redirectToSearch();
+        return false;
+    }
+
+    onPerPageChange(perPage: number) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.searchForm.perPage = perPage;
+        console.log('onPerPageChange: redirect to perPage', perPage);
+        this.redirectToSearch();
+        return false;
+    }
+
+    onSortChange(sort: string) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.searchForm.sort = sort;
+        console.log('onSortChange: redirect to sort', sort);
+        this.redirectToSearch();
+        return false;
+    }
+
+    onLayoutChange(layout: Layout) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.layout = layout;
+        console.log('onLayoutChange: redirect to layout', layout);
+//        this.redirectToSearch();
         return false;
     }
 

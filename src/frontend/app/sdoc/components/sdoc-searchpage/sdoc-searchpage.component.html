@@ -5,13 +5,19 @@
     </div>
     <div class="container">
         <app-sdoc-list-header [searchResult]="searchResult"
+                              [perPage]="perPage"
+                              [layout]="layout"
+                              [sort]="sort"
+                              (perPageChange)="onPerPageChange($event)"
+                              (sortChange)="onSortChange($event)"
+                              (layoutChange)="onLayoutChange($event)"
                               (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
     </div>
     <div class="container">
         <app-sdoc-list [searchResult]="searchResult"
                        [adminMode]="adminMode"
                        [baseSearchUrl]="baseSearchUrl"
-                       [layout]="Layout.BIG"
+                       [layout]="layout"
                        (show)="onShowSDoc($event)"
                        (edit)="onEditSDoc($event)"
                        (delete)="onDeleteSDoc($event)"></app-sdoc-list>

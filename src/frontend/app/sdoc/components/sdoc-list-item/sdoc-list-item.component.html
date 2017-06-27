@@ -5,8 +5,8 @@
             <div>
                 <div style="width: 100px; float: left">
                     <h5>{{record.type | translate }}</h5>
-                    <ng-container *ngFor="let sdocimage of getThumbnails(record);">
-                        <img class="sdoc-image-main" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                    <ng-container *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
+                        <img class="sdoc-image-main" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a>
@@ -16,7 +16,7 @@
                 <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
                     <ngb-panel title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <iframe [src]="getMapUrl(record)" width="200" height="150" align="right" scrolling="no" marginheight="5" marginwidth="0" frameborder="0"></iframe>
+                            <iframe [src]="contentUtils.getMapUrl(record)" width="200" height="150" align="right" scrolling="no" marginheight="5" marginwidth="0" frameborder="0"></iframe>
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>
@@ -40,8 +40,8 @@
                 <div style="width: 100px; float: left">
                     <h5>{{record.type | translate }}</h5>
                     <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                        <ng-template ngbSlide *ngFor="let sdocimage of getThumbnails(record);">
-                            <img class="sdoc-image" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                        <ng-template ngbSlide *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
+                            <img class="sdoc-image" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
                             <div class="carousel-caption">
                                 <h3>{{sdocimage.name}}</h3>
                                 <p>{{sdocimage.name}}.</p>
@@ -67,7 +67,7 @@
                     </ngb-panel>
                     <ngb-panel title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <iframe [src]="getMapUrl(record)" width="200" height="150" align="right" scrolling="no" marginheight="5" marginwidth="0" frameborder="0"></iframe>
+                            <iframe [src]="contentUtils.getMapUrl(record)" width="200" height="150" align="right" scrolling="no" marginheight="5" marginwidth="0" frameborder="0"></iframe>
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>

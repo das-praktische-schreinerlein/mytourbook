@@ -1,12 +1,17 @@
 <footer class="footer" >
-        <ng-container *ngIf="searchResult.recordCount > searchResult.searchForm.perPage">
-                <ngb-pagination (pageChange)="onPageChange($event)"
-                                [pageSize]="searchResult.searchForm.perPage"
-                                [collectionSize]="searchResult.recordCount"
-                                [page]="searchResult.searchForm.pageNum"
-                                [maxSize]="5"
-                                [rotate]="true"
-                                [ellipses]="false"
-                                [boundaryLinks]="true"></ngb-pagination>
-        </ng-container>
+        <div class="row">
+                <div class="col-sm-12">
+                        <ng-container *ngIf="searchResult.recordCount > searchResult.searchForm.perPage">
+                                <ngb-pagination (pageChange)="onPageChange($event)"
+                                                [pageSize]="searchResult.searchForm.perPage"
+                                                [collectionSize]="searchResult.recordCount"
+                                                [page]="searchResult.searchForm.pageNum"
+                                                [maxSize]="5"
+                                                [rotate]="true"
+                                                [ellipses]="false"
+                                                [boundaryLinks]="true"
+                                                size="sm"></ngb-pagination>
+                        </ng-container>
+                </div>
+        </div>
 </footer>

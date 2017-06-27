@@ -6,11 +6,11 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
-    selector: 'app-sdoc-list-item',
-    templateUrl: './sdoc-list-item.component.html',
-    styleUrls: ['./sdoc-list-item.component.css']
+    selector: 'app-sdoc-list-item-flat',
+    templateUrl: './sdoc-list-item-flat.component.html',
+    styleUrls: ['./sdoc-list-item-flat.component.css']
 })
-export class SDocListItemComponent {
+export class SDocListItemFlatComponent {
     public contentUtils: SDocContentUtils;
 
     @Input()

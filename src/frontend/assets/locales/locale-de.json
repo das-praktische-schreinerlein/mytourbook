@@ -71,5 +71,11 @@
     "Woche50":"Dez 10-16 KW 50",
     "Woche51":"Dez 17-23 KW 51",
     "Woche52":"Dez 24-30 KW 52",
-    "Woche53":"Dez 31-06 KW 53"
+    "Woche53":"Dez 31-06 KW 53",
+    "listLayout_0": "Liste",
+    "listLayout_1": "Klein",
+    "listLayout_2": "Gross",
+    "listSorts_relevance": "Relevanz",
+    "listSorts_location": "Region",
+    "listSorts_date": "Datum"
 }

@@ -176,5 +176,11 @@
     "kw_wiese":"meadow",
     "kw_winter":"winter",
     "kw_wüste":"desert",
-    "kw_zoo":"zoo"
+    "kw_zoo":"zoo",
+    "listLayout_0": "list",
+    "listLayout_1": "small",
+    "listLayout_2": "big",
+    "listSorts_relevance": "relevance",
+    "listSorts_location": "location",
+    "listSorts_date": "date"
 }

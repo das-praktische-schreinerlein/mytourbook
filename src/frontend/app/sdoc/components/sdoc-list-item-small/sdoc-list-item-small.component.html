@@ -4,8 +4,8 @@
             <div>
                 <div style="width: 100px; float: left">
                     <h5>{{record.type | translate }}</h5>
-                    <ng-container *ngFor="let sdocimage of getThumbnails(record);">
-                        <img class="sdoc-image-main" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                    <ng-container *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
+                        <img class="sdoc-image-main" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.datevon}}</h5></a>
@@ -19,8 +19,8 @@
                 <div style="width: 100px; float: left">
                     <h5>{{record.type | translate }}</h5>
                     <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                        <ng-template ngbSlide *ngFor="let sdocimage of getThumbnails(record);">
-                            <img class="sdoc-image" [src]="getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                        <ng-template ngbSlide *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
+                            <img class="sdoc-image" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
                             <div class="carousel-caption">
                                 <h3>{{sdocimage.name}}</h3>
                                 <p>{{sdocimage.name}}.</p>

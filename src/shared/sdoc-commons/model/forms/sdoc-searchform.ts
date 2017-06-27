@@ -1,4 +1,5 @@
 import {GenericSearchForm} from '../../../search-commons/model/forms/generic-searchform';
+
 export class SDocSearchForm extends GenericSearchForm {
     when: string;
     where: string;

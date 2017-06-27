@@ -4,14 +4,13 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemComponent} from './sdoc-list-item.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {TruncatePipe} from '../../../../shared/angular-commons/pipes/truncate.pipe';
 import {Router} from '@angular/router';
-import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {AngularCommonsModule} from '../../../../shared/angular-commons/angular-commons.module';
 
 describe('SDocListItemComponent', () => {
     let component: SDocListItemComponent;
@@ -19,17 +18,17 @@ describe('SDocListItemComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TruncatePipe, SDocListItemComponent],
+            declarations: [SDocListItemComponent],
             providers: [
                 DomSanitizer,
                 { provide: Router, useClass: RouterTestingModule },
                 SDocRoutingService,
-                SDocSearchFormConverter,
-                { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
+                SDocContentUtils
             ],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
-                TranslateModule.forRoot()]
+                TranslateModule.forRoot(),
+                AngularCommonsModule]
         })
             .compileComponents();
     }));

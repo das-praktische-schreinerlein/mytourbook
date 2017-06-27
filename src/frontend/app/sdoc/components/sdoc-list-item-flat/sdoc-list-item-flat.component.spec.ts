@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocListItemSmallComponent} from './sdoc-list-item-small.component';
+import {SDocListItemFlatComponent} from './sdoc-list-item-flat.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
@@ -11,13 +11,13 @@ import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
-describe('SDocListItemSmallComponent', () => {
-    let component: SDocListItemSmallComponent;
-    let fixture: ComponentFixture<SDocListItemSmallComponent>;
+describe('SDocListItemFlatComponent', () => {
+    let component: SDocListItemFlatComponent;
+    let fixture: ComponentFixture<SDocListItemFlatComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SDocListItemSmallComponent],
+            declarations: [SDocListItemFlatComponent],
             providers: [
                 DomSanitizer,
                 { provide: Router, useClass: RouterTestingModule },
@@ -32,7 +32,7 @@ describe('SDocListItemSmallComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SDocListItemSmallComponent);
+        fixture = TestBed.createComponent(SDocListItemFlatComponent);
         component = fixture.componentInstance;
         component.record = SDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

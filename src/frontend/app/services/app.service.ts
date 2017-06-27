@@ -57,7 +57,7 @@ export class AppService extends GenericAppService {
     }
 
     initApp(): void {
-        this.initSolrData();
+        this.initBackendData();
     }
 
     initSolrData() {

@@ -28,12 +28,15 @@ import {ToastModule} from 'ng2-toastr';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
 import {SearchParameterUtils} from '../../shared/search-commons/services/searchparameter.utils';
+import {SDocListItemFlatComponent} from './components/sdoc-list-item-flat/sdoc-list-item-flat.component';
+import {SDocContentUtils} from './services/sdoc-contentutils.service';
 
 @NgModule({
     declarations: [
         SDocListComponent,
         SDocListItemComponent,
         SDocListItemSmallComponent,
+        SDocListItemFlatComponent,
         SDocListHeaderComponent,
         SDocListFooterComponent,
         SDocEditformComponent,
@@ -64,6 +67,7 @@ import {SearchParameterUtils} from '../../shared/search-commons/services/searchp
         SDocRoutingService,
         SDocSearchFormUtils,
         SearchParameterUtils,
+        SDocContentUtils,
         SDocSearchFormResolver,
         SDocRecordResolver
     ]

@@ -26,18 +26,26 @@ export class SDocSearchformComponent implements OnInit {
 
     public settingsSelectWhen: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
             showUncheckAll: true};
     public settingsSelectWhere: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
             showUncheckAll: true};
     public settingsSelectWhat: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
             showUncheckAll: true};
     public settingsSelectType: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
             enableSearch: false};
 
     public textsSelectWhen: IMultiSelectTexts = { checkAll: 'Alle auswählen',
