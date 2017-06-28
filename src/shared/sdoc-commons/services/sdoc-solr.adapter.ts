@@ -66,9 +66,9 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
         values['datevon'] = this.getSolrValue(doc, 'date_dt', undefined);
         values['desc'] = this.getSolrValue(doc, 'desc_txt', undefined);
-        values['geoLon'] = this.getSolrValue(doc, 'geo_lon_txt', undefined);
-        values['geoLat'] = this.getSolrValue(doc, 'geo_lat_txt', undefined);
-        values['geoLoc'] = this.getSolrValue(doc, 'geo_loc_p', undefined);
+        values['geoLon'] = this.getSolrCoorValue(doc, 'geo_lon_txt', undefined);
+        values['geoLat'] = this.getSolrCoorValue(doc, 'geo_lat_txt', undefined);
+        values['geoLoc'] = this.getSolrCoorValue(doc, 'geo_loc_p', undefined);
         values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_txt', undefined);
         values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.getSolrValue(doc, 'name_txt', undefined);

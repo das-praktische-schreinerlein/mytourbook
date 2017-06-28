@@ -428,6 +428,19 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return value;
     }
 
+    getSolrCoorValue(solrDocument: any, solrFieldName: string, defaultValue: any): string {
+        let value = defaultValue;
+        if (solrDocument[solrFieldName] !== undefined) {
+            if (Array.isArray(solrDocument[solrFieldName])) {
+                value = solrDocument[solrFieldName][0];
+            } else if (solrDocument[solrFieldName] !== '0' && solrDocument[solrFieldName] !== '0,0') {
+                value = solrDocument[solrFieldName];
+            }
+        }
+
+        return value;
+    }
+
     buildUrl(url, params) {
         if (!params) {
             return url;

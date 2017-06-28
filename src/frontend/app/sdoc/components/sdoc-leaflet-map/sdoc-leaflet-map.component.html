@@ -1,0 +1,10 @@
+<div class="container" *ngIf="mapCenterPos || trackUrls.length > 0">
+    <app-leaflet-map [mapId]="mapId"
+                     [height]="height"
+                     [zoom]="mapZoom"
+                     [trackUrls]="trackUrls"
+                     [center]="mapCenterPos"></app-leaflet-map>
+</div>
+
+
+

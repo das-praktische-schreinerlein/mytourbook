@@ -14,9 +14,13 @@
             <br clear="all" />
             <p class="card-text">
                 <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
-                    <ngb-panel title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
+                    <ngb-panel *ngIf="record.gpsTrackBasefile || (record.geoLat != undefined && record.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <iframe [src]="contentUtils.getMapUrl(record)" width="200" height="150" align="right" scrolling="no" marginheight="5" marginwidth="0" frameborder="0"></iframe>
+                            <app-sdoc-leaflet-map [mapId]="'listItemMap' + record.id"
+                                                  [height]="'150'"
+                                                  [mapZoom]="'9'"
+                                                  [sdocs]="[record]"
+                                                  [mapCenterPos]="undefined"></app-sdoc-leaflet-map>
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>
@@ -65,9 +69,13 @@
                             </ul>
                         </ng-template>
                     </ngb-panel>
-                    <ngb-panel title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
+                    <ngb-panel *ngIf="record.gpsTrackBasefile || (record.geoLat != undefined && record.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <iframe [src]="contentUtils.getMapUrl(record)" width="200" height="150" align="right" scrolling="no" marginheight="5" marginwidth="0" frameborder="0"></iframe>
+                            <app-sdoc-leaflet-map [mapId]="'listItemMap' + record.id"
+                                                  [height]="'150'"
+                                                  [mapZoom]="'9'"
+                                                  [sdocs]="[record]"
+                                                  [mapCenterPos]="undefined"></app-sdoc-leaflet-map>
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>

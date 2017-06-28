@@ -30,6 +30,8 @@ import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons
 import {SearchParameterUtils} from '../../shared/search-commons/services/searchparameter.utils';
 import {SDocListItemFlatComponent} from './components/sdoc-list-item-flat/sdoc-list-item-flat.component';
 import {SDocContentUtils} from './services/sdoc-contentutils.service';
+import {LeafletMapComponent} from './components/leaflet-map/leaflet-map.component';
+import {SDocLeafletMapComponent} from './components/sdoc-leaflet-map/sdoc-leaflet-map.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +48,9 @@ import {SDocContentUtils} from './services/sdoc-contentutils.service';
         SDocCreatepageComponent,
         SDocEditpageComponent,
         SDocShowpageComponent,
-        SDocInlineSearchpageComponent
+        SDocInlineSearchpageComponent,
+        LeafletMapComponent,
+        SDocLeafletMapComponent
     ],
     imports: [
         NgbModule,

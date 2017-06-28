@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
@@ -17,7 +17,7 @@ import {AppState, GenericAppService} from '../../../../shared/search-commons/ser
     templateUrl: './sdoc-inline-searchpage.component.html',
     styleUrls: ['./sdoc-inline-searchpage.component.css']
 })
-export class SDocInlineSearchpageComponent implements OnInit, OnDestroy {
+export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChanges {
     private initialized = false;
     private appStateSubscription: Subscription;
     adminMode = false;
@@ -73,17 +73,17 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy {
                 return this.doSearchWithParams(this.params);
             }
         });
-/**
-        this._paramsObservable.subscribe(
-            params => {
-                console.error("doNewSearchWithparams", params);
-                return this.doSearchWithParams(params);
-            });
-**/
     }
 
     ngOnDestroy() {
         // Clean sub to avoid memory leak
+    }
+
+    ngOnChanges() {
+        if (this.initialized) {
+//            console.error("doNewSearchWithparams", this.params);
+//            return this.doSearchWithParams(this.params);
+        }
     }
 
     onShowSDoc(sdoc: SDocRecord) {

@@ -26,6 +26,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     layout = Layout.FLAT;
     sort = 'relevance';
     perPage = 10;
+    mapCenterPos: L.LatLng = undefined;
+    mapZoom = 9;
 
     constructor(private route: ActivatedRoute, private router: Router,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -51,6 +53,12 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 this.searchForm = data.searchForm;
                 this.perPage = this.searchForm.perPage;
                 this.sort = this.searchForm.sort;
+                if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
+                    const [lat, lon] = this.searchForm.nearby.split('_');
+                    this.mapCenterPos = new L.LatLng(+lat, +lon);
+                } else {
+                    this.mapCenterPos = undefined;
+                }
                 return this.doSearch();
             },
             (error: {reason: any}) => {

@@ -12,6 +12,13 @@
                                     [layout]="Layout.BIG"
                                     [record]="record"></app-sdoc-list-item>
             </section>
+            <div class="container" *ngIf="record.gpsTrackBasefile">
+                <app-sdoc-leaflet-map [mapId]="'showMap'"
+                                      [height]="'400'"
+                                      [mapZoom]="'9'"
+                                      [sdocs]="[record]"
+                                      [mapCenterPos]="undefined"></app-sdoc-leaflet-map>
+            </div>
             <ng-container [ngSwitch]="record.type">
                 <ng-container *ngSwitchCase="'LOCATION'">
                     <app-sdoc-inline-searchpage [label]="'Unterregionen'"
