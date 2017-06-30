@@ -38,8 +38,6 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
     }
 
     mapSolrDocument(mapper: Mapper, doc: any): Record {
-        const imageMapper = mapper['datastore']._mappers['pdocimage'];
-
         const values = {};
         values['id'] = this.getSolrValue(doc, 'id', undefined);
 

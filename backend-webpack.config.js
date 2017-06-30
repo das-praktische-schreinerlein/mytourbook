@@ -13,7 +13,7 @@ fs.readdirSync('node_modules')
 
 module.exports = {
     entry: './dist/tsc-out/backend/server.js',
-    target: 'node',
+    target: 'async-node',
     output: {
         path: path.join(__dirname, 'dist/backend/'),
         filename: 'backend.js'
@@ -23,16 +23,19 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] },
+            {test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] }
         ]
     },
     externals: nodeModules,
     plugins: [
-        new webpack.IgnorePlugin(/\.(css|less)$/),
+        new webpack.IgnorePlugin(/\.(css|less)$/)
 /**
         new webpack.BannerPlugin('require("source-map-support").install();',
             { raw: true, entryOnly: false })
 **/
     ],
-    devtool: 'sourcemap'
+    devtool: 'sourcemap',
+    node: {
+        fs: 'empty'
+    }
 };

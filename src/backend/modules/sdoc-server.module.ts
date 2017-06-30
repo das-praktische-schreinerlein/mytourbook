@@ -4,16 +4,16 @@ import {SDocDataStore} from '../shared/sdoc-commons/services/sdoc-data.store';
 import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSolrAdapter} from '../shared/sdoc-commons/services/sdoc-solr.adapter';
-import {mount, queryParser, Router} from 'js-data-express';
+import {Router} from 'js-data-express';
 import axios from 'axios';
 import express from 'express';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string) {
         // configure store
-        const sdocDataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils());
-        const sdocDataService: SDocDataService = new SDocDataService(sdocDataStore);
-        const sdocMapper = sdocDataService.getMapper('sdoc');
+        const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils());
+        const dataService: SDocDataService = new SDocDataService(dataStore);
+        const mapper = dataService.getMapper('sdoc');
 
         // configure solr-adapter
         const options = {
@@ -21,8 +21,8 @@ export class SDocServerModule {
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
             http: axios
         };
-        const httpAdapter = new SDocSolrAdapter(options);
-        sdocDataStore.setAdapter('http', httpAdapter, '', {});
+        const adapter = new SDocSolrAdapter(options);
+        dataStore.setAdapter('http', adapter, '', {});
 
         // configure express
         const config = {
@@ -36,7 +36,7 @@ export class SDocServerModule {
                 }
             }
         };
-        app.use(apiPrefix + '/sdoc', new Router(sdocMapper, config).router);
+        app.use(apiPrefix + '/sdoc', new Router(mapper, config).router);
 
         // use own wrapper for search
         app.route(apiPrefix + '/sdocsearch')
@@ -47,19 +47,40 @@ export class SDocServerModule {
             })
             .get(function(req, res, next) {
                 const searchForm = new SDocSearchForm(req.query);
-                sdocDataService.search(searchForm).then(
-                    function searchDone(sdocSearchResult: SDocSearchResult) {
-                        res.json(sdocSearchResult.toSerializableJsonObj());
-                    }
-                );
+                try {
+                    dataService.search(searchForm).then(
+                        function searchDone(searchResult: SDocSearchResult) {
+                            res.json(searchResult.toSerializableJsonObj());
+                        }
+                    ).catch(
+                        function searchError(error) {
+                            console.error('error thrown: ', error);
+                            res.sendStatus(500);
+                        }
+                    );
+                } catch (error) {
+                    console.error('error thrown: ', error);
+                    res.sendStatus(500);
+                }
             })
             .post(function(req, res, next) {
                 // TODO: Test it - untested
-                sdocDataService.search(JSON.parse(req.body)).then(
-                    function searchDone(sdocSearchResult: SDocSearchResult) {
-                        res.json(sdocSearchResult.toSerializableJsonObj());
-                    }
-                );
+                const searchForm = JSON.parse(req.body);
+                try {
+                    dataService.search(searchForm).then(
+                        function searchDone(searchResult: SDocSearchResult) {
+                            res.json(searchResult.toSerializableJsonObj());
+                        }
+                    ).catch(
+                        function searchError(error) {
+                            console.error('error thrown: ', error);
+                            res.sendStatus(500);
+                        }
+                    );
+                } catch (error) {
+                    console.error('error thrown: ', error);
+                    res.sendStatus(500);
+                }
             });
     }
 }

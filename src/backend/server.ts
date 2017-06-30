@@ -1,9 +1,10 @@
+import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
-import proxy from 'http-proxy-middleware';
 import {json, urlencoded} from 'body-parser';
 import {SDocServerModule} from './modules/sdoc-server.module';
 import {PDocServerModule} from './modules/pdoc-server.module';
+import {ProxyServerModule} from './modules/proxy-server.module';
 
 // create server
 const app = express();
@@ -15,12 +16,12 @@ app.use(mycors);
 
 app.use(json()); // for parsing application/json
 app.use(urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+//app.use(compression);
 
 // add routes
 SDocServerModule.configureRoutes(app, '/api/v1');
 PDocServerModule.configureRoutes(app, '/api/v1');
-
-app.use('/tracks', proxy({target: 'http://localhost/michas', changeOrigin: true}));
+ProxyServerModule.configureRoutes(app, '');
 
 // start server
 app.listen(3000, function () {

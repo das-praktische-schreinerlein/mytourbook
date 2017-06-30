@@ -15,7 +15,7 @@
     "outDir": "../../dist/tsc-out/backend",
     "module": "es2015",
     "baseUrl": "",
-    "types": []
+    "types": ["node"]
   },
   "exclude": [
     "test.ts",

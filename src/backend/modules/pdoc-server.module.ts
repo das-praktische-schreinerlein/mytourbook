@@ -3,26 +3,32 @@ import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform
 import {PDocDataStore} from '../shared/pdoc-commons/services/pdoc-data.store';
 import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {PDocDataService} from '../shared/pdoc-commons/services/pdoc-data.service';
-import {mount, queryParser, Router} from 'js-data-express';
+import {PDocInMemoryAdapter} from '../shared/pdoc-commons/services/pdoc-inmemory.adapter';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
+import {arser, Router} from 'js-data-express';
 import express from 'express';
 import * as fs from 'fs';
 
 export class PDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string) {
         // configure store
-        const pdocDataStore: PDocDataStore = new PDocDataStore(new SearchParameterUtils());
-        const pdocDataService: PDocDataService = new PDocDataService(pdocDataStore);
-        const pdocMapper = pdocDataService.getMapper('pdoc');
+        const dataStore: PDocDataStore = new PDocDataStore(new SearchParameterUtils());
+        const dataService: PDocDataService = new PDocDataService(dataStore);
+        const mapper = dataService.getMapper('pdoc');
 
-        const pdocs: any[] = JSON.parse(fs.readFileSync('src/backend/assets/pdocs.json', { encoding: 'utf8' })).pdocs;
-        pdocDataService.addMany(pdocs).then(function doneAddMany(pdocsRecords: PDocRecord[]) {
-                console.log('loaded pdocs from assets', pdocsRecords);
+        const docs: any[] = JSON.parse(fs.readFileSync('src/backend/assets/pdocs.json', { encoding: 'utf8' })).pdocs;
+        dataService.addMany(docs).then(function doneAddMany(records: PDocRecord[]) {
+                console.log('loaded pdocs from assets', records);
             },
             function errorCreate(reason: any) {
-                console.error('loading appdata failed:' + reason);
+                console.error('loading pdocs failed:' + reason);
             }
         );
+
+        // configure dummy-adapter
+        const options = {};
+        const adapter = new PDocInMemoryAdapter(options);
+        dataStore.setAdapter('inmemory', adapter, '', {});
 
         // configure express
         const config = {
@@ -36,7 +42,7 @@ export class PDocServerModule {
                 }
             }
         };
-        app.use(apiPrefix + '/pdoc', new Router(pdocMapper, config).router);
+        app.use(apiPrefix + '/pdoc', new Router(mapper, config).router);
 
         // use own wrapper for search
         app.route(apiPrefix + '/pdocsearch')
@@ -47,19 +53,40 @@ export class PDocServerModule {
             })
             .get(function(req, res, next) {
                 const searchForm = new PDocSearchForm(req.query);
-                pdocDataService.search(searchForm).then(
-                    function searchDone(pdocSearchResult: PDocSearchResult) {
-                        res.json(pdocSearchResult.toSerializableJsonObj());
-                    }
-                );
+                try {
+                    dataService.search(searchForm).then(
+                        function searchDone(searchResult: PDocSearchResult) {
+                            res.json(searchResult.toSerializableJsonObj());
+                        }
+                    ).catch(
+                        function searchError(error) {
+                            console.error('error thrown: ', error);
+                            res.sendStatus(500);
+                        }
+                    );
+                } catch (error) {
+                    console.error('error thrown: ', error);
+                    res.sendStatus(500);
+                }
             })
             .post(function(req, res, next) {
                 // TODO: Test it - untested
-                pdocDataService.search(JSON.parse(req.body)).then(
-                    function searchDone(pdocSearchResult: PDocSearchResult) {
-                        res.json(pdocSearchResult.toSerializableJsonObj());
-                    }
-                );
+                const searchForm = JSON.parse(req.body);
+                try {
+                    dataService.search(searchForm).then(
+                        function searchDone(searchResult: PDocSearchResult) {
+                            res.json(searchResult.toSerializableJsonObj());
+                        }
+                    ).catch(
+                        function searchError(error) {
+                            console.error('error thrown: ', error);
+                            res.sendStatus(500);
+                        }
+                    );
+                } catch (error) {
+                    console.error('error thrown: ', error);
+                    res.sendStatus(500);
+                }
             });
     }
 }
