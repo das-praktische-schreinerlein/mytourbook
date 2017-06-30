@@ -6,6 +6,7 @@ import {SDocDataStore} from './sdoc-data.store';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
 import {SearchParameterUtils} from '../../search-commons/services/searchparameter.utils';
+import {SDocTeamFilterConfig} from './sdoc-data.store';
 
 describe('SDocDataService', () => {
     let sdoc1: SDocRecord = undefined;
@@ -13,7 +14,7 @@ describe('SDocDataService', () => {
     let service: SDocDataService;
 
     beforeEach(() => {
-        const datastore = new SDocDataStore(new SearchParameterUtils());
+        const datastore = new SDocDataStore(new SearchParameterUtils(), new SDocTeamFilterConfig());
         service = new SDocDataService(datastore);
         sdoc1 = new SDocRecord({desc: '', name: 'Testsdoc1', persons: '', id: '1'});
         sdoc2 = new SDocRecord({desc: '', name: 'Testsdoc2', persons: '', id: '2'});

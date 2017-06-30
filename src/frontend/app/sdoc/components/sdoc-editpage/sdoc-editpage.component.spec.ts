@@ -4,7 +4,7 @@ import {SDocEditpageComponent} from './sdoc-editpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SDocDataStore} from '../../../../shared/sdoc-commons/services/sdoc-data.store';
+import {SDocDataStore, SDocTeamFilterConfig} from '../../../../shared/sdoc-commons/services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
@@ -23,7 +23,7 @@ describe('SDocEditpageComponent', () => {
                 ToastModule.forRoot()
             ],
             providers: [
-                { provide: SDocDataStore, useValue: new SDocDataStore(new SearchParameterUtils()) },
+                { provide: SDocDataStore, useValue: new SDocDataStore(new SearchParameterUtils(), new SDocTeamFilterConfig()) },
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useClass: RouterTestingModule },

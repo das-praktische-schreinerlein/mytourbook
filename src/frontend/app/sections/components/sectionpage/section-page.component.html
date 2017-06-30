@@ -1,0 +1,43 @@
+<ng-container *ngIf="pdoc !== undefined">
+    <section>
+        <div class="container">{{pdoc.desc}}</div>
+    </section>
+
+    <div class="container">
+        <ng-container *ngIf="pdoc.flgShowSearch">
+            <div class="hint_tosearch"><a href="{{getToSearchUrl()}}" (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
+        </ng-container>
+
+        <ng-container *ngIf="pdoc.flgShowSearch && pdoc.flgShowTopTen">
+            <p>oder</p>
+        </ng-container>
+
+        <ng-container *ngIf="pdoc.flgShowTopTen">
+            <div class="hint_tostoebern">Fröhliches Stöbern :-)</div>
+            <app-sdoc-inline-searchpage [label]="'Regionen'"
+                                        i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.sdoc.LOCATION"
+                                        [params]="getFiltersForType(pdoc, 'LOCATION')"
+                                        [showForm]="false"
+                                        [layout]="Layout.FLAT"
+                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+            <app-sdoc-inline-searchpage [label]="'Routen'"
+                                        i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.sdoc.ROUTE"
+                                        [params]="getFiltersForType(pdoc, 'ROUTE')"
+                                        [showForm]="false"
+                                        [layout]="Layout.FLAT"
+                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+            <app-sdoc-inline-searchpage [label]="'Bilder'"
+                                        i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.sdoc.IMAGE"
+                                        [params]="getFiltersForType(pdoc, 'IMAGE')"
+                                        [showForm]="false"
+                                        [layout]="Layout.SMALL"
+                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+            <app-sdoc-inline-searchpage [label]="'Tracks'"
+                                        i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.sdoc.TRACK"
+                                        [params]="getFiltersForType(pdoc, 'TRACK')"
+                                        [showForm]="false"
+                                        [layout]="Layout.FLAT"
+                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+        </ng-container>
+    </div>
+</ng-container>

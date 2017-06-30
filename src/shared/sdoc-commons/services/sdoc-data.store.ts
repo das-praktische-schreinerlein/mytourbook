@@ -5,6 +5,18 @@ import {SDocRecord} from '../model/records/sdoc-record';
 import {Facets} from '../../search-commons/model/container/facets';
 import {SearchParameterUtils} from '../../search-commons/services/searchparameter.utils';
 
+export class SDocTeamFilterConfig {
+    private values = new Map();
+
+    get(key: string): any {
+        return this.values.get(key);
+    }
+
+    set(key: string, value: any) {
+        this.values.set(key, value)
+    }
+}
+
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {
 
     private validMoreFilterNames = {
@@ -15,7 +27,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         loc_parent_id_i: true
     };
 
-    constructor(private searchParameterUtils: SearchParameterUtils) {
+    constructor(private searchParameterUtils: SearchParameterUtils, private teamFilterConfig: SDocTeamFilterConfig) {
         super();
     }
 
@@ -23,11 +35,11 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         const query = {};
 
         if (searchForm === undefined) {
-            searchForm = new SDocSearchForm({});
+            return query;
         }
 
-        let filter = undefined;
-        let spatial = undefined;
+        let filter: {} = undefined;
+        let spatial: {} = undefined;
         if (searchForm.fulltext !== undefined && searchForm.fulltext.length > 0) {
             filter = filter || {};
             filter['html'] = {
@@ -118,7 +130,35 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             query['spatial'] = spatial;
         }
 
+        const additionalFilter = this.createThemeFilterQueryFromForm(searchForm);
+        if (additionalFilter !== undefined) {
+            query['additionalWhere'] = additionalFilter;
+        }
+
+
         return query;
+    }
+
+    createThemeFilterQueryFromForm(searchForm: SDocSearchForm): Object {
+        let queryFilter: {} = undefined;
+        if (searchForm === undefined) {
+            return queryFilter;
+        }
+
+        let filter: {} = undefined;
+        if (searchForm.theme !== undefined && searchForm.theme.length > 0 && this.teamFilterConfig.get(searchForm.theme)) {
+            filter = filter || {};
+            const themeFilter = this.teamFilterConfig.get(searchForm.theme);
+            for (const filterProp in themeFilter) {
+                filter[filterProp] = themeFilter[filterProp];
+            }
+        }
+
+        if (filter !== undefined) {
+            queryFilter = filter;
+        }
+
+        return queryFilter;
     }
 
     createSearchResult(searchForm: SDocSearchForm, recordCount: number, records: SDocRecord[], facets: Facets): SDocSearchResult {

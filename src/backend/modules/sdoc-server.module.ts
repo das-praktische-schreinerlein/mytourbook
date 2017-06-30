@@ -1,23 +1,29 @@
 import {SDocSearchResult} from '../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {SDocDataStore} from '../shared/sdoc-commons/services/sdoc-data.store';
+import {SDocDataStore, SDocTeamFilterConfig} from '../shared/sdoc-commons/services/sdoc-data.store';
 import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSolrAdapter} from '../shared/sdoc-commons/services/sdoc-solr.adapter';
 import {Router} from 'js-data-express';
 import axios from 'axios';
 import express from 'express';
+import * as fs from 'fs';
 
 export class SDocServerModule {
-    public static configureRoutes(app: express.Application, apiPrefix: string) {
+    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
         // configure store
-        const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils());
+        const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
+        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
+        for (const themeName in themeFilters) {
+            filterConfig.set(themeName, themeFilters[themeName]);
+        }
+        const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils(), filterConfig);
         const dataService: SDocDataService = new SDocDataService(dataStore);
         const mapper = dataService.getMapper('sdoc');
 
         // configure solr-adapter
         const options = {
-            basePath: 'http://localhost:8983/solr/mytb/',
+            basePath: backendConfig['solrCoreSDoc'],
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
             http: axios
         };

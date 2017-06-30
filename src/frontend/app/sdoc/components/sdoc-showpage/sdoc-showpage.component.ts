@@ -4,7 +4,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
-import {Layout} from '../sdoc-list/sdoc-list.component';
+import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 
 @Component({
     selector: 'app-sdoc-showpage',

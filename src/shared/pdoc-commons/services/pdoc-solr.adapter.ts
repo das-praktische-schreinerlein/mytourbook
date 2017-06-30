@@ -46,11 +46,11 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
         values['type'] = this.getSolrValue(doc, 'type_txt', undefined);
 
-        console.log('mapSolrDocument values:', values);
+        // console.log('mapSolrDocument values:', values);
 
         const record: PDocRecord = <PDocRecord>mapper.createRecord(values);
 
-        console.log('mapSolrDocument record full:', record);
+        // console.log('mapSolrDocument record full:', record);
 
         return record;
     }

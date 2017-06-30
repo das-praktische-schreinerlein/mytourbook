@@ -1,0 +1,10 @@
+.hint_tosearch, .hint_tostoebern {
+    width: 100%;
+    text-align: center;
+    font-size: large;
+    font-weight: bolder;
+}
+p {
+    width: 100%;
+    text-align: center;
+}

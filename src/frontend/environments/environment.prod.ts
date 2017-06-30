@@ -1,4 +1,7 @@
 export const environment = {
     production: true,
-    backendBasePath: 'http://localhost:3000/api/'
+    solrBaseUrl: 'http://solr/solr/mytb/',
+    backendApiBaseUrl: 'http://backend/api/v1/',
+    tracksBaseUrl: 'http://backend/tracks/',
+    picsBaseUrl: 'http://www.michas-ausflugstipps.de/digifotos/'
 };

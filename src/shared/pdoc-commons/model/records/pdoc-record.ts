@@ -2,16 +2,23 @@ import {BaseEntityRecord} from '../../../search-commons/model/records/base-entit
 
 export class PDocRecord extends BaseEntityRecord {
     desc: string;
+    flgShowSearch: boolean;
+    flgShowTopTen: boolean;
+    heading: string;
     keywords: string;
     name: string;
+    subSectionIds: string;
+    teaser: string;
+    theme: string;
     type: string;
     pdoc_parent_id: string;
 
     toString() {
         return 'PDocRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
-            '  desc: ' + this.desc + ',\n' +
+            '  heading: ' + this.name + ',\n' +
             '  name: ' + this.name + ',\n' +
+            '  theme: ' + this.theme + '' +
             '  type: ' + this.type + '' +
             '}';
     }

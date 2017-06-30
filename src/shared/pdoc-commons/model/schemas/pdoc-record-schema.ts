@@ -10,8 +10,14 @@ export const PDocRecordSchema = new Schema({
     properties: {
         pdoc_parent_id: {type: 'string'},
         desc: {type: 'string'},
+        flgShowSearch: {type: 'boolean'},
+        flgShowTopTen: {type: 'boolean'},
+        heading: {type: 'string'},
         keywords: {type: 'string'},
         name: {type: 'string', minLength: 1, maxLength: 255},
+        subSectionIds: {type: 'string'},
+        teaser: {type: 'string'},
+        theme: {type: 'string'},
         type: {type: 'string'}
     }
 });

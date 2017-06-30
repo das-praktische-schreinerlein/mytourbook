@@ -10,13 +10,13 @@ import express from 'express';
 import * as fs from 'fs';
 
 export class PDocServerModule {
-    public static configureRoutes(app: express.Application, apiPrefix: string) {
+    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
         // configure store
         const dataStore: PDocDataStore = new PDocDataStore(new SearchParameterUtils());
         const dataService: PDocDataService = new PDocDataService(dataStore);
         const mapper = dataService.getMapper('pdoc');
 
-        const docs: any[] = JSON.parse(fs.readFileSync('src/backend/assets/pdocs.json', { encoding: 'utf8' })).pdocs;
+        const docs: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathPDocJson'], { encoding: 'utf8' })).pdocs;
         dataService.addMany(docs).then(function doneAddMany(records: PDocRecord[]) {
                 console.log('loaded pdocs from assets', records);
             },

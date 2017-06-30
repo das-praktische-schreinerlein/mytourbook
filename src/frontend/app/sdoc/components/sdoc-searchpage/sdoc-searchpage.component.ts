@@ -8,7 +8,7 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
-import {Layout} from '../sdoc-list/sdoc-list.component';
+import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -49,7 +49,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                     return this.redirectToSearch();
                 }
 
-                console.log('route: search for ', data.searchForm);
+                console.log('route: search for ', data);
                 this.searchForm = data.searchForm;
                 this.perPage = this.searchForm.perPage;
                 this.sort = this.searchForm.sort;

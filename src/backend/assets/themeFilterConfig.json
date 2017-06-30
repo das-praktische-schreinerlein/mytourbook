@@ -1,0 +1,28 @@
+{
+    "berge": {
+        "keywords_txt": {
+            "in": [
+                "kw_berge"
+            ]
+        }
+    },
+    "museum": {
+        "keywords_txt": {
+            "in": [
+                "kw_museum",
+                "kw_museumsbesuch"
+            ]
+        }
+    },
+    "klettern": {
+        "keywords_txt": {
+            "in": [
+                "kw_klettern",
+                "kw_sachsenklettern",
+                "kw_klettersteig",
+                "kw_sportklettern",
+                "kw_alpinklettern"
+            ]
+        }
+    }
+}

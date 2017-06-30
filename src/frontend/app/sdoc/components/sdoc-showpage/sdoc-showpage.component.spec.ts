@@ -28,7 +28,6 @@ describe('SDocShowpageComponent', () => {
                 SDocRoutingService,
                 ToastsManager,
                 TranslateService
-
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

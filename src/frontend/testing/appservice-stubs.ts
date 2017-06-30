@@ -5,13 +5,16 @@ import {AppState, GenericAppService} from '../shared/search-commons/services/gen
 
 @Injectable()
 export class AppServiceStub extends GenericAppService {
-    appStateObservable = new ReplaySubject<AppState>();
+    mockedAppStateObservable = new ReplaySubject<AppState>();
 
     initApp(): void {
     }
 
     getAppState(): Subject<AppState> {
-        this.appStateObservable.next(AppState.Ready);
-        return this.appStateObservable;
+        this.mockedAppStateObservable.next(AppState.Ready);
+        return this.mockedAppStateObservable;
+    }
+    getAppConfig(): {} {
+        return {};
     }
 }

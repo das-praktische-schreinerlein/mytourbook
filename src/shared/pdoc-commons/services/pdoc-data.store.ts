@@ -18,7 +18,7 @@ export class PDocDataStore extends GenericDataStore<PDocRecord, PDocSearchForm, 
         const query = {};
 
         if (searchForm === undefined) {
-            searchForm = new PDocSearchForm({});
+            return query;
         }
 
         let filter = undefined;

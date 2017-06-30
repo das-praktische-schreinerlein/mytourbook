@@ -9,11 +9,15 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AppRoutingModule} from './app.router';
 import {SDocModule} from './sdoc/sdoc.module';
-import {SDocDataStore} from '../shared/sdoc-commons/services/sdoc-data.store';
+import {SDocDataStore, SDocTeamFilterConfig} from '../shared/sdoc-commons/services/sdoc-data.store';
 import {SearchFormUtils} from '../shared/angular-commons/services/searchform-utils.service';
 import {GenericAppService} from '../shared/search-commons/services/generic-app.service';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
+import {SectionsModule} from './sections/sections.module';
+import {PDocDataService} from '../shared/pdoc-commons/services/pdoc-data.service';
+import {PDocDataStore} from '../shared/pdoc-commons/services/pdoc-data.store';
+import {BrowserModule} from '@angular/platform-browser';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -28,6 +32,7 @@ export function createTranslateLoader(http: Http) {
     imports: [
         HttpModule,
         NgbModule.forRoot(),
+        BrowserModule,
         ToastModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
@@ -37,12 +42,16 @@ export function createTranslateLoader(http: Http) {
             }
         }),
         SDocModule,
+        SectionsModule,
         AppRoutingModule
     ],
     providers: [
         { provide: GenericAppService, useClass: AppService },
+        SDocTeamFilterConfig,
         SDocDataStore,
         SDocDataService,
+        PDocDataStore,
+        PDocDataService,
         SearchFormUtils,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils }
     ],

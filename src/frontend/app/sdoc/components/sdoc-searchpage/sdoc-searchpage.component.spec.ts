@@ -13,11 +13,6 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 class RouterStub {
-    public routerState: {} = {
-        snapshot: {
-            url: 'record'
-        }
-    };
     navigateByUrl(url: string) { return url; }
 }
 

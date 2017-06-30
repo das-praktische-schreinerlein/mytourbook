@@ -5,25 +5,25 @@
     </a>
     <ul class="navbar-nav navbar-toggleable-md" role="menu">
         <li class="nav-item">
-            <a class="nav-link mdl-navigation__link" routerLink="/sdoc/search/" routerLinkActive="active">
-                Alles
-            </a>
+            <a class="nav-link mdl-navigation__link" routerLink="/pages/start" routerLinkActive="active">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link mdl-navigation__link" routerLink="/theme/" routerLinkActive="active">
-                Themen
-            </a>
+            <a class="nav-link mdl-navigation__link" routerLink="/sdoc/search/" routerLinkActive="active">Suche</a>
         </li>
-        <li class="nav-item dropdown" ngbDropdown>
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkThemen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkThemen" role="menu">
-                <li class="dropdown-item"><a class="nav-link mdl-navigation__link" routerLink="/theme/klettern/" routerLinkActive="active">
-                    Klettern</a></li>
-                <li class="dropdown-item"><a class="nav-link mdl-navigation__link" routerLink="/theme/berge/" routerLinkActive="active">
-                    Berge</a></li>
-            </ul>
-        </li>
+        <ng-container *ngIf="sections !== undefined && sections.length > 0">
+            <li class="nav-item">
+                <a class="nav-link mdl-navigation__link" routerLink="/sections/sections" routerLinkActive="active">Themen</a>
+            </li>
+            <li class="nav-item dropdown" ngbDropdown>
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkThemen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkThemen" role="menu">
+                    <ng-container *ngFor="let section of sections">
+                        <li class="dropdown-item"><a class="nav-link mdl-navigation__link" title="{{section.teaser}}" routerLink="/sections/{{section.id}}/" routerLinkActive="active">{{section.name}}</a></li>
+                    </ng-container>
+                </ul>
+            </li>
+        </ng-container>
         <li class="nav-item">
             <a class="nav-link mdl-navigation__link" routerLink="/sdoc/create" routerLinkActive="active">New SDoc</a>
         </li>

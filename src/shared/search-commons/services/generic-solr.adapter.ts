@@ -502,24 +502,37 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             });
         }
 
+        console.log('solQuery:', query);
+
         return query;
     }
 
     private createSolrQuery(mapper: Mapper, params: any, opts: any): any {
         // console.log('queryTransformToSolrQuery params:', params);
         // console.log('queryTransformToSolrQuery opts:', opts);
-        if (params.where === undefined) {
-            const query = {'q': '*:*', 'start': opts.offset, 'rows': opts.limit};
-            // console.log('queryTransformToSolrQuery result:', query);
-            return query;
-        }
 
         const newParams = [];
-        for (const fieldName of Object.getOwnPropertyNames(params.where)) {
-            const filter = params.where[fieldName];
-            const action = Object.getOwnPropertyNames(filter)[0];
-            const value = params.where[fieldName][action];
-            newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
+        if (params.where) {
+            for (const fieldName of Object.getOwnPropertyNames(params.where)) {
+                const filter = params.where[fieldName];
+                const action = Object.getOwnPropertyNames(filter)[0];
+                const value = params.where[fieldName][action];
+                newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
+            }
+        }
+        if (params.additionalWhere) {
+            for (const fieldName of Object.getOwnPropertyNames(params.additionalWhere)) {
+                const filter = params.additionalWhere[fieldName];
+                const action = Object.getOwnPropertyNames(filter)[0];
+                const value = params.additionalWhere[fieldName][action];
+                newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
+            }
+        }
+
+        if (newParams.length <= 0) {
+            const query = {'q': '*:*', 'start': opts.offset * opts.limit, 'rows': opts.limit};
+            // console.log('queryTransformToSolrQuery result:', query);
+            return query;
         }
 
         const query = {'q': newParams.join(' AND '), 'start': opts.offset * opts.limit, 'rows': opts.limit};

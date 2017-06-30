@@ -80,7 +80,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             .trim();
 
         values['persons'] = this.getSolrValue(doc, 'personen_txt', '').split(',,').join(', ');
-        console.log('mapSolrDocument values:', values);
+        // console.log('mapSolrDocument values:', values);
 
         const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
 
@@ -109,7 +109,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             }
         }
         record.set('sdocimages', images);
-        console.log('mapSolrDocument record full:', record);
+        // console.log('mapSolrDocument record full:', record);
 
         return record;
     }

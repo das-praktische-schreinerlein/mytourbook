@@ -4,6 +4,9 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {NavbarComponent} from './navbar.component';
 import {ActivatedRoute} from '@angular/router';
 import {ActivatedRouteStub} from '../../../testing/router-stubs';
+import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
@@ -11,9 +14,16 @@ describe('NavbarComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                ToastModule.forRoot(),
+                TranslateModule.forRoot()
+            ],
             declarations: [NavbarComponent],
             schemas: [NO_ERRORS_SCHEMA],
+
             providers: [
+                TranslateService,
+                {provide: ToastsManager, useValue: new ToastsManagerStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() }
             ],
         })

@@ -8,8 +8,8 @@ export enum AppState {
 }
 
 export abstract class GenericAppService {
-    appState: AppState = AppState.Starting;
-    appStateObservable = new ReplaySubject<AppState>();
+    private appState: AppState = AppState.Starting;
+    private appStateObservable = new ReplaySubject<AppState>();
 
     constructor() {
         this.appStateObservable.next(this.appState);
@@ -20,6 +20,8 @@ export abstract class GenericAppService {
     getAppState(): Subject<AppState> {
         return this.appStateObservable;
     }
+
+    abstract getAppConfig(): {}
 
     protected setAppState(appState: AppState): void {
         this.appState = appState;

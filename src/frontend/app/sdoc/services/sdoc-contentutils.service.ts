@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {SDocImageRecord} from '../../../shared/sdoc-commons/model/records/sdocimage-record';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
+import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 
 @Injectable()
 export class SDocContentUtils {
 
-    constructor(private sanitizer: DomSanitizer) {
+    constructor(private sanitizer: DomSanitizer, private appService: GenericAppService) {
     }
 
     public getMapUrl(record: SDocRecord): SafeUrl {
@@ -20,6 +21,19 @@ export class SDocContentUtils {
         }
 
         return this.getMapUrlLocation(record);
+    }
+
+    getLastElementLocationHierarchy(record: SDocRecord): string {
+        if (record.locHirarchie === undefined) {
+            return '';
+        }
+
+        const hierarchy = record.locHirarchie.split(' -> ');
+        if (record.type === 'LOCATION' && hierarchy.length > 1) {
+            return hierarchy[hierarchy.length - 2];
+        }
+
+        return hierarchy[hierarchy.length - 1];
     }
 
     getMapUrlTrack(record: SDocRecord): SafeUrl {
@@ -54,6 +68,6 @@ export class SDocContentUtils {
 
     getThumbnailUrl(image: SDocImageRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(
-            'http://www.michas-ausflugstipps.de/digifotos/pics_x100/' + image.fileName);
+            this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x100/' + image.fileName);
     }
 }

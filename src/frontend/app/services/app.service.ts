@@ -7,9 +7,19 @@ import {environment} from '../../environments/environment';
 import {SDocRecord} from '../../shared/sdoc-commons/model/records/sdoc-record';
 import {AppState, GenericAppService} from '../../shared/search-commons/services/generic-app.service';
 import {SDocHttpAdapter} from '../../shared/sdoc-commons/services/sdoc-http.adapter';
+import {PDocHttpAdapter} from '../../shared/pdoc-commons/services/pdoc-http.adapter';
+import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.service';
+import {PDocDataStore} from '../../shared/pdoc-commons/services/pdoc-data.store';
 
 @Injectable()
 export class AppService extends GenericAppService {
+    private appConfig = {
+        solrBaseUrl: environment.solrBaseUrl,
+        backendApiBaseUrl: environment.backendApiBaseUrl,
+        tracksBaseUrl: environment.tracksBaseUrl,
+        picsBaseUrl: environment.picsBaseUrl
+    };
+
     static configureHttpProvider(jsonP: Jsonp): any {
         return function makeHttpRequest(httpConfig) {
             const headers: Headers = new Headers();
@@ -52,7 +62,7 @@ export class AppService extends GenericAppService {
     }
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
-                private http: Http, private jsonp: Jsonp) {
+                private pdocDataStore: PDocDataStore, private http: Http, private jsonp: Jsonp) {
         super();
     }
 
@@ -60,9 +70,13 @@ export class AppService extends GenericAppService {
         this.initBackendData();
     }
 
+    getAppConfig(): {}  {
+        return this.appConfig;
+    }
+
     initSolrData() {
         const options = {
-            basePath: environment.solrBasePath,
+            basePath: this.appConfig.solrBaseUrl,
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
             http: AppService.configureHttpProvider(this.jsonp)
         };
@@ -73,10 +87,13 @@ export class AppService extends GenericAppService {
 
     initBackendData() {
         const options = {
-            basePath: environment.backendBasePath
+            basePath: this.appConfig.backendApiBaseUrl
         };
-        const httpAdapter = new SDocHttpAdapter(options);
-        this.sdocDataStore.setAdapter('http', httpAdapter, '', {});
+        const sdocAdapter = new SDocHttpAdapter(options);
+        this.sdocDataStore.setAdapter('http', sdocAdapter, '', {});
+        const pdocAdapter = new PDocHttpAdapter(options);
+        this.pdocDataStore.setAdapter('http', pdocAdapter, '', {});
+
         this.setAppState(AppState.Ready);
     }
 
