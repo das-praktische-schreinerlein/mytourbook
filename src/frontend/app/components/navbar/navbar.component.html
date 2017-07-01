@@ -23,7 +23,7 @@
                         <ng-container [ngSwitch]="section.type">
                             <ng-container *ngSwitchCase="'SectionOverviewPage'">
                                 <div class="dropdown-divider"></div>
-                                <li class="dropdown-item {{section.type}}"><span title="{{section.teaser}}">{{section.name}}</span>
+                                <li class="dropdown-item {{section.type}}"><a class="nav-link mdl-navigation__link" title="{{section.teaser}}" routerLink="/sections/{{section.id}}/" routerLinkActive="active">{{section.name}}</a>
                                     <ul>
                                         <ng-container *ngFor="let subSection of getSubSections(section)">
                                             <li class="dropdown-item"><a class="nav-link mdl-navigation__link" title="{{subSection.teaser}}" routerLink="/sections/{{subSection.id}}/" routerLinkActive="active">{{subSection.name}}</a></li>

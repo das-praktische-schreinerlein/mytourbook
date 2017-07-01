@@ -9,6 +9,7 @@ import {SectionComponent} from './components/section/section.component';
 import {SectionPageComponent} from './components/sectionpage/section-page.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
+import {SharedPDocModule} from '../shared-pdoc/shared-pdoc.module';
 
 @NgModule({
     declarations: [
@@ -19,6 +20,7 @@ import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
     imports: [
         BrowserModule,
         SharedSDocModule,
+        SharedPDocModule,
         SectionsRoutingModule
     ],
     providers: [

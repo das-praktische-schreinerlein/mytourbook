@@ -1,0 +1,16 @@
+<div class="card pdoc-list-item text-center">
+    <ng-container [ngSwitch]="record.type">
+        <ng-container *ngSwitchCase="'IMAGE'">
+        </ng-container>
+        <ng-container *ngSwitchDefault="">
+            <div class="card-img-top">
+                <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><img src="http://www.michas-ausflugstipps.de/digifotos/pics_x600/{{record.image}}" width="170px" class="" alt="{{record.name}}"></a>
+            </div>
+            <div class="card-block">
+                <h6 class="card-title"><a class="" [href]="getShowUrl(record)" (click)="submitShow(record)">{{record.name}}</a></h6>
+                <p class="card-text">{{record.desc}}</p>
+                <a class="btn btn-primary pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)">mehr...</a>
+            </div>
+        </ng-container>
+    </ng-container>
+</div>

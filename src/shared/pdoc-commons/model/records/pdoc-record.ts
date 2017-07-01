@@ -5,6 +5,7 @@ export class PDocRecord extends BaseEntityRecord {
     flgShowSearch: boolean;
     flgShowTopTen: boolean;
     heading: string;
+    image: string;
     keywords: string;
     name: string;
     subSectionIds: string;

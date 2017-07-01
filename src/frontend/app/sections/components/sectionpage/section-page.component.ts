@@ -5,6 +5,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchFormConverter} from '../../../sdoc/services/sdoc-searchform-converter.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
+import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -14,9 +15,10 @@ import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.compon
 export class SectionPageComponent implements OnInit {
     pdoc: PDocRecord = new PDocRecord();
     baseSearchUrl = '';
+    sections: PDocRecord[] = [];
     public Layout = Layout;
 
-    constructor(private route: ActivatedRoute,
+    constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private router: Router, private searchFormConverter: SDocSearchFormConverter,
                 private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.toastr.setRootViewContainerRef(vcr);
@@ -29,6 +31,7 @@ export class SectionPageComponent implements OnInit {
             (data: { pdoc: PDocRecord, baseSearchUrl: string }) => {
                 me.pdoc = data.pdoc;
                 me.baseSearchUrl = data.baseSearchUrl;
+                me.sections = me.pdoc !== undefined ? me.getSubSections(me.pdoc) : [];
 
             },
             (error: {reason: any}) => {
@@ -53,14 +56,35 @@ export class SectionPageComponent implements OnInit {
         return filters;
     }
 
+    onShow(record: PDocRecord) {
+        this.router.navigateByUrl('sections/' + record.id);
+        return false;
+    }
+
     getToSearchUrl() {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, new SDocSearchForm({theme: this.pdoc.theme}));
     }
+
     submitToSearch() {
         const url = this.getToSearchUrl();
         console.log('submitToSearch: redirect to ', url);
 
         this.router.navigateByUrl(url);
         return false;
+    }
+
+    getSubSections(pdoc: PDocRecord): PDocRecord[] {
+        const sections: PDocRecord[] = [];
+        const ids = pdoc.subSectionIds !== undefined ? pdoc.subSectionIds.split(/,/) : [];
+        for (let id of ids) {
+            const section = this.pdocDataService.getByIdFromLocalStore(id);
+            if (section !== undefined) {
+                sections.push(section);
+            } else {
+                console.error('getSubSections: section not found:' + id);
+            }
+        }
+
+        return sections;
     }
 }

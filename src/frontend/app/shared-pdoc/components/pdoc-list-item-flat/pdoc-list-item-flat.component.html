@@ -1,0 +1,21 @@
+<div class="row pdoc-list-item-flat">
+    <ng-container *ngIf="record.image !== undefined">
+        <div class="col-3" style="min-width: 170px;">
+            <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><img src="http://www.michas-ausflugstipps.de/digifotos/pics_x600/{{record.image}}" width="170px" class="" alt="{{record.name}}"></a>
+        </div>
+        <div class="col-9">
+            <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><h6>{{record.name}}</h6></a>
+            <p class="">{{record.desc}}</p>
+            <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)">mehr...</a>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="record.image === undefined">
+        <div class="col-3" style="min-width: 170px;">
+            <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><h6>{{record.name}}</h6></a>
+        </div>
+        <div class="col-9">
+            <p class="">{{record.desc}}</p>
+            <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)">mehr...</a>
+        </div>
+    </ng-container>
+</div>

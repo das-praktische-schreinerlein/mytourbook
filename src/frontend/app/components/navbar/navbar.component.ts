@@ -40,7 +40,7 @@ export class NavbarComponent implements OnInit {
 
     getSubSections(pdoc: PDocRecord): PDocRecord[] {
         const sections: PDocRecord[] = [];
-        const ids = pdoc.subSectionIds.split(/,/);
+        const ids = pdoc.subSectionIds !== undefined ? pdoc.subSectionIds.split(/,/) : [];
         for (let id of ids) {
             const section = this.pdocDataService.getByIdFromLocalStore(id);
             if (section !== undefined) {

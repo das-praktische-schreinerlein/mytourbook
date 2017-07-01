@@ -13,6 +13,7 @@ export const PDocRecordSchema = new Schema({
         flgShowSearch: {type: 'boolean'},
         flgShowTopTen: {type: 'boolean'},
         heading: {type: 'string'},
+        image: {type: 'string'},
         keywords: {type: 'string'},
         name: {type: 'string', minLength: 1, maxLength: 255},
         subSectionIds: {type: 'string'},

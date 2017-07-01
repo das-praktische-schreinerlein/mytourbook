@@ -31,23 +31,28 @@
             "flgShowSearch": false,
             "heading": "Schwerpunkte",
             "name": "Schwerpunkte",
-            "subSectionIds": "Stadt,Aktivitäten,Naturlandschaften,Urlaube,Hund",
+            "subSectionIds": "kultur,aktiv,landschaft,Urlaube,Hund",
             "teaser": "Schwerpunkte",
             "type": "SectionOverviewPage"
         },
 
 
 
+
         {
             "id": "aktiv",
-            "desc": "Aktivitäten",
+            "desc": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
             "flgShowTopTen": false,
             "flgShowSearch": false,
             "heading": "Aktivitäten",
             "name": "Aktivitäten",
             "subSectionIds": "Klettern,Klettersteige,Wandern,Boots-Touren,Skating-Touren,Schneeschuhtouren,Tagestouren,Spaziergang",
-            "teaser": "Aktivitäten",
-            "type": "SectionOverviewPage"
+            "teaser": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
+            "type": "SectionOverviewPage",
+
+            "image": "F__Micha_Bilder_digifotos_import_20060910-kanutour-fuerstenberg/P9100337.JPG",
+            "prio": "Aktiv",
+            "oldUrl": "./aktiv.html"
         },
 
 
@@ -61,22 +66,31 @@
             "heading": "Landschaften",
             "name": "Landschaften",
             "subSectionIds": "Berge,Mittelgebirge,Hochgebirge,Wald,Wiesen,Naturlandschaft,Flüsse,Meer,Seen",
-            "teaser": "Landschaften",
-            "type": "SectionOverviewPage"
+            "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
+            "type": "SectionOverviewPage",
+
+
+            "image": "F__Micha_Bilder_digifotos_import_20060527-urlaub-ruegen/P5270044.JPG",
+            "prio": "Aktiv",
+            "oldUrl": "./naturlandschaft.html"
         },
 
 
 
         {
             "id": "kultur",
-            "desc": "Kultur",
+            "desc": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
             "flgShowTopTen": false,
             "flgShowSearch": false,
             "heading": "Kultur",
             "name": "Kultur",
             "subSectionIds": "Museen,Schloesser,Parks,Besichtigungen,Stadtbesichtigung,Zoos,Kunst,Kirchen",
-            "teaser": "Kultur",
-            "type": "SectionOverviewPage"
+            "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
+            "type": "SectionOverviewPage",
+
+            "image": "D__Bilder_digifotos_import-2010-05_20100809-erfurt/CIMG7217.JPG",
+            "prio": "Aktiv",
+            "oldUrl": "./stadt.html"
         },
 
 
@@ -117,66 +131,6 @@
         },
 
 
-
-
-
-
-
-
-        {
-            "id": "Stadt",
-            "desc": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
-            "flgShowTopTen": true,
-            "flgShowSearch": true,
-            "heading": "Stadt",
-            "name": "Stadt",
-            "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
-            "theme": "Stadt",
-            "type": "SectionPage",
-
-
-            "image": "D__Bilder_digifotos_import-2010-05_20100809-erfurt/CIMG7217.JPG",
-            "prio": "Aktiv",
-            "oldUrl": "./stadt.html"
-        },
-
-
-        {
-            "id": "Aktivitäten",
-            "desc": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
-            "flgShowTopTen": true,
-            "flgShowSearch": true,
-            "heading": "Aktivitäten",
-            "name": "Aktivitäten",
-            "teaser": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
-            "theme": "Aktivitäten",
-            "type": "SectionPage",
-
-
-            "image": "F__Micha_Bilder_digifotos_import_20060910-kanutour-fuerstenberg/P9100337.JPG",
-            "prio": "Aktiv",
-            "oldUrl": "./aktiv.html"
-        },
-
-
-        {
-            "id": "Naturlandschaften",
-            "desc": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
-            "flgShowTopTen": true,
-            "flgShowSearch": true,
-            "heading": "Naturlandschaften",
-            "name": "Naturlandschaften",
-            "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
-            "theme": "Naturlandschaften",
-            "type": "SectionPage",
-
-
-            "image": "F__Micha_Bilder_digifotos_import_20060527-urlaub-ruegen/P5270044.JPG",
-            "prio": "Aktiv",
-            "oldUrl": "./naturlandschaft.html"
-        },
-
-
         {
             "id": "Urlaube",
             "desc": "Wer Inspirationen für den nächsten Urlaub sucht oder vielleicht auch nur ein lohnendes Ziel für ein verlängertes Wochenende, der wird bestimmt bei meinen kleinen Urlaubsgeschichten fündig.",
@@ -211,6 +165,7 @@
             "prio": "Aktiv",
             "oldUrl": "./hundetouren.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
         },
+
 
 
 
@@ -255,12 +210,12 @@
 
         {
             "id": "Wandern",
-            "desc": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wiese' class='a-intro-search-keyword flg-showloading'>Wiesen</a> und <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Feld' class='a-intro-search-keyword flg-showloading'>Felder</a>, am <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sandstrand' class='a-intro-search-keyword flg-showloading'>Strand</a> oder durch <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Wälder</a>, im Flachland oder im <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Gebirge</a>. Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
+            "desc": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Wandern",
             "name": "Wandern",
-            "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wiese' class='a-intro-search-keyword flg-showloading'>Wiesen</a> und <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Feld' class='a-intro-search-keyword flg-showloading'>Felder</a>, am <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sandstrand' class='a-intro-search-keyword flg-showloading'>Strand</a> oder durch <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Wälder</a>, im Flachland oder im <a href='./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Gebirge</a>. Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
+            "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
             "theme": "Wandern",
             "type": "SectionPage",
 
@@ -368,12 +323,12 @@
 
         {
             "id": "Berge",
-            "desc": "Die Berge... Ob nun die <a href='./mittelgebirge.php?&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Mittelgebirge' class='a-intro-search-keyword flg-showloading'>Mittelgebirge</a> Deutschlands oder die <a href='./hochgebirge.php?&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Hochgebirge' class='a-intro-search-keyword flg-showloading'>Hochgebirge</a> der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
+            "desc": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Berge",
             "name": "Berge",
-            "teaser": "Die Berge... Ob nun die <a href='./mittelgebirge.php?&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Mittelgebirge' class='a-intro-search-keyword flg-showloading'>Mittelgebirge</a> Deutschlands oder die <a href='./hochgebirge.php?&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Hochgebirge' class='a-intro-search-keyword flg-showloading'>Hochgebirge</a> der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
+            "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
             "theme": "Berge",
             "type": "SectionPage",
 
@@ -386,12 +341,12 @@
 
         {
             "id": "Mittelgebirge",
-            "desc": "Mittelgebirge mit ihren bewaldeten Gipfeln, <a href='./mittelgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Felsen' class='a-intro-search-keyword flg-showloading'>Sandsteinfelsen</a> und Flußtälern, laden gerade zum <a href='./mittelgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wandern' class='a-intro-search-keyword flg-showloading'>Wandern</a> und <a href='./mittelgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Klettern' class='a-intro-search-keyword flg-showloading'>Klettern</a> ein... Erfreut euch an den Tourentipps, Berichten und Bilder für die Mittelgebirge...",
+            "desc": "Mittelgebirge mit ihren bewaldeten Gipfeln, [Sandsteinfelsen]() und Flußtälern, laden gerade zum [Wandern]() und [Klettern]() ein... Erfreut euch an den Tourentipps, Berichten und Bilder für die Mittelgebirge...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Mittelgebirge",
             "name": "Mittelgebirge",
-            "teaser": "Mittelgebirge mit ihren bewaldeten Gipfeln, <a href='./mittelgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Felsen' class='a-intro-search-keyword flg-showloading'>Sandsteinfelsen</a> und Flußtälern, laden gerade zum <a href='./mittelgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wandern' class='a-intro-search-keyword flg-showloading'>Wandern</a> und <a href='./mittelgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Klettern' class='a-intro-search-keyword flg-showloading'>Klettern</a> ein... Erfreut euch an den Tourentipps, Berichten und Bilder für die Mittelgebirge...",
+            "teaser": "Mittelgebirge mit ihren bewaldeten Gipfeln, [Sandsteinfelsen]() und Flußtälern, laden gerade zum [Wandern]() und [Klettern]() ein... Erfreut euch an den Tourentipps, Berichten und Bilder für die Mittelgebirge...",
             "theme": "Mittelgebirge",
             "type": "SectionPage",
 
@@ -404,12 +359,12 @@
 
         {
             "id": "Hochgebirge",
-            "desc": "Hochgebirge, dass sind hohe <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Berge</a> und tiefe <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Tal' class='a-intro-search-keyword flg-showloading'>Täler</a>, dass sind <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Felsen' class='a-intro-search-keyword flg-showloading'>schroffe Felsen</a> und <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Gletscherschau' class='a-intro-search-keyword flg-showloading'>Gletscher</a>, <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Bergwälder</a> und Almen, dass sind Bergtouren und <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Klettern' class='a-intro-search-keyword flg-showloading'>Klettereien</a>... Hier findet ihr Tourentipps, Berichte und Bilder für die Regionen oberhalb von 1500m...",
+            "desc": "Hochgebirge, dass sind hohe [Berge]() und tiefe [Täler](), dass sind [schroffe Felsen]() und [Gletscher](), [Bergwälder]() und Almen, dass sind Bergtouren und [Klettereien]()... Hier findet ihr Tourentipps, Berichte und Bilder für die Regionen oberhalb von 1500m...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Hochgebirge",
             "name": "Hochgebirge",
-            "teaser": "Hochgebirge, dass sind hohe <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Berge</a> und tiefe <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Tal' class='a-intro-search-keyword flg-showloading'>Täler</a>, dass sind <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Felsen' class='a-intro-search-keyword flg-showloading'>schroffe Felsen</a> und <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Gletscherschau' class='a-intro-search-keyword flg-showloading'>Gletscher</a>, <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Bergwälder</a> und Almen, dass sind Bergtouren und <a href='./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Klettern' class='a-intro-search-keyword flg-showloading'>Klettereien</a>... Hier findet ihr Tourentipps, Berichte und Bilder für die Regionen oberhalb von 1500m...",
+            "teaser": "Hochgebirge, dass sind hohe [Berge]() und tiefe [Täler](), dass sind [schroffe Felsen]() und [Gletscher](), [Bergwälder]() und Almen, dass sind Bergtouren und [Klettereien]()... Hier findet ihr Tourentipps, Berichte und Bilder für die Regionen oberhalb von 1500m...",
             "theme": "Hochgebirge",
             "type": "SectionPage",
 
@@ -422,12 +377,12 @@
 
         {
             "id": "Wald",
-            "desc": "Der Wald als Quell des Lebens... Ob in den <a href='./wald.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Bergen</a>, am <a href='./wald.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Meer' class='a-intro-search-keyword flg-showloading'>Meer</a> oder im Flachland. Findet Tourentipps, Berichte und Bilder für euren Waldspaziergang...",
+            "desc": "Der Wald als Quell des Lebens... Ob in den [Bergen](), am [Meer]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euren Waldspaziergang...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Wald",
             "name": "Wald",
-            "teaser": "Der Wald als Quell des Lebens... Ob in den <a href='./wald.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Bergen</a>, am <a href='./wald.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Meer' class='a-intro-search-keyword flg-showloading'>Meer</a> oder im Flachland. Findet Tourentipps, Berichte und Bilder für euren Waldspaziergang...",
+            "teaser": "Der Wald als Quell des Lebens... Ob in den [Bergen](), am [Meer]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euren Waldspaziergang...",
             "theme": "Wald",
             "type": "SectionPage",
 
@@ -440,12 +395,12 @@
 
         {
             "id": "Wiesen",
-            "desc": "Was ist schöner als eine wunderschöne grüne <a href='./wiesen.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Blumen' class='a-intro-search-keyword flg-showloading'>Blumenwiese</a>? Ob in den <a href='./wiesen.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Bergen</a> oder im Flachland. Findet Tourentipps, Berichte und Bilder für euer Picknick im Gras...",
+            "desc": "Was ist schöner als eine wunderschöne grüne [Blumenwiese]()? Ob in den [Bergen]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euer Picknick im Gras...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Wiesen",
             "name": "Wiesen",
-            "teaser": "Was ist schöner als eine wunderschöne grüne <a href='./wiesen.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Blumen' class='a-intro-search-keyword flg-showloading'>Blumenwiese</a>? Ob in den <a href='./wiesen.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Bergen</a> oder im Flachland. Findet Tourentipps, Berichte und Bilder für euer Picknick im Gras...",
+            "teaser": "Was ist schöner als eine wunderschöne grüne [Blumenwiese]()? Ob in den [Bergen]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euer Picknick im Gras...",
             "theme": "Wiesen",
             "type": "SectionPage",
 
@@ -458,12 +413,12 @@
 
         {
             "id": "Naturlandschaft",
-            "desc": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Berge</a> oder <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Meer' class='a-intro-search-keyword flg-showloading'>Meer</a>, <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Wälder</a> oder <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wiese' class='a-intro-search-keyword flg-showloading'>Wiesen</a>, <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_See' class='a-intro-search-keyword flg-showloading'>Seen</a> oder <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Moor' class='a-intro-search-keyword flg-showloading'>Moore</a>, hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
+            "desc": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Naturlandschaft",
             "name": "Naturlandschaft",
-            "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Berge</a> oder <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Meer' class='a-intro-search-keyword flg-showloading'>Meer</a>, <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Wälder</a> oder <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wiese' class='a-intro-search-keyword flg-showloading'>Wiesen</a>, <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_See' class='a-intro-search-keyword flg-showloading'>Seen</a> oder <a href='./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Moor' class='a-intro-search-keyword flg-showloading'>Moore</a>, hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
+            "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
             "theme": "Naturlandschaft",
             "type": "SectionPage",
 
@@ -476,12 +431,12 @@
 
         {
             "id": "Flüsse",
-            "desc": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder <a href='./fluesse.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Baden' class='a-intro-search-keyword flg-showloading'>Baden</a> in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
+            "desc": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder [Baden]() in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Flüsse",
             "name": "Flüsse",
-            "teaser": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder <a href='./fluesse.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Baden' class='a-intro-search-keyword flg-showloading'>Baden</a> in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
+            "teaser": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder [Baden]() in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
             "theme": "Flüsse",
             "type": "SectionPage",
 
@@ -494,12 +449,12 @@
 
         {
             "id": "Meer",
-            "desc": "Lange <a href='./meer.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sandstrand' class='a-intro-search-keyword flg-showloading'>Sandstrände</a>, steile <a href='./meer.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Steilküste' class='a-intro-search-keyword flg-showloading'>Felsküsten</a>, blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
+            "desc": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Meer",
             "name": "Meer",
-            "teaser": "Lange <a href='./meer.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sandstrand' class='a-intro-search-keyword flg-showloading'>Sandstrände</a>, steile <a href='./meer.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Steilküste' class='a-intro-search-keyword flg-showloading'>Felsküsten</a>, blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
+            "teaser": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
             "theme": "Meer",
             "type": "SectionPage",
 
@@ -534,12 +489,12 @@
 
         {
             "id": "Museen",
-            "desc": "Ob nun <a href='./museum.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Geschichte' class='a-intro-search-keyword flg-showloading'>Geschichte</a> oder <a href='./museum.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Kunst' class='a-intro-search-keyword flg-showloading'>Kunst</a>. Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
+            "desc": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Museen",
             "name": "Museen",
-            "teaser": "Ob nun <a href='./museum.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Geschichte' class='a-intro-search-keyword flg-showloading'>Geschichte</a> oder <a href='./museum.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Kunst' class='a-intro-search-keyword flg-showloading'>Kunst</a>. Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
+            "teaser": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
             "theme": "Museen",
             "type": "SectionPage",
 
@@ -552,12 +507,12 @@
 
         {
             "id": "Schloesser",
-            "desc": "Was ist romantischer als eine alte Ritterburg oder ein schönes altes Schloss (vielleicht sogar mit <a href='./schloesser.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Park' class='a-intro-search-keyword flg-showloading'>Schlosspark</a>)... Hier gibt es Tourentipps, Berichte und Bilder für den Schlossbesuch...",
+            "desc": "Was ist romantischer als eine alte Ritterburg oder ein schönes altes Schloss (vielleicht sogar mit [Schlosspark]())... Hier gibt es Tourentipps, Berichte und Bilder für den Schlossbesuch...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Schloesser",
             "name": "Schloesser",
-            "teaser": "Was ist romantischer als eine alte Ritterburg oder ein schönes altes Schloss (vielleicht sogar mit <a href='./schloesser.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Park' class='a-intro-search-keyword flg-showloading'>Schlosspark</a>)... Hier gibt es Tourentipps, Berichte und Bilder für den Schlossbesuch...",
+            "teaser": "Was ist romantischer als eine alte Ritterburg oder ein schönes altes Schloss (vielleicht sogar mit [Schlosspark]())... Hier gibt es Tourentipps, Berichte und Bilder für den Schlossbesuch...",
             "theme": "Schloesser",
             "type": "SectionPage",
 
@@ -570,12 +525,12 @@
 
         {
             "id": "Parks",
-            "desc": "Nichts geht über einen schönen Parkspaziergang, insbesondere wenn es auch noch ein <a href='./parks.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Schloss' class='a-intro-search-keyword flg-showloading'>Schlosspark</a> ist... Hier findet ihr Tourentipps, Berichte und Bilder zum Schlendern...",
+            "desc": "Nichts geht über einen schönen Parkspaziergang, insbesondere wenn es auch noch ein [Schlosspark]() ist... Hier findet ihr Tourentipps, Berichte und Bilder zum Schlendern...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Parks",
             "name": "Parks",
-            "teaser": "Nichts geht über einen schönen Parkspaziergang, insbesondere wenn es auch noch ein <a href='./parks.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Schloss' class='a-intro-search-keyword flg-showloading'>Schlosspark</a> ist... Hier findet ihr Tourentipps, Berichte und Bilder zum Schlendern...",
+            "teaser": "Nichts geht über einen schönen Parkspaziergang, insbesondere wenn es auch noch ein [Schlosspark]() ist... Hier findet ihr Tourentipps, Berichte und Bilder zum Schlendern...",
             "theme": "Parks",
             "type": "SectionPage",
 
@@ -588,12 +543,12 @@
 
         {
             "id": "Besichtigungen",
-            "desc": "Alles was man besichtigen kann: ob nun <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Stadtbesichtigung' class='a-intro-search-keyword flg-showloading'>Städte</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Museum' class='a-intro-search-keyword flg-showloading'>Museen</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Kirche' class='a-intro-search-keyword flg-showloading'>Kirchen</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Tempel' class='a-intro-search-keyword flg-showloading'>Tempel</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Park' class='a-intro-search-keyword flg-showloading'>Parks</a> oder z.B. <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Zoo' class='a-intro-search-keyword flg-showloading'>Zoos</a> ... Hier gibt es Tourentipps, Berichte und Bilder für eure Besichtigung...",
+            "desc": "Alles was man besichtigen kann: ob nun [Städte](), [Museen](), [Kirchen](), [Tempel](), [Parks]() oder z.B. [Zoos]() ... Hier gibt es Tourentipps, Berichte und Bilder für eure Besichtigung...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Besichtigungen",
             "name": "Besichtigungen",
-            "teaser": "Alles was man besichtigen kann: ob nun <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Stadtbesichtigung' class='a-intro-search-keyword flg-showloading'>Städte</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Museum' class='a-intro-search-keyword flg-showloading'>Museen</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Kirche' class='a-intro-search-keyword flg-showloading'>Kirchen</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Tempel' class='a-intro-search-keyword flg-showloading'>Tempel</a>, <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Park' class='a-intro-search-keyword flg-showloading'>Parks</a> oder z.B. <a href='./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Zoo' class='a-intro-search-keyword flg-showloading'>Zoos</a> ... Hier gibt es Tourentipps, Berichte und Bilder für eure Besichtigung...",
+            "teaser": "Alles was man besichtigen kann: ob nun [Städte](), [Museen](), [Kirchen](), [Tempel](), [Parks]() oder z.B. [Zoos]() ... Hier gibt es Tourentipps, Berichte und Bilder für eure Besichtigung...",
             "theme": "Besichtigungen",
             "type": "SectionPage",
 
@@ -642,12 +597,12 @@
 
         {
             "id": "Kunst",
-            "desc": "Ob das Gemälde im <a href='./kunst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Museum' class='a-intro-search-keyword flg-showloading'>Museum</a>, die Skulptur im <a href='./kunst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Park' class='a-intro-search-keyword flg-showloading'>Park</a>, oder die Architektur eines schönen alten Dörfleins.... Hier gibt es Tourentipps, Berichte und Bilder für den Kunst&amp;Architektur-Fan...",
+            "desc": "Ob das Gemälde im [Museum](), die Skulptur im [Park](), oder die Architektur eines schönen alten Dörfleins.... Hier gibt es Tourentipps, Berichte und Bilder für den Kunst&amp;Architektur-Fan...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Kunst",
             "name": "Kunst",
-            "teaser": "Ob das Gemälde im <a href='./kunst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Museum' class='a-intro-search-keyword flg-showloading'>Museum</a>, die Skulptur im <a href='./kunst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Park' class='a-intro-search-keyword flg-showloading'>Park</a>, oder die Architektur eines schönen alten Dörfleins.... Hier gibt es Tourentipps, Berichte und Bilder für den Kunst&amp;Architektur-Fan...",
+            "teaser": "Ob das Gemälde im [Museum](), die Skulptur im [Park](), oder die Architektur eines schönen alten Dörfleins.... Hier gibt es Tourentipps, Berichte und Bilder für den Kunst&amp;Architektur-Fan...",
             "theme": "Kunst",
             "type": "SectionPage",
 
@@ -717,12 +672,12 @@
 
         {
             "id": "Herbst",
-            "desc": "Der Sommer ist vorbei, die <a href='./herbst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Bergtouren</a> gehen in niedrigere Gefilde, die <a href='./herbst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Wälder</a> strahlen in allen Farben... Hier findet ihr die Tourentipps, Berichte und Bilder rund um den Herbst...",
+            "desc": "Der Sommer ist vorbei, die [Bergtouren]() gehen in niedrigere Gefilde, die [Wälder]() strahlen in allen Farben... Hier findet ihr die Tourentipps, Berichte und Bilder rund um den Herbst...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Herbst",
             "name": "Herbst",
-            "teaser": "Der Sommer ist vorbei, die <a href='./herbst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Berge' class='a-intro-search-keyword flg-showloading'>Bergtouren</a> gehen in niedrigere Gefilde, die <a href='./herbst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wald' class='a-intro-search-keyword flg-showloading'>Wälder</a> strahlen in allen Farben... Hier findet ihr die Tourentipps, Berichte und Bilder rund um den Herbst...",
+            "teaser": "Der Sommer ist vorbei, die [Bergtouren]() gehen in niedrigere Gefilde, die [Wälder]() strahlen in allen Farben... Hier findet ihr die Tourentipps, Berichte und Bilder rund um den Herbst...",
             "theme": "Herbst",
             "type": "SectionPage",
 
@@ -735,12 +690,12 @@
 
         {
             "id": "Winter",
-            "desc": "Die weiße Pracht (so denn vorhanden) schränkt den Bewegungsspielraum natürlich etwas ein, aber auch im Winter lassen sich <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wandern' class='a-intro-search-keyword flg-showloading'>Wanderungen</a> und <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Klettern' class='a-intro-search-keyword flg-showloading'>Klettereien</a> unternehmen. Aber der Schwerpunkt liegt natürlich eher auf Indoor-Aktivitäten wie <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Besichtigung' class='a-intro-search-keyword flg-showloading'>Besichtigungen</a> oder kurzen <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Spaziergang' class='a-intro-search-keyword flg-showloading'>Spaziergängen</a>. Obwohl manche Sachen wie <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT= KW_Schneeschuhwandern' class='a-intro-search-keyword flg-showloading'>Schneeschuhwandern</a> nur im Winter möglich sind :-) Also findet hier Tourentipps, Berichte und Bilder für einen schönen Wintertag...",
+            "desc": "Die weiße Pracht (so denn vorhanden) schränkt den Bewegungsspielraum natürlich etwas ein, aber auch im Winter lassen sich [Wanderungen]() und [Klettereien]() unternehmen. Aber der Schwerpunkt liegt natürlich eher auf Indoor-Aktivitäten wie [Besichtigungen]() oder kurzen [Spaziergängen](). Obwohl manche Sachen wie [Schneeschuhwandern]() nur im Winter möglich sind :-) Also findet hier Tourentipps, Berichte und Bilder für einen schönen Wintertag...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Winter",
             "name": "Winter",
-            "teaser": "Die weiße Pracht (so denn vorhanden) schränkt den Bewegungsspielraum natürlich etwas ein, aber auch im Winter lassen sich <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wandern' class='a-intro-search-keyword flg-showloading'>Wanderungen</a> und <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Klettern' class='a-intro-search-keyword flg-showloading'>Klettereien</a> unternehmen. Aber der Schwerpunkt liegt natürlich eher auf Indoor-Aktivitäten wie <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Besichtigung' class='a-intro-search-keyword flg-showloading'>Besichtigungen</a> oder kurzen <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Spaziergang' class='a-intro-search-keyword flg-showloading'>Spaziergängen</a>. Obwohl manche Sachen wie <a href='./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT= KW_Schneeschuhwandern' class='a-intro-search-keyword flg-showloading'>Schneeschuhwandern</a> nur im Winter möglich sind :-) Also findet hier Tourentipps, Berichte und Bilder für einen schönen Wintertag...",
+            "teaser": "Die weiße Pracht (so denn vorhanden) schränkt den Bewegungsspielraum natürlich etwas ein, aber auch im Winter lassen sich [Wanderungen]() und [Klettereien]() unternehmen. Aber der Schwerpunkt liegt natürlich eher auf Indoor-Aktivitäten wie [Besichtigungen]() oder kurzen [Spaziergängen](). Obwohl manche Sachen wie [Schneeschuhwandern]() nur im Winter möglich sind :-) Also findet hier Tourentipps, Berichte und Bilder für einen schönen Wintertag...",
             "theme": "Winter",
             "type": "SectionPage",
 
@@ -753,12 +708,12 @@
 
         {
             "id": "Schnee",
-            "desc": "<a href='./schnee.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Spaziergang' class='a-intro-search-keyword flg-showloading'>Spaziergänge</a> und <a href='./schnee.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wanderung' class='a-intro-search-keyword flg-showloading'>Wanderungen</a> im Schnee... Hier gibt es Tourentipps, Berichte und Bilder für die weiße Jahreszeit...",
+            "desc": "[Spaziergänge]() und [Wanderungen]() im Schnee... Hier gibt es Tourentipps, Berichte und Bilder für die weiße Jahreszeit...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Schnee",
             "name": "Schnee",
-            "teaser": "<a href='./schnee.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Spaziergang' class='a-intro-search-keyword flg-showloading'>Spaziergänge</a> und <a href='./schnee.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Wanderung' class='a-intro-search-keyword flg-showloading'>Wanderungen</a> im Schnee... Hier gibt es Tourentipps, Berichte und Bilder für die weiße Jahreszeit...",
+            "teaser": "[Spaziergänge]() und [Wanderungen]() im Schnee... Hier gibt es Tourentipps, Berichte und Bilder für die weiße Jahreszeit...",
             "theme": "Schnee",
             "type": "SectionPage",
 
@@ -771,12 +726,12 @@
 
         {
             "id": "Sonne",
-            "desc": "Was ist schöner als ein wunderschöner <a href='./sonne.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sonnenaufgang' class='a-intro-search-keyword flg-showloading'>Sonnenauf-</a> oder <a href='./sonne.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sonnenuntergang' class='a-intro-search-keyword flg-showloading'>Untergang</a> oder etwa ein schöner, fahler <a href='./sonne.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Mond' class='a-intro-search-keyword flg-showloading'>Mondschein</a>? Hä????!!!! Hier zeige ich euch Tourentipps, Berichte und Bilder von orten wo ich schöne Sonnenuntergänge erlebt habe...",
+            "desc": "Was ist schöner als ein wunderschöner [Sonnenauf-]() oder [Untergang]() oder etwa ein schöner, fahler [Mondschein]()? Hä????!!!! Hier zeige ich euch Tourentipps, Berichte und Bilder von orten wo ich schöne Sonnenuntergänge erlebt habe...",
             "flgShowTopTen": true,
             "flgShowSearch": true,
             "heading": "Sonne",
             "name": "Sonne",
-            "teaser": "Was ist schöner als ein wunderschöner <a href='./sonne.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sonnenaufgang' class='a-intro-search-keyword flg-showloading'>Sonnenauf-</a> oder <a href='./sonne.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Sonnenuntergang' class='a-intro-search-keyword flg-showloading'>Untergang</a> oder etwa ein schöner, fahler <a href='./sonne.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20&amp;SHORT=1&amp;MODUS=TOUR&amp;FULLTEXT=KW_Mond' class='a-intro-search-keyword flg-showloading'>Mondschein</a>? Hä????!!!! Hier zeige ich euch Tourentipps, Berichte und Bilder von orten wo ich schöne Sonnenuntergänge erlebt habe...",
+            "teaser": "Was ist schöner als ein wunderschöner [Sonnenauf-]() oder [Untergang]() oder etwa ein schöner, fahler [Mondschein]()? Hä????!!!! Hier zeige ich euch Tourentipps, Berichte und Bilder von orten wo ich schöne Sonnenuntergänge erlebt habe...",
             "theme": "Sonne",
             "type": "SectionPage",
 
