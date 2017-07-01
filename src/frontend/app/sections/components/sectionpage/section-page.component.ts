@@ -54,8 +54,7 @@ export class SectionPageComponent implements OnInit {
     }
 
     getToSearchUrl() {
-        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl,
-                new SDocSearchForm({theme: this.pdoc.theme})) + '?' + new Date().getTime();
+        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, new SDocSearchForm({theme: this.pdoc.theme}));
     }
     submitToSearch() {
         const url = this.getToSearchUrl();

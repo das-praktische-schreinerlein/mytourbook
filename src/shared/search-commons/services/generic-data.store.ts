@@ -76,7 +76,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
     public count(mapperName: string, query?: any, opts?: any): Promise<number> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.filter(mapperName, query).length);
         } else {
             return this.getAdapterForMapper(mapperName).count(this.store.getMapper(mapperName), query, opts);
@@ -88,7 +88,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
     public create<T extends Record>(mapperName: string, record: any, opts?: any): Promise<T> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.add(mapperName, record, opts));
         } else {
             return this.store.create(mapperName, record, opts);
@@ -96,7 +96,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
     public createMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.add(mapperName, records, opts));
         } else {
             return this.store.createMany(mapperName, records, opts);
@@ -104,7 +104,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
     public destroy<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.remove(mapperName, id, opts));
         } else {
             return this.store.destroy(mapperName, id, opts);
@@ -113,7 +113,8 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
 
     public facets(mapperName: string, query?: any, opts?: any): Promise<Facets> {
         if (this.getAdapterForMapper(mapperName) === undefined ||
-            (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter))) {
+            (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter)) ||
+            (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(undefined);
         } else {
             opts = opts || {};
@@ -126,8 +127,12 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
+    public getFromLocalStore<T extends Record>(mapperName: string, id: any):T {
+        return this.store.get(mapperName, id);
+    }
+
     public find<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.get(mapperName, id));
         } else {
             return this.store.find(mapperName, id, opts);
@@ -135,7 +140,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
     public findAll<T extends Record>(mapperName: string, query?: any, opts?: any): Promise<T[]> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.filter(mapperName, query));
         } else {
             opts = opts || {};
@@ -163,7 +168,8 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                 orderBy: [['created_at', 'desc']]
             };
             if (this.getAdapterForMapper(mapperName) === undefined ||
-                (! (this.getAdapterForMapper(mapperName) instanceof GenericSearchHttpAdapter))) {
+                (! (this.getAdapterForMapper(mapperName) instanceof GenericSearchHttpAdapter)) ||
+                (opts && opts.forceLocalStore)) {
                 // the resolve / reject functions control the fate of the promise
                 me.findAll(mapperName, query, options).then(function doneFindAll(documents: R[]) {
                     searchResult.currentRecords = documents;
@@ -201,7 +207,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
 
 
     public update<T extends Record>(mapperName: string, id: any, record: any, opts?: any): Promise<T> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             if (id === undefined || id === null) {
                 return utils.Promise.reject('cant update records without id');
             }
@@ -219,7 +225,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
 
 
     public updateAll<T extends Record>(mapperName: string, props: any, query?: any, opts?: any): Promise<T[]> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.reject('cant do update all without adapter');
         } else {
             return this.store.updateAll(mapperName, props, query, opts);
@@ -227,7 +233,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
     public updateMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
-        if (this.getAdapterForMapper(mapperName) === undefined) {
+        if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.reject('cant do update many without adapter');
         } else {
             return this.store.updateMany(mapperName, records, opts);

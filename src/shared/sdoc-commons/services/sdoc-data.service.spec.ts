@@ -74,8 +74,8 @@ describe('SDocDataService', () => {
             // GIVEN
             Observable.forkJoin(
                 service.addMany([sdoc1, sdoc2]),
-                service.getById(1),
-                service.getById(2)
+                service.getById('1'),
+                service.getById('2')
             ).subscribe(
                 results => {
                     // THEN: add SDocs
@@ -165,7 +165,7 @@ describe('SDocDataService', () => {
                 service.updateById('1', {
                     name: 'new name'
                 }),
-                service.getById(1)
+                service.getById('1')
             ).subscribe(
                 results => {
                     // THEN: add SDocs
@@ -193,7 +193,7 @@ describe('SDocDataService', () => {
                 service.updateById('26', {
                     name: 'new name'
                 }),
-                service.getById(26)
+                service.getById('26')
             ).subscribe(
                 results => {
                     // THEN: add SDocs

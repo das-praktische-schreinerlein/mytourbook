@@ -19,9 +19,265 @@
             "in": [
                 "kw_klettern",
                 "kw_sachsenklettern",
-                "kw_klettersteig",
                 "kw_sportklettern",
                 "kw_alpinklettern"
+            ]
+        }
+    },
+
+    "Klettern": {
+        "keywords_txt": {
+            "in": [
+                "kw_Klettern",
+                "kw_sachsenklettern",
+                "kw_sportklettern",
+                "kw_alpinklettern"
+            ]
+        }
+    },
+    "Stadt": {
+        "keywords_txt": {
+            "in": [
+                "kw_Stadt"
+            ]
+        }
+    },
+    "Aktivitäten": {
+        "keywords_txt": {
+            "in": [
+                "kw_Aktiv"
+            ]
+        }
+    },
+    "Naturlandschaften": {
+        "keywords_txt": {
+            "in": [
+                "kw_Naturlandschaft"
+            ]
+        }
+    },
+    "Urlaube": {
+        "keywords_txt": {
+            "in": [
+                "kw_Urlaub"
+            ]
+        }
+    },
+    "Hund": {
+        "keywords_txt": {
+            "in": [
+                "kw_Hund"
+            ]
+        }
+    },
+    "Klettersteige": {
+        "keywords_txt": {
+            "in": [
+                "kw_Klettersteig"
+            ]
+        }
+    },
+    "Wandern": {
+        "keywords_txt": {
+            "in": [
+                "kw_Wandern"
+            ]
+        }
+    },
+    "Boots-Touren": {
+        "keywords_txt": {
+            "in": [
+                "kw_Boot"
+            ]
+        }
+    },
+    "Skating-Touren": {
+        "keywords_txt": {
+            "in": [
+                "kw_Skaten"
+            ]
+        }
+    },
+    "Schneeschuhtouren": {
+        "keywords_txt": {
+            "in": [
+                "kw_Schneeschuhtour"
+            ]
+        }
+    },
+    "Tagestouren": {
+        "keywords_txt": {
+            "in": [
+                "kw_Tagestour"
+            ]
+        }
+    },
+    "Spaziergang": {
+        "keywords_txt": {
+            "in": [
+                "kw_Spaziergang"
+            ]
+        }
+    },
+    "Berge": {
+        "keywords_txt": {
+            "in": [
+                "kw_Berge"
+            ]
+        }
+    },
+    "Mittelgebirge": {
+        "keywords_txt": {
+            "in": [
+                "kw_Mittelgebirge"
+            ]
+        }
+    },
+    "Hochgebirge": {
+        "keywords_txt": {
+            "in": [
+                "kw_Hochgebirge"
+            ]
+        }
+    },
+    "Wald": {
+        "keywords_txt": {
+            "in": [
+                "kw_Wald"
+            ]
+        }
+    },
+    "Wiesen": {
+        "keywords_txt": {
+            "in": [
+                "kw_Wiese"
+            ]
+        }
+    },
+    "Naturlandschaft": {
+        "keywords_txt": {
+            "in": [
+                "kw_Naturlandschaft"
+            ]
+        }
+    },
+    "Flüsse": {
+        "keywords_txt": {
+            "in": [
+                "kw_Fluss"
+            ]
+        }
+    },
+    "Meer": {
+        "keywords_txt": {
+            "in": [
+                "kw_Meer"
+            ]
+        }
+    },
+    "Seen": {
+        "keywords_txt": {
+            "in": [
+                "kw_See"
+            ]
+        }
+    },
+    "Museen": {
+        "keywords_txt": {
+            "in": [
+                "kw_Museum",
+                "kw_Museumsbesuch"
+            ]
+        }
+    },
+    "Schloesser": {
+        "keywords_txt": {
+            "in": [
+                "kw_Schloss"
+            ]
+        }
+    },
+    "Parks": {
+        "keywords_txt": {
+            "in": [
+                "kw_Park"
+            ]
+        }
+    },
+    "Besichtigungen": {
+        "keywords_txt": {
+            "in": [
+                "kw_Besichtigung"
+            ]
+        }
+    },
+    "Stadtbesichtigung": {
+        "keywords_txt": {
+            "in": [
+                "kw_Stadtbesichtigung"
+            ]
+        }
+    },
+    "Zoos": {
+        "keywords_txt": {
+            "in": [
+                "kw_Zoo"
+            ]
+        }
+    },
+    "Kunst": {
+        "keywords_txt": {
+            "in": [
+                "kw_Kunst"
+            ]
+        }
+    },
+    "Kirchen": {
+        "keywords_txt": {
+            "in": [
+                "kw_Kirche"
+            ]
+        }
+    },
+    "Frühling": {
+        "keywords_txt": {
+            "in": [
+                "kw_Frühling"
+            ]
+        }
+    },
+    "Sommer": {
+        "keywords_txt": {
+            "in": [
+                "kw_Sommer"
+            ]
+        }
+    },
+    "Herbst": {
+        "keywords_txt": {
+            "in": [
+                "kw_Herbst"
+            ]
+        }
+    },
+    "Winter": {
+        "keywords_txt": {
+            "in": [
+                "kw_Winter"
+            ]
+        }
+    },
+    "Schnee": {
+        "keywords_txt": {
+            "in": [
+                "kw_Schnee"
+            ]
+        }
+    },
+    "Sonne": {
+        "keywords_txt": {
+            "in": [
+                "kw_Sonne"
             ]
         }
     }

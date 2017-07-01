@@ -19,22 +19,22 @@ export class PDocDataService extends PDocSearchService {
     }
 
     // Simulate POST /pdocs
-    add(pdoc: PDocRecord): Promise<PDocRecord> {
-        return this.dataStore.create('pdoc', pdoc);
+    add(pdoc: PDocRecord, opts?: any): Promise<PDocRecord> {
+        return this.dataStore.create('pdoc', pdoc, opts);
     }
 
     // Simulate POST /pdocs
-    addMany(pdocs: PDocRecord[]): Promise<PDocRecord[]> {
-        return this.dataStore.createMany('pdoc', pdocs);
+    addMany(pdocs: PDocRecord[], opts?: any): Promise<PDocRecord[]> {
+        return this.dataStore.createMany('pdoc', pdocs, opts);
     }
 
     // Simulate DELETE /pdocs/:id
-    deleteById(id: string): Promise<PDocRecord> {
-        return this.dataStore.destroy('pdoc', id);
+    deleteById(id: string, opts?: any): Promise<PDocRecord> {
+        return this.dataStore.destroy('pdoc', id, opts);
     }
 
     // Simulate PUT /pdocs/:id
-    updateById(id: string, values: Object = {}): Promise<PDocRecord> {
-        return this.dataStore.update('pdoc', id, values);
+    updateById(id: string, values: Object = {}, opts?: any): Promise<PDocRecord> {
+        return this.dataStore.update('pdoc', id, values, opts);
     }
 }

@@ -7,6 +7,8 @@ import {ActivatedRouteStub} from '../../../testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ToastsManagerStub} from '../../../testing/toasts-stubs';
+import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
+import {PDocDataServiceStub} from '../../../testing/pdoc-dataservice-stubs';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
@@ -23,6 +25,7 @@ describe('NavbarComponent', () => {
 
             providers: [
                 TranslateService,
+                { provide: PDocDataService, useValue: new PDocDataServiceStub() },
                 {provide: ToastsManager, useValue: new ToastsManagerStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() }
             ],

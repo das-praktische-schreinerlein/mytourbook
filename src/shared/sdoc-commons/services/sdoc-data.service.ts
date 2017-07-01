@@ -22,22 +22,22 @@ export class SDocDataService extends SDocSearchService {
     }
 
     // Simulate POST /sdocs
-    add(sdoc: SDocRecord): Promise<SDocRecord> {
-        return this.dataStore.create('sdoc', sdoc);
+    add(sdoc: SDocRecord, opts?: any): Promise<SDocRecord> {
+        return this.dataStore.create('sdoc', sdoc, opts);
     }
 
     // Simulate POST /sdocs
-    addMany(sdocs: SDocRecord[]): Promise<SDocRecord[]> {
-        return this.dataStore.createMany('sdoc', sdocs);
+    addMany(sdocs: SDocRecord[], opts?: any): Promise<SDocRecord[]> {
+        return this.dataStore.createMany('sdoc', sdocs, opts);
     }
 
     // Simulate DELETE /sdocs/:id
-    deleteById(id: string): Promise<SDocRecord> {
-        return this.dataStore.destroy('sdoc', id);
+    deleteById(id: string, opts?: any): Promise<SDocRecord> {
+        return this.dataStore.destroy('sdoc', id, opts);
     }
 
     // Simulate PUT /sdocs/:id
-    updateById(id: string, values: Object = {}): Promise<SDocRecord> {
-        return this.dataStore.update('sdoc', id, values);
+    updateById(id: string, values: Object = {}, opts?: any): Promise<SDocRecord> {
+        return this.dataStore.update('sdoc', id, values, opts);
     }
 }
