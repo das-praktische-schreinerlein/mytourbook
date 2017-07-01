@@ -114,13 +114,6 @@ const sectionRoutes: Routes = [
                 ]
             },
         ]
-    },
-    {
-        path: '**',
-        redirectTo: 'sdoc/search',
-        data: {
-            id: 'sdoc_fallback'
-        }
     }
 ];
 
