@@ -10,6 +10,7 @@ import {SectionPageComponent} from './components/sectionpage/section-page.compon
 import {BrowserModule} from '@angular/platform-browser';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
 import {SharedPDocModule} from '../shared-pdoc/shared-pdoc.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
@@ -18,6 +19,7 @@ import {SharedPDocModule} from '../shared-pdoc/shared-pdoc.module';
         SectionBarComponent
     ],
     imports: [
+        NgbModule.forRoot(),
         BrowserModule,
         SharedSDocModule,
         SharedPDocModule,

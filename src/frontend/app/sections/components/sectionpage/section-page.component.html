@@ -25,30 +25,59 @@
 
         <ng-container *ngIf="pdoc.flgShowTopTen">
             <div class="hint_tostoebern">Fröhliches Stöbern :-)</div>
-            <app-sdoc-inline-searchpage [label]="'Regionen'"
-                                        i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.sdoc.LOCATION"
-                                        [params]="getFiltersForType(pdoc, 'LOCATION')"
-                                        [showForm]="false"
-                                        [layout]="Layout.FLAT"
-                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-            <app-sdoc-inline-searchpage [label]="'Routen'"
-                                        i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.sdoc.ROUTE"
-                                        [params]="getFiltersForType(pdoc, 'ROUTE')"
-                                        [showForm]="false"
-                                        [layout]="Layout.FLAT"
-                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-            <app-sdoc-inline-searchpage [label]="'Bilder'"
-                                        i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.sdoc.IMAGE"
-                                        [params]="getFiltersForType(pdoc, 'IMAGE')"
-                                        [showForm]="false"
-                                        [layout]="Layout.SMALL"
-                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-            <app-sdoc-inline-searchpage [label]="'Tracks'"
-                                        i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.sdoc.TRACK"
-                                        [params]="getFiltersForType(pdoc, 'TRACK')"
-                                        [showForm]="false"
-                                        [layout]="Layout.FLAT"
-                                        [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+            <ngb-tabset>
+                <ngb-tab title=Alles>
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Alles'"
+                                                    i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.sdoc.ALL"
+                                                    [params]="getFiltersForType(pdoc, '')"
+                                                    [showForm]="false"
+                                                    [layout]="Layout.FLAT"
+                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Regionen">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Regionen'"
+                                                    i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.sdoc.LOCATION"
+                                                    [params]="getFiltersForType(pdoc, 'LOCATION')"
+                                                    [showForm]="false"
+                                                    [layout]="Layout.FLAT"
+                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Routen">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Routen'"
+                                                    i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.sdoc.ROUTE"
+                                                    [params]="getFiltersForType(pdoc, 'ROUTE')"
+                                                    [showForm]="false"
+                                                    [layout]="Layout.FLAT"
+                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Bilder">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Bilder'"
+                                                    i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.sdoc.IMAGE"
+                                                    [params]="getFiltersForType(pdoc, 'IMAGE')"
+                                                    [showForm]="false"
+                                                    [layout]="Layout.SMALL"
+                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Tracks">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Tracks'"
+                                                    i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.sdoc.TRACK"
+                                                    [params]="getFiltersForType(pdoc, 'TRACK')"
+                                                    [showForm]="false"
+                                                    [layout]="Layout.FLAT"
+                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+
         </ng-container>
     </div>
 </ng-container>
