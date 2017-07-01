@@ -5,9 +5,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
-import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 
 @Component({
@@ -17,7 +17,6 @@ import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.compon
 })
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
-    adminMode = true;
     Layout = Layout;
 
     searchResult: SDocSearchResult;
@@ -73,28 +72,6 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     onShowSDoc(sdoc: SDocRecord) {
         this.sdocRoutingService.navigateToShow(sdoc, this.sdocRoutingService.getLastSearchUrl());
-        return false;
-    }
-
-    onEditSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToEdit(sdoc.id, this.sdocRoutingService.getLastSearchUrl());
-        return false;
-    }
-
-    onDeleteSDoc(sdoc: SDocRecord) {
-        if (window.confirm('SDoc wirklich löschen?')) {
-            const me = this;
-            this.sdocDataService.deleteById(sdoc.id).then(function doneDeleteById() {
-                    console.log('SDoc deleted', sdoc);
-                    me.toastr.info('Datensatz wurde gelöscht.', 'Fertig');
-                    me.doSearch();
-                },
-                function errorCreate(reason: any) {
-                    console.error('deleteSDocById failed:' + reason);
-                    me.toastr.error('Es gab leider ein Problem beim Löschen - am besten noch einmal probieren :-(', 'Oops!');
-                }
-            );
-        }
         return false;
     }
 

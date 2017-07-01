@@ -6,9 +6,9 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {ActivatedRoute, Router} from '@angular/router';
 import {SDocDataStore, SDocTeamFilterConfig} from '../../../../shared/sdoc-commons/services/sdoc-data.store';
 import {AppServiceStub} from '../../../../testing/appservice-stubs';
-import {SDocSearchFormConverter} from '../../../sdoc/services/sdoc-searchform-converter.service';
+import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../sdoc/services/sdoc-routing.service';
+import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';

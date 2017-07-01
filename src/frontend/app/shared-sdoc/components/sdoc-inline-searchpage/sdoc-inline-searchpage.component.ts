@@ -5,9 +5,9 @@ import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-s
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Subscription} from 'rxjs/Subscription';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
-import {SDocSearchFormConverter} from '../../../sdoc/services/sdoc-searchform-converter.service';
+import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../sdoc/services/sdoc-routing.service';
+import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AppState, GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
@@ -20,7 +20,6 @@ import {AppState, GenericAppService} from '../../../../shared/search-commons/ser
 export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChanges {
     private initialized = false;
     private appStateSubscription: Subscription;
-    adminMode = false;
     Layout = Layout;
 
     searchResult: SDocSearchResult;

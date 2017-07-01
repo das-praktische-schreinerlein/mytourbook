@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {SDocRecordResolver} from './resolver/sdoc-details.resolver';
-import {SDocEditpageComponent} from './components/sdoc-editpage/sdoc-editpage.component';
+import {SDocRecordResolver} from '../shared-sdoc/resolver/sdoc-details.resolver';
+import {SDocEditpageComponent} from '../admin/components/sdoc-editpage/sdoc-editpage.component';
 import {SDocShowpageComponent} from './components/sdoc-showpage/sdoc-showpage.component';
-import {SDocCreatepageComponent} from './components/sdoc-createpage/sdoc-createpage.component';
-import {SDocSearchFormResolver} from './resolver/sdoc-searchform.resolver';
+import {SDocCreatepageComponent} from '../admin/components/sdoc-createpage/sdoc-createpage.component';
+import {SDocSearchFormResolver} from '../shared-sdoc/resolver/sdoc-searchform.resolver';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
 
 const sdocRoutes: Routes = [

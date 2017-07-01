@@ -3,7 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 
 @Component({
     selector: 'app-sdoc-editpage',

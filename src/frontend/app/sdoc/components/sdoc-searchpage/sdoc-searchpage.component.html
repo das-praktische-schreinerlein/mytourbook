@@ -24,12 +24,9 @@
     </div>
     <div class="container">
         <app-sdoc-list [searchResult]="searchResult"
-                       [adminMode]="adminMode"
                        [baseSearchUrl]="baseSearchUrl"
                        [layout]="layout"
-                       (show)="onShowSDoc($event)"
-                       (edit)="onEditSDoc($event)"
-                       (delete)="onDeleteSDoc($event)"></app-sdoc-list>
+                       (show)="onShowSDoc($event)"></app-sdoc-list>
     </div>
     <div class="container">
         <app-sdoc-list-footer [searchResult]="searchResult"

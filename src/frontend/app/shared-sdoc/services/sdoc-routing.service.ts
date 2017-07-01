@@ -26,10 +26,6 @@ export class SDocRoutingService {
         return redirectUrl;
     }
 
-    getEditUrl(sDocId: string, from: string): string {
-        return '/sdoc/edit/' + sDocId + (from ? '?from=' + from : '');
-    }
-
     getShowUrl(sDoc: SDocRecord, from: string): string {
         const name = (sDoc.name ? sDoc.name : '')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
@@ -43,10 +39,6 @@ export class SDocRoutingService {
 
     navigateBackToSearch(): Promise<boolean> {
         return this.router.navigateByUrl(this.getLastSearchUrl());
-    }
-
-    navigateToEdit(sDocId: string, from: string): Promise<boolean> {
-        return this.router.navigateByUrl(this.getEditUrl(sDocId, from));
     }
 
     navigateToShow(sDoc: SDocRecord, from: string): Promise<boolean> {

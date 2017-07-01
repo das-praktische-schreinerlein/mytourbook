@@ -6,9 +6,6 @@
             <section class="row card-deck">
                 <app-sdoc-list-item style="min-width: 300px;" class="card app-sdoc-list-item"
                                     [backToSearchUrl]="getBackToSearchUrl(searchResult)"
-                                    [adminMode]="adminMode"
-                                    (edit)="onEditSDoc($event)"
-                                    (delete)="onDeleteSDoc($event)"
                                     [layout]="Layout.BIG"
                                     [record]="record"></app-sdoc-list-item>
             </section>

@@ -3,7 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 
 @Component({
@@ -36,29 +36,6 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-    }
-
-    onEditSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToEdit(sdoc.id, '');
-        return false;
-    }
-
-    onDeleteSDoc(sdoc: SDocRecord) {
-        if (window.confirm('SDoc wirklich löschen?')) {
-            const me = this;
-            this.sdocDataService.deleteById(sdoc.id).then(function doneDeleteById() {
-                    console.log('SDoc deleted', sdoc);
-                    me.toastr.info('Datesatz wurde gelöscht.', 'Fertig');
-                    me.sdocRoutingService.navigateBackToFrom(me.route);
-                },
-                function errorCreate(reason: any) {
-                    console.error('deleteSDocById failed:' + reason);
-                    me.toastr.error('Es gab leider ein Problem beim Löschen - am besten noch einmal probieren :-(', 'Oops!');
-                }
-            );
-        }
-
-        return false;
     }
 
     submitBackToSearch() {

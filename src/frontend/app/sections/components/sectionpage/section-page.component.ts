@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {SDocSearchFormConverter} from '../../../sdoc/services/sdoc-searchform-converter.service';
+import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 

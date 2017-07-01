@@ -5,11 +5,11 @@ import {SDocListItemSmallComponent} from './sdoc-list-item-small.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
-import {SDocRoutingService} from '../../../sdoc/services/sdoc-routing.service';
+import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {SDocContentUtils} from '../../../sdoc/services/sdoc-contentutils.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 

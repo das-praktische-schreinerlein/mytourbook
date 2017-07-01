@@ -5,7 +5,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
-import {SDocSearchFormUtils} from '../../../sdoc/services/sdoc-searchform-utils.service';
+import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoCoder} from 'geo-coder';
 
 @Component({

@@ -13,19 +13,10 @@ export class PDocListItemComponent {
     public record: PDocRecord;
 
     @Input()
-    public adminMode = false;
-
-    @Input()
     public layout: Layout;
 
     @Output()
     public show: EventEmitter<PDocRecord> = new EventEmitter();
-
-    @Output()
-    public edit: EventEmitter<PDocRecord> = new EventEmitter();
-
-    @Output()
-    public delete: EventEmitter<PDocRecord> = new EventEmitter();
 
     constructor(private sanitizer: DomSanitizer) {
     }

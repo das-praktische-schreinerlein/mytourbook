@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {SDocSearchFormConverter} from '../../../sdoc/services/sdoc-searchform-converter.service';
+import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';

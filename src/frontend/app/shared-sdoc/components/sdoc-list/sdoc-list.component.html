@@ -3,34 +3,25 @@
         <ng-container *ngSwitchCase="Layout.SMALL">
             <app-sdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-sdoc-list-item"
                                 [record]="record"
-                                [adminMode]="adminMode"
                                 [layout]="layout"
                                 [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                 (show)="onShow($event)"
-                                (edit)="onEdit($event)"
-                                (delete)="onDelete($event)"
                                 *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-small>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.FLAT">
             <app-sdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-sdoc-list-item"
                                       [record]="record"
-                                      [adminMode]="adminMode"
                                       [layout]="layout"
                                       [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                       (show)="onShow($event)"
-                                      (edit)="onEdit($event)"
-                                      (delete)="onDelete($event)"
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-flat>
         </ng-container>
         <ng-container *ngSwitchDefault>
             <app-sdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-sdoc-list-item"
                                 [record]="record"
-                                [adminMode]="adminMode"
                                 [layout]="layout"
                                 [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                 (show)="onShow($event)"
-                                (edit)="onEdit($event)"
-                                (delete)="onDelete($event)"
                                 *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item>
         </ng-container>
     </ng-container>

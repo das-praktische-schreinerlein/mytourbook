@@ -2,7 +2,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListComponent} from './sdoc-list.component';
-import {SDocSearchFormConverter} from '../../../sdoc/services/sdoc-searchform-converter.service';
+import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';

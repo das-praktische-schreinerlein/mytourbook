@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SDocDataStore, SDocTeamFilterConfig} from '../../../../shared/sdoc-commons/services/sdoc-data.store';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';

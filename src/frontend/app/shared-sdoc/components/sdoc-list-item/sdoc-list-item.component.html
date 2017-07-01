@@ -30,10 +30,6 @@
             <small class="text-muted">{{record.datevon}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-primary" (click)="submitShow(record)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
-                <div ngif="adminMode == true">
-                    <button class="edit btn-primary" (click)="submitEdit(record)" i18n="button listitemaction edit sdoc|Buttontext to listitemaction:edit sdoc@@button.listitemaction.sdoc.edit">Edit</button>
-                    <button class="delete btn-primary" (click)="submitDelete(record)" i18n="button listitemaction delete sdoc|Buttontext to listitemaction:delete sdoc@@button.listitemaction.sdoc.delete">Delete</button>
-                </div>
             </div>
         </div>
     </ng-container>
@@ -85,10 +81,6 @@
             <small class="text-muted">{{record.datevon}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-primary" (click)="submitShow(record)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
-                <div ngif="adminMode == true">
-                    <button class="edit btn-primary" (click)="submitEdit(record)" i18n="button listitemaction edit edit|Buttontext to listitemaction:edit sdoc@@button.listitemaction.sdoc.edit">Edit</button>
-                    <button class="delete btn-primary" (click)="submitDelete(record)" i18n="button listitemaction delete sdoc|Buttontext to listitemaction:delete sdoc@@button.listitemaction.sdoc.delete">Delete</button>
-                </div>
             </div>
         </div>
     </ng-container>
