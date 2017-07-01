@@ -7,6 +7,7 @@
             "flgShowSearch": true,
             "heading": "Thats MyTB",
             "name": "Start",
+            "subSectionIds": "schwerpunkt",
             "teaser": "Willkommen bei MyTB",
             "type": "SectionOverviewPage",
             "theme": ""

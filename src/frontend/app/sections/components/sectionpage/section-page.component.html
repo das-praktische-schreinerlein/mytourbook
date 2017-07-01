@@ -4,17 +4,6 @@
     </section>
 
     <div class="container">
-        <ng-container *ngFor="let section of sections">
-            <app-pdoc-list-item-flat class="app-pdoc-list-item"
-                                     [record]="section"
-                                     [layout]="Layout.FLAT"
-                                     (show)="onShow($event)"></app-pdoc-list-item-flat>
-            <app-pdoc-list class="app-pdoc-list"
-                                     [records]="getSubSections(section)"
-                                     [layout]="Layout.BIG"
-                                     (show)="onShow($event)"></app-pdoc-list>
-        </ng-container>
-
         <ng-container *ngIf="pdoc.flgShowSearch">
             <div class="hint_tosearch"><a href="{{getToSearchUrl()}}" (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
         </ng-container>
@@ -77,7 +66,18 @@
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>
-
         </ng-container>
+
+        <ng-container *ngFor="let section of sections">
+            <app-pdoc-list-item-flat class="app-pdoc-list-item"
+                                     [record]="section"
+                                     [layout]="Layout.FLAT"
+                                     (show)="onShow($event)"></app-pdoc-list-item-flat>
+            <app-pdoc-list class="app-pdoc-list"
+                           [records]="getSubSections(section)"
+                           [layout]="Layout.BIG"
+                           (show)="onShow($event)"></app-pdoc-list>
+        </ng-container>
+
     </div>
 </ng-container>
