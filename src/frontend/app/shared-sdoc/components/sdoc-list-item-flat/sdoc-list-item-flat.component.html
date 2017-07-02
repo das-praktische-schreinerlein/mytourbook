@@ -2,20 +2,14 @@
     <div class="col-1 image">
         <ng-container [ngSwitch]="record.type">
             <ng-container *ngSwitchCase="'IMAGE'">
-                <ng-container *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
-                    <img class="sdoc-image-main" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
+                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <img class="sdoc-image-main" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                 </ng-container>
             </ng-container>
             <ng-container *ngSwitchDefault="">
-                <ngb-carousel *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <ng-template ngbSlide *ngFor="let sdocimage of contentUtils.getThumbnails(record);">
-                        <img class="sdoc-image" [src]="contentUtils.getThumbnailUrl(sdocimage)" alt="{{sdocimage.name}}">
-                        <div class="carousel-caption">
-                            <h3>{{sdocimage.name}}</h3>
-                            <p>{{sdocimage.name}}.</p>
-                        </div>
-                    </ng-template>
-                </ngb-carousel>
+                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <img class="sdoc-image-main" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                </ng-container>
             </ng-container>
         </ng-container>
     </div>

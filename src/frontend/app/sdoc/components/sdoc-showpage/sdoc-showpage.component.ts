@@ -53,18 +53,28 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         };
 
         if (this.record.type === 'TRACK') {
-            filters['moreFilter'] = 'track_id_i:' + record.trackId;
-            if (type === 'IMAGE') {
+            if (type === 'IMAGE' && record.trackId) {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['perPage'] = 999;
-            } else if (type === 'ROUTE') {
+            } else if (type === 'ROUTE' && record.routeId) {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 999;
+            } else if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
             }
         } else if (this.record.type === 'ROUTE') {
-            filters['moreFilter'] = 'route_id_i:' + record.routeId;
-            if (type === 'IMAGE') {
+            if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'IMAGE') {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 30;
             } else if (type === 'TRACK') {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 999;
+            } else {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
             }
         } else if (this.record.type === 'LOCATION') {
             if (type === 'LOCATION') {
@@ -76,7 +86,15 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 }
             }
         } else if (this.record.type === 'IMAGE') {
-            filters['moreFilter'] = 'image_id_i:' + record.imageId;
+            if (type === 'TRACK' && record.trackId) {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
+            } else if (type === 'ROUTE' && record.routeId) {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+            } else if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else {
+                filters['moreFilter'] = 'image_id_i:' + record.imageId;
+            }
         }
 
         return filters;

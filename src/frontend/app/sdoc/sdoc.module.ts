@@ -15,6 +15,9 @@ import {SearchParameterUtils} from '../../shared/search-commons/services/searchp
 import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.service';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
 import {BrowserModule} from '@angular/platform-browser';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -24,14 +27,18 @@ import {BrowserModule} from '@angular/platform-browser';
         SDocShowpageComponent,
     ],
     imports: [
+        TranslateModule,
         BrowserModule,
+        NgbModule,
         ToastModule,
         HttpModule,
         JsonpModule,
+        AngularCommonsModule,
         SharedSDocModule,
         SDocRoutingModule
     ],
     providers: [
+        TranslateService,
         SDocSearchFormConverter,
         SDocRoutingService,
         SDocSearchFormUtils,

@@ -4,18 +4,60 @@
            i18n="link back2search sdoc|Linktext back to search sdoc@@a.show.sdoc.back2search">Back to Search</a>
         <ng-container *ngIf="record != undefined && record.id != undefined">
             <section class="row card-deck">
-                <app-sdoc-list-item style="min-width: 300px;" class="card app-sdoc-list-item"
-                                    [backToSearchUrl]="getBackToSearchUrl(searchResult)"
-                                    [layout]="Layout.BIG"
-                                    [record]="record"></app-sdoc-list-item>
+                <ng-container [ngSwitch]="record.type">
+                    <ng-container *ngSwitchCase="'IMAGE'">
+                        <div class="card-block">
+                            <h5>{{record.locHirarchie}}</h5>
+                            <div>
+                                <div>
+                                    <h5>{{record.type | translate }} {{record.name}}</h5>
+                                    <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
+                                        <img class="sdoc-image-main" width="600px" [src]="contentUtils.getFullUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault="">
+                        <div class="card-block">
+                            <h5>{{record.locHirarchie}}</h5>
+                            <div>
+                                <div style="width: 200px; float: left">
+                                    <h5>{{record.type | translate }}</h5>
+                                    <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
+                                        <img class="sdoc-image-main" width="200px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                                    </ng-container>
+                                </div>
+                                <h5>{{record.name}}</h5>
+                                <p>
+                                    {{record.desc}}
+                                </p>
+                            </div>
+                            <br clear="all" />
+                            <p class="card-text">
+                                <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
+                                    <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
+                                        <ng-template ngbPanelContent>
+                                            <ul class="" style="float: left; list-style: none">
+                                                <li *ngIf="record.keywords !== ''"><label>Keywords:</label><span>{{record.keywords}}</span></li>
+                                            </ul>
+                                        </ng-template>
+                                    </ngb-panel>
+                                </ngb-accordion>
+                            </p>
+                        </div>
+                    </ng-container>
+                </ng-container>
             </section>
-            <div class="container" *ngIf="record.gpsTrackBasefile">
+
+            <div class="container" *ngIf="record.gpsTrackBasefile || record.geoLoc !== undefined">
                 <app-sdoc-leaflet-map [mapId]="'showMap'"
                                       [height]="'400'"
                                       [mapZoom]="'9'"
                                       [sdocs]="[record]"
                                       [mapCenterPos]="undefined"></app-sdoc-leaflet-map>
             </div>
+
             <ng-container [ngSwitch]="record.type">
                 <ng-container *ngSwitchCase="'LOCATION'">
                     <app-sdoc-inline-searchpage [label]="'Unterregionen'"
@@ -44,6 +86,12 @@
                                                 [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 </ng-container>
                 <ng-container *ngSwitchCase="'ROUTE'">
+                    <app-sdoc-inline-searchpage [label]="'Region'"
+                                                i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
+                                                [params]="getFiltersForType(record, 'LOCATION')"
+                                                [showForm]="false"
+                                                [layout]="Layout.FLAT"
+                                                [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     <app-sdoc-inline-searchpage [label]="'Bilder'"
                                                 i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
                                                 [params]="getFiltersForType(record, 'IMAGE')"
@@ -58,6 +106,12 @@
                                                 [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 </ng-container>
                 <ng-container *ngSwitchCase="'TRACK'">
+                    <app-sdoc-inline-searchpage [label]="'Region'"
+                                                i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
+                                                [params]="getFiltersForType(record, 'LOCATION')"
+                                                [showForm]="false"
+                                                [layout]="Layout.FLAT"
+                                                [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     <app-sdoc-inline-searchpage [label]="'Routen'"
                                                 i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
                                                 [params]="getFiltersForType(record, 'ROUTE')"
@@ -69,6 +123,26 @@
                                                 [params]="getFiltersForType(record, 'IMAGE')"
                                                 [showForm]="false"
                                                 [layout]="Layout.SMALL"
+                                                [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                </ng-container>
+                <ng-container *ngSwitchCase="'IMAGE'">
+                    <app-sdoc-inline-searchpage [label]="'Regionen'"
+                                                i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
+                                                [params]="getFiltersForType(record, 'LOCATION')"
+                                                [showForm]="false"
+                                                [layout]="Layout.FLAT"
+                                                [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    <app-sdoc-inline-searchpage [label]="'Route'"
+                                                i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
+                                                [params]="getFiltersForType(record, 'ROUTE')"
+                                                [showForm]="false"
+                                                [layout]="Layout.FLAT"
+                                                [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    <app-sdoc-inline-searchpage [label]="'Track'"
+                                                i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
+                                                [params]="getFiltersForType(record, 'TRACK')"
+                                                [showForm]="false"
+                                                [layout]="Layout.FLAT"
                                                 [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 </ng-container>
             </ng-container>

@@ -70,4 +70,14 @@ export class SDocContentUtils {
         return this.sanitizer.bypassSecurityTrustResourceUrl(
             this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x100/' + image.fileName);
     }
+
+    getPreviewUrl(image: SDocImageRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName);
+    }
+
+    getFullUrl(image: SDocImageRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(
+            this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName);
+    }
 }
