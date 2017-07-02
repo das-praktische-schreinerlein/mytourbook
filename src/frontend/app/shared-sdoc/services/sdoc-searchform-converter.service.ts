@@ -28,7 +28,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             this.searchParameterUtils.useValueOrDefault(searchForm.fulltext, 'egal'),
             this.searchParameterUtils.useValueOrDefault(searchForm.moreFilter, 'ungefiltert'),
             this.searchParameterUtils.useValueOrDefault(searchForm.sort, 'relevance'),
-            this.searchParameterUtils.useValueOrDefault(searchForm.type, 'alle').toLowerCase(),
+            this.searchParameterUtils.useValueOrDefault(searchForm.type, 'alle'),
             +searchForm.perPage || 10,
             +searchForm.pageNum || 1
         ];
