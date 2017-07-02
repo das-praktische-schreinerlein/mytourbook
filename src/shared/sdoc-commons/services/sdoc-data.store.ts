@@ -20,6 +20,7 @@ export class SDocTeamFilterConfig {
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {
 
     private validMoreFilterNames = {
+        id: true,
         track_id_i: true,
         loc_id_i: true,
         image_id_i: true,

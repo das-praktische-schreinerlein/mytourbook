@@ -8,6 +8,7 @@ import {Router} from 'js-data-express';
 import axios from 'axios';
 import express from 'express';
 import * as fs from 'fs';
+import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
@@ -19,7 +20,6 @@ export class SDocServerModule {
         }
         const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils(), filterConfig);
         const dataService: SDocDataService = new SDocDataService(dataStore);
-        const mapper = dataService.getMapper('sdoc');
 
         // configure solr-adapter
         const options = {
@@ -31,18 +31,37 @@ export class SDocServerModule {
         dataStore.setAdapter('http', adapter, '', {});
 
         // configure express
-        const config = {
-            request: (req, res, next) => {
-                const userLoggedIn = true;
-
-                if (userLoggedIn) {
-                    next();
-                } else {
-                    res.sendStatus(403);
-                }
+        app.param('sdoc_id', function(req, res, next, sdoc_id) {
+            const sdocIdParam = (sdoc_id || '');
+            if (sdocIdParam.search(/[^a-zA-Z0-9_]/) >= 0) {
+                return next('not found');
             }
-        };
-        app.use(apiPrefix + '/sdoc', new Router(mapper, config).router);
+            const searchForm = new SDocSearchForm({moreFilter: 'id:' + sdocIdParam});
+            dataService.search(searchForm).then(
+                function searchDone(searchResult: SDocSearchResult) {
+                    if (!searchResult || searchResult.recordCount !== 1) {
+                        return next('not found');
+                    }
+                    req['sdoc'] = searchResult.currentRecords[0];
+                    next();
+                }
+            ).catch(
+                function searchError(error) {
+                    console.error('error thrown: ', error);
+                    return next('not found');
+                }
+            );
+        });
+
+        app.route(apiPrefix + '/sdoc/:sdoc_id')
+            .all(function(req, res, next) {
+                next();
+            })
+            .get(function(req, res, next) {
+                const sdoc: SDocRecord = req['sdoc'];
+                res.json(sdoc.toSerializableJsonObj());
+                next();
+            });
 
         // use own wrapper for search
         app.route(apiPrefix + '/sdocsearch')
@@ -57,16 +76,17 @@ export class SDocServerModule {
                     dataService.search(searchForm).then(
                         function searchDone(searchResult: SDocSearchResult) {
                             res.json(searchResult.toSerializableJsonObj());
+                            next();
                         }
                     ).catch(
                         function searchError(error) {
                             console.error('error thrown: ', error);
-                            res.sendStatus(500);
+                            return next('not found');
                         }
                     );
                 } catch (error) {
                     console.error('error thrown: ', error);
-                    res.sendStatus(500);
+                    return next('not found');
                 }
             })
             .post(function(req, res, next) {
@@ -76,16 +96,17 @@ export class SDocServerModule {
                     dataService.search(searchForm).then(
                         function searchDone(searchResult: SDocSearchResult) {
                             res.json(searchResult.toSerializableJsonObj());
+                            next();
                         }
                     ).catch(
                         function searchError(error) {
                             console.error('error thrown: ', error);
-                            res.sendStatus(500);
+                            return next('not found');
                         }
                     );
                 } catch (error) {
                     console.error('error thrown: ', error);
-                    res.sendStatus(500);
+                    return next('not found');
                 }
             });
     }

@@ -2,14 +2,14 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {SDocShowpageComponent} from './sdoc-showpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
+import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -19,12 +19,13 @@ describe('SDocShowpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [SDocShowpageComponent],
             imports: [
+                NgbModule.forRoot(),
                 ToastModule.forRoot(),
                 TranslateModule.forRoot()],
             providers: [
-                { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useClass: RouterTestingModule },
+                SDocContentUtils,
                 SDocRoutingService,
                 ToastsManager,
                 TranslateService

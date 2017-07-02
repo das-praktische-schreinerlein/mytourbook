@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
+import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -12,12 +12,13 @@ import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.compon
     styleUrls: ['./sdoc-showpage.component.css']
 })
 export class SDocShowpageComponent implements OnInit, OnDestroy {
+    public contentUtils: SDocContentUtils;
     public record: SDocRecord;
     public Layout = Layout;
 
-    constructor(private route: ActivatedRoute,
-                private sdocDataService: SDocDataService, private sdocRoutingService: SDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef) {
+    constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
+                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils) {
+        this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
 

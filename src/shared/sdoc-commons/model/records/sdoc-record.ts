@@ -25,6 +25,17 @@ export class SDocRecord extends BaseEntityRecord {
             '  type: ' + this.type + '' +
             '}';
     }
+
+    toSerializableJsonObj(): {} {
+        const record = {};
+        const me: SDocRecord = this;
+        for (const key in me) {
+            record[key] = me[key];
+        }
+        record['sdocimages'] = this.get('sdocimages');
+
+        return record;
+    }
 }
 
 export let SDocRecordRelation: any = {
@@ -37,3 +48,4 @@ export let SDocRecordRelation: any = {
         },
     }
 };
+
