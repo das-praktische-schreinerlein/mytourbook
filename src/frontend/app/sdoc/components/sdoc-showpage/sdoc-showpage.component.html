@@ -7,10 +7,10 @@
                 <ng-container [ngSwitch]="record.type">
                     <ng-container *ngSwitchCase="'IMAGE'">
                         <div class="card-block">
-                            <h5>{{record.locHirarchie}}</h5>
+                            <h6>{{record.locHirarchie}}</h6>
                             <div>
-                                <div>
-                                    <h5>{{record.type | translate }} {{record.name}}</h5>
+                                <h5>{{record.type | translate }} {{record.name}}</h5>
+                                <div class="image-container">
                                     <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                         <img class="sdoc-image-main" width="600px" [src]="contentUtils.getFullUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                                     </ng-container>
@@ -20,7 +20,7 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault="">
                         <div class="card-block">
-                            <h5>{{record.locHirarchie}}</h5>
+                            <h6>{{record.locHirarchie}}</h6>
                             <div>
                                 <div style="width: 200px; float: left">
                                     <h5>{{record.type | translate }}</h5>

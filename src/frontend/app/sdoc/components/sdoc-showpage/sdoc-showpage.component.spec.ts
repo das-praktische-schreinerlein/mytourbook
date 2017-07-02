@@ -10,6 +10,8 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {AppServiceStub} from '../../../../testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -26,6 +28,7 @@ describe('SDocShowpageComponent', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useClass: RouterTestingModule },
                 SDocContentUtils,
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 SDocRoutingService,
                 ToastsManager,
                 TranslateService

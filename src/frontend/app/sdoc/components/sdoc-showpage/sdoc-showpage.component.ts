@@ -56,10 +56,9 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         if (this.record.type === 'TRACK') {
             if (type === 'IMAGE' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
-                filters['perPage'] = 999;
+                filters['perPage'] = 100;
             } else if (type === 'ROUTE' && record.routeId) {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
-                filters['perPage'] = 999;
             } else if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else {
@@ -70,10 +69,9 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'IMAGE') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
-                filters['perPage'] = 30;
+                filters['perPage'] = 12;
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
-                filters['perPage'] = 999;
             } else {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
             }
@@ -83,7 +81,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             } else {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
                 if (type === 'IMAGE') {
-                    filters['perPage'] = 30;
+                    filters['perPage'] = 12;
                 }
             }
         } else if (this.record.type === 'IMAGE') {
