@@ -28,7 +28,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             this.searchParameterUtils.useValueOrDefault(searchForm.fulltext, 'egal'),
             this.searchParameterUtils.useValueOrDefault(searchForm.moreFilter, 'ungefiltert'),
             this.searchParameterUtils.useValueOrDefault(searchForm.sort, 'relevance'),
-            this.searchParameterUtils.useValueOrDefault(searchForm.type, 'alle'),
+            this.searchParameterUtils.useValueOrDefault(searchForm.type, 'alle').toLowerCase(),
             +searchForm.perPage || 10,
             +searchForm.pageNum || 1
         ];
@@ -86,7 +86,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             defaults['moreFilter'], '');
         searchForm.sort = this.searchParameterUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
         searchForm.type = this.searchParameterUtils.useValueDefaultOrFallback(
-            this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '');
+            this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '').toLowerCase();
         searchForm.perPage = +params['perPage'] || 10;
         searchForm.pageNum = +params['pageNum'] || 1;
     }

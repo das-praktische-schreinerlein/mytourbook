@@ -6,6 +6,7 @@ import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-s
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
+import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -20,7 +21,7 @@ export class SectionPageComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private router: Router, private searchFormConverter: SDocSearchFormConverter,
-                private toastr: ToastsManager, vcr: ViewContainerRef) {
+                private sDocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -32,7 +33,9 @@ export class SectionPageComponent implements OnInit {
                 me.pdoc = data.pdoc;
                 me.baseSearchUrl = data.baseSearchUrl;
                 me.sections = me.pdoc !== undefined ? me.getSubSections(me.pdoc) : [];
-
+                if (me.pdoc) {
+                    me.sDocRoutingService.setLastSearchUrl(me.getToSearchUrl());
+                }
             },
             (error: {reason: any}) => {
                 me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oops!');

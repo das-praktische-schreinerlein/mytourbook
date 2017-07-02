@@ -19,6 +19,9 @@
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Alles'"
                                                     i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.sdoc.ALL"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page ALL|SearchLinkLabel section-page ALL@@linline-search.searchLinkLabel.sdoc.ALL"
+                                                    [baseSearchUrl]="baseSearchUrl"
                                                     [params]="getFiltersForType(pdoc, '')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
@@ -29,6 +32,9 @@
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Regionen'"
                                                     i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.sdoc.LOCATION"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page LOCATION|SearchLinkLabel section-page LOCATION@@linline-search.searchLinkLabel.sdoc.LOCATION"
+                                                    [baseSearchUrl]="baseSearchUrl"
                                                     [params]="getFiltersForType(pdoc, 'LOCATION')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
@@ -39,6 +45,9 @@
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Routen'"
                                                     i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.sdoc.ROUTE"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.sdoc.ROUTE"
+                                                    [baseSearchUrl]="baseSearchUrl"
                                                     [params]="getFiltersForType(pdoc, 'ROUTE')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
@@ -49,6 +58,9 @@
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Bilder'"
                                                     i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.sdoc.IMAGE"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page IMAGE|SearchLinkLabel section-page IMAGE@@linline-search.searchLinkLabel.sdoc.IMAGE"
+                                                    [baseSearchUrl]="baseSearchUrl"
                                                     [params]="getFiltersForType(pdoc, 'IMAGE')"
                                                     [showForm]="false"
                                                     [layout]="Layout.SMALL"
@@ -59,6 +71,9 @@
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Tracks'"
                                                     i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.sdoc.TRACK"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page TRACK|SearchLinkLabel section-page TRACK@@linline-search.searchLinkLabel.sdoc.TRACK"
+                                                    [baseSearchUrl]="baseSearchUrl"
                                                     [params]="getFiltersForType(pdoc, 'TRACK')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"

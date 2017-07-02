@@ -10,6 +10,7 @@ import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-search
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
+import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -31,6 +32,7 @@ describe('SectionPageComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
                 SDocSearchFormConverter,
+                SDocRoutingService,
                 SearchParameterUtils,
                 ToastsManager,
                 TranslateService

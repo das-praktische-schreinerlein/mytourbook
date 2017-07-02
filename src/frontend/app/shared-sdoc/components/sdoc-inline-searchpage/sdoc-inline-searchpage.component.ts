@@ -11,6 +11,7 @@ import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AppState, GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-sdoc-inline-searchpage',
@@ -52,12 +53,18 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     public label: string;
 
     @Input()
+    public baseSearchUrl? = 'sdoc/search/';
+
+    @Input()
+    public searchLinkLabel?: string;
+
+    @Input()
     public layout: Layout;
 
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(private appService: GenericAppService,
+    constructor(private appService: GenericAppService, private router: Router,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.searchForm = new SDocSearchForm({});
@@ -109,6 +116,16 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         this.doSearch();
         return false;
     }
+
+    getToSearchUrl() {
+        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm);
+    }
+
+    onToSearchPage(event: any) {
+        this.router.navigateByUrl(this.getToSearchUrl(), '');
+        return false;
+    }
+
 
     private doSearchWithParams(params: any) {
         console.log('doSearchWithParams params:', params);

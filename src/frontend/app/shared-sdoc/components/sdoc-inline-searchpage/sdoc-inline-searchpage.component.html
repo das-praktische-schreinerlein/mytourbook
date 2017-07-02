@@ -1,6 +1,9 @@
 <div *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0">
     <section>
-        <h5>{{label}}: {{ searchResult.recordCount }}</h5>
+        <div class="container">
+            <h5 class="">{{label}}: {{ searchResult.recordCount }}</h5>
+            <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined">{{searchLinkLabel}}</a>
+        </div>
         <div class="container" *ngIf="showForm">
             <app-sdoc-searchform [searchResult]="searchResult"
                                  (search)="onSearchSDoc($event)"></app-sdoc-searchform>
