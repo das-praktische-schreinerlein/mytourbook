@@ -1,5 +1,5 @@
 <div *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0">
-    <section>
+    <div class="container inline-content-container">
         <div class="container">
             <h5 class="">{{label}}: {{ searchResult.recordCount }}</h5>
             <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined">{{searchLinkLabel}}</a>
@@ -17,6 +17,6 @@
             <app-sdoc-list-footer [searchResult]="searchResult"
                                   (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
         </div>
-    </section>
+    </div>
 </div>
 

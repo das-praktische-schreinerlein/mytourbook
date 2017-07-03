@@ -1,14 +1,9 @@
 <div class="row sdoc-list-item-flat">
     <div class="col-1 image">
         <ng-container [ngSwitch]="record.type">
-            <ng-container *ngSwitchCase="'IMAGE'">
-                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <img class="sdoc-image-main" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
-                </ng-container>
-            </ng-container>
             <ng-container *ngSwitchDefault="">
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <img class="sdoc-image-main" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                    <img class="picture-thumbnail" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                 </ng-container>
             </ng-container>
         </ng-container>

@@ -2,10 +2,12 @@ import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {LeafletMapComponent} from './components/leaflet-map/leaflet-map.component';
+import {VisJsProfileMapComponent} from './components/visjs-profilemap/visjs-profilemap.component';
 
 @NgModule({
     declarations: [
-        LeafletMapComponent
+        LeafletMapComponent,
+        VisJsProfileMapComponent
     ],
     imports: [
         NgbModule,
@@ -14,7 +16,8 @@ import {LeafletMapComponent} from './components/leaflet-map/leaflet-map.componen
     providers: [
     ],
     exports: [
-        LeafletMapComponent
+        LeafletMapComponent,
+        VisJsProfileMapComponent
     ]
 })
 export class AngularMapsModule {}

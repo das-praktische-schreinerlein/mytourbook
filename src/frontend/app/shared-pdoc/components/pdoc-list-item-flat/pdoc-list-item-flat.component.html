@@ -1,7 +1,7 @@
 <div class="row pdoc-list-item-flat">
     <ng-container *ngIf="record.image !== undefined">
         <div class="col-3" style="min-width: 170px;">
-            <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><img src="http://www.michas-ausflugstipps.de/digifotos/pics_x600/{{record.image}}" width="170px" class="" alt="{{record.name}}"></a>
+            <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><img src="http://www.michas-ausflugstipps.de/digifotos/pics_x600/{{record.image}}" width="170px" class="picture" alt="{{record.name}}"></a>
         </div>
         <div class="col-9">
             <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><h6>{{record.name}}</h6></a>

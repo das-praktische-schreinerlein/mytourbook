@@ -1,4 +1,4 @@
-<section class="row card-deck" *ngIf="searchResult.currentRecords != undefined && searchResult.currentRecords.length > 0">
+<div class="row card-deck" *ngIf="searchResult.currentRecords != undefined && searchResult.currentRecords.length > 0">
     <ng-container [ngSwitch]="layout">
         <ng-container *ngSwitchCase="Layout.SMALL">
             <app-sdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-sdoc-list-item"
@@ -25,4 +25,4 @@
                                 *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item>
         </ng-container>
     </ng-container>
-</section>
+</div>

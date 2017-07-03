@@ -4,6 +4,8 @@ import 'leaflet';
 import {GPX} from '../../services/leaflet-gpx.plugin';
 import {Http} from '@angular/http';
 import LatLng = L.LatLng;
+import {GpxLoader} from '../../services/gpx.loader';
+import {GpxParser} from '../../services/gpx.parser';
 
 @Component({
     selector: 'app-leaflet-map',
@@ -17,8 +19,9 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         minZoom: 1, maxZoom: 16,
         attribution: this.osmAttrib
     });
+    private gpxLoader: GpxLoader;
 
-    initialzed: boolean;
+    initialized: boolean;
     map: L.Map;
 
     @Input()
@@ -40,15 +43,15 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     public centerChanged: EventEmitter<L.LatLng> = new EventEmitter();
 
     constructor(private http: Http) {
-
+        this.gpxLoader = new GpxLoader(http, new GpxParser());
     }
 
     ngAfterViewChecked() {
-        if (this.initialzed) {
+        if (this.initialized) {
             return;
         }
 
-        this.initialzed = true;
+        this.initialized = true;
         this.renderMap();
     }
 
@@ -57,7 +60,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     }
 
     private renderMap() {
-        if (!this.initialzed || !this.mapId) {
+        if (!this.initialized || !this.mapId) {
             return;
         }
         if (!this.map) {
@@ -77,7 +80,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         const gpxObjs = [];
         for (let i = 0; i < this.trackUrls.length; i++) {
             const trackUrl = this.trackUrls[i];
-            const gpxObj = new GPX(this.http, trackUrl, {async: true, display_wpt: false});
+            const gpxObj = new GPX(this.gpxLoader, trackUrl, {async: true, display_wpt: false});
             gpxObjs.push(gpxObj);
             gpxObj.addTo(this.map);
             gpxObj.on('loaded', function (e) {

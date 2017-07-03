@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {Layout, SDocListComponent} from './components/sdoc-list/sdoc-list.component';
+import {SDocListComponent} from './components/sdoc-list/sdoc-list.component';
 import {SDocListItemComponent} from './components/sdoc-list-item/sdoc-list-item.component';
 import {SDocListFooterComponent} from './components/sdoc-list-footer/sdoc-list-footer.component';
 import {SDocEditformComponent} from './components/sdoc-editform/sdoc-editform.component';
@@ -10,7 +10,6 @@ import {SDocListHeaderComponent} from './components/sdoc-list-header/sdoc-list-h
 import {SDocInlineSearchpageComponent} from './components/sdoc-inline-searchpage/sdoc-inline-searchpage.component';
 import {SDocListItemSmallComponent} from './components/sdoc-list-item-small/sdoc-list-item-small.component';
 import {SDocListItemFlatComponent} from './components/sdoc-list-item-flat/sdoc-list-item-flat.component';
-import {SDocLeafletMapComponent} from './components/sdoc-leaflet-map/sdoc-leaflet-map.component';
 import {AngularMapsModule} from '../../shared/angular-maps/angular-maps.module';
 import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
 import {HttpModule, JsonpModule} from '@angular/http';
@@ -20,6 +19,8 @@ import {TranslateModule} from '@ngx-translate/core';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastModule} from 'ng2-toastr';
+import {SDocProfileMapComponent} from './components/sdoc-profilemap/sdoc-profilemap.component';
+import {SDocMapComponent} from './components/sdoc-map/sdoc-map.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import {ToastModule} from 'ng2-toastr';
         SDocCreateformComponent,
         SDocSearchformComponent,
         SDocInlineSearchpageComponent,
-        SDocLeafletMapComponent,
+        SDocMapComponent,
+        SDocProfileMapComponent,
         SDocInlineSearchpageComponent,
     ],
     imports: [
@@ -63,7 +65,8 @@ import {ToastModule} from 'ng2-toastr';
         SDocCreateformComponent,
         SDocSearchformComponent,
         SDocInlineSearchpageComponent,
-        SDocLeafletMapComponent,
+        SDocMapComponent,
+        SDocProfileMapComponent,
         SDocInlineSearchpageComponent
     ]
 })

@@ -7,3 +7,33 @@ button.buttonselect {
     width: 100%;
 }
 
+img.picture-thumbnail {
+    border-radius: 5px;
+}
+img.picture, img.picture-thumbnail-big, img.picture-small, img.picture-big  {
+    border-radius: 10px;
+}
+div.leaflet-container {
+    border-radius: 10px;
+}
+
+div.content-container {
+    border: 2px solid #8CACD3;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: white;
+    margin: 10px;
+}
+
+div.inline-content-container {
+    border: 2px solid #bfccd3;
+    border-radius: 5px;
+    background-color: white;
+}
+
+body {
+    background: url(http://localhost/michas/images/bg-berge3.jpg);
+    background-repeat: repeat-x;
+    background-color: #BDBDAD;
+    background-attachment: fixed;
+}
