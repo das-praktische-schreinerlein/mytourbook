@@ -56,12 +56,12 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
                 showGrid: true,
                 showShadow: false,
                 keepAspectRatio: true,
-                verticalRatio: 0.5,
+                verticalRatio: 0.2,
                 xBarWidth: 0.004,
                 yBarWidth: 0.004,
                 xLabel: 'lat',
                 yLabel: 'lon',
-                zLabel: 'altitude',
+                zLabel: 'm',
             };
             const container = document.getElementById(this.mapId);
             const mapProfileObj = new VisJsGPXProfileMap(this.gpxLoader, trackUrl, container, options);
