@@ -1,0 +1,199 @@
+<dataConfig>
+    <dataSource type="JdbcDataSource"
+                driver="com.mysql.jdbc.Driver"
+                url="jdbc:mysql://mysqldb:3306/mytb"
+                user="mytb"
+                password="mytb"/>
+    <document>
+        <entity name="track"
+                pk="id"
+                query="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt from kategorie_full, location where kategorie_full.l_id = location.l_id order by k_datevon"
+                deltaImportQuery="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS month, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt from kategorie_full, location where kategorie_full.l_id = location.l_id and kategorie_full.k_id='${dih.delta.id}'"
+                deltaQuery="SELECT k_id from kategorie_full'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="k_id" name="id"/>
+            <field column="k_id" name="track_id_i"/>
+            <field column="t_id" name="route_id_i"/>
+            <field column="l_id" name="loc_id_i"/>
+            <!-- strip html-->
+            <field column="k_name" name="name_s" stripHTML="true" />
+            <field column="k_name" name="name_txt" stripHTML="true" />
+            <!-- strip html and replace \n and doubled whitespaces -->
+            <field column="k_html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="k_html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
+            <field column="k_datevon" name="date_dt" />
+            <field column="week" name="week_is" />
+            <field column="month" name="month_is" />
+            <field column="k_gps_lat" name="geo_lat_s" />
+            <field column="k_gps_lon" name="geo_lon_s" />
+            <field column="k_gps_loc" name="geo_loc_p" type="location" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+
+            <!-- child='true' -->
+            <entity name='image'
+                    query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id='${track.k_id}' order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id from image'"
+            >
+                <field column="i_id" name="i_fav_id_is" />
+                <field column="i_date" name="i_fav_i_date_dts" />
+                <field column="i_url" name="i_fav_url_txt" />
+            </entity>
+        </entity>
+
+        <entity name="route"
+                pk="id"
+                query="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, t_k_ids from tour, location where tour.l_id = location.l_id order by t_datevon, t_id"
+                deltaImportQuery="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, t_k_ids  from tour, location where tour.l_id = location.l_id and tour.t_id='${dih.delta.id}'"
+                deltaQuery="SELECT T_id from tour order by t_datevon, t_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="t_id" name="id"/>
+            <field column="k_id" name="track_id_i"/>
+            <field column="t_id" name="route_id_i"/>
+            <field column="l_id" name="loc_id_i"/>
+            <!-- strip html-->
+            <field column="t_name" name="name_s" stripHTML="true" />
+            <field column="t_name" name="name_txt" stripHTML="true" />
+            <!-- strip html and replace \n and doubled whitespaces -->
+            <field column="t_html_list" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="t_html_list" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="t_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="t_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="t_gpstracks_basefile" name="gpstracks_basefile_s" />
+            <field column="t_datevon" name="date_dt" />
+            <field column="t_gps_lat" name="geo_lat_s" />
+            <field column="t_gps_lon" name="geo_lon__s" />
+            <field column="t_gps_loc" name="geo_loc_p" type="location" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+
+            <!-- child='true' -->
+            <entity name='image'
+                    query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (${route.t_k_ids} 0) or k_id in (${route.k_id}) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id from image'"
+            >
+                <field column="i_id" name="i_fav_id_is" />
+                <field column="i_date" name="i_fav_i_date_dts" />
+                <field column="i_url" name="i_fav_url_txt" />
+            </entity>
+            <entity name='bericht'
+                    query="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id in (${route.t_k_ids} 0) or k_id in (${route.k_id}) order by k_datevon asc"
+                    deltaImportQuery="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id=dih.delta.id}'"
+                    deltaQuery="SELECT k_id from kategorie_full'"
+            >
+                <field column="k_datevon" name="date_dts" />
+                <field column="week" name="week_is" />
+                <field column="month" name="month_is" />
+            </entity>
+        </entity>
+
+        <entity name="location"
+                pk="id"
+                query="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_parent_id, l_name, l_html, l_meta_shortdesc, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_katids, l_tids from location order by l_typ asc, l_name"
+                deltaImportQuery="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_name, l_html, l_meta_shortdesc, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_katids, l_tids from location WHERE l_id='${dih.delta.id}'"
+                deltaQuery="SELECT l_id from location order by l_typ asc, l_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="l_id" name="id"/>
+            <field column="l_id" name="loc_id_i"/>
+            <field column="l_parent_id" name="loc_parent_id_i"/>
+
+            <!-- strip html-->
+            <field column="l_name" name="name_s" stripHTML="true" />
+            <field column="l_name" name="name_txt" stripHTML="true" />
+            <!-- strip html and replace \n and doubled whitespaces -->
+            <field column="l_html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="l_html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="l_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="l_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="l_gps_lat" name="geo_lat_s" />
+            <field column="l_gps_lon" name="geo_lon_s" />
+            <field column="l_gps_loc" name="geo_loc_p" type="location" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+
+            <!-- child='true' -->
+            <entity name='image'
+                    query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (${location.l_katids} 0) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id from image'"
+            >
+                <field column="i_id" name="i_fav_id_is" />
+                <field column="i_date" name="i_fav_i_date_dts" />
+                <field column="i_url" name="i_fav_url_txt" />
+            </entity>
+
+            <entity name='tour'
+                    query="select t_id, t_keywords from tour where t_id in (${location.l_tids} 0)"
+                    deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id from tour'"
+            >
+                <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            </entity>
+            <entity name='bericht'
+                    query="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id in (${location.l_katids} 0) order by k_datevon asc"
+                    deltaImportQuery="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id=dih.delta.id}'"
+                    deltaQuery="SELECT k_id from kategorie_full'"
+            >
+                <field column="k_datevon" name="date_dts" />
+                <field column="week" name="week_is" />
+                <field column="month" name="month_is" />
+            </entity>
+
+        </entity>
+        <entity name="image"
+                pk="id"
+                query="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id order by i_date, i_id"
+                deltaImportQuery="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id and image.i_id='${dih.delta.id}'"
+                deltaQuery="SELECT i_id from image order by i_date, i_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="i_id" name="id"/>
+            <field column="i_id" name="image_id_i"/>
+            <field column="k_id" name="track_id_i"/>
+            <field column="t_id" name="route_id_i"/>
+            <field column="l_id" name="loc_id_i"/>
+            <!-- strip html-->
+            <field column="i_katname" name="name_s" stripHTML="true" />
+            <field column="i_katname" name="name_txt" stripHTML="true" />
+            <!-- strip html and replace \n and doubled whitespaces -->
+            <field column="i_katdesc" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="i_katdesc" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
+            <field column="i_gps_lat" name="geo_lat_s" />
+            <field column="i_gps_lon" name="geo_lon_s" />
+            <field column="i_gps_loc" name="geo_loc_p" type="location" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="i_date" name="date_dt" />
+            <field column="i_date" name="date_dts" />
+            <field column="week" name="week_is" />
+            <field column="month" name="month_is" />
+            <field column="i_id" name="i_fav_id_is" />
+            <field column="i_date" name="i_fav_i_date_dts" />
+            <field column="i_url" name="i_fav_url_txt" />
+
+        </entity>
+    </document>
+
+</dataConfig>
