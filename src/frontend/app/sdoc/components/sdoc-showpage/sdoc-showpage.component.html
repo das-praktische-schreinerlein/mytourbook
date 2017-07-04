@@ -3,7 +3,7 @@
             <ng-container [ngSwitch]="record.type">
                 <ng-container *ngSwitchCase="'IMAGE'">
                     <div class="card-block">
-                        <h6>{{record.locHirarchie}}</h6>
+                        <h6><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h6>
                         <div>
                             <h5>{{record.type | translate }} {{record.name}}</h5>
                             <div class="image-container">
@@ -16,7 +16,7 @@
                 </ng-container>
                 <ng-container *ngSwitchDefault="">
                     <div class="card-block">
-                        <h6>{{record.locHirarchie}}</h6>
+                        <h6><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h6>
                         <div>
                             <div style="width: 200px; float: left">
                                 <h5>{{record.type | translate }}</h5>

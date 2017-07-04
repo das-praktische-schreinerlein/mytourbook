@@ -36,6 +36,30 @@ export class SDocContentUtils {
         return hierarchy[hierarchy.length - 1];
     }
 
+    getLocationHierarchy(record: SDocRecord, lastOnly: boolean): any[] {
+        if (record.locHirarchie === undefined || record.locHirarchieIds === undefined) {
+            return [];
+        }
+
+        const hierarchyTexts = record.locHirarchie.split(' -> ');
+        const hierarchyIds = record.locHirarchieIds.split(',');
+        if (hierarchyIds.length !== hierarchyTexts.length) {
+            return [];
+        }
+
+        const hierarchy = [];
+        let lastIndex = hierarchyTexts.length - 1;
+        if (record.type === 'LOCATION' && hierarchy.length > 1) {
+            lastIndex--;
+        }
+
+        for (let i = lastOnly ? lastIndex : 0; i < hierarchyTexts.length; i++) {
+            hierarchy.push(['LOCATION_' + hierarchyIds[i], hierarchyTexts[i]]);
+        }
+
+        return hierarchy;
+    }
+
     getMapUrlTrack(record: SDocRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(
             'http://www.michas-ausflugstipps.de/gmap.php?' +

@@ -8,13 +8,13 @@
                         <img class="picture-thumbnail-big" width="100px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                     </ng-container>
                 </div>
-                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.datevon}}</h5></a>
+                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon}}</h5></a>
             </div>
         </div>
     </ng-container>
     <ng-container *ngSwitchDefault="">
         <div class="card-block">
-            <h5>{{ contentUtils.getLastElementLocationHierarchy(record)}}</h5>
+            <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div style="width: 100px; float: left">
                     <h5>{{record.type | translate }}</h5>
@@ -22,7 +22,7 @@
                         <img class="picture-thumbnail" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                     </ng-container>
                 </div>
-                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a>
+                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.name}}</h5></a>
             </div>
         </div>
     </ng-container>

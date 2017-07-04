@@ -14,6 +14,7 @@ export class SDocRecord extends BaseEntityRecord {
     gpsTrackBasefile: string;
     keywords: string;
     locHirarchie: string;
+    locHirarchieIds: string;
     name: string;
     type: string;
 

@@ -43,6 +43,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 .toLowerCase()
                 .replace(/[ ]*->[ ]*/g, ',,')
                 .replace(/ /g, '_') : ''),
+            loc_lochirarchie_ids_s: (props.locHirarchieIds ? props.locHirarchieIds
+                .toLowerCase()
+                .replace(/,/g, ',,')
+                .replace(/ /g, '_') : ''),
             name_s: props.name,
             type_s: props.type,
 
@@ -78,6 +82,9 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             .replace(/,/g, ' ')
             .replace(/_/g, ' ')
             .trim();
+        values['locHirarchieIds'] = this.getSolrValue(doc, 'loc_lochirarchie_ids_s', '')
+            .replace(/_/g, ' ').trim()
+            .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
 
         // console.log('mapSolrDocument values:', values);
 
@@ -116,7 +123,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
         return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
-            'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'name_s', 'type_s', 'i_fav_url_txt'];
+            'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s', 'i_fav_url_txt'];
     };
 
     getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {

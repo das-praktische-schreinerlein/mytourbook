@@ -7,8 +7,8 @@
     <document>
         <entity name="track"
                 pk="id"
-                query="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt from kategorie_full, location where kategorie_full.l_id = location.l_id order by k_datevon"
-                deltaImportQuery="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS month, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt from kategorie_full, location where kategorie_full.l_id = location.l_id and kategorie_full.k_id='${dih.delta.id}'"
+                query="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id order by k_datevon"
+                deltaImportQuery="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS month, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id and kategorie_full.k_id='${dih.delta.id}'"
                 deltaQuery="SELECT k_id from kategorie_full'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -34,6 +34,8 @@
             <field column="k_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
 
@@ -51,8 +53,8 @@
 
         <entity name="route"
                 pk="id"
-                query="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, t_k_ids from tour, location where tour.l_id = location.l_id order by t_datevon, t_id"
-                deltaImportQuery="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, t_k_ids  from tour, location where tour.l_id = location.l_id and tour.t_id='${dih.delta.id}'"
+                query="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids from tour, location where tour.l_id = location.l_id order by t_datevon, t_id"
+                deltaImportQuery="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids  from tour, location where tour.l_id = location.l_id and tour.t_id='${dih.delta.id}'"
                 deltaQuery="SELECT T_id from tour order by t_datevon, t_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -76,6 +78,8 @@
             <field column="t_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
 
@@ -102,8 +106,8 @@
 
         <entity name="location"
                 pk="id"
-                query="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_parent_id, l_name, l_html, l_meta_shortdesc, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_katids, l_tids from location order by l_typ asc, l_name"
-                deltaImportQuery="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_name, l_html, l_meta_shortdesc, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_katids, l_tids from location WHERE l_id='${dih.delta.id}'"
+                query="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_parent_id, l_name, l_html, l_meta_shortdesc, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_lochirarchieids, l_katids, l_tids from location order by l_typ asc, l_name"
+                deltaImportQuery="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_name, l_html, l_meta_shortdesc, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_lochirarchieids, l_katids, l_tids from location WHERE l_id='${dih.delta.id}'"
                 deltaQuery="SELECT l_id from location order by l_typ asc, l_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -124,6 +128,8 @@
             <field column="l_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
 
@@ -158,8 +164,8 @@
         </entity>
         <entity name="image"
                 pk="id"
-                query="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id order by i_date, i_id"
-                deltaImportQuery="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id and image.i_id='${dih.delta.id}'"
+                query="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt, l_lochirarchieids from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id order by i_date, i_id"
+                deltaImportQuery="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt, l_lochirarchieids from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id and image.i_id='${dih.delta.id}'"
                 deltaQuery="SELECT i_id from image order by i_date, i_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -183,6 +189,8 @@
             <field column="i_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
             <field column="i_date" name="date_dt" />
