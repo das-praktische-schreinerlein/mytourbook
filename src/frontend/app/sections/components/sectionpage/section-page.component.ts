@@ -53,7 +53,7 @@ export class SectionPageComponent implements OnInit {
         if (type === 'IMAGE') {
             filters['perPage'] = 6;
         } else {
-            filters['perPage'] = 3;
+            filters['perPage'] = 5;
         }
 
         return filters;

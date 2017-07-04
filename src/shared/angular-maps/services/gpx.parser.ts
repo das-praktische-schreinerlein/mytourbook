@@ -118,7 +118,7 @@ export class GpxParser  {
             const ptElement = el[i];
             const eleElement = ptElement.getElementsByTagName('ele');
             let ele;
-            if (eleElement.length) {
+            if (eleElement && eleElement.length > 0) {
                 ele = eleElement[0].childNodes[0].nodeValue;
             }
             const ll = ele !== undefined ?

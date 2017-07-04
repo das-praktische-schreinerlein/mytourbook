@@ -1,9 +1,10 @@
-import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import LatLng = L.LatLng;
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 @Component({
     selector: 'app-sdoc-map',
     templateUrl: './sdoc-map.component.html'
@@ -41,8 +42,10 @@ export class SDocMapComponent implements AfterViewChecked, OnChanges {
         this.renderMap();
     }
 
-    ngOnChanges() {
-        this.renderMap();
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
+            this.renderMap();
+        }
     }
 
     renderMap() {

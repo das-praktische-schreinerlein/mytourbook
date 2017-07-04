@@ -1,9 +1,10 @@
-import {AfterViewChecked, Component, Input, OnChanges} from '@angular/core';
+import {AfterViewChecked, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {Http} from '@angular/http';
 import {GpxLoader} from '../../services/gpx.loader';
 import {GpxParser} from '../../services/gpx.parser';
 import {VisJsGPXProfileMap} from '../../services/visjs-gpxprofilemap.plugin';
 import LatLng = L.LatLng;
+import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 
 @Component({
     selector: 'app-visjs-profilemap',
@@ -36,8 +37,10 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
         this.renderMap();
     }
 
-    ngOnChanges() {
-        this.renderMap();
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
+            this.renderMap();
+        }
     }
 
     private renderMap() {
@@ -62,6 +65,14 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
                 xLabel: 'lat',
                 yLabel: 'lon',
                 zLabel: 'm',
+                cameraPosition: {
+                    horizontal: 1.0,
+                    vertical: 0.5,
+                    distance: 2
+                },
+                tooltip: function (data) {
+                    return 'Hoehe:' +  data.data.z;
+                }
             };
             const container = document.getElementById(this.mapId);
             const mapProfileObj = new VisJsGPXProfileMap(this.gpxLoader, trackUrl, container, options);

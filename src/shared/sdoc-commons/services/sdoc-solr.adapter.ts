@@ -13,7 +13,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     mapToSolrFieldName(fieldName: string): string {
         switch (fieldName) {
             case 'name':
-                return 'name_txt';
+                return 'name_s';
             case 'html':
                 return 'html_txt';
             case 'desc':
@@ -34,21 +34,21 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             track_id_i: props.trackId,
             date_dt: props.datevon,
             desc_txt: props.desc,
-            geo_lon_txt: props.geoLon,
-            geo_lat_txt: props.geoLat,
+            geo_lon_s: props.geoLon,
+            geo_lat_s: props.geoLat,
             geo_loc_p: props.geoLoc,
-            gpstracks_basefile_txt: props.gpsTrackBasefile,
+            gpstracks_basefile_s: props.gpsTrackBasefile,
             keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
-            loc_lochirarchie_txt: (props.locHirarchie ? props.locHirarchie
+            loc_lochirarchie_s: (props.locHirarchie ? props.locHirarchie
                 .toLowerCase()
                 .replace(/[ ]*->[ ]*/g, ',,')
                 .replace(/ /g, '_') : ''),
-            name_txt: props.name,
-            type_txt: props.type,
+            name_s: props.name,
+            type_s: props.type,
 
         };
 
-        values['html_txt'] = [values.desc_txt, values.name_txt, values.keywords_txt, values.type_txt].join(' ');
+        values['html_txt'] = [values.desc_txt, values.name_s, values.keywords_txt, values.type_s].join(' ');
 
         return values;
     }
@@ -66,20 +66,19 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
         values['datevon'] = this.getSolrValue(doc, 'date_dt', undefined);
         values['desc'] = this.getSolrValue(doc, 'desc_txt', undefined);
-        values['geoLon'] = this.getSolrCoorValue(doc, 'geo_lon_txt', undefined);
-        values['geoLat'] = this.getSolrCoorValue(doc, 'geo_lat_txt', undefined);
+        values['geoLon'] = this.getSolrCoorValue(doc, 'geo_lon_s', undefined);
+        values['geoLat'] = this.getSolrCoorValue(doc, 'geo_lat_s', undefined);
         values['geoLoc'] = this.getSolrCoorValue(doc, 'geo_loc_p', undefined);
-        values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_txt', undefined);
+        values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_s', undefined);
         values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
-        values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
-        values['type'] = this.getSolrValue(doc, 'type_txt', undefined);
-        values['locHirarchie'] = this.getSolrValue(doc, 'loc_lochirarchie_txt', '')
+        values['name'] = this.getSolrValue(doc, 'name_s', undefined);
+        values['type'] = this.getSolrValue(doc, 'type_s', undefined);
+        values['locHirarchie'] = this.getSolrValue(doc, 'loc_lochirarchie_s', '')
             .replace(/,,/g, ' -> ')
             .replace(/,/g, ' ')
             .replace(/_/g, ' ')
             .trim();
 
-        values['persons'] = this.getSolrValue(doc, 'personen_txt', '').split(',,').join(', ');
         // console.log('mapSolrDocument values:', values);
 
         const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
@@ -116,8 +115,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
         return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i',
-            'date_dt', 'desc_txt', 'geo_lon_txt', 'geo_lat_txt', 'geo_loc_p',
-            'gpstracks_basefile_txt', 'keywords_txt', 'loc_lochirarchie_txt', 'name_txt', 'type_txt', 'personen_txt', 'i_fav_url_txt'];
+            'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
+            'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'name_s', 'type_s', 'i_fav_url_txt'];
     };
 
     getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
@@ -125,10 +124,9 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         facetParams.set('facet', 'on');
 
         facetParams.set('facet.field', ['loc_id_i',
-            'personen_txt',
             'loc_lochirarchie_txt',
-            'keywords_txt', 'month_is',
-            'week_is',
+            'keywords_txt',
+            'month_is', 'week_is',
             'type_txt']);
 
         facetParams.set('f.keywords_txt.facet.prefix', 'kw_');
@@ -167,13 +165,13 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const form = opts.originalSearchForm || {};
         switch (form.sort) {
             case 'date':
-                sortParams.set('bq', 'type_txt:ROUTE^1.4 type_txt:LOCATION^1.3 type_txt:TRACK^1.2 type_txt:IMAGE^1');
+                sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:IMAGE^1');
                 sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
                 sortParams.set('defType', 'edismax');
                 sortParams.set('boost', 'recip(rord(date_dts),1,3000,1000)');
                 break;
             case 'location':
-                // sortParams.set('sort', 'loc_lochirarchie_txt asc');
+                sortParams.set('sort', 'loc_lochirarchie_s asc');
                 sortParams.set('bq', 'type_txt:ROUTE^1.4 type_txt:LOCATION^1.3 type_txt:TRACK^1.2 type_txt:IMAGE^1');
                 sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
                 sortParams.set('defType', 'edismax');

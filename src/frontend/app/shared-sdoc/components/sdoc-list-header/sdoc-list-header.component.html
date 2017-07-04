@@ -1,7 +1,7 @@
 <header class="header">
     <div [formGroup]="headerFormGroup" class="form-control-sm">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-6">
                 <span class="sdoc-count" *ngIf="searchResult.recordCount != undefined" i18n="searchresult text sdoc|Text for searchresult sdoc@@text.search.sdoc.result">{searchResult.recordCount, plural, =0 {no result} =1 {one result} other { <strong>{{searchResult.recordCount}}</strong> results}}</span>
                 <ng-container *ngIf="searchResult.recordCount > searchResult.searchForm.perPage">
                     <ngb-pagination (pageChange)="onPageChange($event)"
@@ -15,14 +15,12 @@
                                     size="sm"></ngb-pagination>
                 </ng-container>
             </div>
-<!--
             <div class="col-sm-2 form-inline input-group input-group-sm">
-                <label class="col-form-label" i18n="sort label|Label for header: sort@@label.pageHeader.sdoc.perPage">Sort:</label>
-                <select class="form-control input-sm" name="sort" id="sort" formControlName="perPage" (change)="onSortChange()">
+                <label class="col-form-label" i18n="sort label|Label for header: sort@@label.pageHeader.sdoc.sort">Sort:</label>
+                <select class="form-control input-sm" name="sort" id="sort" formControlName="sort" (change)="onSortChange()">
                     <option *ngFor="let sort of ['relevance', 'location', 'date']" [value]="sort">{{ 'listSorts_' + sort | translate }}</option>
                 </select>
             </div>
--->
             <div class="col-sm-2 form-inline input-group input-group-sm">
                 <label class="col-form-label" i18n="perPage label|Label for header: perPage@@label.pageHeader.sdoc.perPage">per Page:</label>
                 <select class="form-control input-sm" name="perPage" id="perPage" formControlName="perPage" (change)="onPerPageChange()">

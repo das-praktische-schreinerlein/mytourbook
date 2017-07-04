@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
 import {GPX} from '../../services/leaflet-gpx.plugin';
@@ -6,6 +6,7 @@ import {Http} from '@angular/http';
 import LatLng = L.LatLng;
 import {GpxLoader} from '../../services/gpx.loader';
 import {GpxParser} from '../../services/gpx.parser';
+import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 
 @Component({
     selector: 'app-leaflet-map',
@@ -55,8 +56,10 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         this.renderMap();
     }
 
-    ngOnChanges() {
-        this.renderMap();
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
+            this.renderMap();
+        }
     }
 
     private renderMap() {

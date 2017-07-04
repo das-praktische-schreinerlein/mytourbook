@@ -34,8 +34,7 @@ export class VisJsGPXProfileMap {
 
         this.gpxLoader.loadGpx(url, options).then(function onLoaded(geoElements) {
             const layers = me._convertGeoElementsToDataSet(geoElements, element, options);
-            this.graph = new Graph3d(element, layers, options);
-            this.graph.setCameraPosition({ horizontal: 1.0, vertical: 0.1, distance: 3});
+            me.graph = new Graph3d(element, layers, options);
         }).catch(function onError(error) {
             console.error('failed to load gpx for leeafletmap:' + url, error);
         });
@@ -52,7 +51,7 @@ export class VisJsGPXProfileMap {
             const geoElement = geoElements[i];
             for (let p = 0; p < geoElement.points.length; p++) {
                 const point = geoElement.points[p];
-                if (point.lat && point.lng && point.alt) {
+                if (point.lat && point.lng && point.alt !== undefined) {
                     data.add(new VisJsGPXProfileMapPoint({
                         id: counter++,
                         x: point.lat,

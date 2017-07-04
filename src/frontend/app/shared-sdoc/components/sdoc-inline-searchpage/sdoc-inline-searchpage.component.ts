@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
@@ -9,9 +9,9 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AppState, GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {Router} from '@angular/router';
+import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 
 @Component({
     selector: 'app-sdoc-inline-searchpage',
@@ -26,22 +26,8 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     searchResult: SDocSearchResult;
     searchForm: SDocSearchForm;
 
-    // initialize a private variable _record, it's a BehaviorSubject
-    private _paramsObservable = new BehaviorSubject<any>({});
-    private _params = {};
-
     @Input()
-    public set params(value: any) {
-        // set the latest value for _data BehaviorSubject
-        this._paramsObservable.next(value);
-        this._params = value;
-    };
-
-    public get params(): any {
-        // get the latest value from _data BehaviorSubject
-        // return this._params.getValue();
-        return this._params;
-    }
+    public params = {};
 
     @Input()
     public showForm = false;
@@ -88,10 +74,10 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         // Clean sub to avoid memory leak
     }
 
-    ngOnChanges() {
-        if (this.initialized) {
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
 //            console.error("doNewSearchWithparams", this.params);
-//            return this.doSearchWithParams(this.params);
+            return this.doSearchWithParams(this.params);
         }
     }
 
