@@ -39,7 +39,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     public label: string;
 
     @Input()
-    public baseSearchUrl? = 'sdoc/search/';
+    public baseSearchUrl? = 'sdoc/';
 
     @Input()
     public searchLinkLabel?: string;

@@ -4,12 +4,10 @@ import {SDocSolrAdapter} from '../../shared/sdoc-commons/services/sdoc-solr.adap
 import {Headers, Http, Jsonp, RequestOptionsArgs} from '@angular/http';
 import {SDocDataStore} from '../../shared/sdoc-commons/services/sdoc-data.store';
 import {environment} from '../../environments/environment';
-import {SDocRecord} from '../../shared/sdoc-commons/model/records/sdoc-record';
 import {AppState, GenericAppService} from '../../shared/search-commons/services/generic-app.service';
 import {SDocHttpAdapter} from '../../shared/sdoc-commons/services/sdoc-http.adapter';
-import {PDocHttpAdapter} from '../../shared/pdoc-commons/services/pdoc-http.adapter';
 import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.service';
-import {PDocDataStore} from '../../shared/pdoc-commons/services/pdoc-data.store';
+import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -62,7 +60,8 @@ export class AppService extends GenericAppService {
     }
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
-                private pdocDataStore: PDocDataStore, private http: Http, private jsonp: Jsonp) {
+                private pdocDataService: PDocDataService,
+                private http: Http, private jsonp: Jsonp) {
         super();
     }
 
@@ -75,6 +74,7 @@ export class AppService extends GenericAppService {
     }
 
     initSolrData() {
+        const me = this;
         const options = {
             basePath: this.appConfig.solrBaseUrl,
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
@@ -82,39 +82,62 @@ export class AppService extends GenericAppService {
         };
         const httpAdapter = new SDocSolrAdapter(options);
         this.sdocDataStore.setAdapter('http', httpAdapter, '', {});
-        this.setAppState(AppState.Ready);
+
+        this.http.request('./assets/pdocs.json').toPromise()
+            .then(function onDocsLoaded(res: any) {
+                const docs: any[] = res.json().pdocs;
+                return me.pdocDataService.addMany(docs);
+            }).then(function onDocsAdded(records: BaseEntityRecord[]) {
+            console.log('initially loaded pdocs from server', records);
+            me.setAppState(AppState.Ready);
+        }).catch(function onError(reason: any) {
+            console.error('loading appdata failed:' + reason);
+            me.setAppState(AppState.Failed);
+        });
     }
 
     initBackendData() {
+        const me = this;
         const options = {
             basePath: this.appConfig.backendApiBaseUrl
         };
         const sdocAdapter = new SDocHttpAdapter(options);
         this.sdocDataStore.setAdapter('http', sdocAdapter, '', {});
-        const pdocAdapter = new PDocHttpAdapter(options);
-        this.pdocDataStore.setAdapter('http', pdocAdapter, '', {});
 
-        this.setAppState(AppState.Ready);
+        this.http.request(options.basePath + 'pdoc/').toPromise()
+            .then(function onDocsLoaded(res: any) {
+                const docs: any[] = res.json();
+                return me.pdocDataService.addMany(docs);
+            }).then(function onDocsAdded(records: BaseEntityRecord[]) {
+                console.log('initially loaded pdocs from server', records);
+                me.setAppState(AppState.Ready);
+            }).catch(function onError(reason: any) {
+                console.error('loading appdata failed:' + reason);
+                me.setAppState(AppState.Failed);
+        });
     }
 
     initStaticData() {
         const me = this;
-        this.http.request('./assets/sdocs.json').subscribe(
-            res => {
-                const sdocs: any[] = res.json().sdocs;
-                this.sdocDataService.addMany(sdocs).then(function doneAddMany(sdocsRecords: SDocRecord[]) {
-                        console.log('loaded sdocs from assets', sdocsRecords);
-                        me.setAppState(AppState.Ready);
-                    },
-                    function errorCreate(reason: any) {
-                        console.error('loading appdata failed:' + reason);
-                        me.setAppState(AppState.Failed);
-                    }
-                );
-            },
-            error => {
-                console.error('loading appdata failed:' + error);
-                this.setAppState(AppState.Failed);
-            });
+        this.http.request('./assets/pdocs.json').toPromise()
+            .then(function onDocsLoaded(res: any) {
+                const docs: any[] = res.json().pdocs;
+
+                return me.pdocDataService.addMany(docs);
+            }).then(function onDocsAdded(records: BaseEntityRecord[]) {
+                console.log('initially loaded pdocs from assets', records);
+
+                return me.http.request('./assets/sdocs.json').toPromise();
+            }).then(function onDocsLoaded(res: any) {
+                const docs: any[] = res.json().sdocs;
+
+                return me.sdocDataService.addMany(docs);
+            }).then(function onDocsAdded(records: BaseEntityRecord[]) {
+                console.log('initially loaded sdocs from assets', records);
+                me.setAppState(AppState.Ready);
+            }).catch(function onError(reason: any) {
+                console.error('loading appdata failed:' + reason);
+                me.setAppState(AppState.Failed);
+        });
     }
 }

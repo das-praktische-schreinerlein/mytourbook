@@ -15,15 +15,6 @@ const sectionRoutes: Routes = [
         path: 'sections',
         children: [
             {
-                path: '',
-                pathMatch: 'full',
-                component: SDocSearchpageComponent,
-                data: {
-                    id: 'sections_default',
-                    baseSearchUrl: 'sections/'
-                }
-            },
-            {
                 path: ':section',
                 component: SectionComponent,
                 children: [
@@ -48,7 +39,20 @@ const sectionRoutes: Routes = [
                         },
                     },
                     {
-                        path: ':when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
+                        path: 'show/:name/:id',
+                        component: SDocShowpageComponent,
+                        pathMatch: 'full',
+                        data: {
+                            id: 'sections_show'
+                        },
+                        resolve: {
+                            pdoc: SectionsPDocRecordResolver,
+                            baseSearchUrl: SectionsBaseUrlResolver,
+                            record: SectionsSDocRecordResolver
+                        }
+                    },
+                    {
+                        path: 'search/:when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
                         component: SDocSearchpageComponent,
                         data: {
                             flgDoSearch: true,
@@ -61,23 +65,8 @@ const sectionRoutes: Routes = [
                         }
                     }
                 ]
-            },
-            {
-                path: '**',
-                component: SDocSearchpageComponent,
-                data: {
-                    id: 'sections_fallback',
-                    baseSearchUrl: 'sections/'
-                }
             }
         ]
-    },
-    {
-        path: ':section/show/:name/:id',
-        component: SDocShowpageComponent,
-        resolve: {
-            record: SectionsSDocRecordResolver
-        }
     },
     {
         path: 'pages',

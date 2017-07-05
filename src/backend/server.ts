@@ -1,5 +1,5 @@
-import compression from 'compression';
 import cors from 'cors';
+import compression from 'compression';
 import express from 'express';
 import {json, urlencoded} from 'body-parser';
 import {SDocServerModule} from './modules/sdoc-server.module';
@@ -23,7 +23,7 @@ app.use(mycors);
 
 app.use(json()); // for parsing application/json
 app.use(urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-//app.use(compression);
+app.use(compression());
 
 // add routes
 SDocServerModule.configureRoutes(app, '/api/v1', backendConfig);

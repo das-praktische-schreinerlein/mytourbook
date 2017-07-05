@@ -127,7 +127,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public getFromLocalStore<T extends Record>(mapperName: string, id: any):T {
+    public getFromLocalStore<T extends Record>(mapperName: string, id: any): T {
         return this.store.get(mapperName, id);
     }
 

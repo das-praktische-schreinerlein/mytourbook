@@ -8,7 +8,6 @@ export const PDocRecordSchema = new Schema({
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
-        pdoc_parent_id: {type: 'string'},
         desc: {type: 'string'},
         flgShowSearch: {type: 'boolean'},
         flgShowTopTen: {type: 'boolean'},

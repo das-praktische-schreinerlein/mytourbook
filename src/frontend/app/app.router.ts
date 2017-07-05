@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {NavbarComponent} from './components/navbar/navbar.component';
-import {SectionsPDocRecordResolver} from './sections/resolver/sections-pdoc-details.resolver';
+import {SectionsPDocsResolver} from './sections/resolver/sections-pdocs.resolver';
 
 export const appRoutes: Routes = [
     {
@@ -14,7 +14,7 @@ export const appRoutes: Routes = [
         outlet: 'navbar',
         component: NavbarComponent,
         resolve: {
-            pdocs: SectionsPDocRecordResolver,
+            pdocs: SectionsPDocsResolver,
         },
     },
     {

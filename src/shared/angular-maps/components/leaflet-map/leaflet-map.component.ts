@@ -3,10 +3,10 @@ import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, Sim
 import 'leaflet';
 import {GPX} from '../../services/leaflet-gpx.plugin';
 import {Http} from '@angular/http';
-import LatLng = L.LatLng;
 import {GpxLoader} from '../../services/gpx.loader';
 import {GpxParser} from '../../services/gpx.parser';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
+import LatLng = L.LatLng;
 
 @Component({
     selector: 'app-leaflet-map',

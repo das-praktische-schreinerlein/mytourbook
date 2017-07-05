@@ -21,7 +21,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     searchResult: SDocSearchResult;
     searchForm: SDocSearchForm;
-    baseSearchUrl = '/sdoc/search/';
+    baseSearchUrl = '/sdoc/';
     layout = Layout.FLAT;
     sort = 'relevance';
     perPage = 10;
@@ -143,6 +143,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     private doSearch() {
         console.log('doSearch form:', this.searchForm);
+        this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
         const me = this;
         this.sdocDataService.search(this.searchForm).then(function doneSearch(sdocSearchResult) {

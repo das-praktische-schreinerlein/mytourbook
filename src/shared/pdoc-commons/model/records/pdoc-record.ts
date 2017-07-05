@@ -12,7 +12,6 @@ export class PDocRecord extends BaseEntityRecord {
     teaser: string;
     theme: string;
     type: string;
-    pdoc_parent_id: string;
 
     toString() {
         return 'PDocRecord Record {\n' +
@@ -26,20 +25,4 @@ export class PDocRecord extends BaseEntityRecord {
 }
 
 export let PDocRecordRelation: any = {
-    belongsTo: {
-        pdoc: {
-            // database column
-            foreignKey: 'id',
-            // reference to related object in memory
-            localField: 'pdoc_parent'
-        }
-    },
-    hasMany: {
-        pdoc: {
-            // database column
-            foreignKey: 'pdoc_parent_id',
-            // reference to related objects in memory
-            localField: 'pdocs'
-        },
-    }
 };

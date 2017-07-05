@@ -8,7 +8,7 @@
                         <img class="picture-thumbnail-big" width="100px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                     </ng-container>
                 </div>
-                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon}}</h5></a>
+                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
             </div>
         </div>
     </ng-container>

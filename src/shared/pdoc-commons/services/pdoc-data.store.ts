@@ -22,7 +22,6 @@ export class PDocDataStore extends GenericDataStore<PDocRecord, PDocSearchForm, 
         }
 
         let filter = undefined;
-        let spatial = undefined;
         if (searchForm.fulltext !== undefined && searchForm.fulltext.length > 0) {
             filter = filter || {};
             filter['html'] = {
@@ -57,9 +56,6 @@ export class PDocDataStore extends GenericDataStore<PDocRecord, PDocSearchForm, 
 
         if (filter !== undefined) {
             query['where'] = filter;
-        }
-        if (spatial !== undefined) {
-            query['spatial'] = spatial;
         }
 
         return query;

@@ -1,0 +1,26 @@
+{
+ "pdocs": [
+  {
+   "id": "start",
+   "desc": "Willkommen bei Michas Ausflugstipps dem Portal für die Tourenplanung mit Schwerpunkt Ostdeutschland, Alpen und ausgewählten Ländern der Welt. Es ist eine Mischung aus Tourenführer (Tourentipps), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder) und Linkliste (Infos).\nAber auch wer Inspirationen für einen ganzen Urlaub oder auch nur ein verlängertes Wochenende sucht, für den ist mit einem übersichtlichen Urlaubstagebuch gesorgt.\nDa auf der Seite alles vom Klettern, Wandernbis zum Zoo versammelt ist, gibt es für den, der schon genauer weiß, was er will, Themenseiten auf denen er Vorschläge für sein Plaisierchen findet.\n\nDas ganze natürlich auch speziell für die Freunde der Vierbeiner :-)",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Thats MyTB",
+   "name": "Start",
+   "subSectionIds": "",
+   "teaser": "Willkommen bei MyTB",
+   "type": "SectionOverviewPage",
+   "theme": ""
+   }, {
+   "id": "sections",
+   "desc": "Die Themen",
+   "flgShowTopTen": false,
+   "flgShowSearch": false,
+   "heading": "Thats Themen",
+   "name": "Themen",
+   "subSectionIds": "",
+   "teaser": "Die Schwerpunkte",
+   "type": "SectionOverviewPage"
+  }
+ ]
+}

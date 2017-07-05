@@ -33,13 +33,10 @@ export class PDocServerModule {
         // configure express
         const config = {
             request: (req, res, next) => {
-                const userLoggedIn = true;
-
-                if (userLoggedIn) {
-                    next();
-                } else {
-                    res.sendStatus(403);
+                if (req.method !== 'GET') {
+                    next('not allowed');
                 }
+                next();
             }
         };
         app.use(apiPrefix + '/pdoc', new Router(mapper, config).router);
@@ -47,8 +44,9 @@ export class PDocServerModule {
         // use own wrapper for search
         app.route(apiPrefix + '/pdocsearch')
             .all(function(req, res, next) {
-                // runs for all HTTP verbs first
-                // think of it as route specific middleware!
+                if (req.method !== 'GET') {
+                    next('not allowed');
+                }
                 next();
             })
             .get(function(req, res, next) {
@@ -57,35 +55,17 @@ export class PDocServerModule {
                     dataService.search(searchForm).then(
                         function searchDone(searchResult: PDocSearchResult) {
                             res.json(searchResult.toSerializableJsonObj());
+                            next();
                         }
                     ).catch(
                         function searchError(error) {
                             console.error('error thrown: ', error);
-                            res.sendStatus(500);
+                            return next('not found');
                         }
                     );
                 } catch (error) {
                     console.error('error thrown: ', error);
-                    res.sendStatus(500);
-                }
-            })
-            .post(function(req, res, next) {
-                // TODO: Test it - untested
-                const searchForm = JSON.parse(req.body);
-                try {
-                    dataService.search(searchForm).then(
-                        function searchDone(searchResult: PDocSearchResult) {
-                            res.json(searchResult.toSerializableJsonObj());
-                        }
-                    ).catch(
-                        function searchError(error) {
-                            console.error('error thrown: ', error);
-                            res.sendStatus(500);
-                        }
-                    );
-                } catch (error) {
-                    console.error('error thrown: ', error);
-                    res.sendStatus(500);
+                    return next('not found');
                 }
             });
     }

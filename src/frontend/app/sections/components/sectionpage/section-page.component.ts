@@ -34,6 +34,7 @@ export class SectionPageComponent implements OnInit {
                 me.baseSearchUrl = data.baseSearchUrl;
                 me.sections = me.pdoc !== undefined ? me.getSubSections(me.pdoc) : [];
                 if (me.pdoc) {
+                    me.sDocRoutingService.setLastBaseUrl(me.baseSearchUrl);
                     me.sDocRoutingService.setLastSearchUrl(me.getToSearchUrl());
                 }
             },
@@ -77,17 +78,6 @@ export class SectionPageComponent implements OnInit {
     }
 
     getSubSections(pdoc: PDocRecord): PDocRecord[] {
-        const sections: PDocRecord[] = [];
-        const ids = pdoc.subSectionIds !== undefined ? pdoc.subSectionIds.split(/,/) : [];
-        for (let id of ids) {
-            const section = this.pdocDataService.getByIdFromLocalStore(id);
-            if (section !== undefined) {
-                sections.push(section);
-            } else {
-                console.error('getSubSections: section not found:' + id);
-            }
-        }
-
-        return sections;
+        return this.pdocDataService.getSubDocuments(pdoc);
     }
 }

@@ -5,7 +5,7 @@
                     <div class="card-block">
                         <h6><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h6>
                         <div>
-                            <h5>{{record.type | translate }} {{record.name}}</h5>
+                            <h5>{{record.type | translate }} {{record.datevon | date: 'dd.MM.yyyy'}} {{record.name}}</h5>
                             <div class="image-container">
                                 <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                     <img class="picture-big" width="600px" [src]="contentUtils.getFullUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">

@@ -11,6 +11,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
 import {SharedPDocModule} from '../shared-pdoc/shared-pdoc.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {SectionsPDocsResolver} from './resolver/sections-pdocs.resolver';
 
 @NgModule({
     declarations: [
@@ -21,6 +23,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     imports: [
         NgbModule.forRoot(),
         BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
         SharedSDocModule,
         SharedPDocModule,
         SectionsRoutingModule
@@ -29,7 +33,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         SectionsBaseUrlResolver,
         SectionsSearchFormResolver,
         SectionsSDocRecordResolver,
-        SectionsPDocRecordResolver
+        SectionsPDocRecordResolver,
+        SectionsPDocsResolver
     ]
 })
 export class SectionsModule {}

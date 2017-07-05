@@ -37,4 +37,19 @@ export class PDocDataService extends PDocSearchService {
     updateById(id: string, values: Object = {}, opts?: any): Promise<PDocRecord> {
         return this.dataStore.update('pdoc', id, values, opts);
     }
+
+    getSubDocuments(pdoc: PDocRecord): PDocRecord[] {
+        const sections: PDocRecord[] = [];
+        const ids = pdoc.subSectionIds !== undefined ? pdoc.subSectionIds.split(/,/) : [];
+        for (const id of ids) {
+            const section = this.getByIdFromLocalStore(id);
+            if (section !== undefined) {
+                sections.push(section);
+            } else {
+                console.error('getSubSections: section not found:' + id);
+            }
+        }
+
+        return sections;
+    }
 }

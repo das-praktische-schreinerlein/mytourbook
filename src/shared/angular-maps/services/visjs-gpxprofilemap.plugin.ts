@@ -34,9 +34,11 @@ export class VisJsGPXProfileMap {
 
         this.gpxLoader.loadGpx(url, options).then(function onLoaded(geoElements) {
             const layers = me._convertGeoElementsToDataSet(geoElements, element, options);
-            me.graph = new Graph3d(element, layers, options);
+            if (layers !== undefined) {
+                me.graph = new Graph3d(element, layers, options);
+            }
         }).catch(function onError(error) {
-            console.error('failed to load gpx for leeafletmap:' + url, error);
+            console.error('failed to load gpx for VisJsGPXProfileMap:' + url, error);
         });
     }
 

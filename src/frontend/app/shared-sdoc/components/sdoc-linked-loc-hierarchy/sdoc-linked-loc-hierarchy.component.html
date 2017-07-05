@@ -1,8 +1,8 @@
 <div >
-    <ng-container *ngFor="let location of contentUtils.getLocationHierarchy(record, lastOnly); let i = index">
-        <ng-container *ngIf="i > 0">-&gt;</ng-container>
+    <ng-container *ngFor="let location of locations; let i = index">
         <span>
-            <a [href]="getShowUrl(location)" (click)="submitShow(location)">{{location[1]}}</a>
+            <ng-container *ngIf="i > 0">-&gt;</ng-container>
+            <a [href]="getShowUrl(location)" (click)="submitShow($event, location)">{{location[1]}}</a>
         </span>
     </ng-container>
 </div>

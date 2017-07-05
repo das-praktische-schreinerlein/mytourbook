@@ -35,7 +35,7 @@
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
 
@@ -79,7 +79,7 @@
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
 
@@ -129,7 +129,7 @@
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
 
@@ -190,7 +190,7 @@
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchieids" name="loc_lochirarchie__ids_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
             <field column="i_date" name="date_dt" />

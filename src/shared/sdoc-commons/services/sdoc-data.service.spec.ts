@@ -2,11 +2,10 @@
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocDataService} from './sdoc-data.service';
 import {Observable} from 'rxjs/Observable';
-import {SDocDataStore} from './sdoc-data.store';
+import {SDocDataStore, SDocTeamFilterConfig} from './sdoc-data.store';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
 import {SearchParameterUtils} from '../../search-commons/services/searchparameter.utils';
-import {SDocTeamFilterConfig} from './sdoc-data.store';
 
 describe('SDocDataService', () => {
     let sdoc1: SDocRecord = undefined;

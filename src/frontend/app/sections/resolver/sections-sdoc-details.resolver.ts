@@ -12,7 +12,7 @@ export class SectionsSDocRecordResolver implements Resolve<SDocRecord> {
         return new Promise<SDocRecord>((resolve, reject) => {
             this.appService.getAppState().subscribe(appState => {
                 if (appState === AppState.Ready) {
-                    const id = route.params['section'];
+                    const id = route.params['id'];
                     this.sdocDataService.getById(id).then(
                         function doneGetById(sdoc: SDocRecord) {
                             resolve(sdoc);

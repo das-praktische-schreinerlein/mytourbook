@@ -31,12 +31,12 @@ export class SDocServerModule {
         dataStore.setAdapter('http', adapter, '', {});
 
         // configure express
-        app.param('sdoc_id', function(req, res, next, sdoc_id) {
-            const sdocIdParam = (sdoc_id || '');
-            if (sdocIdParam.search(/[^a-zA-Z0-9_]/) >= 0) {
+        app.param('id', function(req, res, next, id) {
+            const idParam = (id || '');
+            if (idParam.search(/[^a-zA-Z0-9_]/) >= 0) {
                 return next('not found');
             }
-            const searchForm = new SDocSearchForm({moreFilter: 'id:' + sdocIdParam});
+            const searchForm = new SDocSearchForm({moreFilter: 'id:' + idParam});
             dataService.search(searchForm).then(
                 function searchDone(searchResult: SDocSearchResult) {
                     if (!searchResult || searchResult.recordCount !== 1) {
@@ -53,8 +53,11 @@ export class SDocServerModule {
             );
         });
 
-        app.route(apiPrefix + '/sdoc/:sdoc_id')
+        app.route(apiPrefix + '/sdoc/:id')
             .all(function(req, res, next) {
+                if (req.method !== 'GET') {
+                    next('not allowed');
+                }
                 next();
             })
             .get(function(req, res, next) {
@@ -66,32 +69,13 @@ export class SDocServerModule {
         // use own wrapper for search
         app.route(apiPrefix + '/sdocsearch')
             .all(function(req, res, next) {
-                // runs for all HTTP verbs first
-                // think of it as route specific middleware!
+                if (req.method !== 'GET') {
+                    next('not allowed');
+                }
                 next();
             })
             .get(function(req, res, next) {
                 const searchForm = new SDocSearchForm(req.query);
-                try {
-                    dataService.search(searchForm).then(
-                        function searchDone(searchResult: SDocSearchResult) {
-                            res.json(searchResult.toSerializableJsonObj());
-                            next();
-                        }
-                    ).catch(
-                        function searchError(error) {
-                            console.error('error thrown: ', error);
-                            return next('not found');
-                        }
-                    );
-                } catch (error) {
-                    console.error('error thrown: ', error);
-                    return next('not found');
-                }
-            })
-            .post(function(req, res, next) {
-                // TODO: Test it - untested
-                const searchForm = JSON.parse(req.body);
                 try {
                     dataService.search(searchForm).then(
                         function searchDone(searchResult: SDocSearchResult) {

@@ -20,7 +20,7 @@ const sdocRoutes: Routes = [
                         component: SDocSearchpageComponent,
                         data: {
                             id: 'sdocs_default',
-                            baseSearchUrl: 'sdoc/search/'
+                            baseSearchUrl: 'sdoc/'
                         }
                     },
                     {
@@ -30,7 +30,7 @@ const sdocRoutes: Routes = [
                             flgDoSearch: true,
                             id: 'sdocs_search',
                             searchFormDefaults: {},
-                            baseSearchUrl: 'sdoc/search/'
+                            baseSearchUrl: 'sdoc/'
                         },
                         resolve: {
                             searchForm: SDocSearchFormResolver
@@ -41,25 +41,14 @@ const sdocRoutes: Routes = [
                         component: SDocSearchpageComponent,
                         data: {
                             id: 'sdocs_fallback',
-                            baseSearchUrl: 'sdoc/search/'
+                            baseSearchUrl: 'sdoc/'
                         }
                     }
                 ]
             },
             {
-                path: 'create',
-                component: SDocCreatepageComponent
-            },
-            {
                 path: 'show/:name/:id',
                 component: SDocShowpageComponent,
-                resolve: {
-                    record: SDocRecordResolver
-                }
-            },
-            {
-                path: 'edit/:id',
-                component: SDocEditpageComponent,
                 resolve: {
                     record: SDocRecordResolver
                 }

@@ -1,16 +1,15 @@
-import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 
 import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import LatLng = L.LatLng;
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import LatLng = L.LatLng;
 @Component({
     selector: 'app-sdoc-profilemap',
     templateUrl: './sdoc-profilemap.component.html'
 })
-export class SDocProfileMapComponent implements AfterViewChecked, OnChanges {
-    initialized = false;
+export class SDocProfileMapComponent implements OnChanges {
     trackUrls: string[] = [];
 
     @Input()
@@ -24,26 +23,13 @@ export class SDocProfileMapComponent implements AfterViewChecked, OnChanges {
 
     constructor(private appService: GenericAppService) {}
 
-    ngAfterViewChecked() {
-        if (this.initialized) {
-            return;
-        }
-
-        this.initialized = true;
-        this.renderMap();
-    }
-
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
+        if (ComponentUtils.hasNgChanged(changes)) {
             this.renderMap();
         }
     }
 
     renderMap() {
-        if (!this.initialized) {
-            return;
-        }
-
         this.trackUrls = [];
         if (!this.sdocs) {
             return;

@@ -12,12 +12,12 @@ export class SectionsPDocsResolver implements Resolve<PDocRecord[]> {
         return new Promise<PDocRecord[]>((resolve, reject) => {
             this.appService.getAppState().subscribe(appState => {
                 if (appState === AppState.Ready) {
-                    this.pdocDataService.getAll().then(
-                        function doneGetAll(pdocs: PDocRecord[]) {
+                    this.pdocDataService.getAll(undefined).then(
+                        function doneGetAll(pdocs: any) {
                             resolve(pdocs);
                         },
                         function errorGetAll(reason: any) {
-                            console.error('error pdocs', reason);
+                            console.error('error loading pdocs', reason);
                             reject(reason);
                         }
                     );

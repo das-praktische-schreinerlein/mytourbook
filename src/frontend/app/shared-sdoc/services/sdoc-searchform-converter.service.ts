@@ -11,7 +11,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
     }
 
     searchFormToUrl(baseUrl: string, sdocSearchForm: SDocSearchForm): string {
-        let url = baseUrl;
+        let url = baseUrl + 'search/';
         const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
 
         const whereMap = new Map();

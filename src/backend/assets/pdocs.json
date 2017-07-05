@@ -50,7 +50,7 @@
    "flgShowSearch": false,
    "heading": "Landschaften",
    "name": "Landschaften",
-   "subSectionIds": "Berge,Mittelgebirge,Hochgebirge,Wald,Wiesen,Naturlandschaft,Flüsse,Meer,Seen",
+   "subSectionIds": "Berge,Mittelgebirge,Hochgebirge,Wald,Wiesen,Naturlandschaft,Fluesse,Meer,Seen",
    "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
    "type": "SectionOverviewPage",  
    "image": "F__Micha_Bilder_digifotos_import_20060527-urlaub-ruegen/P5270044.JPG",
@@ -74,7 +74,7 @@
    "flgShowSearch": false,
    "heading": "Jahreszeiten",
    "name": "Jahreszeiten",
-   "subSectionIds": "Frühling,Sommer,Herbst,Winter,Schnee,Sonne",
+   "subSectionIds": "Fruehling,Sommer,Herbst,Winter,Schnee,Sonne",
    "teaser": "Jahreszeiten",
    "type": "SectionOverviewPage"
   }, {
@@ -290,14 +290,14 @@
    "image": "D__Bilder_digifotos_import-2009-06_20091029-maremma/HPIM0328.JPG",
    "oldUrl": "./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
   }, {
-   "id": "Flüsse",
+   "id": "Fluesse",
    "desc": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder [Baden]() in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Flüsse",
    "name": "Flüsse",
    "teaser": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder [Baden]() in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
-   "theme": "Flüsse",
+   "theme": "Fluesse",
    "type": "SectionPage",  
    "image": "D__Bilder_digifotos_import-2012-05_20121020-gauernitz/CIMG5016.JPG",
    "oldUrl": "./fluesse.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
@@ -422,14 +422,14 @@
    "image": "F__Micha_Bilder_digifotos_import_italien2_20070929-rom/P9290059.JPG",
    "oldUrl": "./kirchen.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
   }, {
-   "id": "Frühling",
+   "id": "Fruehling",
    "desc": "'Veronica der Lenz ist da, die Vögeln singen Trallala...'. Hier gibt es Tourentipps, Berichte und Bilder um den Winter zu vertreiben...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Frühling",
    "name": "Frühling",
    "teaser": "'Veronica der Lenz ist da, die Vögeln singen Trallala...'. Hier gibt es Tourentipps, Berichte und Bilder um den Winter zu vertreiben...",
-   "theme": "Frühling",
+   "theme": "Fruehling",
    "type": "SectionPage",  
    "image": "D__Bilder_digifotos_import-2009-03_20090510-mallenchen/HPIM1924.JPG",
    "oldUrl": "./fruehling.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"

@@ -40,16 +40,16 @@ export class GpxParser  {
 
     _parseGpxDom(gpxDom, options): GeoElement[] {
         let j, i, el = [];
-        let named = false;
         const elements = [], tags = [['rte', 'rtept'], ['trkseg', 'trkpt']];
 
         for (j = 0; j < tags.length; j++) {
             el = gpxDom.getElementsByTagName(tags[j][0]);
             for (i = 0; i < el.length; i++) {
                 const l = this.parse_trkseg(el[i], gpxDom, tags[j][1]);
-                if (this.parse_name(el[i], l)) {
-                    named = true;
+                if (!l) {
+                    continue;
                 }
+                this.parse_name(el[i], l);
                 elements.push(l);
             }
         }
@@ -61,9 +61,7 @@ export class GpxParser  {
                 if (!waypoint) {
                     continue;
                 }
-                if (this.parse_name(el[i], waypoint)) {
-                    named = true;
-                }
+                this.parse_name(el[i], waypoint);
                 elements.push(waypoint);
             }
         }
@@ -91,7 +89,7 @@ export class GpxParser  {
             link = el[0].getAttribute('href');
         }
 
-        len = this._polylineLen(layer.points);
+        len = layer !== undefined ? this._polylineLen(layer.points) : undefined;
 
         if (name) {
             txt += '<h2>' + name + '</h2>' + descr;

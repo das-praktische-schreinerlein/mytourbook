@@ -5,6 +5,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -15,6 +16,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     public contentUtils: SDocContentUtils;
     public record: SDocRecord;
     public Layout = Layout;
+    pdoc: PDocRecord;
+    baseSearchUrl: string;
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils) {
@@ -26,8 +29,10 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         // Subscribe to route params
         const me = this;
         this.route.data.subscribe(
-            (data: { record: SDocRecord }) => {
+            (data: { record: SDocRecord, pdoc: PDocRecord, baseSearchUrl: string }) => {
                 me.record = data.record;
+                me.pdoc = data.pdoc;
+                me.baseSearchUrl = data.baseSearchUrl;
             },
             (error: {reason: any}) => {
                 me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oops!');
@@ -52,6 +57,11 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         const filters = {
             type: type
         };
+
+        // filter theme only for locations
+        if (this.record.type === 'LOCATION' && this.pdoc !== undefined && this.pdoc.theme !== undefined) {
+            filters['theme'] = this.pdoc.theme;
+        }
 
         if (this.record.type === 'TRACK') {
             if (type === 'IMAGE' && record.trackId) {
@@ -78,8 +88,9 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         } else if (this.record.type === 'LOCATION') {
             if (type === 'LOCATION') {
                 filters['moreFilter'] = 'loc_parent_id_i:' + record.locId;
+                filters['sort'] = 'location';
             } else {
-                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+                filters['moreFilter'] = 'loc_lochirarchie_ids_txt:' + record.locId;
                 if (type === 'IMAGE') {
                     filters['perPage'] = 12;
                 }

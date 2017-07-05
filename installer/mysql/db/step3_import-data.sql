@@ -140,6 +140,7 @@ DROP TABLE IF EXISTS `location`;
 CREATE TABLE `location` (
   `L_ID` int(11) DEFAULT NULL,
   `L_LOCHIRARCHIE` text COLLATE latin1_general_ci,
+  `L_LOCHIRARCHIEIDS` text COLLATE latin1_general_ci,
   `L_LOCHIRARCHIETXT` text COLLATE latin1_general_ci,
   `L_META_SHORTDESC` text COLLATE latin1_general_ci,
   `L_NAME` char(255) COLLATE latin1_general_ci DEFAULT NULL,

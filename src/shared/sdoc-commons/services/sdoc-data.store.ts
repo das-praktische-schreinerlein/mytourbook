@@ -13,7 +13,7 @@ export class SDocTeamFilterConfig {
     }
 
     set(key: string, value: any) {
-        this.values.set(key, value)
+        this.values.set(key, value);
     }
 }
 
@@ -23,6 +23,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         id: true,
         track_id_i: true,
         loc_id_i: true,
+        loc_lochirarchie_ids_txt: true,
         image_id_i: true,
         route_id_i: true,
         loc_parent_id_i: true

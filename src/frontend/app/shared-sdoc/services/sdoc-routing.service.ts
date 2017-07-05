@@ -5,6 +5,7 @@ import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record
 @Injectable()
 export class SDocRoutingService {
     private lastSearchUrl = '/sdoc/search/';
+    private lastBaseUrl = '/sdoc/';
 
     constructor(private router: Router) {
     }
@@ -15,6 +16,14 @@ export class SDocRoutingService {
 
     getLastSearchUrl(): string {
         return this.lastSearchUrl;
+    }
+
+    setLastBaseUrl(lastBaseUrl: string): void {
+        this.lastBaseUrl = lastBaseUrl;
+    }
+
+    getLastBaseUrl(): string {
+        return this.lastBaseUrl;
     }
 
     getBackToFromUrl(route: ActivatedRoute): string {
@@ -30,7 +39,7 @@ export class SDocRoutingService {
         const name = (sDoc.name ? sDoc.name : '')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
             .replace(/ +/g, ' ').replace(/ /g, '-').trim();
-        return '/sdoc/show/' + name + '/' + sDoc.id + (from ? '?from=' + from : '');
+        return this.lastBaseUrl + 'show/' + name + '/' + sDoc.id + (from ? '?from=' + from : '');
     }
 
     navigateBackToFrom(route: ActivatedRoute): Promise<boolean> {

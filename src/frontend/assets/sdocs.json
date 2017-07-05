@@ -1,108 +1,800 @@
 {
     "sdocs": [
         {
-            "id": "1",
-            "name": "Alpen 2014 IV: Hochtour auf die Hintere Ölgrubenspitze vom Taschachhaus 18.08.2014",
-            "desc": "Habe leider noch keinen speziellen Bericht von der Begehung, deshalb gibt es nur die allgemeine Tourenbeschreibung. ",
-            "html": "Habe leider noch keinen speziellen Bericht von der Begehung, deshalb gibt es nur die allgemeine Tourenbeschreibung. ",
-            "sdocimages": [
-                {
-                    "id": "1",
-                    "name": "testImage1",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus-2/CIMG7490.JPG",
-                    "sdoc_id": "1"
-                },
-                {
-                    "id": "2",
-                    "name": "testImage2",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7373.JPG",
-                    "sdoc_id": "1"
-                },
-                {
-                    "id": "3",
-                    "name": "testImage3",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7130.JPG",
-                    "sdoc_id": "1"
-                }
-            ]
-        },
+            "datevon":"2014-08-18T00:00:00Z",
+            "imageId":null,
+            "locId":327,
+            "routeId":1275,
+            "trackId":2266,
+            "desc":"",
+            "geoLat":"46.9542",
+            "geoLoc":"46.9542,10.8806",
+            "gpsTrackBasefile":"route-Oe_Oetztaler_Alpen_Taschachtal-Hintere_Oelgrubenspitze_Normalweg-t1275",
+            "keywords":"Berge, Eis, Felsen, Felswand, Firn, Gletscherbegehung, Gletscherschau, heiter, Hochebene, Hochgebirge, Hochtour, Klettern, Landschaft, Natur, Naturlandschaft, Schnee, Schneefelder, Sommer, Sonne, sonnig, Tagestour, Teich",
+            "locHirarchie":"Alpen -> Ostalpen -> Ötztaler Alpen -> Pitztal -> Mittelberg",
+            "locHirarchieIds":"185,1458,339,335,327",
+            "name":"Hintere Ölgrubenspitze - Normalweg",
+            "type":"ROUTE",
+            "id":"1275",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7373.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7333.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7439.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7369.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7470.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7455.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7427.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7469.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7431.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7330.JPG",
+                "name":"Hintere Ölgrubenspitze - Normalweg",
+                "sdoc_id":"1275",
+                "id":"1275000009"}]},
         {
-            "id": "2",
-            "name": "Alpen 2014 IV: Hochtour auf dem Offenbacher Höhenweg über den Wurmtaler Kopf vom Riffelsee zum Taschachhaus 17.08.2014",
-            "desc": "Habe leider noch keinen speziellen Bericht von der Begehung, ",
-            "html": "Habe leider noch keinen speziellen Bericht von der Begehung, ",
-            "sdocimages": [
-                {
-                    "id": "4",
-                    "name": "testImage4",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus-2/CIMG7490.JPG",
-                    "sdoc_id": "2"
-                },
-                {
-                    "id": "5",
-                    "name": "testImage5",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7373.JPG",
-                    "sdoc_id": "2"
-                },
-                {
-                    "id": "6",
-                    "name": "testImage6",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7130.JPG",
-                    "sdoc_id": "2"
-                }
-            ]
-        },
+            "datevon":"2014-08-17T00:00:00Z",
+            "imageId":null,
+            "locId":327,
+            "routeId":1276,
+            "trackId":2265,
+            "desc":"",
+            "geoLat":"46.9542",
+            "geoLoc":"46.9542,10.8806",
+            "gpsTrackBasefile":"route-Oe_Oetztaler_Alpen_Taschachtal-Wurmtaler_Kogel_Offenbacher_Hoehenweg-t1276",
+            "keywords":"Berge, Eis, Felsen, Felswand, Firn, Gletscherbegehung, Gletscherschau, heiter, Hochebene, Hochgebirge, Hochtour, Landschaft, Natur, Naturlandschaft, Schnee, Schneefelder, See, Sommer, Sonne, sonnig, Tagestour",
+            "locHirarchie":"Alpen -> Ostalpen -> Ötztaler Alpen -> Pitztal -> Mittelberg",
+            "locHirarchieIds":"185,1458,339,335,327",
+            "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+            "type":"ROUTE",
+            "id":"1276",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7069.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG6996.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7130.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7073.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7112.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7075.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG6997.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG6994.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7223.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7251.JPG",
+                "name":"Wurmtaler Kogel - Offenbacher Höhenweg",
+                "sdoc_id":"1276",
+                "id":"1276000009"}]},
         {
-            "id": "3",
-            "name": "Teneriffa 2014: Berg-Wanderung mit Familie durch die Masca-Schlucht 22.07.2014",
-            "desc": "Habe leider noch keinen speziellen Bericht von der Begehung, deshalb gibt es nur die allgemeine Tourenbeschreibung. Und die geht so: Vom Wanderparkplatz am letzten Ende von Ahrenshoop gehen wir über den Damm und die Dünen hinab zum Sandstrand. Linker Hand geht es Richtung Badestrand Ahrenshoop, aber wir wenden uns rechter Hand in Richtung Naturstrand zum Darsser Urwald. Gesegnet mit einen idyllischen Sandstrand wird die Westküste hier mit jedem Schritt urtümlicher und wilder mit ihren angespülten Baumstämmen.",
-            "html": "Habe leider noch keinen speziellen Bericht von der Begehung, deshalb gibt es nur die allgemeine Tourenbeschreibung. Und die geht so: Vom Wanderparkplatz am letzten Ende von Ahrenshoop gehen wir über den Damm und die Dünen hinab zum Sandstrand. Linker Hand geht es Richtung Badestrand Ahrenshoop, aber wir wenden uns rechter Hand in Richtung Naturstrand zum Darsser Urwald. Gesegnet mit einen idyllischen Sandstrand wird die Westküste hier mit jedem Schritt urtümlicher und wilder mit ihren angespülten Baumstämmen.",
-            "sdocimages": [
-                {
-                    "id": "43",
-                    "name": "testImage4",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus-2/CIMG7490.JPG",
-                    "sdoc_id": "3"
-                },
-                {
-                    "id": "53",
-                    "name": "testImage5",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7373.JPG",
-                    "sdoc_id": "3"
-                },
-                {
-                    "id": "63",
-                    "name": "testImage6",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7130.JPG",
-                    "sdoc_id": "3"
-                }
-            ]
-        },
+            "datevon":"2014-08-16T00:00:00Z",
+            "imageId":null,
+            "locId":1689,
+            "routeId":2884,
+            "trackId":2261,
+            "desc":"",
+            "geoLat":"46.935",
+            "geoLoc":"46.935,10.9092",
+            "gpsTrackBasefile":"route-Oe_Oetztaler_Alpen_Pitztal-Mittelberg_Berg-Tour_ueber_Rettenbachjoch_und_Pitztaler_Joechl_von_zur_Braunschweiger_Huette-t2884",
+            "keywords":"Berge, Eis, Felsen, Felswand, Firn, Gletscherschau, heiter, Hochgebirge, Landschaft, Natur, Naturlandschaft, Regen, Schnee, Schneefelder, Sommer, Sonne, sonnig, Tagestour, Wandern, Wanderung",
+            "locHirarchie":"Alpen -> Ostalpen -> Ötztaler Alpen -> Pitztal -> Mittelberg -> Braunschweiger Hütte",
+            "locHirarchieIds":"185,1458,339,335,327,1689",
+            "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+            "type":"ROUTE",
+            "id":"2884",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6752.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6711.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6724.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6789.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6775.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6766.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6765.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6759.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6757.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6747.JPG",
+                "name":"Mittelberg - Berg-Tour über Rettenbachjoch und Pitztaler Jöchl von/zur Braunschweiger Hütte",
+                "sdoc_id":"2884",
+                "id":"2884000009"}]},
         {
-            "id": "4",
-            "name": "Mallorca 2013/14: Wanderung mit Familie ins Cairats-Tal bei Valldemossa 03.01.201418o475 kdqsjgh alskjflkaj lkajfljaf ölkjalkfjbf öalfkjlkb alkjkjb pojbvoIJB POJBIJ bSOIJ POIOIJBOIJA POIJ BF ökjfdblkjblk pöokbgpokgbpok abpoük ",
-            "desc": "Habe leider noch keinen speziellen Bericht von der Begehung, deshalb gibt es nur die allgemeine Tourenbeschreibung. Und die geht so: Vom Wanderparkplatz am letzten Ende von Ahrenshoop gehen wir über den Damm und die Dünen hinab zum Sandstrand. Linker Hand geht es Richtung Badestrand Ahrenshoop, aber wir wenden uns rechter Hand in Richtung Naturstrand zum Darsser Urwald. Gesegnet mit einen idyllischen Sandstrand wird die Westküste hier mit jedem Schritt urtümlicher und wilder mit ihren angespülten Baumstämmen.",
-            "html": "Habe leider noch keinen speziellen Bericht von der Begehung, deshalb gibt es nur die allgemeine Tourenbeschreibung. Und die geht so: Vom Wanderparkplatz am letzten Ende von Ahrenshoop gehen wir über den Damm und die Dünen hinab zum Sandstrand. Linker Hand geht es Richtung Badestrand Ahrenshoop, aber wir wenden uns rechter Hand in Richtung Naturstrand zum Darsser Urwald. Gesegnet mit einen idyllischen Sandstrand wird die Westküste hier mit jedem Schritt urtümlicher und wilder mit ihren angespülten Baumstämmen.",
-            "sdocimages": [
-                {
-                    "id": "44",
-                    "name": "testImage4",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus/CIMG7373.JPG",
-                    "sdoc_id": "4"
-                },
-                {
-                    "id": "54",
-                    "name": "testImage5",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-taschachhaus-2/CIMG7490.JPG",
-                    "sdoc_id": "4"
-                },
-                {
-                    "id": "64",
-                    "name": "testImage6",
-                    "fileName": "D__Bilder_digifotos_bilder-OK_import-2014-07_20140817-riffelsee/CIMG7130.JPG",
-                    "sdoc_id": "42"
-                }
-            ]
-        }
-    ]
+            "datevon":"2014-08-15T00:00:00Z",
+            "imageId":null,
+            "locId":1689,
+            "routeId":2882,
+            "trackId":2259,
+            "desc":"",
+            "geoLat":"46.935",
+            "geoLoc":"46.935,10.9092",
+            "gpsTrackBasefile":"route-Oe_Oetztaler_Alpen_Pitztal-Karleskopf_Huettenberg_der_Braunschweiger_Huette-t2882",
+            "keywords":"Berge, Eis, Felsen, Felswand, Gletscherschau, Hochgebirge, Kurztour, Landschaft, Natur, Naturlandschaft, Regen, Sommer, Sonne, sonnig, Wandern, Wanderung",
+            "locHirarchie":"Alpen -> Ostalpen -> Ötztaler Alpen -> Pitztal -> Mittelberg -> Braunschweiger Hütte",
+            "locHirarchieIds":"185,1458,339,335,327,1689",
+            "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+            "type":"ROUTE",
+            "id":"2882",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6667.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6663.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6673.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6693.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6688.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6687.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6686.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6685.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6683.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6680.JPG",
+                "name":"Karleskopf - Hüttenberg der Braunschweiger Hütte",
+                "sdoc_id":"2882",
+                "id":"2882000009"}]},
+        {
+            "datevon":"2014-08-15T00:00:00Z",
+            "imageId":null,
+            "locId":327,
+            "routeId":2883,
+            "trackId":2262,
+            "desc":"",
+            "geoLat":"46.9542",
+            "geoLoc":"46.9542,10.8806",
+            "gpsTrackBasefile":"route-Oe_Oetztaler_Alpen_Pitztal-Mittelberg_Berg-Wanderung_von_Mittelberg_zur_Braunschweiger_Huette_ueber_Mittelbergferner_zur_Brunnkogelbahn_und_zurueck-t2883",
+            "keywords":"Bach, bedeckt, Berge, Eis, Felsen, Felswand, Firn, Gletscherbegehung, Gletscherschau, heiter, Hochebene, Hochgebirge, Landschaft, Natur, Naturlandschaft, Schlucht, Schnee, Schneefelder, Sommer, Sonne, sonnig, Tagestour, Wandern, Wanderung, Weide",
+            "locHirarchie":"Alpen -> Ostalpen -> Ötztaler Alpen -> Pitztal -> Mittelberg",
+            "locHirarchieIds":"185,1458,339,335,327",
+            "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+            "type":"ROUTE",
+            "id":"2883",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6852.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6906.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6857.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6910.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6843.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-mittelberg/CIMG6640.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6962.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6902.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-mittelberg/CIMG6650.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6958.JPG",
+                "name":"Mittelberg - Berg-Wanderung von Mittelberg zur Braunschweiger Hütte über Mittelbergferner zur Brunnkogelbahn und zurück",
+                "sdoc_id":"2883",
+                "id":"2883000009"}]},
+        {
+            "datevon":"2014-07-11T00:00:00Z",
+            "imageId":null,
+            "locId":458,
+            "routeId":2862,
+            "trackId":2202,
+            "desc":"",
+            "geoLat":"45.8856",
+            "geoLoc":"45.8856,10.8467",
+            "gpsTrackBasefile":"route-I_Gardaseeberge-Cima_SAT_Via_dell_Amicizia_auf_die_Cima_SAT_bei_Riva_Del_Garda-t2862",
+            "keywords":"Berge, Bergwald, Felsen, Felswand, heiter, Hochgebirge, Klettersteig, Landschaft, Natur, Naturlandschaft, Schlucht, See, Sommer, Sonne, sonnig, Tagestour, Wald, Wiese",
+            "locHirarchie":"Italien -> Gardasee -> Riva del Garda",
+            "locHirarchieIds":"449,451,458",
+            "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+            "type":"ROUTE",
+            "id":"2862",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3780.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3748.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3719.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3786.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3782.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3737.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3734.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3836.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3785.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140711-riva-del-garda/CIMG3768.JPG",
+                "name":"Cima SAT - Via dell Amicizia auf die Cima SAT bei Riva Del Garda",
+                "sdoc_id":"2862",
+                "id":"2862000009"}]},
+        {
+            "datevon":"2014-07-10T00:00:00Z",
+            "imageId":null,
+            "locId":450,
+            "routeId":2861,
+            "trackId":2200,
+            "desc":"",
+            "geoLat":"45.9179",
+            "geoLoc":"45.9179,10.8859",
+            "gpsTrackBasefile":"route-I_Gardaseeberge-Arco_Wanderung_um_den_Burgberg_von_Arco_nach_Ceniga-t2861",
+            "keywords":"Berge, Bergwald, Blumen, Dorf, Feld, Felsen, Felswand, Fluss, heiter, Hochgebirge, Kirche, Kulturlandschaft, Kurztour, Landschaft, Natur, Naturlandschaft, Park, Schlucht, Sommer, Sonne, sonnig, Stadt, Stadtbesichtigung, Tal, Wald, Wandern, Wanderung, Weide, Wiese",
+            "locHirarchie":"Italien -> Gardasee -> Arco",
+            "locHirarchieIds":"449,451,450",
+            "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+            "type":"ROUTE",
+            "id":"2861",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3515.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3547.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3520.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3488.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3593.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3584.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3559.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3553.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3542.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140710-arco/CIMG3527.JPG",
+                "name":"Arco - Wanderung um den Burgberg von Arco nach Ceniga",
+                "sdoc_id":"2861",
+                "id":"2861000009"}]},
+        {
+            "datevon":"2014-07-09T00:00:00Z",
+            "imageId":null,
+            "locId":1654,
+            "routeId":2860,
+            "trackId":2199,
+            "desc":"",
+            "geoLat":"46.7177",
+            "geoLoc":"46.7177,11.6572",
+            "gpsTrackBasefile":"route-I_Suedtirol-Brixen_Stadtbesichtigung-t2860",
+            "keywords":"bedeckt, Besichtigung, Fluss, Kirche, Kurztour, Park, Regen, Schloss, Sommer, Spaziergang, Stadt, Stadtbesichtigung",
+            "locHirarchie":"Alpen -> Ostalpen -> Sarntaler Alpen -> Brixen",
+            "locHirarchieIds":"185,1458,337,1654",
+            "name":"Brixen - Stadtbesichtigung",
+            "type":"ROUTE",
+            "id":"2860",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3474.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3463.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3472.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3448.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3444.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3441.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3475.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3471.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3469.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140709-brixen/CIMG3468.JPG",
+                "name":"Brixen - Stadtbesichtigung",
+                "sdoc_id":"2860",
+                "id":"2860000009"}]},
+        {
+            "datevon":"2014-07-08T00:00:00Z",
+            "imageId":null,
+            "locId":1653,
+            "routeId":2859,
+            "trackId":2197,
+            "desc":"",
+            "geoLat":"47.0408",
+            "geoLoc":"47.0408,13.2155",
+            "gpsTrackBasefile":"route-Oe_Ankogelgruppe-Ankogelgruppe_Abstieg_vom_Neuen_Hannoverhaus_ueber_Kleinhappscharte__Plesschig_ins_Seebachtal_nach_Mallnitz-t2859",
+            "keywords":"bedeckt, Berge, Bergwald, Eis, Felsen, Gletscherschau, Hochgebirge, Kulturlandschaft, Landschaft, Natur, Naturlandschaft, Regen, Schnee, Schneefelder, Sommer, Tagestour, Tal, Teich, Wald, Wandern, Wanderung, Wasserfall, Weide, Wiese",
+            "locHirarchie":"Alpen -> Ostalpen -> Hohe Tauern -> Ankogelgruppe -> Mallnitz -> Neues Hannoverhaus",
+            "locHirarchieIds":"185,1458,1435,1144,1207,1653",
+            "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+            "type":"ROUTE",
+            "id":"2859",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3412.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3408.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3393.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3392.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3297.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3284.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3267.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3241.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3414.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140708-neues-hannoverhaus/CIMG3373.JPG",
+                "name":"Ankogelgruppe - Abstieg vom Neuen Hannoverhaus über Kleinhappscharte, Plesschig ins Seebachtal nach Mallnitz",
+                "sdoc_id":"2859",
+                "id":"2859000009"}]},
+        {
+            "datevon":"2014-07-07T00:00:00Z",
+            "imageId":null,
+            "locId":1653,
+            "routeId":1312,
+            "trackId":2196,
+            "desc":"",
+            "geoLat":"47.0408",
+            "geoLoc":"47.0408,13.2155",
+            "gpsTrackBasefile":"route-Oe_Ankogelgruppe-Ankogel_Normalweg-t1312",
+            "keywords":"Berge, Eis, Felsen, Felswand, Firn, Gletscherbegehung, Gletscherschau, heiter, Hochebene, Hochgebirge, Hochtour, Klettern, Landschaft, Natur, Naturlandschaft, Schnee, Schneefelder, Sommer, Sonne, sonnig, Tagestour, Tal, Wandern, Wanderung",
+            "locHirarchie":"Alpen -> Ostalpen -> Hohe Tauern -> Ankogelgruppe -> Mallnitz -> Neues Hannoverhaus",
+            "locHirarchieIds":"185,1458,1435,1144,1207,1653",
+            "name":"Ankogel - Normalweg",
+            "type":"ROUTE",
+            "id":"1312",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG3154.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG3092.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG3149.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG3008.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG2960.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG3095.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG2997.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG3171.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG3048.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140707-neues-hannoverhaus/CIMG2959.JPG",
+                "name":"Ankogel - Normalweg",
+                "sdoc_id":"1312",
+                "id":"1312000009"}]},{
+            "imageId":null,
+            "locId":1689,
+            "routeId":null,
+            "trackId":null,
+            "desc":"",
+            "geoLon":"10.9092",
+            "geoLat":"46.935",
+            "geoLoc":"46.935,10.9092",
+            "keywords":"Berge, Eis, Felsen, Felswand, Gletscherschau, Hochgebirge, Kurztour, Landschaft, Natur, Naturlandschaft, Regen, Sommer, Sonne, sonnig, Wandern, Wanderung",
+            "locHirarchie":"Alpen -> Ostalpen -> Ötztaler Alpen -> Pitztal -> Mittelberg -> Braunschweiger Hütte",
+            "locHirarchieIds":"185,1458,339,335,327,1689",
+            "name":"Braunschweiger Hütte",
+            "type":"LOCATION",
+            "id":"LOCATION_1689",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6852.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6906.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6857.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6910.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette-2/CIMG6843.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140816-braunschweiger-huette/CIMG6752.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-braunschweiger-huette/CIMG6667.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-16-braunschweiger-huette/CIMG6700.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-16-braunschweiger-huette/CIMG6698.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-07_20140815-16-braunschweiger-huette/CIMG6697.JPG",
+                "name":"Braunschweiger Hütte",
+                "sdoc_id":"LOCATION_1689",
+                "id":"1689000009"}]},
+        {
+            "datevon":"2006-04-29T00:00:00Z",
+            "imageId":null,
+            "locId":526,
+            "routeId":1563,
+            "trackId":823,
+            "desc":"Von Bremsdorfer Mühle aus, an der Schlaube entlang zur Kieselwitzer Mühle und dann durch den Wald zurück zum Auto",
+            "geoLat":"52.1357",
+            "geoLoc":"52.1357,14.4613",
+            "gpsTrackBasefile":"route-D_Brandenburg_Oder-Spree-Seengebiet-Schlaubetal_Bremsdorfer_Muehle_zur_Kieselwitzer_Muehle-t1563",
+            "keywords":"Aue, Bach, Gassi, Kurztour, Natur, Naturlandschaft, Schnee, See, Seenlandschaft, Sommer, Wald, Wandern, Wanderung, Winter",
+            "locHirarchie":"Deutschland -> Brandenburg -> Oder-Spree-Seengebiet -> Schlaubetal -> Bremsdorfer Mühle",
+            "locHirarchieIds":"2,4,14,15,526",
+            "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+            "type":"ROUTE",
+            "id":"1563",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2742.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2739.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2776.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2756.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2736.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2790.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2788.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2782.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2781.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-bremsdorfer-muehle/CIMG2780.JPG",
+                "name":"Schlaubetal - Bremsdorfer Mühle zur Kieselwitzer Mühle",
+                "sdoc_id":"1563",
+                "id":"1563000009"}]},
+        {
+            "datevon":"2014-06-28T00:00:00Z",
+            "imageId":null,
+            "locId":250,
+            "routeId":2858,
+            "trackId":2193,
+            "desc":"",
+            "geoLat":"52.1481",
+            "geoLoc":"52.1481,14.3146",
+            "gpsTrackBasefile":"route-D_Brandenburg_Oder-Spree-Seengebiet-Bisonpark_Kruegersdorf_Rundwanderung_um_Kruegersdorf_Richtung_Bahrendorf__Zeust_und_den_Bisonpark-t2858",
+            "keywords":"Bach, bedeckt, Blumen, Feld, Frühling, Heide, heiter, Kirche, Kulturlandschaft, Kurztour, Landschaft, Natur, Naturlandschaft, Sonne, sonnig, Tagestour, Wald, Wandern, Wanderung, Weide, Wiese",
+            "locHirarchie":"Deutschland -> Brandenburg -> Oder-Spree-Seengebiet -> Schwielochsee -> Bisonpark Krügersdorf",
+            "locHirarchieIds":"2,4,14,1362,250",
+            "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+            "type":"ROUTE",
+            "id":"2858",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2719.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2631.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2604.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2718.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2717.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2715.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2710.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2709.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2702.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140628-kruegersdorf/CIMG2700.JPG",
+                "name":"Bisonpark Krügersdorf - Rundwanderung um Kruegersdorf Richtung Bahrendorf, Zeust und den Bisonpark",
+                "sdoc_id":"2858",
+                "id":"2858000009"}]},
+        {
+            "datevon":"2014-06-23T00:00:00Z",
+            "imageId":null,
+            "locId":1642,
+            "routeId":2857,
+            "trackId":2190,
+            "desc":"",
+            "geoLat":"50.9496",
+            "geoLoc":"50.9496,14.1119",
+            "gpsTrackBasefile":"route-D_Saechsische_Schweiz_Rathener_Gebiet-Waltersdorf_Saechsiche_Schwe_Wanderung_von_Waltersdorf_ueber_die_kleine_Bastei_nach_Rathen_und_ueber_Gamrig_zurueck-t2857",
+            "keywords":"Berge, Bergwald, Dorf, Feld, Felsen, Felswand, Fluss, Frühling, Kulturlandschaft, Kurztour, Landschaft, Natur, Naturlandschaft, Sonne, sonnig, Tal, Wald, Wandern, Wanderung, Weide, Wiese",
+            "locHirarchie":"Deutschland -> Sachsen -> Sächsiche Schweiz -> Elbsandsteingebirge -> Rathener Gebiet -> Waltersdorf/Sächsiche Schweiz",
+            "locHirarchieIds":"2,132,133,129,398,1642",
+            "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+            "type":"ROUTE",
+            "id":"2857",
+            "sdocimages":[{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2470.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000000"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2421.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000001"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2484.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000002"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2478.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000003"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2434.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000004"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2430.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000005"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2426.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000006"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2418.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000007"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2417.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000008"},{
+                "fileName":"D__Bilder_digifotos_bilder-OK_import-2014-06_20140623-walterdorf-sachsen/CIMG2492.JPG",
+                "name":"Waltersdorf/Sächsiche Schwe - Wanderung von Waltersdorf über die kleine Bastei nach Rathen und über Gamrig zurück",
+                "sdoc_id":"2857",
+                "id":"2857000009"}]}
+        ]
 }

@@ -3,8 +3,8 @@ import {Http} from '@angular/http';
 import {GpxLoader} from '../../services/gpx.loader';
 import {GpxParser} from '../../services/gpx.parser';
 import {VisJsGPXProfileMap} from '../../services/visjs-gpxprofilemap.plugin';
-import LatLng = L.LatLng;
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
+import LatLng = L.LatLng;
 
 @Component({
     selector: 'app-visjs-profilemap',

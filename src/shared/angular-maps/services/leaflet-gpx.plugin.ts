@@ -31,8 +31,10 @@ export class GPX extends L.FeatureGroup {
 
         this.gpxLoader.loadGpx(url, options).then(function onLoaded(geoElements) {
             const layers = me.convertGeoElementsToLayers(geoElements, options);
-            me.addLayer(layers);
-            me.fire('loaded', layers);
+            if (layers !== undefined) {
+                me.addLayer(layers);
+                me.fire('loaded', layers);
+            }
         }).catch(function onError(error) {
             console.error('failed to load gpx for leeafletmap:' + url, error);
         });
