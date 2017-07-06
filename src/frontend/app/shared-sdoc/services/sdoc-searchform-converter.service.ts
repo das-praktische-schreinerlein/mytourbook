@@ -38,6 +38,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
     }
 
     paramsToSearchForm(params: any, defaults: {}, searchForm: SDocSearchForm): void {
+        // TODO: sanitize
         params = params || {};
         defaults = defaults || {};
         const whereValues = this.searchParameterUtils.splitValuesByPrefixes(params.where, this.splitter,

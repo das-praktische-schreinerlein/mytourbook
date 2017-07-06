@@ -9,6 +9,7 @@ import axios from 'axios';
 import express from 'express';
 import * as fs from 'fs';
 import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
+import {IdValidationRule} from '../../shared/search-commons/model/forms/generic-validator.util';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
@@ -31,12 +32,13 @@ export class SDocServerModule {
         dataStore.setAdapter('http', adapter, '', {});
 
         // configure express
+        const idValidationRule = new IdValidationRule(true);
         app.param('id', function(req, res, next, id) {
             const idParam = (id || '');
-            if (idParam.search(/[^a-zA-Z0-9_]/) >= 0) {
+            if (!idValidationRule.isValid(idParam)) {
                 return next('not found');
             }
-            const searchForm = new SDocSearchForm({moreFilter: 'id:' + idParam});
+            const searchForm = new SDocSearchForm({moreFilter: 'id:' + idValidationRule.sanitize(idParam)});
             dataService.search(searchForm).then(
                 function searchDone(searchResult: SDocSearchResult) {
                     if (!searchResult || searchResult.recordCount !== 1) {
