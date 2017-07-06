@@ -9,7 +9,7 @@ import axios from 'axios';
 import express from 'express';
 import * as fs from 'fs';
 import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
-import {IdValidationRule} from '../../shared/search-commons/model/forms/generic-validator.util';
+import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {

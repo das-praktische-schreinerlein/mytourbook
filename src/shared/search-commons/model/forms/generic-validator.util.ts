@@ -33,6 +33,7 @@ export abstract class ValidationWithDefaultRule extends ValidationRule {
             return value;
         }
 
+        // console.error("sanitize value:" + value + " to defaultValue: " + this._defaultValue);
         return this._defaultValue;
     }
 }
@@ -108,31 +109,33 @@ export class RegExValidationReplaceRule extends ValidationRule {
         if (typeof value !== 'string') {
             return undefined;
         }
-        return value.replace(this._replaceRegEx, this._replaceMent);
+        const result = value.replace(this._replaceRegEx, this._replaceMent);
+        // console.error("sanitize value:" + value + " to replaceValue: " + result);
+        return result;
     }
 }
 
 export class IdValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[a-zA-Z_0-9]$/gi, /[^a-zA-Z_0-9]*/gi, '');
+        super(required, /^[a-zA-Z_0-9]*$/gi, /[^a-zA-Z_0-9]*/gi, '');
     }
 }
 
 export class IdCsvValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[a-zA-Z_0-9,]$/gi, /[^a-zA-Z_0-9,]*/gi, '');
+        super(required, /^[a-zA-Z_0-9,]*$/gi, /[^a-zA-Z_0-9,]*/gi, '');
     }
 }
 
 export class KeyParamsValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[-a-zA-Z_0-9,;: ]$/gi, /[^-a-zA-Z_0-9,;: ]*/gi, '');
+        super(required, /^[-a-zA-Z_0-9,;: ]*$/gi, /[^-a-zA-Z_0-9,;: ]*/gi, '');
     }
 }
 
 export class TextValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[-[:word]äöüßÄÖÜ+;,:._*]$/gi, /[^-[:word]äöüßÄÖÜ+;,:._*]*/gi, '');
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._*]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._*]*/gi, '');
     }
 }
 
@@ -175,7 +178,7 @@ export class NumberValidationRule extends ValidationWithDefaultRule {
         if (this.isValid(value)) {
             return +value;
         }
-
+        // console.error("sanitize value:" + value + " to defaultValue: " + this._defaultValue);
         return this._defaultValue;
     }
 }
