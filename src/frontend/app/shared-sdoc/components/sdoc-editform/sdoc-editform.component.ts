@@ -78,7 +78,7 @@ export class SDocEditformComponent implements OnInit {
             errors.map((value: SchemaValidationError, index, array) => {
                 msg += '- ' + value.path + ':' + value.expected + '<br>';
             });
-            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oops!');
+            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
             return false;
         }
 

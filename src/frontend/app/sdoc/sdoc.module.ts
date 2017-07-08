@@ -18,6 +18,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {ErrorResolver} from '../sections/resolver/error.resolver';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
         SearchParameterUtils,
         SDocContentUtils,
         SDocSearchFormResolver,
-        SDocRecordResolver
+        SDocRecordResolver,
+        ErrorResolver
     ],
     exports: [
         SDocSearchpageComponent

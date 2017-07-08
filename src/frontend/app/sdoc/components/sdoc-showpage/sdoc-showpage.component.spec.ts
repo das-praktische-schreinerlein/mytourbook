@@ -12,6 +12,7 @@ import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '../../../../testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -31,7 +32,8 @@ describe('SDocShowpageComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 SDocRoutingService,
                 ToastsManager,
-                TranslateService
+                TranslateService,
+                ErrorResolver
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

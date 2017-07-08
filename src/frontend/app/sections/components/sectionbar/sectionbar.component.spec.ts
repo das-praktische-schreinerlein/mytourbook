@@ -7,11 +7,10 @@ import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
-import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {FormBuilder} from '@angular/forms';
-import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {ErrorResolver} from '../../resolver/error.resolver';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -32,11 +31,10 @@ describe('SectionBarComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
                 FormBuilder,
-                SDocSearchFormConverter,
-                SDocRoutingService,
-                SearchParameterUtils,
                 ToastsManager,
-                TranslateService
+                TranslateService,
+                ErrorResolver,
+                SDocRoutingService
             ]
         })
             .compileComponents();

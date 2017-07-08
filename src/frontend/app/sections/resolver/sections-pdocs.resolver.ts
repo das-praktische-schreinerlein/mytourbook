@@ -3,24 +3,34 @@ import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/rou
 import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
 import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
+import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
 
 @Injectable()
-export class SectionsPDocsResolver implements Resolve<PDocRecord[]> {
-    constructor(private appService: GenericAppService, private pdocDataService: PDocDataService) {}
+export class SectionsPDocsResolver implements Resolve<ResolvedData<PDocRecord[]>> {
+    static ERROR_READING_SECTIONS = 'ERROR_READING_SECTIONS';
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<PDocRecord[]> {
-        return new Promise<PDocRecord[]>((resolve, reject) => {
+    constructor(private appService: GenericAppService, private dataService: PDocDataService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<ResolvedData<PDocRecord[]>> {
+        const result: ResolvedData<PDocRecord[]> = {
+            route: route,
+            state: state
+        };
+
+        return new Promise<ResolvedData<PDocRecord[]>>((resolve) => {
             this.appService.getAppState().subscribe(appState => {
                 if (appState === AppState.Ready) {
-                    this.pdocDataService.getAll(undefined).then(
+                    this.dataService.getAll(undefined).then(
                         function doneGetAll(pdocs: any) {
-                            resolve(pdocs);
-                        },
-                        function errorGetAll(reason: any) {
+                            result.data = pdocs;
+                            resolve(result);
+                            return;
+                        }).catch(function errorGetAll(reason: any) {
                             console.error('error loading pdocs', reason);
-                            reject(reason);
-                        }
-                    );
+                            result.error = new ResolverError(SectionsPDocsResolver.ERROR_READING_SECTIONS, undefined, reason);
+                            resolve(result);
+                            return;
+                        });
                 }
             });
         });

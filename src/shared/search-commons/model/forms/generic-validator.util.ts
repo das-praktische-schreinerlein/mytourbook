@@ -139,6 +139,18 @@ export class TextValidationRule extends RegExValidationReplaceRule {
     }
 }
 
+export class RouteValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ/+;,:._*]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ/+;,:._*]*/gi, '');
+    }
+}
+
+export class ShowRouteValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9/_]*$/gi, /[^-A-Za-z0-9/_]*/gi, '');
+    }
+}
+
 export class NumberValidationRule extends ValidationWithDefaultRule {
     protected _min: number;
     protected _max: number;

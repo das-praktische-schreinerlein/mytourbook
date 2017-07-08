@@ -11,6 +11,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -35,7 +36,8 @@ describe('SDocSearchpageComponent', () => {
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 SDocRoutingService,
                 ToastsManager,
-                TranslateService
+                TranslateService,
+                ErrorResolver
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

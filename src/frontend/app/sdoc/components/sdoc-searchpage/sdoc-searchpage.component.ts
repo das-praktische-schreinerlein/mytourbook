@@ -9,6 +9,10 @@ import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-search
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
+import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
+import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {SectionsSearchFormResolver} from '../../../sections/resolver/sections-searchform.resolver';
+import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -17,6 +21,7 @@ import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.compon
 })
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
+    idValidationRule = new IdValidationRule(true);
     Layout = Layout;
 
     searchResult: SDocSearchResult;
@@ -28,7 +33,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     mapCenterPos: L.LatLng = undefined;
     mapZoom = 9;
 
-    constructor(private route: ActivatedRoute, private router: Router,
+    constructor(private route: ActivatedRoute, private router: Router, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.searchForm = new SDocSearchForm({});
@@ -39,30 +44,52 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // reset initialized
         this.initialized = false;
+        const me = this;
 
         this.route.data.subscribe(
-            (data: { searchForm: SDocSearchForm, flgDoSearch: boolean, baseSearchUrl: string }) => {
-                this.baseSearchUrl = (data.baseSearchUrl ? data.baseSearchUrl : this.baseSearchUrl);
-                if (!data.flgDoSearch) {
-                    console.log('ngOnInit: redirect for ', data);
-                    return this.redirectToSearch();
+            (data: { searchForm: ResolvedData<SDocSearchForm>, flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
+                const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
+                const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
+                if (!flgSearchFormError && !flgBaseSearchUrlError) {
+                    me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
+                    if (!data.flgDoSearch) {
+                        console.log('ngOnInit: redirect for ', data);
+                        return this.redirectToSearch();
+                    }
+
+                    console.log('route: search for ', data);
+                    this.searchForm = data.searchForm.data;
+                    this.perPage = this.searchForm.perPage;
+                    this.sort = this.searchForm.sort;
+                    if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
+                        const [lat, lon] = this.searchForm.nearby.split('_');
+                        this.mapCenterPos = new L.LatLng(+lat, +lon);
+                    } else {
+                        this.mapCenterPos = undefined;
+                    }
+                    return this.doSearch();
                 }
 
-                console.log('route: search for ', data);
-                this.searchForm = data.searchForm;
-                this.perPage = this.searchForm.perPage;
-                this.sort = this.searchForm.sort;
-                if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
-                    const [lat, lon] = this.searchForm.nearby.split('_');
-                    this.mapCenterPos = new L.LatLng(+lat, +lon);
-                } else {
-                    this.mapCenterPos = undefined;
+                let newUrl, msg, code;
+                const errorCode = (flgSearchFormError ? data.searchForm.error.code : data.baseSearchUrl.error.code);
+                const sectionId = (flgSearchFormError ? data.searchForm.error.data : data.searchForm.data.theme);
+                const searchForm = (flgSearchFormError ? new SDocSearchForm(data.searchForm.error.data) : data.searchForm.data);
+                switch (errorCode) {
+                    case SectionsSearchFormResolver.ERROR_INVALID_SECTION_ID:
+                        code = ErrorResolver.ERROR_INVALID_ID;
+                        me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                        newUrl = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, searchForm);
+                        msg = undefined;
+                        break;
+                    default:
+                        code = ErrorResolver.ERROR_OTHER;
+                        me.baseSearchUrl = ['sdoc'].join('/');
+                        newUrl = undefined;
+                        msg = undefined;
                 }
-                return this.doSearch();
-            },
-            (error: {reason: any}) => {
-                    console.error('deleteSDocById failed:' + error.reason);
-                    this.toastr.error('Es gab leider ein Problem bei der Suche - am besten noch einmal probieren :-(', 'Oops!');
+
+                this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                return;
             }
         );
     }
@@ -156,7 +183,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 me.searchForm = sdocSearchResult.searchForm;
             }
         }).catch(function errorSearch(reason) {
-            me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oops!');
+            me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:' + reason);
         });
     }

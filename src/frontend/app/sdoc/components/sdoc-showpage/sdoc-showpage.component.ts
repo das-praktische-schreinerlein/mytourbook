@@ -6,6 +6,11 @@ import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.ser
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
+import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
+import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pdoc-details.resolver';
+import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -13,6 +18,7 @@ import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-rec
     styleUrls: ['./sdoc-showpage.component.css']
 })
 export class SDocShowpageComponent implements OnInit, OnDestroy {
+    idValidationRule = new IdValidationRule(true);
     public contentUtils: SDocContentUtils;
     public record: SDocRecord;
     public Layout = Layout;
@@ -20,7 +26,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     baseSearchUrl: string;
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils) {
+                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
+                private errorResolver: ErrorResolver) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -29,14 +36,77 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         // Subscribe to route params
         const me = this;
         this.route.data.subscribe(
-            (data: { record: SDocRecord, pdoc: PDocRecord, baseSearchUrl: string }) => {
-                me.record = data.record;
-                me.pdoc = data.pdoc;
-                me.baseSearchUrl = data.baseSearchUrl;
-            },
-            (error: {reason: any}) => {
-                me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oops!');
-                console.error('show getById failed:' + error.reason);
+            (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
+                const flgSDocError = ErrorResolver.isResolverError(data.record);
+                const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
+                const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
+                if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
+                    me.record = data.record.data;
+                    me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
+                    me.baseSearchUrl = data.baseSearchUrl.data;
+                    return;
+                }
+
+                let newUrl, msg, code;
+                let errorCode;
+                if (flgSDocError) {
+                    errorCode = data.record.error.code;
+                } else {
+                    errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
+                }
+                const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
+                const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
+                const sdocName = (flgSDocError ? 'name' : data.record.data.name);
+                switch (errorCode) {
+                    case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
+                    case SDocRecordResolver.ERROR_INVALID_SDOC_ID:
+                        code = ErrorResolver.ERROR_INVALID_ID;
+                        if (sectionId) {
+                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                        } else {
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                        }
+                        newUrl = [me.baseSearchUrl,
+                            'show',
+                            this.idValidationRule.sanitize(sdocName),
+                            this.idValidationRule.sanitize(sdocId)].join('/');
+                        msg = undefined;
+                        break;
+                    case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
+                        code = ErrorResolver.ERROR_UNKNOWN_ID;
+                        me.baseSearchUrl = ['sdoc'].join('/');
+                        newUrl = [me.baseSearchUrl,
+                            'show',
+                            this.idValidationRule.sanitize(sdocName),
+                            this.idValidationRule.sanitize(sdocId)].join('/');
+                        msg = undefined;
+                        break;
+                    case SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID:
+                        code = ErrorResolver.ERROR_UNKNOWN_ID;
+                        if (sectionId) {
+                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                        } else {
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                        }
+                        newUrl = [me.baseSearchUrl].join('/');
+                        msg = undefined;
+                        break;
+                    case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
+                    case SDocRecordResolver.ERROR_READING_SDOC_ID:
+                        code = ErrorResolver.ERROR_WHILE_READING;
+                        me.baseSearchUrl = ['sdoc'].join('/');
+                        newUrl = undefined;
+                        msg = undefined;
+                        break;
+                    default:
+                        code = ErrorResolver.ERROR_OTHER;
+                        me.baseSearchUrl = ['sdoc'].join('/');
+                        newUrl = undefined;
+                        msg = undefined;
+                }
+
+                this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                return;
             }
         );
     }

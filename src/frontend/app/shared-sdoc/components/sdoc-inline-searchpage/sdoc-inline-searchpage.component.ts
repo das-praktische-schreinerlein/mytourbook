@@ -132,7 +132,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
                 me.searchForm = sdocSearchResult.searchForm;
             }
         }).catch(function errorSearch(reason) {
-            me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oops!');
+            me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:' + reason);
         });
     }

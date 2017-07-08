@@ -1,9 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SDocRecordResolver} from '../shared-sdoc/resolver/sdoc-details.resolver';
-import {SDocEditpageComponent} from '../admin/components/sdoc-editpage/sdoc-editpage.component';
 import {SDocShowpageComponent} from './components/sdoc-showpage/sdoc-showpage.component';
-import {SDocCreatepageComponent} from '../admin/components/sdoc-createpage/sdoc-createpage.component';
 import {SDocSearchFormResolver} from '../shared-sdoc/resolver/sdoc-searchform.resolver';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
 
@@ -20,7 +18,7 @@ const sdocRoutes: Routes = [
                         component: SDocSearchpageComponent,
                         data: {
                             id: 'sdocs_default',
-                            baseSearchUrl: 'sdoc/'
+                            baseSearchUrl: { data: 'sdoc/' }
                         }
                     },
                     {
@@ -30,7 +28,7 @@ const sdocRoutes: Routes = [
                             flgDoSearch: true,
                             id: 'sdocs_search',
                             searchFormDefaults: {},
-                            baseSearchUrl: 'sdoc/'
+                            baseSearchUrl: { data: 'sdoc/' }
                         },
                         resolve: {
                             searchForm: SDocSearchFormResolver
@@ -41,7 +39,7 @@ const sdocRoutes: Routes = [
                         component: SDocSearchpageComponent,
                         data: {
                             id: 'sdocs_fallback',
-                            baseSearchUrl: 'sdoc/'
+                            baseSearchUrl: { data: 'sdoc/' }
                         }
                     }
                 ]
@@ -49,6 +47,9 @@ const sdocRoutes: Routes = [
             {
                 path: 'show/:name/:id',
                 component: SDocShowpageComponent,
+                data: {
+                    baseSearchUrl: { data: 'sdoc/' }
+                },
                 resolve: {
                     record: SDocRecordResolver
                 }

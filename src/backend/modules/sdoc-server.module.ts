@@ -42,7 +42,8 @@ export class SDocServerModule {
             dataService.search(searchForm).then(
                 function searchDone(searchResult: SDocSearchResult) {
                     if (!searchResult || searchResult.recordCount !== 1) {
-                        return next('not found');
+                        req['sdoc'] = undefined;
+                        return next();
                     }
                     req['sdoc'] = searchResult.currentRecords[0];
                     next();
@@ -64,6 +65,10 @@ export class SDocServerModule {
             })
             .get(function(req, res, next) {
                 const sdoc: SDocRecord = req['sdoc'];
+                if (sdoc === undefined) {
+                    res.json();
+                    next();
+                }
                 res.json(sdoc.toSerializableJsonObj());
                 next();
             });

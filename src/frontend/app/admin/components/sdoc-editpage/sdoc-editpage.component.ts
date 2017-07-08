@@ -27,7 +27,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                 me.record = data.record;
             },
             (error: {reason: any}) => {
-                me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oops!');
+                me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oje!');
                 console.error('edit getById failed:' + error.reason);
             }
         );
@@ -44,7 +44,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
             },
             function errorCreate(reason: any) {
                 console.error('edit updateById failed:' + reason);
-                me.toastr.error('Es gibt leider Probleme bei der Speichern - am besten noch einmal probieren :-(', 'Oops!');
+                me.toastr.error('Es gibt leider Probleme bei der Speichern - am besten noch einmal probieren :-(', 'Oje!');
             }
         );
         return false;

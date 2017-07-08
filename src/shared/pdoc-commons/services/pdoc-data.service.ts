@@ -40,6 +40,10 @@ export class PDocDataService extends PDocSearchService {
 
     getSubDocuments(pdoc: PDocRecord): PDocRecord[] {
         const sections: PDocRecord[] = [];
+        if (!pdoc) {
+            return [];
+        }
+
         const ids = pdoc.subSectionIds !== undefined ? pdoc.subSectionIds.split(/,/) : [];
         for (const id of ids) {
             const section = this.getByIdFromLocalStore(id);

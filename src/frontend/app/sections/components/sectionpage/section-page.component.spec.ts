@@ -11,6 +11,7 @@ import {SearchParameterUtils} from '../../../../shared/search-commons/services/s
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {ErrorResolver} from '../../resolver/error.resolver';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -35,7 +36,8 @@ describe('SectionPageComponent', () => {
                 SDocRoutingService,
                 SearchParameterUtils,
                 ToastsManager,
-                TranslateService
+                TranslateService,
+                ErrorResolver
             ]
         })
             .compileComponents();

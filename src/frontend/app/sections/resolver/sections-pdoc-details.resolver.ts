@@ -4,30 +4,58 @@ import {AppState, GenericAppService} from '../../../shared/search-commons/servic
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
 import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocRoutingService} from '../../shared-sdoc/services/sdoc-routing.service';
+import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
 import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
 
 @Injectable()
-export class SectionsPDocRecordResolver implements Resolve<PDocRecord> {
+export class SectionsPDocRecordResolver implements Resolve<ResolvedData<PDocRecord>> {
+    static ERROR_UNKNOWN_SECTION_ID = 'ERROR_UNKNOWN_SECTION_ID';
+    static ERROR_INVALID_SECTION_ID = 'ERROR_INVALID_SECTION_ID';
+    static ERROR_READING_SECTION_ID = 'ERROR_READING_SECTION_ID';
     idValidationRule = new IdValidationRule(true);
-    constructor(private appService: GenericAppService, private pdocDataService: PDocDataService,
-        private sDocRoutingService: SDocRoutingService) {}
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<PDocRecord> {
+    constructor(private appService: GenericAppService, private dataService: PDocDataService,
+        private routingService: SDocRoutingService) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<ResolvedData<PDocRecord>> {
         const me = this;
-        return new Promise<PDocRecord>((resolve, reject) => {
+        const result: ResolvedData<PDocRecord> = {
+            route: route,
+            state: state
+        };
+
+        return new Promise<ResolvedData<PDocRecord>>((resolve) => {
             this.appService.getAppState().subscribe(appState => {
                 if (appState === AppState.Ready) {
-                    const id = this.idValidationRule.sanitize(route.params['section'] || route.parent.params['section']);
-                    this.pdocDataService.getById(id).then(
+                    let id = route.params['section'] || route.parent.params['section'];
+                    if (!this.idValidationRule.isValid(id)) {
+                        console.error('error no id for pdoc:', id);
+                        result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID, id, undefined);
+                        resolve(result);
+                        return;
+                    }
+
+                    id = this.idValidationRule.sanitize(id);
+                    this.dataService.getById(id).then(
                         function doneGetById(pdoc: PDocRecord) {
-                            if (pdoc.id !== undefined) {
-                                me.sDocRoutingService.setLastBaseUrl('sections/' + pdoc.id + '/');
+                            if (pdoc === undefined) {
+                                console.error('error no pdoc for id:' + id);
+                                result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID, id, undefined);
+                                resolve(result);
+                                return;
                             }
-                            resolve(pdoc);
-                        },
-                        function errorGetById(reason: any) {
+
+                            if (pdoc.id !== undefined) {
+                                me.routingService.setLastBaseUrl('sections/' + pdoc.id + '/');
+                            }
+                            result.data = pdoc;
+                            resolve(result);
+                            return;
+                        }).catch(function errorGetById(reason: any) {
                             console.error('error pdoc for id:' + id, reason);
-                            reject(reason);
+                            result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_READING_SECTION_ID, id, reason);
+                            resolve(result);
+                            return;
                         }
                     );
                 }

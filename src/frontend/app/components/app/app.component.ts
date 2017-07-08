@@ -28,7 +28,7 @@ export class AppComponent {
                 if (appState === AppState.Ready) {
                     this.toastr.info('App wurde initialisiert. Viel Spaß :-)', 'Fertig');
                 } else if (appState === AppState.Failed) {
-                    this.toastr.error('Es gibt leider Probleme bei Initialiseren der App - am besten noch einmal probieren :-(', 'Oops!');
+                    this.toastr.error('Es gibt leider Probleme bei Initialiseren der App - am besten noch einmal probieren :-(', 'Oje!');
                 }
             }
         );

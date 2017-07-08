@@ -22,4 +22,8 @@ export class PDocDataServiceStub {
     getById(id: any): Promise<PDocRecord> {
         return Promise.resolve(new PDocRecord({id: '1'}));
     };
+
+    getSubDocuments(pdoc: any): PDocRecord[] {
+        return [];
+    }
 }

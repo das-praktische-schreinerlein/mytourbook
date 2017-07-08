@@ -13,6 +13,7 @@ import {SharedPDocModule} from '../shared-pdoc/shared-pdoc.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SectionsPDocsResolver} from './resolver/sections-pdocs.resolver';
+import {ErrorResolver} from './resolver/error.resolver';
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import {SectionsPDocsResolver} from './resolver/sections-pdocs.resolver';
         SectionsSearchFormResolver,
         SectionsSDocRecordResolver,
         SectionsPDocRecordResolver,
-        SectionsPDocsResolver
+        SectionsPDocsResolver,
+        ErrorResolver
     ]
 })
 export class SectionsModule {}

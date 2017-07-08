@@ -28,11 +28,10 @@ export class NavbarComponent implements OnInit {
                     }
                 ).catch(function onNotFound(error) {
                     console.error('show getSection failed:', error);
-                    }
-                );
+                });
             },
             (error: {reason: any}) => {
-                me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oops!');
+                me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oje!');
                 console.error('show getSections failed:' + error.reason);
             }
         );
