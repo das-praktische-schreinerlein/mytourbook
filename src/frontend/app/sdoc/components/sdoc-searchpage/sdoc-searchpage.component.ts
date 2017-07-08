@@ -13,6 +13,8 @@ import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {SectionsSearchFormResolver} from '../../../sections/resolver/sections-searchform.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -47,8 +49,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         const me = this;
 
         this.route.data.subscribe(
-            (data: { searchForm: ResolvedData<SDocSearchForm>, flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
+            (data: { searchForm: ResolvedData<SDocSearchForm>, pdoc: ResolvedData<PDocRecord>,
+                flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
                 const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
+                const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 if (!flgSearchFormError && !flgBaseSearchUrlError) {
                     me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
@@ -72,18 +76,34 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
                 let newUrl, msg, code;
                 const errorCode = (flgSearchFormError ? data.searchForm.error.code : data.baseSearchUrl.error.code);
-                const sectionId = (flgSearchFormError ? data.searchForm.error.data : data.searchForm.data.theme);
-                const searchForm = (flgSearchFormError ? new SDocSearchForm(data.searchForm.error.data) : data.searchForm.data);
+                const sectionId = (flgSearchFormError ? data.searchForm.error.data.theme : data.searchForm.data.theme);
+                const searchForm = (flgSearchFormError ?
+                    SDocSearchFormFactory.createSanitized(data.searchForm.error.data) : data.searchForm.data);
                 switch (errorCode) {
-                    case SectionsSearchFormResolver.ERROR_INVALID_SECTION_ID:
+                    case SectionsSearchFormResolver.ERROR_INVALID_SDOC_SEARCHFORM:
+                        code = ErrorResolver.ERROR_INVALID_DATA;
+                        if (sectionId && sectionId !== '') {
+                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                        } else {
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                        }
+                        newUrl = this.searchFormConverter.searchFormToUrl(
+                            this.baseSearchUrl + '/', SDocSearchFormFactory.cloneSanitized(searchForm));
+                        msg = undefined;
+                        break;
+                    case SectionsSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID:
                         code = ErrorResolver.ERROR_INVALID_ID;
-                        me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        newUrl = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, searchForm);
+                        if (sectionId && sectionId !== '') {
+                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                        } else {
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                        }
+                        newUrl = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl + '/', searchForm);
                         msg = undefined;
                         break;
                     default:
                         code = ErrorResolver.ERROR_OTHER;
-                        me.baseSearchUrl = ['sdoc'].join('/');
+                        me.baseSearchUrl = ['sdoc'].join('/') + '/';
                         newUrl = undefined;
                         msg = undefined;
                 }

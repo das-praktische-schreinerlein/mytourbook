@@ -5,10 +5,12 @@ import {SDocSearchForm} from '../../../shared/sdoc-commons/model/forms/sdoc-sear
 import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
 import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
+import {SDocSearchFormValidator} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 
 @Injectable()
 export class SectionsSearchFormResolver implements Resolve<ResolvedData<SDocSearchForm>> {
-    static ERROR_INVALID_SECTION_ID = 'ERROR_INVALID_SECTION_ID';
+    static ERROR_INVALID_SEARCHFORM_SECTION_ID = 'ERROR_INVALID_SEARCHFORM_SECTION_ID';
+    static ERROR_INVALID_SDOC_SEARCHFORM = 'ERROR_INVALID_SDOC_SEARCHFORM';
     idValidationRule = new IdValidationRule(true);
 
     constructor(private appService: GenericAppService, private searchFormConverter: SDocSearchFormConverter) {}
@@ -21,19 +23,25 @@ export class SectionsSearchFormResolver implements Resolve<ResolvedData<SDocSear
         };
 
         return new Promise<ResolvedData<SDocSearchForm>>((resolve) => {
-            let id: string = route.params['section'] || route.parent.params['section'];
-            if (!this.idValidationRule.isValid(id)) {
-                result.error = new ResolverError(SectionsSearchFormResolver.ERROR_INVALID_SECTION_ID, id, undefined);
-                resolve(result);
-                return;
-            }
+            const id: string = route.params['section'] || route.parent.params['section'];
 
-            id = this.idValidationRule.sanitize(id);
             const searchForm = new SDocSearchForm({});
             this.appService.getAppState().subscribe(appState => {
                 if (appState === AppState.Ready) {
                     this.searchFormConverter.paramsToSearchForm(route.params, route.data['searchFormDefaults'], searchForm);
-                    searchForm.theme = id;
+                    searchForm.theme = this.idValidationRule.sanitize(id);
+                    if (!SDocSearchFormValidator.isValid(searchForm)) {
+                        result.error = new ResolverError(SectionsSearchFormResolver.ERROR_INVALID_SDOC_SEARCHFORM, searchForm, undefined);
+                        resolve(result);
+                        return;
+                    }
+                    if (!this.idValidationRule.isValid(id)) {
+                        result.error = new ResolverError(SectionsSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID,
+                            searchForm, undefined);
+                        resolve(result);
+                        return;
+                    }
+
                     result.data = searchForm;
                     resolve(result);
                 }

@@ -11,7 +11,7 @@ export class PDocSearchForm extends GenericSearchForm {
     static pdocFields = {
         what: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new IdCsvValidationRule(false)),
         moreFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FILTER_LIST, new KeyParamsValidationRule(false)),
-        type: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdValidationRule(false))
+        type: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false))
     };
 
     what: string;

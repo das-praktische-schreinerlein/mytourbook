@@ -2,7 +2,6 @@ import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
@@ -11,6 +10,7 @@ import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 
 @Component({
     selector: 'app-sectionpage',
@@ -104,7 +104,8 @@ export class SectionPageComponent implements OnInit {
     }
 
     getToSearchUrl() {
-        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, new SDocSearchForm({theme: this.pdoc.theme}));
+        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl,
+            SDocSearchFormFactory.createSanitized({theme: this.pdoc.theme}));
     }
 
     submitToSearch() {

@@ -1,5 +1,5 @@
 import {SDocSearchResult} from '../shared/sdoc-commons/model/container/sdoc-searchresult';
-import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchForm, SDocSearchFormValidator} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocDataStore, SDocTeamFilterConfig} from '../shared/sdoc-commons/services/sdoc-data.store';
 import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
@@ -10,6 +10,7 @@ import express from 'express';
 import * as fs from 'fs';
 import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
+import {Facets} from '../shared/search-commons/model/container/facets';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
@@ -83,6 +84,10 @@ export class SDocServerModule {
             })
             .get(function(req, res, next) {
                 const searchForm = new SDocSearchForm(req.query);
+                if (!SDocSearchFormValidator.isValid(searchForm)) {
+                    res.json((new SDocSearchResult(searchForm, 0, [], new Facets())).toSerializableJsonObj());
+                    next();
+                }
                 try {
                     dataService.search(searchForm).then(
                         function searchDone(searchResult: SDocSearchResult) {

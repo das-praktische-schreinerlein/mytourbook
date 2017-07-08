@@ -39,10 +39,10 @@ export class GenericSearchForm {
 
 
     constructor(values: {}) {
-        this.fulltext = GenericSearchForm.genericFields.fulltext.validator.sanitize(values['fulltext']) || '';
-        this.sort = GenericSearchForm.genericFields.sort.validator.sanitize(values['sort']) || '';
-        this.perPage = GenericSearchForm.genericFields.perPage.validator.sanitize(values['perPage']) || 10;
-        this.pageNum = GenericSearchForm.genericFields.pageNum.validator.sanitize(values['pageNum']) || 1;
+        this.fulltext = values['fulltext'] || '';
+        this.sort = values['sort'] || '';
+        this.perPage = values['perPage'] || 10;
+        this.pageNum = values['pageNum'] || 1;
     }
 
     toString() {

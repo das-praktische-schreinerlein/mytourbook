@@ -8,6 +8,7 @@ import {SDocRoutingService} from '../../shared-sdoc/services/sdoc-routing.servic
 export class ErrorResolver {
     static ERROR_INVALID_ID = 'ERROR_INVALID_ID';
     static ERROR_UNKNOWN_ID = 'ERROR_UNKNOWN_ID';
+    static ERROR_INVALID_DATA = 'ERROR_INVALID_DATA';
     static ERROR_WHILE_READING = 'ERROR_WHILE_READING';
     static ERROR_OTHER = 'ERROR_OTHER';
 
@@ -23,7 +24,7 @@ export class ErrorResolver {
         return false;
     }
 
-    constructor(private router: Router, private routingService: SDocRoutingService) {
+    constructor(private router: Router) {
     }
 
     redirectAfterRouterError(errorCode: string, newUrl: string, toasts: ToastsManager, toastMessage: string) {
@@ -35,6 +36,10 @@ export class ErrorResolver {
                 switch (errorCode) {
                     case ErrorResolver.ERROR_INVALID_ID:
                         msg = 'Der Url ist leider nicht korrekt. Wir haben versucht ihn zu berichtigen und ' +
+                            'leiten Sie auf die hoffentlich richtige Seite weiter.';
+                        break;
+                    case ErrorResolver.ERROR_INVALID_DATA:
+                        msg = 'Einige Daten waren leider nicht korrekt. Wir haben versucht sie zu berichtigen und ' +
                             'leiten Sie auf die hoffentlich richtige Seite weiter.';
                         break;
                     case ErrorResolver.ERROR_UNKNOWN_ID:
@@ -49,6 +54,7 @@ export class ErrorResolver {
         }
 
         if (newUrl) {
+            console.error('after error ' + errorCode +  ' redirect to', newUrl);
             this.router.navigateByUrl(newUrl);
         }
     }

@@ -60,6 +60,7 @@ const sectionRoutes: Routes = [
                             searchFormDefaults: {},
                         },
                         resolve: {
+                            pdoc: SectionsPDocRecordResolver,
                             baseSearchUrl: SectionsBaseUrlResolver,
                             searchForm: SectionsSearchFormResolver
                         }

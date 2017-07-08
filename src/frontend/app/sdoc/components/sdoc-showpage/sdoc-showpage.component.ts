@@ -61,7 +61,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
                     case SDocRecordResolver.ERROR_INVALID_SDOC_ID:
                         code = ErrorResolver.ERROR_INVALID_ID;
-                        if (sectionId) {
+                        if (sectionId && sectionId !== '') {
                             me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
                         } else {
                             me.baseSearchUrl = ['sdoc'].join('/');
@@ -83,7 +83,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                         break;
                     case SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID:
                         code = ErrorResolver.ERROR_UNKNOWN_ID;
-                        if (sectionId) {
+                        if (sectionId && sectionId !== '') {
                             me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
                         } else {
                             me.baseSearchUrl = ['sdoc'].join('/');
