@@ -138,7 +138,7 @@ export class SDocSearchformComponent implements OnInit {
             when: [(values.when ? values.when.split(/,/) : [])],
             what: [(values.what ? values.what.split(/,/) : [])],
             where: [(values.where ? values.where.split(/,/) : [])],
-            nearbyAddress: '',
+            nearbyAddress: values.nearbyAddress,
             nearbyDistance: '10',
             nearby: values.nearby,
             fulltext: values.fulltext,
@@ -155,7 +155,7 @@ export class SDocSearchformComponent implements OnInit {
             this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true);
 
         const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
-        if (lat && lon && !(values.nearbyAddress === undefined || values.nearbyAddress === '')) {
+        if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
             this.doReverseLookUpForNearBy(lat, lon).then(function (result: any) {
                 me.searchFormGroup.patchValue({'nearbyAddress': result.address});
             });
@@ -181,7 +181,7 @@ export class SDocSearchformComponent implements OnInit {
         inputEl.addEventListener('place_changed', (event: any) => {
             const distance = this.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
             this.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
-            this.searchFormGroup.patchValue({'nearbyAddress': event.detail.address});
+            this.searchFormGroup.patchValue({'nearbyAddress': event.detail.formatted});
             this.doSearch();
             return false;
         });
