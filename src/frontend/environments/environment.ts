@@ -5,7 +5,9 @@
 
 export const environment = {
     production: false,
-    solrBaseUrl: 'http://localhost:8983/solr/mytb/',
+    solrCoreSDoc: 'http://localhost:8983/solr/mytb/',
+    solrCoreSDocReadUsername: 'mytbread',
+    solrCoreSDocReadPassword: 'SolrRocks',
     backendApiBaseUrl: 'http://localhost:3000/api/v1/',
     tracksBaseUrl: 'http://localhost:3000/tracks/',
     picsBaseUrl: 'http://localhost/michas//digifotos/'

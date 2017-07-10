@@ -12,16 +12,19 @@ import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-e
 @Injectable()
 export class AppService extends GenericAppService {
     private appConfig = {
-        solrBaseUrl: environment.solrBaseUrl,
+        solrCoreSDoc: environment.solrCoreSDoc,
+        solrCoreSDocReadUsername: environment.solrCoreSDocReadUsername,
+        solrCoreSDocReadPassword: environment.solrCoreSDocReadPassword,
         backendApiBaseUrl: environment.backendApiBaseUrl,
         tracksBaseUrl: environment.tracksBaseUrl,
         picsBaseUrl: environment.picsBaseUrl
     };
 
-    static configureHttpProvider(jsonP: Jsonp): any {
+    static configureHttpProvider(http: Http, appConfig): any {
         return function makeHttpRequest(httpConfig) {
             const headers: Headers = new Headers();
             headers.append('Content-Type', (httpConfig.contentType ? httpConfig.contentType : 'application/x-www-form-urlencoded'));
+            headers.append('Authorization', 'Basic ' + btoa(appConfig.solrCoreSDocReadUsername + ':' + appConfig.solrCoreSDocReadPassword));
 
             const requestConfig: RequestOptionsArgs = {
                 method: httpConfig.method.toLowerCase(),
@@ -32,7 +35,7 @@ export class AppService extends GenericAppService {
 
             console.log('makeHttpRequest:', httpConfig);
             let result, request;
-            request = jsonP.get(httpConfig.url, requestConfig);
+            request = http.request(httpConfig.url, requestConfig);
             result = request.map((res) => {
                     console.log('response makeHttpRequest:' + httpConfig.url, res);
                     const json = res.json();
@@ -76,9 +79,9 @@ export class AppService extends GenericAppService {
     initSolrData() {
         const me = this;
         const options = {
-            basePath: this.appConfig.solrBaseUrl,
+            basePath: me.appConfig.solrCoreSDoc,
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
-            http: AppService.configureHttpProvider(this.jsonp)
+            http: AppService.configureHttpProvider(this.jsonp, me.appConfig)
         };
         const httpAdapter = new SDocSolrAdapter(options);
         this.sdocDataStore.setAdapter('http', httpAdapter, '', {});

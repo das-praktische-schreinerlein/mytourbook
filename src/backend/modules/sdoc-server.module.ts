@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
 import {Facets} from '../shared/search-commons/model/container/facets';
+import {HttpAdapter} from 'js-data-http';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
@@ -27,7 +28,16 @@ export class SDocServerModule {
         const options = {
             basePath: backendConfig['solrCoreSDoc'],
             suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
-            http: axios
+            http: axios,
+            beforeHTTP: function (config, opts) {
+                config.auth = {
+                    username: backendConfig['solrCoreSDocReadUsername'],
+                    password: backendConfig['solrCoreSDocReadPassword']
+                };
+
+                // Now do the default behavior
+                return HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
+            }
         };
         const adapter = new SDocSolrAdapter(options);
         dataStore.setAdapter('http', adapter, '', {});

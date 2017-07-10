@@ -8,6 +8,8 @@ import {ProxyServerModule} from './modules/proxy-server.module';
 
 const backendConfig = {
     solrCoreSDoc: 'http://localhost:8983/solr/mytb/',
+    solrCoreSDocReadUsername: 'mytbread',
+    solrCoreSDocReadPassword: 'SolrRocks',
     filePathPDocJson: 'src/backend/assets/pdocs.json',
     filePathThemeFilterJson: 'src/backend/assets/themeFilterConfig.json',
     proxyUrlTracks: 'http://localhost/michas/'
