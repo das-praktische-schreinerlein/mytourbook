@@ -157,7 +157,8 @@ export class SDocSearchformComponent implements OnInit {
         const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
             this.doReverseLookUpForNearBy(lat, lon).then(function (result: any) {
-                me.searchFormGroup.patchValue({'nearbyAddress': result.address});
+                me.searchFormGroup.patchValue({'nearbyAddress':
+                    SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(result.address)});
             });
         }
         if (dist) {
@@ -181,7 +182,8 @@ export class SDocSearchformComponent implements OnInit {
         inputEl.addEventListener('place_changed', (event: any) => {
             const distance = this.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
             this.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
-            this.searchFormGroup.patchValue({'nearbyAddress': event.detail.formatted});
+            this.searchFormGroup.patchValue({'nearbyAddress':
+                SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(event.detail.formatted)});
             this.doSearch();
             return false;
         });
