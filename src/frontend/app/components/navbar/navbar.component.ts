@@ -11,6 +11,7 @@ import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.s
 })
 export class NavbarComponent implements OnInit {
     sections: PDocRecord[];
+    public isExpanded = false;
 
     constructor(private route: ActivatedRoute, private toastr: ToastsManager, vcr: ViewContainerRef,
                 private pdocDataService: PDocDataService) {
