@@ -1,5 +1,5 @@
 <div class="row sdoc-list-item-flat">
-    <div class="col-1 image">
+    <div class="col-1 image layout-big">
         <ng-container [ngSwitch]="record.type">
             <ng-container *ngSwitchDefault="">
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
@@ -8,8 +8,24 @@
             </ng-container>
         </ng-container>
     </div>
-    <div class="col-1 type"><h5>{{record.type | translate }}</h5></div>
-    <div class="col-3 location"><h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5></div>
-    <div class="col-1"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a></div>
-    <div class="col-4"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+    <div class="col-1 type layout-big"><h5>{{record.type | translate }}</h5></div>
+    <div class="col-3 location layout-big"><h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5></div>
+    <div class="col-1 date layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a></div>
+
+
+    <div class="col-3 image layout-small">
+        <ng-container [ngSwitch]="record.type">
+            <ng-container *ngSwitchDefault="">
+                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <img class="picture-thumbnail" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="col-3 location layout-small"><h5>{{record.type | translate }}</h5>
+        <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
+        <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+    </div>
+
+    <div class="col-6"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
 </div>
