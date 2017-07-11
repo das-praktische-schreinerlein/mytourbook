@@ -10,9 +10,10 @@ const backendConfig = {
     solrCoreSDoc: 'http://localhost:8983/solr/mytb/',
     solrCoreSDocReadUsername: 'mytbread',
     solrCoreSDocReadPassword: 'SolrRocks',
-    filePathPDocJson: 'src/backend/assets/pdocs.json',
-    filePathThemeFilterJson: 'src/backend/assets/themeFilterConfig.json',
-    proxyUrlTracks: 'http://localhost/michas/'
+    filePathPDocJson: 'assets/pdocs.json',
+    filePathThemeFilterJson: 'assets/themeFilterConfig.json',
+    proxyUrlTracks: 'http://localhost/michas/',
+    port: 4100
 };
 
 // create server
@@ -33,7 +34,7 @@ PDocServerModule.configureRoutes(app, '/api/v1', backendConfig);
 ProxyServerModule.configureRoutes(app, '', backendConfig);
 
 // start server
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+app.listen(backendConfig.port, function () {
+    console.log('MyTB app listening on port ' + backendConfig.port);
 });
 
