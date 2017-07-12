@@ -3,9 +3,22 @@ import {Mapper, Record, utils} from 'js-data';
 import {Facet, Facets} from '../model/container/facets';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
+import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter';
+
+export class SolrFilterActions {
+    static LIKEI = 'likei';
+    static LIKE = 'like';
+    static EQ1 = '==';
+    static EQ2 = 'eq';
+    static GT = '>';
+    static GE = '>=';
+    static LT = '<';
+    static LE = '<=';
+    static IN = 'in';
+    static NOTIN = 'notin';
+}
 
 export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> extends GenericSearchHttpAdapter<R, F, S> {
@@ -535,45 +548,67 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             return query;
         }
 
-        const query = {'q': newParams.join(' AND '), 'start': opts.offset * opts.limit, 'rows': opts.limit};
-        // console.log('queryTransformToSolrQuery result:', query);
+        const query = {'q': '(' + newParams.join(' AND ') + ')', 'start': opts.offset * opts.limit, 'rows': opts.limit};
+        console.log('queryTransformToSolrQuery result:', query);
         return query;
     }
 
     private mapFilterToSolrQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
         let query = '';
 
-        if (action === 'likei' || action === 'like') {
-            value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ':' + this.escapeSolrValue(value);
-        } else if (action === '==' || action === 'eq') {
-            value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ':' + this.escapeSolrValue(value);
-        } else if (action === '>') {
-            value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ':{' + this.escapeSolrValue(value) + ' TO *}';
-        } else if (action === '>=') {
-            value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ':[' + this.escapeSolrValue(value) + ' TO *]';
-        } else if (action === '<') {
-            value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ':{ * TO ' + this.escapeSolrValue(value) + '}';
-        } else if (action === '<=') {
-            value = value.toString().replace(/%/g, '');
-            query = this.mapToSolrFieldName(fieldName) + ':[ * TO ' + this.escapeSolrValue(value) + ']';
-        } else if (action === 'in') {
-            query = this.mapToSolrFieldName(fieldName) + ':(' + value.map(
-                    inValue => this.escapeSolrValue(inValue.toString().replace(/%/g, ''))
-                ).join(' OR ') + ')';
-        } else if (action === 'notin') {
-            query = this.mapToSolrFieldName(fieldName) + ':(-' + value.map(
-                    inValue => this.escapeSolrValue(inValue.toString().replace(/%/g, ''))
-                ).join(' AND -') + ')';
+        if (action === SolrFilterActions.LIKEI || action === SolrFilterActions.LIKE) {
+            query = this.mapToSolrFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
+        } else if (action === SolrFilterActions.EQ1 || action === SolrFilterActions.EQ2) {
+            query = this.mapToSolrFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
+        } else if (action === SolrFilterActions.GT) {
+            query = this.mapToSolrFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
+        } else if (action === SolrFilterActions.GE) {
+            query = this.mapToSolrFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
+        } else if (action === SolrFilterActions.LT) {
+            query = this.mapToSolrFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
+        } else if (action === SolrFilterActions.LE) {
+            query = this.mapToSolrFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
+        } else if (action === SolrFilterActions.IN) {
+            query = this.mapToSolrFieldName(fieldName) + ':("' + value.map(
+                    inValue => this.escapeSolrValue(inValue.toString())
+                ).join('" OR "') + '")';
+        } else if (action === SolrFilterActions.NOTIN) {
+            query = this.mapToSolrFieldName(fieldName) + ':(-"' + value.map(
+                    inValue => this.escapeSolrValue(inValue.toString())
+                ).join('" AND -"') + '")';
         }
         return query;
     }
 
+    prepareEscapedSingleValue(value: any, splitter: string, joiner: string): string {
+        value = this.prepareSingleValue(value, ' ');
+        value = this.escapeSolrValue(value);
+        const values = this.prepareValueToArray(value, splitter);
+        value = values.map(inValue => this.escapeSolrValue(inValue)).join(joiner);
+        return value;
+    }
+
+    private prepareSingleValue(value: any, joiner: string): string {
+        switch (typeof value) {
+            case 'string':
+                return value.toString();
+            case 'number':
+                return '' + value;
+            default:
+        }
+        if (Array.isArray(value)) {
+            return value.join(joiner);
+        }
+
+        return value.toString();
+    }
+
+    private prepareValueToArray(value: any, splitter: string): string[] {
+        return value.toString().split(splitter);
+    }
+
     private escapeSolrValue(value: any): string {
+        value = value.toString().replace(/[%]/g, ' ').replace(/[-+:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
         return value;
     }
 

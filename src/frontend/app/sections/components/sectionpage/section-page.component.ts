@@ -105,7 +105,7 @@ export class SectionPageComponent implements OnInit {
 
     getToSearchUrl() {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl,
-            SDocSearchFormFactory.createSanitized({theme: this.pdoc.theme}));
+            SDocSearchFormFactory.createSanitized({theme: this.pdoc.theme, type: 'route,location,track'}));
     }
 
     submitToSearch() {

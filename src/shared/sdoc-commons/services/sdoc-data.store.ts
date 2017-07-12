@@ -137,7 +137,6 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             query['additionalWhere'] = additionalFilter;
         }
 
-
         return query;
     }
 

@@ -133,9 +133,21 @@ export class KeyParamsValidationRule extends RegExValidationReplaceRule {
     }
 }
 
+export class NearbyParamValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-0-9._]*$/gi, /[^-0-9._]*/gi, '');
+    }
+}
+
 export class TextValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._*]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._*]*/gi, '');
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*/gi, '');
+    }
+}
+
+export class SolrValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*/gi, '');
     }
 }
 

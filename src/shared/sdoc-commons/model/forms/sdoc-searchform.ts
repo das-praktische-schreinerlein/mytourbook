@@ -4,6 +4,7 @@ import {
     IdCsvValidationRule,
     IdValidationRule,
     KeyParamsValidationRule,
+    NearbyParamValidationRule,
     TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
@@ -12,7 +13,7 @@ export class SDocSearchForm extends GenericSearchForm {
         when: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHEN_KEY_CSV, new KeyParamsValidationRule(false)),
         where: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.LOCATION_KEY_CSV, new KeyParamsValidationRule(false)),
         locId: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
-        nearby: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NEARBY, new TextValidationRule(false)),
+        nearby: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NEARBY, new NearbyParamValidationRule(false)),
         nearbyAddress: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ADDRESS, new TextValidationRule(false)),
         what: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new IdCsvValidationRule(false)),
         moreFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FILTER_LIST, new KeyParamsValidationRule(false)),

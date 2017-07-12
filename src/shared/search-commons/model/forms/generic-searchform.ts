@@ -2,7 +2,7 @@ import {
     GenericValidatorDatatypes,
     IdValidationRule,
     NumberValidationRule,
-    TextValidationRule,
+    SolrValidationRule,
     ValidationRule
 } from './generic-validator.util';
 
@@ -26,7 +26,7 @@ export class GenericSearchFormFieldConfig {
 
 export class GenericSearchForm {
     static genericFields = {
-        fulltext: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FULLTEXT, new TextValidationRule(false)),
+        fulltext: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FULLTEXT, new SolrValidationRule(false)),
         sort: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.SORT, new IdValidationRule(false)),
         perPage: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.PERPAGE, new NumberValidationRule(false, 0, 100, 10)),
         pageNum: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.PAGENUM, new NumberValidationRule(false, 1, 999999, 1))
