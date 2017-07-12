@@ -31,7 +31,7 @@ export class SectionsPDocsResolver implements Resolve<ResolvedData<PDocRecord[]>
                             resolve(result);
                             return;
                         });
-                } else {
+                } else if (appState === AppState.Failed) {
                     result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
                     resolve(result);
                     return;
