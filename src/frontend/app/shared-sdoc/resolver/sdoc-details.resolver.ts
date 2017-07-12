@@ -53,6 +53,10 @@ export class SDocRecordResolver implements Resolve<ResolvedData<SDocRecord>> {
                             return;
                         }
                     );
+                } else {
+                    result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
+                    resolve(result);
+                    return;
                 }
             });
         });

@@ -53,6 +53,10 @@ export class SectionsSDocRecordResolver implements Resolve<ResolvedData<SDocReco
                             return;
                         }
                     );
+                } else {
+                    result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
+                    resolve(result);
+                    return;
                 }
             });
         });

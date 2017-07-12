@@ -11,6 +11,7 @@ import {ErrorResolver} from '../../resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -61,12 +62,29 @@ export class SectionPageComponent implements OnInit {
                     case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
                         code = ErrorResolver.ERROR_UNKNOWN_ID;
                         me.baseSearchUrl = ['sections', 'start'].join('/');
-                        newUrl = [me.baseSearchUrl].join('/');
-                        msg = undefined;
+                        if (data.pdoc.state.url === me.baseSearchUrl) {
+                            newUrl = 'errorpage';
+                            msg = 'Es ist leider ein unglaublich schwerwiegender Fehler aufgetreten. ' +
+                                'Bitte probieren Sie es später noch einmal :-(';
+                        } else {
+                            newUrl = [me.baseSearchUrl].join('/');
+                            msg = undefined;
+                        }
                         break;
                     case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
                         code = ErrorResolver.ERROR_WHILE_READING;
                         me.baseSearchUrl = ['sections', 'start'].join('/');
+                        if (data.pdoc.state.url === me.baseSearchUrl) {
+                            newUrl = 'errorpage';
+                            msg = 'Es ist leider ein unglaublich schwerwiegender Fehler aufgetreten. ' +
+                                'Bitte probieren Sie es später noch einmal :-(';
+                        } else {
+                            newUrl = undefined;
+                            msg = undefined;
+                        }
+                        break;
+                    case GenericAppService.ERROR_APP_NOT_INITIALIZED:
+                        code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
                         newUrl = undefined;
                         msg = undefined;
                         break;

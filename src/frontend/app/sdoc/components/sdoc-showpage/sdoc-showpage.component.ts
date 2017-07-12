@@ -11,6 +11,7 @@ import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pdoc-details.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
+import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -95,6 +96,11 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     case SDocRecordResolver.ERROR_READING_SDOC_ID:
                         code = ErrorResolver.ERROR_WHILE_READING;
                         me.baseSearchUrl = ['sdoc'].join('/');
+                        newUrl = undefined;
+                        msg = undefined;
+                        break;
+                    case GenericAppService.ERROR_APP_NOT_INITIALIZED:
+                        code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
                         newUrl = undefined;
                         msg = undefined;
                         break;

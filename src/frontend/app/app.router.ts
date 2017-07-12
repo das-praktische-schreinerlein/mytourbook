@@ -2,8 +2,14 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {SectionsPDocsResolver} from './sections/resolver/sections-pdocs.resolver';
+import {ErrorPageComponent} from './components/errorpage/errorpage.component';
 
 export const appRoutes: Routes = [
+    {
+        path: 'errorpage',
+        pathMatch: 'full',
+        component: ErrorPageComponent
+    },
     {
         path: '',
         pathMatch: 'full',
@@ -23,7 +29,7 @@ export const appRoutes: Routes = [
         data: {
             id: 'global_fallback'
         }
-    },
+    }
 ];
 
 @NgModule({

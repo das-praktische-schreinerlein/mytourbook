@@ -15,6 +15,7 @@ import {SectionsSearchFormResolver} from '../../../sections/resolver/sections-se
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
+import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -76,9 +77,21 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
                 let newUrl, msg, code;
                 const errorCode = (flgSearchFormError ? data.searchForm.error.code : data.baseSearchUrl.error.code);
-                const sectionId = (flgSearchFormError ? data.searchForm.error.data.theme : data.searchForm.data.theme);
-                const searchForm = (flgSearchFormError ?
-                    SDocSearchFormFactory.createSanitized(data.searchForm.error.data) : data.searchForm.data);
+                let sectionId = undefined;
+                let searchForm = undefined;
+                if (flgSearchFormError) {
+                    if (data.searchForm.error.data) {
+                        sectionId = data.searchForm.error.data.theme;
+                    }
+                    if (data.searchForm.error.data) {
+                        searchForm = SDocSearchFormFactory.createSanitized(data.searchForm.error.data);
+                    } else {
+                        searchForm = new SDocSearchForm({});
+                    }
+                } else if (data.searchForm.data) {
+                    sectionId = data.searchForm.data.theme;
+                    searchForm = data.searchForm.data;
+                }
                 switch (errorCode) {
                     case SectionsSearchFormResolver.ERROR_INVALID_SDOC_SEARCHFORM:
                         code = ErrorResolver.ERROR_INVALID_DATA;
@@ -99,6 +112,11 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                             me.baseSearchUrl = ['sdoc'].join('/');
                         }
                         newUrl = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl + '/', searchForm);
+                        msg = undefined;
+                        break;
+                    case GenericAppService.ERROR_APP_NOT_INITIALIZED:
+                        code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
+                        newUrl = undefined;
                         msg = undefined;
                         break;
                     default:

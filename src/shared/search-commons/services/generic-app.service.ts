@@ -8,6 +8,7 @@ export enum AppState {
 }
 
 export abstract class GenericAppService {
+    static ERROR_APP_NOT_INITIALIZED = 'ERROR_APP_NOT_INITIALIZED';
     private appState: AppState = AppState.Starting;
     private appStateObservable = new ReplaySubject<AppState>();
 

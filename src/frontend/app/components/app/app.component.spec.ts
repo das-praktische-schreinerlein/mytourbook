@@ -9,7 +9,11 @@ import {AppServiceStub} from '../../../testing/appservice-stubs';
 import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
+import {Router} from '@angular/router';
 
+class RouterStub {
+    navigateByUrl(url: string) { return url; }
+}
 describe('AppComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -25,6 +29,7 @@ describe('AppComponent', () => {
             providers: [
                 TranslateService,
                 {provide: GenericAppService, useValue: new AppServiceStub() },
+                { provide: Router, useValue: new RouterStub() },
                 {provide: ToastsManager, useValue: new ToastsManagerStub() }
             ],
             schemas: [

@@ -10,6 +10,7 @@ export class ErrorResolver {
     static ERROR_UNKNOWN_ID = 'ERROR_UNKNOWN_ID';
     static ERROR_INVALID_DATA = 'ERROR_INVALID_DATA';
     static ERROR_WHILE_READING = 'ERROR_WHILE_READING';
+    static ERROR_APP_NOT_INITIALIZED = 'ERROR_APP_NOT_INITIALIZED';
     static ERROR_OTHER = 'ERROR_OTHER';
 
     static isResolverError(resolvedData: ResolvedData<any>): boolean {
@@ -44,6 +45,10 @@ export class ErrorResolver {
                         break;
                     case ErrorResolver.ERROR_UNKNOWN_ID:
                         msg = 'Die Seite wurde leider nicht gefunden. Wir leiten Sie deshalb zur letzten Suche weiter.';
+                        break;
+                    case ErrorResolver.ERROR_APP_NOT_INITIALIZED:
+                        msg = 'Die Anwendung konnte leider nicht richtig gestartet werden. Probieren Sie es später noch einmal.';
+                        newUrl = 'errorpage';
                         break;
                     default:
                         msg = 'Es gibt leider Probleme beim Lesen - am besten noch einmal probieren :-(';
