@@ -16,6 +16,9 @@
     "start": "ng serve --app=frontend --watch --aot true --locale de --i18n-format xlf --i18n-file src/frontend/locales/messages.de.xlf",
     "start-en": "ng serve --app=frontend --watch --aot true --locale en --i18n-format xlf --i18n-file src/frontend/locales/messages.en.xlf",
     "start-prod": "ng serve --app=frontend --target=production --environment=prod --aot true --locale de --i18n-format xlf --i18n-file src/frontend/locales/messages.de.xlf",
+    "static-serve-de": "cd dist/frontend-de && live-server --port=4300 --host=localhost --entry-file=/index.html",
+    "sw-de": "sw-precache --root=dist/frontend-de --config=sw-precache-config.de.js",
+    "sw-en": "sw-precache --root=dist/frontend-de --config=sw-precache-config.en.js",
     "test": "ng test",
     "xi18n": "ng xi18n --locale de --out-file messages.de.xlf --app=frontend --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
     "xi18n-en": "ng xi18n --locale en --out-file messages.en.xlf --app=frontend --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress"
@@ -79,6 +82,7 @@
     "postcss-load-config": "1.0.0",
     "postcss-loader": "1.0.0",
     "protractor": "5.1.2",
+    "sw-precache": "^5.2.0",
     "ts-node": "2.0.0",
     "tslint": "4.5.1",
     "typescript": "2.1.6"
