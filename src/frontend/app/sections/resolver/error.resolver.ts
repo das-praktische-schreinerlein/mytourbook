@@ -2,7 +2,6 @@ import {Router} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {Injectable} from '@angular/core';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
-import {SDocRoutingService} from '../../shared-sdoc/services/sdoc-routing.service';
 
 @Injectable()
 export class ErrorResolver {

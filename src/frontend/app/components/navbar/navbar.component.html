@@ -6,6 +6,7 @@
         <img src="http://www.michas-ausflugstipps.de/images/index_banner-harry2.jpg" width="30" height="30" class="d-inline-block picture-thumbnail align-top">
         MyTourBook
     </a>
+
     <div class="navbar-collapse collapse" id="navbarContent" [ngbCollapse]="!isExpanded">
         <ul class="nav navbar-nav" role="menu">
             <li class="nav-item">
@@ -14,11 +15,11 @@
             <li class="nav-item">
                 <a class="nav-link mdl-navigation__link" routerLink="/sdoc/search/" routerLinkActive="active">Suche</a>
             </li>
+
             <ng-container *ngIf="sections !== undefined && sections.length > 0">
                 <li class="nav-item">
                     <a class="nav-link mdl-navigation__link" routerLink="/sections/sections" routerLinkActive="active">Themen</a>
                 </li>
-
                 <li class="nav-item dropdown" ngbDropdown>
                     <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkThemen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 
@@ -43,6 +44,18 @@
                     </ul>
                 </li>
             </ng-container>
+
+            <li class="nav-item">
+                <a class="nav-link mdl-navigation__link">Settings</a>
+            </li>
+            <li class="nav-item dropdown" ngbDropdown>
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkSettings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLinkSettings" role="menu">
+                    <li class="dropdown-item"><div class="navbar-right"><app-browser-onoffline></app-browser-onoffline></div></li>
+                    <div class="dropdown-divider"></div>
+                    <li class="dropdown-item"><app-switch-onoffline></app-switch-onoffline></li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

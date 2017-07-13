@@ -26,12 +26,13 @@ export class NavbarComponent implements OnInit {
                 me.sections = [];
                 this.pdocDataService.getById('sections', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                     me.sections = me.getSubSections(pdoc);
-                    }
-                ).catch(function onNotFound(error) {
+                }).catch(function onNotFound(error) {
+                    me.sections = [];
                     console.error('show getSection failed:', error);
                 });
             },
             (error: {reason: any}) => {
+                me.sections = [];
                 me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oje!');
                 console.error('show getSections failed:' + error.reason);
             }

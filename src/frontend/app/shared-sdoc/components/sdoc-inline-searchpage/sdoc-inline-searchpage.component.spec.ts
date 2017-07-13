@@ -5,7 +5,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SDocDataStore, SDocTeamFilterConfig} from '../../../../shared/sdoc-commons/services/sdoc-data.store';
-import {AppServiceStub} from '../../../../testing/appservice-stubs';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';

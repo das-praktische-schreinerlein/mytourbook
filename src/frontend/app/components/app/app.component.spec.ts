@@ -5,7 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {AppServiceStub} from '../../../testing/appservice-stubs';
+import {AppServiceStub} from '../../../shared/angular-commons/testing/appservice-stubs';
 import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';

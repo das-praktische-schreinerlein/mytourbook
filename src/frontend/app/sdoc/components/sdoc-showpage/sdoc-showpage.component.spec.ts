@@ -10,7 +10,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {AppServiceStub} from '../../../../testing/appservice-stubs';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 

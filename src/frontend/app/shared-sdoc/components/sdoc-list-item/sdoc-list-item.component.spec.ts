@@ -12,7 +12,7 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {AngularCommonsModule} from '../../../../shared/angular-commons/angular-commons.module';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
-import {AppServiceStub} from '../../../../testing/appservice-stubs';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 
 describe('SDocListItemComponent', () => {
     let component: SDocListItemComponent;

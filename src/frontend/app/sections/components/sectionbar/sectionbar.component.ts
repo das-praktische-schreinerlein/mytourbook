@@ -45,6 +45,7 @@ export class SectionBarComponent implements OnInit {
                 this.pdocDataService.getById('sections', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                         me.sections = me.getSubSections(pdoc);
                     }).catch(function onNotFound(error) {
+                        me.sections = [];
                         console.error('show getSection failed:', error);
                     });
             }
@@ -53,8 +54,9 @@ export class SectionBarComponent implements OnInit {
 
     onThemeChange() {
         let url = this.router.url;
-        url = url.replace('sections/' + this.pdoc.id,
-            'sections/' + this.idValidationRule.sanitize(this.themeFormGroup.getRawValue()['theme']));
+        const newUrl = '/sections/' + this.idValidationRule.sanitize(this.themeFormGroup.getRawValue()['theme']);
+        url = url.replace('\/sections\/' + this.pdoc.id, newUrl);
+        url = url.replace('\/pages\/' + this.pdoc.id, newUrl);
         this.router.navigateByUrl(url);
         return false;
     }

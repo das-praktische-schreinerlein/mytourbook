@@ -111,6 +111,10 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
+    public clearLocalStore(mapperName: string): void {
+        this.store.removeAll(mapperName);
+    }
+
     public facets(mapperName: string, query?: any, opts?: any): Promise<Facets> {
         if (this.getAdapterForMapper(mapperName) === undefined ||
             (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter)) ||

@@ -10,7 +10,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {AngularCommonsModule} from '../../../../shared/angular-commons/angular-commons.module';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
-import {AppServiceStub} from '../../../../testing/appservice-stubs';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 
 describe('PDocListItemComponent', () => {
     let component: PDocListItemComponent;

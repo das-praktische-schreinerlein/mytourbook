@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute, Router} from '@angular/router';
-import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
@@ -13,7 +13,6 @@ import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {SectionsSearchFormResolver} from '../../../sections/resolver/sections-searchform.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 

@@ -1,4 +1,4 @@
-import {Component, Injectable, OnInit} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 
 @Component({
     selector: 'app-errorpage',

@@ -19,6 +19,7 @@ import {PDocDataService} from '../shared/pdoc-commons/services/pdoc-data.service
 import {PDocDataStore} from '../shared/pdoc-commons/services/pdoc-data.store';
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorPageComponent} from './components/errorpage/errorpage.component';
+import {AngularCommonsModule} from '../shared/angular-commons/angular-commons.module';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -43,6 +44,7 @@ export function createTranslateLoader(http: Http) {
                 deps: [Http]
             }
         }),
+        AngularCommonsModule,
         SDocModule,
         SectionsModule,
         AppRoutingModule

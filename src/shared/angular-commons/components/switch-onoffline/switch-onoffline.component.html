@@ -1,0 +1,9 @@
+<div [formGroup]="onlineStateForm" ngbRadioGroup >
+    <label>App:</label>
+    <label class="btn btn-secondary btn-sm">
+        <input type="radio" (change)="onSwitchOnline()" formControlName="onlineState" value="online"> Online
+    </label>
+    <label class="btn btn-secondary btn-sm">
+        <input type="radio" (change)="onSwitchOffline()" formControlName="onlineState" value="offline"> Offline
+    </label>
+</div>

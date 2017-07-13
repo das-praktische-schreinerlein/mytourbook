@@ -7,20 +7,14 @@
                         <ng-container *ngFor="let section of sections">
                             <ng-container [ngSwitch]="section.type">
                                 <ng-container *ngSwitchCase="'SectionOverviewPage'">
-                                    <ng-container *ngFor="let section of sections">
-                                        <ng-container [ngSwitch]="section.type">
-                                            <ng-container *ngSwitchCase="'SectionOverviewPage'">
-                                                <optgroup label="{{section.name}}">
-                                                    <ng-container *ngFor="let subSection of getSubSections(section)">
-                                                        <option [value]="subSection.id">{{ subSection.name }}</option>
-                                                    </ng-container>
-                                                </optgroup>
-                                            </ng-container>
-                                            <ng-container *ngSwitchDefault>
-                                                <option [value]="section.theme">{{ section.name }}</option>
-                                            </ng-container>
+                                    <optgroup label="{{section.name}}">
+                                        <ng-container *ngFor="let subSection of getSubSections(section)">
+                                            <option [value]="subSection.id">{{ subSection.name }}</option>
                                         </ng-container>
-                                    </ng-container>
+                                    </optgroup>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    <option [value]="section.theme">{{ section.name }}</option>
                                 </ng-container>
                             </ng-container>
                         </ng-container>

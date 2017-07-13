@@ -50,7 +50,7 @@ export class PDocDataService extends PDocSearchService {
             if (section !== undefined) {
                 sections.push(section);
             } else {
-                console.error('getSubSections: section not found:' + id);
+//                console.error('getSubSections: section not found:' + id);
             }
         }
 

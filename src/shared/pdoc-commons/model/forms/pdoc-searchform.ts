@@ -3,7 +3,6 @@ import {GenericSearchFormFieldConfig} from '../../..//search-commons/model/forms
 import {
     GenericValidatorDatatypes,
     IdCsvValidationRule,
-    IdValidationRule,
     KeyParamsValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
