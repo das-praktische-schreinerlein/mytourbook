@@ -5,16 +5,10 @@ import {json, urlencoded} from 'body-parser';
 import {SDocServerModule} from './modules/sdoc-server.module';
 import {PDocServerModule} from './modules/pdoc-server.module';
 import {ProxyServerModule} from './modules/proxy-server.module';
+import * as fs from 'fs';
 
-const backendConfig = {
-    solrCoreSDoc: 'http://localhost:8983/solr/mytb/',
-    solrCoreSDocReadUsername: 'mytbread',
-    solrCoreSDocReadPassword: 'SolrRocks',
-    filePathPDocJson: 'assets/pdocs.json',
-    filePathThemeFilterJson: 'assets/themeFilterConfig.json',
-    proxyUrlTracks: 'http://localhost/michas/',
-    port: 4100
-};
+const filePathConfigJson = 'config/backend.json';
+const backendConfig: {} = JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' }));
 
 // create server
 const app = express();
@@ -34,7 +28,7 @@ PDocServerModule.configureRoutes(app, '/api/v1', backendConfig);
 ProxyServerModule.configureRoutes(app, '', backendConfig);
 
 // start server
-app.listen(backendConfig.port, function () {
-    console.log('MyTB app listening on port ' + backendConfig.port);
+app.listen(backendConfig['port'], function () {
+    console.log('MyTB app listening on port ' + backendConfig['port']);
 });
 

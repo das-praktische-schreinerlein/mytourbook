@@ -1,0 +1,9 @@
+{
+    "solrCoreSDoc": "http://localhost:8983/solr/mytb/",
+    "solrCoreSDocReadUsername": "mytbread",
+    "solrCoreSDocReadPassword": "SolrRocks",
+    "filePathPDocJson": "config/pdocs.json",
+    "filePathThemeFilterJson": "config/themeFilterConfig.json",
+    "proxyUrlTracks": "http://localhost/michas/",
+    "port": 4100
+}
