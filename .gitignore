@@ -41,3 +41,5 @@ Thumbs.db
 /installer/docker/mysqldb/docker-entrypoint-initdb.d/*
 /installer/docker/solr/cores/*
 /documentation/
+/src/frontend/shared
+/src/backend/shared
