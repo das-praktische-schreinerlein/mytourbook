@@ -2,7 +2,7 @@
  "pdocs": [
   {
    "id": "start",
-   "desc": "Willkommen bei Michas Ausflugstipps dem Portal für die Tourenplanung mit Schwerpunkt Ostdeutschland, Alpen und ausgewählten Ländern der Welt. Es ist eine Mischung aus Tourenführer (Tourentipps), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder) und Linkliste (Infos).\nAber auch wer Inspirationen für einen ganzen Urlaub oder auch nur ein verlängertes Wochenende sucht, für den ist mit einem übersichtlichen Urlaubstagebuch gesorgt.\nDa auf der Seite alles vom Klettern, Wandernbis zum Zoo versammelt ist, gibt es für den, der schon genauer weiß, was er will, Themenseiten auf denen er Vorschläge für sein Plaisierchen findet.\n\nDas ganze natürlich auch speziell für die Freunde der Vierbeiner :-)",
+   "desc": "Willkommen bei MyTB dem Portal für die Tourenplanung in ausgewählten Ländern der Welt. Es ist eine Mischung aus Tourenführer (Tourentipps), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder).",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Thats MyTB",
@@ -18,7 +18,7 @@
    "flgShowSearch": false,
    "heading": "Thats Themen",
    "name": "Themen",
-   "subSectionIds": "schwerpunkt,aktiv,landschaft,kultur,jahr",
+   "subSectionIds": "schwerpunkt,aktiv,landschaft,kultur",
    "teaser": "Die Schwerpunkte",
    "type": "SectionOverviewPage"
   }, {
@@ -28,33 +28,9 @@
    "flgShowSearch": false,
    "heading": "Schwerpunkte",
    "name": "Schwerpunkte",
-   "subSectionIds": "kultur,aktiv,landschaft,Urlaube,Hund",
+   "subSectionIds": "kultur,aktiv,landschaft",
    "teaser": "Schwerpunkte",
    "type": "SectionOverviewPage"
-  }, {
-   "id": "aktiv",
-   "desc": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
-   "flgShowTopTen": false,
-   "flgShowSearch": false,
-   "heading": "Aktivitäten",
-   "name": "Aktivitäten",
-   "subSectionIds": "Klettern,Klettersteige,Wandern,BootsTouren,SkatingTouren,Schneeschuhtouren,Tagestouren,Spaziergang",
-   "teaser": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
-   "type": "SectionOverviewPage", 
-   "image": "F__Micha_Bilder_digifotos_import_20060910-kanutour-fuerstenberg/P9100337.JPG",
-   "oldUrl": "./aktiv.html"
-  }, {
-   "id": "landschaft",
-   "desc": "Landschaften",
-   "flgShowTopTen": false,
-   "flgShowSearch": false,
-   "heading": "Landschaften",
-   "name": "Landschaften",
-   "subSectionIds": "Berge,Mittelgebirge,Hochgebirge,Wald,Wiesen,Naturlandschaft,Fluesse,Meer,Seen",
-   "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
-   "type": "SectionOverviewPage",  
-   "image": "F__Micha_Bilder_digifotos_import_20060527-urlaub-ruegen/P5270044.JPG",
-   "oldUrl": "./naturlandschaft.html"
   }, {
    "id": "kultur",
    "desc": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
@@ -62,65 +38,32 @@
    "flgShowSearch": false,
    "heading": "Kultur",
    "name": "Kultur",
-   "subSectionIds": "Museen,Schloesser,Parks,Besichtigungen,Stadtbesichtigung,Zoos,Kunst,Kirchen",
+   "subSectionIds": "Museen,Stadtbesichtigung",
    "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
    "type": "SectionOverviewPage", 
-   "image": "D__Bilder_digifotos_import-2010-05_20100809-erfurt/CIMG7217.JPG",
-   "oldUrl": "./stadt.html"
+   "image": "/assets/images/theme-kultur.jpg"
   }, {
-   "id": "jahr",
-   "desc": "Jahreszeiten",
+   "id": "aktiv",
+   "desc": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
    "flgShowTopTen": false,
    "flgShowSearch": false,
-   "heading": "Jahreszeiten",
-   "name": "Jahreszeiten",
-   "subSectionIds": "Fruehling,Sommer,Herbst,Winter,Schnee,Sonne",
-   "teaser": "Jahreszeiten",
-   "type": "SectionOverviewPage"
+   "heading": "Aktivitäten",
+   "name": "Aktivitäten",
+   "subSectionIds": "Klettern,Wandern",
+   "teaser": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
+   "type": "SectionOverviewPage",
+   "image": "/assets/images/theme-aktiv.jpg"
   }, {
-   "id": "klettern",
-   "desc": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen... \nBerichte und Erlebnisse von meinen Touren, Annekdoten und Schoten all over the world :-)",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Klettereien in allen Facetten",
-   "name": "Klettern",
-   "teaser": "Ob Sport-, Sachsen-, Alpin- und natürlich Klettersteige.",
-   "theme": "klettern",
-   "type": "SectionPage"
-   }, {
-   "id": "museum",
-   "desc": "Ob nun Geschichte oder Kunst. Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Museumsbesuche: Auf Tuchfühlung mit Nofretete",
-   "name": "Museumsbesuche",
-   "teaser": "Tourentipps, Berichte und Bilder für euren Museumsbesuch",
-   "theme": "museum",
-   "type": "SectionPage"
-  }, {
-   "id": "Urlaube",
-   "desc": "Wer Inspirationen für den nächsten Urlaub sucht oder vielleicht auch nur ein lohnendes Ziel für ein verlängertes Wochenende, der wird bestimmt bei meinen kleinen Urlaubsgeschichten fündig.",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Urlaube",
-   "name": "Urlaube",
-   "teaser": "Wer Inspirationen für den nächsten Urlaub sucht oder vielleicht auch nur ein lohnendes Ziel für ein verlängertes Wochenende, der wird bestimmt bei meinen kleinen Urlaubsgeschichten fündig.",
-   "theme": "Urlaube",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-06_20091028-ciciano/HPIM9927.JPG",
-   "oldUrl": "./urlaube.php"
-  }, {
-   "id": "Hund",
-   "desc": "Touren, Berichte, Bilder und Tipps für das Leben mit dem Vierbeiner...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Hund",
-   "name": "Hund",
-   "teaser": "Touren, Berichte, Bilder und Tipps für das Leben mit dem Vierbeiner...",
-   "theme": "Hund",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2012-03_20120629-pieskow/CIMG6653.JPG",
-   "oldUrl": "./hundetouren.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
+   "id": "landschaft",
+   "desc": "Landschaften",
+   "flgShowTopTen": false,
+   "flgShowSearch": false,
+   "heading": "Landschaften",
+   "name": "Landschaften",
+   "subSectionIds": "Berge,Meer",
+   "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
+   "type": "SectionOverviewPage",
+   "image": "/assets/images/theme-landschaft.jpg"
   }, {
    "id": "Klettern",
    "desc": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
@@ -131,20 +74,7 @@
    "teaser": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
    "theme": "Klettern",
    "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2008-05_20080628-diabonakante/P6280416.JPG",
-   "oldUrl": "./klettern.php?MODUS=KATEGORIE&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Klettersteige",
-   "desc": "Klettersteige... Da kann man so manche Kletterei auch mal Solo machen. Hier gibt es Tourentipps, Berichte und Bilder für Ferrata-Regionen...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Klettersteige",
-   "name": "Klettersteige",
-   "teaser": "Klettersteige... Da kann man so manche Kletterei auch mal Solo machen. Hier gibt es Tourentipps, Berichte und Bilder für Ferrata-Regionen...",
-   "theme": "Klettersteige",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-05_20090828-monte-agner/HPIM8702.JPG",
-   "oldUrl": "./klettersteig.php?MODUS=KATEGORIE&amp;SHORT=1&amp;PERPAGE=20"
+   "image": "/assets/images/theme-klettern.jpg"
   }, {
    "id": "Wandern",
    "desc": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
@@ -155,68 +85,7 @@
    "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
    "theme": "Wandern",
    "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-05_20090711-la-varella/HPIM4820.JPG",
-   "oldUrl": "./wandern.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "BootsTouren",
-   "desc": "Ob nun mit dem Dampfer, dem Longtail, Ruderboot oder dem Kanu... Hier gibt es Tourentipps, Berichte und Bilder fürs Wasser...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Boots-Touren",
-   "name": "Boots-Touren",
-   "teaser": "Ob nun mit dem Dampfer, dem Longtail, Ruderboot oder dem Kanu... Hier gibt es Tourentipps, Berichte und Bilder fürs Wasser...",
-   "theme": "BootsTouren",
-   "type": "SectionPage",  
-   "image": "D__Micha_Bilder_digifotos_20040801-Stichlinsee/IMAG0008.JPG",
-   "oldUrl": "./kanu.php?MODUS=KATEGORIE&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "SkatingTouren",
-   "desc": "Skaten... Ob man einsam seine Rennbahnen ziehen will oder in der Gruppe den Spaß genießen. Hier gibt es Tourentipps, Berichte und Bilder für Skating-Runden...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Skating-Touren",
-   "name": "Skating-Touren",
-   "teaser": "Skaten... Ob man einsam seine Rennbahnen ziehen will oder in der Gruppe den Spaß genießen. Hier gibt es Tourentipps, Berichte und Bilder für Skating-Runden...",
-   "theme": "SkatingTouren",
-   "type": "SectionPage",  
-   "image": "F__Micha_Bilder_digifotos_import_20051119-ausflug-flaeming-skate/PB190013.JPG",
-   "oldUrl": "./skaten.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Schneeschuhtouren",
-   "desc": "Schneeschuhwandern... Für mich als NICHT-Skiläufer die Möglichkeit auch im Winter das Gebirge zu genießen :-) Hier gibt es Tourentipps, Berichte und Bilder für die passenden Regionen...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Schneeschuhtouren",
-   "name": "Schneeschuhtouren",
-   "teaser": "Schneeschuhwandern... Für mich als NICHT-Skiläufer die Möglichkeit auch im Winter das Gebirge zu genießen :-) Hier gibt es Tourentipps, Berichte und Bilder für die passenden Regionen...",
-   "theme": "Schneeschuhtouren",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-07_20091205-maurach/HPIM0934.JPG",
-   "oldUrl": "./schneeschuhtour.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Tagestouren",
-   "desc": "Tagestouren... Das sind keine kleinen Spaziergänge, sondern da wird in Punkto Ausdauer schon eher geklotzt. Hier gibt es Tourentipps, Berichte und Bilder für die Regionen die man auch mal einen GANZEN Tag genießen kann...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Tagestouren",
-   "name": "Tagestouren",
-   "teaser": "Tagestouren... Das sind keine kleinen Spaziergänge, sondern da wird in Punkto Ausdauer schon eher geklotzt. Hier gibt es Tourentipps, Berichte und Bilder für die Regionen die man auch mal einen GANZEN Tag genießen kann...",
-   "theme": "Tagestouren",
-   "type": "SectionPage",  
-   "image": "F__Micha_Bilder_digifotos_import_20070217-zschand/P2170419.JPG",
-   "oldUrl": "./tagestour.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Spaziergang",
-   "desc": "Schöne Spaziergänge und Besichtigungen... Hier gibt es Tourentipps, Berichte und Bilder für den entspannten Nachmittagsspaziergang...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Spaziergang",
-   "name": "Spaziergang",
-   "teaser": "Schöne Spaziergänge und Besichtigungen... Hier gibt es Tourentipps, Berichte und Bilder für den entspannten Nachmittagsspaziergang...",
-   "theme": "Spaziergang",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2011-03_20110409-ahrenshoop2/CIMG3393.JPG",
-   "oldUrl": "spaziergang.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
+   "image": "/assets/images/theme-wandern.jpg"
   }, {
    "id": "Berge",
    "desc": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
@@ -227,80 +96,7 @@
    "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
    "theme": "Berge",
    "type": "SectionPage",  
-   "image": "F__Micha_Bilder_digifotos_import_italien2_20070923-marmolada/P9230394.JPG",
-   "oldUrl": "./berge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Mittelgebirge",
-   "desc": "Mittelgebirge mit ihren bewaldeten Gipfeln, [Sandsteinfelsen]() und Flußtälern, laden gerade zum [Wandern]() und [Klettern]() ein... Erfreut euch an den Tourentipps, Berichten und Bilder für die Mittelgebirge...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Mittelgebirge",
-   "name": "Mittelgebirge",
-   "teaser": "Mittelgebirge mit ihren bewaldeten Gipfeln, [Sandsteinfelsen]() und Flußtälern, laden gerade zum [Wandern]() und [Klettern]() ein... Erfreut euch an den Tourentipps, Berichten und Bilder für die Mittelgebirge...",
-   "theme": "Mittelgebirge",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2008-03_20080329-klettersteige-schmilka/P3290046.JPG",
-   "oldUrl": "./mittelgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Hochgebirge",
-   "desc": "Hochgebirge, dass sind hohe [Berge]() und tiefe [Täler](), dass sind [schroffe Felsen]() und [Gletscher](), [Bergwälder]() und Almen, dass sind Bergtouren und [Klettereien]()... Hier findet ihr Tourentipps, Berichte und Bilder für die Regionen oberhalb von 1500m...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Hochgebirge",
-   "name": "Hochgebirge",
-   "teaser": "Hochgebirge, dass sind hohe [Berge]() und tiefe [Täler](), dass sind [schroffe Felsen]() und [Gletscher](), [Bergwälder]() und Almen, dass sind Bergtouren und [Klettereien]()... Hier findet ihr Tourentipps, Berichte und Bilder für die Regionen oberhalb von 1500m...",
-   "theme": "Hochgebirge",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-05_20090806-breithorn/HPIM6234.JPG",
-   "oldUrl": "./hochgebirge.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Wald",
-   "desc": "Der Wald als Quell des Lebens... Ob in den [Bergen](), am [Meer]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euren Waldspaziergang...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Wald",
-   "name": "Wald",
-   "teaser": "Der Wald als Quell des Lebens... Ob in den [Bergen](), am [Meer]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euren Waldspaziergang...",
-   "theme": "Wald",
-   "type": "SectionPage",  
-   "image": "F__Micha_Bilder_digifotos_import_20070525-klettern/P5260009.JPG",
-   "oldUrl": "./wald.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Wiesen",
-   "desc": "Was ist schöner als eine wunderschöne grüne [Blumenwiese]()? Ob in den [Bergen]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euer Picknick im Gras...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Wiesen",
-   "name": "Wiesen",
-   "teaser": "Was ist schöner als eine wunderschöne grüne [Blumenwiese]()? Ob in den [Bergen]() oder im Flachland. Findet Tourentipps, Berichte und Bilder für euer Picknick im Gras...",
-   "theme": "Wiesen",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2010-04_20100523-eldena/CIMG3592.JPG",
-   "oldUrl": "./wiesen.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Naturlandschaft",
-   "desc": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Naturlandschaft",
-   "name": "Naturlandschaft",
-   "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
-   "theme": "Naturlandschaft",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-06_20091029-maremma/HPIM0328.JPG",
-   "oldUrl": "./naturlandschaft.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Fluesse",
-   "desc": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder [Baden]() in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Flüsse",
-   "name": "Flüsse",
-   "teaser": "Flußlandschaften... Ob nun Forschen in den Flußauen, der romantische Spaziergang am Bachlauf, die Deichwanderung und Brückentour oder [Baden]() in den Strömen der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die passenden Flüsse...",
-   "theme": "Fluesse",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2012-05_20121020-gauernitz/CIMG5016.JPG",
-   "oldUrl": "./fluesse.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
+   "image": "/assets/images/theme-berge.jpg"
   }, {
    "id": "Meer",
    "desc": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
@@ -311,20 +107,7 @@
    "teaser": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
    "theme": "Meer",
    "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-03_20090406-8-nai-thon/P4080003.JPG",
-   "oldUrl": "./meer.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Seen",
-   "desc": "Wer nach einem idyllischen See mit Bandestrand, ursprünglichen Uferbereich oder nur einem einfachen Teich sucht, der ist hier richtig aufgehoben. Hier gibt es Tourentipps, Berichte und Bilder für den Ausflug an den See...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Seen",
-   "name": "Seen",
-   "teaser": "Wer nach einem idyllischen See mit Bandestrand, ursprünglichen Uferbereich oder nur einem einfachen Teich sucht, der ist hier richtig aufgehoben. Hier gibt es Tourentipps, Berichte und Bilder für den Ausflug an den See...",
-   "theme": "Seen",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-06_20091029-maremma/HPIM0328.JPG",
-   "oldUrl": "./seen.php??MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
+   "image": "assets/images/theme-meer.jpg"
   }, {
    "id": "Museen",
    "desc": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
@@ -335,44 +118,7 @@
    "teaser": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
    "theme": "Museen",
    "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2010-02_20100404-efesos/CIMG1616.JPG",
-   "oldUrl": "./museum.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Schloesser",
-   "desc": "Was ist romantischer als eine alte Ritterburg oder ein schönes altes Schloss (vielleicht sogar mit [Schlosspark]())... Hier gibt es Tourentipps, Berichte und Bilder für den Schlossbesuch...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Schloesser",
-   "name": "Schloesser",
-   "teaser": "Was ist romantischer als eine alte Ritterburg oder ein schönes altes Schloss (vielleicht sogar mit [Schlosspark]())... Hier gibt es Tourentipps, Berichte und Bilder für den Schlossbesuch...",
-   "theme": "Schloesser",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2008-08_20080926-potsdam/P9260755.JPG",
-   "oldUrl": "./schloesser.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Parks",
-   "desc": "Nichts geht über einen schönen Parkspaziergang, insbesondere wenn es auch noch ein [Schlosspark]() ist... Hier findet ihr Tourentipps, Berichte und Bilder zum Schlendern...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Parks",
-   "name": "Parks",
-   "teaser": "Nichts geht über einen schönen Parkspaziergang, insbesondere wenn es auch noch ein [Schlosspark]() ist... Hier findet ihr Tourentipps, Berichte und Bilder zum Schlendern...",
-   "theme": "Parks",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2012-04_20120729-potsdam/CIMG9268.JPG",
-   "oldUrl": "./parks.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Besichtigungen",
-   "desc": "Alles was man besichtigen kann: ob nun [Städte](), [Museen](), [Kirchen](), [Tempel](), [Parks]() oder z.B. [Zoos]() ... Hier gibt es Tourentipps, Berichte und Bilder für eure Besichtigung...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Besichtigungen",
-   "name": "Besichtigungen",
-   "teaser": "Alles was man besichtigen kann: ob nun [Städte](), [Museen](), [Kirchen](), [Tempel](), [Parks]() oder z.B. [Zoos]() ... Hier gibt es Tourentipps, Berichte und Bilder für eure Besichtigung...",
-   "theme": "Besichtigungen",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2010-02_20100403-pamukkale/CIMG1240.JPG",
-   "oldUrl": "./besichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
+   "image": "/assets/images/theme-museen.jpg"
   }, {
    "id": "Stadtbesichtigung",
    "desc": "Stadtbesichtigungen in den Großstädten der Welt... Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
@@ -382,117 +128,8 @@
    "name": "Stadtbesichtigung",
    "teaser": "Stadtbesichtigungen in den Großstädten der Welt... Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
    "theme": "Stadtbesichtigung",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-06_20091024-verona/HPIM9663.JPG",
-   "oldUrl": "./stadtbesichtigung.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Zoos",
-   "desc": "Ob nun exotische Tiere aus fremden Ländern oder der Heimattierpark in Brandenburg... Hier gibt es Tourentipps, Berichte und Bilder der von mir besuchten Zoos...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Zoos",
-   "name": "Zoos",
-   "teaser": "Ob nun exotische Tiere aus fremden Ländern oder der Heimattierpark in Brandenburg... Hier gibt es Tourentipps, Berichte und Bilder der von mir besuchten Zoos...",
-   "theme": "Zoos",
-   "type": "SectionPage",  
-   "image": "F__Micha_Bilder_digifotos_import_2007-oktober_20071013-tierpark/HPIM1436.JPG",
-   "oldUrl": "./zoos.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Kunst",
-   "desc": "Ob das Gemälde im [Museum](), die Skulptur im [Park](), oder die Architektur eines schönen alten Dörfleins.... Hier gibt es Tourentipps, Berichte und Bilder für den Kunst&amp;Architektur-Fan...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Kunst",
-   "name": "Kunst",
-   "teaser": "Ob das Gemälde im [Museum](), die Skulptur im [Park](), oder die Architektur eines schönen alten Dörfleins.... Hier gibt es Tourentipps, Berichte und Bilder für den Kunst&amp;Architektur-Fan...",
-   "theme": "Kunst",
-   "type": "SectionPage",  
-   "image": "F__Micha_Bilder_digifotos_import_20060504-ausflug-alte-nationalgalerie/P5040034.JPG",
-   "oldUrl": "./kunst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Kirchen",
-   "desc": "Ob es nun wirklich 'Gotteshäuser' sind, darüber läßt sich trefflich streiten, aber imposant sind die Sakralgebäude auf jeden Fall. Hier zeige ich euch Tourentipps, Berichte und Bilder auf denen sich schöne Kirchen ansehen lassen...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Kirchen",
-   "name": "Kirchen",
-   "teaser": "Ob es nun wirklich 'Gotteshäuser' sind, darüber läßt sich trefflich streiten, aber imposant sind die Sakralgebäude auf jeden Fall. Hier zeige ich euch Tourentipps, Berichte und Bilder auf denen sich schöne Kirchen ansehen lassen...",
-   "theme": "Kirchen",
-   "type": "SectionPage",  
-   "image": "F__Micha_Bilder_digifotos_import_italien2_20070929-rom/P9290059.JPG",
-   "oldUrl": "./kirchen.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Fruehling",
-   "desc": "'Veronica der Lenz ist da, die Vögeln singen Trallala...'. Hier gibt es Tourentipps, Berichte und Bilder um den Winter zu vertreiben...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Frühling",
-   "name": "Frühling",
-   "teaser": "'Veronica der Lenz ist da, die Vögeln singen Trallala...'. Hier gibt es Tourentipps, Berichte und Bilder um den Winter zu vertreiben...",
-   "theme": "Fruehling",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-03_20090510-mallenchen/HPIM1924.JPG",
-   "oldUrl": "./fruehling.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Sommer",
-   "desc": "Sommer... Hier gibt es Tourentipps, Berichte und Bilder für die passenden Regionen...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Sommer",
-   "name": "Sommer",
-   "teaser": "Sommer... Hier gibt es Tourentipps, Berichte und Bilder für die passenden Regionen...",
-   "theme": "Sommer",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2011-05_20110728-ulbendorf/CIMG7188.JPG",
-   "oldUrl": "./sommer.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Herbst",
-   "desc": "Der Sommer ist vorbei, die [Bergtouren]() gehen in niedrigere Gefilde, die [Wälder]() strahlen in allen Farben... Hier findet ihr die Tourentipps, Berichte und Bilder rund um den Herbst...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Herbst",
-   "name": "Herbst",
-   "teaser": "Der Sommer ist vorbei, die [Bergtouren]() gehen in niedrigere Gefilde, die [Wälder]() strahlen in allen Farben... Hier findet ihr die Tourentipps, Berichte und Bilder rund um den Herbst...",
-   "theme": "Herbst",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2012-05_20121020-papstdorf/CIMG5040.JPG",
-   "oldUrl": "./herbst.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Winter",
-   "desc": "Die weiße Pracht (so denn vorhanden) schränkt den Bewegungsspielraum natürlich etwas ein, aber auch im Winter lassen sich [Wanderungen]() und [Klettereien]() unternehmen. Aber der Schwerpunkt liegt natürlich eher auf Indoor-Aktivitäten wie [Besichtigungen]() oder kurzen [Spaziergängen](). Obwohl manche Sachen wie [Schneeschuhwandern]() nur im Winter möglich sind :-) Also findet hier Tourentipps, Berichte und Bilder für einen schönen Wintertag...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Winter",
-   "name": "Winter",
-   "teaser": "Die weiße Pracht (so denn vorhanden) schränkt den Bewegungsspielraum natürlich etwas ein, aber auch im Winter lassen sich [Wanderungen]() und [Klettereien]() unternehmen. Aber der Schwerpunkt liegt natürlich eher auf Indoor-Aktivitäten wie [Besichtigungen]() oder kurzen [Spaziergängen](). Obwohl manche Sachen wie [Schneeschuhwandern]() nur im Winter möglich sind :-) Also findet hier Tourentipps, Berichte und Bilder für einen schönen Wintertag...",
-   "theme": "Winter",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2011-01_20110122-Fels-Papststein/CIMG2389.JPG",
-   "oldUrl": "./winter.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Schnee",
-   "desc": "[Spaziergänge]() und [Wanderungen]() im Schnee... Hier gibt es Tourentipps, Berichte und Bilder für die weiße Jahreszeit...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Schnee",
-   "name": "Schnee",
-   "teaser": "[Spaziergänge]() und [Wanderungen]() im Schnee... Hier gibt es Tourentipps, Berichte und Bilder für die weiße Jahreszeit...",
-   "theme": "Schnee",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2012-03_20120517-sellrain/CIMG4078.JPG",
-   "oldUrl": "./schnee.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
-  }, {
-   "id": "Sonne",
-   "desc": "Was ist schöner als ein wunderschöner [Sonnenauf-]() oder [Untergang]() oder etwa ein schöner, fahler [Mondschein]()? Hä????!!!! Hier zeige ich euch Tourentipps, Berichte und Bilder von orten wo ich schöne Sonnenuntergänge erlebt habe...",
-   "flgShowTopTen": true,
-   "flgShowSearch": true,
-   "heading": "Sonne",
-   "name": "Sonne",
-   "teaser": "Was ist schöner als ein wunderschöner [Sonnenauf-]() oder [Untergang]() oder etwa ein schöner, fahler [Mondschein]()? Hä????!!!! Hier zeige ich euch Tourentipps, Berichte und Bilder von orten wo ich schöne Sonnenuntergänge erlebt habe...",
-   "theme": "Sonne",
-   "type": "SectionPage",  
-   "image": "D__Bilder_digifotos_import-2009-06_20091028-ciciano/HPIM9936.JPG",
-   "oldUrl": "./sonne.php?MODUS=TOUR&amp;SHORT=1&amp;PERPAGE=20"
+   "type": "SectionPage",
+   "image": "/assets/images/theme-stadtbesichtigung.jpg"
   }
  ]
 }

@@ -4,7 +4,9 @@
         </ng-container>
         <ng-container *ngSwitchDefault="">
             <div class="card-img-top">
-                <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><img src="http://www.michas-ausflugstipps.de/digifotos/pics_x600/{{record.image}}" width="170px" class="picture" alt="{{record.name}}"></a>
+                <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)">
+                    <img src="{{record.image}}" width="170px" class="picture" alt="{{record.name}}" *ngIf="record.image !== undefined && record.image.length > 0">
+                </a>
             </div>
             <div class="card-block">
                 <h6 class="card-title"><a class="" [href]="getShowUrl(record)" (click)="submitShow(record)">{{record.name}}</a></h6>

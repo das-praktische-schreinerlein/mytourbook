@@ -2,25 +2,70 @@
  "pdocs": [
   {
    "id": "start",
-   "desc": "Willkommen bei Michas Ausflugstipps dem Portal für die Tourenplanung mit Schwerpunkt Ostdeutschland, Alpen und ausgewählten Ländern der Welt. Es ist eine Mischung aus Tourenführer (Tourentipps), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder) und Linkliste (Infos).\nAber auch wer Inspirationen für einen ganzen Urlaub oder auch nur ein verlängertes Wochenende sucht, für den ist mit einem übersichtlichen Urlaubstagebuch gesorgt.\nDa auf der Seite alles vom Klettern, Wandernbis zum Zoo versammelt ist, gibt es für den, der schon genauer weiß, was er will, Themenseiten auf denen er Vorschläge für sein Plaisierchen findet.\n\nDas ganze natürlich auch speziell für die Freunde der Vierbeiner :-)",
+   "desc": "Willkommen bei MyTB dem Portal für die Tourenplanung in ausgewählten Ländern der Welt. Es ist eine Mischung aus Tourenführer (Tourentipps), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder).",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Thats MyTB",
    "name": "Start",
-   "subSectionIds": "",
+   "subSectionIds": "sections",
    "teaser": "Willkommen bei MyTB",
    "type": "SectionOverviewPage",
    "theme": ""
-   }, {
+  }, {
    "id": "sections",
    "desc": "Die Themen",
    "flgShowTopTen": false,
    "flgShowSearch": false,
    "heading": "Thats Themen",
    "name": "Themen",
-   "subSectionIds": "",
+   "subSectionIds": "Klettern,Wandern,Berge,Museen",
    "teaser": "Die Schwerpunkte",
    "type": "SectionOverviewPage"
+  }, {
+   "id": "Klettern",
+   "desc": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Klettern",
+   "name": "Klettern",
+   "teaser": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
+   "theme": "Klettern",
+   "type": "SectionPage",
+   "image": "/assets/images/theme-klettern.jpg"
+  }, {
+   "id": "Wandern",
+   "desc": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Wandern",
+   "name": "Wandern",
+   "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
+   "theme": "Wandern",
+   "type": "SectionPage",
+   "image": "/assets/images/theme-wandern.jpg"
+  }, {
+   "id": "Berge",
+   "desc": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Berge",
+   "name": "Berge",
+   "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
+   "theme": "Berge",
+   "type": "SectionPage",
+   "image": "/assets/images/theme-berge.jpg"
+  },
+  {
+   "id": "Museen",
+   "desc": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Museen",
+   "name": "Museen",
+   "teaser": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
+   "theme": "Museen",
+   "type": "SectionPage",
+   "image": "/assets/images/theme-museen.jpg"
   }
  ]
 }
