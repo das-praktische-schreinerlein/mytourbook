@@ -8,7 +8,7 @@
         <div class="col-9">
             <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><h6>{{record.name}}</h6></a>
             <p class="">{{record.desc}}</p>
-            <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)">mehr...</a>
+            <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
         </div>
     </ng-container>
     <ng-container *ngIf="record.image === undefined">
@@ -17,7 +17,7 @@
         </div>
         <div class="col-9">
             <p class="">{{record.desc}}</p>
-            <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)">mehr...</a>
+            <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
         </div>
     </ng-container>
 </div>
