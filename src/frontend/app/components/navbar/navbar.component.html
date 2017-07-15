@@ -4,21 +4,21 @@
     </button>
     <a class="navbar-brand mdl-navigation__link" routerLink="/" routerLinkActive="active">
         <img src="assets/images/banner.png" width="30" class="d-inline-block picture-thumbnail align-top">
-        MyTourBook
+        <span i18n="link brand navBar|Link brand navBar@@a.navBar.brand">MyTourBook</span>
     </a>
 
     <div class="navbar-collapse collapse" id="navbarContent" [ngbCollapse]="!isExpanded">
         <ul class="nav navbar-nav" role="menu">
             <li class="nav-item">
-                <a class="nav-link mdl-navigation__link" routerLink="/pages/start" routerLinkActive="active">Home</a>
+                <a class="nav-link mdl-navigation__link" routerLink="/pages/start" routerLinkActive="active" i18n="link home navBar|Link home navBar@@a.navBar.home">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link mdl-navigation__link" routerLink="/sdoc/search/" routerLinkActive="active">Suche</a>
+                <a class="nav-link mdl-navigation__link" routerLink="/sdoc/search/" routerLinkActive="active" i18n="link search navBar|Link search navBar@@a.navBar.search">Suche</a>
             </li>
 
             <ng-container *ngIf="sections !== undefined && sections.length > 0">
                 <li class="nav-item">
-                    <a class="nav-link mdl-navigation__link" routerLink="/sections/sections" routerLinkActive="active">Themen</a>
+                    <a class="nav-link mdl-navigation__link" routerLink="/sections/sections" routerLinkActive="active" i18n="link sections navBar|Link sections navBar@@a.navBar.sections">Themen</a>
                 </li>
                 <li class="nav-item dropdown" ngbDropdown>
                     <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkThemen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>

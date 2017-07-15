@@ -11,11 +11,11 @@
         </ng-container>
 
         <ng-container *ngIf="pdoc.flgShowSearch && pdoc.flgShowTopTen">
-            <p>oder</p>
+            <p i18n="text search-or sectionPage|Text to search-or sectionPage@@text.sectionPage.searchOr">oder</p>
         </ng-container>
 
         <ng-container *ngIf="pdoc.flgShowTopTen">
-            <div class="hint_tostoebern">Fröhliches Stöbern :-)</div>
+            <div class="hint_tostoebern" i18n="text pokeAround sectionPage|Text to pokeAround sectionPage@@text.sectionPage.pokeAround">Fröhliches Stöbern :-)</div>
             <ngb-tabset>
                 <ngb-tab title="Routen">
                     <ng-template ngbTabContent>
