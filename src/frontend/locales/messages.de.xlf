@@ -352,6 +352,23 @@
         <note priority="1" from="description">Text to pokeAround sectionPage</note>
         <note priority="1" from="meaning">text pokeAround sectionPage</note>
       </trans-unit>
+      <trans-unit id="a.pdocListItem.show" datatype="html">
+      <source>mehr...</source>
+      <target>mehr...</target>
+      <context-group purpose="location">
+        <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/shared-pdoc/components/pdoc-list-item/pdoc-list-item.component.ts</context>
+        <context context-type="linenumber">14</context>
+      </context-group>
+      <context-group purpose="location">
+        <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/shared-pdoc/components/pdoc-list-item-flat/pdoc-list-item-flat.component.ts</context>
+        <context context-type="linenumber">11</context>
+      </context-group>
+      <context-group purpose="location">
+        <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/shared-pdoc/components/pdoc-list-item-flat/pdoc-list-item-flat.component.ts</context>
+        <context context-type="linenumber">20</context>
+      </context-group>
+      <note priority="1" from="description">Link show-pdoc listitem</note>
+      <note priority="1" from="meaning">link pdoc listitem</note>
     </body>
   </file>
 </xliff>
