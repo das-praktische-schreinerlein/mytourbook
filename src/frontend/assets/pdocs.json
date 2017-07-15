@@ -31,7 +31,7 @@
    "teaser": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
    "theme": "Klettern",
    "type": "SectionPage",
-   "image": "/assets/images/theme-klettern.jpg"
+   "image": "assets/images/theme-klettern.jpg"
   }, {
    "id": "Wandern",
    "desc": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
@@ -42,7 +42,7 @@
    "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
    "theme": "Wandern",
    "type": "SectionPage",
-   "image": "/assets/images/theme-wandern.jpg"
+   "image": "assets/images/theme-wandern.jpg"
   }, {
    "id": "Berge",
    "desc": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
@@ -53,7 +53,7 @@
    "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
    "theme": "Berge",
    "type": "SectionPage",
-   "image": "/assets/images/theme-berge.jpg"
+   "image": "assets/images/theme-berge.jpg"
   },
   {
    "id": "Museen",
@@ -65,7 +65,7 @@
    "teaser": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
    "theme": "Museen",
    "type": "SectionPage",
-   "image": "/assets/images/theme-museen.jpg"
+   "image": "assets/images/theme-museen.jpg"
   }
  ]
 }
