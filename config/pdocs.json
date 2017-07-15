@@ -41,7 +41,7 @@
    "subSectionIds": "Museen,Stadtbesichtigung",
    "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
    "type": "SectionOverviewPage", 
-   "image": "/assets/images/theme-kultur.jpg"
+   "image": "assets/images/theme-kultur.jpg"
   }, {
    "id": "aktiv",
    "desc": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
@@ -52,7 +52,7 @@
    "subSectionIds": "Klettern,Wandern",
    "teaser": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
    "type": "SectionOverviewPage",
-   "image": "/assets/images/theme-aktiv.jpg"
+   "image": "assets/images/theme-aktiv.jpg"
   }, {
    "id": "landschaft",
    "desc": "Landschaften",
@@ -63,7 +63,7 @@
    "subSectionIds": "Berge,Meer",
    "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
    "type": "SectionOverviewPage",
-   "image": "/assets/images/theme-landschaft.jpg"
+   "image": "assets/images/theme-landschaft.jpg"
   }, {
    "id": "Klettern",
    "desc": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
@@ -74,7 +74,7 @@
    "teaser": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
    "theme": "Klettern",
    "type": "SectionPage",  
-   "image": "/assets/images/theme-klettern.jpg"
+   "image": "assets/images/theme-klettern.jpg"
   }, {
    "id": "Wandern",
    "desc": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
@@ -85,7 +85,7 @@
    "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
    "theme": "Wandern",
    "type": "SectionPage",  
-   "image": "/assets/images/theme-wandern.jpg"
+   "image": "assets/images/theme-wandern.jpg"
   }, {
    "id": "Berge",
    "desc": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
@@ -96,7 +96,7 @@
    "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
    "theme": "Berge",
    "type": "SectionPage",  
-   "image": "/assets/images/theme-berge.jpg"
+   "image": "assets/images/theme-berge.jpg"
   }, {
    "id": "Meer",
    "desc": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
@@ -118,7 +118,7 @@
    "teaser": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
    "theme": "Museen",
    "type": "SectionPage",  
-   "image": "/assets/images/theme-museen.jpg"
+   "image": "assets/images/theme-museen.jpg"
   }, {
    "id": "Stadtbesichtigung",
    "desc": "Stadtbesichtigungen in den Großstädten der Welt... Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
@@ -129,7 +129,7 @@
    "teaser": "Stadtbesichtigungen in den Großstädten der Welt... Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
    "theme": "Stadtbesichtigung",
    "type": "SectionPage",
-   "image": "/assets/images/theme-stadtbesichtigung.jpg"
+   "image": "assets/images/theme-stadtbesichtigung.jpg"
   }
  ]
 }
