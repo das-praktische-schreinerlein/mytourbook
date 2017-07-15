@@ -22,7 +22,7 @@ NODE_EXEC=$(which node)
 # chkconfig: - 58 74
 # description: node-app is the script for starting a node app on boot.
 ### BEGIN INIT INFO
-# Provides: node
+# Provides: mytb
 # Required-Start:    $network $remote_fs $local_fs
 # Required-Stop:     $network $remote_fs $local_fs
 # Default-Start:     2 3 4 5
