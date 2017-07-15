@@ -55,45 +55,45 @@
    "image": "assets/images/theme-aktiv.jpg"
   }, {
    "id": "landschaft",
-   "desc": "Landschaften",
+   "desc": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
    "flgShowTopTen": false,
    "flgShowSearch": false,
    "heading": "Landschaften",
    "name": "Landschaften",
    "subSectionIds": "Berge,Meer",
-   "teaser": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
+   "teaser": "Die Landschaften der Welt.",
    "type": "SectionOverviewPage",
    "image": "assets/images/theme-landschaft.jpg"
   }, {
    "id": "Klettern",
-   "desc": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
+   "desc": "Klettern... Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Klettern",
    "name": "Klettern",
-   "teaser": "Klettern... Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln. Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
+   "teaser": "Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln.",
    "theme": "Klettern",
    "type": "SectionPage",  
    "image": "assets/images/theme-klettern.jpg"
   }, {
    "id": "Wandern",
-   "desc": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
+   "desc": "Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Wandern",
    "name": "Wandern",
-   "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran. Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
+   "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran.",
    "theme": "Wandern",
    "type": "SectionPage",  
    "image": "assets/images/theme-wandern.jpg"
   }, {
    "id": "Berge",
-   "desc": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
+   "desc": "Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Berge",
    "name": "Berge",
-   "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt. Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
+   "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt.",
    "theme": "Berge",
    "type": "SectionPage",  
    "image": "assets/images/theme-berge.jpg"
@@ -110,12 +110,12 @@
    "image": "assets/images/theme-meer.jpg"
   }, {
    "id": "Museen",
-   "desc": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
+   "desc": "Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Museen",
    "name": "Museen",
-   "teaser": "Ob nun [Geschichte]() oder [Kunst](). Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
+   "teaser": "Ob nun [Geschichte]() oder [Kunst]().",
    "theme": "Museen",
    "type": "SectionPage",  
    "image": "assets/images/theme-museen.jpg"
