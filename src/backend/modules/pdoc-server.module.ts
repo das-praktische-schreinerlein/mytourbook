@@ -10,13 +10,14 @@ import express from 'express';
 import * as fs from 'fs';
 
 export class PDocServerModule {
-    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
+    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}, locale: string) {
         // configure store
         const dataStore: PDocDataStore = new PDocDataStore(new SearchParameterUtils());
         const dataService: PDocDataService = new PDocDataService(dataStore);
         const mapper = dataService.getMapper('pdoc');
 
-        const docs: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathPDocJson'], { encoding: 'utf8' })).pdocs;
+        const fileName = backendConfig['filePathPDocJson'].replace('.json', '-' + locale + '.json');
+        const docs: any[] = JSON.parse(fs.readFileSync(fileName, { encoding: 'utf8' })).pdocs;
         dataService.addMany(docs).then(function doneAddMany(records: PDocRecord[]) {
                 console.log('loaded pdocs from assets', records);
             },
@@ -39,10 +40,10 @@ export class PDocServerModule {
                 next();
             }
         };
-        app.use(apiPrefix + '/pdoc', new Router(mapper, config).router);
+        app.use(apiPrefix + '/' + locale + '/pdoc', new Router(mapper, config).router);
 
         // use own wrapper for search
-        app.route(apiPrefix + '/pdocsearch')
+        app.route(apiPrefix + '/' + locale + '/pdocsearch')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
                     next('not allowed');

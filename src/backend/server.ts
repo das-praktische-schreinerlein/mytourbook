@@ -24,7 +24,8 @@ app.use(compression());
 
 // add routes
 SDocServerModule.configureRoutes(app, '/api/v1', backendConfig);
-PDocServerModule.configureRoutes(app, '/api/v1', backendConfig);
+PDocServerModule.configureRoutes(app, '/api/v1', backendConfig, 'de');
+PDocServerModule.configureRoutes(app, '/api/v1', backendConfig, 'en');
 ProxyServerModule.configureRoutes(app, '', backendConfig);
 
 // start server

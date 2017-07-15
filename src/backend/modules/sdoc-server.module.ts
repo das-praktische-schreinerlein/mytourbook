@@ -67,7 +67,7 @@ export class SDocServerModule {
             );
         });
 
-        app.route(apiPrefix + '/sdoc/:id')
+        app.route(apiPrefix + '/:locale' + '/sdoc/:id')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
                     next('not allowed');
@@ -85,7 +85,7 @@ export class SDocServerModule {
             });
 
         // use own wrapper for search
-        app.route(apiPrefix + '/sdocsearch')
+        app.route(apiPrefix + '/:locale/sdocsearch')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
                     next('not allowed');

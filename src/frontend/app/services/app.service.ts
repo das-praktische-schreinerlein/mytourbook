@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
 import {Http, Jsonp} from '@angular/http';
 import {SDocDataStore} from '../../shared/sdoc-commons/services/sdoc-data.store';
@@ -18,7 +18,7 @@ export class AppService extends GenericAppService {
     };
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
-                private pdocDataService: PDocDataService,
+                private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
                 private http: Http, private jsonp: Jsonp, private router: Router) {
         super();
     }
@@ -48,7 +48,7 @@ export class AppService extends GenericAppService {
     initBackendData(): Promise<any> {
         const me = this;
         const options = {
-            basePath: this.appConfig.backendApiBaseUrl
+            basePath: this.appConfig.backendApiBaseUrl + this.locale + '/'
         };
         const sdocAdapter = new SDocHttpAdapter(options);
 
