@@ -99,12 +99,12 @@
    "image": "assets/images/theme-berge.jpg"
   }, {
    "id": "Meer",
-   "desc": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
+   "desc": "Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Meer",
    "name": "Meer",
-   "teaser": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer. Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
+   "teaser": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer.",
    "theme": "Meer",
    "type": "SectionPage",  
    "image": "assets/images/theme-meer.jpg"
@@ -121,12 +121,12 @@
    "image": "assets/images/theme-museen.jpg"
   }, {
    "id": "Stadtbesichtigung",
-   "desc": "Stadtbesichtigungen in den Großstädten der Welt... Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
+   "desc": "Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Stadtbesichtigung",
    "name": "Stadtbesichtigung",
-   "teaser": "Stadtbesichtigungen in den Großstädten der Welt... Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
+   "teaser": "Stadtbesichtigungen in den Großstädten der Welt...",
    "theme": "Stadtbesichtigung",
    "type": "SectionPage",
    "image": "assets/images/theme-stadtbesichtigung.jpg"
