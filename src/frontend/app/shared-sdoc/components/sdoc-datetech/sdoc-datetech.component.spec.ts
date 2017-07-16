@@ -1,18 +1,18 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocRateTechComponent} from './sdoc-ratetech.component';
+import {SDocDateTechComponent} from './sdoc-datetech.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
-describe('SDocRateTechComponent', () => {
-    let component: SDocRateTechComponent;
-    let fixture: ComponentFixture<SDocRateTechComponent>;
+describe('SDocDateTechComponent', () => {
+    let component: SDocDateTechComponent;
+    let fixture: ComponentFixture<SDocDateTechComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SDocRateTechComponent],
+            declarations: [SDocDateTechComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot()]
@@ -21,7 +21,7 @@ describe('SDocRateTechComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SDocRateTechComponent);
+        fixture = TestBed.createComponent(SDocDateTechComponent);
         component = fixture.componentInstance;
         component.record = SDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

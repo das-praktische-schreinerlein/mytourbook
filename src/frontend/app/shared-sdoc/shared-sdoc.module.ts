@@ -23,6 +23,7 @@ import {SDocProfileMapComponent} from './components/sdoc-profilemap/sdoc-profile
 import {SDocMapComponent} from './components/sdoc-map/sdoc-map.component';
 import {SDocLinkedLocHierarchyComponent} from './components/sdoc-linked-loc-hierarchy/sdoc-linked-loc-hierarchy.component';
 import {SDocRateTechComponent} from './components/sdoc-ratetech/sdoc-ratetech.component';
+import {SDocDateTechComponent} from './components/sdoc-datetech/sdoc-datetech.component';
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import {SDocRateTechComponent} from './components/sdoc-ratetech/sdoc-ratetech.co
         SDocProfileMapComponent,
         SDocInlineSearchpageComponent,
         SDocLinkedLocHierarchyComponent,
+        SDocDateTechComponent,
         SDocRateTechComponent
     ],
     imports: [
@@ -73,6 +75,7 @@ import {SDocRateTechComponent} from './components/sdoc-ratetech/sdoc-ratetech.co
         SDocProfileMapComponent,
         SDocInlineSearchpageComponent,
         SDocLinkedLocHierarchyComponent,
+        SDocDateTechComponent,
         SDocRateTechComponent
     ]
 })

@@ -58,6 +58,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     }
 
     mapSolrDocument(mapper: Mapper, doc: any): Record {
+        const dateTechMapper = mapper['datastore']._mappers['sdocdatetech'];
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
 
@@ -119,13 +120,35 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         // console.log('mapSolrDocument record full:', record);
 
 
+        const dateTechValues = {};
+        dateTechValues['altAsc'] = this.getSolrValue(doc, 'date_tech_alt_asc_i', undefined);
+        dateTechValues['altDesc'] = this.getSolrValue(doc, 'date_tech_alt_desc_i', undefined);
+        dateTechValues['altMin'] = this.getSolrValue(doc, 'date_tech_alt_min_i', undefined);
+        dateTechValues['altMax'] = this.getSolrValue(doc, 'date_tech_alt_max_i', undefined);
+        dateTechValues['dist'] = this.getSolrValue(doc, 'date_tech_dist_f', undefined);
+        dateTechValues['dur'] = this.getSolrValue(doc, 'date_tech_dur_f', undefined);
+        let dateTechSet = false;
+        for (const field in dateTechValues) {
+            if (dateTechValues[field] !== undefined) {
+                dateTechSet = true;
+                break;
+            }
+        }
+
+        if (dateTechSet) {
+            record.set('sdocdatetech', dateTechMapper.createRecord(dateTechValues));
+        } else {
+            record.set('sdocdatetech', undefined);
+        }
+
         const rateTechValues = {};
-        rateTechValues['altAsc'] = this.getSolrValue(doc, 'rate_tech_alt_asc_i', undefined);
-        rateTechValues['altDesc'] = this.getSolrValue(doc, 'rate_tech_alt_desc_i', undefined);
-        rateTechValues['altMin'] = this.getSolrValue(doc, 'rate_tech_alt_min_i', undefined);
-        rateTechValues['altMax'] = this.getSolrValue(doc, 'rate_tech_alt_max_i', undefined);
-        rateTechValues['dist'] = this.getSolrValue(doc, 'rate_tech_dist_f', undefined);
-        rateTechValues['dur'] = this.getSolrValue(doc, 'rate_tech_dur_f', undefined);
+        rateTechValues['overall'] = this.getSolrValue(doc, 'rate_tech_overall_s', undefined);
+        rateTechValues['ks'] = this.getSolrValue(doc, 'rate_tech_ks_s', undefined);
+        rateTechValues['firn'] = this.getSolrValue(doc, 'rate_tech_firn_s', undefined);
+        rateTechValues['gletscher'] = this.getSolrValue(doc, 'rate_tech_gletscher_s', undefined);
+        rateTechValues['klettern'] = this.getSolrValue(doc, 'rate_tech_klettern_s', undefined);
+        rateTechValues['bergtour'] = this.getSolrValue(doc, 'rate_tech_bergtour_s', undefined);
+        rateTechValues['schneeschuh'] = this.getSolrValue(doc, 'rate_tech_schneeschuh_s', undefined);
         let rateTechSet = false;
         for (const field in rateTechValues) {
             if (rateTechValues[field] !== undefined) {
@@ -134,7 +157,6 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             }
         }
 
-        console.log('mapSolrDocument record full:', record);
         if (rateTechSet) {
             record.set('sdocratetech', rateTechMapper.createRecord(rateTechValues));
         } else {
@@ -149,8 +171,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
         return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
-            'rate_tech_alt_asc_i', 'rate_tech_alt_desc_i', 'rate_tech_alt_min_i', 'rate_tech_alt_max_i',
-            'rate_tech_dist_f', 'rate_tech_dur_f',
+            'date_tech_alt_asc_i', 'date_tech_alt_desc_i', 'date_tech_alt_min_i', 'date_tech_alt_max_i',
+            'date_tech_dist_f', 'date_tech_dur_f',
+            'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
+            'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s', 'i_fav_url_txt'];
     };
 

@@ -1,23 +1,19 @@
 import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
 
 export class SDocRateTechRecord extends BaseEntityRecord {
-    altAsc: number;
-    altDesc: number;
-    altMax: number;
-    altMin: number;
-    dist: number;
-    dur: number;
+    bergtour: string;
+    firn: string;
+    gletscher: string;
+    klettern: string;
+    ks: string;
+    overall: string;
+    schneeschuh: string;
     sdoc_id: string;
 
     toString() {
         return 'SDocRateTechRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
-            '  altAsc: ' + this.altAsc + ',\n' +
-            '  altDesc: ' + this.altDesc + ',\n' +
-            '  altMax: ' + this.altMax + ',\n' +
-            '  altMin: ' + this.altMin + ',\n' +
-            '  dist: ' + this.dist + ',\n' +
-            '  dur: ' + this.dur + ',\n' +
+            '  overall: ' + this.overall + ',\n' +
             '  sdoc_id: ' + this.sdoc_id + '' +
             '}';
     }

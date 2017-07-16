@@ -13,6 +13,7 @@
     <div class="col-1 date layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a></div>
     <div class="col-1 ratetech layout-big">
         <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+        <app-sdoc-datetech [record]="record"></app-sdoc-datetech>
     </div>
 
 
@@ -29,6 +30,7 @@
         <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
         <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
         <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+        <app-sdoc-datetech [record]="record"></app-sdoc-datetech>
     </div>
 
     <div class="col-5"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>

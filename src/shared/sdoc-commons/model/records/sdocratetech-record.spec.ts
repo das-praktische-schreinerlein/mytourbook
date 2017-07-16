@@ -1,4 +1,4 @@
-import {SDocRateTechRecord} from './sdoctechrate-record';
+import {SDocRateTechRecord} from './sdocratetech-record';
 describe('SDocRateTechRecord', () => {
     it('should create an instance', () => {
         expect(new SDocRateTechRecord()).toBeTruthy();
@@ -6,8 +6,8 @@ describe('SDocRateTechRecord', () => {
 
     it('should accept values in the constructor', () => {
         const sdoc = new SDocRateTechRecord({
-            dist: 5.0
+            overall: '5'
         });
-        expect(sdoc.dist).toEqual(5.0);
+        expect(sdoc.overall).toEqual('5');
     });
 });

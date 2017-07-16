@@ -1,15 +1,15 @@
 import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {SDocRateTechRecord} from '../../../../shared/sdoc-commons/model/records/sdocratetech-record';
+import {SDocDateTechRecord} from '../../../../shared/sdoc-commons/model/records/sdocdatetech-record';
 
 @Component({
-    selector: 'app-sdoc-ratetech',
-    templateUrl: './sdoc-ratetech.component.html',
-    styleUrls: ['./sdoc-ratetech.component.css']
+    selector: 'app-sdoc-datetech',
+    templateUrl: './sdoc-datetech.component.html',
+    styleUrls: ['./sdoc-datetech.component.css']
 })
-export class SDocRateTechComponent implements OnChanges {
-    sdocratetech: SDocRateTechRecord;
+export class SDocDateTechComponent implements OnChanges {
+    sdocdatetech: SDocDateTechRecord;
 
     @Input()
     public record: SDocRecord;
@@ -22,9 +22,9 @@ export class SDocRateTechComponent implements OnChanges {
 
     private updateData() {
         if (this.record === undefined) {
-            this.sdocratetech = undefined;
+            this.sdocdatetech = undefined;
             return;
         }
-        this.sdocratetech = this.record['sdocratetech'];
+        this.sdocdatetech = this.record['sdocdatetech'];
     }
 }

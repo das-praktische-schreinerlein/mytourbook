@@ -9,7 +9,7 @@
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
-                <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+                <app-sdoc-datetech [record]="record"></app-sdoc-datetech>
             </div>
         </div>
     </ng-container>
@@ -25,6 +25,7 @@
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.name}}</h5></a>
                 <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+                <app-sdoc-datetech [record]="record"></app-sdoc-datetech>
             </div>
         </div>
     </ng-container>

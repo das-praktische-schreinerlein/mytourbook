@@ -8,12 +8,13 @@ export const SDocRateTechRecordSchema = new Schema({
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
-        altAsc: {type: 'number'},
-        altDesc: {type: 'number'},
-        altMax: {type: 'number'},
-        altMin: {type: 'number'},
-        dist: {type: 'number'},
-        dur: {type: 'number'},
+        bergtour: {type: 'string'},
+        firn: {type: 'string'},
+        gletscher: {type: 'string'},
+        klettern: {type: 'string'},
+        ks: {type: 'string'},
+        overall: {type: 'string'},
+        schneeschuh: {type: 'string'},
         sdoc_id: {type: 'string', indexed: true}
     }
 });
