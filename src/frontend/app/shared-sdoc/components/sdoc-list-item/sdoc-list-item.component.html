@@ -54,10 +54,19 @@
                 <ngb-accordion #acc="ngbAccordion" activeIds="">
                     <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <ul class="" style="float: left; list-style: none">
-                                <li><app-sdoc-ratetech [record]="record"></app-sdoc-ratetech></li>
-                                <li><app-sdoc-datatech  [record]="record"></app-sdoc-datatech ></li>
-                                <li *ngIf="record.keywords !== ''"><label>Keywords:</label><span>{{record.keywords}}</span></li>
+                            <ul class="props">
+                                <li>
+                                    <table>
+                                        <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
+                                        <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+                                        <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                                    </table>
+                                </li>
+                                <li *ngIf="record.keywords !== ''">
+                                    <table>
+                                        <tr><td>Keywords:</td><td>{{record.keywords}}</td></tr>
+                                    </table>
+                                </li>
                             </ul>
                         </ng-template>
                     </ngb-panel>

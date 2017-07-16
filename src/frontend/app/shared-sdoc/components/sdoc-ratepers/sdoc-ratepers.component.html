@@ -1,0 +1,4 @@
+<ng-container *ngIf="sdocratepers !== undefined">
+    <tr *ngIf="sdocratepers.gesamt > 0"><td>Gesamt:</td><td><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.gesamt)" [readonly]="'true'"></ngb-rating></td></tr>
+    <tr *ngIf="sdocratepers.schwierigkeit > 0"><td>Schwierig?:</td><td><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.schwierigkeit)" [readonly]="'true'"></ngb-rating></td></tr>
+</ng-container>

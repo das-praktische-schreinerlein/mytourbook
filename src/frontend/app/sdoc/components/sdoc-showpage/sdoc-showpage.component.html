@@ -28,12 +28,20 @@
                             <p>
                                 {{record.desc}}
                             </p>
-                            <ul style="list-style: none" >
+                            <p>
+                                {{record.desc}}
+                            </p>
+                            <ul class="props">
                                 <li>
-                                    <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
-                                    <app-sdoc-datatech  [record]="record"></app-sdoc-datatech >
+                                    <table class="rate">
+                                        <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
+                                        <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+                                    </table>
+                                    <table class="rate">
+                                        <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                                    </table>
                                 </li>
-                                <li *ngIf="record.keywords !== ''"><label>Keywords:</label><span>{{record.keywords}}</span></li>
+                                <li *ngIf="record.keywords !== ''">Keywords: {{record.keywords}}</li>
                             </ul>
                         </div>
                         <br clear="all" />

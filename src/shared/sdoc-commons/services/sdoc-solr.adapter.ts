@@ -60,6 +60,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     mapSolrDocument(mapper: Mapper, doc: any): Record {
         const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
+        const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
 
         const values = {};
@@ -163,6 +164,29 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             record.set('sdocratetech', undefined);
         }
 
+        const ratePersValues = {};
+        ratePersValues['ausdauer'] = this.getSolrValue(doc, 'rate_pers_ausdauer_i', undefined);
+        ratePersValues['bildung'] = this.getSolrValue(doc, 'rate_pers_bildung_i', undefined);
+        ratePersValues['gesamt'] = this.getSolrValue(doc, 'rate_pers_gesamt_i', undefined);
+        ratePersValues['kraft'] = this.getSolrValue(doc, 'rate_pers_kraft_i', undefined);
+        ratePersValues['mental'] = this.getSolrValue(doc, 'rate_pers_mental_i', undefined);
+        ratePersValues['motive'] = this.getSolrValue(doc, 'rate_pers_motive_i', undefined);
+        ratePersValues['schwierigkeit'] = this.getSolrValue(doc, 'rate_pers_schwierigkeit_i', undefined);
+        ratePersValues['wichtigkeit'] = this.getSolrValue(doc, 'rate_pers_wichtigkeit_i', undefined);
+        let ratePersSet = false;
+        for (const field in ratePersValues) {
+            if (ratePersValues[field] !== undefined) {
+                ratePersSet = true;
+                break;
+            }
+        }
+
+        if (ratePersSet) {
+            record.set('sdocratepers', ratePersMapper.createRecord(ratePersValues));
+        } else {
+            record.set('sdocratepers', undefined);
+        }
+
         // console.log('mapSolrDocument record full:', record);
 
         return record;
@@ -173,6 +197,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
             'data_tech_dist_f', 'data_tech_dur_f',
+            'rate_pers_ausdauer_i', 'rate_pers_bildung_i', 'rate_pers_gesamt_i', 'rate_pers_kraft_i', 'rate_pers_mental_i',
+            'rate_pers_motive_i', 'rate_pers_schwierigkeit_i', 'rate_pers_wichtigkeit_i',
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s', 'i_fav_url_txt'];

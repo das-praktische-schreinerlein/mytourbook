@@ -5,3 +5,10 @@
     margin: auto;
     display: block;
 }
+table.rate {
+    display: inline-block;
+}
+ul.props {
+    list-style: none;
+    font-size: 0.75rem;
+}

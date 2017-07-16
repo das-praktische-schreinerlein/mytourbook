@@ -9,7 +9,10 @@
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
-                <app-sdoc-datatech  [record]="record"></app-sdoc-datatech >
+                <table>
+                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers >
+                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                </table>
             </div>
         </div>
     </ng-container>
@@ -24,8 +27,11 @@
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.name}}</h5></a>
-                <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
-                <app-sdoc-datatech  [record]="record"></app-sdoc-datatech >
+                <table>
+                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                    <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                </table>
             </div>
         </div>
     </ng-container>

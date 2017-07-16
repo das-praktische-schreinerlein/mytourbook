@@ -1,3 +1,3 @@
-<table *ngIf="sdocratetech !== undefined">
+<ng-container *ngIf="sdocratetech !== undefined">
     <tr *ngIf="sdocratetech.overall !== undefined && sdocratetech.overall.length > 0"><td>Overall:</td><td>{{sdocratetech.overall}}</td></tr>
-</table>
+</ng-container>

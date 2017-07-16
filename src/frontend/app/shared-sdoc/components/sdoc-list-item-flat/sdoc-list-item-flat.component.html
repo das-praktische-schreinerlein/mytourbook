@@ -8,13 +8,21 @@
             </ng-container>
         </ng-container>
     </div>
-    <div class="col-1 type layout-big"><h5>{{record.type | translate }}</h5></div>
+    <div class="col-2 type layout-big">
+        <table>
+            <tr><td><h5>{{record.type | translate }}</h5></td><td>&nbsp;</td></tr>
+            <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+            <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+        </table>
+    </div>
+    <div class="col-4 layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+    <div class="col-1 ratetech layout-big">
+        <table>
+            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+        </table>
+    </div>
     <div class="col-3 location layout-big"><h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5></div>
     <div class="col-1 date layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a></div>
-    <div class="col-1 ratetech layout-big">
-        <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
-        <app-sdoc-datatech  [record]="record"></app-sdoc-datatech >
-    </div>
 
 
     <div class="col-3 image layout-small">
@@ -26,12 +34,15 @@
             </ng-container>
         </ng-container>
     </div>
-    <div class="col-4 location layout-small"><h5>{{record.type | translate }}</h5>
+    <div class="col-5 location layout-small"><h5>{{record.type | translate }}</h5>
         <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
         <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
-        <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
-        <app-sdoc-datatech  [record]="record"></app-sdoc-datatech >
+        <table>
+            <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+            <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+        </table>
     </div>
 
-    <div class="col-5"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+    <div class="col-4 layout-small"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
 </div>

@@ -23,3 +23,8 @@ div.card-footer div.card-action-buttons {
     float: right;
 }
 
+ul.props {
+    float: left;
+    list-style: none;
+    font-size: 0.75rem;
+}

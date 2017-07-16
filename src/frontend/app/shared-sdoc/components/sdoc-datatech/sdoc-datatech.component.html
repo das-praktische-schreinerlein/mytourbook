@@ -1,6 +1,6 @@
-<table *ngIf="sdocdatatech !== undefined">
+<ng-container *ngIf="sdocdatatech !== undefined">
     <tr *ngIf="sdocdatatech.dur > 0"><td>&#x231A;:</td><td>{{sdocdatatech.dur}} h</td></tr>
     <tr *ngIf="sdocdatatech.altAsc > 0"><td>&#x2197;:</td><td>{{sdocdatatech.altAsc}} Hm</td></tr>
     <tr *ngIf="sdocdatatech.altMax > 0"><td>max:</td><td>{{sdocdatatech.altMax}} m</td></tr>
     <tr *ngIf="sdocdatatech.dist > 0"><td>&#x2194;:</td><td>{{sdocdatatech.dist}} km</td></tr>
-</table>
+</ng-container>
