@@ -7,8 +7,8 @@
     <document>
         <entity name="track"
                 pk="id"
-                query="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt, l_lochirarchieids, `K_ALTITUDE_ASC` as altAsc, `K_ALTITUDE_DESC` as altDesc, `K_ALTITUDE_MAX` as altMin, `K_ALTITUDE_MIN` as altMax, `K_DISTANCE` as dist from kategorie_full, location where kategorie_full.l_id = location.l_id order by k_datevon"
-                deltaImportQuery="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS month, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt, l_lochirarchieids, `K_ALTITUDE_ASC` as altAsc, `K_ALTITUDE_DESC` as altDesc, `K_ALTITUDE_MAX` as altMin, `K_ALTITUDE_MIN` as altMax, `K_DISTANCE` as dist from kategorie_full, location where kategorie_full.l_id = location.l_id and kategorie_full.k_id='${dih.delta.id}'"
+                query="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt, l_lochirarchieids, `K_ALTITUDE_ASC` as altAsc, `K_ALTITUDE_DESC` as altDesc, `K_ALTITUDE_MAX` as altMin, `K_ALTITUDE_MIN` as altMax, `K_DISTANCE` as dist, `K_RATE_AUSDAUER` as ausdauer, `K_RATE_BILDUNG` as bildung, `K_RATE_GESAMT` as gesamt, `K_RATE_KRAFT` as kraft, `K_RATE_MENTAL` as mental, `K_RATE_MOTIVE` as motive, `K_RATE_SCHWIERIGKEIT` as schwierigkeit, `K_RATE_WICHTIGKEIT` as wichtigkeit from kategorie_full, location where kategorie_full.l_id = location.l_id order by k_datevon"
+                deltaImportQuery="select 'TRACK' as type, concat('TRACK', '_', kategorie_full.k_id) as id, kategorie_full.k_id, kategorie_full.t_id, kategorie_full.l_id, k_name, k_html, k_datevon, week(k_datevon) AS month, month(k_datevon) as month, k_gpstracks_basefile, k_keywords, k_meta_shortdesc, k_rate_gesamt, k_gps_lat, k_gps_lon, concat(k_gps_lat, ',', k_gps_lon) as k_gps_loc, l_lochirarchietxt, l_lochirarchieids, `K_ALTITUDE_ASC` as altAsc, `K_ALTITUDE_DESC` as altDesc, `K_ALTITUDE_MAX` as altMin, `K_ALTITUDE_MIN` as altMax, `K_DISTANCE` as dist, `K_RATE_AUSDAUER` as ausdauer, `K_RATE_BILDUNG` as bildung, `K_RATE_GESAMT` as gesamt, `K_RATE_KRAFT` as kraft, `K_RATE_MENTAL` as mental, `K_RATE_MOTIVE` as motive, `K_RATE_SCHWIERIGKEIT` as schwierigkeit, `K_RATE_WICHTIGKEIT` as wichtigkeit from kategorie_full, location where kategorie_full.l_id = location.l_id and kategorie_full.k_id='${dih.delta.id}'"
                 deltaQuery="SELECT k_id from kategorie_full'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -38,11 +38,19 @@
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
-            <field column="altAsc" name="rate_tech_alt_asc_i" />
-            <field column="altDesc" name="rate_tech_alt_desc_i" />
-            <field column="altMin" name="rate_tech_alt_min_i" />
-            <field column="altMax" name="rate_tech_alt_max_i" />
-            <field column="dist" name="rate_tech_dist_f" />
+            <field column="altAsc" name="data_tech_alt_asc_i" />
+            <field column="altDesc" name="data_tech_alt_desc_i" />
+            <field column="altMin" name="data_tech_alt_min_i" />
+            <field column="altMax" name="data_tech_alt_max_i" />
+            <field column="dist" name="data_tech_dist_f" />
+            <field column="ausdauer" name="rate_pers_ausdauer_i" />
+            <field column="bildung" name="rate_pers_bildung_i" />
+            <field column="gesamt" name="rate_pers_gesamt_i" />
+            <field column="kraft" name="rate_pers_kraft_i" />
+            <field column="mental" name="rate_pers_mental_i" />
+            <field column="motive" name="rate_pers_motive_i" />
+            <field column="schwierigkeit" name="rate_pers_schwierigkeit_i" />
+            <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
 
             <!-- child='true' -->
             <entity name='image'
@@ -58,8 +66,8 @@
 
         <entity name="route"
                 pk="id"
-                query="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur from tour, location where tour.l_id = location.l_id order by t_datevon, t_id"
-                deltaImportQuery="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur from tour, location where tour.l_id = location.l_id and tour.t_id='${dih.delta.id}'"
+                query="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur, `T_RATE` as overall, `T_RATE_KS` as ks, `T_RATE_FIRN` as firn, `T_RATE_GLETSCHER` as gletscher, `T_RATE_KLETTERN` as klettern, `T_RATE_BERGTOUR` as bergtour, `T_RATE_SCHNEESCHUH` as schneeschuh, `T_RATE_AUSDAUER` as ausdauer, `T_RATE_BILDUNG` as bildung, `T_RATE_GESAMT` as gesamt, `T_RATE_KRAFT` as kraft, `T_RATE_MENTAL` as mental, `T_RATE_MOTIVE` as motive, `T_RATE_SCHWIERIGKEIT` as schwierigkeit, `T_RATE_WICHTIGKEIT` as wichtigkeit from tour, location where tour.l_id = location.l_id order by t_datevon, t_id"
+                deltaImportQuery="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, t_datevon, t_gpstracks_basefile, t_keywords, t_meta_shortdesc, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur, `T_RATE` as overall, `T_RATE_KS` as ks, `T_RATE_FIRN` as firn, `T_RATE_GLETSCHER` as gletscher, `T_RATE_KLETTERN` as klettern, `T_RATE_BERGTOUR` as bergtour, `T_RATE_SCHNEESCHUH` as schneeschuh, `T_RATE_AUSDAUER` as ausdauer, `T_RATE_BILDUNG` as bildung, `T_RATE_GESAMT` as gesamt, `T_RATE_KRAFT` as kraft, `T_RATE_MENTAL` as mental, `T_RATE_MOTIVE` as motive, `T_RATE_SCHWIERIGKEIT` as schwierigkeit, `T_RATE_WICHTIGKEIT` as wichtigkeit from tour, location where tour.l_id = location.l_id and tour.t_id='${dih.delta.id}'"
                 deltaQuery="SELECT T_id from tour order by t_datevon, t_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -87,10 +95,25 @@
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
-            <field column="altMax" name="rate_tech_alt_max_i" />
-            <field column="altAsc" name="rate_tech_alt_asc_i" />
-            <field column="dist" name="rate_tech_dist_f" />
-            <field column="dur" name="rate_tech_dur_f" />
+            <field column="altMax" name="data_tech_alt_max_i" />
+            <field column="altAsc" name="data_tech_alt_asc_i" />
+            <field column="dist" name="data_tech_dist_f" />
+            <field column="dur" name="data_tech_dur_f" />
+            <field column="overall" name="rate_tech_overall_s" />
+            <field column="ks" name="rate_tech_ks_s" />
+            <field column="firn" name="rate_tech_firn_s" />
+            <field column="gletscher" name="rate_tech_gletscher_s" />
+            <field column="klettern" name="rate_tech_klettern_s" />
+            <field column="bergtour" name="rate_tech_bergtour_s" />
+            <field column="schneeschuh" name="rate_tech_schneeschuh_s" />
+            <field column="ausdauer" name="rate_pers_ausdauer_i" />
+            <field column="bildung" name="rate_pers_bildung_i" />
+            <field column="gesamt" name="rate_pers_gesamt_i" />
+            <field column="kraft" name="rate_pers_kraft_i" />
+            <field column="mental" name="rate_pers_mental_i" />
+            <field column="motive" name="rate_pers_motive_i" />
+            <field column="schwierigkeit" name="rate_pers_schwierigkeit_i" />
+            <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
 
             <!-- child='true' -->
             <entity name='image'
@@ -173,8 +196,8 @@
         </entity>
         <entity name="image"
                 pk="id"
-                query="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt, l_lochirarchieids, `I_GPS_ELE` as altMax from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id order by i_date, i_id"
-                deltaImportQuery="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt, l_lochirarchieids, `I_GPS_ELE` as altMax from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id and image.i_id='${dih.delta.id}'"
+                query="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt, l_lochirarchieids, `I_GPS_ELE` as altMax, `I_RATE` as gesamt, `I_RATE_MOTIVE` as motive, `I_RATE_WICHTIGKEIT` as wichtigkeit from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id order by i_date, i_id"
+                deltaImportQuery="select 'IMAGE' as type, concat('IMAGE', '_', image.i_id) as id, concat(i_dir, '/', i_file) as i_url, image.i_id, image.k_id, image.t_id, kategorie_full.l_id, i_katname, i_katdesc, i_date, k_gpstracks_basefile, i_keywords, k_meta_shortdesc, i_rate, i_gps_lat, i_gps_lon, concat(i_gps_lat, ',', i_gps_lon) as i_gps_loc, l_lochirarchietxt, l_lochirarchieids, `I_GPS_ELE` as altMax, `I_RATE` as gesamt, `I_RATE_MOTIVE` as motive, `I_RATE_WICHTIGKEIT` as wichtigkeit from image, kategorie_full, location where kategorie_full.l_id = location.l_id and image.k_id = kategorie_full.k_id and image.i_id='${dih.delta.id}'"
                 deltaQuery="SELECT i_id from image order by i_date, i_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -209,7 +232,10 @@
             <field column="i_id" name="i_fav_id_is" />
             <field column="i_date" name="i_fav_i_date_dts" />
             <field column="i_url" name="i_fav_url_txt" />
-            <field column="altMax" name="rate_tech_alt_max_i" />
+            <field column="altMax" name="data_tech_alt_max_i" />
+            <field column="gesamt" name="rate_pers_gesamt_i" />
+            <field column="motive" name="rate_pers_motive_i" />
+            <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
 
         </entity>
     </document>
