@@ -1,0 +1,6 @@
+<table *ngIf="sdocratetech !== undefined">
+    <tr *ngIf="sdocratetech.dur > 0"><td>&#x231A;:</td><td>{{sdocratetech.dur}}&nbsp;h</td></tr>
+    <tr *ngIf="sdocratetech.altAsc > 0"><td>&#x2197;:</td><td>{{sdocratetech.altAsc}}&nbsp;Hm</td></tr>
+    <tr *ngIf="sdocratetech.altMax > 0"><td>max:</td><td>{{sdocratetech.altMax}}&nbsp;m</td></tr>
+    <tr *ngIf="sdocratetech.dist > 0"><td>&#x2194;:</td><td>{{sdocratetech.dist}}&nbsp;km</td></tr>
+</table>
