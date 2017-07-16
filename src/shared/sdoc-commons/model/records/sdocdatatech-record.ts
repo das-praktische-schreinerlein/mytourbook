@@ -1,6 +1,6 @@
 import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
 
-export class SDocDateTechRecord extends BaseEntityRecord {
+export class SDocDataTechRecord extends BaseEntityRecord {
     altAsc: number;
     altDesc: number;
     altMax: number;
@@ -10,7 +10,7 @@ export class SDocDateTechRecord extends BaseEntityRecord {
     sdoc_id: string;
 
     toString() {
-        return 'SDocDateTechRecord Record {\n' +
+        return 'SDocDataTechRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
             '  altAsc: ' + this.altAsc + ',\n' +
             '  altDesc: ' + this.altDesc + ',\n' +
@@ -23,7 +23,7 @@ export class SDocDateTechRecord extends BaseEntityRecord {
     }
 }
 
-export let SDocDateTechRecordRelation: any = {
+export let SDocDataTechRecordRelation: any = {
     belongsTo: {
         sdoc: {
             // database column

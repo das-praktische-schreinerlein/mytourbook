@@ -58,7 +58,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     }
 
     mapSolrDocument(mapper: Mapper, doc: any): Record {
-        const dateTechMapper = mapper['datastore']._mappers['sdocdatetech'];
+        const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
 
@@ -120,25 +120,25 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         // console.log('mapSolrDocument record full:', record);
 
 
-        const dateTechValues = {};
-        dateTechValues['altAsc'] = this.getSolrValue(doc, 'date_tech_alt_asc_i', undefined);
-        dateTechValues['altDesc'] = this.getSolrValue(doc, 'date_tech_alt_desc_i', undefined);
-        dateTechValues['altMin'] = this.getSolrValue(doc, 'date_tech_alt_min_i', undefined);
-        dateTechValues['altMax'] = this.getSolrValue(doc, 'date_tech_alt_max_i', undefined);
-        dateTechValues['dist'] = this.getSolrValue(doc, 'date_tech_dist_f', undefined);
-        dateTechValues['dur'] = this.getSolrValue(doc, 'date_tech_dur_f', undefined);
-        let dateTechSet = false;
-        for (const field in dateTechValues) {
-            if (dateTechValues[field] !== undefined) {
-                dateTechSet = true;
+        const dataTechValues = {};
+        dataTechValues['altAsc'] = this.getSolrValue(doc, 'data_tech_alt_asc_i', undefined);
+        dataTechValues['altDesc'] = this.getSolrValue(doc, 'data_tech_alt_desc_i', undefined);
+        dataTechValues['altMin'] = this.getSolrValue(doc, 'data_tech_alt_min_i', undefined);
+        dataTechValues['altMax'] = this.getSolrValue(doc, 'data_tech_alt_max_i', undefined);
+        dataTechValues['dist'] = this.getSolrValue(doc, 'data_tech_dist_f', undefined);
+        dataTechValues['dur'] = this.getSolrValue(doc, 'data_tech_dur_f', undefined);
+        let dataTechSet = false;
+        for (const field in dataTechValues) {
+            if (dataTechValues[field] !== undefined) {
+                dataTechSet = true;
                 break;
             }
         }
 
-        if (dateTechSet) {
-            record.set('sdocdatetech', dateTechMapper.createRecord(dateTechValues));
+        if (dataTechSet) {
+            record.set('sdocdatatech', dataTechMapper.createRecord(dataTechValues));
         } else {
-            record.set('sdocdatetech', undefined);
+            record.set('sdocdatatech', undefined);
         }
 
         const rateTechValues = {};
@@ -171,8 +171,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
         return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
-            'date_tech_alt_asc_i', 'date_tech_alt_desc_i', 'date_tech_alt_min_i', 'date_tech_alt_max_i',
-            'date_tech_dist_f', 'date_tech_dur_f',
+            'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
+            'data_tech_dist_f', 'data_tech_dur_f',
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s', 'i_fav_url_txt'];

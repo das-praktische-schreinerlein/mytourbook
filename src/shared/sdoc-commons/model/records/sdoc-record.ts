@@ -33,7 +33,7 @@ export class SDocRecord extends BaseEntityRecord {
         for (const key in me) {
             record[key] = me[key];
         }
-        record['sdocdatetech'] = this.get('sdocdatetech');
+        record['sdocdatatech'] = this.get('sdocdatatech');
         record['sdocimages'] = this.get('sdocimages');
         record['sdocratetech'] = this.get('sdocratetech');
 
@@ -43,11 +43,11 @@ export class SDocRecord extends BaseEntityRecord {
 
 export let SDocRecordRelation: any = {
     hasOne: {
-        sdocdatetech: {
+        sdocdatatech: {
             // database column
             foreignKey: 'sdoc_id',
             // reference to related objects in memory
-            localField: 'sdocdatetech'
+            localField: 'sdocdatatech'
         },
         sdocratetech: {
             // database column

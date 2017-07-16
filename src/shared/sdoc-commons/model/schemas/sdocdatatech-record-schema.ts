@@ -1,10 +1,10 @@
 import {BaseEntityRecordSchema} from '../../../search-commons/model/schemas/base-entity-record-schema';
 import {Schema} from 'js-data';
 
-export const SDocDateTechRecordSchema = new Schema({
+export const SDocDataTechRecordSchema = new Schema({
     $schema: 'http://json-schema.org/draft-04/schema#',
-    title: 'SDocDateTech',
-    description: 'Schema for a SDocDateTech Record.',
+    title: 'SDocDataTech',
+    description: 'Schema for a SDocDataTech Record.',
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
