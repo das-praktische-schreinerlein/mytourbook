@@ -51,10 +51,11 @@
             </div>
             <br clear="all" />
             <p class="card-text">
-                <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
+                <ngb-accordion #acc="ngbAccordion" activeIds="">
                     <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
                         <ng-template ngbPanelContent>
                             <ul class="" style="float: left; list-style: none">
+                                <li><app-sdoc-ratetech [record]="record"></app-sdoc-ratetech></li>
                                 <li *ngIf="record.keywords !== ''"><label>Keywords:</label><span>{{record.keywords}}</span></li>
                             </ul>
                         </ng-template>

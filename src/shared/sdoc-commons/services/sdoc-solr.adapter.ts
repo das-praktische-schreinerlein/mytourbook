@@ -59,6 +59,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
     mapSolrDocument(mapper: Mapper, doc: any): Record {
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
+        const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
 
         const values = {};
         values['id'] = this.getSolrValue(doc, 'id', undefined);
@@ -117,12 +118,39 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         record.set('sdocimages', images);
         // console.log('mapSolrDocument record full:', record);
 
+
+        const rateTechValues = {};
+        rateTechValues['altAsc'] = this.getSolrValue(doc, 'rate_tech_alt_asc_i', undefined);
+        rateTechValues['altDesc'] = this.getSolrValue(doc, 'rate_tech_alt_desc_i', undefined);
+        rateTechValues['altMin'] = this.getSolrValue(doc, 'rate_tech_alt_min_i', undefined);
+        rateTechValues['altMax'] = this.getSolrValue(doc, 'rate_tech_alt_max_i', undefined);
+        rateTechValues['dist'] = this.getSolrValue(doc, 'rate_tech_dist_f', undefined);
+        rateTechValues['dur'] = this.getSolrValue(doc, 'rate_tech_dur_f', undefined);
+        let rateTechSet = false;
+        for (const field in rateTechValues) {
+            if (rateTechValues[field] !== undefined) {
+                rateTechSet = true;
+                break;
+            }
+        }
+
+        console.log('mapSolrDocument record full:', record);
+        if (rateTechSet) {
+            record.set('sdocratetech', rateTechMapper.createRecord(rateTechValues));
+        } else {
+            record.set('sdocratetech', undefined);
+        }
+
+        // console.log('mapSolrDocument record full:', record);
+
         return record;
     }
 
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
         return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
+            'rate_tech_alt_asc_i', 'rate_tech_alt_desc_i', 'rate_tech_alt_min_i', 'rate_tech_alt_max_i',
+            'rate_tech_dist_f', 'rate_tech_dur_f',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s', 'i_fav_url_txt'];
     };
 

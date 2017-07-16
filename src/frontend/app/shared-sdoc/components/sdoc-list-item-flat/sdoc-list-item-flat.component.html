@@ -11,6 +11,9 @@
     <div class="col-1 type layout-big"><h5>{{record.type | translate }}</h5></div>
     <div class="col-3 location layout-big"><h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5></div>
     <div class="col-1 date layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a></div>
+    <div class="col-1 ratetech layout-big">
+        <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+    </div>
 
 
     <div class="col-3 image layout-small">
@@ -22,10 +25,11 @@
             </ng-container>
         </ng-container>
     </div>
-    <div class="col-3 location layout-small"><h5>{{record.type | translate }}</h5>
+    <div class="col-4 location layout-small"><h5>{{record.type | translate }}</h5>
         <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
         <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+        <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
     </div>
 
-    <div class="col-6"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+    <div class="col-5"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
 </div>

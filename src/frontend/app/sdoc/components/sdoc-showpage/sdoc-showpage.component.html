@@ -18,7 +18,7 @@
                     <div class="card-block">
                         <h6><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h6>
                         <div>
-                            <div style="width: 200px; float: left">
+                            <div style="width: 200px; float: left; margin-right: 10px">
                                 <h5>{{record.type | translate }}</h5>
                                 <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                     <img class="picture-small" width="200px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
@@ -28,19 +28,12 @@
                             <p>
                                 {{record.desc}}
                             </p>
+                            <ul style="list-style: none" >
+                                <li><app-sdoc-ratetech [record]="record"></app-sdoc-ratetech></li>
+                                <li *ngIf="record.keywords !== ''"><label>Keywords:</label><span>{{record.keywords}}</span></li>
+                            </ul>
                         </div>
                         <br clear="all" />
-                        <p class="card-text">
-                            <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
-                                <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
-                                    <ng-template ngbPanelContent>
-                                        <ul class="" style="float: left; list-style: none">
-                                            <li *ngIf="record.keywords !== ''"><label>Keywords:</label><span>{{record.keywords}}</span></li>
-                                        </ul>
-                                    </ng-template>
-                                </ngb-panel>
-                            </ngb-accordion>
-                        </p>
                     </div>
                 </ng-container>
             </ng-container>

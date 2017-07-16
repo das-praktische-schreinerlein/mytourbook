@@ -54,7 +54,7 @@
       </trans-unit>
       <trans-unit id="accordion.details.sdoc.title" datatype="html">
         <source>Details</source>
-        <target/>
+        <target>Details</target>
         <context-group purpose="location">
           <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/sdoc/components/sdoc-showpage/sdoc-showpage.component.ts</context>
           <context context-type="linenumber">35</context>

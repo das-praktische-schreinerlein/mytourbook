@@ -4,6 +4,8 @@ import {SDocSearchService} from './sdoc-search.service';
 import {SDocImageRecord, SDocImageRecordRelation} from '../model/records/sdocimage-record';
 import {SDocImageRecordSchema} from '../model/schemas/sdocimage-record-schema';
 import {SDocRecordSchema} from '../model/schemas/sdoc-record-schema';
+import {SDocRateTechRecord, SDocRateTechRecordRelation} from '../model/records/sdoctechrate-record';
+import {SDocRateTechRecordSchema} from '../model/schemas/sdocratetech-record-schema';
 
 export class SDocDataService extends SDocSearchService {
 
@@ -11,6 +13,7 @@ export class SDocDataService extends SDocSearchService {
         super(dataStore);
         this.dataStore.defineMapper('sdoc', SDocRecord, SDocRecordSchema, SDocRecordRelation);
         this.dataStore.defineMapper('sdocimage', SDocImageRecord, SDocImageRecordSchema, SDocImageRecordRelation);
+        this.dataStore.defineMapper('sdocratetech', SDocRateTechRecord, SDocRateTechRecordSchema, SDocRateTechRecordRelation);
     }
 
     generateNewId(): string {

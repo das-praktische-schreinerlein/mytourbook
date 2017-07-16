@@ -22,6 +22,7 @@ import {ToastModule} from 'ng2-toastr';
 import {SDocProfileMapComponent} from './components/sdoc-profilemap/sdoc-profilemap.component';
 import {SDocMapComponent} from './components/sdoc-map/sdoc-map.component';
 import {SDocLinkedLocHierarchyComponent} from './components/sdoc-linked-loc-hierarchy/sdoc-linked-loc-hierarchy.component';
+import {SDocRateTechComponent} from './components/sdoc-ratetech/sdoc-ratetech.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import {SDocLinkedLocHierarchyComponent} from './components/sdoc-linked-loc-hier
         SDocMapComponent,
         SDocProfileMapComponent,
         SDocInlineSearchpageComponent,
-        SDocLinkedLocHierarchyComponent
+        SDocLinkedLocHierarchyComponent,
+        SDocRateTechComponent
     ],
     imports: [
         ToastModule,
@@ -70,7 +72,8 @@ import {SDocLinkedLocHierarchyComponent} from './components/sdoc-linked-loc-hier
         SDocMapComponent,
         SDocProfileMapComponent,
         SDocInlineSearchpageComponent,
-        SDocLinkedLocHierarchyComponent
+        SDocLinkedLocHierarchyComponent,
+        SDocRateTechComponent
     ]
 })
 export class SharedSDocModule {}
