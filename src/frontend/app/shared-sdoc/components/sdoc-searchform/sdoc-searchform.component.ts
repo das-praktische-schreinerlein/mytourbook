@@ -23,6 +23,11 @@ export class SDocSearchformComponent implements OnInit {
     public optionsSelectWhere: IMultiSelectOption[] = [];
     public optionsSelectWhat: IMultiSelectOption[] = [];
     public optionsSelectType: IMultiSelectOption[] = [];
+    public optionsSelectTechRateOverall: IMultiSelectOption[] = [];
+    public optionsSelectTechDataDistance: IMultiSelectOption[] = [];
+    public optionsSelectTechDataAscent: IMultiSelectOption[] = [];
+    public optionsSelectTechDataAltitudeMax: IMultiSelectOption[] = [];
+    public optionsSelectTechDataDuration: IMultiSelectOption[] = [];
 
     public settingsSelectWhen: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
@@ -43,6 +48,31 @@ export class SDocSearchformComponent implements OnInit {
             enableSearch: true,
             showUncheckAll: true};
     public settingsSelectType: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: false};
+    public settingsSelectTechRateOverall: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: false};
+    public settingsSelectTechDataDistance: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: false};
+    public settingsSelectTechDataAscent: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: false};
+    public settingsSelectTechDataAltitudeMax: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: false};
+    public settingsSelectTechDataDuration: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
@@ -76,6 +106,41 @@ export class SDocSearchformComponent implements OnInit {
         searchPlaceholder: 'Find',
         defaultTitle: 'Typen',
         allSelected: 'Alle'};
+    public textsSelectTechRateOverall: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Bewertung ausgewählt',
+        checkedPlural: 'Bewertung ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Bewertung',
+        allSelected: 'Alle'};
+    public textsSelectTechDataDistance: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Strecke ausgewählt',
+        checkedPlural: 'Strecke ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Strecke',
+        allSelected: 'Alle'};
+    public textsSelectTechDataAscent: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Aufstieg ausgewählt',
+        checkedPlural: 'Aufstieg ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Aufstieg',
+        allSelected: 'Alle'};
+    public textsSelectTechDataAltitudeMax: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Hähe ausgewählt',
+        checkedPlural: 'Höhen ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Höhen',
+        allSelected: 'Alle'};
+    public textsSelectTechDataDuration: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Dauer ausgewählt',
+        checkedPlural: 'Dauer ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Dauer',
+        allSelected: 'Alle'};
 
     @Input()
     public set searchResult(value: SDocSearchResult) {
@@ -100,6 +165,11 @@ export class SDocSearchformComponent implements OnInit {
         nearbyDistance: '10',
         what: [],
         fulltext: '',
+        techDataAscent: [],
+        techDataAltitudeMax: [],
+        techDataDistance: [],
+        techDataDuration: [],
+        techRateOverall: [],
         type: [],
         sort: '',
         perPage: 10,
@@ -142,6 +212,11 @@ export class SDocSearchformComponent implements OnInit {
             nearbyDistance: '10',
             nearby: values.nearby,
             fulltext: values.fulltext,
+            techDataAscent: [],
+            techDataAltitudeMax: [],
+            techDataDistance: [],
+            techDataDuration: [],
+            techRateOverall: [],
             type: [(values.type ? values.type.split(/,/) : [])]
         });
 
@@ -153,6 +228,16 @@ export class SDocSearchformComponent implements OnInit {
             this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
         this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectTechRateOverall = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectTechDataDistance = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getTechDataDistanceValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectTechDataAscent = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getTechDataAscentValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectTechDataAltitudeMax = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getTechDataAltitudeMaxValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectTechDataDuration = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true);
 
         const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
@@ -164,6 +249,8 @@ export class SDocSearchformComponent implements OnInit {
         if (dist) {
             me.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
+
+        // TODO split morefilters to rats/techdates
     }
 
     private doReverseLookUpForNearBy(lat: any, lon: any): Promise<string> {
@@ -196,6 +283,9 @@ export class SDocSearchformComponent implements OnInit {
         if (lat && lon && dist && values.nearbyAddress) {
             values.nearby = [lat, lon, values.nearbyDistance].join('_');
         }
+
+        // TODO join rats/techdates to  morefilters
+
         this.searchFormGroup.patchValue({'nearby': values.nearby});
         this.search.emit(values);
         return false;

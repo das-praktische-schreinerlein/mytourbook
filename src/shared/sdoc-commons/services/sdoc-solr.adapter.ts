@@ -212,6 +212,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'loc_lochirarchie_txt',
             'keywords_txt',
             'month_is', 'week_is',
+            'rate_pers_gesamt_is', 'rate_pers_schwierigkeit_is', 'rate_tech_overall_ss',
+            'data_tech_alt_asc_facet_is', 'data_tech_alt_max_facet_is', 'data_tech_dist_facets_fs', 'data_tech_dur_facet_fs',
             'type_txt']);
 
         facetParams.set('f.keywords_txt.facet.prefix', 'kw_');
@@ -219,10 +221,31 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         facetParams.set('f.keywords_txt.facet.sort', 'count');
 
         facetParams.set('f.month_is.facet.limit', '-1');
-        facetParams.set('f.month_is.facet.sort', 'count');
+        facetParams.set('f.month_is.facet.sort', 'index');
 
         facetParams.set('f.week_is.facet.limit', '-1');
-        facetParams.set('f.week_is.facet.sort', 'count');
+        facetParams.set('f.week_is.facet.sort', 'index');
+
+        facetParams.set('f.rate_pers_gesamt_is.facet.limit', '-1');
+        facetParams.set('f.rate_pers_gesamt_is.facet.sort', 'index');
+
+        facetParams.set('f.rate_pers_schwierigkeit_is.facet.limit', '-1');
+        facetParams.set('f.rate_pers_schwierigkeit_is.facet.sort', 'index');
+
+        facetParams.set('f.rate_tech_overall_ss.facet.limit', '-1');
+        facetParams.set('f.rate_tech_overall_ss.facet.sort', 'index');
+
+        facetParams.set('f.data_tech_alt_asc_facet_is.facet.limit', '-1');
+        facetParams.set('f.data_tech_alt_asc_facet_is.facet.sort', 'index');
+
+        facetParams.set('f.data_tech_alt_max_facet_is.facet.limit', '-1');
+        facetParams.set('f.data_tech_alt_max_facet_is.facet.sort', 'index');
+
+        facetParams.set('f.data_tech_dist_facets_fs.facet.limit', '-1');
+        facetParams.set('f.data_tech_dist_facets_fs.facet.sort', 'index');
+
+        facetParams.set('f.data_tech_dur_facet_fs.facet.limit', '-1');
+        facetParams.set('f.data_tech_dur_facet_fs.facet.sort', 'index');
 
         return facetParams;
     };

@@ -13,7 +13,13 @@ export class SearchParameterUtils {
         }
 
         for (const idx in facets.facets.get(facetName).facet) {
+            if (facetName === undefined || facetName.length <= 0) {
+                continue;
+            }
             const facetValue = facets.facets.get(facetName).facet[idx];
+            if (facetValue[0] === undefined || facetValue[0].toString().length <= 0) {
+                continue;
+            }
             values.push([labelPrefix, facetValue[0], valuePrefix, facetValue[1]]);
         }
 
