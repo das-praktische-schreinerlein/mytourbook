@@ -124,6 +124,54 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
                 }
             }
         }
+        if (searchForm.type !== undefined && searchForm.type.length > 0) {
+            filter = filter || {};
+            filter['type_txt'] = {
+                'in': searchForm.type.split(/,/)
+            };
+        }
+        if (searchForm.type !== undefined && searchForm.type.length > 0) {
+            filter = filter || {};
+            filter['type_txt'] = {
+                'in': searchForm.type.split(/,/)
+            };
+        }
+        if (searchForm.techDataAltitudeMax !== undefined && searchForm.techDataAltitudeMax.length > 0) {
+            filter = filter || {};
+            filter['data_tech_alt_max_facet_is'] = {
+                'in': searchForm.techDataAltitudeMax.split(/,/)
+            };
+        }
+        if (searchForm.techDataAscent !== undefined && searchForm.techDataAscent.length > 0) {
+            filter = filter || {};
+            filter['data_tech_alt_asc_facet_is'] = {
+                'in': searchForm.techDataAscent.split(/,/)
+            };
+        }
+        if (searchForm.techDataDistance !== undefined && searchForm.techDataDistance.length > 0) {
+            filter = filter || {};
+            filter['data_tech_dist_facets_fs'] = {
+                'in': searchForm.techDataDistance.split(/,/)
+            };
+        }
+        if (searchForm.techDataDuration !== undefined && searchForm.techDataDuration.length > 0) {
+            filter = filter || {};
+            filter['data_tech_dur_facet_fs'] = {
+                'in': searchForm.techDataDuration.split(/,/)
+            };
+        }
+        if (searchForm.techRateOverall !== undefined && searchForm.techRateOverall.length > 0) {
+            filter = filter || {};
+            filter['rate_tech_overall_ss'] = {
+                'in': searchForm.techRateOverall.split(/,/)
+            };
+        }
+        if (searchForm.type !== undefined && searchForm.type.length > 0) {
+            filter = filter || {};
+            filter['type_txt'] = {
+                'in': searchForm.type.split(/,/)
+            };
+        }
 
         if (filter !== undefined) {
             query['where'] = filter;

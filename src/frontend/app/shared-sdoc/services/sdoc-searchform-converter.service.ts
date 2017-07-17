@@ -21,12 +21,27 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         whereMap.set('nearbyAddress', searchForm.nearbyAddress);
         const where = this.searchParameterUtils.joinParamsToOneRouteParameter(whereMap, this.splitter);
 
+        const moreFilterMap = new Map();
+        moreFilterMap.set('techDataAltitudeMax', searchForm.techDataAltitudeMax);
+        moreFilterMap.set('techDataAscent', searchForm.techDataAscent);
+        moreFilterMap.set('techDataDistance', searchForm.techDataDistance);
+        moreFilterMap.set('techDataDuration', searchForm.techDataDuration);
+        moreFilterMap.set('techRateOverall', searchForm.techRateOverall);
+        let moreFilter = this.searchParameterUtils.joinParamsToOneRouteParameter(moreFilterMap, this.splitter);
+        if (moreFilter !== undefined && moreFilter.length > 0) {
+            if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
+                moreFilter = [moreFilter, searchForm.moreFilter].join(this.splitter);
+            }
+        } else {
+            moreFilter = searchForm.moreFilter;
+        }
+
         const params: Object[] = [
             this.searchParameterUtils.useValueOrDefault(searchForm.when, 'jederzeit'),
             this.searchParameterUtils.useValueOrDefault(where, 'ueberall'),
             this.searchParameterUtils.useValueOrDefault(searchForm.what, 'alles'),
             this.searchParameterUtils.useValueOrDefault(searchForm.fulltext, 'egal'),
-            this.searchParameterUtils.useValueOrDefault(searchForm.moreFilter, 'ungefiltert'),
+            this.searchParameterUtils.useValueOrDefault(moreFilter, 'ungefiltert'),
             this.searchParameterUtils.useValueOrDefault(searchForm.sort, 'relevance'),
             this.searchParameterUtils.useValueOrDefault(searchForm.type, 'alle'),
             +searchForm.perPage || 10,
@@ -58,6 +73,26 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         const locId: string = (whereValues.has('locId:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId:'), 'locId:', ',') : '');
 
+        const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
+            ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:']);
+        let moreFilter = '';
+        if (moreFilterValues.has('unknown')) {
+            moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
+        }
+        moreFilter = moreFilter.replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
+        const techDataAltitudeMax: string = (moreFilterValues.has('techDataAltitudeMax:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(
+                moreFilterValues.get('techDataAltitudeMax:'), 'techDataAltitudeMax:', ',') : '');
+        const techDataAscent: string = (moreFilterValues.has('techDataAscent:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techDataAscent:'), 'techDataAscent:', ',') : '');
+        const techDataDistance: string = (moreFilterValues.has('techDataDistance:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techDataDistance:'), 'techDataDistance:', ',') : '');
+        const techDataDuration: string = (moreFilterValues.has('techDataDuration:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techDataDuration:'), 'techDataDuration:', ',') : '');
+        const techRateOverall: string = (moreFilterValues.has('techRateOverall:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techRateOverall:'), 'techRateOverall:', ',') : '');
+
+
         searchForm.theme = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
             defaults['theme'], '');
@@ -83,8 +118,23 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             this.searchParameterUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
             defaults['fulltext'], '');
         searchForm.moreFilter = this.searchParameterUtils.useValueDefaultOrFallback(
-            this.searchParameterUtils.replacePlaceHolder(params['moreFilter'], /^ungefiltert$/, ''),
+            this.searchParameterUtils.replacePlaceHolder(moreFilter, /^ungefiltert$/, ''),
             defaults['moreFilter'], '');
+        searchForm.techRateOverall = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(techRateOverall, /^ungefiltert$/, ''),
+            defaults['techRateOverall'], '');
+        searchForm.techDataAscent = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(techDataAscent, /^ungefiltert$/, ''),
+            defaults['techDataAscent'], '');
+        searchForm.techDataDuration = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(techDataDuration, /^ungefiltert$/, ''),
+            defaults['techDataDuration'], '');
+        searchForm.techDataDistance = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(techDataDistance, /^ungefiltert$/, ''),
+            defaults['techDataDistance'], '');
+        searchForm.techDataAltitudeMax = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(techDataAltitudeMax, /^ungefiltert$/, ''),
+            defaults['techDataAltitudeMax'], '');
         searchForm.sort = this.searchParameterUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
         searchForm.type = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '').toLowerCase();

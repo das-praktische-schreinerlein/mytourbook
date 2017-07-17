@@ -7,6 +7,7 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoCoder} from 'geo-coder';
+import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -16,7 +17,6 @@ import {GeoCoder} from 'geo-coder';
 export class SDocSearchformComponent implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
-
     private geoCoder = new GeoCoder({ provider: 'osm' });
 
     public optionsSelectWhen: IMultiSelectOption[] = [];
@@ -212,11 +212,11 @@ export class SDocSearchformComponent implements OnInit {
             nearbyDistance: '10',
             nearby: values.nearby,
             fulltext: values.fulltext,
-            techDataAscent: [],
-            techDataAltitudeMax: [],
-            techDataDistance: [],
-            techDataDuration: [],
-            techRateOverall: [],
+            techDataAscent: [(values.techDataAscent ? values.techDataAscent.split(/,/) : [])],
+            techDataAltitudeMax: [(values.techDataAltitudeMax ? values.techDataAltitudeMax.split(/,/) : [])],
+            techDataDistance: [(values.techDataDistance ? values.techDataDistance.split(/,/) : [])],
+            techDataDuration: [(values.techDataDuration ? values.techDataDuration.split(/,/) : [])],
+            techRateOverall: [(values.techRateOverall ? values.techRateOverall.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]
         });
 
@@ -249,8 +249,6 @@ export class SDocSearchformComponent implements OnInit {
         if (dist) {
             me.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
-
-        // TODO split morefilters to rats/techdates
     }
 
     private doReverseLookUpForNearBy(lat: any, lon: any): Promise<string> {
@@ -283,8 +281,6 @@ export class SDocSearchformComponent implements OnInit {
         if (lat && lon && dist && values.nearbyAddress) {
             values.nearby = [lat, lon, values.nearbyDistance].join('_');
         }
-
-        // TODO join rats/techdates to  morefilters
 
         this.searchFormGroup.patchValue({'nearby': values.nearby});
         this.search.emit(values);

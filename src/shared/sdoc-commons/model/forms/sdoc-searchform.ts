@@ -5,6 +5,7 @@ import {
     IdValidationRule,
     KeyParamsValidationRule,
     NearbyParamValidationRule,
+    NumberValidationRule,
     TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
@@ -18,6 +19,15 @@ export class SDocSearchForm extends GenericSearchForm {
         what: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new IdCsvValidationRule(false)),
         moreFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FILTER_LIST, new KeyParamsValidationRule(false)),
         theme: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
+        techDataAscent: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
+            new NumberValidationRule(false, 0, 9000, undefined)),
+        techDataAltitudeMax: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
+            new NumberValidationRule(false, 0, 9000, undefined)),
+        techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
+            new NumberValidationRule(false, 0, 9000, undefined)),
+        techDataDuration: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
+            new NumberValidationRule(false, 0, 9000, undefined)),
+        techRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new TextValidationRule(false)),
         type: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false))
     };
 
@@ -29,6 +39,11 @@ export class SDocSearchForm extends GenericSearchForm {
     what: string;
     moreFilter: string;
     theme: string;
+    techDataAscent: string;
+    techDataAltitudeMax: string;
+    techDataDistance: string;
+    techDataDuration: string;
+    techRateOverall: string;
     type: string;
 
     constructor(values: {}) {
@@ -41,6 +56,11 @@ export class SDocSearchForm extends GenericSearchForm {
         this.what = values['what'] || '';
         this.moreFilter = values['moreFilter'] || '';
         this.theme = values['theme'] || '';
+        this.techDataAscent = values['techDataAscent'] || '';
+        this.techDataAltitudeMax = values['techDataAltitudeMax'] || '';
+        this.techDataDistance = values['techDataDistance'] || '';
+        this.techDataDuration = values['techDataDuration'] || '';
+        this.techRateOverall = values['techRateOverall'] || '';
         this.type = values['type'] || '';
     }
 
@@ -76,6 +96,11 @@ export class SDocSearchFormFactory {
         sanitizedValues.what = SDocSearchForm.sdocFields.what.validator.sanitize(values['what']) || '';
         sanitizedValues.moreFilter = SDocSearchForm.sdocFields.moreFilter.validator.sanitize(values['moreFilter']) || '';
         sanitizedValues.theme = SDocSearchForm.sdocFields.theme.validator.sanitize(values['theme']) || '';
+        sanitizedValues.techDataAltitudeMax = SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(values['techDataAltitudeMax']) || '';
+        sanitizedValues.techDataAscent = SDocSearchForm.sdocFields.techDataAscent.validator.sanitize(values['techDataAscent']) || '';
+        sanitizedValues.techDataDistance = SDocSearchForm.sdocFields.techDataDistance.validator.sanitize(values['techDataDistance']) || '';
+        sanitizedValues.techDataDuration = SDocSearchForm.sdocFields.techDataDuration.validator.sanitize(values['techDataDuration']) || '';
+        sanitizedValues.techRateOverall = SDocSearchForm.sdocFields.techRateOverall.validator.sanitize(values['techRateOverall']) || '';
         sanitizedValues.type = SDocSearchForm.sdocFields.type.validator.sanitize(values['type']) || '';
 
         return new SDocSearchForm(sanitizedValues);
@@ -95,6 +120,11 @@ export class SDocSearchFormFactory {
         sanitizedValues.what = SDocSearchForm.sdocFields.what.validator.sanitize(searchForm.what) || '';
         sanitizedValues.moreFilter = SDocSearchForm.sdocFields.moreFilter.validator.sanitize(searchForm.moreFilter) || '';
         sanitizedValues.theme = SDocSearchForm.sdocFields.theme.validator.sanitize(searchForm.theme) || '';
+        sanitizedValues.techDataAltitudeMax = SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(searchForm.techDataAltitudeMax) || '';
+        sanitizedValues.techDataAscent = SDocSearchForm.sdocFields.techDataAscent.validator.sanitize(searchForm.techDataAscent) || '';
+        sanitizedValues.techDataDistance = SDocSearchForm.sdocFields.techDataDistance.validator.sanitize(searchForm.techDataDistance) || '';
+        sanitizedValues.techDataDuration = SDocSearchForm.sdocFields.techDataDuration.validator.sanitize(searchForm.techDataDuration) || '';
+        sanitizedValues.techRateOverall = SDocSearchForm.sdocFields.techRateOverall.validator.sanitize(searchForm.techRateOverall) || '';
         sanitizedValues.type = SDocSearchForm.sdocFields.type.validator.sanitize(searchForm.type) || '';
 
         return new SDocSearchForm(sanitizedValues);
@@ -116,6 +146,11 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.what.validator.isValid(values['what']);
         state = state && SDocSearchForm.sdocFields.moreFilter.validator.isValid(values['moreFilter']);
         state = state && SDocSearchForm.sdocFields.theme.validator.isValid(values['theme']);
+        state = state && SDocSearchForm.sdocFields.techDataAltitudeMax.validator.isValid(values['techDataAltitudeMax']);
+        state = state && SDocSearchForm.sdocFields.techDataAscent.validator.isValid(values['techDataAscent']);
+        state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(values['techDataDistance']);
+        state = state && SDocSearchForm.sdocFields.techDataDuration.validator.isValid(values['techDataDuration']);
+        state = state && SDocSearchForm.sdocFields.techRateOverall.validator.isValid(values['techRateOverall']);
         state = state && SDocSearchForm.sdocFields.type.validator.isValid(values['type']);
 
         return state;
@@ -135,6 +170,11 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.what.validator.isValid(searchForm.what);
         state = state && SDocSearchForm.sdocFields.moreFilter.validator.isValid(searchForm.moreFilter);
         state = state && SDocSearchForm.sdocFields.theme.validator.isValid(searchForm.theme);
+        state = state && SDocSearchForm.sdocFields.techDataAltitudeMax.validator.isValid(searchForm.techDataAltitudeMax);
+        state = state && SDocSearchForm.sdocFields.techDataAscent.validator.isValid(searchForm.techDataAscent);
+        state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(searchForm.techDataDistance);
+        state = state && SDocSearchForm.sdocFields.techDataDuration.validator.isValid(searchForm.techDataDuration);
+        state = state && SDocSearchForm.sdocFields.techRateOverall.validator.isValid(searchForm.techRateOverall);
         state = state && SDocSearchForm.sdocFields.type.validator.isValid(searchForm.type);
 
         return state;
