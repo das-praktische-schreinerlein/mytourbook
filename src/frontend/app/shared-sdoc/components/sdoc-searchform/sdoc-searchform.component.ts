@@ -56,27 +56,32 @@ export class SDocSearchformComponent implements OnInit {
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: false};
+            enableSearch: true,
+            showUncheckAll: true};
     public settingsSelectTechDataDistance: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: false};
+            enableSearch: true,
+            showUncheckAll: true};
     public settingsSelectTechDataAscent: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: false};
+            enableSearch: true,
+            showUncheckAll: true};
     public settingsSelectTechDataAltitudeMax: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: false};
+            enableSearch: true,
+            showUncheckAll: true};
     public settingsSelectTechDataDuration: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: false};
+            enableSearch: true,
+            showUncheckAll: true};
 
     public textsSelectWhen: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',

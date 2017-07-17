@@ -608,7 +608,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     }
 
     private escapeSolrValue(value: any): string {
-        value = value.toString().replace(/[%]/g, ' ').replace(/[-+:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
+        value = value.toString().replace(/[%]/g, ' ').replace(/[:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
         return value;
     }
 
