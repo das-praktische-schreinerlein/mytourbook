@@ -12,6 +12,7 @@ import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -37,7 +38,8 @@ describe('SDocSearchpageComponent', () => {
                 SDocRoutingService,
                 ToastsManager,
                 TranslateService,
-                ErrorResolver
+                ErrorResolver,
+                PageUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

@@ -4,7 +4,7 @@
     </button>
     <a class="navbar-brand mdl-navigation__link" routerLink="/" routerLinkActive="active">
         <img src="assets/images/banner.png" width="30" class="d-inline-block picture-thumbnail align-top">
-        <span i18n="link brand navBar|Link brand navBar@@a.navBar.brand">MyTourBook</span>
+        <span>{{ 'nav.brand.appName' | translate }}</span>
     </a>
 
     <div class="navbar-collapse collapse" id="navbarContent" [ngbCollapse]="!isExpanded">

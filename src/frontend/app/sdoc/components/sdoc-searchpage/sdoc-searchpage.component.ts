@@ -15,6 +15,7 @@ import {SectionsSearchFormResolver} from '../../../sections/resolver/sections-se
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -26,6 +27,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     idValidationRule = new IdValidationRule(true);
     Layout = Layout;
 
+    pdoc: PDocRecord;
     searchResult: SDocSearchResult;
     searchForm: SDocSearchForm;
     baseSearchUrl = '/sdoc/';
@@ -37,7 +39,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute, private router: Router, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
-                private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
+                private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private pageUtils: PageUtils) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -71,6 +74,21 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                     } else {
                         this.mapCenterPos = undefined;
                     }
+
+                    me.pdoc = data.pdoc ? data.pdoc.data : undefined;
+                    if (me.pdoc) {
+                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionSearchPage',
+                            {title: me.pdoc.heading}, me.pdoc.heading);
+                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionSearchPage',
+                            {title: me.pdoc.heading, teaser: me.pdoc.teaser}, me.pdoc.teaser);
+                    } else {
+                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSearchPage',
+                            {}, 'Search');
+                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSearchPage',
+                            {}, 'Search');
+                    }
+                    this.pageUtils.setMetaLanguage();
+
                     return this.doSearch();
                 }
 

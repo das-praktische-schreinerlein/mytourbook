@@ -19,7 +19,7 @@ export class AppService extends GenericAppService {
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
-                private http: Http, private jsonp: Jsonp, private router: Router) {
+                private http: Http, private router: Router) {
         super();
     }
 

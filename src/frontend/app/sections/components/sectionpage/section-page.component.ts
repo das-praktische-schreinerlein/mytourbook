@@ -12,6 +12,8 @@ import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.r
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {PageUtils} from '../../../../../shared/angular-commons/services/page.utils';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-sectionpage',
@@ -28,7 +30,7 @@ export class SectionPageComponent implements OnInit {
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private router: Router, private searchFormConverter: SDocSearchFormConverter,
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef) {
+                private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -45,6 +47,11 @@ export class SectionPageComponent implements OnInit {
                     me.sections =  me.getSubSections(me.pdoc);
                     me.sDocRoutingService.setLastBaseUrl(me.baseSearchUrl);
                     me.sDocRoutingService.setLastSearchUrl(me.getToSearchUrl());
+                    this.pageUtils.setTranslatedTitle('meta.title.prefix.sectionPage',
+                        {title: me.pdoc.heading}, me.pdoc.heading);
+                    this.pageUtils.setTranslatedDescription('meta.desc.prefix.sectionPage',
+                        {title: me.pdoc.heading, teaser: me.pdoc.teaser}, me.pdoc.teaser);
+                    this.pageUtils.setMetaLanguage();
                     return;
                 }
 

@@ -14,6 +14,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SectionsPDocsResolver} from './resolver/sections-pdocs.resolver';
 import {ErrorResolver} from './resolver/error.resolver';
+import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import {ErrorResolver} from './resolver/error.resolver';
         SectionsSDocRecordResolver,
         SectionsPDocRecordResolver,
         SectionsPDocsResolver,
-        ErrorResolver
+        ErrorResolver,
+        PageUtils
     ]
 })
 export class SectionsModule {}

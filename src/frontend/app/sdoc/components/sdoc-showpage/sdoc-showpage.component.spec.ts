@@ -13,6 +13,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -33,7 +34,8 @@ describe('SDocShowpageComponent', () => {
                 SDocRoutingService,
                 ToastsManager,
                 TranslateService,
-                ErrorResolver
+                ErrorResolver,
+                PageUtils
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

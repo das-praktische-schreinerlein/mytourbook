@@ -12,6 +12,7 @@ import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {ErrorResolver} from '../../resolver/error.resolver';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -37,7 +38,8 @@ describe('SectionPageComponent', () => {
                 SearchParameterUtils,
                 ToastsManager,
                 TranslateService,
-                ErrorResolver
+                ErrorResolver,
+                PageUtils
             ]
         })
             .compileComponents();

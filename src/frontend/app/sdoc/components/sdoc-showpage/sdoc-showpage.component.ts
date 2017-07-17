@@ -12,6 +12,7 @@ import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pd
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -28,7 +29,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
-                private errorResolver: ErrorResolver) {
+                private errorResolver: ErrorResolver, private pageUtils: PageUtils) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -45,6 +46,21 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     me.record = data.record.data;
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
                     me.baseSearchUrl = data.baseSearchUrl.data;
+
+                    const recordName = me.idValidationRule.sanitize(me.record.name);
+                    if (me.pdoc) {
+                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
+                            {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
+                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
+                            {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
+                    } else {
+                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
+                            {sdoc: recordName}, recordName);
+                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',
+                            {sdoc: recordName}, recordName);
+                    }
+                    this.pageUtils.setMetaLanguage();
+
                     return;
                 }
 

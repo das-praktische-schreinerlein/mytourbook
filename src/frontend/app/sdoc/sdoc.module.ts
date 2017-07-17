@@ -19,6 +19,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorResolver} from '../sections/resolver/error.resolver';
+import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import {ErrorResolver} from '../sections/resolver/error.resolver';
         SDocContentUtils,
         SDocSearchFormResolver,
         SDocRecordResolver,
-        ErrorResolver
+        ErrorResolver,
+        PageUtils
     ],
     exports: [
         SDocSearchpageComponent
