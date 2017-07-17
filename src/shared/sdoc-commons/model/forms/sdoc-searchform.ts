@@ -19,15 +19,11 @@ export class SDocSearchForm extends GenericSearchForm {
         what: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new IdCsvValidationRule(false)),
         moreFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FILTER_LIST, new KeyParamsValidationRule(false)),
         theme: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
-        techDataAscent: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
-            new NumberValidationRule(false, 0, 9000, undefined)),
-        techDataAltitudeMax: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
-            new NumberValidationRule(false, 0, 9000, undefined)),
-        techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
-            new NumberValidationRule(false, 0, 9000, undefined)),
-        techDataDuration: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID,
-            new NumberValidationRule(false, 0, 9000, undefined)),
-        techRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new TextValidationRule(false)),
+        techDataAscent: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        techDataAltitudeMax: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        techDataDuration: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        techRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         type: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false))
     };
 

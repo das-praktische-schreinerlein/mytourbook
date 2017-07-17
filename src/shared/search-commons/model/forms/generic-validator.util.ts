@@ -117,13 +117,13 @@ export class RegExValidationReplaceRule extends ValidationRule {
 
 export class IdValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[a-zA-Z_0-9]*$/gi, /[^a-zA-Z_0-9]*/gi, '');
+        super(required, /^[a-zA-Z_0-9.]*$/gi, /[^a-zA-Z_0-9.]*/gi, '');
     }
 }
 
 export class IdCsvValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[a-zA-Z_0-9,]*$/gi, /[^a-zA-Z_0-9,]*/gi, '');
+        super(required, /^[a-zA-Z_0-9,.]*$/gi, /[^a-zA-Z_0-9,.]*/gi, '');
     }
 }
 
