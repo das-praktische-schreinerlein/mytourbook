@@ -4,6 +4,7 @@ import {ErrorPageComponent} from './errorpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 
 describe('ErrorPageComponent', () => {
     beforeEach(() => {
@@ -16,7 +17,8 @@ describe('ErrorPageComponent', () => {
                 ErrorPageComponent
             ],
             providers: [
-                TranslateService
+                TranslateService,
+                PageUtils
             ],
             schemas: [
                 NO_ERRORS_SCHEMA

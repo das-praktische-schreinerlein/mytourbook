@@ -51,6 +51,7 @@ export class SectionPageComponent implements OnInit {
                         {title: me.pdoc.heading}, me.pdoc.heading);
                     this.pageUtils.setTranslatedDescription('meta.desc.prefix.sectionPage',
                         {title: me.pdoc.heading, teaser: me.pdoc.teaser}, me.pdoc.teaser);
+                    this.pageUtils.setRobots(true, true);
                     this.pageUtils.setMetaLanguage();
                     return;
                 }

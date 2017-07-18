@@ -1,10 +1,12 @@
 {
     "nav.brand.appName": "MyTourBook",
+    "meta.title.prefix.errorPage": "MyTourBook - Oje an error",
     "meta.title.prefix.sectionPage": "MyTourBook - {{title}}",
     "meta.title.prefix.sdocSearchPage": "MyTourBook - search",
     "meta.title.prefix.sdocShowPage": "MyTourBook - {{sdoc}}",
     "meta.title.prefix.sdocSectionSearchPage": "MyTourBook - {{title}} - search",
     "meta.title.prefix.sdocSectionShowPage": "MyTourBook - {{title}} - {{sdoc}}",
+    "meta.desc.prefix.errorPage": "MyTourBook - Oje an error occurred",
     "meta.desc.prefix.sectionPage": "MyTourBook - {{title}} - {{teaser}}",
     "meta.desc.prefix.sdocSearchPage": "MyTourBook - routes/reports/locations/images/infos",
     "meta.desc.prefix.sdocShowPage": "MyTourBook - details for {{sdoc}}",

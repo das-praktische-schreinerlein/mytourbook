@@ -53,11 +53,13 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                             {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
                         this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
                             {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
+                        this.pageUtils.setRobots(false, false);
                     } else {
                         this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
                             {sdoc: recordName}, recordName);
                         this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',
                             {sdoc: recordName}, recordName);
+                        this.pageUtils.setRobots(true, false);
                     }
                     this.pageUtils.setMetaLanguage();
 

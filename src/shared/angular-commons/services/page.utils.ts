@@ -31,6 +31,17 @@ export class PageUtils {
         this.metaService.addTag({ name: 'keywords', content: newKeywords, lang: this.locale});
     }
 
+    public setRobots(flgIndex: boolean, flgFollow: boolean) {
+        const selector = 'name="robots"';
+        const flags = [
+            flgIndex ? 'index' : 'noindex,nosnippet,noodp,noarchive,noimageindex',
+            flgFollow ? 'follow' : 'nofollow'
+        ].join(',');
+        this.metaService.removeTag(selector);
+        this.metaService.addTag({ name: 'robots', content: flags});
+
+    }
+
     public setMetaLanguage() {
         const selector = 'name="language"';
         this.metaService.removeTag(selector);

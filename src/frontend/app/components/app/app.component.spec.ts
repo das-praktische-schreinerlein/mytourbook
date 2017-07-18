@@ -10,6 +10,8 @@ import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 import {Router} from '@angular/router';
+import {HttpModule, XHRBackend} from '@angular/http';
+import {MockBackend} from '@angular/http/testing';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -21,7 +23,8 @@ describe('AppComponent', () => {
                 FormsModule,
                 NoopAnimationsModule,
                 ToastModule.forRoot(),
-                TranslateModule.forRoot()
+                TranslateModule.forRoot(),
+                HttpModule
             ],
             declarations: [
                 AppComponent
@@ -30,11 +33,10 @@ describe('AppComponent', () => {
                 TranslateService,
                 {provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: Router, useValue: new RouterStub() },
-                {provide: ToastsManager, useValue: new ToastsManagerStub() }
+                {provide: ToastsManager, useValue: new ToastsManagerStub() },
+                { provide: XHRBackend, useClass: MockBackend }
             ],
-            schemas: [
-                NO_ERRORS_SCHEMA
-            ]
+            schemas: [NO_ERRORS_SCHEMA]
         });
         TestBed.compileComponents();
     });

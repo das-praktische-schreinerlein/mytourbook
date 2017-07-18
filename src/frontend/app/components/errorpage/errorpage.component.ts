@@ -1,4 +1,5 @@
-import {Component, Injectable} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
+import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 
 @Component({
     selector: 'app-errorpage',
@@ -6,5 +7,15 @@ import {Component, Injectable} from '@angular/core';
     styleUrls: ['./errorpage.component.css']
 })
 @Injectable()
-export class ErrorPageComponent {
+export class ErrorPageComponent implements  OnInit {
+    constructor(private pageUtils: PageUtils) {
+    }
+
+    ngOnInit() {
+        this.pageUtils.setTranslatedTitle('meta.title.prefix.errorPage', {}, 'Error');
+        this.pageUtils.setTranslatedDescription('meta.desc.prefix.errorPage', {}, 'Error');
+        this.pageUtils.setRobots(false, false);
+        this.pageUtils.setMetaLanguage();
+        return;
+    }
 }
