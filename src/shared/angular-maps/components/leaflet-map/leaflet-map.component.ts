@@ -1,6 +1,7 @@
 import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
+import 'leaflet.markercluster';
 import {GPX, MapElement} from '../../services/leaflet-gpx.plugin';
 import {Http} from '@angular/http';
 import {GpxLoader} from '../../services/gpx.loader';
@@ -8,6 +9,7 @@ import {GpxParser} from '../../services/gpx.parser';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import LatLng = L.LatLng;
 import Layer = L.Layer;
+import MarkerClusterGroup = L.MarkerClusterGroup;
 
 export interface LeafletMapOptions {
     flgGenerateNameFromGpx: boolean;
