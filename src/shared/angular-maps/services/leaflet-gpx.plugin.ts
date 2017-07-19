@@ -1,6 +1,6 @@
 /**
  * inspired by leaflet-plugins
-  */
+ */
 import layers = L.control.layers;
 import {GeoElement, GeoElementType} from './gpx.parser';
 import {GpxLoader} from './gpx.loader';
@@ -60,17 +60,29 @@ export class GPX extends L.FeatureGroup {
             const geoElement = geoElements[i];
             switch (geoElement.type) {
                 case GeoElementType.WAYPOINT:
-                    const point = new L.Marker(geoElement.points[0], options);
+                    const point = new L.Marker(geoElement.points[0], {});
                     layers.push(point);
-                    this.fire('addpoint', { mapElement: gpxElement, point: point});
                     break;
                 default:
-                    const line = new L.Polyline(geoElement.points, options);
+                    const line = new L.Polyline(geoElement.points, {});
                     if (gpxElement.popupContent) {
                         line.bindPopup(gpxElement.popupContent);
                     }
                     layers.push(line);
-                    this.fire('addline', { mapElement: gpxElement, line: [line]});
+                    if (options['showStartMarker']) {
+                        layers.push(new L.Marker(geoElement.points[0], {
+                            clickable: true,
+                            title: 'Start: ' + gpxElement.name,
+                            icon: new L.DivIcon({className: 'leaflet-div-icon-start', html: 'S:' + gpxElement.name})
+                        }));
+                    }
+                    if (options['showEndMarker']) {
+                        layers.push(new L.Marker(geoElement.points[geoElement.points.length - 1], {
+                            clickable: true,
+                            title: 'End: ' + gpxElement.name,
+                            icon: new L.DivIcon({className: 'leaflet-div-icon-end', html: 'E:' + gpxElement.name})
+                        }));
+                    }
                     break;
             }
         }
@@ -80,6 +92,6 @@ export class GPX extends L.FeatureGroup {
             return;
         }
 
-        return  new L.FeatureGroup(layers);
+        return new L.FeatureGroup(layers);
     }
 }

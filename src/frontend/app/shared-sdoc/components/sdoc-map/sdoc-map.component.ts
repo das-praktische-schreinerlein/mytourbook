@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
+import 'leaflet.markercluster';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import LatLng = L.LatLng;
 import {MapElement} from '../../../../../shared/angular-maps/services/leaflet-gpx.plugin';
+import LatLng = L.LatLng;
 @Component({
     selector: 'app-sdoc-map',
     templateUrl: './sdoc-map.component.html'
@@ -62,7 +63,7 @@ export class SDocMapComponent implements OnChanges {
                     id: record.id,
                     name: record.name,
                     trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.gpx',
-                    popupContent: '<h2>' + record.type + ': ' + record.name + '</h2>'
+                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>'
                 };
                 this.mapElementsReverseMap.set(mapElement, record);
             } else if (record.geoLat && record.geoLon) {
@@ -70,7 +71,7 @@ export class SDocMapComponent implements OnChanges {
                     id: record.id,
                     name: record.name,
                     point: new LatLng(+record.geoLat, +record.geoLon),
-                    popupContent: '<h2>' + record.type + ': ' + record.name + '</h2>'
+                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>'
                 };
                 this.mapElementsReverseMap.set(mapElement, record);
             }

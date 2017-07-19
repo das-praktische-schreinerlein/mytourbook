@@ -31,6 +31,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
 
     initialized: boolean;
     map: L.Map;
+    private featureGroup: L.MarkerClusterGroup;
 
     @Input()
     public mapId: string;
@@ -89,11 +90,15 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
             return;
         }
 
+        if (this.featureGroup) {
+            this.featureGroup.clearLayers();
+        }
+
         const center = this.center || new LatLng(43, 16);
         this.map.setView(center, this.zoom);
         const me = this;
-        const featureGroup = L.featureGroup([]);
-        const gpxObjs = [];
+        this.featureGroup = L.markerClusterGroup();
+        this.featureGroup.addTo(this.map);
         for (let i = 0; i < this.mapElements.length; i++) {
             const mapElement = this.mapElements[i];
 
@@ -105,26 +110,28 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
                     showStartMarker: this.options.showStartMarker,
                     showEndMarker: this.options.showEndMarker
                 });
-                gpxObjs.push(gpxObj);
-                gpxObj.addTo(this.map);
                 gpxObj.on('loaded', function (e) {
                     const loadedTrackFeature = <Layer>e.target;
                     const loadedMapElement = <MapElement>e['mapElement'];
-                    featureGroup.addLayer(loadedTrackFeature);
+                    me.featureGroup.addLayer(loadedTrackFeature);
                     loadedTrackFeature.on('click', function () {
                         me.mapElementClicked.emit(loadedMapElement);
                     });
 
-                    me.map.fitBounds(featureGroup.getBounds());
+                    me.map.fitBounds(me.featureGroup.getBounds());
                 });
             } else if (mapElement.point) {
-                const pointFeature = new L.Marker(mapElement.point, {});
-                featureGroup.addLayer(pointFeature);
+                const pointFeature = new L.Marker(mapElement.point, {
+                    clickable: true,
+                    title: mapElement.name,
+                    icon: new L.DivIcon({className: 'leaflet-div-icon-point', html: mapElement.name})
+                });
+                me.featureGroup.addLayer(pointFeature);
                 pointFeature.on('click', function () {
                     me.mapElementClicked.emit(mapElement);
                 });
 
-                me.map.fitBounds(featureGroup.getBounds());
+                me.map.fitBounds(me.featureGroup.getBounds());
             }
         }
     }
