@@ -3,6 +3,7 @@
                      [height]="height"
                      [zoom]="mapZoom"
                      [trackUrls]="trackUrls"
+                     (trackUrlClicked)="onTrackClicked($event)"
                      [center]="mapCenterPos"></app-leaflet-map>
 </div>
 

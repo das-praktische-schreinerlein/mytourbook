@@ -214,6 +214,14 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onMapSDocClicked(sdoc: SDocRecord) {
+        console.error("sdocCliccked", sdoc);
+    }
+
+    onMapCenterChanged(newCenter: L.LatLng) {
+        console.error("newCenter", newCenter);
+    }
+
     private redirectToSearch() {
         // reset initialized
         this.initialized = false;

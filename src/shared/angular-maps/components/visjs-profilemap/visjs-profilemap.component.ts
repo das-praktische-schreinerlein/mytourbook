@@ -24,6 +24,9 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
     @Input()
     public trackUrls: string[];
 
+    @Input()
+    public flgGenerateNameFromGpx?: boolean;
+
     constructor(private http: Http) {
         this.gpxLoader = new GpxLoader(http, new GpxParser());
     }
@@ -52,6 +55,7 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
             const trackUrl = this.trackUrls[i];
             // specify options
             const options = {
+                generateName: this.flgGenerateNameFromGpx,
                 width:  '100%',
                 height: this.height,
                 style: 'bar-size',

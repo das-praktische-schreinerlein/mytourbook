@@ -30,17 +30,17 @@ export class GPX extends L.FeatureGroup {
         const me = this;
 
         this.gpxLoader.loadGpx(url, options).then(function onLoaded(geoElements) {
-            const layers = me.convertGeoElementsToLayers(geoElements, options);
+            const layers = me.convertGeoElementsToLayers(url, geoElements, options);
             if (layers !== undefined) {
                 me.addLayer(layers);
-                me.fire('loaded', layers);
+                me.fire('loaded', { url: url, layers: layers});
             }
         }).catch(function onError(error) {
             console.error('failed to load gpx for leeafletmap:' + url, error);
         });
     }
 
-    convertGeoElementsToLayers(geoElements, options) {
+    convertGeoElementsToLayers(url, geoElements, options) {
         if (!geoElements) {
             this.fire('error');
             return;
@@ -56,7 +56,7 @@ export class GPX extends L.FeatureGroup {
                         point.bindPopup(geoElement.name);
                     }
                     layers.push(point);
-                    this.fire('addpoint', {point: point});
+                    this.fire('addpoint', { url: url, point: point});
                     break;
                 default:
                     const line = new L.Polyline(geoElement.points, options);
@@ -64,7 +64,7 @@ export class GPX extends L.FeatureGroup {
                         line.bindPopup(geoElement.name);
                     }
                     layers.push(line);
-                    this.fire('addline', {line: [line]});
+                    this.fire('addline', { url: url, line: [line]});
                     break;
             }
         }
@@ -73,11 +73,7 @@ export class GPX extends L.FeatureGroup {
         if (!layers.length) {
             return;
         }
-        let layer = layers[0];
-        if (layers.length > 1) {
-            layer = new L.FeatureGroup(layers);
-        }
 
-        return layer;
+        return  new L.FeatureGroup(layers);
     }
 }

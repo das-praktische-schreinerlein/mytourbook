@@ -10,6 +10,8 @@
                           [height]="'300'"
                           [mapZoom]="mapZoom"
                           [sdocs]="searchResult.currentRecords"
+                          (sdocClicked)="onMapSDocClicked($event)"
+                          (centerChanged)="onMapCenterChanged($event)"
                           [mapCenterPos]="mapCenterPos"></app-sdoc-map>
         </div>
     </div>

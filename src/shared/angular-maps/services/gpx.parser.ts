@@ -49,7 +49,9 @@ export class GpxParser  {
                 if (!l) {
                     continue;
                 }
-                this.parse_name(el[i], l);
+                if (options.generateName) {
+                    this.parse_name(el[i], l);
+                }
                 elements.push(l);
             }
         }
@@ -61,7 +63,9 @@ export class GpxParser  {
                 if (!waypoint) {
                     continue;
                 }
-                this.parse_name(el[i], waypoint);
+                if (options.generateName) {
+                    this.parse_name(el[i], waypoint);
+                }
                 elements.push(waypoint);
             }
         }

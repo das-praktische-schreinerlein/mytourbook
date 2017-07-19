@@ -7,6 +7,7 @@ import {GpxLoader} from '../../services/gpx.loader';
 import {GpxParser} from '../../services/gpx.parser';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import LatLng = L.LatLng;
+import Layer = L.Layer;
 
 @Component({
     selector: 'app-leaflet-map',
@@ -40,8 +41,14 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     @Input()
     public zoom: number;
 
+    @Input()
+    public flgGenerateNameFromGpx?: boolean;
+
     @Output()
     public centerChanged: EventEmitter<L.LatLng> = new EventEmitter();
+
+    @Output()
+    public trackUrlClicked: EventEmitter<string> = new EventEmitter();
 
     constructor(private http: Http) {
         this.gpxLoader = new GpxLoader(http, new GpxParser());
@@ -83,11 +90,17 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         const gpxObjs = [];
         for (let i = 0; i < this.trackUrls.length; i++) {
             const trackUrl = this.trackUrls[i];
-            const gpxObj = new GPX(this.gpxLoader, trackUrl, {async: true, display_wpt: false});
+            const gpxObj = new GPX(this.gpxLoader, trackUrl, {async: true, display_wpt: false, generateName: this.flgGenerateNameFromGpx});
             gpxObjs.push(gpxObj);
             gpxObj.addTo(this.map);
             gpxObj.on('loaded', function (e) {
-                featureGroup.addLayer(e.target);
+                const loadedTrackFeature = <Layer>e.target;
+                const loadedTrackUrl = <string>e['url'];
+                featureGroup.addLayer(loadedTrackFeature);
+                loadedTrackFeature.on('click', function (clickEvent) {
+                    me.trackUrlClicked.emit(loadedTrackUrl);
+                });
+
                 me.map.fitBounds(featureGroup.getBounds());
             });
         }
