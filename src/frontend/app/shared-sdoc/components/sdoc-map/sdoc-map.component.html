@@ -1,9 +1,10 @@
-<div class="container" *ngIf="mapCenterPos !== undefined || trackUrls.length > 0">
+<div class="container" *ngIf="mapCenterPos !== undefined || mapElements.length > 0">
     <app-leaflet-map [mapId]="mapId"
                      [height]="height"
                      [zoom]="mapZoom"
-                     [trackUrls]="trackUrls"
-                     (trackUrlClicked)="onTrackClicked($event)"
+                     [mapElements]="mapElements"
+                     (mapElementClicked)="onTrackClicked($event)"
+                     [options]="{ showStartMarker: true, showEndMarker: true, flgGenerateNameFromGpx: false }"
                      [center]="mapCenterPos"></app-leaflet-map>
 </div>
 

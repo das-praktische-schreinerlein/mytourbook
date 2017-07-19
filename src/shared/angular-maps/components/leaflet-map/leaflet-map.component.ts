@@ -1,13 +1,19 @@
 import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
-import {GPX} from '../../services/leaflet-gpx.plugin';
+import {GPX, MapElement} from '../../services/leaflet-gpx.plugin';
 import {Http} from '@angular/http';
 import {GpxLoader} from '../../services/gpx.loader';
 import {GpxParser} from '../../services/gpx.parser';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import LatLng = L.LatLng;
 import Layer = L.Layer;
+
+export interface LeafletMapOptions {
+    flgGenerateNameFromGpx: boolean;
+    showStartMarker: boolean;
+    showEndMarker: boolean;
+}
 
 @Component({
     selector: 'app-leaflet-map',
@@ -33,7 +39,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     public height: string;
 
     @Input()
-    public trackUrls: string[];
+    public mapElements: MapElement[];
 
     @Input()
     public center: L.LatLng;
@@ -42,13 +48,13 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     public zoom: number;
 
     @Input()
-    public flgGenerateNameFromGpx?: boolean;
+    public options: LeafletMapOptions;
 
     @Output()
     public centerChanged: EventEmitter<L.LatLng> = new EventEmitter();
 
     @Output()
-    public trackUrlClicked: EventEmitter<string> = new EventEmitter();
+    public mapElementClicked: EventEmitter<MapElement> = new EventEmitter();
 
     constructor(private http: Http) {
         this.gpxLoader = new GpxLoader(http, new GpxParser());
@@ -88,21 +94,38 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         const me = this;
         const featureGroup = L.featureGroup([]);
         const gpxObjs = [];
-        for (let i = 0; i < this.trackUrls.length; i++) {
-            const trackUrl = this.trackUrls[i];
-            const gpxObj = new GPX(this.gpxLoader, trackUrl, {async: true, display_wpt: false, generateName: this.flgGenerateNameFromGpx});
-            gpxObjs.push(gpxObj);
-            gpxObj.addTo(this.map);
-            gpxObj.on('loaded', function (e) {
-                const loadedTrackFeature = <Layer>e.target;
-                const loadedTrackUrl = <string>e['url'];
-                featureGroup.addLayer(loadedTrackFeature);
-                loadedTrackFeature.on('click', function (clickEvent) {
-                    me.trackUrlClicked.emit(loadedTrackUrl);
+        for (let i = 0; i < this.mapElements.length; i++) {
+            const mapElement = this.mapElements[i];
+
+            if (mapElement.trackUrl) {
+                const gpxObj = new GPX(this.gpxLoader, mapElement, {
+                    async: true,
+                    display_wpt: false,
+                    generateName: this.options.flgGenerateNameFromGpx,
+                    showStartMarker: this.options.showStartMarker,
+                    showEndMarker: this.options.showEndMarker
+                });
+                gpxObjs.push(gpxObj);
+                gpxObj.addTo(this.map);
+                gpxObj.on('loaded', function (e) {
+                    const loadedTrackFeature = <Layer>e.target;
+                    const loadedMapElement = <MapElement>e['mapElement'];
+                    featureGroup.addLayer(loadedTrackFeature);
+                    loadedTrackFeature.on('click', function () {
+                        me.mapElementClicked.emit(loadedMapElement);
+                    });
+
+                    me.map.fitBounds(featureGroup.getBounds());
+                });
+            } else if (mapElement.point) {
+                const pointFeature = new L.Marker(mapElement.point, {});
+                featureGroup.addLayer(pointFeature);
+                pointFeature.on('click', function () {
+                    me.mapElementClicked.emit(mapElement);
                 });
 
                 me.map.fitBounds(featureGroup.getBounds());
-            });
+            }
         }
     }
 }

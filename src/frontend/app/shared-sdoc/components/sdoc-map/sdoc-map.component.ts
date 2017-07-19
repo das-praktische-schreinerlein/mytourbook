@@ -5,13 +5,14 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import LatLng = L.LatLng;
+import {MapElement} from '../../../../../shared/angular-maps/services/leaflet-gpx.plugin';
 @Component({
     selector: 'app-sdoc-map',
     templateUrl: './sdoc-map.component.html'
 })
 export class SDocMapComponent implements OnChanges {
-    trackUrls: string[] = [];
-    trackUrlReverseMap = new Map<string, SDocRecord>();
+    mapElements: MapElement[] = [];
+    mapElementsReverseMap = new Map<MapElement, SDocRecord>();
 
     @Input()
     public mapId: string;
@@ -42,14 +43,14 @@ export class SDocMapComponent implements OnChanges {
         }
     }
 
-    onTrackClicked(trackUrl: string) {
-        this.sdocClicked.emit(this.trackUrlReverseMap.get(trackUrl));
+    onTrackClicked(mapElement: MapElement) {
+        this.sdocClicked.emit(this.mapElementsReverseMap.get(mapElement));
     }
 
     renderMap() {
-        this.trackUrlReverseMap.clear();
+        this.mapElementsReverseMap.clear();
         if (!this.sdocs) {
-            this.trackUrls = [];
+            this.mapElements = [];
             return;
         }
 
@@ -57,11 +58,23 @@ export class SDocMapComponent implements OnChanges {
             const record =  this.sdocs[i];
             const trackUrl = record.gpsTrackBasefile;
             if (trackUrl !== undefined && trackUrl.length > 0) {
-                this.trackUrlReverseMap.set(this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.gpx', record);
+                const mapElement: MapElement = {
+                    id: record.id,
+                    name: record.name,
+                    trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.gpx',
+                    popupContent: '<h2>' + record.type + ': ' + record.name + '</h2>'
+                };
+                this.mapElementsReverseMap.set(mapElement, record);
             } else if (record.geoLat && record.geoLon) {
-                this.mapCenterPos = new LatLng(+record.geoLat, +record.geoLon);
+                const mapElement: MapElement = {
+                    id: record.id,
+                    name: record.name,
+                    point: new LatLng(+record.geoLat, +record.geoLon),
+                    popupContent: '<h2>' + record.type + ': ' + record.name + '</h2>'
+                };
+                this.mapElementsReverseMap.set(mapElement, record);
             }
         }
-        this.trackUrls = Array.from(this.trackUrlReverseMap.keys());
+        this.mapElements = Array.from(this.mapElementsReverseMap.keys());
     }
 }
