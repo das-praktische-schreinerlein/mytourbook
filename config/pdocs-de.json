@@ -11,7 +11,19 @@
    "teaser": "Willkommen bei MyTB",
    "type": "SectionOverviewPage",
    "theme": ""
-   }, {
+  },
+  {
+   "id": "impress",
+   "desc": "Letztens bekam ich den \"dezenten\" Hinweis, dass jede Webseite im geschäftsmäßigen Betrieb laut Telemediengesetz ein Impressum benötigt. Nun war ich eigentlich nicht der Meinung, dass MyTourBook ein \"Geschäft\" ist. Aber \"geschäftsmäßig\" heißt im rechtlichen Sinne wohl, dass der Öffentlichkeit ein Dienst angeboten wird (in meinem Falle Informationen). Das dieser \"Dienst\" bei mir nichts kostet ist dabei nebensächlich... Fakt ist, meine Seite ist damit keine private Homepage mehr, sondern ein \"Teledienst\" und damit quasi ein \"Geschäft\" (wenn auch in meinem Falle ein Minusgeschäft\" ;-). Und damit bin ich verpflichtet ein Impressum einzubauen, da man mir sonst eine \"Abmahnung\" aufhalsen könnte, die mich schnell ein paar TAUSEND Euro kostet. Also sollen sie doch ihr BESCHISSENES Impressum bekommen (und dran ver....., Ähm zufrieden sein ;-): \n\n",
+   "flgShowTopTen": false,
+   "flgShowSearch": false,
+   "heading": "Impressum/Datenschutz",
+   "name": "Impressum/Datenschutz",
+   "subSectionIds": "",
+   "teaser": "Impressum/Datenschutz - der rechtliche Teil",
+   "type": "SimplePage"
+  },
+  {
    "id": "sections",
    "desc": "Die Themen",
    "flgShowTopTen": false,
@@ -21,7 +33,8 @@
    "subSectionIds": "schwerpunkt,aktiv,landschaft,kultur",
    "teaser": "Die Schwerpunkte",
    "type": "SectionOverviewPage"
-  }, {
+  },
+  {
    "id": "schwerpunkt",
    "desc": "Schwerpunkte",
    "flgShowTopTen": false,
@@ -31,7 +44,8 @@
    "subSectionIds": "kultur,aktiv,landschaft",
    "teaser": "Schwerpunkte",
    "type": "SectionOverviewPage"
-  }, {
+  },
+  {
    "id": "kultur",
    "desc": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
    "flgShowTopTen": false,
@@ -40,9 +54,10 @@
    "name": "Kultur",
    "subSectionIds": "Museen,Stadtbesichtigung",
    "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
-   "type": "SectionOverviewPage", 
+   "type": "SectionOverviewPage",
    "image": "assets/images/theme-kultur.jpg"
-  }, {
+  },
+  {
    "id": "aktiv",
    "desc": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
    "flgShowTopTen": false,
@@ -53,7 +68,8 @@
    "teaser": "Vom Spaziergang bis zum Klettern. Hier findet sich alles für den Aktiv-Urlauber...",
    "type": "SectionOverviewPage",
    "image": "assets/images/theme-aktiv.jpg"
-  }, {
+  },
+  {
    "id": "landschaft",
    "desc": "Als Städter zieht es mich magisch in die NOCH vorhandenen Naturlandschaften unserer Erde. Ob nun [Berge]() oder [Meer](), [Wälder]() oder [Wiesen](), [Seen]() oder [Moore](), hier findet ihr Tourentipps, Berichte und Bilder für eure Flucht in die Natur...",
    "flgShowTopTen": false,
@@ -64,7 +80,8 @@
    "teaser": "Die Landschaften der Welt.",
    "type": "SectionOverviewPage",
    "image": "assets/images/theme-landschaft.jpg"
-  }, {
+  },
+  {
    "id": "Klettern",
    "desc": "Klettern... Hier gibt es Tourentipps, Berichte und Bilder für die besten Kletter-Regionen...",
    "flgShowTopTen": true,
@@ -72,10 +89,11 @@
    "heading": "Klettern",
    "name": "Klettern",
    "teaser": "Ob nun ein bißchen Kraxelei oder richtig Alpin, Sportklettern oder klassisch sauber nach Sächsischen Regeln.",
-   "theme": "Klettern",
-   "type": "SectionPage",  
-   "image": "assets/images/theme-klettern.jpg"
-  }, {
+   "type": "SectionPage",
+   "image": "assets/images/theme-klettern.jpg",
+   "theme": "Klettern"
+  },
+  {
    "id": "Wandern",
    "desc": "Ob nun über [Wiesen]() und [Felder](), am [Strand]() oder durch [Wälder](), im Flachland oder im [Gebirge](). Hier gibt es Tourentipps, Berichte und Bilder für die Wander-Regionen...",
    "flgShowTopTen": true,
@@ -83,10 +101,11 @@
    "heading": "Wandern",
    "name": "Wandern",
    "teaser": "Wandern... Das heißt Rucksack auf und Stiefel an und ab die Post geht es voran.",
-   "theme": "Wandern",
-   "type": "SectionPage",  
-   "image": "assets/images/theme-wandern.jpg"
-  }, {
+   "type": "SectionPage",
+   "image": "assets/images/theme-wandern.jpg",
+   "theme": "Wandern"
+  },
+  {
    "id": "Berge",
    "desc": "Hier gibt es Tourentipps, Berichte und Bilder für die Berg-Regionen...",
    "flgShowTopTen": true,
@@ -94,10 +113,11 @@
    "heading": "Berge",
    "name": "Berge",
    "teaser": "Die Berge... Ob nun die [Mittelgebirge]() Deutschlands oder die [Hochgebirge]() der Welt.",
-   "theme": "Berge",
-   "type": "SectionPage",  
-   "image": "assets/images/theme-berge.jpg"
-  }, {
+   "type": "SectionPage",
+   "image": "assets/images/theme-berge.jpg",
+   "theme": "Berge"
+  },
+  {
    "id": "Meer",
    "desc": "Hier gibt es Tourentipps, Berichte und Bilder für den Urlaub am Meer...",
    "flgShowTopTen": true,
@@ -105,10 +125,11 @@
    "heading": "Meer",
    "name": "Meer",
    "teaser": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer.",
-   "theme": "Meer",
-   "type": "SectionPage",  
-   "image": "assets/images/theme-meer.jpg"
-  }, {
+   "type": "SectionPage",
+   "image": "assets/images/theme-meer.jpg",
+   "theme": "Meer"
+  },
+  {
    "id": "Museen",
    "desc": "Ein Museumsbesuch gehört zu jedem Urlaub dazu... Hier gibt es Tourentipps, Berichte und Bilder für euren Museumsbesuch...",
    "flgShowTopTen": true,
@@ -116,10 +137,11 @@
    "heading": "Museen",
    "name": "Museen",
    "teaser": "Ob nun [Geschichte]() oder [Kunst]().",
-   "theme": "Museen",
-   "type": "SectionPage",  
-   "image": "assets/images/theme-museen.jpg"
-  }, {
+   "type": "SectionPage",
+   "image": "assets/images/theme-museen.jpg",
+   "theme": "Museen"
+  },
+  {
    "id": "Stadtbesichtigung",
    "desc": "Findet hier Tourentipps, Berichte und Bilder für euren Stadtbummel...",
    "flgShowTopTen": true,
@@ -127,9 +149,9 @@
    "heading": "Stadtbesichtigung",
    "name": "Stadtbesichtigung",
    "teaser": "Stadtbesichtigungen in den Großstädten der Welt...",
-   "theme": "Stadtbesichtigung",
    "type": "SectionPage",
-   "image": "assets/images/theme-stadtbesichtigung.jpg"
+   "image": "assets/images/theme-stadtbesichtigung.jpg",
+   "theme": "Stadtbesichtigung"
   }
  ]
 }
