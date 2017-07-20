@@ -15,6 +15,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SectionsPDocsResolver} from './resolver/sections-pdocs.resolver';
 import {ErrorResolver} from './resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
+import {MarkdownModule} from 'angular2-markdown';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
     ],
     imports: [
         NgbModule.forRoot(),
+        MarkdownModule.forRoot(),
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
