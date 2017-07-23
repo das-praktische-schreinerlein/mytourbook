@@ -156,10 +156,12 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         if (this.record.type === 'LOCATION' && this.pdoc !== undefined && this.pdoc.theme !== undefined) {
             filters['theme'] = this.pdoc.theme;
         }
+        filters['sort'] = 'ratePers';
 
         if (this.record.type === 'TRACK') {
             if (type === 'IMAGE' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
+                filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
             } else if (type === 'ROUTE' && record.routeId) {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;

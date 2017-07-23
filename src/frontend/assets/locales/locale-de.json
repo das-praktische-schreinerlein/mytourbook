@@ -91,5 +91,6 @@
     "listLayout_2": "Gross",
     "listSorts_relevance": "Relevanz",
     "listSorts_location": "Region",
-    "listSorts_date": "Datum"
+    "listSorts_date": "Datum",
+    "listSorts_ratePers": "persönliche Bewertung"
 }

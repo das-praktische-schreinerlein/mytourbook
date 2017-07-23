@@ -195,5 +195,6 @@
     "listLayout_2": "big",
     "listSorts_relevance": "relevance",
     "listSorts_location": "location",
-    "listSorts_date": "date"
+    "listSorts_date": "date",
+    "listSorts_ratePers": "personal rating"
 }

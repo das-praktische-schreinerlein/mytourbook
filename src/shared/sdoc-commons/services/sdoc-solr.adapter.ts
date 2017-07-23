@@ -271,25 +271,30 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const sortParams = new Map<string, any>();
 
         const form = opts.originalSearchForm || {};
+
+        // set commons: relevance
+        sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:IMAGE^1 _val_:"div(rate_pers_gesamt_i, 10)"' );
+        sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
+        sortParams.set('defType', 'edismax');
+        sortParams.set('boost', 'recip(rord(date_dts),1,1000,1000)');
+
         switch (form.sort) {
             case 'date':
-                sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:IMAGE^1');
-                sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
-                sortParams.set('defType', 'edismax');
-                sortParams.set('boost', 'recip(rord(date_dts),1,3000,1000)');
+                sortParams.set('sort', 'dateonly_s desc');
+                break;
+            case 'dateAsc':
+                sortParams.set('sort', 'date_dt asc');
+                break;
+            case 'ratePers':
+                sortParams.set('sort', 'sub(15, rate_pers_gesamt_i) asc, dateonly_s desc');
+                sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:IMAGE^1' );
+                sortParams.set('boost', 'product( recip( rord(date_dts), 1, 1000, 1000), 1)');
                 break;
             case 'location':
                 sortParams.set('sort', 'loc_lochirarchie_s asc');
-                sortParams.set('bq', 'type_txt:ROUTE^1.4 type_txt:LOCATION^1.3 type_txt:TRACK^1.2 type_txt:IMAGE^1');
-                sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
-                sortParams.set('defType', 'edismax');
-                sortParams.set('boost', 'recip(rord(date_dts),1,3000,1000)');
                 break;
+            case 'relevance':
             default:
-                sortParams.set('bq', 'type_txt:ROUTE^1.4 type_txt:LOCATION^1.3 type_txt:TRACK^1.2 type_txt:IMAGE^1');
-                sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
-                sortParams.set('defType', 'edismax');
-                sortParams.set('boost', 'recip(rord(date_dts),1,1000,1000)');
         }
 
         return sortParams;
