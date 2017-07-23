@@ -1,41 +1,65 @@
-<div>
-    <div class="container content-container">
-        <div class="container">
-            <app-sdoc-searchform [searchResult]="searchResult"
-                                 (search)="onSearchSDoc($event)"></app-sdoc-searchform>
+<ng-container [ngSwitch]="layout">
+    <ng-container *ngSwitchCase="Layout.PAGE">
+        <div>
+            <div class="container content-container">
+                <div class="container">
+                    <app-sdoc-list-header [searchResult]="searchResult"
+                                          [perPage]="perPage"
+                                          [layout]="layout"
+                                          [sort]="sort"
+                                          (perPageChange)="onPerPageChange($event)"
+                                          (sortChange)="onSortChange($event)"
+                                          (layoutChange)="onLayoutChange($event)"
+                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
+                </div>
+                <div class="container">
+                    <app-sdoc-list [searchResult]="searchResult"
+                                   [baseSearchUrl]="baseSearchUrl"
+                                   [layout]="layout"></app-sdoc-list>
+                </div>
+            </div>
         </div>
+    </ng-container>
+    <ng-container *ngSwitchDefault="">
+        <div>
+            <div class="container content-container">
+                <div class="container">
+                    <app-sdoc-searchform [searchResult]="searchResult"
+                                         (search)="onSearchSDoc($event)"></app-sdoc-searchform>
+                </div>
 
-        <div class="container" *ngIf="mapCenterPos || searchResult.recordCount > 0">
-            <app-sdoc-map [mapId]="'searchMap'"
-                          [height]="'300'"
-                          [mapZoom]="mapZoom"
-                          [sdocs]="searchResult.currentRecords"
-                          (sdocClicked)="onMapSDocClicked($event)"
-                          (centerChanged)="onMapCenterChanged($event)"
-                          [mapCenterPos]="mapCenterPos"></app-sdoc-map>
+                <div class="container" *ngIf="mapCenterPos || searchResult.recordCount > 0">
+                    <app-sdoc-map [mapId]="'searchMap'"
+                                  [height]="'300'"
+                                  [mapZoom]="mapZoom"
+                                  [sdocs]="searchResult.currentRecords"
+                                  (sdocClicked)="onMapSDocClicked($event)"
+                                  (centerChanged)="onMapCenterChanged($event)"
+                                  [mapCenterPos]="mapCenterPos"></app-sdoc-map>
+                </div>
+            </div>
+            <div class="container content-container">
+                <div class="container">
+                    <app-sdoc-list-header [searchResult]="searchResult"
+                                          [perPage]="perPage"
+                                          [layout]="layout"
+                                          [sort]="sort"
+                                          (perPageChange)="onPerPageChange($event)"
+                                          (sortChange)="onSortChange($event)"
+                                          (layoutChange)="onLayoutChange($event)"
+                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
+                </div>
+                <div class="container">
+                    <app-sdoc-list [searchResult]="searchResult"
+                                   [baseSearchUrl]="baseSearchUrl"
+                                   [layout]="layout"
+                                   (show)="onShowSDoc($event)"></app-sdoc-list>
+                </div>
+                <div class="container">
+                    <app-sdoc-list-footer [searchResult]="searchResult"
+                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="container content-container">
-        <div class="container">
-            <app-sdoc-list-header [searchResult]="searchResult"
-                                  [perPage]="perPage"
-                                  [layout]="layout"
-                                  [sort]="sort"
-                                  (perPageChange)="onPerPageChange($event)"
-                                  (sortChange)="onSortChange($event)"
-                                  (layoutChange)="onLayoutChange($event)"
-                                  (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
-        </div>
-        <div class="container">
-            <app-sdoc-list [searchResult]="searchResult"
-                           [baseSearchUrl]="baseSearchUrl"
-                           [layout]="layout"
-                           (show)="onShowSDoc($event)"></app-sdoc-list>
-        </div>
-        <div class="container">
-            <app-sdoc-list-footer [searchResult]="searchResult"
-                                  (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
-        </div>
-    </div>
-</div>
-
+    </ng-container>
+</ng-container>

@@ -6,7 +6,8 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 export enum Layout {
     FLAT,
     SMALL,
-    BIG
+    BIG,
+    PAGE
 }
 
 @Component({

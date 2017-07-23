@@ -25,6 +25,7 @@ import {SDocLinkedLocHierarchyComponent} from './components/sdoc-linked-loc-hier
 import {SDocRateTechComponent} from './components/sdoc-ratetech/sdoc-ratetech.component';
 import {SDocDataTechComponent} from './components/sdoc-datatech/sdoc-datatech.component';
 import {SDocRatePersonalComponent} from './components/sdoc-ratepers/sdoc-ratepers.component';
+import {SDocListItemPageComponent} from './components/sdoc-list-item-page/sdoc-list-item-page.component';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import {SDocRatePersonalComponent} from './components/sdoc-ratepers/sdoc-rateper
         SDocListItemComponent,
         SDocListItemSmallComponent,
         SDocListItemFlatComponent,
+        SDocListItemPageComponent,
         SDocListHeaderComponent,
         SDocListFooterComponent,
         SDocEditformComponent,
@@ -67,6 +69,7 @@ import {SDocRatePersonalComponent} from './components/sdoc-ratepers/sdoc-rateper
         SDocListItemComponent,
         SDocListItemSmallComponent,
         SDocListItemFlatComponent,
+        SDocListItemPageComponent,
         SDocListHeaderComponent,
         SDocListFooterComponent,
         SDocEditformComponent,

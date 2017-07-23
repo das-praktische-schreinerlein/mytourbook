@@ -193,6 +193,7 @@
     "listLayout_0": "list",
     "listLayout_1": "small",
     "listLayout_2": "big",
+    "listLayout_3": "page",
     "listSorts_relevance": "relevance",
     "listSorts_location": "location",
     "listSorts_date": "date",

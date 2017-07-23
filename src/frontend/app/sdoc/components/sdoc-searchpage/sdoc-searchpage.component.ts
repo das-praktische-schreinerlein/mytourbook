@@ -66,6 +66,9 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
                     console.log('route: search for ', data);
                     this.searchForm = data.searchForm.data;
+                    if (this.searchForm.perPage === 1) {
+                        this.layout = Layout.PAGE;
+                    }
                     this.perPage = this.searchForm.perPage;
                     this.sort = this.searchForm.sort;
                     if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
@@ -202,7 +205,14 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.layout = layout;
-        console.log('onLayoutChange: redirect to layout', layout);
+        console.log('onLayoutChange: redirect to layout', layout.toString());
+        console.log('onLayoutChange: redirect to layout', Layout.PAGE.toString());
+        console.log('onLayoutChange: redirect to layout', layout.toString() === Layout.PAGE.toString());
+        if (layout.toString() === Layout.PAGE.toString()) {
+            this.onPerPageChange(1);
+        } else if (this.perPage === 1) {
+            this.onPerPageChange(10);
+        }
 //        this.redirectToSearch();
         return false;
     }
