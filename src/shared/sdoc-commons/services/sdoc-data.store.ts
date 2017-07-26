@@ -111,6 +111,12 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
                 'in': searchForm.type.split(/,/)
             };
         }
+        if (searchForm.actiontype !== undefined && searchForm.actiontype.length > 0) {
+            filter = filter || {};
+            filter['actiontype_ss'] = {
+                'in': searchForm.actiontype.split(/,/)
+            };
+        }
         if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
             filter = filter || {};
             const moreFilters = searchForm.moreFilter.split(/;/);
@@ -124,18 +130,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
                 }
             }
         }
-        if (searchForm.type !== undefined && searchForm.type.length > 0) {
-            filter = filter || {};
-            filter['type_txt'] = {
-                'in': searchForm.type.split(/,/)
-            };
-        }
-        if (searchForm.type !== undefined && searchForm.type.length > 0) {
-            filter = filter || {};
-            filter['type_txt'] = {
-                'in': searchForm.type.split(/,/)
-            };
-        }
+
         if (searchForm.techDataAltitudeMax !== undefined && searchForm.techDataAltitudeMax.length > 0) {
             filter = filter || {};
             filter['data_tech_alt_max_facet_is'] = {
@@ -164,12 +159,6 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             filter = filter || {};
             filter['rate_tech_overall_ss'] = {
                 'in': searchForm.techRateOverall.split(/,/)
-            };
-        }
-        if (searchForm.type !== undefined && searchForm.type.length > 0) {
-            filter = filter || {};
-            filter['type_txt'] = {
-                'in': searchForm.type.split(/,/)
             };
         }
 

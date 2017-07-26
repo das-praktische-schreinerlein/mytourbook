@@ -33,7 +33,7 @@ export class SearchFormUtils {
                 label = me.translateService.instant(label) || label;
             }
 
-            const result = {id: value[2] + value[1], name: label};
+            const result = {id: value[2] + value[1], name: label, count: value[3]};
             if (withCount && value[3] > 0) {
                 result.name += ' (' + value[3] + ')';
             }

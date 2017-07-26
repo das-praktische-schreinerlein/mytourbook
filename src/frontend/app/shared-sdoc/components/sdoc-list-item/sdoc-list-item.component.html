@@ -4,7 +4,8 @@
             <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div>
-                    <h5>{{record.type | translate }}</h5>
+                    <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
+                    <h5>{{record.subtype | translate }}</h5>
                     <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
                         <img class="picture-small" width="200px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                     </ng-container>

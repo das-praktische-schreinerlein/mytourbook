@@ -6,6 +6,7 @@ export class SDocRecord extends BaseEntityRecord {
     trackId: number;
     imageId: number;
 
+    actiontypes: string;
     datevon: Date;
     desc: string;
     geoLon: string;
@@ -16,6 +17,7 @@ export class SDocRecord extends BaseEntityRecord {
     locHirarchie: string;
     locHirarchieIds: string;
     name: string;
+    subtype: string;
     type: string;
 
     toString() {

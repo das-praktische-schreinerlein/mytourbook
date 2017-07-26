@@ -71,6 +71,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         values['routeId'] = Number(this.getSolrValue(doc, 'route_id_i', undefined));
         values['trackId'] = Number(this.getSolrValue(doc, 'track_id_i', undefined));
 
+        const subtypeField = doc['subtypes_ss'];
+        if (subtypeField !== undefined && Array.isArray(subtypeField)) {
+           values['subtypes'] = subtypeField.join(',');
+        }
         values['datevon'] = this.getSolrValue(doc, 'date_dt', undefined);
         values['desc'] = this.getSolrValue(doc, 'desc_txt', undefined);
         values['geoLon'] = this.getSolrCoorValue(doc, 'geo_lon_s', undefined);
@@ -79,6 +83,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_s', undefined);
         values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.getSolrValue(doc, 'name_s', undefined);
+        values['subtype'] = this.getSolrValue(doc, 'subtype_s', undefined);
         values['type'] = this.getSolrValue(doc, 'type_s', undefined);
         values['locHirarchie'] = this.getSolrValue(doc, 'loc_lochirarchie_s', '')
             .replace(/,,/g, ' -> ')
@@ -201,7 +206,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'rate_pers_motive_i', 'rate_pers_schwierigkeit_i', 'rate_pers_wichtigkeit_i',
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
-            'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s', 'i_fav_url_txt'];
+            'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
+            'actiontype_ss', 'subtype_s', 'i_fav_url_txt'];
     };
 
     getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
@@ -214,7 +220,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'month_is', 'week_is',
             'rate_pers_gesamt_is', 'rate_pers_schwierigkeit_is', 'rate_tech_overall_ss',
             'data_tech_alt_asc_facet_is', 'data_tech_alt_max_facet_is', 'data_tech_dist_facets_fs', 'data_tech_dur_facet_fs',
-            'type_txt']);
+            'type_txt', 'actiontype_ss', 'subtype_ss']);
 
         facetParams.set('f.keywords_txt.facet.prefix', 'kw_');
         facetParams.set('f.keywords_txt.facet.limit', '-1');
@@ -246,6 +252,12 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
         facetParams.set('f.data_tech_dur_facet_fs.facet.limit', '-1');
         facetParams.set('f.data_tech_dur_facet_fs.facet.sort', 'index');
+
+        facetParams.set('f.subtype_ss.facet.limit', '-1');
+        facetParams.set('f.subtype_ss.facet.sort', 'index');
+
+        facetParams.set('f.actiontype_ss.facet.limit', '-1');
+        facetParams.set('f.actiontype_ss.facet.sort', 'index');
 
         return facetParams;
     };

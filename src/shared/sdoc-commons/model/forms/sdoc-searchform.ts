@@ -5,7 +5,6 @@ import {
     IdValidationRule,
     KeyParamsValidationRule,
     NearbyParamValidationRule,
-    NumberValidationRule,
     TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
@@ -24,6 +23,7 @@ export class SDocSearchForm extends GenericSearchForm {
         techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataDuration: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
+        actiontype: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         type: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false))
     };
 
@@ -40,6 +40,7 @@ export class SDocSearchForm extends GenericSearchForm {
     techDataDistance: string;
     techDataDuration: string;
     techRateOverall: string;
+    actiontype: string;
     type: string;
 
     constructor(values: {}) {
@@ -57,6 +58,7 @@ export class SDocSearchForm extends GenericSearchForm {
         this.techDataDistance = values['techDataDistance'] || '';
         this.techDataDuration = values['techDataDuration'] || '';
         this.techRateOverall = values['techRateOverall'] || '';
+        this.actiontype = values['actiontype'] || '';
         this.type = values['type'] || '';
     }
 
@@ -69,6 +71,7 @@ export class SDocSearchForm extends GenericSearchForm {
             '  nearbyAddress: ' + this.nearbyAddress + '\n' +
             '  what: ' + this.what + '\n' +
             '  fulltext: ' + this.fulltext + '\n' +
+            '  actiontype: ' + this.actiontype + '\n' +
             '  type: ' + this.type + '\n' +
             '  sort: ' + this.sort + '\n' +
             '  perPage: ' + this.perPage + '\n' +
@@ -92,11 +95,13 @@ export class SDocSearchFormFactory {
         sanitizedValues.what = SDocSearchForm.sdocFields.what.validator.sanitize(values['what']) || '';
         sanitizedValues.moreFilter = SDocSearchForm.sdocFields.moreFilter.validator.sanitize(values['moreFilter']) || '';
         sanitizedValues.theme = SDocSearchForm.sdocFields.theme.validator.sanitize(values['theme']) || '';
-        sanitizedValues.techDataAltitudeMax = SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(values['techDataAltitudeMax']) || '';
+        sanitizedValues.techDataAltitudeMax =
+            SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(values['techDataAltitudeMax']) || '';
         sanitizedValues.techDataAscent = SDocSearchForm.sdocFields.techDataAscent.validator.sanitize(values['techDataAscent']) || '';
         sanitizedValues.techDataDistance = SDocSearchForm.sdocFields.techDataDistance.validator.sanitize(values['techDataDistance']) || '';
         sanitizedValues.techDataDuration = SDocSearchForm.sdocFields.techDataDuration.validator.sanitize(values['techDataDuration']) || '';
         sanitizedValues.techRateOverall = SDocSearchForm.sdocFields.techRateOverall.validator.sanitize(values['techRateOverall']) || '';
+        sanitizedValues.actiontype = SDocSearchForm.sdocFields.actiontype.validator.sanitize(values['actiontype']) || '';
         sanitizedValues.type = SDocSearchForm.sdocFields.type.validator.sanitize(values['type']) || '';
 
         return new SDocSearchForm(sanitizedValues);
@@ -116,11 +121,13 @@ export class SDocSearchFormFactory {
         sanitizedValues.what = SDocSearchForm.sdocFields.what.validator.sanitize(searchForm.what) || '';
         sanitizedValues.moreFilter = SDocSearchForm.sdocFields.moreFilter.validator.sanitize(searchForm.moreFilter) || '';
         sanitizedValues.theme = SDocSearchForm.sdocFields.theme.validator.sanitize(searchForm.theme) || '';
-        sanitizedValues.techDataAltitudeMax = SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(searchForm.techDataAltitudeMax) || '';
+        sanitizedValues.techDataAltitudeMax =
+            SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(searchForm.techDataAltitudeMax) || '';
         sanitizedValues.techDataAscent = SDocSearchForm.sdocFields.techDataAscent.validator.sanitize(searchForm.techDataAscent) || '';
         sanitizedValues.techDataDistance = SDocSearchForm.sdocFields.techDataDistance.validator.sanitize(searchForm.techDataDistance) || '';
         sanitizedValues.techDataDuration = SDocSearchForm.sdocFields.techDataDuration.validator.sanitize(searchForm.techDataDuration) || '';
         sanitizedValues.techRateOverall = SDocSearchForm.sdocFields.techRateOverall.validator.sanitize(searchForm.techRateOverall) || '';
+        sanitizedValues.actiontype = SDocSearchForm.sdocFields.actiontype.validator.sanitize(searchForm.actiontype) || '';
         sanitizedValues.type = SDocSearchForm.sdocFields.type.validator.sanitize(searchForm.type) || '';
 
         return new SDocSearchForm(sanitizedValues);
@@ -147,6 +154,7 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(values['techDataDistance']);
         state = state && SDocSearchForm.sdocFields.techDataDuration.validator.isValid(values['techDataDuration']);
         state = state && SDocSearchForm.sdocFields.techRateOverall.validator.isValid(values['techRateOverall']);
+        state = state && SDocSearchForm.sdocFields.actiontype.validator.isValid(values['actiontype']);
         state = state && SDocSearchForm.sdocFields.type.validator.isValid(values['type']);
 
         return state;
@@ -171,6 +179,7 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(searchForm.techDataDistance);
         state = state && SDocSearchForm.sdocFields.techDataDuration.validator.isValid(searchForm.techDataDuration);
         state = state && SDocSearchForm.sdocFields.techRateOverall.validator.isValid(searchForm.techRateOverall);
+        state = state && SDocSearchForm.sdocFields.actiontype.validator.isValid(searchForm.actiontype);
         state = state && SDocSearchForm.sdocFields.type.validator.isValid(searchForm.type);
 
         return state;

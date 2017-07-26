@@ -38,6 +38,15 @@ export class SDocSearchFormUtils {
             this.searchParameterUtils.extractFacetValues(searchResult.facets, 'keywords_txt', '', ''));
     }
 
+    getActionTypeValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        return [].concat(
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'actiontype_ss', '', ''));
+    }
+
     getTypeValues(searchResult: SDocSearchResult): any[] {
         if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
             return [];

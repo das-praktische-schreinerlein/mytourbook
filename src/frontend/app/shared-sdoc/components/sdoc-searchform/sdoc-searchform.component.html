@@ -34,67 +34,37 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-2 input-group input-group-sm">
-            <label class="col-xs-2 col-form-label mr-2" i18n="techRateOverall label|Label for filter: techRateOverall@@label.searchform.sdoc.techRateOverall">Bewertung:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectTechRateOverall"
-                                     [settings]="settingsSelectTechRateOverall"
-                                     [texts]="textsSelectTechRateOverall"
-                                     formControlName="techRateOverall"
-                                     ngDefaultControl
-                                     class="fullwidth"
-                                     (onAdded)="onChangeSelect()"
-                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-        </div>
-        <div class="col-sm-2 input-group input-group-sm">
-            <label class="col-xs-2 col-form-label mr-2" i18n="techDataDuration label|Label for filter: techDataDuration@@label.searchform.sdoc.techDataDuration">Dauer:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectTechDataDuration"
-                                     [settings]="settingsSelectTechDataDuration"
-                                     [texts]="textsSelectTechDataDuration"
-                                     formControlName="techDataDuration"
-                                     ngDefaultControl
-                                     class="fullwidth"
-                                     (onAdded)="onChangeSelect()"
-                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-        </div>
-        <div class="col-sm-2 input-group input-group-sm">
-            <label class="col-xs-2 col-form-label mr-2" i18n="techDataDistance label|Label for filter: techDataDistance@@label.searchform.sdoc.techDataDistance">Strecke:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectTechDataDistance"
-                                     [settings]="settingsSelectTechDataDistance"
-                                     [texts]="textsSelectTechDataDistance"
-                                     formControlName="techDataDistance"
-                                     ngDefaultControl
-                                     class="fullwidth"
-                                     (onAdded)="onChangeSelect()"
-                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-        </div>
-        <div class="col-sm-2 input-group input-group-sm">
-            <label class="col-xs-2 col-form-label mr-2" i18n="techDataAltitudeMax label|Label for filter: techDataAltitudeMax@@label.searchform.sdoc.techDataAltitudeMax">Höhe:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectTechDataAltitudeMax"
-                                     [settings]="settingsSelectTechDataAltitudeMax"
-                                     [texts]="textsSelectTechDataAltitudeMax"
-                                     formControlName="techDataAltitudeMax"
-                                     ngDefaultControl
-                                     class="fullwidth"
-                                     (onAdded)="onChangeSelect()"
-                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-        </div>
-        <div class="col-sm-2 input-group input-group-sm">
-            <label class="col-xs-2 col-form-label mr-2" i18n="techDataAscent label|Label for filter: techDataAscent@@label.searchform.sdoc.techDataAscent">Aufstieg:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectTechDataAscent"
-                                     [settings]="settingsSelectTechDataAscent"
-                                     [texts]="textsSelectTechDataAscent"
-                                     formControlName="techDataAscent"
-                                     ngDefaultControl
-                                     class="fullwidth"
-                                     (onAdded)="onChangeSelect()"
-                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-sm-4 form-inline input-group input-group-sm">
             <label class="col-xs-4 col-form-label mr-2" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
             <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control"
                    i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
+        </div>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-2 col-form-label mr-2" i18n="type label|Label for filter: type@@label.searchform.sdoc.type">Types:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectType"
+                                     [settings]="settingsSelectType"
+                                     [texts]="textsSelectType"
+                                     formControlName="type"
+                                     ngDefaultControl
+                                     class="fullwidth"
+                                     (onAdded)="onChangeSelect()"
+                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-4 input-group input-group-sm">
+            <button class="btn btn-primary btn-sm" type="submit" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectActionType"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     formControlName="actiontype"
+                                     ngDefaultControl
+                                     class="fullwidth"
+                                     (onAdded)="onChangeSelect()"
+                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-4 col-form-label mr-2" i18n="what label|Label for filter: what@@label.searchform.sdoc.what">What:</label>
@@ -107,19 +77,62 @@
                                      (onAdded)="onChangeSelect()"
                                      (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
-        <div class="col-sm-2 input-group input-group-sm">
-            <label class="col-xs-2 col-form-label mr-2" i18n="type label|Label for filter: type@@label.searchform.sdoc.type">Types:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectType"
-                                     [settings]="settingsSelectType"
-                                     [texts]="textsSelectType"
-                                     formControlName="type"
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-2 col-form-label mr-2" i18n="techRateOverall label|Label for filter: techRateOverall@@label.searchform.sdoc.techRateOverall">Bewertung:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectTechRateOverall"
+                                     [settings]="settingsSelectTechRateOverall"
+                                     [texts]="textsSelectTechRateOverall"
+                                     formControlName="techRateOverall"
                                      ngDefaultControl
                                      class="fullwidth"
                                      (onAdded)="onChangeSelect()"
                                      (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
-        <div class="col-sm-2 input-group input-group-sm">
-            <button class="btn btn-primary btn-sm" type="submit" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 input-group input-group-sm">
+            <label class="col-xs-2 col-form-label mr-2" i18n="techDataDuration label|Label for filter: techDataDuration@@label.searchform.sdoc.techDataDuration">Dauer:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectTechDataDuration"
+                                     [settings]="settingsSelectTechDataDuration"
+                                     [texts]="textsSelectTechDataDuration"
+                                     formControlName="techDataDuration"
+                                     ngDefaultControl
+                                     class="fullwidth"
+                                     (onAdded)="onChangeSelect()"
+                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-3 input-group input-group-sm">
+            <label class="col-xs-2 col-form-label mr-2" i18n="techDataDistance label|Label for filter: techDataDistance@@label.searchform.sdoc.techDataDistance">Strecke:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectTechDataDistance"
+                                     [settings]="settingsSelectTechDataDistance"
+                                     [texts]="textsSelectTechDataDistance"
+                                     formControlName="techDataDistance"
+                                     ngDefaultControl
+                                     class="fullwidth"
+                                     (onAdded)="onChangeSelect()"
+                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-3 input-group input-group-sm">
+            <label class="col-xs-2 col-form-label mr-2" i18n="techDataAltitudeMax label|Label for filter: techDataAltitudeMax@@label.searchform.sdoc.techDataAltitudeMax">Höhe:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectTechDataAltitudeMax"
+                                     [settings]="settingsSelectTechDataAltitudeMax"
+                                     [texts]="textsSelectTechDataAltitudeMax"
+                                     formControlName="techDataAltitudeMax"
+                                     ngDefaultControl
+                                     class="fullwidth"
+                                     (onAdded)="onChangeSelect()"
+                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-3 input-group input-group-sm">
+            <label class="col-xs-2 col-form-label mr-2" i18n="techDataAscent label|Label for filter: techDataAscent@@label.searchform.sdoc.techDataAscent">Aufstieg:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectTechDataAscent"
+                                     [settings]="settingsSelectTechDataAscent"
+                                     [texts]="textsSelectTechDataAscent"
+                                     formControlName="techDataAscent"
+                                     ngDefaultControl
+                                     class="fullwidth"
+                                     (onAdded)="onChangeSelect()"
+                                     (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
         </div>
     </div>
 </form>

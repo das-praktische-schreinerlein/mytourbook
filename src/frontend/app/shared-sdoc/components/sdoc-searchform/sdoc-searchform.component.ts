@@ -23,6 +23,7 @@ export class SDocSearchformComponent implements OnInit {
     public optionsSelectWhere: IMultiSelectOption[] = [];
     public optionsSelectWhat: IMultiSelectOption[] = [];
     public optionsSelectType: IMultiSelectOption[] = [];
+    public optionsSelectActionType: IMultiSelectOption[] = [];
     public optionsSelectTechRateOverall: IMultiSelectOption[] = [];
     public optionsSelectTechDataDistance: IMultiSelectOption[] = [];
     public optionsSelectTechDataAscent: IMultiSelectOption[] = [];
@@ -42,6 +43,12 @@ export class SDocSearchformComponent implements OnInit {
             enableSearch: true,
             showUncheckAll: true};
     public settingsSelectWhat: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true};
+    public settingsSelectActionType: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
@@ -103,6 +110,13 @@ export class SDocSearchformComponent implements OnInit {
         checkedPlural: 'Eigenschaften ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: 'Eigenschaften',
+        allSelected: 'alles'};
+    public textsSelectActionType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Action ausgewählt',
+        checkedPlural: 'Ation ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Actions',
         allSelected: 'alles'};
     public textsSelectType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
@@ -175,6 +189,7 @@ export class SDocSearchformComponent implements OnInit {
         techDataDistance: [],
         techDataDuration: [],
         techRateOverall: [],
+        actionType: [],
         type: [],
         sort: '',
         perPage: 10,
@@ -216,6 +231,7 @@ export class SDocSearchformComponent implements OnInit {
             nearbyDistance: '10',
             nearby: values.nearby,
             fulltext: values.fulltext,
+            actiontype: [(values.actiontype ? values.actiontype.split(/,/) : [])],
             techDataAscent: [(values.techDataAscent ? values.techDataAscent.split(/,/) : [])],
             techDataAltitudeMax: [(values.techDataAltitudeMax ? values.techDataAltitudeMax.split(/,/) : [])],
             techDataDistance: [(values.techDataDistance ? values.techDataDistance.split(/,/) : [])],
@@ -230,8 +246,22 @@ export class SDocSearchformComponent implements OnInit {
             this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [], false);
         this.optionsSelectWhat = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
+        this.optionsSelectActionType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getActionTypeValues(sdocSearchSearchResult), true, [], true)
+            .sort(function (a, b) {
+                if (a['count'] < b['count']) {
+                    return 1;
+                }
+                if (a['count'] > b['count']) {
+                    return -1;
+                }
+                return a.name.localeCompare(b.name);
+            });
         this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true);
+            this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true)
+            .sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
         this.optionsSelectTechRateOverall = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataDistance = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(

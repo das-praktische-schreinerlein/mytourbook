@@ -36,10 +36,15 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             moreFilter = searchForm.moreFilter;
         }
 
+        const whatMap = new Map();
+        whatMap.set('keyword', searchForm.what);
+        whatMap.set('action', searchForm.actiontype);
+        const what = this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
+
         const params: Object[] = [
             this.searchParameterUtils.useValueOrDefault(searchForm.when, 'jederzeit'),
             this.searchParameterUtils.useValueOrDefault(where, 'ueberall'),
-            this.searchParameterUtils.useValueOrDefault(searchForm.what, 'alles'),
+            this.searchParameterUtils.useValueOrDefault(what, 'alles'),
             this.searchParameterUtils.useValueOrDefault(searchForm.fulltext, 'egal'),
             this.searchParameterUtils.useValueOrDefault(moreFilter, 'ungefiltert'),
             this.searchParameterUtils.useValueOrDefault(searchForm.sort, 'relevance'),
@@ -92,6 +97,18 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         const techRateOverall: string = (moreFilterValues.has('techRateOverall:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techRateOverall:'), 'techRateOverall:', ',') : '');
 
+        const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
+            ['action:', 'keyword:']);
+        let whatFilter = '';
+        if (whatFilterValues.has('unknown')) {
+            whatFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('unknown'), '', ',');
+        }
+        whatFilter = whatFilter.replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
+        const what: string = (whatFilterValues.has('keyword:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(
+                whatFilterValues.get('keyword:'), 'keyword:', ',') : '');
+        const actiontype: string = (whatFilterValues.has('action:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('action:'), 'action:', ',') : '');
 
         searchForm.theme = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
@@ -112,8 +129,11 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             this.searchParameterUtils.replacePlaceHolder(nearbyAddress, /^ueberall$/, ''),
             defaults['nearbyAddress'], '');
         searchForm.what = this.searchParameterUtils.useValueDefaultOrFallback(
-            this.searchParameterUtils.replacePlaceHolder(params['what'], /^alles$/, ''),
+            this.searchParameterUtils.replacePlaceHolder(what, /^alles$/, ''),
             defaults['what'], '');
+        searchForm.actiontype = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(actiontype, /^alles$/, ''),
+            defaults['actiontype'], '');
         searchForm.fulltext = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
             defaults['fulltext'], '');

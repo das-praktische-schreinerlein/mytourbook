@@ -10,7 +10,8 @@
     </div>
     <div class="col-2 type layout-big">
         <table>
-            <tr><td><h5>{{record.type | translate }}</h5></td><td>&nbsp;</td></tr>
+            <tr *ngIf="record.type !== 'LOCATION'"><td><h5>{{record.type | translate }}</h5></td><td>&nbsp;</td></tr>
+            <tr><td><h5>{{record.subtype | translate }}</h5></td><td>&nbsp;</td></tr>
             <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
             <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
         </table>
@@ -27,7 +28,8 @@
     </div>
 
     <div class="col-3 image layout-small">
-        <h5>{{record.type | translate }}</h5>
+        <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
+        <h5>{{record.subtype | translate }}</h5>
         <ng-container [ngSwitch]="record.type">
             <ng-container *ngSwitchDefault="">
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">

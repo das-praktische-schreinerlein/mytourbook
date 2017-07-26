@@ -15,6 +15,7 @@ export const SDocRecordSchema = new Schema({
 
 // TODO
 //        datevon: {type: 'Date'},
+        actiontypes: {type: 'string'},
         desc: {type: 'string'},
         geoLon: {type: 'string'},
         geoLat: {type: 'string'},
@@ -24,6 +25,7 @@ export const SDocRecordSchema = new Schema({
         locHirarchie: {type: 'string'},
         locHirarchieIds: {type: 'string'},
         name: {type: 'string', minLength: 1, maxLength: 255},
+        subtype: {type: 'string'},
         type: {type: 'string'}
     }
 });
