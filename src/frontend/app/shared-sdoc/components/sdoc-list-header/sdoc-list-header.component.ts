@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
@@ -8,7 +8,7 @@ import {FormBuilder} from '@angular/forms';
     templateUrl: './sdoc-list-header.component.html',
     styleUrls: ['./sdoc-list-header.component.css']
 })
-export class SDocListHeaderComponent {
+export class SDocListHeaderComponent implements OnInit {
 
     public Layout = Layout;
 
@@ -43,6 +43,14 @@ export class SDocListHeaderComponent {
     });
 
     constructor(public fb: FormBuilder) {
+    }
+
+    ngOnInit() {
+        this.headerFormGroup = this.fb.group({
+            sort: this.sort,
+            perPage: this.perPage,
+            layout: this.layout
+        });
     }
 
     onPageChange(page: number) {

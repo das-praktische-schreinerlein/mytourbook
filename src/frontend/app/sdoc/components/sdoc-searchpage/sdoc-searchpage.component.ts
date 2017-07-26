@@ -236,7 +236,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         // reset initialized
         this.initialized = false;
 
-        const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm) + '?' + new Date().getTime();
+        const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm);
         console.log('redirectToSearch: redirect to ', url);
 
         this.router.navigateByUrl(url);

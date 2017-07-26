@@ -194,7 +194,6 @@ export class SDocSearchformComponent implements OnInit {
         this.initGeoCodeAutoComplete();
     }
 
-
     public onSubmitSearch(event: any) {
         this.doSearch();
         return false;
