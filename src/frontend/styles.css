@@ -13,6 +13,40 @@ img.picture-thumbnail {
 img.picture, img.picture-thumbnail-big, img.picture-small, img.picture-big  {
     border-radius: 10px;
 }
+
+img.picture-small, img.picture-big {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media(max-width: 600px) {
+    img.picture-big {
+        width: 500px;
+    }
+}
+@media(max-width: 400px) {
+    img.picture-big {
+        width: 350px;
+    }
+}
+@media(max-width: 450px) {
+    img.picture-big {
+        width: 350px;
+    }
+}
+@media(max-width: 360px) {
+    img.picture-big {
+        width: 250px;
+    }
+}
+
+@media(max-width: 320px) {
+    img.picture-big {
+        width: 200px;
+    }
+}
+
 div.leaflet-container {
     border-radius: 10px;
 }

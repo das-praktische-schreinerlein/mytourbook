@@ -95,9 +95,12 @@ export class SDocContentUtils {
             this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x100/' + image.fileName);
     }
 
+    getPreview(image: SDocImageRecord): string {
+        return this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName;
+    }
+
     getPreviewUrl(image: SDocImageRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName);
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getPreview(image));
     }
 
     getFullUrl(image: SDocImageRecord): SafeUrl {
