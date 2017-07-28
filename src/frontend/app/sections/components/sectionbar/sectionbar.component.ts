@@ -42,7 +42,7 @@ export class SectionBarComponent implements OnInit {
 
                 me.pdoc = data.pdoc.data;
                 me.themeFormGroup.patchValue({'theme': me.pdoc.theme});
-                this.pdocDataService.getById('sections', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
+                this.pdocDataService.getById('menu', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                         me.sections = me.getSubSections(pdoc);
                     }).catch(function onNotFound(error) {
                         me.sections = [];

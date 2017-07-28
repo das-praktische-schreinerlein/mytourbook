@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
         this.route.data.subscribe(
             (data: { pdocs: PDocRecord[] }) => {
                 me.sections = [];
-                this.pdocDataService.getById('sections', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
+                this.pdocDataService.getById('menu', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                     me.sections = me.getSubSections(pdoc);
                 }).catch(function onNotFound(error) {
                     me.sections = [];

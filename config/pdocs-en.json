@@ -9,8 +9,7 @@
    "name": "Start",
    "subSectionIds": "schwerpunkt",
    "teaser": "Welcome to MyTB",
-   "type": "SectionOverviewPage",
-   "theme": ""
+   "type": "SectionOverviewPage"
   },
   {
    "id": "impress",
@@ -22,6 +21,16 @@
    "subSectionIds": "",
    "teaser": "Impressum/Datenschutz - der rechtliche Teil",
    "type": "SimplePage"
+  },{
+   "id": "menu",
+   "desc": "Mainmenu",
+   "flgShowTopTen": false,
+   "flgShowSearch": false,
+   "heading": "Mainmenu",
+   "name": "Mainmenu",
+   "subSectionIds": "sections,locations",
+   "teaser": "Mainmenu",
+   "type": "SectionOverviewPage"
   },
   {
    "id": "sections",
@@ -32,6 +41,17 @@
    "name": "Sections",
    "subSectionIds": "schwerpunkt,aktiv,landschaft,kultur",
    "teaser": "The sections",
+   "type": "SectionOverviewPage"
+  },
+  {
+   "id": "locations",
+   "desc": "Locations",
+   "flgShowTopTen": false,
+   "flgShowSearch": false,
+   "heading": "Thats locations",
+   "name": "Locations",
+   "subSectionIds": "deutschland,alpen,usa",
+   "teaser": "Top locations",
    "type": "SectionOverviewPage"
   },
   {
@@ -152,6 +172,42 @@
    "type": "SectionPage",
    "image": "assets/images/theme-stadtbesichtigung.jpg",
    "theme": "Stadtbesichtigung"
+  },
+  {
+   "id": "deutschland",
+   "desc": "Find tour tips, reports and pictures in Deutschland...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Deutschand",
+   "name": "Deutschland",
+   "teaser": "Enjoy Deutschland...",
+   "type": "SectionPage",
+   "image": "",
+   "theme": "deutschland"
+  },
+  {
+   "id": "alpen",
+   "desc": "Find tour tips, reports and pictures in the Alpen...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Alpen",
+   "name": "Alpen",
+   "teaser": "Enjoy Alpen...",
+   "type": "SectionPage",
+   "image": "",
+   "theme": "alpen"
+  },
+  {
+   "id": "usa",
+   "desc": "Find tour tips, reports and pictures in USA...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "USA",
+   "name": "USA",
+   "teaser": "Enjoy USA...",
+   "type": "SectionPage",
+   "image": "",
+   "theme": "usa"
   }
  ]
 }

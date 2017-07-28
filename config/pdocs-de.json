@@ -9,8 +9,7 @@
    "name": "Start",
    "subSectionIds": "schwerpunkt",
    "teaser": "Willkommen bei MyTB",
-   "type": "SectionOverviewPage",
-   "theme": ""
+   "type": "SectionOverviewPage"
   },
   {
    "id": "impress",
@@ -24,6 +23,17 @@
    "type": "SimplePage"
   },
   {
+   "id": "menu",
+   "desc": "Hauptmenü",
+   "flgShowTopTen": false,
+   "flgShowSearch": false,
+   "heading": "Hauptmenü",
+   "name": "Hauptmenü",
+   "subSectionIds": "sections,locations",
+   "teaser": "Hauptmenü",
+   "type": "SectionOverviewPage"
+  },
+  {
    "id": "sections",
    "desc": "Die Themen",
    "flgShowTopTen": false,
@@ -32,6 +42,17 @@
    "name": "Themen",
    "subSectionIds": "schwerpunkt,aktiv,landschaft,kultur",
    "teaser": "Die Schwerpunkte",
+   "type": "SectionOverviewPage"
+  },
+  {
+   "id": "locations",
+   "desc": "Die Regionen",
+   "flgShowTopTen": false,
+   "flgShowSearch": false,
+   "heading": "Thats Regionen",
+   "name": "Regionen",
+   "subSectionIds": "deutschland,alpen,usa",
+   "teaser": "Die wichtigsten Regionen",
    "type": "SectionOverviewPage"
   },
   {
@@ -152,6 +173,42 @@
    "type": "SectionPage",
    "image": "assets/images/theme-stadtbesichtigung.jpg",
    "theme": "Stadtbesichtigung"
+  },
+  {
+   "id": "deutschland",
+   "desc": "Findet hier Tourentipps, Berichte und Bilder in Deutschland...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Deutschand",
+   "name": "Deutschland",
+   "teaser": "Erlebe Deutschland...",
+   "type": "SectionPage",
+   "image": "",
+   "theme": "deutschland"
+  },
+  {
+   "id": "alpen",
+   "desc": "Findet hier Tourentipps, Berichte und Bilder in den Alpen...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "Alpen",
+   "name": "Alpen",
+   "teaser": "Erlebe die Alpen...",
+   "type": "SectionPage",
+   "image": "",
+   "theme": "alpen"
+  },
+  {
+   "id": "usa",
+   "desc": "Findet hier Tourentipps, Berichte und Bilder in den USA...",
+   "flgShowTopTen": true,
+   "flgShowSearch": true,
+   "heading": "USA",
+   "name": "USA",
+   "teaser": "Erlebe die USA...",
+   "type": "SectionPage",
+   "image": "",
+   "theme": "usa"
   }
  ]
 }

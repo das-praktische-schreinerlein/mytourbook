@@ -37,5 +37,8 @@
  "Herbst": { "keywords_txt": { "in": ["kw_Herbst"] } },
  "Winter": { "keywords_txt": { "in": ["kw_Winter"] } },
  "Schnee": { "keywords_txt": { "in": ["kw_Schnee"] } },
- "Sonne": { "keywords_txt": { "in": ["kw_Sonne"] } }
+ "Sonne": { "keywords_txt": { "in": ["kw_Sonne"] } },
+ "deutschland": { "loc_lochirarchie_txt": { "in": ["deutschland"] } },
+ "alpen": { "loc_lochirarchie_txt": { "in": ["alpen"] } },
+ "usa": { "loc_lochirarchie_txt": { "in": ["usa"] } }
 }

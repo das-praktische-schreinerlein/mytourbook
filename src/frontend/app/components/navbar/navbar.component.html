@@ -2,7 +2,7 @@
     <button type="button" class="navbar-toggler navbar-toggler-right" (click)="isExpanded = !isExpanded" [attr.aria-expanded]="!isExpanded" aria-controls="navbarContent">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand mdl-navigation__link" routerLink="/" routerLinkActive="active">
+    <a class="navbar-brand mdl-navigation__link" routerLink="/pages/start" routerLinkActive="active">
         <img src="assets/images/banner.png" width="30" class="d-inline-block picture-thumbnail align-top">
         <span>{{ 'nav.brand.appName' | translate }}</span>
     </a>
@@ -10,39 +10,38 @@
     <div class="navbar-collapse collapse" id="navbarContent" [ngbCollapse]="!isExpanded">
         <ul class="nav navbar-nav" role="menu">
             <li class="nav-item">
-                <a class="nav-link mdl-navigation__link" routerLink="/pages/start" routerLinkActive="active" i18n="link home navBar|Link home navBar@@a.navBar.home">Home</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link mdl-navigation__link" routerLink="/sdoc/search/" routerLinkActive="active" i18n="link search navBar|Link search navBar@@a.navBar.search">Suche</a>
             </li>
 
             <ng-container *ngIf="sections !== undefined && sections.length > 0">
-                <li class="nav-item">
-                    <a class="nav-link mdl-navigation__link" routerLink="/sections/sections" routerLinkActive="active" i18n="link sections navBar|Link sections navBar@@a.navBar.sections">Themen</a>
-                </li>
-                <li class="nav-item dropdown" ngbDropdown>
-                    <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLinkThemen" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                <ng-container *ngFor="let menuSection of sections">
+                    <li class="nav-item">
+                        <a class="nav-link mdl-navigation__link" routerLink="/sections/{{menuSection.id}}" routerLinkActive="active">{{menuSection.name}}</a>
+                    </li>
+                    <li class="nav-item dropdown" ngbDropdown>
+                        <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLink{{menuSection.id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 
-                    <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLinkThemen" role="menu">
-                        <ng-container *ngFor="let section of sections">
-                            <ng-container [ngSwitch]="section.type">
-                                <ng-container *ngSwitchCase="'SectionOverviewPage'">
-                                    <div class="dropdown-divider"></div>
-                                    <li class="dropdown-item {{section.type}}"><a class="nav-link mdl-navigation__link" title="{{section.teaser}}" routerLink="/sections/{{section.id}}/" routerLinkActive="active">{{section.name}}</a>
-                                        <ul>
-                                            <ng-container *ngFor="let subSection of getSubSections(section)">
-                                                <li class="dropdown-item"><a class="nav-link mdl-navigation__link" title="{{subSection.teaser}}" routerLink="/sections/{{subSection.id}}/" routerLinkActive="active">{{subSection.name}}</a></li>
-                                            </ng-container>
-                                        </ul>
-                                    </li>
-                                </ng-container>
-                                <ng-container *ngSwitchDefault>
-                                    <li class="dropdown-item {{section.type}}"><a class="nav-link mdl-navigation__link" title="{{section.teaser}}" routerLink="/sections/{{section.id}}/" routerLinkActive="active">{{section.name}}</a></li>
+                        <ul class="dropdown-menu dropdown-menu-left" role="menu">
+                            <ng-container *ngFor="let section of getSubSections(menuSection)">
+                                <ng-container [ngSwitch]="section.type">
+                                    <ng-container *ngSwitchCase="'SectionOverviewPage'">
+                                        <div class="dropdown-divider"></div>
+                                        <li class="dropdown-item {{section.type}}"><a class="nav-link mdl-navigation__link" title="{{section.teaser}}" routerLink="/sections/{{section.id}}/" routerLinkActive="active">{{section.name}}</a>
+                                            <ul>
+                                                <ng-container *ngFor="let subSection of getSubSections(section)">
+                                                    <li class="dropdown-item"><a class="nav-link mdl-navigation__link" title="{{subSection.teaser}}" routerLink="/sections/{{subSection.id}}/" routerLinkActive="active">{{subSection.name}}</a></li>
+                                                </ng-container>
+                                            </ul>
+                                        </li>
+                                    </ng-container>
+                                    <ng-container *ngSwitchDefault>
+                                        <li class="dropdown-item {{section.type}}"><a class="nav-link mdl-navigation__link" title="{{section.teaser}}" routerLink="/sections/{{section.id}}/" routerLinkActive="active">{{section.name}}</a></li>
+                                    </ng-container>
                                 </ng-container>
                             </ng-container>
-                        </ng-container>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                </ng-container>
             </ng-container>
 
             <li class="nav-item">

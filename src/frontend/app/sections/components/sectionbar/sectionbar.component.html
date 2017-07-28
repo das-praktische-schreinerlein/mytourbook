@@ -4,19 +4,22 @@
             <div>
                 <div style="width: 200px;" class="float-right form-inline input-group input-group-sm">
                     <select class="form-control input-sm" name="theme" id="theme" formControlName="theme" (change)="onThemeChange()">
-                        <ng-container *ngFor="let section of sections">
-                            <ng-container [ngSwitch]="section.type">
-                                <ng-container *ngSwitchCase="'SectionOverviewPage'">
-                                    <optgroup label="{{section.name}}">
-                                        <ng-container *ngFor="let subSection of getSubSections(section)">
-                                            <option [value]="subSection.id">{{ subSection.name }}</option>
+                        <ng-container *ngFor="let mainSection of sections">
+                            <optgroup  label="{{mainSection.name}}">
+                                <ng-container *ngFor="let section of getSubSections(mainSection)">
+                                    <ng-container [ngSwitch]="section.type">
+                                        <ng-container *ngSwitchCase="'SectionOverviewPage'">
+                                            <option [value]="section.id" style="font-weight: bold">{{ section.name }}</option>
+                                            <ng-container *ngFor="let subSection of getSubSections(section)">
+                                                <option [value]="subSection.id">- {{ subSection.name }}</option>
+                                            </ng-container>
                                         </ng-container>
-                                    </optgroup>
+                                        <ng-container *ngSwitchDefault>
+                                            <option [value]="section.id">{{ section.name }}</option>
+                                        </ng-container>
+                                    </ng-container>
                                 </ng-container>
-                                <ng-container *ngSwitchDefault>
-                                    <option [value]="section.theme">{{ section.name }}</option>
-                                </ng-container>
-                            </ng-container>
+                            </optgroup>
                         </ng-container>
                     </select>
                 </div>
