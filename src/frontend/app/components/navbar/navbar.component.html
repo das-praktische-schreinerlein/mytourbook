@@ -1,4 +1,4 @@
-<nav class="navbar navbar-toggleable-sm navbar-light bg-faded mdl-navigation">
+<nav class="navbar navbar-toggleable-sm navbar-light bg-faded mdl-navigation hide-on-fullpage">
     <button type="button" class="navbar-toggler navbar-toggler-right" (click)="isExpanded = !isExpanded" [attr.aria-expanded]="!isExpanded" aria-controls="navbarContent">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -60,4 +60,9 @@
             </li>
         </ul>
     </div>
+</nav>
+<nav class="navbar-fullpage show-on-fullpage-block">
+    <button type="button" class="" (click)="doEndFullPage()">
+        <span>&#x25A3;</span>
+    </button>
 </nav>

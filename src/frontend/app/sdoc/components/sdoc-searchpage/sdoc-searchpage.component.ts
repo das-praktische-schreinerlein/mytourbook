@@ -68,6 +68,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                     this.searchForm = data.searchForm.data;
                     if (this.searchForm.perPage === 1) {
                         this.layout = Layout.PAGE;
+                        this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
+                            '.show-on-fullpage-block { display: block; }', 'fullPageStyle');
+                    } else {
+                        this.pageUtils.setGlobalStyle('.show-on-fullpage-block { display: none; }', 'fullPageStyle');
                     }
                     this.perPage = this.searchForm.perPage;
                     this.sort = this.searchForm.sort;
@@ -206,9 +210,6 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.layout = layout;
-        console.log('onLayoutChange: redirect to layout', layout.toString());
-        console.log('onLayoutChange: redirect to layout', Layout.PAGE.toString());
-        console.log('onLayoutChange: redirect to layout', layout.toString() === Layout.PAGE.toString());
         if (layout.toString() === Layout.PAGE.toString()) {
             this.onPerPageChange(1);
         } else if (this.perPage === 1) {

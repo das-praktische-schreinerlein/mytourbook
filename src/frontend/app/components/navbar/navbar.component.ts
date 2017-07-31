@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
+import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 
 @Component({
     selector: 'app-navbar',
@@ -14,7 +15,7 @@ export class NavbarComponent implements OnInit {
     public isExpanded = false;
 
     constructor(private route: ActivatedRoute, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private pdocDataService: PDocDataService) {
+                private pdocDataService: PDocDataService, private pageUtils: PageUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -41,5 +42,9 @@ export class NavbarComponent implements OnInit {
 
     getSubSections(pdoc: PDocRecord): PDocRecord[] {
         return this.pdocDataService.getSubDocuments(pdoc);
+    }
+
+    doEndFullPage() {
+        this.pageUtils.setGlobalStyle('.show-on-fullpage-block { display: none; }', 'fullPageStyle');
     }
 }

@@ -1,5 +1,5 @@
 <ng-container *ngIf="pdoc !== undefined">
-    <div [formGroup]="themeFormGroup" class="container content-container" *ngIf="pdoc.heading !== undefined && pdoc.heading.length > 0">
+    <div [formGroup]="themeFormGroup" class="container content-container hide-on-fullpage" *ngIf="pdoc.heading !== undefined && pdoc.heading.length > 0">
         <h5>{{pdoc.heading}}
             <div>
                 <div style="width: 200px;" class="float-right form-inline input-group input-group-sm">
