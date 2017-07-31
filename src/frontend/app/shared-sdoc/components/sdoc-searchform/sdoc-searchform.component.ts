@@ -239,30 +239,40 @@ export class SDocSearchformComponent implements OnInit {
             type: [(values.type ? values.type.split(/,/) : [])]
         });
 
+        const rawValues = this.searchFormGroup.getRawValue();
+
         this.optionsSelectWhen = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true);
-        this.optionsSelectWhere = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [], false);
-        this.optionsSelectWhat = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true);
-        this.optionsSelectActionType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getActionTypeValues(sdocSearchSearchResult), true, [], true)
-            .sort(function (a, b) {
-                if (a['count'] < b['count']) {
-                    return 1;
-                }
-                if (a['count'] > b['count']) {
-                    return -1;
-                }
-                return a.name.localeCompare(b.name);
-            });
+        this.optionsSelectWhere = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [], false),
+            rawValues['where']);
+        this.optionsSelectWhat = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true),
+            rawValues['what']);
+        this.optionsSelectActionType = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.searchFormUtils.getActionTypeValues(sdocSearchSearchResult), true, [], true)
+                .sort(function (a, b) {
+                    if (a['count'] < b['count']) {
+                        return 1;
+                    }
+                    if (a['count'] > b['count']) {
+                        return -1;
+                    }
+                    return a.name.localeCompare(b.name);
+                }),
+            rawValues['actiontype']);
         this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true)
-            .sort(function (a, b) {
-                return a.name.localeCompare(b.name);
-            });
-        this.optionsSelectTechRateOverall = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true);
+                this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true)
+                .sort(function (a, b) {
+                    return a.name.localeCompare(b.name);
+                });
+        this.optionsSelectTechRateOverall = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.searchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true),
+            rawValues['techRateOverall']);
         this.optionsSelectTechDataDistance = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getTechDataDistanceValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataAscent = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(

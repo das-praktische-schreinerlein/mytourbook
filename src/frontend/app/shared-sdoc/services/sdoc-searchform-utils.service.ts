@@ -124,4 +124,22 @@ export class SDocSearchFormUtils {
         return this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             values, withCount, removements, translate);
     }
+
+    moveSelectedToTop(options: IMultiSelectOption[], selected: any[]): IMultiSelectOption[] {
+        if (selected === undefined || selected.length < 1) {
+            return options;
+        }
+
+        const selectedOptions: IMultiSelectOption[] = [];
+        const otherOptions: IMultiSelectOption[] = [];
+        for (const option of options) {
+            if (selected.indexOf(option.id) >= 0) {
+                selectedOptions.push(option);
+            } else {
+                otherOptions.push(option);
+            }
+        }
+
+        return [].concat(selectedOptions, otherOptions);
+    }
 }
