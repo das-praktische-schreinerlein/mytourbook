@@ -24,6 +24,7 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 })
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
+    showLoadingSpinner = false;
     idValidationRule = new IdValidationRule(true);
     Layout = Layout;
 
@@ -249,7 +250,9 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         console.log('doSearch form:', this.searchForm);
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
+
         const me = this;
+        me.showLoadingSpinner = true;
         this.sdocDataService.search(this.searchForm).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult === undefined) {
                 console.log('empty searchResult', sdocSearchResult);
@@ -259,9 +262,11 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 me.searchResult = sdocSearchResult;
                 me.searchForm = sdocSearchResult.searchForm;
             }
+            me.showLoadingSpinner = false;
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:' + reason);
+            me.showLoadingSpinner = false;
         });
     }
 }

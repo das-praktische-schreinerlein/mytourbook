@@ -21,6 +21,8 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
 export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChanges {
     private initialized = false;
     private appStateSubscription: Subscription;
+
+    showLoadingSpinner = false;
     Layout = Layout;
 
     searchResult: SDocSearchResult;
@@ -125,6 +127,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     private doSearch() {
         console.log('doSearch form:', this.searchForm);
         const me = this;
+        me.showLoadingSpinner = true;
         this.sdocDataService.search(this.searchForm).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult === undefined) {
                 console.log('empty searchResult', sdocSearchResult);
@@ -134,9 +137,11 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
                 me.searchResult = sdocSearchResult;
                 me.searchForm = sdocSearchResult.searchForm;
             }
+            me.showLoadingSpinner = false;
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:' + reason);
+            me.showLoadingSpinner = false;
         });
     }
 }

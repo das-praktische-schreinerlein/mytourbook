@@ -1,5 +1,4 @@
 import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
-
 import 'leaflet';
 import 'leaflet.markercluster';
 import {GPX, MapElement} from '../../services/leaflet-gpx.plugin';
@@ -34,6 +33,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     initialized: boolean;
     map: L.Map;
     private featureGroup: L.MarkerClusterGroup;
+    private loadedMapElements: MapElement[];
 
     @Input()
     public mapId: string;
@@ -58,6 +58,9 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
 
     @Output()
     public mapElementClicked: EventEmitter<MapElement> = new EventEmitter();
+
+    @Output()
+    public mapElementsLoaded: EventEmitter<MapElement[]> = new EventEmitter();
 
     constructor(private http: Http) {
         this.gpxLoader = new GpxLoader(http, new GpxParser());
@@ -95,6 +98,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         if (this.featureGroup) {
             this.featureGroup.clearLayers();
         }
+        this.loadedMapElements = [];
 
         const center = this.center || new LatLng(43, 16);
         this.map.setView(center, this.zoom);
@@ -121,6 +125,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
                     });
 
                     me.map.fitBounds(me.featureGroup.getBounds());
+                    me.pushLoadedMapElement(loadedMapElement);
                 });
             } else if (mapElement.point) {
                 const pointFeature = new L.Marker(mapElement.point, {
@@ -134,7 +139,15 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
                 });
 
                 me.map.fitBounds(me.featureGroup.getBounds());
+                me.pushLoadedMapElement(mapElement);
             }
+        }
+    }
+
+    private pushLoadedMapElement(loadedMapElement: MapElement) {
+        this.loadedMapElements.push(loadedMapElement);
+        if (this.loadedMapElements.length === this.mapElements.length) {
+            this.mapElementsLoaded.emit(this.loadedMapElements);
         }
     }
 }

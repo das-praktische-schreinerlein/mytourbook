@@ -12,6 +12,7 @@ import LatLng = L.LatLng;
     templateUrl: './sdoc-map.component.html'
 })
 export class SDocMapComponent implements OnChanges {
+    showLoadingSpinner = false;
     mapElements: MapElement[] = [];
     mapElementsReverseMap = new Map<MapElement, SDocRecord>();
 
@@ -48,6 +49,10 @@ export class SDocMapComponent implements OnChanges {
         this.sdocClicked.emit(this.mapElementsReverseMap.get(mapElement));
     }
 
+    onMapElementsLoaded(mapElements: MapElement[]) {
+        this.showLoadingSpinner = false;
+    }
+
     renderMap() {
         this.mapElementsReverseMap.clear();
         if (!this.sdocs) {
@@ -77,5 +82,6 @@ export class SDocMapComponent implements OnChanges {
             }
         }
         this.mapElements = Array.from(this.mapElementsReverseMap.keys());
+        this.showLoadingSpinner = true;
     }
 }

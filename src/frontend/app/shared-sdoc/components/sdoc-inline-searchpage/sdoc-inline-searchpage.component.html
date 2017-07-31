@@ -1,5 +1,6 @@
-<div *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0">
-    <div class="container inline-content-container">
+<div *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0 || showLoadingSpinner">
+    <div class="container inline-content-container relative-container">
+        <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
         <div class="container">
             <h5 class="">{{label}}: {{ searchResult.recordCount }}</h5>
             <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined">{{searchLinkLabel}}</a>

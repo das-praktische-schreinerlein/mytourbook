@@ -1,6 +1,7 @@
 <ng-container [ngSwitch]="layout">
     <ng-container *ngSwitchCase="Layout.PAGE">
-        <div>
+        <div class="relative-container">
+            <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
             <div class="container content-container">
                 <div class="container">
                     <app-sdoc-list-header [searchResult]="searchResult"
@@ -21,7 +22,8 @@
         </div>
     </ng-container>
     <ng-container *ngSwitchDefault="">
-        <div>
+        <div class="relative-container">
+            <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
             <div class="container content-container">
                 <div class="container">
                     <app-sdoc-searchform [searchResult]="searchResult"
