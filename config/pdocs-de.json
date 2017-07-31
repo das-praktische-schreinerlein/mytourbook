@@ -149,7 +149,8 @@
    "teaser": "Lange [Sandstrände](), steile [Felsküsten](), blaues Meer.",
    "type": "SectionPage",
    "image": "assets/images/theme-meer.jpg",
-   "theme": "Meer"
+   "theme": "Meer",
+   "css": "body {background: linear-gradient(to right, #8cacd3 0%,#2989d8 50%,#468ec9 51%,#7db9e8 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
   },
   {
    "id": "Museen",
