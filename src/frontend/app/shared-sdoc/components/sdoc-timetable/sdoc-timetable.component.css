@@ -1,0 +1,12 @@
+div.timetable-column {
+    width: 8.33%;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 0.75em;
+    white-space: nowrap;
+    overflow: hidden;
+}
+div.timetable-column-active {
+    background-color: lightgreen;
+    font-weight: bold;
+}

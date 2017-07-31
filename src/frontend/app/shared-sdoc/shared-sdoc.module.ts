@@ -26,6 +26,7 @@ import {SDocRateTechComponent} from './components/sdoc-ratetech/sdoc-ratetech.co
 import {SDocDataTechComponent} from './components/sdoc-datatech/sdoc-datatech.component';
 import {SDocRatePersonalComponent} from './components/sdoc-ratepers/sdoc-ratepers.component';
 import {SDocListItemPageComponent} from './components/sdoc-list-item-page/sdoc-list-item-page.component';
+import {SDocTimetableComponent} from './components/sdoc-timetable/sdoc-timetable.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +47,8 @@ import {SDocListItemPageComponent} from './components/sdoc-list-item-page/sdoc-l
         SDocLinkedLocHierarchyComponent,
         SDocDataTechComponent,
         SDocRatePersonalComponent,
-        SDocRateTechComponent
+        SDocRateTechComponent,
+        SDocTimetableComponent
     ],
     imports: [
         ToastModule,
@@ -82,7 +84,8 @@ import {SDocListItemPageComponent} from './components/sdoc-list-item-page/sdoc-l
         SDocLinkedLocHierarchyComponent,
         SDocDataTechComponent,
         SDocRatePersonalComponent,
-        SDocRateTechComponent
+        SDocRateTechComponent,
+        SDocTimetableComponent
     ]
 })
 export class SharedSDocModule {}

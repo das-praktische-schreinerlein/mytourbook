@@ -33,6 +33,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     public showForm = false;
 
     @Input()
+    public showTimetable? = false;
+
+    @Input()
     public showOnlyIfRecordsFound = true;
 
     @Input()

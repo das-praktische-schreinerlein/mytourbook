@@ -84,3 +84,7 @@ div.leaflet-div-icon-end, div.leaflet-div-icon-start, div.leaflet-div-icon-point
     white-space: nowrap;
     width: 100px !IMPORTANT;
 }
+
+.show-on-fullpage-block {
+    display: none;
+}

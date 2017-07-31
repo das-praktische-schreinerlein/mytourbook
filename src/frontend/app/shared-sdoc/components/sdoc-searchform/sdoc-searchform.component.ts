@@ -7,7 +7,6 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoCoder} from 'geo-coder';
-import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 @Component({
     selector: 'app-sdoc-searchform',

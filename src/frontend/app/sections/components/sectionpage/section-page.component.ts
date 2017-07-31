@@ -13,7 +13,6 @@ import {IdValidationRule} from '../../../../shared/search-commons/model/forms/ge
 import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {PageUtils} from '../../../../../shared/angular-commons/services/page.utils';
-import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-sectionpage',

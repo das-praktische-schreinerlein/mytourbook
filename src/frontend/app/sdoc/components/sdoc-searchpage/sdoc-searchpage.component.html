@@ -37,6 +37,9 @@
                                   (centerChanged)="onMapCenterChanged($event)"
                                   [mapCenterPos]="mapCenterPos"></app-sdoc-map>
                 </div>
+                <div class="container" *ngIf="searchResult.recordCount > 0">
+                    <app-sdoc-timetable [searchResult]="searchResult"></app-sdoc-timetable>
+                </div>
             </div>
             <div class="container content-container">
                 <div class="container">

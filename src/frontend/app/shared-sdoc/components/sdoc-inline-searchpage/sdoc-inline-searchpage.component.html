@@ -8,6 +8,9 @@
             <app-sdoc-searchform [searchResult]="searchResult"
                                  (search)="onSearchSDoc($event)"></app-sdoc-searchform>
         </div>
+        <div class="container" *ngIf="showTimetable">
+            <app-sdoc-timetable [searchResult]="searchResult"></app-sdoc-timetable>
+        </div>
         <div class="container">
             <app-sdoc-list [searchResult]="searchResult"
                            [layout]="layout"

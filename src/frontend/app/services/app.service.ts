@@ -1,6 +1,6 @@
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
-import {Http, Jsonp} from '@angular/http';
+import {Http} from '@angular/http';
 import {SDocDataStore} from '../../shared/sdoc-commons/services/sdoc-data.store';
 import {environment} from '../../environments/environment';
 import {AppState, GenericAppService} from '../../shared/search-commons/services/generic-app.service';

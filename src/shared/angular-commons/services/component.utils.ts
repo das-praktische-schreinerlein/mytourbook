@@ -9,9 +9,12 @@ export class ComponentUtils {
             const to = changedProp.currentValue;
             if (changedProp.isFirstChange()) {
                 // console.log(`Initial value of ${propName} set to ${to}`);
-                return changed = true;
+                return true;
             } else {
                 const from = changedProp.previousValue;
+                if (from.id !== to.id) {
+                    return true;
+                }
                 if (!deepEqual(from, to)) {
                     // console.log(`${propName} changed from ${from} to ${to}`);
                     return true;

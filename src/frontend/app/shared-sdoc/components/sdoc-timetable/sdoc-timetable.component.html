@@ -1,0 +1,7 @@
+<div class="row">
+        <ng-container *ngFor="let column of columns">
+                <div [ngClass]="{'timetable-column-active': column.value > 0 }" class="timetable-column {{column.class}}" style="width: {{column.width}}">{{column.label}}
+                        <span *ngIf="column.value > 0"><br />{{column.value}}</span>
+                </div>
+        </ng-container>
+</div>
