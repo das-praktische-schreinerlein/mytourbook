@@ -1,7 +1,12 @@
 <div class="row">
         <ng-container *ngFor="let column of columns">
-                <div [ngClass]="{'timetable-column-active': column.value > 0 }" class="timetable-column {{column.class}}" style="width: {{column.width}}">{{column.label}}
-                        <span *ngIf="column.value > 0"><br />{{column.value}}</span>
+                <div class="timetable-column" style="width: {{column.width}}">
+                        <div class="timetable-column-header {{column.class}}">
+                                {{column.label}}
+                        </div>
+                        <div [ngClass]="{'timetable-column-active': column.value > 0 }" class="timetable-column-value">
+                                <span *ngIf="column.value > 0">{{column.value}}</span>
+                        </div>
                 </div>
         </ng-container>
 </div>
