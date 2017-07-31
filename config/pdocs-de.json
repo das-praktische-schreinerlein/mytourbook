@@ -76,7 +76,8 @@
    "subSectionIds": "Museen,Stadtbesichtigung",
    "teaser": "Stadt, Spaziergänge, Museen Parks, Zoos für den 'Homo Saphiens Urbanus'...",
    "type": "SectionOverviewPage",
-   "image": "assets/images/theme-kultur.jpg"
+   "image": "assets/images/theme-kultur.jpg",
+   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
   },
   {
    "id": "aktiv",
@@ -160,7 +161,8 @@
    "teaser": "Ob nun [Geschichte]() oder [Kunst]().",
    "type": "SectionPage",
    "image": "assets/images/theme-museen.jpg",
-   "theme": "Museen"
+   "theme": "Museen",
+   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
   },
   {
    "id": "Stadtbesichtigung",
@@ -172,7 +174,8 @@
    "teaser": "Stadtbesichtigungen in den Großstädten der Welt...",
    "type": "SectionPage",
    "image": "assets/images/theme-stadtbesichtigung.jpg",
-   "theme": "Stadtbesichtigung"
+   "theme": "Stadtbesichtigung",
+   "css": "body {background: linear-gradient(to right, #FCEBBF 0%, #FFFFFF 49%, #FCEBBF 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);}"
   },
   {
    "id": "deutschland",

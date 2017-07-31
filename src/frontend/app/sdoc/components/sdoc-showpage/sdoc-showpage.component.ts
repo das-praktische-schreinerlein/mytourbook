@@ -55,6 +55,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                             {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
                         this.pageUtils.setRobots(false, false);
                     } else {
+                        me.pageUtils.setGlobalStyle('', 'sectionStyle');
                         this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
                             {sdoc: recordName}, recordName);
                         this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',

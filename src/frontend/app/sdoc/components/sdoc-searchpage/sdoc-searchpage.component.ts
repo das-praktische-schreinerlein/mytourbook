@@ -86,6 +86,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                             {title: me.pdoc.heading, teaser: me.pdoc.teaser}, me.pdoc.teaser);
                         this.pageUtils.setRobots(false, false);
                     } else {
+                        me.pageUtils.setGlobalStyle('', 'sectionStyle');
                         this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSearchPage',
                             {}, 'Search');
                         this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSearchPage',

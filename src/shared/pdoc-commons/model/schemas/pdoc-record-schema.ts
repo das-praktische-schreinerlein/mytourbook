@@ -8,6 +8,7 @@ export const PDocRecordSchema = new Schema({
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
+        css: {type: 'string'},
         desc: {type: 'string'},
         flgShowSearch: {type: 'boolean'},
         flgShowTopTen: {type: 'boolean'},

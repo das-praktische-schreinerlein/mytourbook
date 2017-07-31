@@ -7,6 +7,7 @@ import {FormBuilder} from '@angular/forms';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 @Component({
     selector: 'app-sectionbar',
@@ -23,7 +24,8 @@ export class SectionBarComponent implements OnInit {
     });
 
     constructor(public fb: FormBuilder, private route: ActivatedRoute, private pdocDataService: PDocDataService,
-                private router: Router, private errorResolver: ErrorResolver, private toastr: ToastsManager, vcr: ViewContainerRef) {
+                private router: Router, private errorResolver: ErrorResolver, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private pageUtils: PageUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -42,6 +44,9 @@ export class SectionBarComponent implements OnInit {
 
                 me.pdoc = data.pdoc.data;
                 me.themeFormGroup.patchValue({'theme': me.pdoc.theme});
+
+                me.pageUtils.setGlobalStyle(me.pdoc.css, 'sectionStyle');
+
                 this.pdocDataService.getById('menu', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                         me.sections = me.getSubSections(pdoc);
                     }).catch(function onNotFound(error) {

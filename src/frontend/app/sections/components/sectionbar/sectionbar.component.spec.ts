@@ -11,6 +11,7 @@ import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {FormBuilder} from '@angular/forms';
 import {ErrorResolver} from '../../resolver/error.resolver';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -34,7 +35,8 @@ describe('SectionBarComponent', () => {
                 ToastsManager,
                 TranslateService,
                 ErrorResolver,
-                SDocRoutingService
+                SDocRoutingService,
+                PageUtils
             ]
         })
             .compileComponents();

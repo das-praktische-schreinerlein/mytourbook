@@ -1,6 +1,7 @@
 import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
 
 export class PDocRecord extends BaseEntityRecord {
+    css: string;
     desc: string;
     flgShowSearch: boolean;
     flgShowTopTen: boolean;

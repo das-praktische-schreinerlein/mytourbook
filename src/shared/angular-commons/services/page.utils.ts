@@ -1,11 +1,12 @@
-import {Meta, Title} from '@angular/platform-browser';
+import {DOCUMENT, Meta, Title} from '@angular/platform-browser';
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class PageUtils {
     public constructor(private titleService: Title, private metaService: Meta,
-                       @Inject(LOCALE_ID) private locale: string, private translateService: TranslateService) { }
+                       @Inject(LOCALE_ID) private locale: string, private translateService: TranslateService,
+                       @Inject(DOCUMENT) private document) { }
 
     public setTranslatedTitle(key: string, values: any, defaultValue: string) {
         this.setTitle(this.translateService.instant(key, values) || defaultValue);
@@ -46,5 +47,27 @@ export class PageUtils {
         const selector = 'name="language"';
         this.metaService.removeTag(selector);
         this.metaService.addTag({ name: 'language', content: this.locale});
+    }
+
+
+    public setGlobalStyle(style: string, id: string) {
+        this.removeGlobalStyle(id);
+
+        const element = this.document.createElement('style');
+        element.setAttribute('id', id);
+        element.setAttribute('type', 'text/css');
+        element.innerHTML = style ? style : '';
+
+        const body = this.document.getElementsByTagName('body')[0];
+        body.appendChild(element);
+        return element;
+    }
+
+    public removeGlobalStyle(id: string) {
+        const element = this.document.getElementById(id);
+        if (!element) {
+            return;
+        }
+        element.remove();
     }
 }
