@@ -34,6 +34,7 @@ export class SDocListComponent implements OnChanges {
     public Layout = Layout;
 
     private lightboxAlbum = [];
+    private lightboxAlbumPos = {};
 
     constructor(private searchFormConverter: SDocSearchFormConverter, private contentUtils: SDocContentUtils, private lightbox: Lightbox) {
     }
@@ -50,9 +51,11 @@ export class SDocListComponent implements OnChanges {
                     const image = {
                         src: src,
                         caption: caption,
-                        thumb: thumb
+                        thumb: thumb,
+                        id: record.id
                     };
                     newlightboxAlbum.push(image);
+                    this.lightboxAlbumPos[record.id] = newlightboxAlbum.length - 1;
                 }
             }
             this.lightboxAlbum = newlightboxAlbum;
@@ -66,7 +69,7 @@ export class SDocListComponent implements OnChanges {
 
     onShowImage(record: SDocRecord) {
         if (record.type === 'IMAGE') {
-            this.lightbox.open(this.lightboxAlbum, 0);
+            this.lightbox.open(this.lightboxAlbum, this.lightboxAlbumPos[record.id] || 0);
         } else {
             this.show.emit(record);
         }

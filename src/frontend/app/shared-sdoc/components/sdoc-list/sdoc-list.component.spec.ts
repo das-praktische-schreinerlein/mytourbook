@@ -9,7 +9,7 @@ import {SearchParameterUtils} from '../../../../shared/search-commons/services/s
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
-import { Lightbox } from 'angular2-lightbox';
+import { Lightbox, LightboxConfig, LightboxEvent } from 'angular2-lightbox';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -25,6 +25,8 @@ describe('SDocListComponent', () => {
                 SDocSearchFormConverter,
                 SDocContentUtils,
                 Lightbox,
+                LightboxConfig,
+                LightboxEvent,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],
