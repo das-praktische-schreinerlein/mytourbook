@@ -31,6 +31,9 @@ export class SDocMapComponent implements OnChanges {
     @Input()
     public mapZoom: number;
 
+    @Input()
+    public showImageTrackAndGeoPos? = false;
+
     @Output()
     public centerChanged: EventEmitter<L.LatLng> = new EventEmitter();
 
@@ -64,7 +67,12 @@ export class SDocMapComponent implements OnChanges {
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
             const trackUrl = record.gpsTrackBasefile;
-            if (trackUrl !== undefined && trackUrl.length > 0) {
+
+            const isImage = record.type === 'IMAGE';
+            const showTrack = trackUrl !== undefined && trackUrl.length > 0 && (!isImage || this.showImageTrackAndGeoPos);
+            const showGeoPos = record.geoLat && record.geoLon && (!showTrack || isImage);
+
+            if (showTrack) {
                 const mapElement: MapElement = {
                     id: record.id,
                     name: record.name,
@@ -72,7 +80,8 @@ export class SDocMapComponent implements OnChanges {
                     popupContent: '<b>' + record.type + ': ' + record.name + '</b>'
                 };
                 this.mapElementsReverseMap.set(mapElement, record);
-            } else if (record.geoLat && record.geoLon) {
+            }
+            if (showGeoPos) {
                 const mapElement: MapElement = {
                     id: record.id,
                     name: record.name,

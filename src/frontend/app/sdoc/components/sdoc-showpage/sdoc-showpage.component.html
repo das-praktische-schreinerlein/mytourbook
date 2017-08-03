@@ -53,11 +53,12 @@
             </div>
     </div>
 
-    <div class="container content-container" *ngIf="record.gpsTrackBasefile || record.geoLoc !== undefined">
+    <div class="container content-container" *ngIf="tracks !== undefined && tracks.length > 0">
         <app-sdoc-map [mapId]="'showMap'"
                       [height]="'400px'"
                       [mapZoom]="'9'"
-                      [sdocs]="[record]"
+                      [sdocs]="tracks"
+                      [showImageTrackAndGeoPos]="'true'"
                       [mapCenterPos]="undefined"></app-sdoc-map>
     </div>
 
@@ -81,6 +82,7 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [showForm]="false"
                                             [showTimetable]="'true'"
+                                            (searchResultFound)="onTracksFound($event)"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
@@ -199,6 +201,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"

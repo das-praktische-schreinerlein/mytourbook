@@ -15,6 +15,7 @@
             <field column="k_id" name="id"/>
             <field column="k_id" name="track_id_i"/>
             <field column="tr_id" name="trip_id_i"/>
+            <field column="tr_id" name="trip_id_is"/>
             <field column="t_id" name="route_id_i"/>
             <field column="t_id" name="route_id_is"/>
             <field column="l_id" name="loc_id_i"/>
@@ -154,10 +155,11 @@
                 <field column="i_url" name="i_fav_url_txt" />
             </entity>
             <entity name='bericht'
-                    query="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id in (${route.t_k_ids} 0) or k_id in (${route.k_id}) order by k_datevon asc"
-                    deltaImportQuery="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id=dih.delta.id}'"
+                    query="select tr_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id in (${route.t_k_ids} 0) or k_id in (${route.k_id}) order by k_datevon asc"
+                    deltaImportQuery="select tr_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id=dih.delta.id}'"
                     deltaQuery="SELECT k_id from kategorie_full'"
             >
+                <field column="tr_id" name="trip_id_is"/>
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
@@ -216,10 +218,11 @@
                 <field column="actiontype" name="actiontype_ss" />
             </entity>
             <entity name='bericht'
-                    query="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id in (${location.l_katids} 0) order by k_datevon asc"
-                    deltaImportQuery="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id=dih.delta.id}'"
+                    query="select tr_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id in (${location.l_katids} 0) order by k_datevon asc"
+                    deltaImportQuery="select tr_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month from kategorie_full where k_id=dih.delta.id}'"
                     deltaQuery="SELECT k_id from kategorie_full'"
             >
+                <field column="tr_id" name="trip_id_is"/>
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
@@ -286,9 +289,9 @@
                 deltaQuery="SELECT tr_id from trip where tr_id in (select tr_id from kategorie_full) order by tr_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
+            <field column="l_id" name="loc_id_i"/>
             <field column="tr_id" name="id"/>
             <field column="tr_id" name="trip_id_i"/>
-            <field column="l_id" name="loc_id_i"/>
 
             <!-- strip html-->
             <field column="tr_name" name="name_s" stripHTML="true" />
@@ -323,10 +326,11 @@
                 <field column="actiontype" name="actiontype_ss" />
             </entity>
             <entity name='bericht'
-                    query="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month, t_id, k_keywords, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id and tr_id in (${trip.tr_id}) order by k_datevon asc"
-                    deltaImportQuery="select k_datevon, week(k_datevon) AS week, month(k_datevon) as month, t_id, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id and k_id=dih.delta.id}'"
+                    query="select kategorie_full.l_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, t_id, k_keywords, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id and tr_id in (${trip.tr_id}) order by k_datevon asc"
+                    deltaImportQuery="select kategorie_full.l_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, t_id, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id and k_id=dih.delta.id}'"
                     deltaQuery="SELECT k_id from kategorie_full'"
             >
+                <field column="l_id" name="loc_id_i"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />

@@ -13,6 +13,7 @@ import {IdValidationRule} from '../../../../shared/search-commons/model/forms/ge
 import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -26,6 +27,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     public Layout = Layout;
     pdoc: PDocRecord;
     baseSearchUrl: string;
+    tracks: SDocRecord[] = [];
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
@@ -46,6 +48,12 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     me.record = data.record.data;
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
                     me.baseSearchUrl = data.baseSearchUrl.data;
+
+                    if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined) {
+                        me.tracks = [me.record];
+                    } else {
+                        me.tracks = [];
+                    }
 
                     const recordName = me.idValidationRule.sanitize(me.record.name);
                     if (me.pdoc) {
@@ -136,6 +144,18 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         );
     }
 
+    onTracksFound(searchresult: SDocSearchResult) {
+        const realTracks = [];
+        if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
+            for (const record of searchresult.currentRecords) {
+                if (record.gpsTrackBasefile || record.geoLoc !== undefined) {
+                    realTracks.push(record);
+                }
+            }
+        }
+        this.tracks = realTracks;
+    }
+
     ngOnDestroy() {
     }
 
@@ -220,7 +240,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 filters['perPage'] = 99;
                 filters['sort'] = 'dateAsc';
             } else {
-                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['moreFilter'] = 'trip_id_is:' + record.tripId;
             }
         }
 

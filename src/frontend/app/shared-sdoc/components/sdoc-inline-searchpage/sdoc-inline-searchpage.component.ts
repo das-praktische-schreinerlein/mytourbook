@@ -55,6 +55,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 
+    @Output()
+    public searchResultFound: EventEmitter<SDocSearchResult> = new EventEmitter();
+
     constructor(private appService: GenericAppService, private router: Router,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -129,19 +132,23 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         const me = this;
         me.showLoadingSpinner = true;
         this.sdocDataService.search(this.searchForm).then(function doneSearch(sdocSearchResult) {
+            me.showLoadingSpinner = false;
             if (sdocSearchResult === undefined) {
                 console.log('empty searchResult', sdocSearchResult);
+                me.searchResult = new SDocSearchResult(me.searchForm, 0, [], new Facets());
             } else {
                 console.log('update searchResult', sdocSearchResult);
                 me.initialized = true;
                 me.searchResult = sdocSearchResult;
                 me.searchForm = sdocSearchResult.searchForm;
             }
-            me.showLoadingSpinner = false;
+            me.searchResultFound.emit(me.searchResult);
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:' + reason);
             me.showLoadingSpinner = false;
+            me.searchResult = new SDocSearchResult(me.searchForm, 0, [], new Facets());
+            me.searchResultFound.emit(me.searchResult);
         });
     }
 }
