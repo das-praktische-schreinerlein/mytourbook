@@ -6,6 +6,7 @@
                                       [layout]="layout"
                                       [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                       (show)="onShow($event)"
+                                      (showImage)="onShowImage($event)"
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-page>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.SMALL">
@@ -14,6 +15,7 @@
                                 [layout]="layout"
                                 [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                 (show)="onShow($event)"
+                                (showImage)="onShowImage($event)"
                                 *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-small>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.FLAT">
@@ -22,6 +24,7 @@
                                       [layout]="layout"
                                       [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                       (show)="onShow($event)"
+                                      (showImage)="onShowImage($event)"
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-flat>
         </ng-container>
         <ng-container *ngSwitchDefault>
@@ -30,6 +33,7 @@
                                 [layout]="layout"
                                 [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                 (show)="onShow($event)"
+                                (showImage)="onShowImage($event)"
                                 *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item>
         </ng-container>
     </ng-container>

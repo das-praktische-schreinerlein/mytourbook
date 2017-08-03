@@ -25,12 +25,20 @@ export class SDocListItemSmallComponent {
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 
+    @Output()
+    public showImage: EventEmitter<SDocRecord> = new EventEmitter();
+
     constructor(private sanitizer: DomSanitizer, private sdocRoutingService: SDocRoutingService, contentUtils: SDocContentUtils) {
         this.contentUtils = contentUtils;
     }
 
     public submitShow(sdoc: SDocRecord) {
         this.show.emit(sdoc);
+        return false;
+    }
+
+    public submitShowImage(sdoc: SDocRecord) {
+        this.showImage.emit(sdoc);
         return false;
     }
 

@@ -92,9 +92,12 @@ export class SDocContentUtils {
         return record['sdocimages'].filter((item, index) => index < 10);
     }
 
+    getThumbnail(image: SDocImageRecord): string {
+        return this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x100/' + image.fileName;
+    }
+
     getThumbnailUrl(image: SDocImageRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x100/' + image.fileName);
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getThumbnail(image));
     }
 
     getPreview(image: SDocImageRecord): string {

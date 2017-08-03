@@ -3,7 +3,10 @@
         <ng-container [ngSwitch]="record.type">
             <ng-container *ngSwitchDefault="">
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <img class="picture-thumbnail" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                    <img class="picture-thumbnail" width="50px"
+                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
+                         (click)="submitShowImage(record)"
+                         alt="{{record.sdocimages[0].name}}">
                 </ng-container>
             </ng-container>
         </ng-container>
@@ -33,7 +36,10 @@
         <ng-container [ngSwitch]="record.type">
             <ng-container *ngSwitchDefault="">
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <img class="picture-thumbnail" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                    <img class="picture-thumbnail" width="50px"
+                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
+                         (click)="submitShowImage(record)"
+                         alt="{{record.sdocimages[0].name}}">
                 </ng-container>
             </ng-container>
         </ng-container>

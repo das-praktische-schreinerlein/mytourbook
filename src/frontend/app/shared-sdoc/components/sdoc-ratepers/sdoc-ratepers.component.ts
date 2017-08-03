@@ -24,6 +24,7 @@ export class SDocRatePersonalComponent implements OnChanges {
     }
 
     calcRate(rate: number): number {
+        // TODO: move to Service
         return Math.round((rate / 3) + 0.5);
     }
 

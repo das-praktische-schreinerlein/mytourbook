@@ -5,7 +5,10 @@
                 <div style="width: 100px; float: left">
                     <h5>{{record.type | translate }}</h5>
                     <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                        <img class="picture-thumbnail-big" width="100px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                        <img class="picture-thumbnail-big" width="100px"
+                             [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
+                             (click)="submitShowImage(record)"
+                             alt="{{record.sdocimages[0].name}}">
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
@@ -24,7 +27,10 @@
                     <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
                     <h5>{{record.subtype | translate }}</h5>
                     <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                        <img class="picture-thumbnail" width="50px" [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
+                             (click)="submitShowImage(record)"
+                             alt="{{record.sdocimages[0].name}}">
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.name}}</h5></a>

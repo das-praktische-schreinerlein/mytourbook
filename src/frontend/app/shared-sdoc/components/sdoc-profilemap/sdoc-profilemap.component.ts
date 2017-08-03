@@ -35,6 +35,7 @@ export class SDocProfileMapComponent implements OnChanges {
             return;
         }
 
+        // TODO: move to Service
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
             const trackUrl = record.gpsTrackBasefile;

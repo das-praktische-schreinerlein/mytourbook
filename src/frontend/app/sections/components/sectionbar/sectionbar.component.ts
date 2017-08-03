@@ -58,6 +58,7 @@ export class SectionBarComponent implements OnInit {
     }
 
     onThemeChange() {
+        // TODO: move to Service
         let url = this.router.url;
         const newUrl = '/sections/' + this.idValidationRule.sanitize(this.themeFormGroup.getRawValue()['theme']);
         url = url.replace('\/sections\/' + this.pdoc.id, newUrl);

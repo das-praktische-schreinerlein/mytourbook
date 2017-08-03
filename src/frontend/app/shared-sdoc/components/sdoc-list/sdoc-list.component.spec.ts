@@ -6,6 +6,10 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import { Lightbox } from 'angular2-lightbox';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -19,6 +23,9 @@ describe('SDocListComponent', () => {
             ],
             providers: [
                 SDocSearchFormConverter,
+                SDocContentUtils,
+                Lightbox,
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],
             schemas: [NO_ERRORS_SCHEMA]
