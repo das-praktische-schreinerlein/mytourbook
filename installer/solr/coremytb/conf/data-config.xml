@@ -281,9 +281,9 @@
 
         <entity name="trip"
                 pk="id"
-                query="select 'TRIP' as type, concat('TRIP', '_', tr_id) as id, tr_id, tr_datevon, tr_name, tr_meta_shortdesc from trip order by tr_datevon"
-                deltaImportQuery="select 'TRIP' as type, concat('TRIP', '_', tr_id) as id, tr_id, tr_datevon, tr_name, tr_meta_shortdesc from trip WHERE tr_id='${dih.delta.id}'"
-                deltaQuery="SELECT tr_id from trip order by tr_id'"
+                query="select 'TRIP' as type, concat('TRIP', '_', tr_id) as id, tr_id, tr_datevon, DATE_FORMAT (tr_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, tr_name, tr_meta_shortdesc, concat(tr_name, ' ', tr_meta_shortdesc) as html from trip where tr_id in (select tr_id from kategorie_full) order by tr_datevon"
+                deltaImportQuery="select 'TRIP' as type, concat('TRIP', '_', tr_id) as id, tr_id, tr_datevon, DATE_FORMAT (tr_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, tr_name, tr_meta_shortdesc, concat(tr_name, ' ', tr_meta_shortdesc) as html from trip WHERE tr_id='${dih.delta.id}'"
+                deltaQuery="SELECT tr_id from trip where tr_id in (select tr_id from kategorie_full) order by tr_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="tr_id" name="id"/>
@@ -296,7 +296,10 @@
             <!-- strip html and replace \n and doubled whitespaces -->
             <field column="tr_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="tr_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
             <field column="tr_datevon" name="date_dt" />
+            <field column="dateonly" name="dateonly_s" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
 
