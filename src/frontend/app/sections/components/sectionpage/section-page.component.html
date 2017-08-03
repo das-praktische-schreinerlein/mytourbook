@@ -69,6 +69,19 @@
                                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
+                <ngb-tab title="Trips">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Trips'"
+                                                    i18n-label="label section-page TRIP|Label section-page TRIP@@linline-search.label.sdoc.TRIP"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page TRIP|SearchLinkLabel section-page TRIP@@linline-search.searchLinkLabel.sdoc.TRIP"
+                                                    [baseSearchUrl]="baseSearchUrl"
+                                                    [params]="getFiltersForType(pdoc, 'TRIP')"
+                                                    [showForm]="false"
+                                                    [layout]="Layout.FLAT"
+                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
                 <ngb-tab title=Alles>
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Alles'"

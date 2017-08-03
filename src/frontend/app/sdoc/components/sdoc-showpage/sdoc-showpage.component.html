@@ -90,6 +90,13 @@
                                             [showTimetable]="'true'"
                                             [layout]="Layout.SMALL"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Trips'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
+                                            [params]="getFiltersForType(record, 'TRIP')"
+                                            [showForm]="false"
+                                            [showTimetable]="'true'"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
@@ -112,6 +119,13 @@
                                             [showTimetable]="'true'"
                                             [layout]="Layout.SMALL"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Trips'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
+                                            [params]="getFiltersForType(record, 'TRIP')"
+                                            [showForm]="false"
+                                            [showTimetable]="'true'"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
@@ -121,6 +135,12 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRACK'">
+                <app-sdoc-inline-searchpage [label]="'Trip'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
+                                            [params]="getFiltersForType(record, 'TRIP')"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Region'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
@@ -141,7 +161,13 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'IMAGE'">
-                <app-sdoc-inline-searchpage [label]="'Regionen'"
+                <app-sdoc-inline-searchpage [label]="'Trip'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
+                                            [params]="getFiltersForType(record, 'TRIP')"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Region'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
                                             [showForm]="false"
@@ -158,6 +184,33 @@
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [showForm]="false"
                                             [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+            </ng-container>
+            <ng-container *ngSwitchCase="'TRIP'">
+                <app-sdoc-inline-searchpage [label]="'Region'"
+                                            i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
+                                            [params]="getFiltersForType(record, 'LOCATION')"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Tracks'"
+                                            i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
+                                            [params]="getFiltersForType(record, 'TRACK')"
+                                            [showForm]="false"
+                                            [showTimetable]="'true'"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Routen'"
+                                            i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
+                                            [params]="getFiltersForType(record, 'ROUTE')"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Bilder'"
+                                            i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
+                                            [params]="getFiltersForType(record, 'IMAGE')"
+                                            [showForm]="false"
+                                            [layout]="Layout.SMALL"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
         </ng-container>

@@ -149,40 +149,45 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     getFiltersForType(record: SDocRecord, type: string): any {
+        // TODO: move to Service
         const filters = {
             type: type
         };
 
         // filter theme only for locations
-        if (this.record.type === 'LOCATION' && this.pdoc !== undefined && this.pdoc.theme !== undefined) {
+        if (record.type === 'LOCATION' && this.pdoc !== undefined && this.pdoc.theme !== undefined) {
             filters['theme'] = this.pdoc.theme;
         }
         filters['sort'] = 'ratePers';
 
-        if (this.record.type === 'TRACK') {
+        if (record.type === 'TRACK') {
             if (type === 'IMAGE' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
             } else if (type === 'ROUTE' && record.routeId) {
-                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'TRIP' && record.tripId) {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
             } else if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
             }
-        } else if (this.record.type === 'ROUTE') {
+        } else if (record.type === 'ROUTE') {
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'IMAGE') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
-                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'TRIP' && record.routeId) {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
             }
-        } else if (this.record.type === 'LOCATION') {
+        } else if (record.type === 'LOCATION') {
             if (type === 'LOCATION') {
                 filters['moreFilter'] = 'loc_parent_id_i:' + record.locId;
                 filters['sort'] = 'location';
@@ -192,15 +197,30 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     filters['perPage'] = 12;
                 }
             }
-        } else if (this.record.type === 'IMAGE') {
+        } else if (record.type === 'IMAGE') {
             if (type === 'TRACK' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
             } else if (type === 'ROUTE' && record.routeId) {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
             } else if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'TRIP' && record.tripId) {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
             } else {
                 filters['moreFilter'] = 'image_id_i:' + record.imageId;
+            }
+        } else if (record.type === 'TRIP') {
+            if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'IMAGE') {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['perPage'] = 12;
+            } else if (type === 'TRACK') {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['perPage'] = 99;
+                filters['sort'] = 'dateAsc';
+            } else {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
             }
         }
 

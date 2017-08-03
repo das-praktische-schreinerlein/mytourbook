@@ -54,7 +54,9 @@ export class SDocContentUtils {
         }
 
         for (let i = lastOnly ? lastIndex : 0; i < hierarchyTexts.length; i++) {
-            hierarchy.push(['LOCATION_' + hierarchyIds[i], hierarchyTexts[i]]);
+            if (hierarchyIds[i] !== undefined && hierarchyTexts[i] != undefined && hierarchyTexts[i].length > 0) {
+                hierarchy.push(['LOCATION_' + hierarchyIds[i], hierarchyTexts[i]]);
+            }
         }
 
         return hierarchy;

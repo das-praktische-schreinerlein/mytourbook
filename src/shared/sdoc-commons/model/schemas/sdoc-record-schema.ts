@@ -12,6 +12,7 @@ export const SDocRecordSchema = new Schema({
         locId: {type: 'number'},
         routeId: {type: 'number'},
         trackId: {type: 'number'},
+        tripId: {type: 'number'},
 
 // TODO
 //        datevon: {type: 'Date'},

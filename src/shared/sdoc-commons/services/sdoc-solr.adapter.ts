@@ -32,6 +32,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             loc_id_i: props.locId,
             route_id_i: props.routeId,
             track_id_i: props.trackId,
+            trip_id_i: props.tripId,
             date_dt: props.datevon,
             desc_txt: props.desc,
             geo_lon_s: props.geoLon,
@@ -70,6 +71,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         values['locId'] = Number(this.getSolrValue(doc, 'loc_id_i', undefined));
         values['routeId'] = Number(this.getSolrValue(doc, 'route_id_i', undefined));
         values['trackId'] = Number(this.getSolrValue(doc, 'track_id_i', undefined));
+        values['tripId'] = Number(this.getSolrValue(doc, 'trip_id_i', undefined));
 
         const subtypeField = doc['subtypes_ss'];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
@@ -110,6 +112,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 id = Number(record.locId);
             } else if (record.type === 'IMAGE') {
                 id = Number(record.imageId);
+            } else if (record.type === 'TRIP') {
+                id = Number(record.tripId);
             }
             id = id * 1000000;
 
@@ -198,7 +202,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     }
 
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
-        return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i',
+        return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
             'data_tech_dist_f', 'data_tech_dur_f',
@@ -285,7 +289,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const form = opts.originalSearchForm || {};
 
         // set commons: relevance
-        sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:IMAGE^1 _val_:"div(rate_pers_gesamt_i, 10)"' );
+        sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:IMAGE^1' +
+            ' _val_:"div(rate_pers_gesamt_i, 10)"' );
         sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
         sortParams.set('defType', 'edismax');
         sortParams.set('boost', 'recip(rord(date_dts),1,1000,1000)');
@@ -299,7 +304,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 break;
             case 'ratePers':
                 sortParams.set('sort', 'sub(15, rate_pers_gesamt_i) asc, dateonly_s desc');
-                sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:IMAGE^1' );
+                sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:IMAGE^1' );
                 sortParams.set('boost', 'product( recip( rord(date_dts), 1, 1000, 1000), 1)');
                 break;
             case 'location':

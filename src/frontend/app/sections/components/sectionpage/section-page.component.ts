@@ -109,6 +109,7 @@ export class SectionPageComponent implements OnInit {
     }
 
     getFiltersForType(record: PDocRecord, type: string): any {
+        // TODO: move to Service
         const filters = {
             type: type
         };
@@ -130,7 +131,7 @@ export class SectionPageComponent implements OnInit {
 
     getToSearchUrl() {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl,
-            SDocSearchFormFactory.createSanitized({theme: this.pdoc.theme, type: 'route,location,track'}));
+            SDocSearchFormFactory.createSanitized({theme: this.pdoc.theme, type: 'route,location,track,trip'}));
     }
 
     submitToSearch() {

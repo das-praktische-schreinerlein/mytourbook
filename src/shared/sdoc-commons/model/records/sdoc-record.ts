@@ -4,6 +4,7 @@ export class SDocRecord extends BaseEntityRecord {
     locId: number;
     routeId: number;
     trackId: number;
+    tripId: number;
     imageId: number;
 
     actiontypes: string;
