@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -7,16 +7,18 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoCoder} from 'geo-coder';
+import {GeoLocationService} from '../../../../shared/search-commons/services/geolocation.service';
 
 @Component({
     selector: 'app-sdoc-searchform',
     templateUrl: './sdoc-searchform.component.html',
     styleUrls: ['./sdoc-searchform.component.css']
 })
-export class SDocSearchformComponent implements OnInit {
+export class SDocSearchformComponent implements OnInit, AfterViewInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
     private geoCoder = new GeoCoder({ provider: 'osm' });
+    private geoLocationService = new GeoLocationService();
 
     public optionsSelectWhen: IMultiSelectOption[] = [];
     public optionsSelectWhere: IMultiSelectOption[] = [];
@@ -161,6 +163,9 @@ export class SDocSearchformComponent implements OnInit {
         allSelected: 'Alle'};
 
     @Input()
+    public short? = false;
+
+    @Input()
     public set searchResult(value: SDocSearchResult) {
         // set the latest value for _data BehaviorSubject
         this._searchResult.next(value);
@@ -204,7 +209,9 @@ export class SDocSearchformComponent implements OnInit {
                 this.updateSearchForm(sdocSearchSearchResult);
             },
         );
+    }
 
+    ngAfterViewInit() {
         this.initGeoCodeAutoComplete();
     }
 
@@ -213,9 +220,23 @@ export class SDocSearchformComponent implements OnInit {
         return false;
     }
 
-    public onChangeSelect() {
+    public onChangeSelect(event?: any) {
         this.doSearch();
         return false;
+    }
+
+    public useBrowserGeoLocation() {
+        const me = this;
+        const values = this.searchFormGroup.getRawValue();
+        this.geoLocationService.getCurrentPosition().toPromise().then(position => {
+            const pos: Position = position;
+            this.searchFormGroup.patchValue({'nearby': [pos.coords.latitude, pos.coords.longitude, values.nearbyDistance].join('_')});
+            me.doReverseLookUpForNearBy(pos.coords.latitude, pos.coords.longitude).then(function (result: any) {
+                me.searchFormGroup.patchValue({'nearbyAddress':
+                    SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(result.address)});
+                me.doSearch();
+            });
+        });
     }
 
     private updateSearchForm(sdocSearchSearchResult: SDocSearchResult): void {
@@ -305,8 +326,18 @@ export class SDocSearchformComponent implements OnInit {
     }
 
     private initGeoCodeAutoComplete(): void {
-        const inputEl = document.querySelector('.nearbyAddressAutocomplete');
+        this.initGeoCodeAutoCompleteField('.nearbyAddressAutocomplete');
+        this.initGeoCodeAutoCompleteField('.nearbyAddressAutocompleteShort');
+    }
+
+    private initGeoCodeAutoCompleteField(selector: string): void {
+        const inputEl = document.querySelector(selector);
+        if (!inputEl || inputEl === undefined || inputEl === null) {
+            return;
+        }
+
         this.geoCoder.autocomplete(inputEl);
+        inputEl.removeEventListener('place_changed');
         inputEl.addEventListener('place_changed', (event: any) => {
             const distance = this.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
             this.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
@@ -316,6 +347,7 @@ export class SDocSearchformComponent implements OnInit {
             return false;
         });
     }
+
 
     private doSearch() {
         const values = this.searchFormGroup.getRawValue();

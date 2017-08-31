@@ -16,6 +16,12 @@
 
         <ng-container *ngIf="pdoc.flgShowTopTen">
             <div class="hint_tostoebern" i18n="text pokeAround sectionPage|Text to pokeAround sectionPage@@text.sectionPage.pokeAround">Fröhliches Stöbern :-)</div>
+            <div class="shortsearchform">
+                <app-sdoc-searchform [searchResult]="sdocSearchResult"
+                                     [short]="'true'"
+                                     (search)="onSearchSDoc($event)"></app-sdoc-searchform>
+
+            </div>
             <ngb-tabset>
                 <ngb-tab title="Routen">
                     <ng-template ngbTabContent>
@@ -27,6 +33,7 @@
                                                     [params]="getFiltersForType(pdoc, 'ROUTE')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
                                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
@@ -40,6 +47,7 @@
                                                     [params]="getFiltersForType(pdoc, 'LOCATION')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
                                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
@@ -53,6 +61,7 @@
                                                     [params]="getFiltersForType(pdoc, 'IMAGE')"
                                                     [showForm]="false"
                                                     [layout]="Layout.SMALL"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
                                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
@@ -66,6 +75,7 @@
                                                     [params]="getFiltersForType(pdoc, 'TRACK')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
                                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
@@ -79,6 +89,7 @@
                                                     [params]="getFiltersForType(pdoc, 'TRIP')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
                                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
@@ -92,6 +103,7 @@
                                                     [params]="getFiltersForType(pdoc, '')"
                                                     [showForm]="false"
                                                     [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
                                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>

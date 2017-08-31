@@ -10,9 +10,11 @@ import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {PageUtils} from '../../../../../shared/angular-commons/services/page.utils';
+import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
+import {Facets} from '../../../../shared/search-commons/model/container/facets';
 
 @Component({
     selector: 'app-sectionpage',
@@ -25,6 +27,8 @@ export class SectionPageComponent implements OnInit {
     baseSearchUrl = '';
     sections: PDocRecord[] = [];
     public Layout = Layout;
+    sdocSearchForm: SDocSearchForm = new SDocSearchForm({});
+    sdocSearchResult: SDocSearchResult = new SDocSearchResult(this.sdocSearchForm, 0, undefined, new Facets());
 
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private router: Router, private searchFormConverter: SDocSearchFormConverter,
@@ -121,7 +125,26 @@ export class SectionPageComponent implements OnInit {
             filters['perPage'] = 5;
         }
 
+        filters['when'] = this.sdocSearchForm.when;
+        filters['where'] = this.searchFormConverter.joinWhereParams(this.sdocSearchForm);
+        filters['what'] = this.searchFormConverter.joinWhatParams(this.sdocSearchForm);
+        filters['nearBy'] = this.sdocSearchForm.nearby;
+        filters['nearbyAddress'] = this.sdocSearchForm.nearbyAddress;
+
         return filters;
+    }
+
+    onSearchSDoc(sdocSearchForm: SDocSearchForm) {
+        this.sdocSearchForm = sdocSearchForm;
+        this.sDocRoutingService.setLastSearchUrl(this.getToSearchUrl());
+        return false;
+    }
+
+    onTopTenResultFound(sdocSearchResult: SDocSearchResult) {
+        if (sdocSearchResult !== undefined && sdocSearchResult.searchForm !== undefined) {
+            this.sdocSearchResult = sdocSearchResult;
+        }
+        return false;
     }
 
     onShow(record: PDocRecord) {
@@ -131,7 +154,16 @@ export class SectionPageComponent implements OnInit {
 
     getToSearchUrl() {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl,
-            SDocSearchFormFactory.createSanitized({theme: this.pdoc.theme, type: 'route,location,track,trip'}));
+            SDocSearchFormFactory.createSanitized({
+                theme: this.pdoc.theme,
+                type: 'route,location,track,trip',
+                actiontype: this.sdocSearchForm.actiontype,
+                when: this.sdocSearchForm.when,
+                what: this.sdocSearchForm.what,
+                where: this.sdocSearchForm.where,
+                nearBy: this.sdocSearchForm.nearby,
+                nearbyAddress: this.sdocSearchForm.nearbyAddress
+            }));
     }
 
     submitToSearch() {

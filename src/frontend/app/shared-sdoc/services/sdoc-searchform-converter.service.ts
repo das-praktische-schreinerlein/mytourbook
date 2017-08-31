@@ -10,17 +10,19 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
     constructor(private searchParameterUtils: SearchParameterUtils) {
     }
 
-    searchFormToUrl(baseUrl: string, sdocSearchForm: SDocSearchForm): string {
-        let url = baseUrl + 'search/';
-        const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
 
+    joinWhereParams(sdocSearchForm: SDocSearchForm): string {
+        const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
         const whereMap = new Map();
         whereMap.set('locId', searchForm.locId);
         whereMap.set('loc', searchForm.where);
         whereMap.set('nearby', searchForm.nearby);
         whereMap.set('nearbyAddress', searchForm.nearbyAddress);
-        const where = this.searchParameterUtils.joinParamsToOneRouteParameter(whereMap, this.splitter);
+        return this.searchParameterUtils.joinParamsToOneRouteParameter(whereMap, this.splitter);
+    }
 
+    joinMoreFilterParams(sdocSearchForm: SDocSearchForm): string {
+        const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
         const moreFilterMap = new Map();
         moreFilterMap.set('techDataAltitudeMax', searchForm.techDataAltitudeMax);
         moreFilterMap.set('techDataAscent', searchForm.techDataAscent);
@@ -35,11 +37,24 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         } else {
             moreFilter = searchForm.moreFilter;
         }
+        return moreFilter;
+    }
 
+    joinWhatParams(sdocSearchForm: SDocSearchForm): string {
+        const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
         const whatMap = new Map();
         whatMap.set('keyword', searchForm.what);
         whatMap.set('action', searchForm.actiontype);
-        const what = this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
+        return this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
+    }
+
+    searchFormToUrl(baseUrl: string, sdocSearchForm: SDocSearchForm): string {
+        let url = baseUrl + 'search/';
+        const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
+
+        const where = this.joinWhereParams(searchForm);
+        const moreFilter = this.joinMoreFilterParams(searchForm);
+        const what = this.joinWhatParams(searchForm);
 
         const params: Object[] = [
             this.searchParameterUtils.useValueOrDefault(searchForm.when, 'jederzeit'),

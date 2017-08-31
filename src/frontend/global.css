@@ -98,3 +98,7 @@ div.relative-container {
 .lightbox {
     position: fixed;
 }
+
+.geocode-autocomplete {
+    z-index: 1000;
+}
