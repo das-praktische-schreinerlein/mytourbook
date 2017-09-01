@@ -125,7 +125,7 @@ export class SectionPageComponent implements OnInit {
             filters['perPage'] = 5;
         }
 
-        filters['when'] = this.sdocSearchForm.when;
+        filters['when'] = this.sdocSearchForm.when.toString();  // stringify array
         filters['where'] = this.searchFormConverter.joinWhereParams(this.sdocSearchForm);
         filters['what'] = this.searchFormConverter.joinWhatParams(this.sdocSearchForm);
         filters['nearBy'] = this.sdocSearchForm.nearby;
