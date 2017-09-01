@@ -142,4 +142,27 @@ export class SDocSearchFormUtils {
 
         return [].concat(selectedOptions, otherOptions);
     }
+
+    public extractNearbyPos(nearby: string): any[] {
+        if (!nearby || nearby.length <= 0) {
+            return [];
+        }
+
+        const [lat, lon, dist] = nearby.split('_');
+        if (! (lat && lon && dist)) {
+            return [];
+        }
+
+        return [lat, lon, dist];
+    }
+
+    public joinNearbyPos(rawValues: {}): string {
+        const [lat, lon, dist] = this.extractNearbyPos(rawValues['nearby']);
+        let nearby = '';
+        if (lat && lon && dist && rawValues['nearbyAddress']) {
+            nearby = [lat, lon, rawValues['nearbyDistance']].join('_');
+        }
+
+        return nearby;
+    }
 }

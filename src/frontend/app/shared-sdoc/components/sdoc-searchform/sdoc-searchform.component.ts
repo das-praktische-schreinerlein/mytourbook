@@ -6,7 +6,6 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
-import {GeoCoder} from 'geo-coder';
 import {GeoLocationService} from '../../../../shared/search-commons/services/geolocation.service';
 
 @Component({
@@ -17,7 +16,6 @@ import {GeoLocationService} from '../../../../shared/search-commons/services/geo
 export class SDocSearchformComponent implements OnInit, AfterViewInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
-    private geoCoder = new GeoCoder({ provider: 'osm' });
     private geoLocationService = new GeoLocationService();
 
     public optionsSelectWhen: IMultiSelectOption[] = [];
@@ -215,7 +213,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         this.initGeoCodeAutoComplete();
     }
 
-    public onSubmitSearch(event: any) {
+    public onSubmitSearch(event?: any) {
         this.doSearch();
         return false;
     }
@@ -230,8 +228,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         const values = this.searchFormGroup.getRawValue();
         this.geoLocationService.getCurrentPosition().toPromise().then(position => {
             const pos: Position = position;
-            this.searchFormGroup.patchValue({'nearby': [pos.coords.latitude, pos.coords.longitude, values.nearbyDistance].join('_')});
-            me.doReverseLookUpForNearBy(pos.coords.latitude, pos.coords.longitude).then(function (result: any) {
+            me.searchFormGroup.patchValue({'nearby': [pos.coords.latitude, pos.coords.longitude, values.nearbyDistance].join('_')});
+            me.geoLocationService.doReverseLookup(pos.coords.latitude, pos.coords.longitude).then(function (result: any) {
                 me.searchFormGroup.patchValue({'nearbyAddress':
                     SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(result.address)});
                 me.doSearch();
@@ -303,9 +301,9 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         this.optionsSelectTechDataDuration = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true);
 
-        const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
+        const [lat, lon, dist] = this.searchFormUtils.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
-            this.doReverseLookUpForNearBy(lat, lon).then(function (result: any) {
+            this.geoLocationService.doReverseLookup(lat, lon).then(function (result: any) {
                 me.searchFormGroup.patchValue({'nearbyAddress':
                     SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(result.address)});
             });
@@ -315,63 +313,28 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         }
     }
 
-    private doReverseLookUpForNearBy(lat: any, lon: any): Promise<string> {
-        if (! (lat && lon)) {
-            return Promise.reject('no coordinates - lat:' + lat + ' lon:' + lon);
-        }
-
-        return this.geoCoder.reverse(lat, lon).then(result => {
-            return Promise.resolve(result);
-        });
-    }
-
     private initGeoCodeAutoComplete(): void {
         this.initGeoCodeAutoCompleteField('.nearbyAddressAutocomplete');
         this.initGeoCodeAutoCompleteField('.nearbyAddressAutocompleteShort');
     }
 
     private initGeoCodeAutoCompleteField(selector: string): void {
-        const inputEl = document.querySelector(selector);
-        if (!inputEl || inputEl === undefined || inputEl === null) {
-            return;
-        }
-
-        this.geoCoder.autocomplete(inputEl);
-        inputEl.removeEventListener('place_changed');
-        inputEl.addEventListener('place_changed', (event: any) => {
-            const distance = this.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
-            this.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
-            this.searchFormGroup.patchValue({'nearbyAddress':
+        const me = this;
+        this.geoLocationService.initGeoCodeAutoCompleteField(selector).subscribe((event: any) => {
+            const distance = me.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
+            me.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
+            me.searchFormGroup.patchValue({'nearbyAddress':
                 SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(event.detail.formatted)});
-            this.doSearch();
+            me.doSearch();
             return false;
         });
     }
 
-
     private doSearch() {
         const values = this.searchFormGroup.getRawValue();
-        const [lat, lon, dist] = this.extractNearbyPos(values.nearby);
-        values.nearby = '';
-        if (lat && lon && dist && values.nearbyAddress) {
-            values.nearby = [lat, lon, values.nearbyDistance].join('_');
-        }
-
+        values.nearby = this.searchFormUtils.joinNearbyPos(values);
         this.searchFormGroup.patchValue({'nearby': values.nearby});
         this.search.emit(values);
         return false;
-    }
-
-    private extractNearbyPos(nearby: string): any[] {
-        if (!nearby || nearby.length <= 0) {
-            return [];
-        }
-
-        const [lat, lon, dist] = nearby.split('_');
-        if (! (lat && lon && dist)) {
-            return [];
-        }
-
-        return [lat, lon, dist];
     }
 }

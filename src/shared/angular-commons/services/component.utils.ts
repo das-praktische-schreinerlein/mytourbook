@@ -3,7 +3,6 @@ import * as deepEqual from 'deep-equal';
 
 export class ComponentUtils {
     public static hasNgChanged(changes: {[propKey: string]: SimpleChange}): boolean {
-        let changed = false;
         for (const propName in changes) {
             const changedProp = changes[propName];
             const to = changedProp.currentValue;
@@ -12,7 +11,7 @@ export class ComponentUtils {
                 return true;
             } else {
                 const from = changedProp.previousValue;
-                if (from.id !== to.id) {
+                if (from !== undefined && to !== undefined && from.id !== to.id) {
                     return true;
                 }
                 if (!deepEqual(from, to)) {
