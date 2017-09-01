@@ -28,6 +28,7 @@
         "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
         "../..//node_modules/angular2-lightbox/lightbox.css",
         "spinner.css",
+        "responsive.css",
         "global.css",
         "global-overrides.css"
       ],

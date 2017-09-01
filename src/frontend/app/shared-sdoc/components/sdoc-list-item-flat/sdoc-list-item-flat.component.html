@@ -1,81 +1,119 @@
 <div class="row sdoc-list-item-flat">
-    <div class="col-1 image layout-big">
-        <ng-container [ngSwitch]="record.type">
-            <ng-container *ngSwitchDefault="">
-                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
-                         (click)="submitShowImage(record)"
-                         alt="{{record.sdocimages[0].name}}">
-                </ng-container>
-            </ng-container>
-        </ng-container>
-    </div>
-    <div class="col-2 type layout-big">
-        <table>
-            <tr *ngIf="record.type !== 'LOCATION'"><td><h5>{{record.type | translate }}</h5></td><td>&nbsp;</td></tr>
-            <tr><td><h5>{{record.subtype | translate }}</h5></td><td>&nbsp;</td></tr>
-            <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-            <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
-        </table>
-    </div>
-    <div class="col-4 layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
-    <div class="col-2 ratetech layout-big">
-        <table>
-            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-        </table>
-    </div>
-    <div class="col-3 location layout-big">
-        <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
-        <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
-    </div>
-
-    <div class="col-3 image layout-small">
-        <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
-        <h5>{{record.subtype | translate }}</h5>
-        <ng-container [ngSwitch]="record.type">
-            <ng-container *ngSwitchDefault="">
-                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
-                         (click)="submitShowImage(record)"
-                         alt="{{record.sdocimages[0].name}}">
-                </ng-container>
-            </ng-container>
-        </ng-container>
-    </div>
     <ng-container [ngSwitch]="record.type">
-            <ng-container *ngSwitchCase="'LOCATION'">
-                <div class="col-9 location layout-small">
-                    <div class="">
-                        <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+        <ng-container *ngSwitchDefault="">
+            <!--- BIG -->
+            <div class="col-1 image layout-big">
+                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <img class="picture-thumbnail" width="50px"
+                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
+                         (click)="submitShowImage(record)"
+                         alt="{{record.sdocimages[0].name}}">
+                </ng-container>
+            </div>
+            <div class="col-2 type layout-big">
+                <table>
+                    <tr *ngIf="record.type !== 'LOCATION'"><td><h5>{{record.type | translate }}</h5></td><td>&nbsp;</td></tr>
+                    <tr><td><h5>{{record.subtype | translate }}</h5></td><td>&nbsp;</td></tr>
+                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                    <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+                </table>
+            </div>
+            <div class="col-4 layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+            <div class="col-2 ratetech layout-big">
+                <table>
+                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                </table>
+            </div>
+            <div class="col-3 location layout-big">
+                <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+            </div>
+
+            <!--- SMALL -->
+            <div class="col-3 image layout-small">
+                <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
+                <h5>{{record.subtype | translate }}</h5>
+                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <img class="picture-thumbnail" width="50px"
+                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
+                         (click)="submitShowImage(record)"
+                         alt="{{record.sdocimages[0].name}}">
+                </ng-container>
+            </div>
+            <ng-container [ngSwitch]="record.type">
+                <ng-container *ngSwitchCase="'LOCATION'">
+                    <div class="col-9 location layout-small">
+                        <div class="">
+                            <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <table>
+                                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                                </table>
+                            </div>
+                            <div class="col-8">
+                                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                                <table>
+                                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                                    <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-4 location">
+                </ng-container>
+                <ng-container *ngSwitchDefault="">
+                    <div class="col-9 location layout-small">
+                        <div class=""><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+                        <div class="row">
+                            <div class="col-4 location">
+                                <table>
+                                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                                </table>
+                            </div>
+                            <div class="col-8 location">
+                                <table>
+                                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                                    <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+                                </table>
+                                <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
+                                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <!--- VERYSMALL -->
+            <div class="col-12 image layout-verysmall">
+                <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
+                <h5>{{record.subtype | translate }}</h5>
+                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <img class="picture-thumbnail" width="100px"
+                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
+                         (click)="submitShowImage(record)"
+                         alt="{{record.sdocimages[0].name}}">
+                </ng-container>
+                <ng-container [ngSwitch]="record.type">
+                    <ng-container *ngSwitchCase="'LOCATION'">
+                        <div class="">
+                            <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
                             <table>
                                 <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                             </table>
-                        </div>
-                        <div class="col-8 location">
                             <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                             <table>
                                 <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
                                 <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </ng-container>
-            <ng-container *ngSwitchDefault="">
-                <div class="col-9 location layout-small">
-                    <div class=""><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
-                    <div class="row">
-                        <div class="col-4 location">
+                    </ng-container>
+                    <ng-container *ngSwitchDefault="">
+                        <div class="">
+                            <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a>
                             <table>
                                 <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                             </table>
-                        </div>
-                        <div class="col-8 location">
                             <table>
                                 <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
                                 <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
@@ -83,8 +121,9 @@
                             <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
                             <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                         </div>
-                    </div>
-                </div>
-            </ng-container>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
     </ng-container>
 </div>
