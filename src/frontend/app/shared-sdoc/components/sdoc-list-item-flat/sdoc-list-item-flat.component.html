@@ -1,4 +1,4 @@
-<div class="row sdoc-list-item-flat">
+<div class="row sdoc-list-item-flat" [ngClass]="getStyleClassForRecord(record)">
     <ng-container [ngSwitch]="record.type">
         <ng-container *ngSwitchDefault="">
             <!--- BIG -->

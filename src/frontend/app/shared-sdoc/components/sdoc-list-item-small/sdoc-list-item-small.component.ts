@@ -46,4 +46,7 @@ export class SDocListItemSmallComponent {
         return this.sanitizer.bypassSecurityTrustUrl(this.sdocRoutingService.getShowUrl(record, ''));
     }
 
+    public getStyleClassForRecord(record: SDocRecord): string[] {
+        return this.contentUtils.getStyleClassForRecord(record, 'small');
+    }
 }

@@ -112,4 +112,10 @@ export class SDocContentUtils {
         return this.sanitizer.bypassSecurityTrustResourceUrl(
             this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName);
     }
+
+    getStyleClassForRecord(record: SDocRecord, layout: string): string[] {
+        const value = record['sdocratepers'] || {gesamt: 0};
+        const rate = Math.round(((value['gesamt'] || 0) / 3) + 0.5);
+        return ['list-item-persrate-' + rate, 'list-item-' + layout + '-persrate-' + rate];
+    }
 }

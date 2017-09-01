@@ -75,3 +75,19 @@ div.relative-container {
 .geocode-autocomplete {
     z-index: 1000;
 }
+
+.list-item-persrate-0 {
+}
+.list-item-persrate-1 {
+}
+.list-item-persrate-2 {
+}
+.list-item-persrate-3 {
+}
+.list-item-persrate-4 {
+    border: 3px solid gold !IMPORTANT;
+}
+.list-item-persrate-5 {
+    border: 3px solid gold;
+    background: gold;
+}
