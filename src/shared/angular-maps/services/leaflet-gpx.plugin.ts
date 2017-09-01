@@ -11,6 +11,7 @@ export interface MapElement {
     popupContent: string;
     trackUrl?: string;
     point?: L.LatLng;
+    type?: string;
 }
 
 export class GPX extends L.FeatureGroup {
@@ -64,6 +65,11 @@ export class GPX extends L.FeatureGroup {
                     layers.push(point);
                     break;
                 default:
+                    if ((gpxElement.type === 'TRACK' && geoElement.type === GeoElementType.ROUTE)
+                    || (gpxElement.type === 'ROUTE' && geoElement.type === GeoElementType.TRACK)) {
+                        break;
+                    }
+
                     const line = new L.Polyline(geoElement.points, {});
                     if (gpxElement.popupContent) {
                         line.bindPopup(gpxElement.popupContent);

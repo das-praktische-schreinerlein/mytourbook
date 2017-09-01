@@ -77,7 +77,8 @@ export class SDocMapComponent implements OnChanges {
                     id: record.id,
                     name: record.name,
                     trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.gpx',
-                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>'
+                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
+                    type: record.type
                 };
                 this.mapElementsReverseMap.set(mapElement, record);
             }
@@ -86,7 +87,8 @@ export class SDocMapComponent implements OnChanges {
                     id: record.id,
                     name: record.name,
                     point: new LatLng(+record.geoLat, +record.geoLon),
-                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>'
+                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
+                    type: record.type
                 };
                 this.mapElementsReverseMap.set(mapElement, record);
             }
