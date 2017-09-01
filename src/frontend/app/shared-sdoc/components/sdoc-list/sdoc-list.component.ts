@@ -3,8 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import { Lightbox } from 'angular2-lightbox';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {SDocLightboxAlbumConfig, SDocLightBox} from '../../services/sdoc-lightbox.service';
 
 export enum Layout {
     FLAT,
@@ -33,32 +32,18 @@ export class SDocListComponent implements OnChanges {
 
     public Layout = Layout;
 
-    private lightboxAlbum = [];
-    private lightboxAlbumPos = {};
+    private lightboxAlbumConfig: SDocLightboxAlbumConfig = {
+        album: [],
+        idPos: {}
+    };
 
-    constructor(private searchFormConverter: SDocSearchFormConverter, private contentUtils: SDocContentUtils, private lightbox: Lightbox) {
+    constructor(private searchFormConverter: SDocSearchFormConverter,
+                private lightboxService: SDocLightBox) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {
-            const newlightboxAlbum = [];
-            for (let i = 0; i <= this.searchResult.currentRecords.length; i++) {
-                const record = this.searchResult.currentRecords[i];
-                if (record && record.type === 'IMAGE') {
-                    const src = this.contentUtils.getPreview(record['sdocimages'][0]);
-                    const caption = record.name;
-                    const thumb = this.contentUtils.getThumbnail(record['sdocimages'][0]);
-                    const image = {
-                        src: src,
-                        caption: caption,
-                        thumb: thumb,
-                        id: record.id
-                    };
-                    newlightboxAlbum.push(image);
-                    this.lightboxAlbumPos[record.id] = newlightboxAlbum.length - 1;
-                }
-            }
-            this.lightboxAlbum = newlightboxAlbum;
+            this.lightboxAlbumConfig = this.lightboxService.createAlbumConfig(this.searchResult);
         }
     }
 
@@ -69,7 +54,7 @@ export class SDocListComponent implements OnChanges {
 
     onShowImage(record: SDocRecord) {
         if (record.type === 'IMAGE') {
-            this.lightbox.open(this.lightboxAlbum, this.lightboxAlbumPos[record.id] || 0);
+            this.lightboxService.openId(this.lightboxAlbumConfig, record.id);
         } else {
             this.show.emit(record);
         }

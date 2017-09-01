@@ -20,6 +20,7 @@ import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorResolver} from '../sections/resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
+import {SDocLightBox} from '../shared-sdoc/services/sdoc-lightbox.service';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
         SDocSearchFormResolver,
         SDocRecordResolver,
         ErrorResolver,
-        PageUtils
+        PageUtils,
+        SDocLightBox
     ],
     exports: [
         SDocSearchpageComponent
