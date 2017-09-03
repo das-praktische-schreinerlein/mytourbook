@@ -85,45 +85,43 @@
             </ng-container>
 
             <!--- VERYSMALL -->
-            <div class="col-12 image layout-verysmall">
+            <div class="col-3 image layout-verysmall">
                 <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
                 <h5>{{record.subtype | translate }}</h5>
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
-                    <img class="picture-thumbnail" width="100px"
+                    <img class="picture-thumbnail" width="50px"
                          [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
                          (click)="submitShowImage(record)"
                          alt="{{record.sdocimages[0].name}}">
                 </ng-container>
-                <ng-container [ngSwitch]="record.type">
-                    <ng-container *ngSwitchCase="'LOCATION'">
+            </div>
+            <ng-container [ngSwitch]="record.type">
+                <ng-container *ngSwitchCase="'LOCATION'">
+                    <div class="col-9 location layout-verysmall">
                         <div class="">
                             <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
                             <table>
                                 <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                            </table>
-                            <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
-                            <table>
                                 <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
                                 <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                             </table>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchDefault="">
-                        <div class="">
-                            <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a>
-                            <table>
-                                <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                            </table>
-                            <table>
-                                <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-                                <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
-                            </table>
-                            <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
                             <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                         </div>
-                    </ng-container>
+                    </div>
                 </ng-container>
-            </div>
+                <ng-container *ngSwitchDefault="">
+                    <div class="col-9 location layout-verysmall">
+                        <div class=""><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
+                        <table>
+                            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                            <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                            <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+                        </table>
+                        <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
+                        <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                    </div>
+                </ng-container>
+            </ng-container>
         </ng-container>
     </ng-container>
 </div>

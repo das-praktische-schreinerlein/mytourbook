@@ -1,6 +1,6 @@
 <ng-container [ngSwitch]="record.type">
     <ng-container *ngSwitchCase="'IMAGE'">
-        <div class="card-block" style="max-width: 135px;" [ngClass]="getStyleClassForRecord(record)">
+        <div class="card-block" style="max-width: 120px; padding-right: 5px; padding-left: 5px" [ngClass]="getStyleClassForRecord(record)">
             <div>
                 <div style="width: 100px; float: left">
                     <h5>{{record.type | translate }}</h5>

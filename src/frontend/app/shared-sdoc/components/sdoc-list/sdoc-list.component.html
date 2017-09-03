@@ -10,7 +10,7 @@
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-page>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.SMALL">
-            <app-sdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-sdoc-list-item"
+            <app-sdoc-list-item-small style="min-width: 120px; margin-bottom: 10px" class="card app-sdoc-list-item"
                                 [record]="record"
                                 [layout]="layout"
                                 [backToSearchUrl]="getBackToSearchUrl(searchResult)"
