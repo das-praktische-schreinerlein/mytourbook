@@ -79,14 +79,14 @@ export class GPX extends L.FeatureGroup {
                         layers.push(new L.Marker(geoElement.points[0], {
                             clickable: true,
                             title: 'Start: ' + gpxElement.name,
-                            icon: new L.DivIcon({className: 'leaflet-div-icon-start', html: 'S:' + gpxElement.name})
+                            icon: new L.DivIcon({className: 'leaflet-div-icon-start', html: '&#128204;S:' + gpxElement.name})
                         }));
                     }
                     if (options['showEndMarker']) {
                         layers.push(new L.Marker(geoElement.points[geoElement.points.length - 1], {
                             clickable: true,
                             title: 'End: ' + gpxElement.name,
-                            icon: new L.DivIcon({className: 'leaflet-div-icon-end', html: 'E:' + gpxElement.name})
+                            icon: new L.DivIcon({className: 'leaflet-div-icon-end', html: '&#128205;E:' + gpxElement.name})
                         }));
                     }
                     break;
