@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import {SDocSearchForm} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericSearchFormSearchFormConverter} from '../../../shared/search-commons/services/generic-searchform.converter';
 import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class SDocSearchFormConverter implements GenericSearchFormSearchFormConverter<SDocSearchForm> {
     private splitter = '_,_';
 
-    constructor(private searchParameterUtils: SearchParameterUtils) {
+    constructor(private searchParameterUtils: SearchParameterUtils, private translateService: TranslateService) {
     }
 
 
@@ -177,4 +178,58 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         searchForm.pageNum = +params['pageNum'] || 1;
     }
 
+    searchFormToHumanReadableText(sdocSearchForm: SDocSearchForm): string {
+        const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
+
+        const res = [];
+        res.push(this.valueToHumanReadableText(sdocSearchForm.type, 'hrt_type', 'hrt_alltypes', true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.where, 'hrt_in', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.nearbyAddress, 'hrt_nearby', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.actiontype, 'hrt_actiontype', undefined, true));
+
+        const when = (sdocSearchForm.when ? sdocSearchForm.when : '')
+            .replace(new RegExp('month', 'g'), 'Monat')
+            .replace(new RegExp('week', 'g'), 'Woche');
+        res.push(this.valueToHumanReadableText(when, 'hrt_when', undefined, true));
+        const what = (sdocSearchForm.what ? sdocSearchForm.what : '')
+            .replace(new RegExp('kw_', 'g'), '');
+        res.push(this.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
+
+        res.push(this.valueToHumanReadableText(sdocSearchForm.fulltext, 'hrt_fulltext', undefined, true));
+        /**
+         techDataAltitudeMax'
+         'techDataAscent'
+         'techDataDistance'
+         'techDataDuration'
+         'techRateOverall'
+         **/
+
+        return res.join(' ');
+    }
+
+    private valueToHumanReadableText(valueString: any, prefix: string, defaultValue: string, translate: boolean): string {
+        let res = '';
+        if (valueString) {
+            if (prefix) {
+                res += (translate ? this.translateService.instant(prefix) : prefix)
+                    + ' ';
+            }
+            const values = valueString.toString().split(',');
+            if (values.length > 1) {
+                res += '"';
+            }
+            for (const value of values) {
+                res += (translate ? this.translateService.instant(value) || value : value)
+                    + ', ';
+            }
+            res = res.slice(0, res.length - 2);
+            if (values.length > 1) {
+                res += '"';
+            }
+        } else if (defaultValue) {
+            res = (translate ? this.translateService.instant(defaultValue) : defaultValue);
+        }
+
+        return res;
+    }
 }

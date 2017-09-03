@@ -128,5 +128,13 @@
     "loc_3": "Bundesland",
     "loc_4": "Region",
     "loc_5": "Ort/ Stadt",
-    "loc_6": "Park/ See/ Sehenswürdigkeit"
+    "loc_6": "Park/ See/ Sehenswürdigkeit",
+    "hrt_type": "Suche nach",
+    "hrt_alltypes": "Suche nach Allem",
+    "hrt_in": "in",
+    "hrt_nearby": "nahe",
+    "hrt_actiontype": "mit Aktionen:",
+    "hrt_when": "im Zeitraum:",
+    "hrt_keyword": "mit Schlüsselworten:",
+    "hrt_fulltext": "enthält:"
 }

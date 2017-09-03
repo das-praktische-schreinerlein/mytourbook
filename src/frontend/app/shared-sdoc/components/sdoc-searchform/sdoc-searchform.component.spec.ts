@@ -8,6 +8,7 @@ import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service'
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -22,6 +23,7 @@ describe('SDocSearchformComponent', () => {
             ],
             providers: [
                 SDocSearchFormUtils,
+                SDocSearchFormConverter,
                 SearchFormUtils,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],

@@ -7,6 +7,7 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoLocationService} from '../../../../shared/search-commons/services/geolocation.service';
+import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -159,9 +160,13 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         searchPlaceholder: 'Find',
         defaultTitle: 'Dauer',
         allSelected: 'Alle'};
+    public humanReadableSearchForm = '';
 
     @Input()
     public short? = false;
+
+    @Input()
+    public showForm? = true;
 
     @Input()
     public set searchResult(value: SDocSearchResult) {
@@ -198,7 +203,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         pageNum: 1
     });
 
-    constructor(public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils) {
+    constructor(public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils,
+                private searchFormConverter: SDocSearchFormConverter) {
     }
 
     ngOnInit() {
@@ -311,6 +317,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         if (dist) {
             me.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
+
+        this.humanReadableSearchForm = this.searchFormConverter.searchFormToHumanReadableText(sdocSearchSearchResult.searchForm);
     }
 
     private initGeoCodeAutoComplete(): void {

@@ -1,6 +1,16 @@
 <form [formGroup]="searchFormGroup" (ngSubmit)="onSubmitSearch($event)" class="form-control-sm">
+    <!-- extended searchform-->
+    <ng-container *ngIf="!showForm">
+        <div class="row">
+            <div class="col-sm-12">
+                {{humanReadableSearchForm}}
+                <button class="btn btn-primary btn-sm float-right" (click)="showForm = true" i18n="button show form|Buttontext to show form@@button.searchform.hide.form">Filter ändern</button>
+            </div>
+        </div>
+    </ng-container>
+
     <!-- short searchform-->
-    <ng-container *ngIf="short">
+    <ng-container *ngIf="short && showForm">
         <div class="row">
             <div class="col-sm-5 input-group input-group-sm">
                 <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
@@ -37,7 +47,7 @@
                                          (onAdded)="onChangeSelect()"
                                          (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
             </div>
-            <div class="col-sm-6 input-group input-group-sm">
+            <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectActionType"
                                          [settings]="settingsSelectActionType"
@@ -48,11 +58,15 @@
                                          (onAdded)="onChangeSelect()"
                                          (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
             </div>
+            <div class="col-sm-2 input-group input-group-sm">
+                <button class="btn btn-primary btn-sm" type="submit" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
+                <button class="btn btn-primary btn-sm" (click)="showForm = false" i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</button>
+            </div>
         </div>
     </ng-container>
 
     <!-- extended searchform-->
-    <ng-container *ngIf="!short">
+    <ng-container *ngIf="!short && showForm">
         <div class="row">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
@@ -107,6 +121,7 @@
             </div>
             <div class="col-sm-4 input-group input-group-sm">
                 <button class="btn btn-primary btn-sm" type="submit" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
+                <button class="btn btn-primary btn-sm" (click)="showForm = false" i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</button>
             </div>
         </div>
         <div class="row">
