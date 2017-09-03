@@ -1,0 +1,62 @@
+{
+    "routerErrorsConfigs" : {
+        "pdocsearch_de": {
+            "pattern": "/api/v1/de/pdocsearch.*",
+            "file": "pdocsearch.json"
+        },
+        "pdocsearch_en": {
+            "pattern": "/api/v1/en/pdocsearch.*",
+            "file": "pdocsearch.json"
+        },
+        "pdoc_de": {
+            "pattern": "/api/v1/de/pdoc/$",
+            "file": "pdocsearch.json"
+        },
+        "pdoc_en": {
+            "pattern": "/api/v1/de/pdoc/$",
+            "file": "pdocsearch.json"
+        },
+        "pdoc_params_de": {
+            "pattern": "/api/v1/de/pdoc/.+",
+            "file": "pdoc.json"
+        },
+        "pdoc_params_en": {
+            "pattern": "/api/v1/de/pdoc/.+",
+            "file": "pdoc.json"
+        },
+        "sdocsearch_de": {
+            "pattern": "/api/v1/de/sdocsearch.*",
+            "file": "sdocsearch.json"
+        },
+        "sdocsearch_en": {
+            "pattern": "/api/v1/en/sdocsearch.*",
+            "file": "sdocsearch.json"
+        },
+        "sdoc_de": {
+            "pattern": "/api/v1/de/sdoc/$",
+            "file": "sdocsearch.json"
+        },
+        "sdoc_en": {
+            "pattern": "/api/v1/de/sdoc/$",
+            "file": "sdocsearch.json"
+        },
+        "sdoc_params_de": {
+            "pattern": "/api/v1/de/sdoc/.+",
+            "file": "sdoc.json"
+        },
+        "sdoc_params_en": {
+            "pattern": "/api/v1/de/sdoc/.+",
+            "file": "sdoc.json"
+        },
+        "tracks": {
+            "pattern": "/tracks/.*",
+            "file": "track.gpx"
+        },
+        "digifotos": {
+            "pattern": "/digifotos/.*",
+            "file": "image.png"
+        }
+    },
+    "blackListIps": [
+    ]
+}

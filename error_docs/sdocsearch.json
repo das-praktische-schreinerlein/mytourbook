@@ -1,0 +1,66 @@
+{
+    "recordCount": 1,
+    "searchForm": {
+        "fulltext": "",
+        "sort": "relevance",
+        "perPage": "10",
+        "pageNum": "1",
+        "when": "",
+        "where": "",
+        "locId": "",
+        "nearby": "",
+        "nearbyAddress": "",
+        "what": "",
+        "moreFilter": "",
+        "theme": "start",
+        "techDataAscent": "",
+        "techDataAltitudeMax": "",
+        "techDataDistance": "",
+        "techDataDuration": "",
+        "techRateOverall": "",
+        "actiontype": "",
+        "type": ""
+    },
+    "currentRecords": [
+        {
+            "datevon": "2014-08-18T16:03:13Z",
+            "imageId": null,
+            "locId": 1533,
+            "routeId": 2767,
+            "trackId": 2267,
+            "tripId": 471,
+            "desc": "Solltest du das hier sehen, kommt deine IP-Adresse leider aus einem Bereich der gesperrt wurde, um Angreifer fernzuhalten... Sorry :-(",
+            "geoLon": "10.8175",
+            "geoLat": "46.9097",
+            "geoLoc": "46.9097,10.8175",
+            "gpsTrackBasefile": "track-k2267",
+            "keywords": "keine",
+            "locHirarchie": "Nirwana",
+            "locHirarchieIds": "1",
+            "name": "Sorry... Solltest du das hier sehen, kommt deine IP-Adresse leider aus einem Bereich der gesperrt wurde, um Angreifer fernzuhalten... Sorry :-(",
+            "subtype": "ac_121",
+            "type": "TRACK",
+            "id": "TRACK_2267",
+            "sdocdatatech": {},
+            "sdocimages": []
+        }
+    ],
+    "facets": {
+        "facets": {
+            "loc_id_i": [],
+            "loc_lochirarchie_txt": [],
+            "keywords_txt": [],
+            "month_is": [],
+            "week_is": [],
+            "rate_pers_gesamt_is": [],
+            "rate_pers_schwierigkeit_is": [],
+            "rate_tech_overall_ss": [],
+            "data_tech_alt_asc_facet_is": [],
+            "data_tech_alt_max_facet_is": [],
+            "data_tech_dist_facets_fs": [],
+            "data_tech_dur_facet_fs": [],
+            "type_txt": [],
+            "actiontype_ss": []
+        }
+    }
+}
