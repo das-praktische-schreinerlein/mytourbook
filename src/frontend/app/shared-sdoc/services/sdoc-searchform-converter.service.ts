@@ -182,6 +182,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
 
         const res = [];
+        res.push(this.translateService.instant('hrt_search') || 'search');
         res.push(this.valueToHumanReadableText(sdocSearchForm.type, 'hrt_type', 'hrt_alltypes', true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.where, 'hrt_in', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.nearbyAddress, 'hrt_nearby', undefined, true));
@@ -196,13 +197,11 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         res.push(this.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
         res.push(this.valueToHumanReadableText(sdocSearchForm.fulltext, 'hrt_fulltext', undefined, true));
-        /**
-         techDataAltitudeMax'
-         'techDataAscent'
-         'techDataDistance'
-         'techDataDuration'
-         'techRateOverall'
-         **/
+        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataAltitudeMax, 'hrt_techDataAltitudeMax', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataAscent, 'hrt_techDataAscent', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDistance, 'hrt_techDataDistance', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
 
         return res.join(' ');
     }

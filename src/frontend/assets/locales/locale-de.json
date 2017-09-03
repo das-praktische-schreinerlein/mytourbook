@@ -129,12 +129,18 @@
     "loc_4": "Region",
     "loc_5": "Ort/ Stadt",
     "loc_6": "Park/ See/ Sehenswürdigkeit",
-    "hrt_type": "Suche nach",
-    "hrt_alltypes": "Suche nach Allem",
+    "hrt_search": "Suche",
+    "hrt_type": "nach",
+    "hrt_alltypes": "nach Allem",
     "hrt_in": "in",
     "hrt_nearby": "nahe",
     "hrt_actiontype": "mit Aktionen:",
     "hrt_when": "im Zeitraum:",
     "hrt_keyword": "mit Schlüsselworten:",
-    "hrt_fulltext": "enthält:"
+    "hrt_fulltext": "enthält:",
+    "hrt_techDataAltitudeMax": "max Höhe:",
+    "hrt_techDataAscent": "Aufstieg:",
+    "hrt_techDataDistance": "Strecke:",
+    "hrt_techDataDuration": "Dauer:",
+    "hrt_techRateOverall": "Schwierigkeit:"
 }
