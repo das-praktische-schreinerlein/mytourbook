@@ -38,6 +38,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     public showTimetable? = false;
 
     @Input()
+    public loadFacets? = false;
+
+    @Input()
     public showOnlyIfRecordsFound = true;
 
     @Input()
@@ -133,7 +136,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         me.showLoadingSpinner = true;
         this.sdocDataService.search(this.searchForm,
             {
-                showFacets: this.showForm || (this.showTimetable ? ['week_is', 'month_is'] : false),
+                showFacets: this.showForm || this.loadFacets || (this.showTimetable ? ['week_is', 'month_is'] : false),
                 showForm: this.showForm
             }).then(function doneSearch(sdocSearchResult) {
             me.showLoadingSpinner = false;
