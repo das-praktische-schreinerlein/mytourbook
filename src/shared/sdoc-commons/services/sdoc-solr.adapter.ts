@@ -275,7 +275,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         for (const key in facetConfigs) {
             if (opts.showFacets === true || (opts.showFacets instanceof Array && opts.showFacets.indexOf(key) >= 0)) {
                 facets.push(key);
-                for (const paramKey of facetConfigs[key]) {
+                for (const paramKey in facetConfigs[key]) {
                     facetParams.set(paramKey, facetConfigs[key][paramKey]);
                 }
             }
