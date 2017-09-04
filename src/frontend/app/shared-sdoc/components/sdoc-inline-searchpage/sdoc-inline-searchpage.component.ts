@@ -131,7 +131,11 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         console.log('doSearch form:', this.searchForm);
         const me = this;
         me.showLoadingSpinner = true;
-        this.sdocDataService.search(this.searchForm).then(function doneSearch(sdocSearchResult) {
+        this.sdocDataService.search(this.searchForm,
+            {
+                showFacets: this.showForm || (this.showTimetable ? ['week_is', 'month_is'] : false),
+                showForm: this.showForm
+            }).then(function doneSearch(sdocSearchResult) {
             me.showLoadingSpinner = false;
             if (sdocSearchResult === undefined) {
                 console.log('empty searchResult', sdocSearchResult);

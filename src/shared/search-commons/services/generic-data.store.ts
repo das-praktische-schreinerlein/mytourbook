@@ -158,13 +158,15 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     public search(mapperName: string, searchForm: F, opts?: any): Promise<S> {
         const query = this.createQueryFromForm(searchForm);
 
-        console.log('findCurList for form', searchForm);
+        console.log('search for form', searchForm);
         const searchResult = this.createSearchResult(searchForm, 0, [], new Facets());
 
         const me = this;
         const result = new Promise<S>((resolve, reject) => {
             const options = {
                 originalSearchForm: searchForm,
+                showFacets: opts && opts['showFacets'] !== undefined ? opts['showFacets'] : true,
+                showForm: opts && opts['showForm'] !== undefined ? opts['showForm'] : true,
                 force: false,
                 limit: searchForm.perPage,
                 offset: searchForm.pageNum - 1,
@@ -185,7 +187,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     searchResult.facets = facets;
                     resolve(searchResult);
                 }).catch(function errorHandling(reason) {
-                    console.error('findCurList failed:' + reason);
+                    console.error('search failed:' + reason);
                     reject(reason);
                 });
             } else {
@@ -200,7 +202,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     searchResult.recordCount = genericSearchResult.recordCount;
                     resolve(searchResult);
                 }).catch(function errorHandling(reason) {
-                    console.error('findCurList failed:' + reason);
+                    console.error('search failed:' + reason);
                     reject(reason);
                 });
             }

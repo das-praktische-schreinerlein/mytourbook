@@ -215,53 +215,76 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     };
 
     getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+        const facetConfigs = {
+            'actiontype_ss': {
+                'f.actiontype_ss.facet.limit': '-1',
+                'f.actiontype_ss.facet.sort': 'index'
+            },
+            'data_tech_alt_asc_facet_is': {
+                'f.data_tech_alt_asc_facet_is.facet.limit': '-1',
+                'f.data_tech_alt_asc_facet_is.facet.sort': 'index'
+            },
+            'data_tech_alt_max_facet_is': {
+                'f.data_tech_alt_max_facet_is.facet.limit': '-1',
+                'f.data_tech_alt_max_facet_is.facet.sort': 'index'
+            },
+            'data_tech_dist_facets_fs': {
+                'f.data_tech_dist_facets_fs.facet.limit': '-1',
+                'f.data_tech_dist_facets_fs.facet.sort': 'index'
+            },
+            'data_tech_dur_facet_fs': {
+                'f.data_tech_dur_facet_fs.facet.limit': '-1',
+                'f.data_tech_dur_facet_fs.facet.sort': 'index'
+            },
+            'keywords_txt': {
+                'f.keywords_txt.facet.prefix': 'kw_',
+                'f.keywords_txt.facet.limit': '-1',
+                'f.keywords_txt.facet.sort': 'count'
+            },
+            'loc_id_i': {},
+            'loc_lochirarchie_txt': {},
+            'month_is': {
+                'f.month_is.facet.limit': '-1',
+                'f.month_is.facet.sort': 'index'
+            },
+            'rate_pers_gesamt_is': {
+                'f.rate_pers_gesamt_is.facet.limit': '-1',
+                'f.rate_pers_gesamt_is.facet.sort': 'index'
+            },
+            'rate_pers_schwierigkeit_is': {
+                'f.rate_pers_schwierigkeit_is.facet.limit': '-1',
+                'f.rate_pers_schwierigkeit_is.facet.sort': 'index'
+            },
+            'rate_tech_overall_ss': {
+                'f.rate_tech_overall_ss.facet.limit': '-1',
+                'f.rate_tech_overall_ss.facet.sort': 'index'
+            },
+            'subtype_ss': {
+                'f.subtype_ss.facet.limit': '-1',
+                'f.subtype_ss.facet.sort': 'index'
+            },
+            'type_txt': {},
+            'week_is': {
+                'f.week_is.facet.limit': '-1',
+                'f.week_is.facet.sort': 'index'
+            }
+        };
+
         const facetParams = new Map<string, any>();
-        facetParams.set('facet', 'on');
+        const facets = [];
+        for (const key in facetConfigs) {
+            if (opts.showFacets === true || (opts.showFacets instanceof Array && opts.showFacets.indexOf(key) >= 0)) {
+                facets.push(key);
+                for (const paramKey of facetConfigs[key]) {
+                    facetParams.set(paramKey, facetConfigs[key][paramKey]);
+                }
+            }
+        }
 
-        facetParams.set('facet.field', ['loc_id_i',
-            'loc_lochirarchie_txt',
-            'keywords_txt',
-            'month_is', 'week_is',
-            'rate_pers_gesamt_is', 'rate_pers_schwierigkeit_is', 'rate_tech_overall_ss',
-            'data_tech_alt_asc_facet_is', 'data_tech_alt_max_facet_is', 'data_tech_dist_facets_fs', 'data_tech_dur_facet_fs',
-            'type_txt', 'actiontype_ss', 'subtype_ss']);
-
-        facetParams.set('f.keywords_txt.facet.prefix', 'kw_');
-        facetParams.set('f.keywords_txt.facet.limit', '-1');
-        facetParams.set('f.keywords_txt.facet.sort', 'count');
-
-        facetParams.set('f.month_is.facet.limit', '-1');
-        facetParams.set('f.month_is.facet.sort', 'index');
-
-        facetParams.set('f.week_is.facet.limit', '-1');
-        facetParams.set('f.week_is.facet.sort', 'index');
-
-        facetParams.set('f.rate_pers_gesamt_is.facet.limit', '-1');
-        facetParams.set('f.rate_pers_gesamt_is.facet.sort', 'index');
-
-        facetParams.set('f.rate_pers_schwierigkeit_is.facet.limit', '-1');
-        facetParams.set('f.rate_pers_schwierigkeit_is.facet.sort', 'index');
-
-        facetParams.set('f.rate_tech_overall_ss.facet.limit', '-1');
-        facetParams.set('f.rate_tech_overall_ss.facet.sort', 'index');
-
-        facetParams.set('f.data_tech_alt_asc_facet_is.facet.limit', '-1');
-        facetParams.set('f.data_tech_alt_asc_facet_is.facet.sort', 'index');
-
-        facetParams.set('f.data_tech_alt_max_facet_is.facet.limit', '-1');
-        facetParams.set('f.data_tech_alt_max_facet_is.facet.sort', 'index');
-
-        facetParams.set('f.data_tech_dist_facets_fs.facet.limit', '-1');
-        facetParams.set('f.data_tech_dist_facets_fs.facet.sort', 'index');
-
-        facetParams.set('f.data_tech_dur_facet_fs.facet.limit', '-1');
-        facetParams.set('f.data_tech_dur_facet_fs.facet.sort', 'index');
-
-        facetParams.set('f.subtype_ss.facet.limit', '-1');
-        facetParams.set('f.subtype_ss.facet.sort', 'index');
-
-        facetParams.set('f.actiontype_ss.facet.limit', '-1');
-        facetParams.set('f.actiontype_ss.facet.sort', 'index');
+        if (facets.length > 0) {
+            facetParams.set('facet', 'on');
+            facetParams.set('facet.field', facets);
+        }
 
         return facetParams;
     };

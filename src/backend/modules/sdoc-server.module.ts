@@ -12,6 +12,7 @@ import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
 import {Facets} from '../shared/search-commons/model/container/facets';
 import {HttpAdapter} from 'js-data-http';
+import {GenericSearchOptions} from '../shared/search-commons/services/generic-search.service';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
@@ -100,8 +101,26 @@ export class SDocServerModule {
                     next();
                 }
                 try {
-                    dataService.search(searchForm).then(
+                    const searchOptions: GenericSearchOptions = {
+                        showForm: req.query['showForm'] !== 'false',
+                        showFacets: true
+                    };
+                    if (req.query['showFacets'] === 'false') {
+                        searchOptions.showFacets = false;
+                    } else if (req.query['showFacets'] === 'true') {
+                        searchOptions.showFacets = true;
+                    } else if (req.query['showFacets'] !== undefined) {
+                        searchOptions.showFacets = req.query['showFacets'].toString().split(',');
+                    }
+
+                    dataService.search(searchForm, searchOptions).then(
                         function searchDone(searchResult: SDocSearchResult) {
+                            if (searchOptions.showForm === false) {
+                                searchResult.searchForm = new SDocSearchForm({});
+                            }
+                            if (searchOptions.showFacets === false) {
+                                searchResult.facets = new Facets();
+                            }
                             res.json(searchResult.toSerializableJsonObj());
                             next();
                         }

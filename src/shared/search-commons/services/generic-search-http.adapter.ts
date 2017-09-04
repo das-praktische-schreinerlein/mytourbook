@@ -167,7 +167,15 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
     abstract getHttpEndpoint(method: string): string;
 
     private queryTransformToHttpQuery(mapper: Mapper, params: any, opts: any): any {
-        return opts.originalSearchForm;
+        const ret = {};
+        for (const i in opts.originalSearchForm) {
+            if (opts.originalSearchForm.hasOwnProperty(i)) {
+                ret[i] = opts.originalSearchForm[i];
+            }
+        }
+        ret['showForm'] = opts.showForm;
+        ret['showFacets'] = opts.showFacets;
+        return ret;
     }
 
     buildUrl(url, params) {

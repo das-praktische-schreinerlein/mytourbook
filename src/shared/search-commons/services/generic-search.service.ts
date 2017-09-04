@@ -4,6 +4,11 @@ import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {Mapper, Record} from 'js-data';
 import {Adapter} from 'js-data-adapter';
 
+export interface GenericSearchOptions {
+    showForm: boolean;
+    showFacets: string[]|boolean;
+}
+
 export abstract class GenericSearchService <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> {
     dataStore: GenericDataStore<R, F, S>;
@@ -50,7 +55,7 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         return result;
     }
 
-    search(searchForm: F, opts?: any): Promise<S> {
+    search(searchForm: F, opts?: GenericSearchOptions): Promise<S> {
         console.log('search for form', searchForm);
         const searchResultObs = this.dataStore.search(this.searchMapperName, searchForm, opts);
 
