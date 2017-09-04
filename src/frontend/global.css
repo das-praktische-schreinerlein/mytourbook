@@ -86,8 +86,10 @@ div.relative-container {
 }
 .list-item-persrate-4 {
     border: 3px solid gold !IMPORTANT;
+    border-color: gold !IMPORTANT;
 }
 .list-item-persrate-5 {
     border: 3px solid gold;
+    border-color: gold !IMPORTANT;
     background: gold;
 }
