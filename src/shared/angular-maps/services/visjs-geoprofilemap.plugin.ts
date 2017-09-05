@@ -32,7 +32,7 @@ export class VisJsGeoProfileMap {
     _addData(url: string, element, options) {
         const me = this;
 
-        this.geoLoader.loadData(url, options).then(function onLoaded(geoElements) {
+        this.geoLoader.loadDataFromUrl(url, options).then(function onLoaded(geoElements) {
             const layers = me._convertGeoElementsToDataSet(geoElements, element, options);
             if (layers !== undefined) {
                 me.graph = new Graph3d(element, layers, options);

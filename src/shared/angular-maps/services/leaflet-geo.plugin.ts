@@ -10,6 +10,7 @@ export interface MapElement {
     name: string;
     popupContent: string;
     trackUrl?: string;
+    trackSrc?: string;
     point?: L.LatLng;
     type?: string;
 }
@@ -39,7 +40,13 @@ export class GeoParsedFeature extends L.FeatureGroup {
     addGeoData(geoElement: MapElement, options) {
         const me = this;
 
-        this.geoLoader.loadData(geoElement.trackUrl, options).then(function onLoaded(geoElements) {
+        let promise: Promise<GeoElement[]>;
+        if (geoElement.trackSrc !== undefined && geoElement.trackSrc.length > 20) {
+            promise = this.geoLoader.loadData(geoElement.trackSrc, options);
+        } else {
+            promise = this.geoLoader.loadDataFromUrl(geoElement.trackUrl, options);
+        }
+        promise.then(function onLoaded(geoElements) {
             const layers = me.convertGeoElementsToLayers(geoElement, geoElements, options);
             if (layers !== undefined) {
                 me.addLayer(layers);

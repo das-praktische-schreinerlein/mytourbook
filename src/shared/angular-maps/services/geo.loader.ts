@@ -4,7 +4,7 @@ import {GeoParser, GeoElement} from './geo.parser';
 export class GeoLoader  {
     constructor(private http: Http, private parser: GeoParser) {}
 
-    loadData(url: string, options): Promise<GeoElement[]> {
+    loadDataFromUrl(url: string, options): Promise<GeoElement[]> {
         return new Promise<GeoElement[]>((resolve, reject) => {
             this.http.request(url).subscribe(
                 res => {
@@ -14,6 +14,12 @@ export class GeoLoader  {
                     console.error('loading gpx-failed failed:' + url, error);
                     reject(error);
                 });
+        });
+    }
+
+    loadData(src: string, options): Promise<GeoElement[]> {
+        return new Promise<GeoElement[]>((resolve) => {
+            resolve(this.parser.parse(src, options));
         });
     }
 }
