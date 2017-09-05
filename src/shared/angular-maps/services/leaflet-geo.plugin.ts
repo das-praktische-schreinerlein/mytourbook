@@ -72,8 +72,9 @@ export class GeoParsedFeature extends L.FeatureGroup {
                     layers.push(point);
                     break;
                 default:
-                    if ((gpxElement.type === 'TRACK' && geoElement.type === GeoElementType.ROUTE)
-                    || (gpxElement.type === 'ROUTE' && geoElement.type === GeoElementType.TRACK)) {
+                    if (geoElements.length > 1
+                        && ((gpxElement.type === 'TRACK' && geoElement.type === GeoElementType.ROUTE)
+                            || (gpxElement.type === 'ROUTE' && geoElement.type === GeoElementType.TRACK))) {
                         break;
                     }
 
