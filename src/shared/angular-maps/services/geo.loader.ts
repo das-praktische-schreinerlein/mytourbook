@@ -1,14 +1,14 @@
 import {Http} from '@angular/http';
-import {GeoElement, GpxParser} from './gpx.parser';
+import {GeoParser, GeoElement} from './geo.parser';
 
-export class GpxLoader  {
-    constructor(private http: Http, private gpxParser: GpxParser) {}
+export class GeoLoader  {
+    constructor(private http: Http, private parser: GeoParser) {}
 
-    loadGpx(url: string, options): Promise<GeoElement[]> {
+    loadData(url: string, options): Promise<GeoElement[]> {
         return new Promise<GeoElement[]>((resolve, reject) => {
             this.http.request(url).subscribe(
                 res => {
-                    resolve(this.gpxParser.parseGpx(res.text(), options));
+                    resolve(this.parser.parse(res.text(), options));
                 },
                 error => {
                     console.error('loading gpx-failed failed:' + url, error);

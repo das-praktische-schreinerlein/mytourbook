@@ -1,8 +1,9 @@
 import {AfterViewChecked, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {Http} from '@angular/http';
-import {GpxLoader} from '../../services/gpx.loader';
-import {GpxParser} from '../../services/gpx.parser';
-import {VisJsGPXProfileMap} from '../../services/visjs-gpxprofilemap.plugin';
+import {GeoLoader} from '../../services/geo.loader';
+import {GeoJsonParser} from '../../services/geojson.parser';
+import {GeoGpxParser} from '../../services/geogpx.parser';
+import {VisJsGeoProfileMap} from '../../services/visjs-geoprofilemap.plugin';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import LatLng = L.LatLng;
 
@@ -11,7 +12,8 @@ import LatLng = L.LatLng;
     templateUrl: './visjs-profilemap.component.html'
 })
 export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
-    private gpxLoader: GpxLoader;
+    private gpxLoader: GeoLoader;
+    private jsonLoader: GeoLoader;
 
     initialized: boolean;
 
@@ -28,7 +30,8 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
     public flgGenerateNameFromGpx?: boolean;
 
     constructor(private http: Http) {
-        this.gpxLoader = new GpxLoader(http, new GpxParser());
+        this.gpxLoader = new GeoLoader(http, new GeoGpxParser());
+        this.jsonLoader = new GeoLoader(http, new GeoJsonParser());
     }
 
     ngAfterViewChecked() {
@@ -80,7 +83,13 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
                 }
             };
             const container = document.getElementById(this.mapId);
-            const mapProfileObj = new VisJsGPXProfileMap(this.gpxLoader, trackUrl, container, options);
+            let loader: GeoLoader;
+            if (trackUrl.endsWith('.gpx')) {
+                loader = this.gpxLoader;
+            } else {
+                loader = this.jsonLoader;
+            }
+            const mapProfileObj = new VisJsGeoProfileMap(loader, trackUrl, container, options);
         }
     }
 }

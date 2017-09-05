@@ -1,10 +1,11 @@
 import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import 'leaflet';
 import 'leaflet.markercluster';
-import {GPX, MapElement} from '../../services/leaflet-gpx.plugin';
+import {GeoParsedFeature, MapElement} from '../../services/leaflet-geo.plugin';
+import {GeoLoader} from '../../services/geo.loader';
+import {GeoJsonParser} from '../../services/geojson.parser';
+import {GeoGpxParser} from '../../services/geogpx.parser';
 import {Http} from '@angular/http';
-import {GpxLoader} from '../../services/gpx.loader';
-import {GpxParser} from '../../services/gpx.parser';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import LatLng = L.LatLng;
 import Layer = L.Layer;
@@ -28,7 +29,8 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         minZoom: 1, maxZoom: 16,
         attribution: this.osmAttrib
     });
-    private gpxLoader: GpxLoader;
+    private gpxLoader: GeoLoader;
+    private jsonLoader: GeoLoader;
 
     initialized: boolean;
     map: L.Map;
@@ -63,7 +65,8 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     public mapElementsLoaded: EventEmitter<MapElement[]> = new EventEmitter();
 
     constructor(private http: Http) {
-        this.gpxLoader = new GpxLoader(http, new GpxParser());
+        this.gpxLoader = new GeoLoader(http, new GeoGpxParser());
+        this.jsonLoader = new GeoLoader(http, new GeoJsonParser());
     }
 
     ngAfterViewChecked() {
@@ -110,14 +113,26 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
             const mapElement = this.mapElements[i];
 
             if (mapElement.trackUrl) {
-                const gpxObj = new GPX(this.gpxLoader, mapElement, {
-                    async: true,
-                    display_wpt: false,
-                    generateName: this.options.flgGenerateNameFromGpx,
-                    showStartMarker: this.options.showStartMarker,
-                    showEndMarker: this.options.showEndMarker
-                });
-                gpxObj.on('loaded', function (e) {
+                let geoFeature: GeoParsedFeature;
+
+                if (mapElement.trackUrl.endsWith('.gpx')) {
+                    geoFeature = new GeoParsedFeature(this.gpxLoader, mapElement, {
+                        async: true,
+                        display_wpt: false,
+                        generateName: this.options.flgGenerateNameFromGpx,
+                        showStartMarker: this.options.showStartMarker,
+                        showEndMarker: this.options.showEndMarker
+                    });
+                } else {
+                    geoFeature = new GeoParsedFeature(this.jsonLoader, mapElement, {
+                        async: true,
+                        display_wpt: false,
+                        generateName: this.options.flgGenerateNameFromGpx,
+                        showStartMarker: this.options.showStartMarker,
+                        showEndMarker: this.options.showEndMarker
+                    });
+                }
+                geoFeature.on('loaded', function (e) {
                     const loadedTrackFeature = <Layer>e.target;
                     const loadedMapElement = <MapElement>e['mapElement'];
                     me.featureGroup.addLayer(loadedTrackFeature);

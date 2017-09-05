@@ -1,25 +1,8 @@
 import LatLng = L.LatLng;
+import {GeoParser, GeoElement, GeoElementType} from './geo.parser';
 
-export enum GeoElementType {
-    TRACK,
-    ROUTE,
-    WAYPOINT
-}
-
-export class GeoElement {
-    type: GeoElementType;
-    points: LatLng[] = [];
-    name: string;
-
-    constructor(type: GeoElementType, points: L.LatLng[], name: string) {
-        this.type = type;
-        this.points = points;
-        this.name = name;
-    }
-}
-
-export class GpxParser  {
-    parseGpx(xml: string, options): GeoElement[] {
+export class GeoGpxParser extends GeoParser {
+    parse(xml: string, options): GeoElement[] {
         if (!xml || !xml.startsWith('<?xml')) {
             return;
         }
@@ -134,24 +117,5 @@ export class GpxParser  {
     parse_wpt(e, gpxDom): GeoElement {
         const m = new GeoElement(GeoElementType.WAYPOINT, [new L.LatLng(e.getAttribute('lat'), e.getAttribute('lon'))], undefined);
         return m;
-    }
-
-    _humanLen(l) {
-        if (l < 2000) {
-            return l.toFixed(0) + ' m';
-        } else {
-            return (l / 1000).toFixed(1) + ' km';
-        }
-    }
-
-    _polylineLen(ll: LatLng[]) {
-        let d = 0, p = null;
-        for (let i = 0; i < ll.length; i++) {
-            if (i && p) {
-                d += p.distanceTo(ll[i]);
-            }
-            p = ll[i];
-        }
-        return d;
     }
 }

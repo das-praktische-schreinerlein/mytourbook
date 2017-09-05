@@ -5,7 +5,7 @@ import 'leaflet.markercluster';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {MapElement} from '../../../../../shared/angular-maps/services/leaflet-gpx.plugin';
+import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
 import LatLng = L.LatLng;
 @Component({
     selector: 'app-sdoc-map',
@@ -76,7 +76,7 @@ export class SDocMapComponent implements OnChanges {
                 const mapElement: MapElement = {
                     id: record.id,
                     name: record.name,
-                    trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.gpx',
+                    trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json',
                     popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                     type: record.type
                 };

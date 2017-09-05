@@ -2,8 +2,8 @@
  * inspired by leaflet-plugins
  */
 import layers = L.control.layers;
-import {GeoElement, GeoElementType} from './gpx.parser';
-import {GpxLoader} from './gpx.loader';
+import {GeoLoader} from './geo.loader';
+import {GeoElement, GeoElementType} from './geo.parser';
 
 export interface MapElement {
     id: string;
@@ -14,39 +14,39 @@ export interface MapElement {
     type?: string;
 }
 
-export class GPX extends L.FeatureGroup {
+export class GeoParsedFeature extends L.FeatureGroup {
     options: any;
     _layers: {};
     layers: {};
-    gpxLoader: GpxLoader;
+    geoLoader: GeoLoader;
 
-    constructor(gpxLoader: GpxLoader, gpxElement: MapElement, options: {}) {
+    constructor(geoLoader: GeoLoader, geoElement: MapElement, options: {}) {
         super([]);
-        this.gpxLoader = gpxLoader;
-        this.initialize(gpxLoader, gpxElement, options);
+        this.geoLoader = geoLoader;
+        this.initialize(geoLoader, geoElement, options);
     }
 
-    initialize(gpxLoader: GpxLoader, gpxElement: MapElement, options: {}) {
-        this.gpxLoader = gpxLoader;
+    initialize(geoLoader: GeoLoader, geoElement: MapElement, options: {}) {
+        this.geoLoader = geoLoader;
         L.Util.setOptions(this, options);
         this._layers = {};
 
-        if (gpxElement) {
-            this.addGPX(gpxElement, options);
+        if (geoElement) {
+            this.addGeoData(geoElement, options);
         }
     }
 
-    addGPX(gpxElement: MapElement, options) {
+    addGeoData(geoElement: MapElement, options) {
         const me = this;
 
-        this.gpxLoader.loadGpx(gpxElement.trackUrl, options).then(function onLoaded(geoElements) {
-            const layers = me.convertGeoElementsToLayers(gpxElement, geoElements, options);
+        this.geoLoader.loadData(geoElement.trackUrl, options).then(function onLoaded(geoElements) {
+            const layers = me.convertGeoElementsToLayers(geoElement, geoElements, options);
             if (layers !== undefined) {
                 me.addLayer(layers);
-                me.fire('loaded', { mapElement: gpxElement, layers: layers});
+                me.fire('loaded', { mapElement: geoElement, layers: layers});
             }
         }).catch(function onError(error) {
-            console.error('failed to load gpx for leeafletmap:' + gpxElement, error);
+            console.error('failed to load gpx for leeafletmap:' + geoElement, error);
         });
     }
 
