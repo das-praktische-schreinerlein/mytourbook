@@ -77,6 +77,7 @@ export class SDocMapComponent implements OnChanges {
                     id: record.id,
                     name: record.name,
                     trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json',
+                    trackSrc: this.sdocs[i].gpsTrack,
                     popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                     type: record.type
                 };
