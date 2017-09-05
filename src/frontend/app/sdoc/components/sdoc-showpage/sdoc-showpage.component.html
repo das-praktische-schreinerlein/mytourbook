@@ -82,6 +82,7 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [showForm]="false"
                                             [showTimetable]="'true'"
+                                            [loadTrack]="'true'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
@@ -210,6 +211,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
+                                            [loadTrack]="'true'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Routen'"

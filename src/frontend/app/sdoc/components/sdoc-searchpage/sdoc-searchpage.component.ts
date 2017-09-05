@@ -253,7 +253,11 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
         const me = this;
         me.showLoadingSpinner = true;
-        this.sdocDataService.search(this.searchForm).then(function doneSearch(sdocSearchResult) {
+        this.sdocDataService.search(this.searchForm, {
+            showFacets: true,
+            loadTrack: true,
+            showForm: true
+        }).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult === undefined) {
                 console.log('empty searchResult', sdocSearchResult);
             } else {

@@ -103,6 +103,7 @@ export class SDocServerModule {
                 try {
                     const searchOptions: GenericSearchOptions = {
                         showForm: req.query['showForm'] !== 'false',
+                        loadTrack: req.query['loadTrack'] !== 'true',
                         showFacets: true
                     };
                     if (req.query['showFacets'] === 'false') {

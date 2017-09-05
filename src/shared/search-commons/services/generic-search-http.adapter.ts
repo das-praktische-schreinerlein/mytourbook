@@ -175,6 +175,7 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         }
         ret['showForm'] = opts.showForm;
         ret['showFacets'] = opts.showFacets;
+        ret['loadTrack'] = opts.loadTrack;
         return ret;
     }
 

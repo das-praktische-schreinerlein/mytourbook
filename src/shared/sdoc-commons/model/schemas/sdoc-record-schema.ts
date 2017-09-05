@@ -21,6 +21,7 @@ export const SDocRecordSchema = new Schema({
         geoLon: {type: 'string'},
         geoLat: {type: 'string'},
         geoLoc: {type: 'string'},
+        gpsTrack: {type: 'string'},
         gpsTrackBasefile: {type: 'string'},
         keywords: {type: 'string'},
         locHirarchie: {type: 'string'},

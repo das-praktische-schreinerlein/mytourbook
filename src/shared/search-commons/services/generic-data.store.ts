@@ -166,6 +166,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
             const options = {
                 originalSearchForm: searchForm,
                 showFacets: opts && opts['showFacets'] !== undefined ? opts['showFacets'] : true,
+                loadTrack: opts && opts['loadTrack'] !== undefined ? opts['loadTrack'] : false,
                 showForm: opts && opts['showForm'] !== undefined ? opts['showForm'] : true,
                 force: false,
                 limit: searchForm.perPage,

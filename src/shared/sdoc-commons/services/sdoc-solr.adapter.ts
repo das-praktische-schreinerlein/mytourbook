@@ -38,6 +38,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             geo_lon_s: props.geoLon,
             geo_lat_s: props.geoLat,
             geo_loc_p: props.geoLoc,
+            gpstrack_s: props.gpsTrack,
             gpstracks_basefile_s: props.gpsTrackBasefile,
             keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
             loc_lochirarchie_s: (props.locHirarchie ? props.locHirarchie
@@ -82,6 +83,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         values['geoLon'] = this.getSolrCoorValue(doc, 'geo_lon_s', undefined);
         values['geoLat'] = this.getSolrCoorValue(doc, 'geo_lat_s', undefined);
         values['geoLoc'] = this.getSolrCoorValue(doc, 'geo_loc_p', undefined);
+        values['gpsTrack'] = this.getSolrValue(doc, 'gpstrack_s', undefined);
         values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_s', undefined);
         values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.getSolrValue(doc, 'name_s', undefined);
@@ -202,7 +204,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     }
 
     getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
-        return ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i',
+        const fields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
             'data_tech_dist_f', 'data_tech_dur_f',
@@ -212,6 +214,12 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
             'actiontype_ss', 'subtype_s', 'i_fav_url_txt'];
+
+        if (opts.loadTrack === true) {
+            fields.push('gpstrack_s');
+        }
+
+        return fields;
     };
 
     getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {

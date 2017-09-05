@@ -6,6 +6,7 @@ import {Adapter} from 'js-data-adapter';
 
 export interface GenericSearchOptions {
     showForm: boolean;
+    loadTrack: boolean;
     showFacets: string[]|boolean;
 }
 
