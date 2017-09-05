@@ -3,21 +3,23 @@
         <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
         <div class="container">
             <h5 class="">{{label}}: {{ searchResult.recordCount }}</h5>
-            <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined">{{searchLinkLabel}}</a>
+            <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined" class="btn btn-primary btn-sm float">{{searchLinkLabel}}</a>
+            <button *ngIf="!showResultList" class="btn btn-primary btn-sm float-right" (click)="showResultList = true" i18n="button show resultlist|Buttontext to show resultlist@@button.inlineSearchPage.show.resultlist">Ergebnisse zeigen</button>
+            <button *ngIf="showResultList" class="btn btn-primary btn-sm float-right" (click)="showResultList = false" i18n="button hide resultlist|Buttontext to hide resultlist@@button.inlineSearchPage.hide.resultlist">Ergebnisse ausblenden</button>
         </div>
         <div class="container" *ngIf="showForm">
             <app-sdoc-searchform [searchResult]="searchResult"
                                  (search)="onSearchSDoc($event)"></app-sdoc-searchform>
         </div>
-        <div class="container" *ngIf="showTimetable">
+        <div class="container" *ngIf="showTimetable && showResultList">
             <app-sdoc-timetable [searchResult]="searchResult"></app-sdoc-timetable>
         </div>
-        <div class="container">
+        <div class="container" *ngIf="showResultList">
             <app-sdoc-list [searchResult]="searchResult"
                            [layout]="layout"
                            (show)="onShowSDoc($event)"></app-sdoc-list>
         </div>
-        <div class="container">
+        <div class="container" *ngIf="showResultList">
             <app-sdoc-list-footer [searchResult]="searchResult"
                                   (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
         </div>
