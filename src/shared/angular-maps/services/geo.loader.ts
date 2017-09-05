@@ -11,7 +11,7 @@ export class GeoLoader  {
                     resolve(this.parser.parse(res.text(), options));
                 },
                 error => {
-                    console.error('loading gpx-failed failed:' + url, error);
+                    console.error('loading geofeature failed:' + url, error);
                     reject(error);
                 });
         });
