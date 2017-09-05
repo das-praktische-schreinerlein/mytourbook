@@ -26,24 +26,11 @@ export class SDocRoutingService {
         return this.lastBaseUrl;
     }
 
-    getBackToFromUrl(route: ActivatedRoute): string {
-        let redirectUrl = this.getLastSearchUrl();
-        const from = this.getFromRoute(route);
-        if (from !== undefined && from !== null && !from.startsWith('http://')) {
-            redirectUrl = from;
-        }
-        return redirectUrl;
-    }
-
     getShowUrl(sDoc: SDocRecord, from: string): string {
         const name = (sDoc.name ? sDoc.name : '')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
             .replace(/ +/g, ' ').replace(/ /g, '-').trim();
         return this.lastBaseUrl + 'show/' + name + '/' + sDoc.id + (from ? '?from=' + from : '');
-    }
-
-    navigateBackToFrom(route: ActivatedRoute): Promise<boolean> {
-        return this.router.navigateByUrl(this.getBackToFromUrl(route));
     }
 
     navigateBackToSearch(): Promise<boolean> {
@@ -52,14 +39,5 @@ export class SDocRoutingService {
 
     navigateToShow(sDoc: SDocRecord, from: string): Promise<boolean> {
         return this.router.navigateByUrl(this.getShowUrl(sDoc, from));
-    }
-
-    getFromRoute(route: ActivatedRoute): string {
-        const from = route.snapshot.queryParamMap.get('from');
-        if (from !== undefined && from !== null && !from.startsWith('http://')) {
-            return from;
-        }
-
-        return undefined;
     }
 }
