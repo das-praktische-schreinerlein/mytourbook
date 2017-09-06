@@ -61,6 +61,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
     mapSolrDocument(mapper: Mapper, doc: any): Record {
         const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
+        const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
         const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
@@ -198,6 +199,25 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             record.set('sdocratepers', undefined);
         }
 
+        const dataInfoValues = {};
+        dataInfoValues['guides'] = this.getSolrValue(doc, 'data_info_guides_s', undefined);
+        dataInfoValues['region'] = this.getSolrValue(doc, 'data_info_region_s', undefined);
+        dataInfoValues['baseloc'] = this.getSolrValue(doc, 'data_info_baseloc_s', undefined);
+        dataInfoValues['destloc'] = this.getSolrValue(doc, 'data_info_destloc_s', undefined);
+        let dataInfoSet = false;
+        for (const field in dataInfoValues) {
+            if (dataInfoValues[field] !== undefined) {
+                dataInfoSet = true;
+                break;
+            }
+        }
+
+        if (dataInfoSet) {
+            record.set('sdocdatainfo', dataInfoMapper.createRecord(dataInfoValues));
+        } else {
+            record.set('sdocdatainfo', undefined);
+        }
+
         // console.log('mapSolrDocument record full:', record);
 
         return record;
@@ -208,6 +228,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
             'data_tech_dist_f', 'data_tech_dur_f',
+            'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s',
             'rate_pers_ausdauer_i', 'rate_pers_bildung_i', 'rate_pers_gesamt_i', 'rate_pers_kraft_i', 'rate_pers_mental_i',
             'rate_pers_motive_i', 'rate_pers_schwierigkeit_i', 'rate_pers_wichtigkeit_i',
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',

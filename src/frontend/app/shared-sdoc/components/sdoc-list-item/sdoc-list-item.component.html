@@ -72,6 +72,7 @@
                             <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
                             <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                             <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
+                            <app-sdoc-datainfo [record]="record"></app-sdoc-datainfo >
                         </ng-template>
                     </ngb-panel>
                     <ngb-panel *ngIf="record.gpsTrackBasefile || (record.geoLat != undefined && record.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">

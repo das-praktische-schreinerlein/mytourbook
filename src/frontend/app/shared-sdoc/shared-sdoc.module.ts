@@ -30,6 +30,7 @@ import {SDocListItemPageComponent} from './components/sdoc-list-item-page/sdoc-l
 import {SDocTimetableComponent} from './components/sdoc-timetable/sdoc-timetable.component';
 import {SDocRatePersonalDifficultyComponent} from './components/sdoc-ratepers-difficulty/sdoc-ratepers-difficulty.component';
 import {SDocKeywordsComponent} from './components/sdoc-keywords/sdoc-keywords.component';
+import {SDocDataInfoComponent} from './components/sdoc-datainfo/sdoc-datainfo.component';
 
 @NgModule({
     declarations: [
@@ -52,6 +53,7 @@ import {SDocKeywordsComponent} from './components/sdoc-keywords/sdoc-keywords.co
         SDocRatePersonalComponent,
         SDocRatePersonalDifficultyComponent,
         SDocKeywordsComponent,
+        SDocDataInfoComponent,
         SDocRateTechComponent,
         SDocTimetableComponent
     ],
@@ -92,6 +94,7 @@ import {SDocKeywordsComponent} from './components/sdoc-keywords/sdoc-keywords.co
         SDocRatePersonalComponent,
         SDocRatePersonalDifficultyComponent,
         SDocKeywordsComponent,
+        SDocDataInfoComponent,
         SDocRateTechComponent,
         SDocTimetableComponent
     ]

@@ -10,6 +10,8 @@ import {SDocDataTechRecord, SDocDataTechRecordRelation} from '../model/records/s
 import {SDocRateTechRecordSchema} from '../model/schemas/sdocratetech-record-schema';
 import {SDocRatePersonalRecordSchema} from '../model/schemas/sdocratepers-record-schema';
 import {SDocRatePersonalRecord, SDocRatePersonalRecordRelation} from '../model/records/sdocratepers-record';
+import {SDocDataInfoRecord, SDocDataInfoRecordRelation} from '../model/records/sdocdatainfo-record';
+import {SDocDataInfoRecordSchema} from '../model/schemas/sdocdatainfo-record-schema';
 
 export class SDocDataService extends SDocSearchService {
 
@@ -17,6 +19,7 @@ export class SDocDataService extends SDocSearchService {
         super(dataStore);
         this.dataStore.defineMapper('sdoc', SDocRecord, SDocRecordSchema, SDocRecordRelation);
         this.dataStore.defineMapper('sdocdatatech', SDocDataTechRecord, SDocDataTechRecordSchema, SDocDataTechRecordRelation);
+        this.dataStore.defineMapper('sdocdatainfo', SDocDataInfoRecord, SDocDataInfoRecordSchema, SDocDataInfoRecordRelation);
         this.dataStore.defineMapper('sdocimage', SDocImageRecord, SDocImageRecordSchema, SDocImageRecordRelation);
         this.dataStore.defineMapper('sdocratepers', SDocRatePersonalRecord, SDocRatePersonalRecordSchema, SDocRatePersonalRecordRelation);
         this.dataStore.defineMapper('sdocratetech', SDocRateTechRecord, SDocRateTechRecordSchema, SDocRateTechRecordRelation);
