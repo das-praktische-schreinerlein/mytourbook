@@ -15,6 +15,7 @@
                     <tr *ngIf="record.type !== 'LOCATION'"><td><h5>{{record.type | translate }}</h5></td><td>&nbsp;</td></tr>
                     <tr><td><h5>{{record.subtype | translate }}</h5></td><td>&nbsp;</td></tr>
                     <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                    <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
                     <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                 </table>
             </div>
@@ -56,6 +57,7 @@
                                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                                 <table>
                                     <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                                    <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
                                     <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                                 </table>
                             </div>
@@ -74,6 +76,7 @@
                             <div class="col-8 location">
                                 <table>
                                     <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                                    <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
                                     <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                                 </table>
                                 <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
@@ -103,6 +106,7 @@
                             <table>
                                 <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                                 <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                                <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
                                 <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                             </table>
                             <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
@@ -115,6 +119,7 @@
                         <table>
                             <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                             <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                            <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
                             <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                         </table>
                         <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>

@@ -1,4 +1,5 @@
 <ng-container *ngIf="sdocratepers !== undefined">
     <tr *ngIf="sdocratepers.gesamt > 0"><td>Gesamt:</td><td><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.gesamt)" [readonly]="'true'"></ngb-rating></td></tr>
-    <tr *ngIf="sdocratepers.schwierigkeit > 0"><td>Schwierig?:</td><td><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.schwierigkeit)" [readonly]="'true'"></ngb-rating></td></tr>
+    <tr *ngIf="!small && sdocratepers.bildung > 0"><td>Bildung:</td><td><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.bildung)" [readonly]="'true'"></ngb-rating></td></tr>
+    <tr *ngIf="!small && sdocratepers.motive > 0"><td>Motive:</td><td><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.motive)" [readonly]="'true'"></ngb-rating></td></tr>
 </ng-container>

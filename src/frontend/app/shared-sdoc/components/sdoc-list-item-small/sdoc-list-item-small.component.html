@@ -14,6 +14,7 @@
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                 <table>
                     <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers >
+                    <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
                     <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                 </table>
             </div>

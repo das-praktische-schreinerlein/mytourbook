@@ -28,6 +28,7 @@ import {SDocDataTechComponent} from './components/sdoc-datatech/sdoc-datatech.co
 import {SDocRatePersonalComponent} from './components/sdoc-ratepers/sdoc-ratepers.component';
 import {SDocListItemPageComponent} from './components/sdoc-list-item-page/sdoc-list-item-page.component';
 import {SDocTimetableComponent} from './components/sdoc-timetable/sdoc-timetable.component';
+import {SDocRatePersonalDifficultyComponent} from './components/sdoc-ratepers-difficulty/sdoc-ratepers-difficulty.component';
 
 @NgModule({
     declarations: [
@@ -48,6 +49,7 @@ import {SDocTimetableComponent} from './components/sdoc-timetable/sdoc-timetable
         SDocLinkedLocHierarchyComponent,
         SDocDataTechComponent,
         SDocRatePersonalComponent,
+        SDocRatePersonalDifficultyComponent,
         SDocRateTechComponent,
         SDocTimetableComponent
     ],
@@ -86,6 +88,7 @@ import {SDocTimetableComponent} from './components/sdoc-timetable/sdoc-timetable
         SDocLinkedLocHierarchyComponent,
         SDocDataTechComponent,
         SDocRatePersonalComponent,
+        SDocRatePersonalDifficultyComponent,
         SDocRateTechComponent,
         SDocTimetableComponent
     ]
