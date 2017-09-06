@@ -30,7 +30,7 @@ export class SDocRoutingService {
         const name = (sDoc.name ? sDoc.name : '')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
             .replace(/ +/g, ' ').replace(/ /g, '-').trim();
-        return this.lastBaseUrl + 'show/' + name + '/' + sDoc.id + (from ? '?from=' + from : '');
+        return this.lastBaseUrl + 'show/' + name + '/' + sDoc.id; // + (from ? '?from=' + from : '');
     }
 
     navigateBackToSearch(): Promise<boolean> {
