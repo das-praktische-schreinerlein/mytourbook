@@ -1,0 +1,10 @@
+<div *ngIf="keywordKats.length > 0" class="techvaluetable">
+    <ng-container *ngFor="let kat of keywordKats">
+        <div class='entry'>
+            <div class='label'>{{kat.name}}:</div>
+            <div class='value'>
+                {{ kat.keywords.join(', ')}}
+            </div>
+        </div>
+    </ng-container>
+</div>

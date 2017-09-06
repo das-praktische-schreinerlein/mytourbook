@@ -11,19 +11,15 @@
                 </ng-container>
             </div>
             <div class="col-2 type layout-big">
-                <table>
-                    <tr *ngIf="record.type !== 'LOCATION'"><td><h5>{{record.type | translate }}</h5></td><td>&nbsp;</td></tr>
-                    <tr><td><h5>{{record.subtype | translate }}</h5></td><td>&nbsp;</td></tr>
-                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-                    <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                    <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
-                </table>
+                <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
+                <h5>{{record.subtype | translate }}</h5>
+                <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
             </div>
             <div class="col-4 layout-big"><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
             <div class="col-2 ratetech layout-big">
-                <table>
-                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                </table>
+                <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
             </div>
             <div class="col-3 location layout-big">
                 <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
@@ -49,17 +45,13 @@
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <table>
-                                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                                </table>
+                                <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                             </div>
                             <div class="col-8">
                                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
-                                <table>
-                                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-                                    <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                                    <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
-                                </table>
+                                <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                                <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                                <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                             </div>
                         </div>
                     </div>
@@ -69,16 +61,12 @@
                         <div class=""><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
                         <div class="row">
                             <div class="col-4 location">
-                                <table>
-                                    <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                                </table>
+                                <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                             </div>
                             <div class="col-8 location">
-                                <table>
-                                    <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-                                    <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                                    <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
-                                </table>
+                                <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                                <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                                <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                                 <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
                                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                             </div>
@@ -103,12 +91,10 @@
                     <div class="col-9 location layout-verysmall">
                         <div class="">
                             <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
-                            <table>
-                                <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                                <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-                                <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                                <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
-                            </table>
+                            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                            <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                            <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                            <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                             <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                         </div>
                     </div>
@@ -116,12 +102,10 @@
                 <ng-container *ngSwitchDefault="">
                     <div class="col-9 location layout-verysmall">
                         <div class=""><a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a></div>
-                        <table>
-                            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                            <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-                            <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                            <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
-                        </table>
+                        <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                        <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
+                        <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                        <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
                         <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
                         <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.datevon | date: 'dd.MM.yyyy'}}</h5></a>
                     </div>

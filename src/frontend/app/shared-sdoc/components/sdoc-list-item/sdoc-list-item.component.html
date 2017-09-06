@@ -28,6 +28,12 @@
                                           [mapCenterPos]="undefined"></app-sdoc-map>
                         </ng-template>
                     </ngb-panel>
+                    <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
+                        <ng-template ngbPanelContent>
+                            <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
+                            <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
+                        </ng-template>
+                    </ngb-panel>
                 </ngb-accordion>
             </p>
         </div>
@@ -61,21 +67,11 @@
                 <ngb-accordion #acc="ngbAccordion" activeIds="">
                     <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <ul class="props">
-                                <li>
-                                    <table>
-                                        <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
-                                        <app-sdoc-ratepers-difficulty [record]="record" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                                        <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
-                                        <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                                    </table>
-                                </li>
-                                <li *ngIf="record.keywords !== ''">
-                                    <table>
-                                        <tr><td>Keywords:</td><td>{{record.keywords}}</td></tr>
-                                    </table>
-                                </li>
-                            </ul>
+                            <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
+                            <app-sdoc-ratepers-difficulty [record]="record"></app-sdoc-ratepers-difficulty>
+                            <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+                            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                            <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
                         </ng-template>
                     </ngb-panel>
                     <ngb-panel *ngIf="record.gpsTrackBasefile || (record.geoLat != undefined && record.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">

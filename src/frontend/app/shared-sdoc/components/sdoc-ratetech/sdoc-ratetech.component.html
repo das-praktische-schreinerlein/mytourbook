@@ -1,9 +1,11 @@
 <ng-container *ngIf="sdocratetech !== undefined">
-    <tr *ngIf="sdocratetech.overall !== undefined && sdocratetech.overall.length > 0"><td>Overall:</td><td>{{sdocratetech.overall}}</td></tr>
-    <tr *ngIf="!small && sdocratetech.bergtour !== undefined && sdocratetech.bergtour.length > 0"><td>Bergtour:</td><td>{{sdocratetech.bergtour}}</td></tr>
-    <tr *ngIf="!small && sdocratetech.klettern !== undefined && sdocratetech.klettern.length > 0"><td>Klettern:</td><td>{{sdocratetech.klettern}}</td></tr>
-    <tr *ngIf="!small && sdocratetech.ks !== undefined && sdocratetech.ks.length > 0"><td>Klettersteig:</td><td>{{sdocratetech.ks}}</td></tr>
-    <tr *ngIf="!small && sdocratetech.gletscher !== undefined && sdocratetech.gletscher.length > 0"><td>Gletscher:</td><td>{{sdocratetech.gletscher}}</td></tr>
-    <tr *ngIf="!small && sdocratetech.firn !== undefined && sdocratetech.firn.length > 0"><td>Firn:</td><td>{{sdocratetech.firn}}</td></tr>
-    <tr *ngIf="!small && sdocratetech.schneeschuh !== undefined && sdocratetech.schneeschuh.length > 0"><td>Schneeschuh:</td><td>{{sdocratetech.schneeschuh}}</td></tr>
+    <div class="techvaluetable">
+        <div *ngIf="sdocratetech.overall !== undefined && sdocratetech.overall.length > 0" class="entry"><div class="label">Overall:</div><div class="value">{{sdocratetech.overall}}</div></div>
+        <div *ngIf="!small && sdocratetech.bergtour !== undefined && sdocratetech.bergtour.length > 0" class="entry"><div class="label">Bergtour:</div><div class="value">{{sdocratetech.bergtour}}</div></div>
+        <div *ngIf="!small && sdocratetech.klettern !== undefined && sdocratetech.klettern.length > 0" class="entry"><div class="label">Klettern:</div><div class="value">{{sdocratetech.klettern}}</div></div>
+        <div *ngIf="!small && sdocratetech.ks !== undefined && sdocratetech.ks.length > 0" class="entry"><div class="label">Klettersteig:</div><div class="value">{{sdocratetech.ks}}</div></div>
+        <div *ngIf="!small && sdocratetech.gletscher !== undefined && sdocratetech.gletscher.length > 0" class="entry"><div class="label">Gletscher:</div><div class="value">{{sdocratetech.gletscher}}</div></div>
+        <div *ngIf="!small && sdocratetech.firn !== undefined && sdocratetech.firn.length > 0" class="entry"><div class="label">Firn:</div><div class="value">{{sdocratetech.firn}}</div></div>
+        <div *ngIf="!small && sdocratetech.schneeschuh !== undefined && sdocratetech.schneeschuh.length > 0" class="entry"><div class="label">Schneeschuh:</div><div class="value">{{sdocratetech.schneeschuh}}</div></div>
+    </div>
 </ng-container>

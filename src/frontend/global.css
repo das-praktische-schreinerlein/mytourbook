@@ -93,3 +93,22 @@ div.relative-container {
     border-color: gold !IMPORTANT;
     background: gold;
 }
+
+
+div.techvaluetable {
+    display: inline-grid;
+    border: 1px solid #bfccd3;
+}
+div.techvaluetable .entry {
+    font-size: 0.75rem;
+}
+div.techvaluetable .entry .label {
+    min-width: 75px;
+    display: inline-grid;
+    font-weight: bold;
+    white-space: nowrap;
+}
+div.techvaluetable .entry .value {
+    display: inline-grid;
+    min-width: 50px;
+}

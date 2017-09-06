@@ -1,5 +1,7 @@
-td {
-    font-size: 0.75rem;
+div.datatechvaluetable .entry .label {
+    min-width: 30px;
+}
+div.datatechvaluetable .entry .value {
     text-align: right;
     white-space: nowrap;
 }

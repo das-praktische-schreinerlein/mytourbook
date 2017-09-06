@@ -1,6 +1,8 @@
 <ng-container *ngIf="sdocdatatech !== undefined">
-    <tr *ngIf="sdocdatatech.dur > 0"><td>&#x231A;:</td><td>{{sdocdatatech.dur}} h</td></tr>
-    <tr *ngIf="sdocdatatech.altAsc > 0"><td>&#x2197;:</td><td>{{sdocdatatech.altAsc}} Hm</td></tr>
-    <tr *ngIf="sdocdatatech.altMax > 0"><td>max:</td><td>{{sdocdatatech.altMax}} m</td></tr>
-    <tr *ngIf="sdocdatatech.dist > 0"><td>&#x2194;:</td><td>{{sdocdatatech.dist}} km</td></tr>
+    <div class="techvaluetable datatechvaluetable">
+        <div *ngIf="sdocdatatech.dur > 0" class="entry"><div class="label">&#x231A;:</div><div class="value">{{sdocdatatech.dur}} h</div></div>
+        <div *ngIf="sdocdatatech.altAsc > 0" class="entry"><div class="label">&#x2197;:</div><div class="value">{{sdocdatatech.altAsc}} Hm</div></div>
+        <div *ngIf="sdocdatatech.altMax > 0" class="entry"><div class="label">max:</div><div class="value">{{sdocdatatech.altMax}} m</div></div>
+        <div *ngIf="sdocdatatech.dist > 0" class="entry"><div class="label">&#x2194;:</div><div class="value">{{sdocdatatech.dist}} km</div></div>
+    </div>
 </ng-container>
