@@ -9,7 +9,7 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         super(config);
     }
 
-    mapToSolrFieldName(fieldName: string): string {
+    mapToAdapterFieldName(fieldName: string): string {
         switch (fieldName) {
             case 'name':
                 return 'name_txt';
@@ -19,10 +19,10 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
                 break;
         }
 
-        return super.mapToSolrFieldName(fieldName);
+        return super.mapToAdapterFieldName(fieldName);
     }
 
-    mapToSolrDocument(props: any): any {
+    mapToAdapterDocument(props: any): any {
         const values = {
             id: props.id,
             desc_txt: props.desc,
@@ -37,25 +37,25 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         return values;
     }
 
-    mapSolrDocument(mapper: Mapper, doc: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any): Record {
         const values = {};
-        values['id'] = this.getSolrValue(doc, 'id', undefined);
+        values['id'] = this.getAdapterValue(doc, 'id', undefined);
 
-        values['desc'] = this.getSolrValue(doc, 'desc_txt', undefined);
-        values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
-        values['name'] = this.getSolrValue(doc, 'name_txt', undefined);
-        values['type'] = this.getSolrValue(doc, 'type_txt', undefined);
+        values['desc'] = this.getAdapterValue(doc, 'desc_txt', undefined);
+        values['keywords'] = this.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
+        values['name'] = this.getAdapterValue(doc, 'name_txt', undefined);
+        values['type'] = this.getAdapterValue(doc, 'type_txt', undefined);
 
-        // console.log('mapSolrDocument values:', values);
+        // console.log('mapResponseDocument values:', values);
 
         const record: PDocRecord = <PDocRecord>mapper.createRecord(values);
 
-        // console.log('mapSolrDocument record full:', record);
+        // console.log('mapResponseDocument record full:', record);
 
         return record;
     }
 
-    getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
+    getAdapterFields(mapper: Mapper, params: any, opts: any): string[] {
         return ['id', 'desc_txt', 'keywords_txt', 'name_txt', 'type_txt'];
     };
 

@@ -7,7 +7,7 @@ import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter'
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
-export class SolrFilterActions {
+export class AdapterFilterActions {
     static LIKEI = 'likei';
     static LIKE = 'like';
     static EQ1 = '==';
@@ -32,10 +32,10 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('count');
-        opts.solrQuery = true;
-        opts.solrCount = true;
+        opts.adapterQuery = true;
+        opts.adapterCount = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
 
         return super.count(mapper, query, opts);
     }
@@ -44,13 +44,13 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('create');
-        opts.solrQuery = true;
+        opts.adapterQuery = true;
         opts.params = this.getParams(opts);
         opts.params = this.queryTransform(mapper, opts.params, opts);
         opts.suffix = this.getSuffix(mapper, opts);
         const query = {
             add: {
-                doc: this.mapToSolrDocument(props)
+                doc: this.mapToAdapterDocument(props)
             },
             commit: {}
         };
@@ -65,7 +65,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('destroy');
-        opts.solrQuery = true;
+        opts.adapterQuery = true;
         opts.params = this.getParams(opts);
         opts.params = this.queryTransform(mapper, opts.params, opts);
         opts.suffix = this.getSuffix(mapper, opts);
@@ -75,7 +75,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             },
             commit: {}
         };
-        opts.solrDeletequery = query;
+        opts.adapterDeletequery = query;
         return super.destroy(mapper, id, opts);
     }
 
@@ -87,14 +87,14 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('find');
-        opts.solrQuery = true;
+        opts.adapterQuery = true;
         const me = this;
         opts.params = opts.params || {};
         opts.params.where = opts.params.where || {};
         opts.params.where.id = { '==': id};
         opts.offset = 0;
         opts.limit = 10;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
 
         return super.find(mapper, id, opts);
     }
@@ -104,9 +104,9 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('findAll');
-        opts.solrQuery = true;
+        opts.adapterQuery = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
 
         return super.findAll(mapper, query, opts);
     }
@@ -117,10 +117,10 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('findAll');
-        opts.solrQuery = true;
-        opts.solrFacet = true;
+        opts.adapterQuery = true;
+        opts.adapterFacet = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
 
         opts.params = this.getParams(opts);
         opts.params.count = true;
@@ -156,10 +156,10 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('findAll');
-        opts.solrQuery = true;
-        opts.solrFacet = true;
+        opts.adapterQuery = true;
+        opts.adapterFacet = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToSolrQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
 
         opts.params = this.getParams(opts);
         opts.params.count = true;
@@ -197,13 +197,13 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('update');
-        opts.solrQuery = true;
+        opts.adapterQuery = true;
         opts.params = this.getParams(opts);
         opts.params = this.queryTransform(mapper, opts.params, opts);
         opts.suffix = this.getSuffix(mapper, opts);
         const query = {
             add: {
-                doc: this.mapToSolrDocument(props)
+                doc: this.mapToAdapterDocument(props)
             },
             commit: {}
         };
@@ -265,7 +265,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     _destroy (mapper: Mapper, id: string | number, opts: any) {
         let url = this.getPath('delete', mapper, id, opts);
-        url = url + '&stream.body=' + encodeURIComponent(JSON.stringify(opts.solrDeletequery));
+        url = url + '&stream.body=' + encodeURIComponent(JSON.stringify(opts.adapterDeletequery));
         opts.contentType = 'application/json';
         return this.GET(
             url,
@@ -284,13 +284,13 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     }
 
     deserialize(mapper: Mapper, response: any, opts: any) {
-        if (opts.solrQuery) {
+        if (opts.adapterQuery) {
             if (response && (typeof response.data === 'string') && response.data.startsWith('JSONP_CALLBACK(')) {
                 const json = response.data.substring('JSONP_CALLBACK('.length, response.data.length - 2);
                 response.data = JSON.parse(json);
             }
 
-            return this.deserializeSolr(mapper, response, opts);
+            return this.deserializeResponse(mapper, response, opts);
         }
 
         // do default behavior
@@ -299,17 +299,16 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     getPath(method: string, mapper: Mapper, id: string | number, opts: any) {
         let path: string;
-        if (opts.solrQuery) {
-            path = this.getSolrPath(method, mapper, id, opts);
+        if (opts.adapterQuery) {
+            path = this.getAdapterPath(method, mapper, id, opts);
         } else {
             path = super.getPath(method, mapper, id, opts);
         }
         return path;
     }
 
-    deserializeSolr(mapper: Mapper, response: any, opts: any) {
-        // solr-result
-        // console.log('deserializeSolr:', response);
+    deserializeResponse(mapper: Mapper, response: any, opts: any) {
+        // console.log('deserializeResponse:', response);
 
         // check response
         if (response === undefined) {
@@ -319,7 +318,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             return super.deserialize(mapper, response, opts);
         }
 
-        // check for solr
+        // check for adapter-response
         if (response.data.responseHeader === undefined) {
             return super.deserialize(mapper, response, opts);
         }
@@ -331,12 +330,12 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         }
 
         // count
-        if (opts.solrCount) {
+        if (opts.adapterCount) {
             return this.extractCountFromRequestResult(mapper, response.data);
         }
 
         // facet
-        if (opts.solrFacet) {
+        if (opts.adapterFacet) {
             if (response.data.facet_counts === undefined) {
                 return undefined;
             }
@@ -368,9 +367,9 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         const docs = result.response.docs;
         const records = [];
         for (const doc of docs) {
-            records.push(this.mapSolrDocument(mapper, doc));
+            records.push(this.mapResponseDocument(mapper, doc));
         }
-        // console.log('deserializeSolr:', records);
+        // console.log('extractRecordsFromRequestResult:', records);
 
         return records;
     }
@@ -393,14 +392,14 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     }
 
 
-    mapSolrDocument(mapper: Mapper, doc: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any): Record {
         const values = {};
-        values['id'] = Number(this.getSolrValue(doc, 'id', undefined));
-        // console.log('mapSolrDocument values:', values);
+        values['id'] = Number(this.getAdapterValue(doc, 'id', undefined));
+        // console.log('mapResponseDocument values:', values);
         return mapper.createRecord(values);
     }
 
-    getSolrPath(method: string, mapper: Mapper, id: string | number, opts: any) {
+    getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any) {
         let path = [
             opts.basePath === undefined ? (mapper['basePath'] === undefined ? this['basePath'] : mapper['basePath']) : opts.basePath,
             this.getEndpoint(mapper, null, opts)
@@ -409,7 +408,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return path;
     }
 
-    mapToSolrFieldName(fieldName: string): string {
+    mapToAdapterFieldName(fieldName: string): string {
         switch (fieldName) {
             default:
                 break;
@@ -418,9 +417,9 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return fieldName;
     }
 
-    abstract mapToSolrDocument(props: any): any;
+    abstract mapToAdapterDocument(props: any): any;
 
-    abstract getSolrFields(mapper: Mapper, params: any, opts: any): string[];
+    abstract getAdapterFields(mapper: Mapper, params: any, opts: any): string[];
 
     abstract getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
@@ -428,26 +427,26 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     abstract getSortParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
-    getSolrValue(solrDocument: any, solrFieldName: string, defaultValue: any): string {
+    getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
-        if (solrDocument[solrFieldName] !== undefined) {
-            if (Array.isArray(solrDocument[solrFieldName])) {
-                value = solrDocument[solrFieldName][0];
+        if (adapterDocument[adapterFieldName] !== undefined) {
+            if (Array.isArray(adapterDocument[adapterFieldName])) {
+                value = adapterDocument[adapterFieldName][0];
             } else {
-                value = solrDocument[solrFieldName];
+                value = adapterDocument[adapterFieldName];
             }
         }
 
         return value;
     }
 
-    getSolrCoorValue(solrDocument: any, solrFieldName: string, defaultValue: any): string {
+    getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
-        if (solrDocument[solrFieldName] !== undefined) {
-            if (Array.isArray(solrDocument[solrFieldName])) {
-                value = solrDocument[solrFieldName][0];
-            } else if (solrDocument[solrFieldName] !== '0' && solrDocument[solrFieldName] !== '0,0') {
-                value = solrDocument[solrFieldName];
+        if (adapterDocument[adapterFieldName] !== undefined) {
+            if (Array.isArray(adapterDocument[adapterFieldName])) {
+                value = adapterDocument[adapterFieldName][0];
+            } else if (adapterDocument[adapterFieldName] !== '0' && adapterDocument[adapterFieldName] !== '0,0') {
+                value = adapterDocument[adapterFieldName];
             }
         }
 
@@ -486,10 +485,10 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return url;
     }
 
-    private queryTransformToSolrQuery(mapper: Mapper, params: any, opts: any): any {
-        const query = this.createSolrQuery(mapper, params, opts);
+    private queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
+        const query = this.createAdapterQuery(mapper, params, opts);
 
-        const fields = this.getSolrFields(mapper, params, opts);
+        const fields = this.getAdapterFields(mapper, params, opts);
         if (fields !== undefined && fields.length > 0) {
             query.fl = fields.join(' ');
         }
@@ -520,9 +519,9 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return query;
     }
 
-    private createSolrQuery(mapper: Mapper, params: any, opts: any): any {
-        // console.log('queryTransformToSolrQuery params:', params);
-        // console.log('queryTransformToSolrQuery opts:', opts);
+    private createAdapterQuery(mapper: Mapper, params: any, opts: any): any {
+        // console.log('createAdapterQuery params:', params);
+        // console.log('createAdapterQuery opts:', opts);
 
         const newParams = [];
         if (params.where) {
@@ -530,7 +529,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
                 const filter = params.where[fieldName];
                 const action = Object.getOwnPropertyNames(filter)[0];
                 const value = params.where[fieldName][action];
-                newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
+                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
             }
         }
         if (params.additionalWhere) {
@@ -538,43 +537,43 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
                 const filter = params.additionalWhere[fieldName];
                 const action = Object.getOwnPropertyNames(filter)[0];
                 const value = params.additionalWhere[fieldName][action];
-                newParams.push(this.mapFilterToSolrQuery(mapper, fieldName, action, value));
+                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
             }
         }
 
         if (newParams.length <= 0) {
             const query = {'q': '*:*', 'start': opts.offset * opts.limit, 'rows': opts.limit};
-            // console.log('queryTransformToSolrQuery result:', query);
+            // console.log('createAdapterQuery result:', query);
             return query;
         }
 
         const query = {'q': '(' + newParams.join(' AND ') + ')', 'start': opts.offset * opts.limit, 'rows': opts.limit};
-        console.log('queryTransformToSolrQuery result:', query);
+        console.log('createAdapterQuery result:', query);
         return query;
     }
 
-    private mapFilterToSolrQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
+    private mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
         let query = '';
 
-        if (action === SolrFilterActions.LIKEI || action === SolrFilterActions.LIKE) {
-            query = this.mapToSolrFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
-        } else if (action === SolrFilterActions.EQ1 || action === SolrFilterActions.EQ2) {
-            query = this.mapToSolrFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
-        } else if (action === SolrFilterActions.GT) {
-            query = this.mapToSolrFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
-        } else if (action === SolrFilterActions.GE) {
-            query = this.mapToSolrFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
-        } else if (action === SolrFilterActions.LT) {
-            query = this.mapToSolrFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
-        } else if (action === SolrFilterActions.LE) {
-            query = this.mapToSolrFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
-        } else if (action === SolrFilterActions.IN) {
-            query = this.mapToSolrFieldName(fieldName) + ':("' + value.map(
-                    inValue => this.escapeSolrValue(inValue.toString())
+        if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
+        } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
+        } else if (action === AdapterFilterActions.GT) {
+            query = this.mapToAdapterFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
+        } else if (action === AdapterFilterActions.GE) {
+            query = this.mapToAdapterFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
+        } else if (action === AdapterFilterActions.LT) {
+            query = this.mapToAdapterFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
+        } else if (action === AdapterFilterActions.LE) {
+            query = this.mapToAdapterFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
+        } else if (action === AdapterFilterActions.IN) {
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + value.map(
+                    inValue => this.escapeAdapterValue(inValue.toString())
                 ).join('" OR "') + '")';
-        } else if (action === SolrFilterActions.NOTIN) {
-            query = this.mapToSolrFieldName(fieldName) + ':(-"' + value.map(
-                    inValue => this.escapeSolrValue(inValue.toString())
+        } else if (action === AdapterFilterActions.NOTIN) {
+            query = this.mapToAdapterFieldName(fieldName) + ':(-"' + value.map(
+                    inValue => this.escapeAdapterValue(inValue.toString())
                 ).join('" AND -"') + '")';
         }
         return query;
@@ -582,9 +581,9 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     prepareEscapedSingleValue(value: any, splitter: string, joiner: string): string {
         value = this.prepareSingleValue(value, ' ');
-        value = this.escapeSolrValue(value);
+        value = this.escapeAdapterValue(value);
         const values = this.prepareValueToArray(value, splitter);
-        value = values.map(inValue => this.escapeSolrValue(inValue)).join(joiner);
+        value = values.map(inValue => this.escapeAdapterValue(inValue)).join(joiner);
         return value;
     }
 
@@ -607,7 +606,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return value.toString().split(splitter);
     }
 
-    private escapeSolrValue(value: any): string {
+    private escapeAdapterValue(value: any): string {
         value = value.toString().replace(/[%]/g, ' ').replace(/[:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
         return value;
     }

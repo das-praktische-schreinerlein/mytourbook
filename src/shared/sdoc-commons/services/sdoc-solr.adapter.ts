@@ -10,7 +10,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         super(config);
     }
 
-    mapToSolrFieldName(fieldName: string): string {
+    mapToAdapterFieldName(fieldName: string): string {
         switch (fieldName) {
             case 'name':
                 return 'name_s';
@@ -22,10 +22,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 break;
         }
 
-        return super.mapToSolrFieldName(fieldName);
+        return super.mapToAdapterFieldName(fieldName);
     }
 
-    mapToSolrDocument(props: any): any {
+    mapToAdapterDocument(props: any): any {
         const values = {
             id: props.id,
             image_id_i: props.imageId,
@@ -59,7 +59,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         return values;
     }
 
-    mapSolrDocument(mapper: Mapper, doc: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any): Record {
         const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
         const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
@@ -67,39 +67,39 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
 
         const values = {};
-        values['id'] = this.getSolrValue(doc, 'id', undefined);
+        values['id'] = this.getAdapterValue(doc, 'id', undefined);
 
-        values['imageId'] = Number(this.getSolrValue(doc, 'image_id_i', undefined));
-        values['locId'] = Number(this.getSolrValue(doc, 'loc_id_i', undefined));
-        values['routeId'] = Number(this.getSolrValue(doc, 'route_id_i', undefined));
-        values['trackId'] = Number(this.getSolrValue(doc, 'track_id_i', undefined));
-        values['tripId'] = Number(this.getSolrValue(doc, 'trip_id_i', undefined));
+        values['imageId'] = Number(this.getAdapterValue(doc, 'image_id_i', undefined));
+        values['locId'] = Number(this.getAdapterValue(doc, 'loc_id_i', undefined));
+        values['routeId'] = Number(this.getAdapterValue(doc, 'route_id_i', undefined));
+        values['trackId'] = Number(this.getAdapterValue(doc, 'track_id_i', undefined));
+        values['tripId'] = Number(this.getAdapterValue(doc, 'trip_id_i', undefined));
 
         const subtypeField = doc['subtypes_ss'];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
            values['subtypes'] = subtypeField.join(',');
         }
-        values['datevon'] = this.getSolrValue(doc, 'date_dt', undefined);
-        values['desc'] = this.getSolrValue(doc, 'desc_txt', undefined);
-        values['geoLon'] = this.getSolrCoorValue(doc, 'geo_lon_s', undefined);
-        values['geoLat'] = this.getSolrCoorValue(doc, 'geo_lat_s', undefined);
-        values['geoLoc'] = this.getSolrCoorValue(doc, 'geo_loc_p', undefined);
-        values['gpsTrack'] = this.getSolrValue(doc, 'gpstrack_s', undefined);
-        values['gpsTrackBasefile'] = this.getSolrValue(doc, 'gpstracks_basefile_s', undefined);
-        values['keywords'] = this.getSolrValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
-        values['name'] = this.getSolrValue(doc, 'name_s', undefined);
-        values['subtype'] = this.getSolrValue(doc, 'subtype_s', undefined);
-        values['type'] = this.getSolrValue(doc, 'type_s', undefined);
-        values['locHirarchie'] = this.getSolrValue(doc, 'loc_lochirarchie_s', '')
+        values['datevon'] = this.getAdapterValue(doc, 'date_dt', undefined);
+        values['desc'] = this.getAdapterValue(doc, 'desc_txt', undefined);
+        values['geoLon'] = this.getAdapterCoorValue(doc, 'geo_lon_s', undefined);
+        values['geoLat'] = this.getAdapterCoorValue(doc, 'geo_lat_s', undefined);
+        values['geoLoc'] = this.getAdapterCoorValue(doc, 'geo_loc_p', undefined);
+        values['gpsTrack'] = this.getAdapterValue(doc, 'gpstrack_s', undefined);
+        values['gpsTrackBasefile'] = this.getAdapterValue(doc, 'gpstracks_basefile_s', undefined);
+        values['keywords'] = this.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
+        values['name'] = this.getAdapterValue(doc, 'name_s', undefined);
+        values['subtype'] = this.getAdapterValue(doc, 'subtype_s', undefined);
+        values['type'] = this.getAdapterValue(doc, 'type_s', undefined);
+        values['locHirarchie'] = this.getAdapterValue(doc, 'loc_lochirarchie_s', '')
             .replace(/,,/g, ' -> ')
             .replace(/,/g, ' ')
             .replace(/_/g, ' ')
             .trim();
-        values['locHirarchieIds'] = this.getSolrValue(doc, 'loc_lochirarchie_ids_s', '')
+        values['locHirarchieIds'] = this.getAdapterValue(doc, 'loc_lochirarchie_ids_s', '')
             .replace(/_/g, ' ').trim()
             .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
 
-        // console.log('mapSolrDocument values:', values);
+        // console.log('mapResponseDocument values:', values);
 
         const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
 
@@ -130,16 +130,16 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             }
         }
         record.set('sdocimages', images);
-        // console.log('mapSolrDocument record full:', record);
+        // console.log('mapResponseDocument record full:', record);
 
 
         const dataTechValues = {};
-        dataTechValues['altAsc'] = this.getSolrValue(doc, 'data_tech_alt_asc_i', undefined);
-        dataTechValues['altDesc'] = this.getSolrValue(doc, 'data_tech_alt_desc_i', undefined);
-        dataTechValues['altMin'] = this.getSolrValue(doc, 'data_tech_alt_min_i', undefined);
-        dataTechValues['altMax'] = this.getSolrValue(doc, 'data_tech_alt_max_i', undefined);
-        dataTechValues['dist'] = this.getSolrValue(doc, 'data_tech_dist_f', undefined);
-        dataTechValues['dur'] = this.getSolrValue(doc, 'data_tech_dur_f', undefined);
+        dataTechValues['altAsc'] = this.getAdapterValue(doc, 'data_tech_alt_asc_i', undefined);
+        dataTechValues['altDesc'] = this.getAdapterValue(doc, 'data_tech_alt_desc_i', undefined);
+        dataTechValues['altMin'] = this.getAdapterValue(doc, 'data_tech_alt_min_i', undefined);
+        dataTechValues['altMax'] = this.getAdapterValue(doc, 'data_tech_alt_max_i', undefined);
+        dataTechValues['dist'] = this.getAdapterValue(doc, 'data_tech_dist_f', undefined);
+        dataTechValues['dur'] = this.getAdapterValue(doc, 'data_tech_dur_f', undefined);
         let dataTechSet = false;
         for (const field in dataTechValues) {
             if (dataTechValues[field] !== undefined) {
@@ -155,13 +155,13 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         }
 
         const rateTechValues = {};
-        rateTechValues['overall'] = this.getSolrValue(doc, 'rate_tech_overall_s', undefined);
-        rateTechValues['ks'] = this.getSolrValue(doc, 'rate_tech_ks_s', undefined);
-        rateTechValues['firn'] = this.getSolrValue(doc, 'rate_tech_firn_s', undefined);
-        rateTechValues['gletscher'] = this.getSolrValue(doc, 'rate_tech_gletscher_s', undefined);
-        rateTechValues['klettern'] = this.getSolrValue(doc, 'rate_tech_klettern_s', undefined);
-        rateTechValues['bergtour'] = this.getSolrValue(doc, 'rate_tech_bergtour_s', undefined);
-        rateTechValues['schneeschuh'] = this.getSolrValue(doc, 'rate_tech_schneeschuh_s', undefined);
+        rateTechValues['overall'] = this.getAdapterValue(doc, 'rate_tech_overall_s', undefined);
+        rateTechValues['ks'] = this.getAdapterValue(doc, 'rate_tech_ks_s', undefined);
+        rateTechValues['firn'] = this.getAdapterValue(doc, 'rate_tech_firn_s', undefined);
+        rateTechValues['gletscher'] = this.getAdapterValue(doc, 'rate_tech_gletscher_s', undefined);
+        rateTechValues['klettern'] = this.getAdapterValue(doc, 'rate_tech_klettern_s', undefined);
+        rateTechValues['bergtour'] = this.getAdapterValue(doc, 'rate_tech_bergtour_s', undefined);
+        rateTechValues['schneeschuh'] = this.getAdapterValue(doc, 'rate_tech_schneeschuh_s', undefined);
         let rateTechSet = false;
         for (const field in rateTechValues) {
             if (rateTechValues[field] !== undefined) {
@@ -177,14 +177,14 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         }
 
         const ratePersValues = {};
-        ratePersValues['ausdauer'] = this.getSolrValue(doc, 'rate_pers_ausdauer_i', undefined);
-        ratePersValues['bildung'] = this.getSolrValue(doc, 'rate_pers_bildung_i', undefined);
-        ratePersValues['gesamt'] = this.getSolrValue(doc, 'rate_pers_gesamt_i', undefined);
-        ratePersValues['kraft'] = this.getSolrValue(doc, 'rate_pers_kraft_i', undefined);
-        ratePersValues['mental'] = this.getSolrValue(doc, 'rate_pers_mental_i', undefined);
-        ratePersValues['motive'] = this.getSolrValue(doc, 'rate_pers_motive_i', undefined);
-        ratePersValues['schwierigkeit'] = this.getSolrValue(doc, 'rate_pers_schwierigkeit_i', undefined);
-        ratePersValues['wichtigkeit'] = this.getSolrValue(doc, 'rate_pers_wichtigkeit_i', undefined);
+        ratePersValues['ausdauer'] = this.getAdapterValue(doc, 'rate_pers_ausdauer_i', undefined);
+        ratePersValues['bildung'] = this.getAdapterValue(doc, 'rate_pers_bildung_i', undefined);
+        ratePersValues['gesamt'] = this.getAdapterValue(doc, 'rate_pers_gesamt_i', undefined);
+        ratePersValues['kraft'] = this.getAdapterValue(doc, 'rate_pers_kraft_i', undefined);
+        ratePersValues['mental'] = this.getAdapterValue(doc, 'rate_pers_mental_i', undefined);
+        ratePersValues['motive'] = this.getAdapterValue(doc, 'rate_pers_motive_i', undefined);
+        ratePersValues['schwierigkeit'] = this.getAdapterValue(doc, 'rate_pers_schwierigkeit_i', undefined);
+        ratePersValues['wichtigkeit'] = this.getAdapterValue(doc, 'rate_pers_wichtigkeit_i', undefined);
         let ratePersSet = false;
         for (const field in ratePersValues) {
             if (ratePersValues[field] !== undefined) {
@@ -200,10 +200,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         }
 
         const dataInfoValues = {};
-        dataInfoValues['guides'] = this.getSolrValue(doc, 'data_info_guides_s', undefined);
-        dataInfoValues['region'] = this.getSolrValue(doc, 'data_info_region_s', undefined);
-        dataInfoValues['baseloc'] = this.getSolrValue(doc, 'data_info_baseloc_s', undefined);
-        dataInfoValues['destloc'] = this.getSolrValue(doc, 'data_info_destloc_s', undefined);
+        dataInfoValues['guides'] = this.getAdapterValue(doc, 'data_info_guides_s', undefined);
+        dataInfoValues['region'] = this.getAdapterValue(doc, 'data_info_region_s', undefined);
+        dataInfoValues['baseloc'] = this.getAdapterValue(doc, 'data_info_baseloc_s', undefined);
+        dataInfoValues['destloc'] = this.getAdapterValue(doc, 'data_info_destloc_s', undefined);
         let dataInfoSet = false;
         for (const field in dataInfoValues) {
             if (dataInfoValues[field] !== undefined) {
@@ -218,12 +218,12 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             record.set('sdocdatainfo', undefined);
         }
 
-        // console.log('mapSolrDocument record full:', record);
+        // console.log('mapResponseDocument record full:', record);
 
         return record;
     }
 
-    getSolrFields(mapper: Mapper, params: any, opts: any): string[] {
+    getAdapterFields(mapper: Mapper, params: any, opts: any): string[] {
         const fields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
