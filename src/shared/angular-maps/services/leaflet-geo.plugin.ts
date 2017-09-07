@@ -68,7 +68,11 @@ export class GeoParsedFeature extends L.FeatureGroup {
             const geoElement = geoElements[i];
             switch (geoElement.type) {
                 case GeoElementType.WAYPOINT:
-                    const point = new L.Marker(geoElement.points[0], {});
+                    const point = new L.Marker(geoElement.points[0], {
+                        clickable: true,
+                        title: gpxElement.type + ': ' + gpxElement.name,
+                        icon: new L.DivIcon({className: 'leaflet-div-icon-point', html: '&#128204;' + gpxElement.name})
+                    });
                     layers.push(point);
                     break;
                 default:

@@ -70,7 +70,8 @@ export class SDocMapComponent implements OnChanges {
 
             const isImage = record.type === 'IMAGE';
             const showTrack = trackUrl !== undefined && trackUrl.length > 0 && (!isImage || this.showImageTrackAndGeoPos);
-            const showGeoPos = record.geoLat && record.geoLon && (!showTrack || isImage);
+            const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
+                record.geoLat !== '0.0' && record.geoLon !== '0.0';
 
             if (showTrack) {
                 const mapElement: MapElement = {
@@ -86,7 +87,7 @@ export class SDocMapComponent implements OnChanges {
             if (showGeoPos) {
                 const mapElement: MapElement = {
                     id: record.id,
-                    name: record.name,
+                    name: record.type + ': ' + record.name,
                     point: new LatLng(+record.geoLat, +record.geoLon),
                     popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                     type: record.type
