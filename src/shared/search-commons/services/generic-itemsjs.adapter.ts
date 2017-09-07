@@ -5,7 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import {GenericInMemoryAdapter} from './generic-inmemory.adapter';
 import {Facet, Facets} from '../model/container/facets';
-import {SolrFilterActions} from './generic-solr.adapter';
+import {AdapterFilterActions} from './generic-solr.adapter';
 
 export interface ItemJsResultPagionation {
     per_page: number;
@@ -36,7 +36,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
 
     constructor(config: any, data: any[], itemJsConfig: {}) {
         super(config);
-        this.itemJs = require('itemsjs')(data, itemJsConfig);
+        //this.itemJs = require('itemsjs')(data, itemJsConfig);
     }
 
     _doQuery(query: any, opts: any): ItemJsResult {
@@ -112,11 +112,10 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
     }
 
 
-    deserializeItemsJs(mapper: Mapper, response: ItemJsResult, opts: any) {
-        // itemsJs-result
-        // console.log('deserializeItemsJs:', response);
+    deserializeResponse(mapper: Mapper, response: ItemJsResult, opts: any) {
+        // console.log('deserializeResponse:', response);
 
-        // check for itemsJs
+        // check response
         if (response === undefined) {
             return undefined;
         }
@@ -159,9 +158,9 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         const docs = result.data.items;
         const records = [];
         for (const doc of docs) {
-            records.push(this.mapItemsJsDocument(mapper, doc));
+            records.push(this.mapResponseDocument(mapper, doc));
         }
-        // console.log('deserializeItemsJs:', records);
+        // console.log('extractRecordsFromRequestResult:', records);
 
         return records;
     }
@@ -188,14 +187,14 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
     }
 
 
-    mapItemsJsDocument(mapper: Mapper, doc: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any): Record {
         const values = {};
-        values['id'] = Number(this.getItemsJsValue(doc, 'id', undefined));
-        // console.log('mapItemsJsDocument values:', values);
+        values['id'] = Number(this.getAdapterValue(doc, 'id', undefined));
+        // console.log('mapResponseDocument values:', values);
         return mapper.createRecord(values);
     }
 
-    mapToItemsJsFieldName(fieldName: string): string {
+    mapToAdapterFieldName(fieldName: string): string {
         switch (fieldName) {
             default:
                 break;
@@ -204,9 +203,9 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return fieldName;
     }
 
-    abstract mapToItemsJsDocument(props: any): any;
+    abstract mapToAdapterDocument(props: any): any;
 
-    abstract getItemsJsFields(mapper: Mapper, params: any, opts: any): string[];
+    abstract getAdapterFields(mapper: Mapper, params: any, opts: any): string[];
 
     abstract getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
@@ -214,36 +213,36 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
 
     abstract getSortParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
-    getItemsJsValue(itemsJsDocument: any, itemsJsFieldName: string, defaultValue: any): string {
+    getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
-        if (itemsJsDocument[itemsJsFieldName] !== undefined) {
-            if (Array.isArray(itemsJsDocument[itemsJsFieldName])) {
-                value = itemsJsDocument[itemsJsFieldName][0];
+        if (adapterDocument[adapterFieldName] !== undefined) {
+            if (Array.isArray(adapterDocument[adapterFieldName])) {
+                value = adapterDocument[adapterFieldName][0];
             } else {
-                value = itemsJsDocument[itemsJsFieldName];
+                value = adapterDocument[adapterFieldName];
             }
         }
 
         return value;
     }
 
-    getItemsJsCoorValue(itemsJsDocument: any, itemsJsFieldName: string, defaultValue: any): string {
+    getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
-        if (itemsJsDocument[itemsJsFieldName] !== undefined) {
-            if (Array.isArray(itemsJsDocument[itemsJsFieldName])) {
-                value = itemsJsDocument[itemsJsFieldName][0];
-            } else if (itemsJsDocument[itemsJsFieldName] !== '0' && itemsJsDocument[itemsJsFieldName] !== '0,0') {
-                value = itemsJsDocument[itemsJsFieldName];
+        if (adapterDocument[adapterFieldName] !== undefined) {
+            if (Array.isArray(adapterDocument[adapterFieldName])) {
+                value = adapterDocument[adapterFieldName][0];
+            } else if (adapterDocument[adapterFieldName] !== '0' && adapterDocument[adapterFieldName] !== '0,0') {
+                value = adapterDocument[adapterFieldName];
             }
         }
 
         return value;
     }
 
-    private queryTransformToItemsJsQuery(mapper: Mapper, params: any, opts: any): any {
-        const query = this.createItemsJsQuery(mapper, params, opts);
+    private queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
+        const query = this.createAdapterQuery(mapper, params, opts);
 
-        const fields = this.getItemsJsFields(mapper, params, opts);
+        const fields = this.getAdapterFields(mapper, params, opts);
         if (fields !== undefined && fields.length > 0) {
             query.fl = fields.join(' ');
         }
@@ -274,9 +273,9 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return query;
     }
 
-    private createItemsJsQuery(mapper: Mapper, params: any, opts: any): any {
-        // console.log('queryTransformToItemsJsQuery params:', params);
-        // console.log('queryTransformToItemsJsQuery opts:', opts);
+    private createAdapterQuery(mapper: Mapper, params: any, opts: any): any {
+        // console.log('createAdapterQuery params:', params);
+        // console.log('createAdapterQuery opts:', opts);
 
         const newParams = [];
         if (params.where) {
@@ -284,7 +283,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
                 const filter = params.where[fieldName];
                 const action = Object.getOwnPropertyNames(filter)[0];
                 const value = params.where[fieldName][action];
-                newParams.push(this.mapFilterToItemsJsQuery(mapper, fieldName, action, value));
+                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
             }
         }
         if (params.additionalWhere) {
@@ -292,43 +291,43 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
                 const filter = params.additionalWhere[fieldName];
                 const action = Object.getOwnPropertyNames(filter)[0];
                 const value = params.additionalWhere[fieldName][action];
-                newParams.push(this.mapFilterToItemsJsQuery(mapper, fieldName, action, value));
+                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
             }
         }
 
         if (newParams.length <= 0) {
             const query = {'query': '', 'page': opts.offset, 'per_page': opts.limit, filters: []};
-            // console.log('queryTransformToItemsJsQuery result:', query);
+            // console.log('createAdapterQuery result:', query);
             return query;
         }
 
         const query = {'query': '(' + newParams.join(' AND ') + ')', 'page': opts.offset, 'per_page': opts.limit, filters: []};
-        console.log('queryTransformToItemsJsQuery result:', query);
+        console.log('createAdapterQuery result:', query);
         return query;
     }
 
-    private mapFilterToItemsJsQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
+    private mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
         let query = '';
 
-        if (action === SolrFilterActions.LIKEI || action === SolrFilterActions.LIKE) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
-        } else if (action === SolrFilterActions.EQ1 || action === SolrFilterActions.EQ2) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
-        } else if (action === SolrFilterActions.GT) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
-        } else if (action === SolrFilterActions.GE) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
-        } else if (action === SolrFilterActions.LT) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
-        } else if (action === SolrFilterActions.LE) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
-        } else if (action === SolrFilterActions.IN) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':("' + value.map(
-                    inValue => this.escapeItemsJsValue(inValue.toString())
+        if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
+        } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
+        } else if (action === AdapterFilterActions.GT) {
+            query = this.mapToAdapterFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
+        } else if (action === AdapterFilterActions.GE) {
+            query = this.mapToAdapterFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
+        } else if (action === AdapterFilterActions.LT) {
+            query = this.mapToAdapterFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
+        } else if (action === AdapterFilterActions.LE) {
+            query = this.mapToAdapterFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
+        } else if (action === AdapterFilterActions.IN) {
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + value.map(
+                    inValue => this.escapeAdapterValue(inValue.toString())
                 ).join('" OR "') + '")';
-        } else if (action === SolrFilterActions.NOTIN) {
-            query = this.mapToItemsJsFieldName(fieldName) + ':(-"' + value.map(
-                    inValue => this.escapeItemsJsValue(inValue.toString())
+        } else if (action === AdapterFilterActions.NOTIN) {
+            query = this.mapToAdapterFieldName(fieldName) + ':(-"' + value.map(
+                    inValue => this.escapeAdapterValue(inValue.toString())
                 ).join('" AND -"') + '")';
         }
         return query;
@@ -336,9 +335,9 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
 
     prepareEscapedSingleValue(value: any, splitter: string, joiner: string): string {
         value = this.prepareSingleValue(value, ' ');
-        value = this.escapeItemsJsValue(value);
+        value = this.escapeAdapterValue(value);
         const values = this.prepareValueToArray(value, splitter);
-        value = values.map(inValue => this.escapeItemsJsValue(inValue)).join(joiner);
+        value = values.map(inValue => this.escapeAdapterValue(inValue)).join(joiner);
         return value;
     }
 
@@ -361,7 +360,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return value.toString().split(splitter);
     }
 
-    private escapeItemsJsValue(value: any): string {
+    private escapeAdapterValue(value: any): string {
         value = value.toString().replace(/[%]/g, ' ').replace(/[-+:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
         return value;
     }
