@@ -58,7 +58,7 @@ export class SDocServerModule {
                         return next();
                     }
                     req['sdoc'] = searchResult.currentRecords[0];
-                    next();
+                    return next();
                 }
             ).catch(
                 function searchError(error) {
@@ -73,7 +73,7 @@ export class SDocServerModule {
                 if (req.method !== 'GET') {
                     next('not allowed');
                 }
-                next();
+                return next();
             })
             .get(function(req, res, next) {
                 const sdoc: SDocRecord = req['sdoc'];
@@ -82,7 +82,7 @@ export class SDocServerModule {
                     next();
                 }
                 res.json(sdoc.toSerializableJsonObj());
-                next();
+                return next();
             });
 
         // use own wrapper for search
@@ -91,14 +91,14 @@ export class SDocServerModule {
                 if (req.method !== 'GET') {
                     next('not allowed');
                 }
-                next();
+                return next();
             })
             .get(function(req, res, next) {
                 const searchForm = new SDocSearchForm(req.query);
                 if (!SDocSearchFormValidator.isValid(searchForm)) {
                     console.error('form invalid:', searchForm);
                     res.json((new SDocSearchResult(searchForm, 0, [], new Facets())).toSerializableJsonObj());
-                    next();
+                    return next();
                 }
                 try {
                     const searchOptions: GenericSearchOptions = {
@@ -123,7 +123,7 @@ export class SDocServerModule {
                                 searchResult.facets = new Facets();
                             }
                             res.json(searchResult.toSerializableJsonObj());
-                            next();
+                            return next();
                         }
                     ).catch(
                         function searchError(error) {

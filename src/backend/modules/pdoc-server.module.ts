@@ -35,9 +35,9 @@ export class PDocServerModule {
         const config = {
             request: (req, res, next) => {
                 if (req.method !== 'GET') {
-                    next('not allowed');
+                    return next('not allowed');
                 }
-                next();
+                return next();
             }
         };
         app.use(apiPrefix + '/' + locale + '/pdoc', new Router(mapper, config).router);
@@ -46,9 +46,9 @@ export class PDocServerModule {
         app.route(apiPrefix + '/' + locale + '/pdocsearch')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
-                    next('not allowed');
+                    return next('not allowed');
                 }
-                next();
+                return next();
             })
             .get(function(req, res, next) {
                 const searchForm = new PDocSearchForm(req.query);
@@ -56,7 +56,7 @@ export class PDocServerModule {
                     dataService.search(searchForm).then(
                         function searchDone(searchResult: PDocSearchResult) {
                             res.json(searchResult.toSerializableJsonObj());
-                            next();
+                            return next();
                         }
                     ).catch(
                         function searchError(error) {
