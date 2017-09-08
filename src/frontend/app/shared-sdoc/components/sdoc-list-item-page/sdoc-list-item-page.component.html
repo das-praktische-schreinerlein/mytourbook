@@ -56,23 +56,19 @@
                     </ng-container>
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a>
-                <p class="card-text">
-                    {{record.desc | truncate : 300 }}
+                <p>
+                    {{record.desc}}
                 </p>
+                <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
+                <app-sdoc-ratepers-difficulty [record]="record"></app-sdoc-ratepers-difficulty>
+                <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
+                <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+                <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
+                <app-sdoc-datainfo [record]="record"></app-sdoc-datainfo >
             </div>
             <br clear="all" />
             <p class="card-text">
                 <ngb-accordion #acc="ngbAccordion" activeIds="">
-                    <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
-                        <ng-template ngbPanelContent>
-                            <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
-                            <app-sdoc-ratepers-difficulty [record]="record"></app-sdoc-ratepers-difficulty >
-                            <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
-                            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                            <app-sdoc-keywords [record]="record"></app-sdoc-keywords >
-                            <app-sdoc-datainfo [record]="record"></app-sdoc-datainfo >
-                        </ng-template>
-                    </ngb-panel>
                     <ngb-panel *ngIf="record.gpsTrackBasefile || (record.geoLat != undefined && record.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
                             <app-sdoc-map [mapId]="'listItemMap' + record.id"

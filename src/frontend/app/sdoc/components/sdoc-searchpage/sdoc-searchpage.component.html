@@ -16,7 +16,8 @@
                 <div class="container">
                     <app-sdoc-list [searchResult]="searchResult"
                                    [baseSearchUrl]="baseSearchUrl"
-                                   [layout]="layout"></app-sdoc-list>
+                                   [layout]="layout"
+                                   (show)="onShowSDoc($event)"></app-sdoc-list>
                 </div>
             </div>
         </div>
