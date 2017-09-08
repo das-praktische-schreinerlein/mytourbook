@@ -1,7 +1,13 @@
 <form [formGroup]="searchFormGroup" (ngSubmit)="onSubmitSearch($event)" class="form-control-sm">
+        <div class="row visible-print-block">
+            <div class="col-sm-12">
+                Filter: {{humanReadableSearchForm}}
+            </div>
+        </div>
+
     <!-- extended searchform-->
     <ng-container *ngIf="!showForm">
-        <div class="row">
+        <div class="row hidden-print">
             <div class="col-sm-12">
                 {{humanReadableSearchForm}}
                 <button class="btn btn-primary btn-sm float-right" (click)="showForm = true" i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</button>
@@ -11,7 +17,7 @@
 
     <!-- short searchform-->
     <ng-container *ngIf="short && showForm">
-        <div class="row">
+        <div class="row hidden-print">
             <div class="col-sm-5 input-group input-group-sm">
                 <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectWhere"
@@ -35,7 +41,7 @@
                        i18n-placeholder="nearbyDistance placeholder|Placeholder for nearbyDistance@@placeholder.searchform.sdoc.nearbyDistance">
             </div>
         </div>
-        <div class="row">
+        <div class="row hidden-print">
             <div class="col-sm-6 input-group input-group-sm">
                 <label class="col-form-label" i18n="when label|Label for filter: when@@label.searchform.sdoc.when">When:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectWhen"
@@ -67,7 +73,7 @@
 
     <!-- extended searchform-->
     <ng-container *ngIf="!short && showForm">
-        <div class="row">
+        <div class="row hidden-print">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectWhere"
@@ -102,7 +108,7 @@
                                          (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
             </div>
         </div>
-        <div class="row">
+        <div class="row hidden-print">
             <div class="col-sm-4 form-inline input-group input-group-sm">
                 <label class="col-xs-4 col-form-label mr-2" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
                 <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control"
@@ -124,7 +130,7 @@
                 <button class="btn btn-primary btn-sm" (click)="showForm = false" i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</button>
             </div>
         </div>
-        <div class="row">
+        <div class="row hidden-print">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectActionType"
@@ -159,7 +165,7 @@
                                          (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
             </div>
         </div>
-        <div class="row">
+        <div class="row hidden-print">
             <div class="col-sm-3 input-group input-group-sm">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataDuration label|Label for filter: techDataDuration@@label.searchform.sdoc.techDataDuration">Dauer:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectTechDataDuration"

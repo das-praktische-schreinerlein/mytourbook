@@ -2,7 +2,7 @@
     <div [formGroup]="themeFormGroup" class="container content-container hide-on-fullpage" *ngIf="pdoc.heading !== undefined && pdoc.heading.length > 0">
         <h5>{{pdoc.heading}}
             <div>
-                <div style="width: 200px;" class="float-right form-inline input-group input-group-sm">
+                <div style="width: 200px;" class="float-right form-inline input-group input-group-sm hidden-print">
                     <select class="form-control input-sm" name="theme" id="theme" formControlName="theme" (change)="onThemeChange()">
                         <ng-container *ngFor="let mainSection of sections">
                             <optgroup  label="{{mainSection.name}}">

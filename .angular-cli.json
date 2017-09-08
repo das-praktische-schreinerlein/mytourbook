@@ -30,7 +30,9 @@
         "spinner.css",
         "responsive.css",
         "global.css",
-        "global-overrides.css"
+        "global-overrides.css",
+        "print.css",
+        "print-overrides.css"
       ],
       "scripts": [],
       "serviceWorker": "true",
