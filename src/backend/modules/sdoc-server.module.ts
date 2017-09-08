@@ -79,7 +79,7 @@ export class SDocServerModule {
                 const sdoc: SDocRecord = req['sdoc'];
                 if (sdoc === undefined) {
                     res.json();
-                    next();
+                    return next();
                 }
                 res.json(sdoc.toSerializableJsonObj());
                 return next();
