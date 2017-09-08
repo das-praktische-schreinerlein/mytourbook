@@ -41,7 +41,9 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
-            showUncheckAll: true};
+            showUncheckAll: true,
+            autoUnselect: true,
+            selectionLimit: 1};
     public settingsSelectWhat: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
