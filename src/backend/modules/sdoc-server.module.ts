@@ -71,7 +71,7 @@ export class SDocServerModule {
         app.route(apiPrefix + '/:locale' + '/sdoc/:id')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
-                    next('not allowed');
+                    return next('not allowed');
                 }
                 return next();
             })
@@ -89,7 +89,7 @@ export class SDocServerModule {
         app.route(apiPrefix + '/:locale/sdocsearch')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
-                    next('not allowed');
+                    return next('not allowed');
                 }
                 return next();
             })
