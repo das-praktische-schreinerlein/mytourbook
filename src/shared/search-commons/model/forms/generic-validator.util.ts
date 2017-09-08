@@ -129,7 +129,7 @@ export class IdCsvValidationRule extends RegExValidationReplaceRule {
 
 export class KeyParamsValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[-a-zA-Z_0-9,;: ]*$/gi, /[^-a-zA-Z_0-9,;: ]*/gi, '');
+        super(required, /^[-a-zA-Z_0-9äöüßÄÖÜ,;: ]*$/gi, /[^-a-zA-Z_0-9äöüßÄÖÜ,;: ]*/gi, '');
     }
 }
 

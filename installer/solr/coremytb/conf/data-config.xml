@@ -45,8 +45,8 @@
             <field column="subtype" name="subtype_ss" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="altAsc" name="data_tech_alt_asc_i" />
             <field column="altDesc" name="data_tech_alt_desc_i" />
             <field column="altMin" name="data_tech_alt_min_i" />
@@ -115,8 +115,8 @@
             <field column="subtype" name="subtype_ss" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="altMax" name="data_tech_alt_max_i" />
             <field column="altAsc" name="data_tech_alt_asc_i" />
             <field column="dist" name="data_tech_dist_f" />
@@ -198,8 +198,8 @@
             <field column="subtype" name="subtype_ss" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
 
             <!-- child='true' -->
             <entity name='image'
@@ -268,8 +268,8 @@
             <field column="subtype" name="subtype_ss" />
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
-            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="dateonly" name="dateonly_s" />
             <field column="i_date" name="date_dt" />
             <field column="i_date" name="date_dts" />
@@ -333,6 +333,7 @@
                     query="select kategorie_full.l_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, t_id, k_keywords, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id and tr_id in (${trip.tr_id}) order by k_datevon asc"
                     deltaImportQuery="select kategorie_full.l_id, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, t_id, l_lochirarchietxt, l_lochirarchieids from kategorie_full, location where kategorie_full.l_id = location.l_id and k_id=dih.delta.id}'"
                     deltaQuery="SELECT k_id from kategorie_full'"
+                    transformer="HTMLStripTransformer,RegexTransformer"
             >
                 <field column="l_id" name="loc_id_i"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
@@ -342,8 +343,8 @@
                 <field column="t_id" name="route_id_is"/>
                 <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
                 <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
-                <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[ ]+" replaceWith="_"/>
-                <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[ ]+" replaceWith="_"/>
+                <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+                <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             </entity>
 
         </entity>
