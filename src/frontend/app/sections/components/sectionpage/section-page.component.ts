@@ -112,7 +112,7 @@ export class SectionPageComponent implements OnInit {
         );
     }
 
-    getFiltersForType(record: PDocRecord, type: string): any {
+    getFiltersForType(record: PDocRecord, type: string, sort?: string): any {
         // TODO: move to Service
         const filters = {
             type: type
@@ -123,6 +123,10 @@ export class SectionPageComponent implements OnInit {
             filters['perPage'] = 6;
         } else {
             filters['perPage'] = 5;
+        }
+
+        if (sort) {
+            filters['sort'] = sort;
         }
 
         filters['when'] = this.sdocSearchForm.when.toString();  // stringify array

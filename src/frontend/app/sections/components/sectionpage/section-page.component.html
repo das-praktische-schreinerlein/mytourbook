@@ -30,13 +30,13 @@
                                                     [searchLinkLabel]="'Durchsuchen'"
                                                     i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.sdoc.ROUTE"
                                                     [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'ROUTE')"
+                                                    [params]="getFiltersForType(pdoc, 'ROUTE', 'relevance')"
                                                     [showForm]="false"
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.FLAT"
                                                     (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab title="Regionen">
@@ -46,13 +46,13 @@
                                                     [searchLinkLabel]="'Durchsuchen'"
                                                     i18n-searchLinkLabel="searchLinkLabel section-page LOCATION|SearchLinkLabel section-page LOCATION@@linline-search.searchLinkLabel.sdoc.LOCATION"
                                                     [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'LOCATION')"
+                                                    [params]="getFiltersForType(pdoc, 'LOCATION', 'relevance')"
                                                     [showForm]="false"
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.FLAT"
                                                     (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab title="Bilder">
@@ -62,13 +62,13 @@
                                                     [searchLinkLabel]="'Durchsuchen'"
                                                     i18n-searchLinkLabel="searchLinkLabel section-page IMAGE|SearchLinkLabel section-page IMAGE@@linline-search.searchLinkLabel.sdoc.IMAGE"
                                                     [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'IMAGE')"
+                                                    [params]="getFiltersForType(pdoc, 'IMAGE', 'relevance')"
                                                     [showForm]="false"
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.SMALL"
                                                     (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab title="Tracks">
@@ -78,13 +78,13 @@
                                                     [searchLinkLabel]="'Durchsuchen'"
                                                     i18n-searchLinkLabel="searchLinkLabel section-page TRACK|SearchLinkLabel section-page TRACK@@linline-search.searchLinkLabel.sdoc.TRACK"
                                                     [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'TRACK')"
+                                                    [params]="getFiltersForType(pdoc, 'TRACK', 'relevance')"
                                                     [showForm]="false"
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.FLAT"
                                                     (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab title="Trips">
@@ -94,13 +94,13 @@
                                                     [searchLinkLabel]="'Durchsuchen'"
                                                     i18n-searchLinkLabel="searchLinkLabel section-page TRIP|SearchLinkLabel section-page TRIP@@linline-search.searchLinkLabel.sdoc.TRIP"
                                                     [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'TRIP')"
+                                                    [params]="getFiltersForType(pdoc, 'TRIP', 'relevance')"
                                                     [showForm]="false"
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.FLAT"
                                                     (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
                 <ngb-tab title=Alles>
@@ -110,13 +110,13 @@
                                                     [searchLinkLabel]="'Durchsuchen'"
                                                     i18n-searchLinkLabel="searchLinkLabel section-page ALL|SearchLinkLabel section-page ALL@@linline-search.searchLinkLabel.sdoc.ALL"
                                                     [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, '')"
+                                                    [params]="getFiltersForType(pdoc, '', 'relevance')"
                                                     [showForm]="false"
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.FLAT"
                                                     (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>
