@@ -221,14 +221,17 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     onSearchSDoc(sdocSearchForm: SDocSearchForm) {
+        const origSearchForm = this.searchForm;
         this.searchForm = sdocSearchForm;
+        this.searchForm.perPage = origSearchForm.perPage;
+        this.searchForm.sort = origSearchForm.sort;
         console.log('onSearchSDoc: redirect to ', sdocSearchForm);
         this.redirectToSearch();
         return false;
     }
 
     onMapSDocClicked(sdoc: SDocRecord) {
-        console.error("sdocCliccked", sdoc);
+        console.error("sdocClicked", sdoc);
     }
 
     onMapCenterChanged(newCenter: L.LatLng) {
