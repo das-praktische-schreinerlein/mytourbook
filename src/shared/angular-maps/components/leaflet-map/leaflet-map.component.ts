@@ -101,6 +101,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
 
         if (this.featureGroup) {
             this.featureGroup.clearLayers();
+            this.map.removeLayer(this.featureGroup);
         }
         this.loadedMapElements = [];
 
