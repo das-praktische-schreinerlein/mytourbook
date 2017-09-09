@@ -18,7 +18,7 @@
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print">
                 <label class="col-form-label" i18n="sort label|Label for header: sort@@label.pageHeader.sdoc.sort">Sort:</label>
                 <select class="form-control input-sm" name="sort" id="sort" formControlName="sort" (change)="onSortChange()">
-                    <ng-container *ngFor="let sortValue of ['relevance', 'location', 'date', 'ratePers']">
+                    <ng-container *ngFor="let sortValue of ['relevance', 'location', 'date', 'ratePers', 'distance']">
                         <option [value]="sortValue">{{ 'listSorts_' + sortValue | translate }}</option>
                     </ng-container>
                 </select>

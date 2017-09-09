@@ -250,6 +250,13 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     private doSearch() {
+        if (this.searchForm.sort === 'distance' && (this.searchForm.nearby === undefined || this.searchForm.nearby === '')) {
+            console.log('doSearch: redirect because of sort/nearby form:', this.searchForm);
+            this.searchForm.sort = 'relevance';
+            this.sort = 'relvance';
+            return this.redirectToSearch();
+        }
+
         console.log('doSearch form:', this.searchForm);
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));

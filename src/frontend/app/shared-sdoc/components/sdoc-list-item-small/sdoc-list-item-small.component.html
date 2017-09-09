@@ -3,6 +3,7 @@
         <div class="card-block" style="max-width: 135px; padding-right: 5px; padding-left: 5px" [ngClass]="getStyleClassForRecord(record)">
             <div>
                 <div style="width: 100px; float: left">
+                    <h5 *ngIf="record.geoDistance > 0"><app-sdoc-distance [record]="record"></app-sdoc-distance></h5>
                     <h5>{{record.type | translate }}</h5>
                     <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
                         <img class="picture-thumbnail-big" width="100px"
@@ -19,6 +20,7 @@
     </ng-container>
     <ng-container *ngSwitchDefault="">
         <div class="card-block" [ngClass]="getStyleClassForRecord(record)">
+            <h5 *ngIf="record.geoDistance > 0"><app-sdoc-distance [record]="record"></app-sdoc-distance></h5>
             <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div style="width: 100px; float: left">

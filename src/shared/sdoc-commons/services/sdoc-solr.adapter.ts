@@ -81,6 +81,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         }
         values['datevon'] = this.getAdapterValue(doc, 'date_dt', undefined);
         values['desc'] = this.getAdapterValue(doc, 'desc_txt', undefined);
+        values['geoDistance'] = this.getAdapterCoorValue(doc, 'distance', undefined);
         values['geoLon'] = this.getAdapterCoorValue(doc, 'geo_lon_s', undefined);
         values['geoLat'] = this.getAdapterCoorValue(doc, 'geo_lat_s', undefined);
         values['geoLoc'] = this.getAdapterCoorValue(doc, 'geo_loc_p', undefined);
@@ -236,6 +237,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
             'actiontype_ss', 'subtype_s', 'i_fav_url_txt'];
 
+        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
+            params.spatial.geo_loc_p.nearby !== undefined) {
+            fields.push('distance:geodist()');
+        }
         if (opts.loadTrack === true) {
             fields.push('gpstrack_s');
         }
@@ -350,6 +355,9 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         switch (form.sort) {
             case 'date':
                 sortParams.set('sort', 'dateonly_s desc');
+                break;
+            case 'distance':
+                sortParams.set('sort', 'geodist() asc');
                 break;
             case 'dateAsc':
                 sortParams.set('sort', 'date_dt asc');
