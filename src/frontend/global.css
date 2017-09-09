@@ -73,6 +73,7 @@ div.relative-container {
 }
 
 .geocode-autocomplete {
+    top: 40px;
     z-index: 1000;   /** analogue $zindex-dropdown=1000 **/
 }
 
