@@ -23,8 +23,8 @@ export interface LeafletMapOptions {
 })
 export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     // create the tile layer with correct attribution
-    private osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    private osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+    private osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    private osmAttrib = 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
     private osm = new L.TileLayer(this.osmUrl, {
         minZoom: 1, maxZoom: 16,
         attribution: this.osmAttrib
