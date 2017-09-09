@@ -231,6 +231,14 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         return false;
     }
 
+    public clearNearBy() {
+        const me = this;
+        const values = this.searchFormGroup.getRawValue();
+        me.searchFormGroup.patchValue({'nearby': undefined});
+        me.searchFormGroup.patchValue({'nearbyAddress': ''});
+        me.doSearch();
+    }
+
     public useBrowserGeoLocation() {
         const me = this;
         const values = this.searchFormGroup.getRawValue();

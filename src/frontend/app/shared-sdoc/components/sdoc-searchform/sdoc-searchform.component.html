@@ -33,7 +33,8 @@
                 <label class="col-xs-3 col-form-label mr-2" i18n="nearby label|Label for filter: nearby@@label.searchform.sdoc.nearby">Nahe:</label>
                 <input formControlName="nearbyAddress" type="text" placeholder="Nahe" class="form-control nearbyAddressAutocompleteShort" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.sdoc.nearby">
                 <input formControlName="nearby" type="text" style="display: none">
-                <div class="input-group-addon"><a (click)="useBrowserGeoLocation()">&#8982;</a></div>
+                <div class="input-group-addon"><a (click)="useBrowserGeoLocation()">&#9673;</a></div>
+                <div class="input-group-addon"><a (click)="clearNearBy()">&#10008;</a></div>
             </div>
             <div class="col-sm-2 form-inline input-group input-group-sm">
                 <label class="col-xs-1 col-form-label mr-2" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.sdoc.nearbyDistance">Umkreis:</label>
@@ -89,7 +90,8 @@
                 <label class="col-xs-3 col-form-label mr-2" i18n="nearby label|Label for filter: nearby@@label.searchform.sdoc.nearby">Nahe:</label>
                 <input formControlName="nearbyAddress" type="text" placeholder="Nahe" class="form-control nearbyAddressAutocomplete" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.sdoc.nearby">
                 <input formControlName="nearby" type="text" style="display: none">
-                <div class="input-group-addon"><a (click)="useBrowserGeoLocation()">&#8982;</a></div>
+                <div class="input-group-addon"><a (click)="useBrowserGeoLocation()">&#9673;</a></div>
+                <div class="input-group-addon"><a (click)="clearNearBy()">&#10008;</a></div>
             </div>
             <div class="col-sm-2 form-inline input-group input-group-sm">
                 <label class="col-xs-1 col-form-label mr-2" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.sdoc.nearbyDistance">Umkreis:</label>
