@@ -1,7 +1,7 @@
 /* Absolute Center Spinner */
 .loading {
     position: absolute;
-    z-index: 999;
+    z-index: 1040; /** analogue $zindex-modal-backdrop=1040**/
     height: 100%;
     width: 100%;
     overflow: show;
