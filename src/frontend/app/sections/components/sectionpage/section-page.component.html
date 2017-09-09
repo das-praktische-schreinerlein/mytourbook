@@ -5,23 +5,31 @@
         <br clear="both">
     </div>
 
-    <div class="container content-container">
-        <ng-container *ngIf="pdoc.flgShowSearch">
-            <div class="hint_tosearch"><a href="{{getToSearchUrl()}}" (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
-        </ng-container>
+    <ng-container *ngIf="pdoc.flgShowSearch || pdoc.flgShowTopTen">
+        <div class="container content-container">
+            <ng-container *ngIf="pdoc.flgShowSearch">
+                <div class="hint_tosearch"><a href="{{getToSearchUrl()}}" (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
+            </ng-container>
 
-        <ng-container *ngIf="pdoc.flgShowSearch && pdoc.flgShowTopTen">
-            <p i18n="text search-or sectionPage|Text to search-or sectionPage@@text.sectionPage.searchOr">oder</p>
-        </ng-container>
+            <ng-container *ngIf="pdoc.flgShowSearch && pdoc.flgShowTopTen">
+                <p i18n="text search-or sectionPage|Text to search-or sectionPage@@text.sectionPage.searchOr">oder</p>
+            </ng-container>
 
-        <ng-container *ngIf="pdoc.flgShowTopTen">
-            <div class="hint_tostoebern" i18n="text pokeAround sectionPage|Text to pokeAround sectionPage@@text.sectionPage.pokeAround">Fröhliches Stöbern :-)</div>
-            <div class="shortsearchform">
-                <app-sdoc-searchform [searchResult]="sdocSearchResult"
-                                     [short]="'true'"
-                                     (search)="onSearchSDoc($event)"></app-sdoc-searchform>
+            <ng-container *ngIf="pdoc.flgShowTopTen">
+                <div class="hint_tostoebern" i18n="text pokeAround sectionPage|Text to pokeAround sectionPage@@text.sectionPage.pokeAround">Fröhliches Stöbern :-)</div>
+                <div class="shortsearchform">
+                    <app-sdoc-searchform [searchResult]="sdocSearchResult"
+                                         [short]="'true'"
+                                         (search)="onSearchSDoc($event)"></app-sdoc-searchform>
 
-            </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="pdoc.flgShowTopTen">
+        <div class="container content-container">
+            <h5 i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</h5>
             <ngb-tabset>
                 <ngb-tab title="Routen">
                     <ng-template ngbTabContent>
@@ -120,8 +128,79 @@
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>
-        </ng-container>
-    </div>
+        </div>
+
+        <div class="container content-container">
+            <h5 i18n="heading favorite-results sectionPage|Heading to favorite-results sectionPage@@heading.sectionPage.favoriteResults">Favorites</h5>
+            <ngb-tabset>
+                <ngb-tab title="Bilder">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Bilder'"
+                                                    i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.sdoc.IMAGE"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page IMAGE|SearchLinkLabel section-page IMAGE@@linline-search.searchLinkLabel.sdoc.IMAGE"
+                                                    [baseSearchUrl]="baseSearchUrl"
+                                                    [params]="getFiltersForType(pdoc, 'IMAGE', 'ratePers')"
+                                                    [showForm]="false"
+                                                    [showResultList]="true"
+                                                    [loadFacets]="true"
+                                                    [layout]="Layout.SMALL"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Routen">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Routen'"
+                                                    i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.sdoc.ROUTE"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.sdoc.ROUTE"
+                                                    [baseSearchUrl]="baseSearchUrl"
+                                                    [params]="getFiltersForType(pdoc, 'ROUTE', 'ratePers')"
+                                                    [showForm]="false"
+                                                    [showResultList]="true"
+                                                    [loadFacets]="true"
+                                                    [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Tracks">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Tracks'"
+                                                    i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.sdoc.TRACK"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page TRACK|SearchLinkLabel section-page TRACK@@linline-search.searchLinkLabel.sdoc.TRACK"
+                                                    [baseSearchUrl]="baseSearchUrl"
+                                                    [params]="getFiltersForType(pdoc, 'TRACK', 'ratePers')"
+                                                    [showForm]="false"
+                                                    [showResultList]="true"
+                                                    [loadFacets]="true"
+                                                    [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title=Alles>
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Alles'"
+                                                    i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.sdoc.ALL"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page ALL|SearchLinkLabel section-page ALL@@linline-search.searchLinkLabel.sdoc.ALL"
+                                                    [baseSearchUrl]="baseSearchUrl"
+                                                    [params]="getFiltersForType(pdoc, '', 'ratePers')"
+                                                    [showForm]="false"
+                                                    [showResultList]="true"
+                                                    [loadFacets]="true"
+                                                    [layout]="Layout.FLAT"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+    </ng-container>
+
     <ng-container *ngIf="sections.length > 0">
         <ng-container *ngFor="let section of sections">
             <div class="container content-container">
