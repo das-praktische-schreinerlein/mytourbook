@@ -15,6 +15,7 @@ import {GenericAppService} from '../../../../shared/search-commons/services/gene
 import {PageUtils} from '../../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
+import {MarkdownService} from 'angular2-markdown';
 
 @Component({
     selector: 'app-sectionpage',
@@ -22,6 +23,7 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
     styleUrls: ['./section-page.component.css']
 })
 export class SectionPageComponent implements OnInit {
+    private markdownRendered = false;
     idValidationRule = new IdValidationRule(true);
     pdoc: PDocRecord = new PDocRecord();
     baseSearchUrl = '';
@@ -33,7 +35,8 @@ export class SectionPageComponent implements OnInit {
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private router: Router, private searchFormConverter: SDocSearchFormConverter,
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils) {
+                private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
+                private markdownService: MarkdownService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -46,6 +49,7 @@ export class SectionPageComponent implements OnInit {
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 if (!flgPDocError && !flgBaseSearchUrlError) {
                     me.pdoc = data.pdoc.data;
+                    me.markdownRendered = false;
                     me.baseSearchUrl = data.baseSearchUrl.data;
                     me.sections =  me.getSubSections(me.pdoc);
                     me.sDocRoutingService.setLastBaseUrl(me.baseSearchUrl);
@@ -56,6 +60,7 @@ export class SectionPageComponent implements OnInit {
                         {title: me.pdoc.heading, teaser: me.pdoc.teaser}, me.pdoc.teaser);
                     this.pageUtils.setRobots(true, true);
                     this.pageUtils.setMetaLanguage();
+
                     return;
                 }
 
@@ -110,6 +115,43 @@ export class SectionPageComponent implements OnInit {
                 return;
             }
         );
+    }
+
+    renderMarkdown(): void {
+        // TODO: move to Service
+        if (this.markdownRendered) {
+            return;
+        }
+        if (!this.pdoc) {
+            this.markdownRendered = true;
+            return;
+        }
+        const inputEl = document.querySelector('#markdown');
+        if (!inputEl || inputEl === undefined || inputEl === null) {
+            return;
+        }
+
+        inputEl.innerHTML = '';
+        try {
+            inputEl.innerHTML = this.markdownService.compile(this.pdoc.desc);
+        } finally {}
+
+        const links = document.querySelectorAll('#markdown a');
+        const me = this;
+        for (let i = 0; i < links.length; i++) {
+            const link = links[i];
+            const url = link.getAttribute('href');
+            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('mailto://')) {
+                continue;
+            }
+            link.addEventListener('click', function (event) {
+                me.router.navigateByUrl(url);
+                event.preventDefault();
+                return false;
+            });
+        }
+
+        this.markdownRendered = true;
     }
 
     getFiltersForType(record: PDocRecord, type: string, sort?: string): any {
