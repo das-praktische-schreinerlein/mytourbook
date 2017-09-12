@@ -52,6 +52,34 @@ const sectionRoutes: Routes = [
                         }
                     },
                     {
+                        path: 'search',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            flgDoSearch: true,
+                            id: 'sections_search_default',
+                            searchFormDefaults: {},
+                        },
+                        resolve: {
+                            pdoc: SectionsPDocRecordResolver,
+                            baseSearchUrl: SectionsBaseUrlResolver,
+                            searchForm: SectionsSearchFormResolver
+                        }
+                    },
+                    {
+                        path: 'search/:type',
+                        component: SDocSearchpageComponent,
+                        data: {
+                            flgDoSearch: true,
+                            id: 'sections_search_types',
+                            searchFormDefaults: {},
+                        },
+                        resolve: {
+                            pdoc: SectionsPDocRecordResolver,
+                            baseSearchUrl: SectionsBaseUrlResolver,
+                            searchForm: SectionsSearchFormResolver
+                        }
+                    },
+                    {
                         path: 'search/:when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
                         component: SDocSearchpageComponent,
                         data: {
