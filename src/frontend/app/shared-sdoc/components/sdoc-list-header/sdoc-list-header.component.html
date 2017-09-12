@@ -18,7 +18,7 @@
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print">
                 <label class="col-form-label" i18n="sort label|Label for header: sort@@label.pageHeader.sdoc.sort">Sort:</label>
                 <select class="form-control input-sm" name="sort" id="sort" formControlName="sort" (change)="onSortChange()">
-                    <ng-container *ngFor="let sortValue of ['relevance', 'location', 'date', 'ratePers', 'distance']">
+                    <ng-container *ngFor="let sortValue of availableSorts">
                         <option [value]="sortValue">{{ 'listSorts_' + sortValue | translate }}</option>
                     </ng-container>
                 </select>
@@ -26,13 +26,13 @@
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print" *ngIf="layout !== Layout.PAGE">
                 <label class="col-form-label" i18n="perPage label|Label for header: perPage@@label.pageHeader.sdoc.perPage">per Page:</label>
                 <select class="form-control input-sm" name="perPage" id="perPage" formControlName="perPage" (change)="onPerPageChange()">
-                    <option *ngFor="let num of [1, 10, 20, 50]" [value]="num">{{ num }}</option>
+                    <option *ngFor="let num of availablePerPage" [value]="num">{{ num }}</option>
                 </select>
             </div>
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print">
                 <label class="col-form-label" i18n="listLayout label|Label for header: listLayout@@label.pageHeader.sdoc.listLayout">Layout:</label>
                 <select class="form-control input-sm" name="layout" id="layout" formControlName="layout" (change)="onLayoutChange()">
-                    <option *ngFor="let layout of [Layout.FLAT, Layout.SMALL, Layout.BIG, Layout.PAGE]" [value]="layout">{{ 'listLayout_' + layout | translate }}</option>
+                    <option *ngFor="let layout of availableLayouts" [value]="layout">{{ 'listLayout_' + layout | translate }}</option>
                 </select>
             </div>
         </div>

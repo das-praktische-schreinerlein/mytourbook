@@ -356,11 +356,35 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             case 'date':
                 sortParams.set('sort', 'dateonly_s desc');
                 break;
+            case 'dateAsc':
+                sortParams.set('sort', 'date_dt asc');
+                break;
             case 'distance':
                 sortParams.set('sort', 'geodist() asc');
                 break;
-            case 'dateAsc':
-                sortParams.set('sort', 'date_dt asc');
+            case 'dataTechDurDesc':
+                sortParams.set('sort', 'data_tech_dur_f desc');
+                break;
+            case 'dataTechAltDesc':
+                sortParams.set('sort', 'data_tech_alt_asc_i desc');
+                break;
+            case 'dataTechMaxDesc':
+                sortParams.set('sort', 'data_tech_alt_max_i desc');
+                break;
+            case 'dataTechDistDesc':
+                sortParams.set('sort', 'data_tech_dist_f desc');
+                break;
+            case 'dataTechDurAsc':
+                sortParams.set('sort', 'data_tech_dur_f asc');
+                break;
+            case 'dataTechAltAsc':
+                sortParams.set('sort', 'data_tech_alt_asc_i asc');
+                break;
+            case 'dataTechMaxAsc':
+                sortParams.set('sort', 'data_tech_alt_max_i asc');
+                break;
+            case 'dataTechDistAsc':
+                sortParams.set('sort', 'data_tech_dist_f asc');
                 break;
             case 'ratePers':
                 sortParams.set('sort', 'sub(15, rate_pers_gesamt_i) asc, dateonly_s desc');
