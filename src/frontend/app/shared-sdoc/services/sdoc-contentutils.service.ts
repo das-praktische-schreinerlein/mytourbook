@@ -111,4 +111,82 @@ export class SDocContentUtils {
 
         return keywordKats;
     }
+
+    getSDocSubItemFiltersForType(record: SDocRecord, type: string, theme: string): any {
+        const filters = {
+            type: type
+        };
+
+        // filter theme only for locations
+        if (record.type === 'LOCATION' && theme !== undefined) {
+            filters['theme'] = theme;
+        }
+        filters['sort'] = 'ratePers';
+
+        if (record.type === 'TRACK') {
+            if (type === 'IMAGE' && record.trackId) {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
+                filters['sort'] = 'dateAsc';
+                filters['perPage'] = 100;
+            } else if (type === 'ROUTE' && record.routeId) {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'TRIP' && record.tripId) {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+            } else if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
+            }
+        } else if (record.type === 'ROUTE') {
+            if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'IMAGE') {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+                filters['perPage'] = 12;
+            } else if (type === 'TRACK') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'TRIP' && record.routeId) {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+            }
+        } else if (record.type === 'LOCATION') {
+            if (type === 'LOCATION') {
+                filters['moreFilter'] = 'loc_parent_id_i:' + record.locId;
+                filters['sort'] = 'location';
+            } else {
+                filters['moreFilter'] = 'loc_lochirarchie_ids_txt:' + record.locId;
+                if (type === 'IMAGE') {
+                    filters['perPage'] = 12;
+                }
+            }
+        } else if (record.type === 'IMAGE') {
+            if (type === 'TRACK' && record.trackId) {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
+            } else if (type === 'ROUTE' && record.routeId) {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+            } else if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'TRIP' && record.tripId) {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+            } else {
+                filters['moreFilter'] = 'image_id_i:' + record.imageId;
+            }
+        } else if (record.type === 'TRIP') {
+            if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'IMAGE') {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['perPage'] = 12;
+            } else if (type === 'TRACK') {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['perPage'] = 99;
+                filters['sort'] = 'dateAsc';
+            } else {
+                filters['moreFilter'] = 'trip_id_is:' + record.tripId;
+            }
+        }
+
+        return filters;
+    }
 }
