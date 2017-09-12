@@ -6,6 +6,7 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
 import {SDocLightboxAlbumConfig, SDocLightBox} from '../../services/sdoc-lightbox.service';
 
 export enum Layout {
+    THIN,
     FLAT,
     SMALL,
     BIG,

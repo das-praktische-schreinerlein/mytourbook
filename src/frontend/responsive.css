@@ -33,6 +33,7 @@
     }
     div.layout-verysmall {
         display: block;
+        padding: 3px;
     }
     .container {
         padding-left: 10px;
@@ -45,6 +46,7 @@
     }
     div.layout-small {
         display: block;
+        padding: 5px;
     }
     div.layout-verysmall {
         display: none;

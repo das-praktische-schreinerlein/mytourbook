@@ -32,6 +32,7 @@ import {SDocRatePersonalDifficultyComponent} from './components/sdoc-ratepers-di
 import {SDocKeywordsComponent} from './components/sdoc-keywords/sdoc-keywords.component';
 import {SDocDataInfoComponent} from './components/sdoc-datainfo/sdoc-datainfo.component';
 import {SDocDistanceComponent} from './components/sdoc-distance/sdoc-distance.component';
+import {SDocListItemThinComponent} from './components/sdoc-list-item-thin/sdoc-list-item-thin.component';
 
 @NgModule({
     declarations: [
@@ -39,6 +40,7 @@ import {SDocDistanceComponent} from './components/sdoc-distance/sdoc-distance.co
         SDocListItemComponent,
         SDocListItemSmallComponent,
         SDocListItemFlatComponent,
+        SDocListItemThinComponent,
         SDocListItemPageComponent,
         SDocListHeaderComponent,
         SDocListFooterComponent,
@@ -81,6 +83,7 @@ import {SDocDistanceComponent} from './components/sdoc-distance/sdoc-distance.co
         SDocListItemComponent,
         SDocListItemSmallComponent,
         SDocListItemFlatComponent,
+        SDocListItemThinComponent,
         SDocListItemPageComponent,
         SDocListHeaderComponent,
         SDocListFooterComponent,

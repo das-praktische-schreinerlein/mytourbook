@@ -27,6 +27,15 @@
                                       (showImage)="onShowImage($event)"
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-flat>
         </ng-container>
+        <ng-container *ngSwitchCase="Layout.THIN">
+            <app-sdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-sdoc-list-item"
+                                     [record]="record"
+                                     [layout]="layout"
+                                     [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                     (show)="onShow($event)"
+                                     (showImage)="onShowImage($event)"
+                                     *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-thin>
+        </ng-container>
         <ng-container *ngSwitchDefault>
             <app-sdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-sdoc-list-item"
                                 [record]="record"

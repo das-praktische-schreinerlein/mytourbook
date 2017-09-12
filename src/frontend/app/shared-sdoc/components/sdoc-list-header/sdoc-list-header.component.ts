@@ -13,7 +13,7 @@ export class SDocListHeaderComponent implements OnInit {
     public Layout = Layout;
 
     @Input()
-    public availableLayouts?: Layout[] = [Layout.FLAT, Layout.SMALL, Layout.BIG, Layout.PAGE];
+    public availableLayouts?: Layout[] = [Layout.THIN, Layout.FLAT, Layout.SMALL, Layout.BIG, Layout.PAGE];
 
     @Input()
     public availableSorts?: string[] = ['relevance', 'location', 'date', 'ratePers', 'distance',
