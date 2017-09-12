@@ -80,6 +80,7 @@
     "babel-core": "6.25.0",
     "babel-loader": "7.1.1",
     "codelyzer": "2.0.1",
+    "enhanced-resolve": "3.3.0",
     "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "3.2.0",
     "karma": "1.4.1",
