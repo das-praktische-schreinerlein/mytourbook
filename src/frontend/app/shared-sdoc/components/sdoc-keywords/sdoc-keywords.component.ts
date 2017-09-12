@@ -1,45 +1,39 @@
-import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocContentUtils, StructuredKeyword} from '../../services/sdoc-contentutils.service';
+import {AppState, GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-keywords',
     templateUrl: './sdoc-keywords.component.html',
     styleUrls: ['./sdoc-keywords.component.css']
 })
-export class SDocKeywordsComponent implements OnChanges {
+export class SDocKeywordsComponent implements OnInit, OnChanges {
     keywordKats: StructuredKeyword[] = [];
-
-    blacklist = ['OFFEN', 'Mom', 'Pa', 'Dani', 'Micha', 'Verena',
-        'Booga', 'Harry', 'Rudi', 'Pelle'];
-
-    keywordsConfig: StructuredKeyword[] = [
-        {name: 'Aktivität', keywords: ['Baden', 'Boofen', 'Bootfahren', 'Campen',
-            'Fliegen', 'Gletscherbegehung', 'Kanu', 'Klettern', 'Klettersteig',
-            'Radfahren', 'Schneeschuhwandern', 'Skaten', 'Wandern', 'Museumsbesuch',
-            'Stadtbesichtigung', 'Besichtigung', 'Gassi', 'Hochtour', 'Spaziergang',
-            'Wanderung']},
-        {name: 'Kultur', keywords: ['Denkmal', 'Geschichte', 'Kunst', 'Museum',
-            'Architektur', 'Burg', 'Dom', 'Kirche', 'Park', 'Schloss', 'Zoo']},
-        {name: 'Jahreszeit', keywords: ['Frühling', 'Herbst', 'Sommer', 'Winter']},
-        {name: 'Tourdauer', keywords: ['Kurztour', 'Mehrtagestour', 'Tagestour']},
-        {name: 'Wetter', keywords: ['bedeckt', 'Eis', 'heiter', 'Regen', 'Schnee',
-            'sonnig', 'Sonne', 'Mond', 'Sonnenaufgang', 'Sonnenuntergang']},
-        {name: 'Landschaft', keywords: ['Kulturlandschaft', 'Landschaft', 'Dorf',
-            'Stadt', 'Naturlandschaft', 'Natur']},
-        {name: 'Natur', keywords: ['Alm', 'Aue', 'Bach', 'Fluss', 'Moor', 'See',
-            'Teich', 'Wasserfall', 'Felsen', 'Felswand', 'Gletscherschau',
-            'Höhle', 'Schlucht', 'Tal', 'Sandstrand', 'Steinstrand',
-            'Steilküste', 'Blumen', 'Feld', 'Heide', 'Steppe', 'Wiese',
-            'Bergwald', 'Strandwald', 'Wald', 'Seenlandschaft', 'Berge',
-            'Hochgebirge', 'Mittelgebirge', 'Meer', 'Ozean']}
-    ];
+    blacklist = [];
+    keywordsConfig: StructuredKeyword[] = [];
 
     @Input()
     public record: SDocRecord;
 
-    constructor(private contentUtils: SDocContentUtils) {
+    constructor(private appService: GenericAppService, private contentUtils: SDocContentUtils) {
+    }
+
+    ngOnInit() {
+        this.appService.getAppState().subscribe(appState => {
+            if (appState === AppState.Ready) {
+                const config = this.appService.getAppConfig();
+                if (config['components']
+                    && config['components']['sdoc-keywords']
+                    && config['components']['sdoc-keywords']['structuredKeywords']) {
+                    this.keywordsConfig = config['components']['sdoc-keywords']['structuredKeywords'];
+                } else {
+                    console.error('no valid keywordsConfig found');
+                    this.keywordsConfig = [];
+                }
+            }
+        });
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {

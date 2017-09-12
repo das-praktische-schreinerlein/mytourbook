@@ -14,7 +14,9 @@ export class AppService extends GenericAppService {
     private appConfig = {
         backendApiBaseUrl: environment.backendApiBaseUrl,
         tracksBaseUrl: environment.tracksBaseUrl,
-        picsBaseUrl: environment.picsBaseUrl
+        picsBaseUrl: environment.picsBaseUrl,
+        components: {},
+        services: {}
     };
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
@@ -24,7 +26,16 @@ export class AppService extends GenericAppService {
     }
 
     initApp(): void {
-        this.initBackendData();
+        const me = this;
+        this.initAppConfig().then(function onConfigLoaded() {
+            return me.initBackendData();
+        }).then(function onBackendLoaded() {
+            console.log('app ready');
+            me.setAppState(AppState.Ready);
+        }).catch(function onError(reason: any) {
+            console.error('loading app failed:' + reason);
+            me.setAppState(AppState.Failed);
+        });
     }
 
     getAppConfig(): {}  {
@@ -35,6 +46,9 @@ export class AppService extends GenericAppService {
         const me = this;
         this.initStaticData().then(function onFullfiled() {
             me.router.navigateByUrl('/');
+        }).catch(function onError(reason: any) {
+            console.error('loading app failed:' + reason);
+            me.setAppState(AppState.Failed);
         });
     }
 
@@ -42,10 +56,30 @@ export class AppService extends GenericAppService {
         const me = this;
         this.initBackendData().then(function onFullfiled() {
             me.router.navigateByUrl('/');
+        }).catch(function onError(reason: any) {
+            console.error('loading app failed:' + reason);
+            me.setAppState(AppState.Failed);
         });
     }
 
-    initBackendData(): Promise<any> {
+    initAppConfig(): Promise<any> {
+        const me = this;
+        return new Promise<boolean>((resolve, reject) => {
+            me.http.request('./assets/config.json').toPromise()
+                .then(function onConfigLoaded(res: any) {
+                    const config: {} = res.json();
+                    console.log('initially loaded config from assets', config);
+                    me.appConfig.components = config['components'];
+                    me.appConfig.services = config['services'];
+                    resolve(true);
+                }).catch(function onError(reason: any) {
+                    console.error('loading appdata failed:' + reason);
+                    reject(false);
+            });
+        });
+    }
+
+    initBackendData(): Promise<boolean> {
         const me = this;
         const options = {
             basePath: this.appConfig.backendApiBaseUrl + this.locale + '/'
@@ -57,17 +91,19 @@ export class AppService extends GenericAppService {
         this.sdocDataService.clearLocalStore();
         this.sdocDataStore.setAdapter('http', sdocAdapter, '', {});
 
-        return this.http.request(options.basePath + 'pdoc/').toPromise()
-            .then(function onDocsLoaded(res: any) {
-                const docs: any[] = res.json();
-                return me.pdocDataService.addMany(docs);
-            }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                console.log('initially loaded pdocs from server', records);
-                me.setAppState(AppState.Ready);
-            }).catch(function onError(reason: any) {
-                console.error('loading appdata failed:' + reason);
-                me.setAppState(AppState.Failed);
-        });
+        return new Promise<boolean>((resolve, reject) => {
+            me.http.request(options.basePath + 'pdoc/').toPromise()
+                .then(function onDocsLoaded(res: any) {
+                    const docs: any[] = res.json();
+                    return me.pdocDataService.addMany(docs);
+                }).then(function onDocsAdded(records: BaseEntityRecord[]) {
+                    console.log('initially loaded pdocs from server', records);
+                    resolve(true);
+                }).catch(function onError(reason: any) {
+                    console.error('loading appdata failed:' + reason);
+                    reject(false);
+                });
+            });
     }
 
     initStaticData(): Promise<any> {
@@ -75,25 +111,27 @@ export class AppService extends GenericAppService {
         this.sdocDataStore.setAdapter('http', undefined, '', {});
         this.pdocDataService.clearLocalStore();
         this.sdocDataService.clearLocalStore();
-        return this.http.request('./assets/pdocs.json').toPromise()
-            .then(function onDocsLoaded(res: any) {
-                const docs: any[] = res.json().pdocs;
+        return new Promise<boolean>((resolve, reject) => {
+            me.http.request('./assets/pdocs.json').toPromise()
+                .then(function onDocsLoaded(res: any) {
+                    const docs: any[] = res.json().pdocs;
 
-                return me.pdocDataService.addMany(docs);
-            }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                console.log('initially loaded pdocs from assets', records);
+                    return me.pdocDataService.addMany(docs);
+                }).then(function onDocsAdded(records: BaseEntityRecord[]) {
+                    console.log('initially loaded pdocs from assets', records);
 
-                return me.http.request('./assets/sdocs.json').toPromise();
-            }).then(function onDocsLoaded(res: any) {
-                const docs: any[] = res.json().sdocs;
+                    return me.http.request('./assets/sdocs.json').toPromise();
+                }).then(function onDocsLoaded(res: any) {
+                    const docs: any[] = res.json().sdocs;
 
-                return me.sdocDataService.addMany(docs);
-            }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                console.log('initially loaded sdocs from assets', records);
-                me.setAppState(AppState.Ready);
-            }).catch(function onError(reason: any) {
-                console.error('loading appdata failed:' + reason);
-                me.setAppState(AppState.Failed);
-        });
+                    return me.sdocDataService.addMany(docs);
+                }).then(function onDocsAdded(records: BaseEntityRecord[]) {
+                    console.log('initially loaded sdocs from assets', records);
+                    resolve(true);
+                }).catch(function onError(reason: any) {
+                    console.error('loading appdata failed:' + reason);
+                    reject(false);
+                });
+            });
     }
 }
