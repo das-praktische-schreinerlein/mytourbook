@@ -130,7 +130,6 @@ export class SectionPageComponent implements OnInit {
     }
 
     getFiltersForType(record: PDocRecord, type: string, sort?: string): any {
-        // TODO: move to Service
         const filters = {
             type: type
         };

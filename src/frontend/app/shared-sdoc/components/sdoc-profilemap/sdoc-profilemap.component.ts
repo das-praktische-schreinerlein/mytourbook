@@ -1,10 +1,9 @@
 import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 
-import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import LatLng = L.LatLng;
+
 @Component({
     selector: 'app-sdoc-profilemap',
     templateUrl: './sdoc-profilemap.component.html'
@@ -35,7 +34,6 @@ export class SDocProfileMapComponent implements OnChanges {
             return;
         }
 
-        // TODO: move to Service
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
             const trackUrl = record.gpsTrackBasefile;

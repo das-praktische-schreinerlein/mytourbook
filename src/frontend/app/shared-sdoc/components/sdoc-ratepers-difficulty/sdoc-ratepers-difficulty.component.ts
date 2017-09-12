@@ -2,6 +2,7 @@ import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocRatePersonalRecord} from '../../../../shared/sdoc-commons/model/records/sdocratepers-record';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-ratepers-difficulty',
@@ -17,6 +18,8 @@ export class SDocRatePersonalDifficultyComponent implements OnChanges {
     @Input()
     public small? = false;
 
+    constructor(private contentUtils: SDocContentUtils) {}
+
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {
             this.updateData();
@@ -24,9 +27,9 @@ export class SDocRatePersonalDifficultyComponent implements OnChanges {
     }
 
     calcRate(rate: number): number {
-        // TODO: move to Service
-        return Math.round((rate / 3) + 0.5);
+        return this.contentUtils.calcRate(rate, 5);
     }
+
 
     private updateData() {
         if (this.record === undefined) {

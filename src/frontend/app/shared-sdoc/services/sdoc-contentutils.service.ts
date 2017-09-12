@@ -3,6 +3,9 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {SDocImageRecord} from '../../../shared/sdoc-commons/model/records/sdocimage-record';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
+import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plugin';
+import 'leaflet';
+import LatLng = L.LatLng;
 
 export interface StructuredKeyword {
     name: string;
@@ -188,5 +191,43 @@ export class SDocContentUtils {
         }
 
         return filters;
+    }
+
+    createMapElementForSDoc(record: SDocRecord, showImageTrackAndGeoPos: boolean): MapElement[] {
+        const trackUrl = record.gpsTrackBasefile;
+
+        const isImage = record.type === 'IMAGE';
+        const showTrack = trackUrl !== undefined && trackUrl.length > 0 && (!isImage || showImageTrackAndGeoPos);
+        const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
+            record.geoLat !== '0.0' && record.geoLon !== '0.0';
+        const mapElements: MapElement[] = [];
+
+        if (showTrack) {
+            const mapElement: MapElement = {
+                id: record.id,
+                name: record.name,
+                trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json',
+                trackSrc: record.gpsTrack,
+                popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
+                type: record.type
+            };
+            mapElements.push(mapElement,)
+        }
+        if (showGeoPos) {
+            const mapElement: MapElement = {
+                id: record.id,
+                name: record.type + ': ' + record.name,
+                point: new LatLng(+record.geoLat, +record.geoLon),
+                popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
+                type: record.type
+            };
+            mapElements.push(mapElement);
+        }
+
+        return mapElements;
+    }
+
+    calcRate(rate: number, max: number): number {
+        return Math.round((rate / 15 * max) + 0.5);
     }
 }

@@ -5,6 +5,10 @@ import {SDocRatePersonalComponent} from './sdoc-ratepers.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {DomSanitizer} from '@angular/platform-browser';
 
 describe('SDocRatePersonalComponent', () => {
     let component: SDocRatePersonalComponent;
@@ -15,7 +19,12 @@ describe('SDocRatePersonalComponent', () => {
             declarations: [SDocRatePersonalComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
-                TranslateModule.forRoot()]
+                TranslateModule.forRoot()],
+            providers: [
+                DomSanitizer,
+                SDocContentUtils,
+                { provide: GenericAppService, useValue: new AppServiceStub() }
+            ]
         })
             .compileComponents();
     }));

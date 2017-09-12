@@ -1,12 +1,11 @@
 import {Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
-import 'leaflet.markercluster';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
-import LatLng = L.LatLng;
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+
 @Component({
     selector: 'app-sdoc-map',
     templateUrl: './sdoc-map.component.html'
@@ -40,7 +39,7 @@ export class SDocMapComponent implements OnChanges {
     @Output()
     public sdocClicked: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(private appService: GenericAppService) {}
+    constructor(private contentUtils: SDocContentUtils) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {
@@ -63,35 +62,10 @@ export class SDocMapComponent implements OnChanges {
             return;
         }
 
-        // TODO: move to Service
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
-            const trackUrl = record.gpsTrackBasefile;
 
-            const isImage = record.type === 'IMAGE';
-            const showTrack = trackUrl !== undefined && trackUrl.length > 0 && (!isImage || this.showImageTrackAndGeoPos);
-            const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
-                record.geoLat !== '0.0' && record.geoLon !== '0.0';
-
-            if (showTrack) {
-                const mapElement: MapElement = {
-                    id: record.id,
-                    name: record.name,
-                    trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json',
-                    trackSrc: this.sdocs[i].gpsTrack,
-                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
-                    type: record.type
-                };
-                this.mapElementsReverseMap.set(mapElement, record);
-            }
-            if (showGeoPos) {
-                const mapElement: MapElement = {
-                    id: record.id,
-                    name: record.type + ': ' + record.name,
-                    point: new LatLng(+record.geoLat, +record.geoLon),
-                    popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
-                    type: record.type
-                };
+            for (const mapElement of this.contentUtils.createMapElementForSDoc(record, this.showImageTrackAndGeoPos)) {
                 this.mapElementsReverseMap.set(mapElement, record);
             }
         }

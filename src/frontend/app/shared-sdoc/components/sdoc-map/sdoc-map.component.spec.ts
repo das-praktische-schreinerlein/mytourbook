@@ -5,6 +5,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {SDocMapComponent} from './sdoc-map.component';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {DomSanitizer} from '@angular/platform-browser';
 
 describe('SDocProfileMapComponent', () => {
     let component: SDocMapComponent;
@@ -16,6 +18,8 @@ describe('SDocProfileMapComponent', () => {
             imports: [ReactiveFormsModule],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
+                DomSanitizer,
+                SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ]
         })
