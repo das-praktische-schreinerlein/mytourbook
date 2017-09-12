@@ -93,6 +93,7 @@
     "listLayout_2": "big",
     "listLayout_3": "page",
     "listSorts_relevance": "relevance",
+    "listSorts_distance": "distance",
     "listSorts_location": "location",
     "listSorts_date": "date",
     "listSorts_ratePers": "personal rating",

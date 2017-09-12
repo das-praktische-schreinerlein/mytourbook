@@ -18,6 +18,7 @@ export const SDocRecordSchema = new Schema({
 //        datevon: {type: 'Date'},
         actiontypes: {type: 'string'},
         desc: {type: 'string'},
+        geoDistance: {type: 'number'},
         geoLon: {type: 'string'},
         geoLat: {type: 'string'},
         geoLoc: {type: 'string'},

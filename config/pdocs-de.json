@@ -2,7 +2,7 @@
  "pdocs": [
   {
    "id": "start",
-   "desc": "Willkommen bei MyTB dem Portal für die Tourenplanung in ausgewählten Ländern der Welt. Es ist eine Mischung aus Tourenführer (Tourentipps), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder).",
+   "desc": "Willkommen bei MyTB dem Portal für die Tourenplanung in ausgewählten Ländern der Welt. Es ist eine Mischung aus [Tourenführer (Tourentipps)](sections/start/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/route/5/1), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder) angelehnt an [Michas-Ausflugstipps](http://www.michas-ausflugstipps.de/).",
    "flgShowTopTen": true,
    "flgShowSearch": true,
    "heading": "Thats MyTB",

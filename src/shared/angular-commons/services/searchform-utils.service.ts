@@ -9,7 +9,7 @@ export class SearchFormUtils {
     }
 
     public getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,
-                                                              removements: string[], translate: boolean): IMultiSelectOption[] {
+                                                              removements: RegExp[], translate: boolean): IMultiSelectOption[] {
         if (values === undefined) {
             return [];
         }

@@ -1,0 +1,36 @@
+@media print {
+    body {
+        background: white;
+    }
+    .btn, .btn-primary {
+        display: none;
+    }
+
+    div.navbar-collapse, #navbarContent {
+        display: none !IMPORTANT;
+    }
+
+    ul.pagination {
+        display: none;
+    }
+
+    .card-header {
+        display: none;
+    }
+
+    .hidden-print {
+        display: none;
+    }
+
+    div.layout-big {
+        display: none;
+    }
+    div.layout-small {
+        display: block;
+    }
+    div.layout-verysmall {
+        display: none;
+    }
+}
+@media screen {
+}

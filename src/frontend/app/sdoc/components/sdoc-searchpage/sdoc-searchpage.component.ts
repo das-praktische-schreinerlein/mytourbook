@@ -221,14 +221,17 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     onSearchSDoc(sdocSearchForm: SDocSearchForm) {
+        const origSearchForm = this.searchForm;
         this.searchForm = sdocSearchForm;
+        this.searchForm.perPage = origSearchForm.perPage;
+        this.searchForm.sort = origSearchForm.sort;
         console.log('onSearchSDoc: redirect to ', sdocSearchForm);
         this.redirectToSearch();
         return false;
     }
 
     onMapSDocClicked(sdoc: SDocRecord) {
-        console.error("sdocCliccked", sdoc);
+        console.error("sdocClicked", sdoc);
     }
 
     onMapCenterChanged(newCenter: L.LatLng) {
@@ -247,6 +250,13 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     private doSearch() {
+        if (this.searchForm.sort === 'distance' && (this.searchForm.nearby === undefined || this.searchForm.nearby === '')) {
+            console.log('doSearch: redirect because of sort/nearby form:', this.searchForm);
+            this.searchForm.sort = 'relevance';
+            this.sort = 'relvance';
+            return this.redirectToSearch();
+        }
+
         console.log('doSearch form:', this.searchForm);
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));

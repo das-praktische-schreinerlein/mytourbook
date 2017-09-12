@@ -41,7 +41,9 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
-            showUncheckAll: true};
+            showUncheckAll: true,
+            autoUnselect: true,
+            selectionLimit: 1};
     public settingsSelectWhat: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
@@ -229,6 +231,14 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         return false;
     }
 
+    public clearNearBy() {
+        const me = this;
+        const values = this.searchFormGroup.getRawValue();
+        me.searchFormGroup.patchValue({'nearby': undefined});
+        me.searchFormGroup.patchValue({'nearbyAddress': ''});
+        me.doSearch();
+    }
+
     public useBrowserGeoLocation() {
         const me = this;
         const values = this.searchFormGroup.getRawValue();
@@ -270,11 +280,11 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectWhere = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [], false),
+                this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [/^_+/, /_+$/], false),
             rawValues['where']);
         this.optionsSelectWhat = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, ['kw_'], true),
+                this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, [/^kw_/], true),
             rawValues['what']);
         this.optionsSelectActionType = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(

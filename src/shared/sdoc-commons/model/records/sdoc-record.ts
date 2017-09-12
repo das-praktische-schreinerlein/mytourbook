@@ -10,6 +10,7 @@ export class SDocRecord extends BaseEntityRecord {
     actiontypes: string;
     datevon: Date;
     desc: string;
+    geoDistance: number;
     geoLon: string;
     geoLat: string;
     geoLoc: string;

@@ -120,7 +120,7 @@ export class SDocSearchFormUtils {
     }
 
     getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,
-                                                       removements: string[], translate: boolean): IMultiSelectOption[] {
+                                                       removements: RegExp[], translate: boolean): IMultiSelectOption[] {
         return this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             values, withCount, removements, translate);
     }

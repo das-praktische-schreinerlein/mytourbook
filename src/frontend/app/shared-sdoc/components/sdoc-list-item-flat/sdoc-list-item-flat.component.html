@@ -11,6 +11,7 @@
                 </ng-container>
             </div>
             <div class="col-2 type layout-big">
+                <h5 *ngIf="record.geoDistance > 0"><app-sdoc-distance [record]="record"></app-sdoc-distance></h5>
                 <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
                 <h5>{{record.subtype | translate }}</h5>
                 <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
@@ -28,6 +29,7 @@
 
             <!--- SMALL -->
             <div class="col-3 image layout-small">
+                <h5 *ngIf="record.geoDistance > 0"><app-sdoc-distance [record]="record"></app-sdoc-distance></h5>
                 <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
                 <h5>{{record.subtype | translate }}</h5>
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
@@ -77,6 +79,7 @@
 
             <!--- VERYSMALL -->
             <div class="col-3 image layout-verysmall">
+                <h5 *ngIf="record.geoDistance > 0"><app-sdoc-distance [record]="record"></app-sdoc-distance></h5>
                 <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
                 <h5>{{record.subtype | translate }}</h5>
                 <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">

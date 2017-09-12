@@ -96,6 +96,6 @@ export class SDocMapComponent implements OnChanges {
             }
         }
         this.mapElements = Array.from(this.mapElementsReverseMap.keys());
-        this.showLoadingSpinner = true;
+        this.showLoadingSpinner = this.mapElements.length > 0;
     }
 }
