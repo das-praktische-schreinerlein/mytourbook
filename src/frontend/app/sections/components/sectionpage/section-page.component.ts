@@ -15,7 +15,7 @@ import {GenericAppService} from '../../../../shared/search-commons/services/gene
 import {PageUtils} from '../../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
-import {MarkdownService} from 'angular2-markdown';
+import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -36,7 +36,7 @@ export class SectionPageComponent implements OnInit {
                 private router: Router, private searchFormConverter: SDocSearchFormConverter,
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
-                private markdownService: MarkdownService) {
+                private angularMarkdownService: AngularMarkdownService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -118,7 +118,6 @@ export class SectionPageComponent implements OnInit {
     }
 
     renderMarkdown(): void {
-        // TODO: move to Service
         if (this.markdownRendered) {
             return;
         }
@@ -126,32 +125,8 @@ export class SectionPageComponent implements OnInit {
             this.markdownRendered = true;
             return;
         }
-        const inputEl = document.querySelector('#markdown');
-        if (!inputEl || inputEl === undefined || inputEl === null) {
-            return;
-        }
 
-        inputEl.innerHTML = '';
-        try {
-            inputEl.innerHTML = this.markdownService.compile(this.pdoc.desc);
-        } finally {}
-
-        const links = document.querySelectorAll('#markdown a');
-        const me = this;
-        for (let i = 0; i < links.length; i++) {
-            const link = links[i];
-            const url = link.getAttribute('href');
-            if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('mailto://')) {
-                continue;
-            }
-            link.addEventListener('click', function (event) {
-                me.router.navigateByUrl(url);
-                event.preventDefault();
-                return false;
-            });
-        }
-
-        this.markdownRendered = true;
+        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', this.pdoc.desc, true);
     }
 
     getFiltersForType(record: PDocRecord, type: string, sort?: string): any {

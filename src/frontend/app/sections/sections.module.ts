@@ -16,6 +16,7 @@ import {SectionsPDocsResolver} from './resolver/sections-pdocs.resolver';
 import {ErrorResolver} from './resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 import {MarkdownModule} from 'angular2-markdown';
+import {AngularMarkdownService} from '../../shared/angular-commons/services/angular-markdown.service';
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import {MarkdownModule} from 'angular2-markdown';
         SectionsPDocRecordResolver,
         SectionsPDocsResolver,
         ErrorResolver,
+        AngularMarkdownService,
         PageUtils
     ]
 })

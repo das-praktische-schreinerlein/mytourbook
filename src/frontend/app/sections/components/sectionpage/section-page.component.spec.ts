@@ -13,6 +13,8 @@ import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-dat
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
+import {MarkdownModule, MarkdownService} from 'angular2-markdown';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -28,7 +30,8 @@ describe('SectionPageComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             imports: [
                 ToastModule.forRoot(),
-                TranslateModule.forRoot()],
+                TranslateModule.forRoot(),
+                MarkdownModule.forRoot()],
             providers: [
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
@@ -38,6 +41,8 @@ describe('SectionPageComponent', () => {
                 SearchParameterUtils,
                 ToastsManager,
                 TranslateService,
+                MarkdownService,
+                AngularMarkdownService,
                 ErrorResolver,
                 PageUtils
             ]
