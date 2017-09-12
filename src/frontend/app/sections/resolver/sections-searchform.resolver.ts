@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {SDocSearchFormConverter} from '../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {SDocSearchForm, SDocSearchFormValidator} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
 import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
 

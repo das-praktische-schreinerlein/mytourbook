@@ -1,5 +1,5 @@
 import {Component, Injectable, OnInit} from '@angular/core';
-import {BrowserOnlineState, GenericAppService} from '../../../search-commons/services/generic-app.service';
+import {BrowserOnlineState, GenericAppService} from '../../../commons/services/generic-app.service';
 
 @Component({
     selector: 'app-browser-onoffline',

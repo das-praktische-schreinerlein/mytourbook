@@ -8,7 +8,7 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
-import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import { Lightbox, LightboxConfig, LightboxEvent } from 'angular2-lightbox';
 import {SDocLightBox} from '../../services/sdoc-lightbox.service';
 

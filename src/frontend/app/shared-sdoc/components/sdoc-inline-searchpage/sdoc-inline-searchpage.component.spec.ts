@@ -10,7 +10,7 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
-import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {SDocDataService} from '../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';

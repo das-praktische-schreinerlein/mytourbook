@@ -9,7 +9,7 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {AppState, GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {Router} from '@angular/router';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 

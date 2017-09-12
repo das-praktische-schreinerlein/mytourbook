@@ -6,7 +6,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {FormBuilder} from '@angular/forms';
 import {AppServiceStub} from '../../testing/appservice-stubs';
-import {GenericAppService} from '../../../search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../commons/services/generic-app.service';
 
 describe('SwitchOnOfflineComponent', () => {
     beforeEach(() => {

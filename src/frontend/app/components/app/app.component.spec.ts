@@ -8,7 +8,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppServiceStub} from '../../../shared/angular-commons/testing/appservice-stubs';
 import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {Router} from '@angular/router';
 import {HttpModule, XHRBackend} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';

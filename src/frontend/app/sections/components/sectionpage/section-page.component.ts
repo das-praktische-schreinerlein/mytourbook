@@ -11,7 +11,7 @@ import {ErrorResolver} from '../../resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';

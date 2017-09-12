@@ -3,7 +3,7 @@ import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.serv
 import {Http} from '@angular/http';
 import {SDocDataStore} from '../../shared/sdoc-commons/services/sdoc-data.store';
 import {environment} from '../../environments/environment';
-import {AppState, GenericAppService} from '../../shared/search-commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../shared/commons/services/generic-app.service';
 import {SDocHttpAdapter} from '../../shared/sdoc-commons/services/sdoc-http.adapter';
 import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.service';
 import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';

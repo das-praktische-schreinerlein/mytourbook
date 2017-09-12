@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
 
 import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import LatLng = L.LatLng;
 @Component({

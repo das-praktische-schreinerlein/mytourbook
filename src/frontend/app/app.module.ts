@@ -11,7 +11,7 @@ import {AppRoutingModule} from './app.router';
 import {SDocModule} from './sdoc/sdoc.module';
 import {SDocDataStore, SDocTeamFilterConfig} from '../shared/sdoc-commons/services/sdoc-data.store';
 import {SearchFormUtils} from '../shared/angular-commons/services/searchform-utils.service';
-import {GenericAppService} from '../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../shared/commons/services/generic-app.service';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {SectionsModule} from './sections/sections.module';

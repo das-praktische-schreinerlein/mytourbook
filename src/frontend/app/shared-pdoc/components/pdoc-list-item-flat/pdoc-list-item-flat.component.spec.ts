@@ -9,7 +9,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
-import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 describe('PDocListItemFlatComponent', () => {
     let component: PDocListItemFlatComponent;

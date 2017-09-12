@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {SDocImageRecord} from '../../../shared/sdoc-commons/model/records/sdocimage-record';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
-import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
 
 export interface StructuredKeyword {
     name: string;

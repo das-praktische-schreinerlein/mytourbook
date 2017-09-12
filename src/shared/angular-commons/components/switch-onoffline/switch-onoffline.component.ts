@@ -1,5 +1,5 @@
 import {Component, Injectable, OnInit} from '@angular/core';
-import {AppOnlineState, GenericAppService} from '../../../search-commons/services/generic-app.service';
+import {AppOnlineState, GenericAppService} from '../../../commons/services/generic-app.service';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({

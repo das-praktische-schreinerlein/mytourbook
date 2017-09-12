@@ -6,7 +6,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
-import {GeoLocationService} from '../../../../shared/search-commons/services/geolocation.service';
+import {GeoLocationService} from '../../../../shared/commons/services/geolocation.service';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 
 @Component({

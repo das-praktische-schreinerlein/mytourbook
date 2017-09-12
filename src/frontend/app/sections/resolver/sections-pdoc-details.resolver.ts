@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {AppState, GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
 import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocRoutingService} from '../../shared-sdoc/services/sdoc-routing.service';

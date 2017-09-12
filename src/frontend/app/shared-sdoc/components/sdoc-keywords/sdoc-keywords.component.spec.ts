@@ -7,7 +7,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {DomSanitizer} from '@angular/platform-browser';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
-import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 
 describe('SDocKeywordsComponent', () => {

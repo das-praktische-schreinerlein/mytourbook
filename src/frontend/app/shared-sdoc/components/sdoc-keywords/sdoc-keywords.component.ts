@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocContentUtils, StructuredKeyword} from '../../services/sdoc-contentutils.service';
-import {AppState, GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-keywords',
