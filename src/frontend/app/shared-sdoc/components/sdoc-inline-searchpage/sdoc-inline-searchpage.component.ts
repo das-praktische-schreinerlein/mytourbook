@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Subscription} from 'rxjs/Subscription';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
@@ -133,6 +133,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     private doSearchWithParams(params: any) {
         console.log('doSearchWithParams params:', params);
         this.searchFormConverter.paramsToSearchForm(params, {}, this.searchForm);
+        this.searchForm = SDocSearchFormFactory.cloneSanitized(this.searchForm);
         this.doSearch();
     }
 

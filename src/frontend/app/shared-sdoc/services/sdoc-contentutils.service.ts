@@ -18,19 +18,6 @@ export class SDocContentUtils {
     constructor(private sanitizer: DomSanitizer, private appService: GenericAppService) {
     }
 
-    getLastElementLocationHierarchy(record: SDocRecord): string {
-        if (record.locHirarchie === undefined) {
-            return '';
-        }
-
-        const hierarchy = record.locHirarchie.split(' -> ');
-        if (record.type === 'LOCATION' && hierarchy.length > 1) {
-            return hierarchy[hierarchy.length - 2];
-        }
-
-        return hierarchy[hierarchy.length - 1];
-    }
-
     getLocationHierarchy(record: SDocRecord, lastOnly: boolean): any[] {
         if (record.locHirarchie === undefined || record.locHirarchieIds === undefined) {
             return [];

@@ -50,7 +50,6 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
     }
 
     private renderMap() {
-        // TODO: move to Service
         if (!this.initialized || !this.mapId) {
             return;
         }
