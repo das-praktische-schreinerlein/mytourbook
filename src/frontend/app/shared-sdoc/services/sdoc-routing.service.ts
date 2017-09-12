@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 
 @Injectable()

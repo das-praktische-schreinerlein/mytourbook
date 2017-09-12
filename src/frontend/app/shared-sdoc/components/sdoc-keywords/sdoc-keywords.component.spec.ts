@@ -5,6 +5,10 @@ import {SDocKeywordsComponent} from './sdoc-keywords.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
+import {DomSanitizer} from '@angular/platform-browser';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {GenericAppService} from '../../../../shared/search-commons/services/generic-app.service';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 
 describe('SDocKeywordsComponent', () => {
     let component: SDocKeywordsComponent;
@@ -14,6 +18,11 @@ describe('SDocKeywordsComponent', () => {
         TestBed.configureTestingModule({
             declarations: [SDocKeywordsComponent],
             schemas: [NO_ERRORS_SCHEMA],
+            providers: [
+                DomSanitizer,
+                SDocContentUtils,
+                { provide: GenericAppService, useValue: new AppServiceStub() }
+            ],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot()]
         })

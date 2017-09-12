@@ -4,23 +4,15 @@ import {SDocImageRecord} from '../../../shared/sdoc-commons/model/records/sdocim
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../shared/search-commons/services/generic-app.service';
 
+export interface StructuredKeyword {
+    name: string;
+    keywords: string[];
+}
+
 @Injectable()
 export class SDocContentUtils {
 
     constructor(private sanitizer: DomSanitizer, private appService: GenericAppService) {
-    }
-
-    public getMapUrl(record: SDocRecord): SafeUrl {
-        switch (record.type) {
-            case 'TRACK':
-                return this.getMapUrlTrack(record);
-            case 'ROUTE':
-                return this.getMapUrlRoute(record);
-            default:
-                break;
-        }
-
-        return this.getMapUrlLocation(record);
     }
 
     getLastElementLocationHierarchy(record: SDocRecord): string {
@@ -62,32 +54,6 @@ export class SDocContentUtils {
         return hierarchy;
     }
 
-    getMapUrlTrack(record: SDocRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            'http://www.michas-ausflugstipps.de/gmap.php?' +
-            'LAT=' + record.geoLat + '&' +
-            'LONG=' + record.geoLon + '&' +
-            'K_ID=' + record.trackId + '&' +
-            'FORMAT=KATINLINE&FLAGCENTERTRACK=1');
-    }
-
-    getMapUrlRoute(record: SDocRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            'http://www.michas-ausflugstipps.de/gmap.php?' +
-            'LAT=' + record.geoLat + '&' +
-            'LONG=' + record.geoLon + '&' +
-            'T_ID=' + record.routeId + '&' +
-            'FORMAT=KATINLINE&FLAGCENTERTOUR=1');
-    }
-
-    getMapUrlLocation(record: SDocRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            'http://www.michas-ausflugstipps.de/gmap.php?' +
-            'LAT=' + record.geoLat + '&' +
-            'LONG=' + record.geoLon + '&' +
-            'FORMAT=KATINLINE');
-    }
-
     getThumbnails(record: SDocRecord): SDocImageRecord[] {
         return record['sdocimages'].filter((item, index) => index < 10);
     }
@@ -117,5 +83,32 @@ export class SDocContentUtils {
         const value = record['sdocratepers'] || {gesamt: 0};
         const rate = Math.round(((value['gesamt'] || 0) / 3) + 0.5);
         return ['list-item-persrate-' + rate, 'list-item-' + layout + '-persrate-' + rate];
+    }
+
+    getStructuredKeywords(config: StructuredKeyword[], keywords: string[], blacklist: string[]): StructuredKeyword[] {
+        const keywordKats: StructuredKeyword[] = [];
+        if (keywords === undefined || keywords.length < 1) {
+            return keywordKats;
+        }
+        for (const keyword of blacklist) {
+            if (keywords.indexOf(keyword) > -1) {
+                // TODO remove
+            }
+        }
+
+        for (const keywordKat of config) {
+            const keywordFound = [];
+            for (const keyword of keywordKat.keywords) {
+                if (keywords.indexOf(keyword) > -1) {
+                    // TODO remove
+                    keywordFound.push(keyword);
+                }
+            }
+            if (keywordFound.length > 0) {
+                keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
+            }
+        }
+
+        return keywordKats;
     }
 }
