@@ -11,6 +11,7 @@ export const PDocRecordSchema = new Schema({
         css: {type: 'string'},
         desc: {type: 'string'},
         flgShowSearch: {type: 'boolean'},
+        flgShowNews:  {type: 'boolean'},
         flgShowTopTen: {type: 'boolean'},
         heading: {type: 'string'},
         image: {type: 'string'},

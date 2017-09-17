@@ -145,6 +145,11 @@ export class SectionPageComponent implements OnInit {
             filters['sort'] = sort;
         }
 
+        if (type === 'NEWS') {
+            filters['perPage'] = 3;
+            return filters;
+        }
+
         filters['when'] = this.sdocSearchForm.when.toString();  // stringify array
         filters['where'] = this.searchFormConverter.joinWhereParams(this.sdocSearchForm);
         filters['what'] = this.searchFormConverter.joinWhatParams(this.sdocSearchForm);

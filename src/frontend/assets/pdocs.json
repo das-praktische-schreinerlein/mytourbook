@@ -5,6 +5,7 @@
    "desc": "Willkommen bei MyTB dem Portal für die Tourenplanung in ausgewählten Ländern der Welt. Es ist eine Mischung aus Tourenführer (Tourentipps), Reise-Wiki (Regionen), bebildertem Tagebuch (Berichte), Bildersuche (Bilder).",
    "flgShowTopTen": true,
    "flgShowSearch": true,
+   "flgShowNews": true,
    "heading": "Thats MyTB",
    "name": "Start",
    "subSectionIds": "sections",
