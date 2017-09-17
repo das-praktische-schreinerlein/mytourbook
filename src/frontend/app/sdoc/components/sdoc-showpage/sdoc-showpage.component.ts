@@ -14,6 +14,7 @@ import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.res
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
+import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -21,6 +22,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
     styleUrls: ['./sdoc-showpage.component.css']
 })
 export class SDocShowpageComponent implements OnInit, OnDestroy {
+    private markdownRendered = false;
     idValidationRule = new IdValidationRule(true);
     public contentUtils: SDocContentUtils;
     public record: SDocRecord;
@@ -31,7 +33,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
-                private errorResolver: ErrorResolver, private pageUtils: PageUtils) {
+                private errorResolver: ErrorResolver, private pageUtils: PageUtils,
+                private angularMarkdownService: AngularMarkdownService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -144,6 +147,18 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         );
     }
 
+    renderMarkdown(): void {
+        if (this.markdownRendered || !this.record) {
+            return;
+        }
+        if (!this.record.desc) {
+            this.markdownRendered = true;
+            return;
+        }
+
+        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', this.record.desc, true);
+    }
+
     onTracksFound(searchresult: SDocSearchResult) {
         const realTracks = [];
         if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
@@ -170,6 +185,6 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
 
     getFiltersForType(record: SDocRecord, type: string): any {
         return this.contentUtils.getSDocSubItemFiltersForType(record, type,
-            (this.pdoc ? this.pdoc.theme :undefined));
+            (this.pdoc ? this.pdoc.theme : undefined));
     }
 }

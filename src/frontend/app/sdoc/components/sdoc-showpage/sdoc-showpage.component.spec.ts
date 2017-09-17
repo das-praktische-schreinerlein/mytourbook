@@ -14,6 +14,8 @@ import {AppServiceStub} from '../../../../shared/angular-commons/testing/appserv
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
+import {MarkdownModule, MarkdownService} from 'angular2-markdown';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -25,7 +27,8 @@ describe('SDocShowpageComponent', () => {
             imports: [
                 NgbModule.forRoot(),
                 ToastModule.forRoot(),
-                TranslateModule.forRoot()],
+                TranslateModule.forRoot(),
+                MarkdownModule.forRoot()],
             providers: [
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useClass: RouterTestingModule },
@@ -34,6 +37,8 @@ describe('SDocShowpageComponent', () => {
                 SDocRoutingService,
                 ToastsManager,
                 TranslateService,
+                MarkdownService,
+                AngularMarkdownService,
                 ErrorResolver,
                 PageUtils
         ],

@@ -33,6 +33,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             route_id_i: props.routeId,
             track_id_i: props.trackId,
             trip_id_i: props.tripId,
+            news_id_i: props.newsId,
             date_dt: props.datevon,
             desc_txt: props.desc,
             geo_lon_s: props.geoLon,
@@ -74,6 +75,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         values['routeId'] = Number(this.getAdapterValue(doc, 'route_id_i', undefined));
         values['trackId'] = Number(this.getAdapterValue(doc, 'track_id_i', undefined));
         values['tripId'] = Number(this.getAdapterValue(doc, 'trip_id_i', undefined));
+        values['newsId'] = Number(this.getAdapterValue(doc, 'news_id_i', undefined));
 
         const subtypeField = doc['subtypes_ss'];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
@@ -118,6 +120,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 id = Number(record.imageId);
             } else if (record.type === 'TRIP') {
                 id = Number(record.tripId);
+            } else if (record.type === 'NEWS') {
+                id = Number(record.newsId);
             }
             id = id * 1000000;
 
@@ -143,7 +147,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         dataTechValues['dur'] = this.getAdapterValue(doc, 'data_tech_dur_f', undefined);
         let dataTechSet = false;
         for (const field in dataTechValues) {
-            if (dataTechValues[field] !== undefined) {
+            if (dataTechValues[field] !== undefined && dataTechValues[field] !== 0) {
                 dataTechSet = true;
                 break;
             }
@@ -165,7 +169,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         rateTechValues['schneeschuh'] = this.getAdapterValue(doc, 'rate_tech_schneeschuh_s', undefined);
         let rateTechSet = false;
         for (const field in rateTechValues) {
-            if (rateTechValues[field] !== undefined) {
+            if (rateTechValues[field] !== undefined && (rateTechValues[field] + '').length > 0) {
                 rateTechSet = true;
                 break;
             }
@@ -188,7 +192,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         ratePersValues['wichtigkeit'] = this.getAdapterValue(doc, 'rate_pers_wichtigkeit_i', undefined);
         let ratePersSet = false;
         for (const field in ratePersValues) {
-            if (ratePersValues[field] !== undefined) {
+            if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 && ratePersValues[field] > 0) {
                 ratePersSet = true;
                 break;
             }
@@ -207,7 +211,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         dataInfoValues['destloc'] = this.getAdapterValue(doc, 'data_info_destloc_s', undefined);
         let dataInfoSet = false;
         for (const field in dataInfoValues) {
-            if (dataInfoValues[field] !== undefined) {
+            if (dataInfoValues[field] !== undefined && (dataInfoValues[field] + '').length > 0) {
                 dataInfoSet = true;
                 break;
             }
@@ -225,7 +229,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     }
 
     getAdapterFields(mapper: Mapper, params: any, opts: any): string[] {
-        const fields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i',
+        const fields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i',
             'date_dt', 'desc_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
             'data_tech_dist_f', 'data_tech_dur_f',
@@ -346,7 +350,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const form = opts.originalSearchForm || {};
 
         // set commons: relevance
-        sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:IMAGE^1' +
+        sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:IMAGE^1' +
             ' _val_:"div(rate_pers_gesamt_i, 10)"' );
         sortParams.set('qf', 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0');
         sortParams.set('defType', 'edismax');
@@ -388,7 +392,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 break;
             case 'ratePers':
                 sortParams.set('sort', 'sub(15, rate_pers_gesamt_i) asc, dateonly_s desc');
-                sortParams.set('bq', 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:IMAGE^1' );
+                sortParams.set('bq',
+                    'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:IMAGE^1');
                 sortParams.set('boost', 'product( recip( rord(date_dts), 1, 1000, 1000), 1)');
                 break;
             case 'location':

@@ -1,4 +1,4 @@
-<ng-container *ngIf="sdocratepers !== undefined">
+<ng-container *ngIf="sdocratepers !== undefined && (!small || sdocratepers.schwierigkeit > 0)">
     <div class="techvaluetable">
         <div *ngIf="sdocratepers.schwierigkeit > 0" class="entry"><div class="label">Schwierig?:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.schwierigkeit)" [readonly]="'divue'"></ngb-rating></div></div>
         <div *ngIf="!small && sdocratepers.ausdauer > 0" class="entry"><div class="label">Ausdauer:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(sdocratepers.ausdauer)" [readonly]="'divue'"></ngb-rating></div></div>

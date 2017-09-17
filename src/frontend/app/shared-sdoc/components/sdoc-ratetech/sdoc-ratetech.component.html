@@ -1,4 +1,4 @@
-<ng-container *ngIf="sdocratetech !== undefined">
+<ng-container *ngIf="sdocratetech !== undefined && (!small || (sdocratetech.overall !== undefined && sdocratetech.overall.length > 0))">
     <div class="techvaluetable">
         <div *ngIf="sdocratetech.overall !== undefined && sdocratetech.overall.length > 0" class="entry"><div class="label">Overall:</div><div class="value">{{sdocratetech.overall}}</div></div>
         <div *ngIf="!small && sdocratetech.bergtour !== undefined && sdocratetech.bergtour.length > 0" class="entry"><div class="label">Bergtour:</div><div class="value">{{sdocratetech.bergtour}}</div></div>

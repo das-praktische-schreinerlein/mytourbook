@@ -175,6 +175,14 @@ export class SDocContentUtils {
             } else {
                 filters['moreFilter'] = 'trip_id_is:' + record.tripId;
             }
+        } else if (record.type === 'NEWS') {
+            filters['moreFilter'] = 'news_id_i:' + record.newsId;
+            if (type === 'IMAGE') {
+                filters['perPage'] = 12;
+            } else if (type === 'TRACK') {
+                filters['perPage'] = 99;
+                filters['sort'] = 'dateAsc';
+            }
         }
 
         return filters;

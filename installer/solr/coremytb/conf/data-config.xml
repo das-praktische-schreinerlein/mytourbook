@@ -19,14 +19,13 @@
             <field column="t_id" name="route_id_i"/>
             <field column="t_id" name="route_id_is"/>
             <field column="l_id" name="loc_id_i"/>
-            <!-- strip html-->
+
             <field column="k_name" name="name_s" stripHTML="true" />
             <field column="k_name" name="name_txt" stripHTML="true" />
-            <!-- strip html and replace \n and doubled whitespaces -->
             <field column="k_html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="k_html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
-            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true" />
+            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true" />
             <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="k_datevon" name="date_dt" />
@@ -92,14 +91,12 @@
             <field column="t_id" name="route_id_i"/>
             <field column="t_id" name="route_id_is"/>
             <field column="l_id" name="loc_id_i"/>
-            <!-- strip html-->
+
             <field column="t_name" name="name_s" stripHTML="true" />
             <field column="t_name" name="name_txt" stripHTML="true" />
-            <!-- strip html and replace \n and doubled whitespaces -->
             <field column="t_html_list" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="t_html_list" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="t_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
-            <field column="t_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="t_meta_shortdesc" name="desc_txt" stripHTML="true" />
             <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="dateonly" name="dateonly_s" />
@@ -181,14 +178,11 @@
             <field column="l_id" name="loc_id_i"/>
             <field column="l_parent_id" name="loc_parent_id_i"/>
 
-            <!-- strip html-->
             <field column="l_name" name="name_s" stripHTML="true" />
             <field column="l_name" name="name_txt" stripHTML="true" />
-            <!-- strip html and replace \n and doubled whitespaces -->
             <field column="l_html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="l_html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="l_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
-            <field column="l_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="l_meta_shortdesc" name="desc_txt" stripHTML="true" />
             <field column="l_gps_lat" name="geo_lat_s" />
             <field column="l_gps_lon" name="geo_lon_s" />
             <field column="l_gps_loc" name="geo_loc_p" type="location" />
@@ -247,14 +241,12 @@
             <field column="t_id" name="route_id_is"/>
             <field column="tr_id" name="trip_id_i"/>
             <field column="l_id" name="loc_id_i"/>
-            <!-- strip html-->
+
             <field column="i_katname" name="name_s" stripHTML="true" />
             <field column="i_katname" name="name_txt" stripHTML="true" />
-            <!-- strip html and replace \n and doubled whitespaces -->
             <field column="i_katdesc" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="i_katdesc" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
-            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="k_meta_shortdesc" name="desc_txt" stripHTML="true" />
             <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="i_gps_lat" name="geo_lat_s" />
@@ -297,12 +289,9 @@
             <field column="tr_id" name="id"/>
             <field column="tr_id" name="trip_id_i"/>
 
-            <!-- strip html-->
             <field column="tr_name" name="name_s" stripHTML="true" />
             <field column="tr_name" name="name_txt" stripHTML="true" />
-            <!-- strip html and replace \n and doubled whitespaces -->
-            <field column="tr_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
-            <field column="tr_meta_shortdesc" name="desc_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="tr_meta_shortdesc" name="desc_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
             <field column="tr_datevon" name="date_dt" />
@@ -349,6 +338,26 @@
 
         </entity>
 
+        <entity name="news"
+                pk="id"
+                query="select 'NEWS' as type, concat('NEWS', '_', n_id) as id, n_id, n_date, DATE_FORMAT (n_date, GET_FORMAT(DATE, 'ISO')) as dateonly, n_headline, n_message, concat(n_headline, ' ', n_message) as html from news order by n_date"
+                deltaImportQuery="select 'NEWS' as type, concat('NEWS', '_', n_id) as id, n_id, n_date, DATE_FORMAT (n_date, GET_FORMAT(DATE, 'ISO')) as dateonly, n_headline, n_message, concat(n_headline, ' ', n_message) as html from news WHERE n_id='${dih.delta.id}'"
+                deltaQuery="SELECT n_id from trip order by n_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="n_id" name="id"/>
+            <field column="n_id" name="news_id_i"/>
+
+            <field column="n_headline" name="name_s" stripHTML="true" />
+            <field column="n_headline" name="name_txt" stripHTML="true" />
+            <field column="n_message" name="desc_txt" stripHTML="true" />
+            <field column="html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
+            <field column="html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
+            <field column="n_date" name="date_dt" />
+            <field column="dateonly" name="dateonly_s" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+        </entity>
     </document>
 
 </dataConfig>
