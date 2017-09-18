@@ -121,12 +121,16 @@ export class SectionPageComponent implements OnInit {
         if (this.markdownRendered) {
             return;
         }
+
+
+
         if (!this.pdoc) {
             this.markdownRendered = true;
             return;
         }
 
-        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', this.pdoc.desc, true);
+        const desc = this.pdoc.desc ? this.pdoc.desc : '';
+        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', desc, true);
     }
 
     getFiltersForType(record: PDocRecord, type: string, sort?: string): any {

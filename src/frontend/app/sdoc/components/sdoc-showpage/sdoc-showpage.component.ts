@@ -47,6 +47,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 const flgSDocError = ErrorResolver.isResolverError(data.record);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
+                me.markdownRendered = false;
                 if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
                     me.record = data.record.data;
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
@@ -151,12 +152,9 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         if (this.markdownRendered || !this.record) {
             return;
         }
-        if (!this.record.desc) {
-            this.markdownRendered = true;
-            return;
-        }
 
-        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', this.record.desc, true);
+        const desc = this.record.desc ? this.record.desc : '';
+        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', desc, true);
     }
 
     onTracksFound(searchresult: SDocSearchResult) {
