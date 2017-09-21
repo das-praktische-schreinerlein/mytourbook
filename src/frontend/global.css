@@ -3,6 +3,30 @@ button.buttonselect {
     width: 100%;
 }
 
+.btn-navigation {
+    background: rgba(0, 0, 0, 0) radial-gradient(ellipse at center center , #fcf1b5 31%, #fefcea 87%) repeat scroll 0 0;
+    color: #0645ad;
+    border: 2px solid #8cacd3;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 2px;
+    padding: 6px;
+    text-align: center;
+}
+
+.btn-action {
+    background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #8cacd3 0%, #2989d8 50%, #468ec9 51%, #7db9e8 100%) repeat scroll 0 0;
+    color: white;
+    border: 2px solid white;
+    font-weight: bold;
+    text-align: center;
+}
+
+#markdown table {
+    width: 100%;
+}
+
+
 .fullwidth {
     width: 100%;
 }

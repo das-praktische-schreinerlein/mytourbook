@@ -96,7 +96,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                             {}, 'Search');
                         this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSearchPage',
                             {}, 'Search');
-                        this.pageUtils.setRobots(true, true);
+                        this.pageUtils.setRobots(false, false);
                     }
                     this.pageUtils.setMetaLanguage();
 
