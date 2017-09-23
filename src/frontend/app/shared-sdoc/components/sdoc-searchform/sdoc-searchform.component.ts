@@ -116,7 +116,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public textsSelectActionType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Action ausgewählt',
-        checkedPlural: 'Ation ausgewählt',
+        checkedPlural: 'Aktion ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: 'Actions',
         allSelected: 'alles'};

@@ -137,3 +137,24 @@ div.techvaluetable .entry .value {
     display: inline-grid;
     min-width: 50px;
 }
+
+div#LOCATIONIMAGE div.card-block-image div.techvaluetable,
+div#NEWSIMAGE div.card-block-image div.techvaluetable,
+div#ROUTEIMAGE div.card-block-image div.techvaluetable,
+div#TRACKIMAGE div.card-block-image div.techvaluetable,
+div#TRIPIMAGE div.card-block-image div.techvaluetable {
+    display: none !IMPORTANT;
+}
+
+
+div#LOCATIONIMAGE div.card-block-image h5.record-type,
+div#NEWSIMAGE div.card-block-image h5.record-type,
+div#ROUTEIMAGE div.card-block-image h5.record-type,
+div#TRACKIMAGE div.card-block-image h5.record-type,
+div#TRIPIMAGE div.card-block-image h5.record-type {
+    display: none !IMPORTANT;
+}
+
+div#TRACKIMAGE div.card-block-image h5 {
+    display: none !IMPORTANT;
+}

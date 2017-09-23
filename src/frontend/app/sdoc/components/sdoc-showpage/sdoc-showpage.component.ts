@@ -9,7 +9,7 @@ import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-rec
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pdoc-details.resolver';
-import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {IdValidationRule, KeyParamsValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
@@ -24,6 +24,7 @@ import {AngularMarkdownService} from '../../../../shared/angular-commons/service
 export class SDocShowpageComponent implements OnInit, OnDestroy {
     private markdownRendered = false;
     idValidationRule = new IdValidationRule(true);
+    keyParamsValidationRule = new KeyParamsValidationRule(true);
     public contentUtils: SDocContentUtils;
     public record: SDocRecord;
     public Layout = Layout;
@@ -59,7 +60,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                         me.tracks = [];
                     }
 
-                    const recordName = me.idValidationRule.sanitize(me.record.name);
+                    // TODO
+                    const recordName = me.keyParamsValidationRule.sanitize(me.record.name);
                     if (me.pdoc) {
                         this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
                             {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);

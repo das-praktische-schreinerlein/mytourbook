@@ -4,7 +4,7 @@
             <div>
                 <div class="image-container">
                     <h5 *ngIf="record.geoDistance > 0"><app-sdoc-distance [record]="record"></app-sdoc-distance></h5>
-                    <h5>{{record.type | translate }}</h5>
+                    <h5 class="record-type">{{record.type | translate }}</h5>
                     <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
                         <img class="picture-thumbnail-big" width="100px"
                              [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
@@ -23,8 +23,8 @@
             <h5><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div style="width: 100px; float: left">
-                    <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
-                    <h5>{{record.subtype | translate }}</h5>
+                    <h5 *ngIf="record.type !== 'LOCATION'" class="record-type">{{record.type | translate }}</h5>
+                    <h5 class="record-subtype">{{record.subtype | translate }}</h5>
                     <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
                         <img class="picture-thumbnail" width="50px"
                              [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"

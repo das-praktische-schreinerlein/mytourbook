@@ -59,6 +59,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     public searchLinkLabel?: string;
 
     @Input()
+    public htmlId?: string;
+
+    @Input()
     public layout: Layout;
 
     @Output()

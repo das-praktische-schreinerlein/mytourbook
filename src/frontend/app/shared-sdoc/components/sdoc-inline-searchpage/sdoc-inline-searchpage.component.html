@@ -1,5 +1,5 @@
 <div *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0 || showLoadingSpinner">
-    <div class="container inline-content-container relative-container">
+    <div class="container inline-content-container relative-container" id="{{htmlId ? htmlId : ''}}">
         <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
         <div class="container">
             <div class="row justify-content-between">
