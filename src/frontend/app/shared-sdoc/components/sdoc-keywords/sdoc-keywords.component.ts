@@ -28,6 +28,7 @@ export class SDocKeywordsComponent implements OnInit, OnChanges {
                     && config['components']['sdoc-keywords']
                     && config['components']['sdoc-keywords']['structuredKeywords']) {
                     this.keywordsConfig = config['components']['sdoc-keywords']['structuredKeywords'];
+                    this.updateData();
                 } else {
                     console.error('no valid keywordsConfig found');
                     this.keywordsConfig = [];
