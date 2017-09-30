@@ -1,5 +1,4 @@
-import LatLng = L.LatLng;
-import {GeoParser, GeoElement, GeoElementType} from './geo.parser';
+import {GeoElement, GeoElementType, GeoParser} from './geo.parser';
 
 export class GeoJsonParser extends GeoParser {
     parse(json: string, options): GeoElement[] {

@@ -1,4 +1,4 @@
-import {DataStore, Mapper, Record, utils} from 'js-data';
+import {Mapper, Record, utils} from 'js-data';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import 'rxjs/add/operator/toPromise';

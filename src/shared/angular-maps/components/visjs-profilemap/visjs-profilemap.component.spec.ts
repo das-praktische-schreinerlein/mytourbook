@@ -5,6 +5,8 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpModule, XHRBackend} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
 import {VisJsProfileMapComponent} from './visjs-profilemap.component';
+import {SimpleAngularBackendHttpClient} from '../../../angular-commons/services/simple-angular-backend-http-client';
+import {MinimalHttpBackendClient} from '../../../commons/services/minimal-http-backend-client';
 
 describe('VisJsProfileMapComponent', () => {
     let component: VisJsProfileMapComponent;
@@ -16,7 +18,8 @@ describe('VisJsProfileMapComponent', () => {
             imports: [ReactiveFormsModule, HttpModule],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
-                    { provide: XHRBackend, useClass: MockBackend }
+                    { provide: XHRBackend, useClass: MockBackend },
+                    { provide: MinimalHttpBackendClient, useClass: SimpleAngularBackendHttpClient }
             ]
         })
             .compileComponents();

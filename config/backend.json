@@ -6,5 +6,6 @@
     "filePathThemeFilterJson": "config/themeFilterConfig.json",
     "proxyUrlTracks": "http://localhost/michas/",
     "proxyUrlPictures": "http://localhost/michas/",
-    "port": 4100
+    "port": 4100,
+    "corsOrigin": true
 }

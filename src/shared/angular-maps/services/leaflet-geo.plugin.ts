@@ -1,7 +1,6 @@
 /**
  * inspired by leaflet-plugins
  */
-import layers = L.control.layers;
 import {GeoLoader} from './geo.loader';
 import {GeoElement, GeoElementType} from './geo.parser';
 

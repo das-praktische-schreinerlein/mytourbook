@@ -21,6 +21,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {ErrorPageComponent} from './components/errorpage/errorpage.component';
 import {AngularCommonsModule} from '../shared/angular-commons/angular-commons.module';
 import {PageUtils} from '../shared/angular-commons/services/page.utils';
+import {BackendHttpClient} from './services/backend-http-client';
+import {MinimalHttpBackendClient} from '../shared/commons/services/minimal-http-backend-client';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -51,6 +53,7 @@ export function createTranslateLoader(http: Http) {
         AppRoutingModule
     ],
     providers: [
+        { provide: MinimalHttpBackendClient, useClass: BackendHttpClient },
         { provide: GenericAppService, useClass: AppService },
         SDocTeamFilterConfig,
         SDocDataStore,

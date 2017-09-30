@@ -1,11 +1,10 @@
 import {AfterViewChecked, Component, Input, OnChanges, SimpleChange} from '@angular/core';
-import {Http} from '@angular/http';
 import {GeoLoader} from '../../services/geo.loader';
 import {GeoJsonParser} from '../../services/geojson.parser';
 import {GeoGpxParser} from '../../services/geogpx.parser';
 import {VisJsGeoProfileMap} from '../../services/visjs-geoprofilemap.plugin';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
-import LatLng = L.LatLng;
+import {MinimalHttpBackendClient} from '../../../commons/services/minimal-http-backend-client';
 
 @Component({
     selector: 'app-visjs-profilemap',
@@ -29,7 +28,7 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
     @Input()
     public flgGenerateNameFromGpx?: boolean;
 
-    constructor(private http: Http) {
+    constructor(private http: MinimalHttpBackendClient) {
         this.gpxLoader = new GeoLoader(http, new GeoGpxParser());
         this.jsonLoader = new GeoLoader(http, new GeoJsonParser());
     }

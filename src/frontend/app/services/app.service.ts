@@ -8,6 +8,7 @@ import {SDocHttpAdapter} from '../../shared/sdoc-commons/services/sdoc-http.adap
 import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.service';
 import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';
 import {Router} from '@angular/router';
+import {MinimalHttpBackendClient} from '../../shared/commons/services/minimal-http-backend-client';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -21,7 +22,7 @@ export class AppService extends GenericAppService {
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
-                private http: Http, private router: Router) {
+                private http: Http, private router: Router, private backendHttpClient: MinimalHttpBackendClient) {
         super();
     }
 
@@ -82,7 +83,10 @@ export class AppService extends GenericAppService {
     initBackendData(): Promise<boolean> {
         const me = this;
         const options = {
-            basePath: this.appConfig.backendApiBaseUrl + this.locale + '/'
+            basePath: this.appConfig.backendApiBaseUrl + this.locale + '/',
+            http: function (httpConfig) {
+                return me.backendHttpClient.makeHttpRequest(httpConfig);
+            }
         };
         const sdocAdapter = new SDocHttpAdapter(options);
 
@@ -92,9 +96,9 @@ export class AppService extends GenericAppService {
         this.sdocDataStore.setAdapter('http', sdocAdapter, '', {});
 
         return new Promise<boolean>((resolve, reject) => {
-            me.http.request(options.basePath + 'pdoc/').toPromise()
+            me.backendHttpClient.makeHttpRequest({ method: 'get', url: options.basePath + 'pdoc/', withCredentials: true })
                 .then(function onDocsLoaded(res: any) {
-                    const docs: any[] = res.json();
+                    const docs: any[] = (res['data'] || res.json());
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded pdocs from server', records);

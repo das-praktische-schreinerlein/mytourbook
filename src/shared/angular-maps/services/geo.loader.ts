@@ -1,16 +1,17 @@
-import {Http} from '@angular/http';
-import {GeoParser, GeoElement} from './geo.parser';
+import {GeoElement, GeoParser} from './geo.parser';
+import {MinimalHttpBackendClient} from '../../commons/services/minimal-http-backend-client';
 
 export class GeoLoader  {
-    constructor(private http: Http, private parser: GeoParser) {}
+    constructor(private http: MinimalHttpBackendClient, private parser: GeoParser) {}
 
     loadDataFromUrl(url: string, options): Promise<GeoElement[]> {
+        const me = this;
         return new Promise<GeoElement[]>((resolve, reject) => {
-            this.http.request(url).subscribe(
-                res => {
-                    resolve(this.parser.parse(res.text(), options));
-                },
-                error => {
+            me.http.makeHttpRequest({ method: 'get', url: url, withCredentials: true })
+                .then(function onLoaded(res: any) {
+                    resolve(me.parser.parse(res.text(), options));
+                    return;
+            }).catch(function onError(error: any) {
                     console.error('loading geofeature failed:' + url, error);
                     reject(error);
                 });

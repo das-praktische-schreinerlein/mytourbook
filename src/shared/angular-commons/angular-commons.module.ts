@@ -4,6 +4,7 @@ import {SwitchOnOfflineComponent} from './components/switch-onoffline/switch-ono
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {ShowBrowserOnOfflineComponent} from './components/show-browseronoffline/show-browseronoffline.component';
+
 @NgModule({
     declarations: [
         TruncatePipe,

@@ -3,7 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {SDocLightboxAlbumConfig, SDocLightBox} from '../../services/sdoc-lightbox.service';
+import {SDocLightBox, SDocLightboxAlbumConfig} from '../../services/sdoc-lightbox.service';
 
 export enum Layout {
     THIN,
