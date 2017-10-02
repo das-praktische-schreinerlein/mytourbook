@@ -21,6 +21,8 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorResolver} from '../sections/resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 import {SDocLightBox} from '../shared-sdoc/services/sdoc-lightbox.service';
+import {AngularHtmlService} from '../../../shared/angular-commons/services/angular-html.service';
+import {AngularMarkdownService} from '../../shared/angular-commons/services/angular-markdown.service';
 
 @NgModule({
     declarations: [
@@ -51,7 +53,9 @@ import {SDocLightBox} from '../shared-sdoc/services/sdoc-lightbox.service';
         SDocRecordResolver,
         ErrorResolver,
         PageUtils,
-        SDocLightBox
+        SDocLightBox,
+        AngularHtmlService,
+        AngularMarkdownService
     ],
     exports: [
         SDocSearchpageComponent

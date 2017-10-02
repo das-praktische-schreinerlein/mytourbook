@@ -23,6 +23,7 @@ import {AngularCommonsModule} from '../shared/angular-commons/angular-commons.mo
 import {PageUtils} from '../shared/angular-commons/services/page.utils';
 import {BackendHttpClient} from './services/backend-http-client';
 import {MinimalHttpBackendClient} from '../shared/commons/services/minimal-http-backend-client';
+import {AngularHtmlService} from '../shared/angular-commons/services/angular-html.service';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -61,6 +62,7 @@ export function createTranslateLoader(http: Http) {
         PDocDataStore,
         PDocDataService,
         SearchFormUtils,
+        AngularHtmlService,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },
         PageUtils
     ],

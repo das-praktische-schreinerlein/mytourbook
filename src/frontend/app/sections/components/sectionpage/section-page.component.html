@@ -1,8 +1,8 @@
 <ng-container *ngIf="pdoc !== undefined">
     <div class="container content-container" *ngIf="pdoc.desc !== undefined && pdoc.desc.length > 0">
         <img src="{{pdoc.image}}" width="170px" class="picture" style="float: left; margin: 0 15px 15px 0;" alt="{{pdoc.name}}" *ngIf="pdoc.image !== undefined && pdoc.image.length > 0">
-        <div id="markdown"></div>
-        {{ renderMarkdown() }}
+        <div id="desc"></div>
+        {{ renderDesc() }}
         <br clear="both">
     </div>
 

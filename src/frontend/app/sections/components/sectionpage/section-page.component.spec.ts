@@ -15,6 +15,7 @@ import {ErrorResolver} from '../../resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {MarkdownModule, MarkdownService} from 'angular2-markdown';
+import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 
 class RouterStub {
     navigateByUrl(url: string) { return url; }
@@ -43,6 +44,7 @@ describe('SectionPageComponent', () => {
                 TranslateService,
                 MarkdownService,
                 AngularMarkdownService,
+                AngularHtmlService,
                 ErrorResolver,
                 PageUtils
             ]

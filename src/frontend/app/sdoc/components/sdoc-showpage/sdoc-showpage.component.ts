@@ -22,7 +22,7 @@ import {AngularMarkdownService} from '../../../../shared/angular-commons/service
     styleUrls: ['./sdoc-showpage.component.css']
 })
 export class SDocShowpageComponent implements OnInit, OnDestroy {
-    private markdownRendered = false;
+    private flgDescRendered = false;
     idValidationRule = new IdValidationRule(true);
     keyParamsValidationRule = new KeyParamsValidationRule(true);
     public contentUtils: SDocContentUtils;
@@ -48,7 +48,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 const flgSDocError = ErrorResolver.isResolverError(data.record);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
-                me.markdownRendered = false;
+                me.flgDescRendered = false;
                 if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
                     me.record = data.record.data;
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
@@ -155,13 +155,13 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         );
     }
 
-    renderMarkdown(): void {
-        if (this.markdownRendered || !this.record) {
+    renderDesc(): void {
+        if (this.flgDescRendered || !this.record) {
             return;
         }
 
         const desc = this.record.desc ? this.record.desc : '';
-        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', desc, true);
+        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
     }
 
     onTracksFound(searchresult: SDocSearchResult) {

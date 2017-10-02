@@ -12,7 +12,7 @@ import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.r
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {PageUtils} from '../../../../../shared/angular-commons/services/page.utils';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
@@ -23,7 +23,7 @@ import {AngularMarkdownService} from '../../../../shared/angular-commons/service
     styleUrls: ['./section-page.component.css']
 })
 export class SectionPageComponent implements OnInit {
-    private markdownRendered = false;
+    private flgDescRendered = false;
     idValidationRule = new IdValidationRule(true);
     pdoc: PDocRecord = new PDocRecord();
     baseSearchUrl = '';
@@ -49,7 +49,7 @@ export class SectionPageComponent implements OnInit {
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 if (!flgPDocError && !flgBaseSearchUrlError) {
                     me.pdoc = data.pdoc.data;
-                    me.markdownRendered = false;
+                    me.flgDescRendered = false;
                     me.baseSearchUrl = data.baseSearchUrl.data;
                     me.sections =  me.getSubSections(me.pdoc);
                     me.sDocRoutingService.setLastBaseUrl(me.baseSearchUrl);
@@ -117,20 +117,18 @@ export class SectionPageComponent implements OnInit {
         );
     }
 
-    renderMarkdown(): void {
-        if (this.markdownRendered) {
+    renderDesc(): void {
+        if (this.flgDescRendered) {
             return;
         }
 
-
-
         if (!this.pdoc) {
-            this.markdownRendered = true;
+            this.flgDescRendered = true;
             return;
         }
 
         const desc = this.pdoc.desc ? this.pdoc.desc : '';
-        this.markdownRendered = this.angularMarkdownService.renderMarkdown('#markdown', desc, true);
+        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
     }
 
     getFiltersForType(record: PDocRecord, type: string, sort?: string): any {

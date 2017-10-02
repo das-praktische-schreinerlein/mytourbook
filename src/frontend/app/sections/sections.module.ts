@@ -17,6 +17,7 @@ import {ErrorResolver} from './resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 import {MarkdownModule} from 'angular2-markdown';
 import {AngularMarkdownService} from '../../shared/angular-commons/services/angular-markdown.service';
+import {AngularHtmlService} from '../../../shared/angular-commons/services/angular-html.service';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import {AngularMarkdownService} from '../../shared/angular-commons/services/angu
         SectionsPDocRecordResolver,
         SectionsPDocsResolver,
         ErrorResolver,
+        AngularHtmlService,
         AngularMarkdownService,
         PageUtils
     ]

@@ -16,6 +16,7 @@ import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {MarkdownModule, MarkdownService} from 'angular2-markdown';
+import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -39,6 +40,7 @@ describe('SDocShowpageComponent', () => {
                 TranslateService,
                 MarkdownService,
                 AngularMarkdownService,
+                AngularHtmlService,
                 ErrorResolver,
                 PageUtils
         ],
