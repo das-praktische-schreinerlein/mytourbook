@@ -5,7 +5,7 @@
     "routeId": null,
     "trackId": null,
     "tripId": null,
-    "desc": "Solltest du das hier sehen, kommt deine IP-Adresse leider aus einem Bereich der gesperrt wurde, um Angreifer fernzuhalten... Sorry :-(",
+    "descHtml": "Solltest du das hier sehen, kommt deine IP-Adresse leider aus einem Bereich der gesperrt wurde, um Angreifer fernzuhalten... Sorry :-(",
     "geoLon": "",
     "geoLat": "",
     "geoLoc": "",

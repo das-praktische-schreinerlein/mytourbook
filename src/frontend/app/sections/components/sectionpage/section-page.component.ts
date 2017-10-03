@@ -16,6 +16,7 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
+import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -36,7 +37,7 @@ export class SectionPageComponent implements OnInit {
                 private router: Router, private searchFormConverter: SDocSearchFormConverter,
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
-                private angularMarkdownService: AngularMarkdownService) {
+                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -127,8 +128,12 @@ export class SectionPageComponent implements OnInit {
             return;
         }
 
-        const desc = this.pdoc.desc ? this.pdoc.desc : '';
-        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
+        if (this.pdoc.descHtml) {
+            this.flgDescRendered = this.angularHtmlService.renderHtml('#desc', this.pdoc.descHtml, true);
+        } else {
+            const desc = this.pdoc.descMd ? this.pdoc.descMd : '';
+            this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
+        }
     }
 
     getFiltersForType(record: PDocRecord, type: string, sort?: string): any {

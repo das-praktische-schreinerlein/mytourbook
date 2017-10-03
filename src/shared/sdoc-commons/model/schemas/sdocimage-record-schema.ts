@@ -8,7 +8,9 @@ export const SDocImageRecordSchema = new Schema({
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
-        desc: {type: 'string'},
+        descTxt: {type: 'string'},
+        descMd: {type: 'string'},
+        descHtml: {type: 'string'},
         fileName: {type: 'string'},
         name: {type: 'string'},
         sdoc_id: {type: 'string', indexed: true}

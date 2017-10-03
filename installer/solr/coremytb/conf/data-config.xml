@@ -24,7 +24,8 @@
             <field column="k_name" name="name_txt" stripHTML="true" />
             <field column="k_html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="k_html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="k_meta_shortdesc_md" name="desc_txt" stripHTML="true" />
+            <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_html_txt" />
             <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
@@ -96,7 +97,8 @@
             <field column="t_name" name="name_txt" stripHTML="true" />
             <field column="t_html_list" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="t_html_list" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="t_meta_shortdesc_md" name="desc_txt" stripHTML="true" />
+            <field column="t_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
+            <field column="t_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="t_meta_shortdesc_html" name="desc_html_txt" />
             <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_gpstracks_basefile" name="gpstracks_basefile_s" />
@@ -183,7 +185,8 @@
             <field column="l_name" name="name_txt" stripHTML="true" />
             <field column="l_html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="l_html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="l_meta_shortdesc_md" name="desc_txt" stripHTML="true" />
+            <field column="l_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
+            <field column="l_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="l_meta_shortdesc_html" name="desc_html_txt" />
             <field column="l_gps_lat" name="geo_lat_s" />
             <field column="l_gps_lon" name="geo_lon_s" />
@@ -248,7 +251,8 @@
             <field column="i_katname" name="name_txt" stripHTML="true" />
             <field column="i_katdesc" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="i_katdesc" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
-            <field column="k_meta_shortdesc_md" name="desc_txt" stripHTML="true" />
+            <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_html_txt" />
             <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
@@ -294,7 +298,8 @@
 
             <field column="tr_name" name="name_s" stripHTML="true" />
             <field column="tr_name" name="name_txt" stripHTML="true" />
-            <field column="tr_meta_shortdesc_md" name="desc_txt" stripHTML="true" />
+            <field column="tr_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
+            <field column="tr_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="tr_meta_shortdesc_html" name="desc_html_txt" />
             <field column="html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />
@@ -354,7 +359,8 @@
 
             <field column="n_headline" name="name_s" stripHTML="true" />
             <field column="n_headline" name="name_txt" stripHTML="true" />
-            <field column="n_message_md" name="desc_txt" stripHTML="true" />
+            <field column="n_message_html" name="desc_txt" stripHTML="true" />
+            <field column="n_message_md" name="desc_md_txt" stripHTML="true" />
             <field column="n_message_html" name="desc_html_txt" />
             <field column="html" name="html_txt" stripHTML="true"  regex="\n|\r" replaceWith=" " />
             <field column="html" name="html_txt" stripHTML="true"  regex="[ ]+" replaceWith=" " />

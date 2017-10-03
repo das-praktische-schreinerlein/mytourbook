@@ -10,7 +10,9 @@ export class SDocRecord extends BaseEntityRecord {
 
     actiontypes: string;
     datevon: Date;
-    desc: string;
+    descTxt: string;
+    descMd: string;
+    descHtml: string;
     geoDistance: number;
     geoLon: string;
     geoLat: string;
@@ -27,7 +29,6 @@ export class SDocRecord extends BaseEntityRecord {
     toString() {
         return 'SDocRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
-            '  desc: ' + this.desc + ',\n' +
             '  name: ' + this.name + ',\n' +
             '  type: ' + this.type + '' +
             '}';

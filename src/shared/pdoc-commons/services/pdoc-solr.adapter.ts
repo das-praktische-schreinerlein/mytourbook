@@ -13,7 +13,7 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         switch (fieldName) {
             case 'name':
                 return 'name_txt';
-            case 'desc':
+            case 'descTxt':
                 return 'desc_txt';
             default:
                 break;
@@ -25,7 +25,9 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
     mapToAdapterDocument(props: any): any {
         const values = {
             id: props.id,
-            desc_txt: props.desc,
+            desc_txt: props.descTxt,
+            desc_md_txt: props.descMd,
+            desc_html_txt: props.descHtml,
             keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
             name_txt: props.name,
             type_txt: props.type,
@@ -41,7 +43,9 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         const values = {};
         values['id'] = this.getAdapterValue(doc, 'id', undefined);
 
-        values['desc'] = this.getAdapterValue(doc, 'desc_txt', undefined);
+        values['descTxt'] = this.getAdapterValue(doc, 'desc_txt', undefined);
+        values['descMd'] = this.getAdapterValue(doc, 'desc_md_txt', undefined);
+        values['descHtml'] = this.getAdapterValue(doc, 'desc_html_txt', undefined);
         values['keywords'] = this.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.getAdapterValue(doc, 'name_txt', undefined);
         values['type'] = this.getAdapterValue(doc, 'type_txt', undefined);
@@ -56,7 +60,7 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
     }
 
     getAdapterFields(mapper: Mapper, params: any, opts: any): string[] {
-        return ['id', 'desc_txt', 'keywords_txt', 'name_txt', 'type_txt'];
+        return ['id', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'keywords_txt', 'name_txt', 'type_txt'];
     };
 
     getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {

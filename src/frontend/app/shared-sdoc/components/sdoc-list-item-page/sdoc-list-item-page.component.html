@@ -59,7 +59,7 @@
                 </div>
                 <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a>
                 <p>
-                    {{record.desc}}
+                    {{record.descTxt}}
                 </p>
                 <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
                 <app-sdoc-ratepers-difficulty [record]="record"></app-sdoc-ratepers-difficulty>

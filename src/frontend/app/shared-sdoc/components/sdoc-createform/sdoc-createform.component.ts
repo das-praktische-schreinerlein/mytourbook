@@ -28,7 +28,7 @@ export class SDocCreateformComponent implements OnInit {
         if (this.record) {
             this.createFormGroup = this.fb.group({
                 name: [this.record.name, Validators.required],
-                desc: [this.record.desc, Validators.required]
+                descMd: [this.record.descMd, Validators.required]
             });
         }
     }

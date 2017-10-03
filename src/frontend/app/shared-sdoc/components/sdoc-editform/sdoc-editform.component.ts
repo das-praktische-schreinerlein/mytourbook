@@ -48,7 +48,7 @@ export class SDocEditformComponent implements OnInit {
                 const config = {
                     id: [record.id, Validators.required],
                     name: [record.name, Validators.required],
-                    desc: [record.desc, Validators.required],
+                    descMd: [record.descMd, Validators.required],
                     keywords: [record.keywords]
                 };
                 const fields = record.toJSON();

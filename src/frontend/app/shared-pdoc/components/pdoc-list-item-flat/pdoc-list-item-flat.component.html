@@ -7,7 +7,7 @@
         </div>
         <div class="col-9">
             <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><h6>{{record.name}}</h6></a>
-            <p class="">{{record.desc}}</p>
+            <p class="">{{record.descTxt}}</p>
             <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
         </div>
     </ng-container>
@@ -16,7 +16,7 @@
             <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><h6>{{record.name}}</h6></a>
         </div>
         <div class="col-9">
-            <p class="">{{record.desc}}</p>
+            <p class="">{{record.descTxt}}</p>
             <a class="pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
         </div>
     </ng-container>

@@ -9,7 +9,9 @@ export const PDocRecordSchema = new Schema({
     type: 'object',
     properties: {
         css: {type: 'string'},
-        desc: {type: 'string'},
+        descTxt: {type: 'string'},
+        descMd: {type: 'string'},
+        descHtml: {type: 'string'},
         flgShowSearch: {type: 'boolean'},
         flgShowNews:  {type: 'boolean'},
         flgShowTopTen: {type: 'boolean'},

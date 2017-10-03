@@ -15,6 +15,7 @@ import {GenericAppService} from '../../../../shared/commons/services/generic-app
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
+import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -35,7 +36,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils,
-                private angularMarkdownService: AngularMarkdownService) {
+                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -160,8 +161,12 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const desc = this.record.desc ? this.record.desc : '';
-        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
+        if (this.record.descHtml) {
+            this.flgDescRendered = this.angularHtmlService.renderHtml('#desc', this.record.descHtml, true);
+        } else {
+            const desc = this.record.descMd ? this.record.descMd : '';
+            this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
+        }
     }
 
     onTracksFound(searchresult: SDocSearchResult) {
