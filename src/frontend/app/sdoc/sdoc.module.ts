@@ -1,8 +1,6 @@
 import {NgModule} from '@angular/core';
 import {HttpModule, JsonpModule} from '@angular/http';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
-import {SDocEditpageComponent} from '../admin/components/sdoc-editpage/sdoc-editpage.component';
-import {SDocCreatepageComponent} from '../admin/components/sdoc-createpage/sdoc-createpage.component';
 import {SDocSearchFormConverter} from '../shared-sdoc/services/sdoc-searchform-converter.service';
 import {SDocShowpageComponent} from './components/sdoc-showpage/sdoc-showpage.component';
 import {SDocRoutingService} from '../shared-sdoc/services/sdoc-routing.service';
@@ -27,8 +25,6 @@ import {AngularMarkdownService} from '../../shared/angular-commons/services/angu
 @NgModule({
     declarations: [
         SDocSearchpageComponent,
-        SDocCreatepageComponent,
-        SDocEditpageComponent,
         SDocShowpageComponent,
     ],
     imports: [
