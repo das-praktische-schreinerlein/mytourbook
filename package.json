@@ -56,6 +56,7 @@
     "express-ipfilter": "0.3.1",
     "geo-coder": "0.2.1",
     "helmet": "3.8.2",
+    "honeypot": "0.0.2",
     "html-to-text": "3.3.0",
     "http-proxy-middleware": "0.17.4",
     "itemsjs": "1.0.22",
@@ -68,6 +69,7 @@
     "leaflet.markercluster": "1.0.6",
     "ng2-toastr": "4.1.0",
     "pm2": "2.7.1",
+    "request-ip": "2.0.2",
     "rxjs": "5.4.0",
     "vis": "4.20.1",
     "zone.js": "0.8.11"

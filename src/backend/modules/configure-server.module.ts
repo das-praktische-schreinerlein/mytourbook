@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import {json, urlencoded} from 'body-parser';
 import protect from '@risingstack/protect';
+import requestIp from 'request-ip';
 
 
 export class ConfigureServerModule {
@@ -31,5 +32,8 @@ export class ConfigureServerModule {
 
         // configure response
         app.use(compression());
+
+        // require request-ip and register it as middleware
+        app.use(requestIp.mw());
     }
 }

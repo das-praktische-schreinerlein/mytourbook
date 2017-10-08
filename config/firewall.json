@@ -58,5 +58,11 @@
         }
     },
     "blackListIps": [
-    ]
+    ],
+    "dnsBLConfig": {
+        "apiKey": "",
+        "dnsttl": 3600000,
+        "errttl": 60000,
+        "whitelistIps": ["::1", "127.0.0.1"]
+    }
 }
