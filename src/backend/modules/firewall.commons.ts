@@ -10,6 +10,7 @@ export interface FirewallConfig {
 export interface DnsBLConfig {
     dnsttl: number;
     errttl: number;
+    timeout: number;
     apiKey: string;
     whitelistIps: string[];
 }
