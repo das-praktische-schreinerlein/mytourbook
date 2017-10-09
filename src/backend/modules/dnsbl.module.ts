@@ -1,7 +1,7 @@
 import express from 'express';
 import honeypot from 'honeypot';
 import {DnsBLConfig, FirewallConfig} from './firewall.commons';
-import {DnsBLQuery, GenericDnsBLModule} from './generic-dnsbl.module';
+import {DnsBLCacheEntry, DnsBLQuery, GenericDnsBLModule} from './generic-dnsbl.module';
 
 export class DnsBLModule extends GenericDnsBLModule {
     private pot;
@@ -24,10 +24,18 @@ export class DnsBLModule extends GenericDnsBLModule {
         this.pot = new honeypot(this.config.apiKey);
     }
 
-    protected callDnsBLClient(query: DnsBLQuery) {
+    protected callDnsBLClient(query: DnsBLQuery): Promise<DnsBLCacheEntry> {
         const me = this;
-        this.pot.query(query.ip, function(potErr, potRes) {
-            return me.checkResultOfDnsBLClient(query, potErr, !(!potRes), potRes);
+
+        return new Promise<DnsBLCacheEntry>((resolve, reject) => {
+            query.timeoutTimer = setTimeout(() => {
+                resolve(me.checkResultOfDnsBLClient(query, 'timeout after ' + me.config.timeout, false,
+                    'timeout after ' + me.config.timeout));
+            }, me.config.timeout);
+            console.log('DnsBLModule: call DnsBL for IP:' + query.ip + ' URL:' + query.req.url);
+            this.pot.query(query.ip, function (potErr, potRes) {
+                resolve(me.checkResultOfDnsBLClient(query, potErr, !(!potRes), potRes));
+            });
         });
     }
 }

@@ -25,7 +25,8 @@ export interface DnsBLQuery {
 
 
 export abstract class GenericDnsBLModule {
-    private dnsBLCache = {};
+    private dnsBLResultCache = {};
+    private queryCache = {};
 
     constructor(protected app: express.Application, protected firewallConfig: FirewallConfig, protected config: DnsBLConfig,
                 protected filePathErrorDocs: string) {
@@ -35,11 +36,10 @@ export abstract class GenericDnsBLModule {
 
     protected abstract configureDnsBLClient();
 
-    protected abstract callDnsBLClient(query: DnsBLQuery);
+    protected abstract callDnsBLClient(query: DnsBLQuery): Promise<DnsBLCacheEntry>;
 
-    protected checkResultOfDnsBLClient(query: DnsBLQuery, err, blocked: boolean, details: any) {
-        console.log('DnsBLModule: check IP:' + query.ip + ' URL:' + query.req.url);
-        let potCacheEntry: DnsBLCacheEntry = this.dnsBLCache[query.ip];
+    protected checkResultOfDnsBLClient(query: DnsBLQuery, err, blocked: boolean, details: any): DnsBLCacheEntry {
+        let potCacheEntry: DnsBLCacheEntry = this.getCachedResult(query.ip);
         if (!potCacheEntry) {
             potCacheEntry = {
                 created: Date.now(),
@@ -58,12 +58,11 @@ export abstract class GenericDnsBLModule {
             // NORESULT
             console.warn('DnsBLModule: error while reading for query:' +  [query.ip, query.req.url].join(' '), err);
             if (!potCacheEntry) {
-                potCacheEntry.ttl = (Date.now() + this.config.errttl);
                 potCacheEntry.state = DnsBLCacheEntryState.NORESULT;
             } else if (potCacheEntry.state === DnsBLCacheEntryState.OK) {
                 potCacheEntry.state = DnsBLCacheEntryState.NORESULT;
             }
-            potCacheEntry.ttl = this.config.errttl;
+            potCacheEntry.ttl = (Date.now() + this.config.errttl);
         } else if (!blocked) {
             // OK
             potCacheEntry.ttl = (Date.now() + this.config.dnsttl);
@@ -74,45 +73,55 @@ export abstract class GenericDnsBLModule {
             potCacheEntry.state = DnsBLCacheEntryState.BLOCKED;
         }
 
-        this.dnsBLCache[query.ip] = potCacheEntry;
+        this.putCachedResult(query.ip, potCacheEntry);
 
-        return this.resolveResult(potCacheEntry, query, this.firewallConfig, this.filePathErrorDocs);
+        this.resolveResult(potCacheEntry, query, this.firewallConfig, this.filePathErrorDocs);
+
+        return potCacheEntry;
     }
 
     protected configureMiddleware() {
         const me = this;
         me.app.use(function(req, res, _next) {
             const ip = req['clientIp'];
+            const cacheEntry: DnsBLCacheEntry = me.getCachedResult(ip);
+            const query = me.createQuery(ip, req, res, _next);
 
-            const cacheEntry: DnsBLCacheEntry = me.dnsBLCache[ip];
-            const query: DnsBLQuery = {
-                ip: ip,
-                req: req,
-                res: res,
-                _next: _next,
-                alreadyServed: false,
-                timeoutTimer: undefined
-            };
-            if (cacheEntry && cacheEntry.ttl >= Date.now()) {
+            // already cached
+            if (me.isCacheEntryValid(cacheEntry)) {
                 return me.resolveResult(cacheEntry, query, me.firewallConfig, me.filePathErrorDocs);
             }
 
-            if (me.config.whitelistIps.indexOf(ip) >= 0) {
+            // whitelisted
+            if (me.isWhitelisted(ip)) {
                 return _next();
             }
 
-            query.timeoutTimer = setTimeout(() => {
-                me.checkResultOfDnsBLClient(query, 'timeout after ' + me.config.timeout, false,
-                    'timeout after ' + me.config.timeout);
-            }, me.config.timeout);
-            me.callDnsBLClient(query);
+            // same query running
+            let promise = me.getCachedQuery(ip);
+            if (promise) {
+                promise.then(function(parentCacheEntry: DnsBLCacheEntry) {
+                    return me.resolveResult(parentCacheEntry, query, me.firewallConfig, me.filePathErrorDocs);
+                });
+                return;
+            }
+
+            // do new query
+            promise = me.callDnsBLClient(query);
+            me.putCachedQuery(ip, promise);
         });
     }
 
     protected resolveResult(cacheEntry: DnsBLCacheEntry, query: DnsBLQuery, firewallConfig: FirewallConfig, filePathErrorDocs: string) {
+        // remove from queryCache
+        this.removeCachedQuery(query.ip);
+
+        // delete timer
         if (query.timeoutTimer) {
             clearTimeout(query.timeoutTimer);
         }
+
+        // ignore if already served
         if (query.alreadyServed) {
             return;
         }
@@ -125,5 +134,44 @@ export abstract class GenericDnsBLModule {
 
         console.error('DnsBLModule: BLOCKED blacklisted IP:' + query.req['clientIp'] + ' URL:' + query.req.url);
         return FirewallCommons.resolveBlocked(query.req, query.res, firewallConfig, filePathErrorDocs);
+    }
+
+    protected createQuery(ip: string, req, res, _next): DnsBLQuery {
+        return {
+            ip: ip,
+            req: req,
+            res: res,
+            _next: _next,
+            alreadyServed: false,
+            timeoutTimer: undefined
+        };
+    }
+
+    protected isCacheEntryValid(cacheEntry: DnsBLCacheEntry): boolean {
+        return cacheEntry && cacheEntry.ttl >= Date.now();
+    }
+
+    protected isWhitelisted(ip: string): boolean {
+        return this.config.whitelistIps.indexOf(ip) >= 0;
+    }
+
+    protected getCachedResult(ip: string): DnsBLCacheEntry {
+        return this.dnsBLResultCache[ip];
+    }
+
+    protected putCachedResult(ip: string, cacheEntry: DnsBLCacheEntry) {
+        this.dnsBLResultCache[ip] = cacheEntry;
+    }
+
+    protected getCachedQuery(ip: string): Promise<DnsBLCacheEntry> {
+        return this.queryCache[ip];
+    }
+
+    protected putCachedQuery(ip: string, query: Promise<DnsBLCacheEntry>) {
+        this.queryCache[ip] = query;
+    }
+
+    protected removeCachedQuery(ip: string) {
+        delete this.queryCache[ip];
     }
 }
