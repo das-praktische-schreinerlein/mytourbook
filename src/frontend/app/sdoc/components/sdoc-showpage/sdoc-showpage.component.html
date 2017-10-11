@@ -167,6 +167,14 @@
                                             [showForm]="false"
                                             [layout]="Layout.SMALL"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'News'"
+                                            i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
+                                            [params]="getFiltersForType(record, 'NEWS')"
+                                            [htmlId]="'NEWS'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.THIN"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'IMAGE'">
                 <app-sdoc-inline-searchpage [label]="'Trip'"
@@ -200,6 +208,14 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'News'"
+                                            i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
+                                            [params]="getFiltersForType(record, 'NEWS')"
+                                            [htmlId]="'NEWS'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRIP'">
@@ -236,8 +252,24 @@
                                             [showForm]="false"
                                             [layout]="Layout.SMALL"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'News'"
+                                            i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
+                                            [params]="getFiltersForType(record, 'NEWS')"
+                                            [htmlId]="'NEWS'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.THIN"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'NEWS'">
+                <app-sdoc-inline-searchpage [label]="'Trip'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
+                                            [params]="getFiltersForType(record, 'TRIP')"
+                                            [htmlId]="'TRIP'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"

@@ -17,19 +17,19 @@ export class SearchFormUtils {
         const me = this;
         return values.map(function (value) {
             let name: string = value[1];
-            if (translate) {
+            if (name && translate) {
                 name = me.translateService.instant(name) || name;
             }
-            if (removements && (Array.isArray(removements))) {
+            if (name && removements && (Array.isArray(removements))) {
                 for (const replacement of removements) {
                     name = name.replace(replacement, '');
                 }
             }
-            if (translate) {
+            if (name && translate) {
                 name = me.translateService.instant(name) || name;
             }
             let label = value[0] + name;
-            if (translate) {
+            if (label && translate) {
                 label = me.translateService.instant(label) || label;
             }
 

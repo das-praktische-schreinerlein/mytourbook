@@ -124,6 +124,8 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
             } else if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'NEWS' && record.newsId) {
+                filters['moreFilter'] = 'news_id_i:' + record.newsId;
             } else {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
             }
@@ -159,6 +161,8 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'TRIP' && record.tripId) {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+            } else if (type === 'NEWS' && record.newsId) {
+                filters['moreFilter'] = 'news_id_i:' + record.newsId;
             } else {
                 filters['moreFilter'] = 'image_id_i:' + record.imageId;
             }
@@ -172,6 +176,8 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
                 filters['perPage'] = 99;
                 filters['sort'] = 'dateAsc';
+            } else if (type === 'NEWS' && record.newsId) {
+                filters['moreFilter'] = 'news_id_i:' + record.newsId;
             } else {
                 filters['moreFilter'] = 'trip_id_is:' + record.tripId;
             }
@@ -180,7 +186,10 @@ export class SDocContentUtils {
             if (type === 'IMAGE') {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
-                filters['perPage'] = 99;
+                filters['perPage'] = 20;
+                filters['sort'] = 'dateAsc';
+            } else if (type === 'TRIP') {
+                filters['perPage'] = 20;
                 filters['sort'] = 'dateAsc';
             }
         }
