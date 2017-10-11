@@ -22,6 +22,10 @@ button.buttonselect {
     text-align: center;
 }
 
+.btn-configure {
+    text-align: center;
+}
+
 #markdown table {
     width: 100%;
 }

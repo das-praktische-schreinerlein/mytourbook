@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit {
             },
             (error: {reason: any}) => {
                 me.sections = [];
-                me.toastr.error('Es gibt leider Probleme bei der Lesen - am besten noch einmal probieren :-(', 'Oje!');
+                me.toastr.error('Es gibt leider Probleme beim Laden - am besten noch einmal probieren :-(', 'Oje!');
                 console.error('show getSections failed:' + error.reason);
             }
         );

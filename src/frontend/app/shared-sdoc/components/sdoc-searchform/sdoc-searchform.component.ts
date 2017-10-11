@@ -168,7 +168,22 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public short? = false;
 
     @Input()
-    public showForm? = true;
+    public showForm? = false;
+
+    @Input()
+    public showWhere? = this.showForm;
+
+    @Input()
+    public showWhat? = this.showForm;
+
+    @Input()
+    public showWhen? = this.showForm;
+
+    @Input()
+    public showFulltext? = this.showForm;
+
+    @Input()
+    public showDetails? = this.showForm;
 
     @Input()
     public set searchResult(value: SDocSearchResult) {
