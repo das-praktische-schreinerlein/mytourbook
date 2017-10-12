@@ -5,11 +5,11 @@ import {PDocListItemFlatComponent} from './pdoc-list-item-flat.component';
 import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateModule} from '@ngx-translate/core';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 
 describe('PDocListItemFlatComponent', () => {
     let component: PDocListItemFlatComponent;
@@ -20,7 +20,7 @@ describe('PDocListItemFlatComponent', () => {
             declarations: [PDocListItemFlatComponent],
             providers: [
                 DomSanitizer,
-                { provide: Router, useClass: RouterTestingModule },
+                { provide: Router, useValue: new RouterStub() },
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA],

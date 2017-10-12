@@ -16,10 +16,8 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {MarkdownModule, MarkdownService} from 'angular2-markdown';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
-
-class RouterStub {
-    navigateByUrl(url: string) { return url; }
-}
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 
 describe('SectionPageComponent', () => {
     let component: SectionPageComponent;
@@ -37,6 +35,7 @@ describe('SectionPageComponent', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
+                CommonRoutingService,
                 SDocSearchFormConverter,
                 SDocRoutingService,
                 SearchParameterUtils,

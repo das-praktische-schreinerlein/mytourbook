@@ -1,9 +1,9 @@
-import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
+import {CommonRoutingService} from './common-routing.service';
 
 @Injectable()
 export class AngularHtmlService {
-    constructor(private router: Router) {
+    constructor(private commonRoutingService: CommonRoutingService) {
     }
 
     renderHtml(parentSelector: string, html: string, routeLocalLinkWithAngularRouter: boolean): boolean {
@@ -29,7 +29,7 @@ export class AngularHtmlService {
             link.removeEventListener('click');
             link.addEventListener('click', function (event) {
                 event.preventDefault();
-                me.router.navigateByUrl(url);
+                me.commonRoutingService.navigateByUrl(url);
                 return false;
             });
         }

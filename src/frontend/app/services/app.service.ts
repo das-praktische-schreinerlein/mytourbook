@@ -7,8 +7,8 @@ import {AppState, GenericAppService} from '../../shared/commons/services/generic
 import {SDocHttpAdapter} from '../../shared/sdoc-commons/services/sdoc-http.adapter';
 import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.service';
 import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';
-import {Router} from '@angular/router';
 import {MinimalHttpBackendClient} from '../../shared/commons/services/minimal-http-backend-client';
+import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -22,7 +22,8 @@ export class AppService extends GenericAppService {
 
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
-                private http: Http, private router: Router, private backendHttpClient: MinimalHttpBackendClient) {
+                private http: Http, private commonRoutingService: CommonRoutingService,
+                private backendHttpClient: MinimalHttpBackendClient) {
         super();
     }
 
@@ -46,7 +47,7 @@ export class AppService extends GenericAppService {
     doSwitchToOfflineVersion(): void {
         const me = this;
         this.initStaticData().then(function onFullfiled() {
-            me.router.navigateByUrl('/');
+            me.commonRoutingService.navigateByUrl('/');
         }).catch(function onError(reason: any) {
             console.error('loading app failed:' + reason);
             me.setAppState(AppState.Failed);
@@ -56,7 +57,7 @@ export class AppService extends GenericAppService {
     doSwitchToOnlineVersion(): void {
         const me = this;
         this.initBackendData().then(function onFullfiled() {
-            me.router.navigateByUrl('/');
+            me.commonRoutingService.navigateByUrl('/');
         }).catch(function onError(reason: any) {
             console.error('loading app failed:' + reason);
             me.setAppState(AppState.Failed);

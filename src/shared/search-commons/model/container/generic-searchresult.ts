@@ -1,6 +1,7 @@
 import {Record} from 'js-data';
 import {GenericSearchForm} from '../forms/generic-searchform';
 import {Facets} from './facets';
+
 export class GenericSearchResult<R extends Record, F extends GenericSearchForm> {
     currentRecords: R[];
     recordCount: number;

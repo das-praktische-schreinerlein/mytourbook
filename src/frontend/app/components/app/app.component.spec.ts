@@ -12,10 +12,9 @@ import {GenericAppService} from '../../../shared/commons/services/generic-app.se
 import {Router} from '@angular/router';
 import {HttpModule, XHRBackend} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
+import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
+import {RouterStub} from '../../../shared/angular-commons/testing/router-stubs';
 
-class RouterStub {
-    navigateByUrl(url: string) { return url; }
-}
 describe('AppComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -32,6 +31,7 @@ describe('AppComponent', () => {
             providers: [
                 TranslateService,
                 {provide: GenericAppService, useValue: new AppServiceStub() },
+                CommonRoutingService,
                 { provide: Router, useValue: new RouterStub() },
                 {provide: ToastsManager, useValue: new ToastsManagerStub() },
                 { provide: XHRBackend, useClass: MockBackend }

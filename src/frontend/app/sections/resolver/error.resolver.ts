@@ -1,7 +1,7 @@
-import {Router} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {Injectable} from '@angular/core';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
+import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
 
 @Injectable()
 export class ErrorResolver {
@@ -24,7 +24,7 @@ export class ErrorResolver {
         return false;
     }
 
-    constructor(private router: Router) {
+    constructor(private commonRoutingService: CommonRoutingService) {
     }
 
     redirectAfterRouterError(errorCode: string, newUrl: string, toasts: ToastsManager, toastMessage: string) {
@@ -59,7 +59,7 @@ export class ErrorResolver {
 
         if (newUrl) {
             console.error('after error ' + errorCode +  ' redirect to', newUrl);
-            this.router.navigateByUrl(newUrl);
+            this.commonRoutingService.navigateByUrl(newUrl);
         }
     }
 }

@@ -19,7 +19,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ToastModule} from 'ng2-toastr';
-import { LightboxModule } from 'angular2-lightbox';
+import {LightboxModule} from 'angular2-lightbox';
 import {SDocProfileMapComponent} from './components/sdoc-profilemap/sdoc-profilemap.component';
 import {SDocMapComponent} from './components/sdoc-map/sdoc-map.component';
 import {SDocLinkedLocHierarchyComponent} from './components/sdoc-linked-loc-hierarchy/sdoc-linked-loc-hierarchy.component';

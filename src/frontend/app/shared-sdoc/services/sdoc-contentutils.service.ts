@@ -5,6 +5,7 @@ import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record
 import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plugin';
 import 'leaflet';
+import {SDocRoutingService} from './sdoc-routing.service';
 import LatLng = L.LatLng;
 
 export interface StructuredKeyword {
@@ -12,10 +13,19 @@ export interface StructuredKeyword {
     keywords: string[];
 }
 
+export interface ItemData {
+    currentRecord: SDocRecord;
+    styleClassFor: string[];
+    urlShow: SafeUrl;
+    image: SDocImageRecord;
+    thumbnailUrl: SafeUrl;
+    previewUrl: SafeUrl;
+}
+
 @Injectable()
 export class SDocContentUtils {
 
-    constructor(private sanitizer: DomSanitizer, private appService: GenericAppService) {
+    constructor(private sanitizer: DomSanitizer, private sdocRoutingService: SDocRoutingService, private appService: GenericAppService) {
     }
 
     getLocationHierarchy(record: SDocRecord, lastOnly: boolean): any[] {
@@ -215,7 +225,7 @@ export class SDocContentUtils {
                 popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                 type: record.type
             };
-            mapElements.push(mapElement,)
+            mapElements.push(mapElement);
         }
         if (showGeoPos) {
             const mapElement: MapElement = {
@@ -234,4 +244,33 @@ export class SDocContentUtils {
     calcRate(rate: number, max: number): number {
         return Math.round((rate / 15 * max) + 0.5);
     }
+
+    getShowUrl(record: SDocRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustUrl(this.sdocRoutingService.getShowUrl(record, ''));
+    }
+
+    updateItemData(itemData: ItemData, record: SDocRecord, layout: string): boolean {
+        if (record === undefined) {
+            itemData.currentRecord = undefined;
+            itemData.styleClassFor = undefined;
+            itemData.urlShow = undefined;
+            itemData.image = undefined;
+            itemData.thumbnailUrl = undefined;
+            itemData.previewUrl = undefined;
+            return false;
+        }
+
+        itemData.currentRecord = record;
+        itemData.styleClassFor = this.getStyleClassForRecord(itemData.currentRecord, layout);
+        itemData.urlShow = this.getShowUrl(itemData.currentRecord);
+        itemData.image = undefined;
+        itemData.thumbnailUrl = undefined;
+        itemData.previewUrl = undefined;
+        if (itemData.currentRecord['sdocimages'] !== undefined && itemData.currentRecord['sdocimages'].length > 0) {
+            itemData.image = itemData.currentRecord['sdocimages'][0];
+            itemData.thumbnailUrl = this.getThumbnailUrl(itemData.image);
+            itemData.previewUrl = this.getPreviewUrl(itemData.image);
+        }
+    }
+
 }

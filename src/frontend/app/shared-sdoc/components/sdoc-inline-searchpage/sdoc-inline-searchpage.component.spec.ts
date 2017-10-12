@@ -14,15 +14,8 @@ import {GenericAppService} from '../../../../shared/commons/services/generic-app
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
-
-class RouterStub {
-    public routerState: {} = {
-        snapshot: {
-            url: 'record'
-        }
-    };
-    navigateByUrl(url: string) { return url; }
-}
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 
 describe('SDocInlineSearchpageComponent', () => {
     let component: SDocInlineSearchpageComponent;
@@ -40,6 +33,7 @@ describe('SDocInlineSearchpageComponent', () => {
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
+                CommonRoutingService,
                 SDocSearchFormConverter,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 SDocRoutingService,

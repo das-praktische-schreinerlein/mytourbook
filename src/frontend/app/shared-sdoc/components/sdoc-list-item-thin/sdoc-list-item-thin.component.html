@@ -1,81 +1,81 @@
-<div class="row sdoc-list-item-thin" [ngClass]="getStyleClassForRecord(record)">
+<div *ngIf="listItem.currentRecord !== undefined" class="row sdoc-list-item-thin" [ngClass]="listItem.styleClassFor">
     <!--- BIG -->
     <div class="col-2 layout-big">
-        <ng-container [ngSwitch]="record.type">
+        <ng-container [ngSwitch]="listItem.currentRecord.type">
             <ng-container *ngSwitchCase="'IMAGE'">
-                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                <ng-container *ngIf="listItem.image">
                     <img class="picture-thumbnail" width="50px"
-                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
-                         (click)="submitShowImage(record)"
-                         alt="{{record.sdocimages[0].name}}">
+                         [src]="listItem.thumbnailUrl"
+                         (click)="submitShowImage(listItem.currentRecord)"
+                         alt="{{listItem.image.name}}">
                 </ng-container>
             </ng-container>
             <ng-container *ngSwitchDefault="">
-                {{record.type | translate }}<br />
-                {{record.subtype | translate }}
+                {{listItem.currentRecord.type | translate }}<br />
+                {{listItem.currentRecord.subtype | translate }}
             </ng-container>
         </ng-container>
     </div>
     <div class="col-6 layout-big">
-        <a [href]="getShowUrl(record)" (click)="submitShow(record)">{{record.name}}</a>
+        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
     </div>
     <div class="col-2 layout-big">
-        <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-        <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+        <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
+        <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
     </div>
     <div class="col-2 layout-big">
-        <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+        <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
     </div>
 
     <!--- SMALL -->
     <div class="col-4 layout-small">
-        <ng-container [ngSwitch]="record.type">
+        <ng-container [ngSwitch]="listItem.currentRecord.type">
             <ng-container *ngSwitchCase="'IMAGE'">
-                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                <ng-container *ngIf="listItem.image">
                     <img class="picture-thumbnail" width="50px"
-                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
-                         (click)="submitShowImage(record)"
-                         alt="{{record.sdocimages[0].name}}">
+                         [src]="listItem.thumbnailUrl"
+                         (click)="submitShowImage(listItem.currentRecord)"
+                         alt="{{listItem.image.name}}">
                 </ng-container>
             </ng-container>
             <ng-container *ngSwitchDefault="">
-                {{record.type | translate }}<br />
-                {{record.subtype | translate }}
+                {{listItem.currentRecord.type | translate }}<br />
+                {{listItem.currentRecord.subtype | translate }}
             </ng-container>
         </ng-container>
-        <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-        <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+        <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
+        <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
     </div>
     <div class="col-4 layout-small">
-        <a [href]="getShowUrl(record)" (click)="submitShow(record)">{{record.name}}</a>
+        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
     </div>
     <div class="col-4 layout-small">
-        <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+        <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
     </div>
 
     <!--- VERYSMALL -->
     <div class="col-4 layout-verysmall">
-        <ng-container [ngSwitch]="record.type">
+        <ng-container [ngSwitch]="listItem.currentRecord.type">
             <ng-container *ngSwitchCase="'IMAGE'">
-                <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                <ng-container *ngIf="listItem.image">
                     <img class="picture-thumbnail" width="50px"
-                         [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
-                         (click)="submitShowImage(record)"
-                         alt="{{record.sdocimages[0].name}}">
+                         [src]="listItem.thumbnailUrl"
+                         (click)="submitShowImage(listItem.currentRecord)"
+                         alt="{{listItem.image.name}}">
                 </ng-container>
             </ng-container>
             <ng-container *ngSwitchDefault="">
-                {{record.type | translate }}<br />
-                {{record.subtype | translate }}
+                {{listItem.currentRecord.type | translate }}<br />
+                {{listItem.currentRecord.subtype | translate }}
             </ng-container>
         </ng-container>
-        <app-sdoc-ratepers [record]="record" [small]="'true'"></app-sdoc-ratepers>
-        <app-sdoc-ratetech [record]="record" [small]="'true'"></app-sdoc-ratetech>
+        <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
+        <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
     </div>
     <div class="col-4 layout-verysmall">
-        <a [href]="getShowUrl(record)" (click)="submitShow(record)">{{record.name}}</a>
+        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
     </div>
     <div class="col-4 layout-verysmall">
-        <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
+        <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
     </div>
 </div>

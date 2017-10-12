@@ -8,6 +8,7 @@ import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-sectionbar',
@@ -24,8 +25,8 @@ export class SectionBarComponent implements OnInit {
     });
 
     constructor(public fb: FormBuilder, private route: ActivatedRoute, private pdocDataService: PDocDataService,
-                private router: Router, private errorResolver: ErrorResolver, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private pageUtils: PageUtils) {
+                private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver, private toastr: ToastsManager,
+                private router: Router, vcr: ViewContainerRef, private pageUtils: PageUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -62,7 +63,7 @@ export class SectionBarComponent implements OnInit {
         const newUrl = '/sections/' + this.idValidationRule.sanitize(this.themeFormGroup.getRawValue()['theme']);
         url = url.replace('\/sections\/' + this.pdoc.id, newUrl);
         url = url.replace('\/pages\/' + this.pdoc.id, newUrl);
-        this.router.navigateByUrl(url);
+        this.commonRoutingService.navigateByUrl(url);
         return false;
     }
 

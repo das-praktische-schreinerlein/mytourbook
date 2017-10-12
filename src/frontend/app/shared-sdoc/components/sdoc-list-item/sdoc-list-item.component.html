@@ -1,67 +1,67 @@
-<ng-container [ngSwitch]="record.type">
+<ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="listItem.currentRecord.type">
     <ng-container *ngSwitchCase="'IMAGE'">
-        <div class="card-block" [ngClass]="getStyleClassForRecord(record)">
-            <h5><app-sdoc-distance [record]="record"></app-sdoc-distance>
-                <app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+        <div class="card-block" [ngClass]="listItem.styleClassFor">
+            <h5><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance>
+                <app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div>
-                    <h5 *ngIf="record.type !== 'LOCATION'">{{record.type | translate }}</h5>
-                    <h5>{{record.subtype | translate }}</h5>
-                    <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+                    <ng-container *ngIf="listItem.image">
                         <img class="picture-small" width="200px"
-                             [src]="contentUtils.getPreviewUrl(record.sdocimages[0])"
-                             (click)="submitShowImage(record)"
-                             alt="{{record.sdocimages[0].name}}">
+                             [src]="listItem.previewUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
                     </ng-container>
                 </div>
                 <br />
-                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 class="card-title">{{record.name}}</h5></a>
+                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
             </div>
             <br clear="all" />
             <p class="card-text">
-                <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="record.geoLat != undefined && record.geoLon != undefined">
-                    <ngb-panel *ngIf="record.gpsTrackBasefile || (record.geoLat != undefined && record.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
+                <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined">
+                    <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <app-sdoc-map [mapId]="'listItemMap' + record.id"
+                            <app-sdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                           [height]="'150'"
                                           [mapZoom]="'9'"
-                                          [sdocs]="[record]"
+                                          [sdocs]="[listItem.currentRecord]"
                                           [mapCenterPos]="undefined"></app-sdoc-map>
                         </ng-template>
                     </ngb-panel>
                     <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
-                            <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
+                            <app-sdoc-ratepers [record]="listItem.currentRecord"></app-sdoc-ratepers>
+                            <app-sdoc-keywords [record]="listItem.currentRecord"></app-sdoc-keywords>
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>
             </p>
         </div>
         <div class="card-footer">
-            <small class="text-muted">{{record.datevon | date: 'dd.MM.yyyy'}}</small>
+            <small class="text-muted">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
-                <button class="show btn-navigation" (click)="submitShow(record)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
+                <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
             </div>
         </div>
     </ng-container>
     <ng-container *ngSwitchDefault="">
-        <div class="card-block" [ngClass]="getStyleClassForRecord(record)">
-            <h5><app-sdoc-distance [record]="record"></app-sdoc-distance>
-                <app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+        <div class="card-block" [ngClass]="listItem.styleClassFor">
+            <h5><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance>
+                <app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div style="width: 100px; float: left">
-                    <h5>{{record.type | translate }}</h5>
-                    <ng-container *ngIf="record.sdocimages != undefined && record.sdocimages.length > 0">
+                    <h5>{{listItem.currentRecord.type | translate }}</h5>
+                    <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="50px"
-                             [src]="contentUtils.getThumbnailUrl(record.sdocimages[0])"
-                             (click)="submitShowImage(record)"
-                             alt="{{record.sdocimages[0].name}}">
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
                     </ng-container>
                 </div>
-                <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h5 ngcclass="card-title">{{record.name}}</h5></a>
+                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
                 <p class="card-text">
-                    {{record.descTxt | truncate : 300 }}
+                    {{listItem.currentRecord.descTxt | truncate : 300 }}
                 </p>
             </div>
             <br clear="all" />
@@ -69,20 +69,20 @@
                 <ngb-accordion #acc="ngbAccordion" activeIds="">
                     <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <app-sdoc-ratepers [record]="record"></app-sdoc-ratepers>
-                            <app-sdoc-ratepers-difficulty [record]="record"></app-sdoc-ratepers-difficulty>
-                            <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
-                            <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                            <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
-                            <app-sdoc-datainfo [record]="record"></app-sdoc-datainfo >
+                            <app-sdoc-ratepers [record]="listItem.currentRecord"></app-sdoc-ratepers>
+                            <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord"></app-sdoc-ratepers-difficulty>
+                            <app-sdoc-ratetech [record]="listItem.currentRecord"></app-sdoc-ratetech>
+                            <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
+                            <app-sdoc-keywords [record]="listItem.currentRecord"></app-sdoc-keywords>
+                            <app-sdoc-datainfo [record]="listItem.currentRecord"></app-sdoc-datainfo >
                         </ng-template>
                     </ngb-panel>
-                    <ngb-panel *ngIf="record.gpsTrackBasefile || (record.geoLat != undefined && record.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
+                    <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
-                            <app-sdoc-map [mapId]="'listItemMap' + record.id"
+                            <app-sdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
                                           [height]="'150'"
                                           [mapZoom]="'9'"
-                                          [sdocs]="[record]"
+                                          [sdocs]="[listItem.currentRecord]"
                                           [mapCenterPos]="undefined"></app-sdoc-map>
                         </ng-template>
                     </ngb-panel>
@@ -90,9 +90,9 @@
             </p>
         </div>
         <div class="card-footer">
-            <small class="text-muted">{{record.datevon | date: 'dd.MM.yyyy'}}</small>
+            <small class="text-muted">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
-                <button class="show btn-navigation" (click)="submitShow(record)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
+                <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
             </div>
         </div>
     </ng-container>

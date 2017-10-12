@@ -13,10 +13,8 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-
-class RouterStub {
-    navigateByUrl(url: string) { return url; }
-}
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 
 describe('SDocSearchpageComponent', () => {
     let component: SDocSearchpageComponent;
@@ -33,6 +31,7 @@ describe('SDocSearchpageComponent', () => {
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
+                CommonRoutingService,
                 SDocSearchFormConverter,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 SDocRoutingService,

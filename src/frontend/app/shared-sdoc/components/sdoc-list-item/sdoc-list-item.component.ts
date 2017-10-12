@@ -1,17 +1,25 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 
 @Component({
     selector: 'app-sdoc-list-item',
     templateUrl: './sdoc-list-item.component.html',
     styleUrls: ['./sdoc-list-item.component.css']
 })
-export class SDocListItemComponent {
+export class SDocListItemComponent implements OnChanges {
     public contentUtils: SDocContentUtils;
+    listItem: ItemData = {
+        currentRecord: undefined,
+        styleClassFor: undefined,
+        thumbnailUrl: undefined,
+        previewUrl: undefined,
+        image: undefined,
+        urlShow: undefined
+    };
+
 
     @Input()
     public record: SDocRecord;
@@ -28,8 +36,14 @@ export class SDocListItemComponent {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(private sanitizer: DomSanitizer, private sdocRoutingService: SDocRoutingService, contentUtils: SDocContentUtils) {
+    constructor(contentUtils: SDocContentUtils) {
         this.contentUtils = contentUtils;
+    }
+
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        if (ComponentUtils.hasNgChanged(changes)) {
+            this.updateData();
+        }
     }
 
     public submitShow(sdoc: SDocRecord) {
@@ -42,11 +56,8 @@ export class SDocListItemComponent {
         return false;
     }
 
-    public getShowUrl(record: SDocRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustUrl(this.sdocRoutingService.getShowUrl(record, ''));
-    }
 
-    public getStyleClassForRecord(record: SDocRecord): string[] {
-        return this.contentUtils.getStyleClassForRecord(record, 'default');
+    private updateData() {
+        this.contentUtils.updateItemData(this.listItem, this.record, 'default');
     }
 }

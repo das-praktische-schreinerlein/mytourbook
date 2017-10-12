@@ -16,6 +16,7 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
+import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -35,7 +36,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
-                private errorResolver: ErrorResolver, private pageUtils: PageUtils,
+                private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
@@ -46,6 +47,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         const me = this;
         this.route.data.subscribe(
             (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
+                me.commonRoutingService.setRoutingState(RoutingState.DONE);
+
                 const flgSDocError = ErrorResolver.isResolverError(data.record);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);

@@ -1,4 +1,5 @@
 import {SDocRateTechRecord} from './sdocratetech-record';
+
 describe('SDocRateTechRecord', () => {
     it('should create an instance', () => {
         expect(new SDocRateTechRecord()).toBeTruthy();

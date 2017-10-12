@@ -3,8 +3,8 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
-import {Router} from '@angular/router';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-sdoc-linked-loc-hierarchy',
@@ -20,10 +20,9 @@ export class SDocLinkedLocHierarchyComponent implements OnChanges {
     @Input()
     public lastOnly? = false;
 
-    constructor(private sanitizer: DomSanitizer, private router: Router,
+    constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
                 private sdocRoutingService: SDocRoutingService, private contentUtils: SDocContentUtils) {
     }
-
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {
@@ -39,9 +38,8 @@ export class SDocLinkedLocHierarchyComponent implements OnChanges {
         this.locations = this.contentUtils.getLocationHierarchy(this.record, this.lastOnly);
     }
 
-
     public submitShow(event, location): boolean {
-        this.router.navigateByUrl(this.getUrl(location));
+        this.commonRoutingService.navigateByUrl(this.getUrl(location));
         return false;
     }
 

@@ -1,4 +1,5 @@
 import {SDocDataTechRecord} from './sdocdatatech-record';
+
 describe('SDocDataTechRecord', () => {
     it('should create an instance', () => {
         expect(new SDocDataTechRecord()).toBeTruthy();

@@ -24,6 +24,7 @@ import {PageUtils} from '../shared/angular-commons/services/page.utils';
 import {BackendHttpClient} from './services/backend-http-client';
 import {MinimalHttpBackendClient} from '../shared/commons/services/minimal-http-backend-client';
 import {AngularHtmlService} from '../shared/angular-commons/services/angular-html.service';
+import {CommonRoutingService} from '../shared/angular-commons/services/common-routing.service';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: Http) {
@@ -55,6 +56,7 @@ export function createTranslateLoader(http: Http) {
     ],
     providers: [
         { provide: MinimalHttpBackendClient, useClass: BackendHttpClient },
+        CommonRoutingService,
         { provide: GenericAppService, useClass: AppService },
         SDocTeamFilterConfig,
         SDocDataStore,

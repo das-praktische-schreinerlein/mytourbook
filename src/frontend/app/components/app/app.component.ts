@@ -4,6 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
+import {CommonRoutingService, RoutingState} from '../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-root',
@@ -13,11 +14,12 @@ import {Http} from '@angular/http';
 })
 @Injectable()
 export class AppComponent {
+    showLoadingSpinner = true;
     title = 'MyTourBook';
 
     constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,
-                private http: Http) {
+                private http: Http, private commonRoutingService: CommonRoutingService) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(locale);
 
@@ -45,5 +47,15 @@ export class AppComponent {
                 console.error('loading locale-overrides failed:' + reason);
                 appService.initApp();
             });
+
+        this.commonRoutingService.getRoutingState().subscribe(
+            routingState => {
+                if (routingState === RoutingState.RUNNING) {
+                    this.showLoadingSpinner = true;
+                } else {
+                    this.showLoadingSpinner = false;
+                }
+            }
+        );
     }
 }

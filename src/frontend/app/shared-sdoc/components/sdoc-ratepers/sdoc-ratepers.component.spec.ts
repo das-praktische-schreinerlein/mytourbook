@@ -9,6 +9,10 @@ import {AppServiceStub} from '../../../../shared/angular-commons/testing/appserv
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {DomSanitizer} from '@angular/platform-browser';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {Router} from '@angular/router';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 
 describe('SDocRatePersonalComponent', () => {
     let component: SDocRatePersonalComponent;
@@ -22,6 +26,9 @@ describe('SDocRatePersonalComponent', () => {
                 TranslateModule.forRoot()],
             providers: [
                 DomSanitizer,
+                { provide: Router, useValue: new RouterStub() },
+                CommonRoutingService,
+                SDocRoutingService,
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ]

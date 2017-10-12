@@ -9,8 +9,12 @@ import {SearchParameterUtils} from '../../../../shared/search-commons/services/s
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import { Lightbox, LightboxConfig, LightboxEvent } from 'angular2-lightbox';
+import {Lightbox, LightboxConfig, LightboxEvent} from 'angular2-lightbox';
 import {SDocLightBox} from '../../services/sdoc-lightbox.service';
+import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {Router} from '@angular/router';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -24,6 +28,9 @@ describe('SDocListComponent', () => {
             ],
             providers: [
                 SDocSearchFormConverter,
+                { provide: Router, useValue: new RouterStub() },
+                CommonRoutingService,
+                SDocRoutingService,
                 SDocContentUtils,
                 SDocLightBox,
                 Lightbox,

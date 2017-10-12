@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
+import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
 
 @Injectable()
 export class SDocRoutingService {
     private lastSearchUrl = '/sdoc/search/';
     private lastBaseUrl = '/sdoc/';
 
-    constructor(private router: Router) {
+    constructor(private commonRoutingService: CommonRoutingService) {
     }
 
     setLastSearchUrl(lastSearchUrl: string): void {
@@ -34,10 +34,10 @@ export class SDocRoutingService {
     }
 
     navigateBackToSearch(): Promise<boolean> {
-        return this.router.navigateByUrl(this.getLastSearchUrl());
+        return this.commonRoutingService.navigateByUrl(this.getLastSearchUrl());
     }
 
     navigateToShow(sDoc: SDocRecord, from: string): Promise<boolean> {
-        return this.router.navigateByUrl(this.getShowUrl(sDoc, from));
+        return this.commonRoutingService.navigateByUrl(this.getShowUrl(sDoc, from));
     }
 }

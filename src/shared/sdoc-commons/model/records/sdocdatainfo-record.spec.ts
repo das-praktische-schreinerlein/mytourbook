@@ -1,4 +1,5 @@
 import {SDocDataInfoRecord} from './sdocdatainfo-record';
+
 describe('SDocDataInfoRecord', () => {
     it('should create an instance', () => {
         expect(new SDocDataInfoRecord()).toBeTruthy();

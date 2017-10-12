@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
@@ -17,6 +17,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
+import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -34,7 +35,7 @@ export class SectionPageComponent implements OnInit {
     sdocSearchResult: SDocSearchResult = new SDocSearchResult(this.sdocSearchForm, 0, undefined, new Facets());
 
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
-                private router: Router, private searchFormConverter: SDocSearchFormConverter,
+                private commonRoutingService: CommonRoutingService, private searchFormConverter: SDocSearchFormConverter,
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService) {
@@ -46,6 +47,8 @@ export class SectionPageComponent implements OnInit {
         const me = this;
         this.route.data.subscribe(
             (data: { pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
+                me.commonRoutingService.setRoutingState(RoutingState.DONE);
+
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 if (!flgPDocError && !flgBaseSearchUrlError) {
@@ -180,7 +183,7 @@ export class SectionPageComponent implements OnInit {
     }
 
     onShow(record: PDocRecord) {
-        this.router.navigateByUrl('sections/' + record.id);
+        this.commonRoutingService.navigateByUrl('sections/' + record.id);
         return false;
     }
 
@@ -202,7 +205,7 @@ export class SectionPageComponent implements OnInit {
         const url = this.getToSearchUrl();
         console.log('submitToSearch: redirect to ', url);
 
-        this.router.navigateByUrl(url);
+        this.commonRoutingService.navigateByUrl(url);
         return false;
     }
 

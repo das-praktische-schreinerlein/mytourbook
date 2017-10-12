@@ -12,10 +12,9 @@ import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-dat
 import {FormBuilder} from '@angular/forms';
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 
-class RouterStub {
-    navigateByUrl(url: string) { return url; }
-}
 describe('SectionBarComponent', () => {
     let component: SectionBarComponent;
     let fixture: ComponentFixture<SectionBarComponent>;
@@ -31,6 +30,7 @@ describe('SectionBarComponent', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
+                CommonRoutingService,
                 FormBuilder,
                 ToastsManager,
                 TranslateService,

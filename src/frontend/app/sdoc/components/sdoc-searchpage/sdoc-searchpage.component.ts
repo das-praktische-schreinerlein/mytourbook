@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
@@ -16,6 +16,7 @@ import {IdValidationRule} from '../../../../shared/search-commons/model/forms/ge
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -38,7 +39,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     mapCenterPos: L.LatLng = undefined;
     mapZoom = 9;
 
-    constructor(private route: ActivatedRoute, private router: Router, private errorResolver: ErrorResolver,
+    constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 private pageUtils: PageUtils) {
@@ -55,6 +56,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.route.data.subscribe(
             (data: { searchForm: ResolvedData<SDocSearchForm>, pdoc: ResolvedData<PDocRecord>,
                 flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
+                me.commonRoutingService.setRoutingState(RoutingState.DONE);
+
                 const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
@@ -245,7 +248,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm);
         console.log('redirectToSearch: redirect to ', url);
 
-        this.router.navigateByUrl(url);
+        this.commonRoutingService.navigateByUrl(url);
         return false;
     }
 

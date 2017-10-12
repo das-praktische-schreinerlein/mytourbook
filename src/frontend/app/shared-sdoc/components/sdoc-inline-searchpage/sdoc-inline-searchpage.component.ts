@@ -10,8 +10,8 @@ import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {Router} from '@angular/router';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-sdoc-inline-searchpage',
@@ -70,7 +70,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     @Output()
     public searchResultFound: EventEmitter<SDocSearchResult> = new EventEmitter();
 
-    constructor(private appService: GenericAppService, private router: Router,
+    constructor(private appService: GenericAppService, private commonRoutingService: CommonRoutingService,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
         this.searchForm = new SDocSearchForm({});
@@ -128,7 +128,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     }
 
     onToSearchPage(event: any) {
-        this.router.navigateByUrl(this.getToSearchUrl(), '');
+        this.commonRoutingService.navigateByUrl(this.getToSearchUrl(), '');
         return false;
     }
 
