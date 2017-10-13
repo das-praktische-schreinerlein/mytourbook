@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocRatePersonalRecord} from '../../../../shared/sdoc-commons/model/records/sdocratepers-record';
@@ -7,7 +7,8 @@ import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 @Component({
     selector: 'app-sdoc-ratepers-difficulty',
     templateUrl: './sdoc-ratepers-difficulty.component.html',
-    styleUrls: ['./sdoc-ratepers-difficulty.component.css']
+    styleUrls: ['./sdoc-ratepers-difficulty.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocRatePersonalDifficultyComponent implements OnChanges {
     sdocratepers: SDocRatePersonalRecord;

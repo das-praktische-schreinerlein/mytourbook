@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {GeoLoader} from '../../services/geo.loader';
 import {GeoJsonParser} from '../../services/geojson.parser';
 import {GeoGpxParser} from '../../services/geogpx.parser';
@@ -8,7 +8,8 @@ import {MinimalHttpBackendClient} from '../../../commons/services/minimal-http-b
 
 @Component({
     selector: 'app-visjs-profilemap',
-    templateUrl: './visjs-profilemap.component.html'
+    templateUrl: './visjs-profilemap.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
     private gpxLoader: GeoLoader;

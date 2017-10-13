@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
@@ -16,7 +16,8 @@ export enum Layout {
 @Component({
     selector: 'app-sdoc-list',
     templateUrl: './sdoc-list.component.html',
-    styleUrls: ['./sdoc-list.component.css']
+    styleUrls: ['./sdoc-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocListComponent implements OnChanges {
     @Input()

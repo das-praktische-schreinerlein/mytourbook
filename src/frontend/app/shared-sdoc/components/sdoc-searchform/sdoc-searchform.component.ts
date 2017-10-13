@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -12,7 +12,8 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 @Component({
     selector: 'app-sdoc-searchform',
     templateUrl: './sdoc-searchform.component.html',
-    styleUrls: ['./sdoc-searchform.component.css']
+    styleUrls: ['./sdoc-searchform.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocSearchformComponent implements OnInit, AfterViewInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
@@ -346,9 +347,12 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         this.humanReadableSearchForm = this.searchFormConverter.searchFormToHumanReadableText(sdocSearchSearchResult.searchForm);
     }
 
-    private initGeoCodeAutoComplete(): void {
-        this.initGeoCodeAutoCompleteField('.nearbyAddressAutocomplete');
-        this.initGeoCodeAutoCompleteField('.nearbyAddressAutocompleteShort');
+    initGeoCodeAutoComplete(timeout?: number): void {
+        const me = this;
+        setTimeout(function init() {
+            me.initGeoCodeAutoCompleteField('.nearbyAddressAutocomplete');
+            me.initGeoCodeAutoCompleteField('.nearbyAddressAutocompleteShort');
+        }, timeout || 0);
     }
 
     private initGeoCodeAutoCompleteField(selector: string): void {

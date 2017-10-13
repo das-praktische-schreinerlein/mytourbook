@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
@@ -22,7 +22,8 @@ import {CommonRoutingService, RoutingState} from '../../../../shared/angular-com
 @Component({
     selector: 'app-sectionpage',
     templateUrl: './section-page.component.html',
-    styleUrls: ['./section-page.component.css']
+    styleUrls: ['./section-page.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SectionPageComponent implements OnInit {
     private flgDescRendered = false;
@@ -38,7 +39,8 @@ export class SectionPageComponent implements OnInit {
                 private commonRoutingService: CommonRoutingService, private searchFormConverter: SDocSearchFormConverter,
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
-                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService) {
+                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
+                private cd: ChangeDetectorRef) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -65,6 +67,7 @@ export class SectionPageComponent implements OnInit {
                     this.pageUtils.setRobots(true, true);
                     this.pageUtils.setMetaLanguage();
 
+                    me.cd.markForCheck();
                     return;
                 }
 
@@ -116,6 +119,7 @@ export class SectionPageComponent implements OnInit {
                 }
 
                 this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                me.cd.markForCheck();
                 return;
             }
         );
@@ -172,6 +176,7 @@ export class SectionPageComponent implements OnInit {
     onSearchSDoc(sdocSearchForm: SDocSearchForm) {
         this.sdocSearchForm = sdocSearchForm;
         this.sDocRoutingService.setLastSearchUrl(this.getToSearchUrl());
+        this.cd.markForCheck();
         return false;
     }
 
@@ -179,6 +184,7 @@ export class SectionPageComponent implements OnInit {
         if (sdocSearchResult !== undefined && sdocSearchResult.searchForm !== undefined) {
             this.sdocSearchResult = sdocSearchResult;
         }
+        this.cd.markForCheck();
         return false;
     }
 
@@ -188,17 +194,16 @@ export class SectionPageComponent implements OnInit {
     }
 
     getToSearchUrl() {
-        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl,
-            SDocSearchFormFactory.createSanitized({
-                theme: this.pdoc.theme,
-                type: 'route,location,track,trip,news',
-                actiontype: this.sdocSearchForm.actiontype,
-                when: this.sdocSearchForm.when,
-                what: this.sdocSearchForm.what,
-                where: this.sdocSearchForm.where,
-                nearBy: this.sdocSearchForm.nearby,
-                nearbyAddress: this.sdocSearchForm.nearbyAddress
-            }));
+        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
+            theme: this.pdoc.theme,
+            type: 'route,location,track,trip,news',
+            actiontype: this.sdocSearchForm.actiontype.toString(),
+            when: this.sdocSearchForm.when.toString(),
+            what: this.sdocSearchForm.what.toString(),
+            where: this.sdocSearchForm.where.toString(),
+            nearBy: this.sdocSearchForm.nearby,
+            nearbyAddress: this.sdocSearchForm.nearbyAddress
+        }));
     }
 
     submitToSearch() {

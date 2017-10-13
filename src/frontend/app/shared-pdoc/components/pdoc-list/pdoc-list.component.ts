@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 
 export enum Layout {
@@ -10,7 +10,8 @@ export enum Layout {
 @Component({
     selector: 'app-pdoc-list',
     templateUrl: './pdoc-list.component.html',
-    styleUrls: ['./pdoc-list.component.css']
+    styleUrls: ['./pdoc-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PDocListComponent {
     @Input()

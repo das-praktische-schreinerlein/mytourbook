@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
@@ -14,7 +14,8 @@ export interface TimetableColumn {
 @Component({
     selector: 'app-sdoc-timetable',
     templateUrl: './sdoc-timetable.component.html',
-    styleUrls: ['./sdoc-timetable.component.css']
+    styleUrls: ['./sdoc-timetable.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocTimetableComponent implements OnChanges {
     columns: TimetableColumn[] = [];

@@ -1,14 +1,16 @@
-import {Component, Injectable, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Injectable, OnInit} from '@angular/core';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
+import {CommonRoutingService, RoutingState} from '../../../shared/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-errorpage',
     templateUrl: './errorpage.component.html',
-    styleUrls: ['./errorpage.component.css']
+    styleUrls: ['./errorpage.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 @Injectable()
 export class ErrorPageComponent implements  OnInit {
-    constructor(private pageUtils: PageUtils) {
+    constructor(private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService) {
     }
 
     ngOnInit() {
@@ -16,6 +18,7 @@ export class ErrorPageComponent implements  OnInit {
         this.pageUtils.setTranslatedDescription('meta.desc.prefix.errorPage', {}, 'Error');
         this.pageUtils.setRobots(false, false);
         this.pageUtils.setMetaLanguage();
+        this.commonRoutingService.setRoutingState(RoutingState.DONE);
         return;
     }
 }

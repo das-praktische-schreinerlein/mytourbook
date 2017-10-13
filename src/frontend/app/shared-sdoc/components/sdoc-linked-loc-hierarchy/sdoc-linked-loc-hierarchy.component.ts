@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
@@ -9,7 +9,8 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 @Component({
     selector: 'app-sdoc-linked-loc-hierarchy',
     templateUrl: './sdoc-linked-loc-hierarchy.component.html',
-    styleUrls: ['./sdoc-linked-loc-hierarchy.component.css']
+    styleUrls: ['./sdoc-linked-loc-hierarchy.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocLinkedLocHierarchyComponent implements OnChanges {
     locations: any[];

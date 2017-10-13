@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
@@ -21,7 +21,8 @@ import {CommonRoutingService, RoutingState} from '../../../../shared/angular-com
 @Component({
     selector: 'app-sdoc-showpage',
     templateUrl: './sdoc-showpage.component.html',
-    styleUrls: ['./sdoc-showpage.component.css']
+    styleUrls: ['./sdoc-showpage.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocShowpageComponent implements OnInit, OnDestroy {
     private flgDescRendered = false;
@@ -37,7 +38,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
-                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService) {
+                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
+                private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -87,6 +89,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     }
                     this.pageUtils.setMetaLanguage();
 
+                    me.cd.markForCheck();
                     return;
                 }
 
@@ -154,6 +157,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 }
 
                 this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                me.cd.markForCheck();
                 return;
             }
         );

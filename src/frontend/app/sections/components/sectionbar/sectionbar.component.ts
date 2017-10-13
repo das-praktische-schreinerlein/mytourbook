@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
@@ -13,7 +13,8 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 @Component({
     selector: 'app-sectionbar',
     templateUrl: './sectionbar.component.html',
-    styleUrls: ['./sectionbar.component.css']
+    styleUrls: ['./sectionbar.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SectionBarComponent implements OnInit {
     idValidationRule = new IdValidationRule(true);
@@ -26,7 +27,7 @@ export class SectionBarComponent implements OnInit {
 
     constructor(public fb: FormBuilder, private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver, private toastr: ToastsManager,
-                private router: Router, vcr: ViewContainerRef, private pageUtils: PageUtils) {
+                private router: Router, vcr: ViewContainerRef, private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -40,6 +41,7 @@ export class SectionBarComponent implements OnInit {
                     me.pdoc = undefined;
                     me.themeFormGroup.patchValue({'theme': undefined});
                     me.sections = [];
+                    me.cd.markForCheck();
                     return;
                 }
 
@@ -48,10 +50,13 @@ export class SectionBarComponent implements OnInit {
 
                 me.pageUtils.setGlobalStyle(me.pdoc.css, 'sectionStyle');
 
+                me.cd.markForCheck();
                 this.pdocDataService.getById('menu', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                         me.sections = me.getSubSections(pdoc);
+                    me.cd.markForCheck();
                     }).catch(function onNotFound(error) {
                         me.sections = [];
+                        me.cd.markForCheck();
                         console.error('show getSection failed:', error);
                     });
             }

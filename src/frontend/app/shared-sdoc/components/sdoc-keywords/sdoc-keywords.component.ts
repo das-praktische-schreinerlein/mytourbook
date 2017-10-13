@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocContentUtils, StructuredKeyword} from '../../services/sdoc-contentutils.service';
@@ -7,7 +7,8 @@ import {AppState, GenericAppService} from '../../../../shared/commons/services/g
 @Component({
     selector: 'app-sdoc-keywords',
     templateUrl: './sdoc-keywords.component.html',
-    styleUrls: ['./sdoc-keywords.component.css']
+    styleUrls: ['./sdoc-keywords.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocKeywordsComponent implements OnInit, OnChanges {
     keywordKats: StructuredKeyword[] = [];

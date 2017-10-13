@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocRateTechRecord} from '../../../../shared/sdoc-commons/model/records/sdocratetech-record';
@@ -6,7 +6,8 @@ import {SDocRateTechRecord} from '../../../../shared/sdoc-commons/model/records/
 @Component({
     selector: 'app-sdoc-ratetech',
     templateUrl: './sdoc-ratetech.component.html',
-    styleUrls: ['./sdoc-ratetech.component.css']
+    styleUrls: ['./sdoc-ratetech.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocRateTechComponent implements OnChanges {
     sdocratetech: SDocRateTechRecord;

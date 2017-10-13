@@ -1,9 +1,9 @@
 <form [formGroup]="searchFormGroup" (ngSubmit)="onSubmitSearch($event)" class="form-control-sm">
-        <div class="row visible-print-block">
-            <div class="col-sm-12">
-                Filter: {{humanReadableSearchForm}}
-            </div>
+    <div class="row visible-print-block">
+        <div class="col-sm-12">
+            Filter: {{humanReadableSearchForm}}
         </div>
+    </div>
 
     <!-- infos -->
     <ng-container>
@@ -15,9 +15,9 @@
                     <button *ngIf="!showFulltext" class="btn btn-configure btn-sm float-right" (click)="showForm = showFulltext = true" i18n="button show Fulltextform|Buttontext to show Fulltextform@@button.searchform.show.Fulltextform">"Text" filtern</button>
                     <button *ngIf="!showWhat" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhat = true" i18n="button show Whatform|Buttontext to show Whatform@@button.searchform.show.Whatform">"Was" filtern</button>
                     <button *ngIf="!showWhen" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhen = true" i18n="button show Whenform|Buttontext to show Whatform@@button.searchform.show.Whenform">"Zeit" ändern</button>
-                    <button *ngIf="!showWhere" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhere = true" i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</button>
+                    <button *ngIf="!showWhere" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhere = true; initGeoCodeAutoComplete(500);" i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</button>
                 </ng-container>
-                <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="showForm = showDetails = showWhen = showFulltext = showWhat = showWhere = true" i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</button>
+                <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="showForm = showDetails = showWhen = showFulltext = showWhat = showWhere = true; initGeoCodeAutoComplete(500);" i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</button>
                 <button *ngIf="!short && showForm" class="btn btn-action btn-sm float-right" (click)="showForm = false" i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</button>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
@@ -8,7 +8,8 @@ import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-map',
-    templateUrl: './sdoc-map.component.html'
+    templateUrl: './sdoc-map.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocMapComponent implements OnChanges {
     showLoadingSpinner = false;

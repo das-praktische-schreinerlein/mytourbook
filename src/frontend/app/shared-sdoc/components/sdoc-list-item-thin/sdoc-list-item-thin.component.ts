@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
@@ -7,7 +7,8 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
 @Component({
     selector: 'app-sdoc-list-item-thin',
     templateUrl: './sdoc-list-item-thin.component.html',
-    styleUrls: ['./sdoc-list-item-thin.component.css']
+    styleUrls: ['./sdoc-list-item-thin.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocListItemThinComponent implements OnChanges {
     public contentUtils: SDocContentUtils;

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
@@ -21,7 +21,8 @@ import {CommonRoutingService, RoutingState} from '../../../../shared/angular-com
 @Component({
     selector: 'app-sdoc-searchpage',
     templateUrl: './sdoc-searchpage.component.html',
-    styleUrls: ['./sdoc-searchpage.component.css']
+    styleUrls: ['./sdoc-searchpage.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
@@ -42,7 +43,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private pageUtils: PageUtils) {
+                private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -158,6 +159,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 }
 
                 this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                me.cd.markForCheck();
                 return;
             }
         );
@@ -220,6 +222,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             this.onPerPageChange(10);
         }
 //        this.redirectToSearch();
+        this.cd.markForCheck();
         return false;
     }
 
@@ -266,6 +269,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
         const me = this;
         me.showLoadingSpinner = true;
+        me.cd.markForCheck();
         this.sdocDataService.search(this.searchForm, {
             showFacets: true,
             loadTrack: true,
@@ -280,10 +284,12 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 me.searchForm = sdocSearchResult.searchForm;
             }
             me.showLoadingSpinner = false;
+            me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:' + reason);
             me.showLoadingSpinner = false;
+            me.cd.markForCheck();
         });
     }
 }

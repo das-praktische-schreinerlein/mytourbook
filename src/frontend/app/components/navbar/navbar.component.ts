@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
@@ -8,14 +8,15 @@ import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.css']
+    styleUrls: ['./navbar.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit {
     sections: PDocRecord[];
     public isExpanded = false;
 
     constructor(private route: ActivatedRoute, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private pdocDataService: PDocDataService, private pageUtils: PageUtils) {
+                private pdocDataService: PDocDataService, private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -31,11 +32,13 @@ export class NavbarComponent implements OnInit {
                     me.sections = [];
                     console.error('show getSection failed:', error);
                 });
+                me.cd.markForCheck();
             },
-            (error: {reason: any}) => {
+            (error: { reason: any }) => {
                 me.sections = [];
                 me.toastr.error('Es gibt leider Probleme beim Laden - am besten noch einmal probieren :-(', 'Oje!');
                 console.error('show getSections failed:' + error.reason);
+                me.cd.markForCheck();
             }
         );
     }

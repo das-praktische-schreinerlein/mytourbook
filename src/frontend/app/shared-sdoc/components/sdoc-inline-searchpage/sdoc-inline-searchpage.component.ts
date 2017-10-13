@@ -1,4 +1,16 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange, ViewContainerRef} from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChange,
+    ViewContainerRef
+} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
@@ -16,7 +28,8 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 @Component({
     selector: 'app-sdoc-inline-searchpage',
     templateUrl: './sdoc-inline-searchpage.component.html',
-    styleUrls: ['./sdoc-inline-searchpage.component.css']
+    styleUrls: ['./sdoc-inline-searchpage.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChanges {
     private initialized = false;
@@ -72,7 +85,8 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
     constructor(private appService: GenericAppService, private commonRoutingService: CommonRoutingService,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
-                private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef) {
+                private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private cd: ChangeDetectorRef) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -96,7 +110,6 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
-//            console.error("doNewSearchWithparams", this.params);
             return this.doSearchWithParams(this.params);
         }
     }
@@ -144,6 +157,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         console.log('doSearch form:', this.searchForm);
         const me = this;
         me.showLoadingSpinner = true;
+        me.cd.markForCheck();
         this.sdocDataService.search(this.searchForm,
             {
                 showFacets: this.showForm || this.loadFacets || (this.showTimetable ? ['week_is', 'month_is'] : false),
@@ -161,12 +175,14 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
                 me.searchForm = sdocSearchResult.searchForm;
             }
             me.searchResultFound.emit(me.searchResult);
+            me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:' + reason);
             me.showLoadingSpinner = false;
             me.searchResult = new SDocSearchResult(me.searchForm, 0, [], new Facets());
             me.searchResultFound.emit(me.searchResult);
+            me.cd.markForCheck();
         });
     }
 }

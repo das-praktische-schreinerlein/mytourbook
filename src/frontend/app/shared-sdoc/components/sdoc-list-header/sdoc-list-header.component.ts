@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
@@ -6,7 +6,8 @@ import {FormBuilder} from '@angular/forms';
 @Component({
     selector: 'app-sdoc-list-header',
     templateUrl: './sdoc-list-header.component.html',
-    styleUrls: ['./sdoc-list-header.component.css']
+    styleUrls: ['./sdoc-list-header.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocListHeaderComponent implements OnInit {
 

@@ -1,4 +1,4 @@
-import {Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
 import {ToastsManager} from 'ng2-toastr';
 import {TranslateService} from '@ngx-translate/core';
 import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
@@ -10,7 +10,7 @@ import {CommonRoutingService, RoutingState} from '../../../shared/angular-common
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    providers: []
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 @Injectable()
 export class AppComponent {
@@ -19,7 +19,7 @@ export class AppComponent {
 
     constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,
-                private http: Http, private commonRoutingService: CommonRoutingService) {
+                private http: Http, private commonRoutingService: CommonRoutingService, private cd: ChangeDetectorRef) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(locale);
 
@@ -55,6 +55,7 @@ export class AppComponent {
                 } else {
                     this.showLoadingSpinner = false;
                 }
+                this.cd.markForCheck();
             }
         );
     }

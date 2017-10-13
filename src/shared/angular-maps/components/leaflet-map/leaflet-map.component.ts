@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {AfterViewChecked, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import 'leaflet';
 import 'leaflet.markercluster';
 import {GeoParsedFeature, MapElement} from '../../services/leaflet-geo.plugin';
@@ -18,7 +18,8 @@ export interface LeafletMapOptions {
 
 @Component({
     selector: 'app-leaflet-map',
-    templateUrl: './leaflet-map.component.html'
+    templateUrl: './leaflet-map.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     // create the tile layer with correct attribution
