@@ -71,7 +71,6 @@
     "pm2": "2.7.1",
     "request-ip": "2.0.2",
     "rxjs": "5.4.3",
-    "typescript": "^2.5.3",
     "vis": "4.21.0",
     "zone.js": "0.8.18"
   },
@@ -102,6 +101,6 @@
     "protractor": "5.1.2",
     "ts-node": "2.0.0",
     "tslint": "4.5.1",
-    "typescript": "2.1.6"
+    "typescript": "2.5.3"
   }
 }
