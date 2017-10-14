@@ -141,7 +141,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     }
 
     onToSearchPage(event: any) {
-        this.commonRoutingService.navigateByUrl(this.getToSearchUrl(), '');
+        this.commonRoutingService.navigateByUrl(this.getToSearchUrl());
         return false;
     }
 

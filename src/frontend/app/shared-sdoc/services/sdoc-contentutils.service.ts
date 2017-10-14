@@ -4,8 +4,8 @@ import {SDocImageRecord} from '../../../shared/sdoc-commons/model/records/sdocim
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plugin';
-import 'leaflet';
 import {SDocRoutingService} from './sdoc-routing.service';
+import * as L from 'leaflet';
 import LatLng = L.LatLng;
 
 export interface StructuredKeyword {

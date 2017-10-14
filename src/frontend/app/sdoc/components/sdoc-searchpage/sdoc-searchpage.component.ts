@@ -17,6 +17,7 @@ import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-rec
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
+import * as L from 'leaflet';
 
 @Component({
     selector: 'app-sdoc-searchpage',
