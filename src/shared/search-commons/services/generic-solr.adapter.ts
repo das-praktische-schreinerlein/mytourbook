@@ -223,7 +223,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         const records: R[] = this.extractRecordsFromRequestResult(mapper, result);
         const facets: Facets = this.extractFacetsFromRequestResult(mapper, result);
         const searchResult = new GenericSearchResult(undefined, count, records, facets);
-        return utils.Promise.resolve(searchResult);
+        return utils.Promise.resolve(<S>searchResult);
     }
 
     afterCount(mapper: Mapper, props: IDict, opts: any, result: any): Promise<number> {
@@ -250,7 +250,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     }
 
     afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        return utils.Promise.resolve(<Record>undefined);
+        return utils.Promise.resolve(<T>undefined);
     }
 
     _create (mapper: Mapper, props: any, opts: any) {

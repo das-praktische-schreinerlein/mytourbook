@@ -112,7 +112,7 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         const facets: Facets = this.extractFacetsFromRequestResult(mapper, result);
         const searchForm  = result.searchForm;
         const searchResult = new GenericSearchResult(searchForm, count, records, facets);
-        return utils.Promise.resolve(searchResult);
+        return utils.Promise.resolve(<S>searchResult);
     }
 
     afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
@@ -130,7 +130,7 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
     }
 
     afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        return utils.Promise.resolve(<Record>undefined);
+        return utils.Promise.resolve(<T>undefined);
     }
 
     deserialize(mapper: Mapper, response: any, opts: any) {

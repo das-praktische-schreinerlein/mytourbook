@@ -1,3 +1,4 @@
+import * as L from 'leaflet';
 import LatLng = L.LatLng;
 
 export enum GeoElementType {

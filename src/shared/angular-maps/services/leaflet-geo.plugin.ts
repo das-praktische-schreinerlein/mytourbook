@@ -4,6 +4,9 @@
 import {GeoLoader} from './geo.loader';
 import {GeoElement, GeoElementType} from './geo.parser';
 
+import * as L from 'leaflet';
+import 'leaflet.markercluster';
+
 export interface MapElement {
     id: string;
     name: string;

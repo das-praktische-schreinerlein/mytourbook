@@ -7,6 +7,8 @@ import {GeoJsonParser} from '../../services/geojson.parser';
 import {GeoGpxParser} from '../../services/geogpx.parser';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {MinimalHttpBackendClient} from '../../../commons/services/minimal-http-backend-client';
+
+import * as L from 'leaflet';
 import LatLng = L.LatLng;
 import Layer = L.Layer;
 

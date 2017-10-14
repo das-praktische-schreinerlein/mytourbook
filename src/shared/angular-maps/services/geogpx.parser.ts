@@ -1,3 +1,4 @@
+import * as L from 'leaflet';
 import {GeoElement, GeoElementType, GeoParser} from './geo.parser';
 
 export class GeoGpxParser extends GeoParser {

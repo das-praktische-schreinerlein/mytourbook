@@ -108,7 +108,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         const records: R[] = this.extractRecordsFromRequestResult(mapper, result);
         const facets: Facets = this.extractFacetsFromRequestResult(mapper, result);
         const searchResult = new GenericSearchResult(undefined, count, records, facets);
-        return utils.Promise.resolve(searchResult);
+        return utils.Promise.resolve(<S>searchResult);
     }
 
 
