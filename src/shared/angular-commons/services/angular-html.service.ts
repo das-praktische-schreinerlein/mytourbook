@@ -26,7 +26,7 @@ export class AngularHtmlService {
             if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('mailto://')) {
                 continue;
             }
-            link.removeEventListener('click');
+            // TODO link.removeEventListener('click');
             link.addEventListener('click', function (event) {
                 event.preventDefault();
                 me.commonRoutingService.navigateByUrl(url);

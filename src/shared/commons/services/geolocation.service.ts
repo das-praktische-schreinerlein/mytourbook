@@ -42,8 +42,9 @@ export class GeoLocationService {
         }
 
         this.geoCoder.autocomplete(inputEl);
-        inputEl.removeEventListener('place_changed');
+        // TODO inputEl.removeEventListener('place_changed');
         inputEl.addEventListener('place_changed', (event: any) => {
+            event.preventDefault();
             result.next(event);
         });
 
