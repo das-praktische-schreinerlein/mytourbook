@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Http, HttpModule} from '@angular/http';
+import {HttpModule} from '@angular/http';
 import {AppComponent} from './components/app/app.component';
 import {AppService} from './services/app.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -25,9 +25,10 @@ import {BackendHttpClient} from './services/backend-http-client';
 import {MinimalHttpBackendClient} from '../shared/commons/services/minimal-http-backend-client';
 import {AngularHtmlService} from '../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../shared/angular-commons/services/common-routing.service';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 // AoT requires an exported function for factories
-export function createTranslateLoader(http: Http) {
+export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/locales/locale-', '.json');
 }
 
@@ -39,6 +40,7 @@ export function createTranslateLoader(http: Http) {
     ],
     imports: [
         HttpModule,
+        HttpClientModule,
         NgbModule.forRoot(),
         BrowserModule,
         ToastModule.forRoot(),
@@ -46,7 +48,7 @@ export function createTranslateLoader(http: Http) {
             loader: {
                 provide: TranslateLoader,
                 useFactory: (createTranslateLoader),
-                deps: [Http]
+                deps: [HttpClient]
             }
         }),
         AngularCommonsModule,
