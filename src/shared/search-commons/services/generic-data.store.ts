@@ -6,6 +6,7 @@ import {GenericSolrAdapter} from './generic-solr.adapter';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import {GenericSearchHttpAdapter} from './generic-search-http.adapter';
+import {GenericSqlAdapter} from './generic-sql.adapter';
 
 export abstract class GenericDataStore <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> {
@@ -175,7 +176,8 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                 orderBy: [['created_at', 'descTxt']]
             };
             if (this.getAdapterForMapper(mapperName) === undefined ||
-                (! (this.getAdapterForMapper(mapperName) instanceof GenericSearchHttpAdapter)) ||
+                (! (this.getAdapterForMapper(mapperName) instanceof GenericSearchHttpAdapter)
+                && ! (this.getAdapterForMapper(mapperName) instanceof GenericSqlAdapter)) ||
                 (opts && opts.forceLocalStore)) {
                 // the resolve / reject functions control the fate of the promise
                 me.findAll(mapperName, query, options).then(function doneFindAll(documents: R[]) {
