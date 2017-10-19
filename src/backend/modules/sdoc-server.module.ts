@@ -13,6 +13,7 @@ import {IdValidationRule} from '../shared/search-commons/model/forms/generic-val
 import {Facets} from '../shared/search-commons/model/container/facets';
 import {HttpAdapter} from 'js-data-http';
 import {GenericSearchOptions} from '../shared/search-commons/services/generic-search.service';
+import {SDocSqlAdapter} from '../shared/sdoc-commons/services/sdoc-sql.adapter';
 
 export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
@@ -25,6 +26,7 @@ export class SDocServerModule {
         const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils(), filterConfig);
         const dataService: SDocDataService = new SDocDataService(dataStore);
 
+/**
         // configure solr-adapter
         const options = {
             basePath: backendConfig['solrCoreSDoc'],
@@ -41,6 +43,20 @@ export class SDocServerModule {
             }
         };
         const adapter = new SDocSolrAdapter(options);
+ **/
+        const options = {
+            knexOpts: {
+                client: 'mysql',
+                connection: {
+                    host: 'localhost',
+                    user: 'bla',
+                    password: 'blum',
+                    database: 'mytb',
+                    port: '3306'
+                }
+            }
+        };
+        const adapter = new SDocSqlAdapter(options);
         dataStore.setAdapter('http', adapter, '', {});
 
         // configure express
