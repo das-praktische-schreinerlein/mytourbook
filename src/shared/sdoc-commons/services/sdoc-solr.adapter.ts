@@ -232,7 +232,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         return record;
     }
 
-    getAdapterFields(mapper: Mapper, params: any, opts: any): string[] {
+    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[] {
         const fields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i',
             'date_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
@@ -256,7 +256,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         return fields;
     };
 
-    getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+    getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const facetConfigs = {
             'actiontype_ss': {
                 'f.actiontype_ss.facet.limit': '-1',
@@ -331,7 +331,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         return facetParams;
     };
 
-    getSpatialParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+    getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const spatialParams = new Map<string, any>();
 
         if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
@@ -348,7 +348,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     };
 
 
-    getSortParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+    getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const sortParams = new Map<string, any>();
 
         const form = opts.originalSearchForm || {};
