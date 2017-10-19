@@ -15,33 +15,18 @@ import {HttpAdapter} from 'js-data-http';
 import {GenericSearchOptions} from '../shared/search-commons/services/generic-search.service';
 
 export class SDocServerModule {
-    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
-        // configure store
-        const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
-        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
-        for (const themeName in themeFilters) {
-            filterConfig.set(themeName, themeFilters[themeName]);
+    private static dataService: SDocDataService;
+
+    public static getDataService(backendConfig: {}): SDocDataService {
+        if (!this.dataService) {
+            this.dataService = SDocServerModule.createDataService(backendConfig);
         }
-        const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils(), filterConfig);
-        const dataService: SDocDataService = new SDocDataService(dataStore);
 
-        // configure solr-adapter
-        const options = {
-            basePath: backendConfig['solrCoreSDoc'],
-            suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
-            http: axios,
-            beforeHTTP: function (config, opts) {
-                config.auth = {
-                    username: backendConfig['solrCoreSDocReadUsername'],
-                    password: backendConfig['solrCoreSDocReadPassword']
-                };
+        return this.dataService;
+    }
 
-                // Now do the default behavior
-                return HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
-            }
-        };
-        const adapter = new SDocSolrAdapter(options);
-        dataStore.setAdapter('http', adapter, '', {});
+    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
+        const dataService: SDocDataService = SDocServerModule.getDataService(backendConfig);
 
         // configure express
         const idValidationRule = new IdValidationRule(true);
@@ -136,5 +121,36 @@ export class SDocServerModule {
                     return next('not found');
                 }
             });
+    }
+
+    private static createDataService(backendConfig: {}): SDocDataService {
+        // configure store
+        const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
+        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
+        for (const themeName in themeFilters) {
+            filterConfig.set(themeName, themeFilters[themeName]);
+        }
+        const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils(), filterConfig);
+        const dataService: SDocDataService = new SDocDataService(dataStore);
+
+        // configure solr-adapter
+        const options = {
+            basePath: backendConfig['solrCoreSDoc'],
+            suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
+            http: axios,
+            beforeHTTP: function (config, opts) {
+                config.auth = {
+                    username: backendConfig['solrCoreSDocReadUsername'],
+                    password: backendConfig['solrCoreSDocReadPassword']
+                };
+
+                // Now do the default behavior
+                return HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
+            }
+        };
+        const adapter = new SDocSolrAdapter(options);
+        dataStore.setAdapter('http', adapter, '', {});
+
+        return dataService;
     }
 }
