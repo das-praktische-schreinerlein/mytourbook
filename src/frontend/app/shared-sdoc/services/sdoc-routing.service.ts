@@ -27,7 +27,7 @@ export class SDocRoutingService {
     }
 
     getShowUrl(sDoc: SDocRecord, from: string): string {
-        const name = (sDoc.name ? sDoc.name : '')
+        const name = (sDoc.name ? sDoc.name : 'name')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
             .replace(/ +/g, ' ').replace(/ /g, '-').trim();
         return this.lastBaseUrl + 'show/' + name + '/' + sDoc.id; // + (from ? '?from=' + from : '');
