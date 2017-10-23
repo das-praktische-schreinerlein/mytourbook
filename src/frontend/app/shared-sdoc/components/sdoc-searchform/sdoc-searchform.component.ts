@@ -177,6 +177,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         defaultTitle: 'Dauer',
         allSelected: 'Alle'};
     public humanReadableSearchForm: SafeHtml = '';
+    public humanReadableSpecialFilter = '';
 
     @Input()
     public short? = false;
@@ -198,6 +199,9 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
 
     @Input()
     public showDetails? = this.showForm;
+
+    @Input()
+    public showSpecialFilter? = this.showForm;
 
     @Input()
     public set searchResult(value: SDocSearchResult) {
@@ -361,24 +365,30 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             me.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
 
+        me.humanReadableSpecialFilter = '';
         this.humanReadableSearchForm = '';
         const filters: HumanReadableFilter[] = this.searchFormConverter.searchFormToHumanReadableFilter(sdocSearchSearchResult.searchForm);
-        const resolveableFilters = this.searchFormConverter.extractResolvableIdsFrom(filters);
-        if (resolveableFilters.size > 0) {
-            this.sdocDataCacheService.resolveNamesForIds(Array.from(resolveableFilters.keys())).then(nameCache => {
+        const resolveableFilters = this.searchFormConverter.extractResolvableFilters(filters);
+        if (resolveableFilters.length > 0) {
+            const resolveableIds = this.searchFormConverter.extractResolvableIds(resolveableFilters);
+            this.sdocDataCacheService.resolveNamesForIds(Array.from(resolveableIds.keys())).then(nameCache => {
                 me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
                     me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, nameCache));
+                me.humanReadableSpecialFilter = me.searchFormConverter.searchFormToHumanReadableMarkup(resolveableFilters, true, nameCache);
+
                 me.cd.markForCheck();
             }).catch(function onRejected(reason) {
                 me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
                 console.error('resolve moreFilterIds failed:' + reason);
                 me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
-                    me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, resolveableFilters));
+                    me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
+                me.humanReadableSpecialFilter = me.searchFormConverter.searchFormToHumanReadableMarkup(resolveableFilters, true, undefined);
+
                 me.cd.markForCheck();
             });
         } else {
             this.humanReadableSearchForm = this.sanitizer.bypassSecurityTrustHtml(
-                this.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, resolveableFilters));
+                this.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
         }
     }
 
@@ -388,6 +398,12 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             me.initGeoCodeAutoCompleteField('.nearbyAddressAutocomplete');
             me.initGeoCodeAutoCompleteField('.nearbyAddressAutocompleteShort');
         }, timeout || 0);
+    }
+
+    removeMoreIdFilters(): void {
+        const values = this.searchFormGroup.getRawValue();
+        this.searchFormGroup.patchValue({'moreFilter': undefined});
+        this.search.emit(values);
     }
 
     private initGeoCodeAutoCompleteField(selector: string): void {

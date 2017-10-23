@@ -199,15 +199,19 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         return this.searchFormToHumanReadableMarkup(filters, true, obJCache);
     }
 
-    searchFormToHumanReadableMarkup(filters: HumanReadableFilter[], textOnly: boolean, obJCache: Map<string, string>): string {
+    searchFormToHumanReadableMarkup(filters: HumanReadableFilter[], textOnly: boolean, objCache: Map<string, string>): string {
         const str = [];
 
         for (const filter of filters) {
             if (filter && filter.values && filter.values.length > 0) {
-                const resolvedValues = [];
-                for (const value of filter.values) {
-                    const resolvedValue = obJCache.get(this.HRD_IDS[filter.id.replace('hrt_', '')] + '_' + value);
-                    resolvedValues.push(resolvedValue ? resolvedValue : value);
+                let resolvedValues = [];
+                if (objCache) {
+                    for (const value of filter.values) {
+                        const resolvedValue = objCache.get(this.HRD_IDS[filter.id.replace('hrt_', '')] + '_' + value);
+                        resolvedValues.push(resolvedValue ? resolvedValue : value);
+                    }
+                } else {
+                    resolvedValues = filter.values;
                 }
                 if (textOnly) {
                     str.push([(filter.prefix ? filter.prefix + ' ' : ''), '"', resolvedValues.join(','), '"'].join(' '));
@@ -223,11 +227,22 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         return str.join(' ');
     }
 
-    extractResolvableIdsFrom(filters: HumanReadableFilter[]): Map<string, string> {
+    extractResolvableFilters(filters: HumanReadableFilter[]): HumanReadableFilter[] {
+        const res: HumanReadableFilter[] = [];
+        for (const filter of filters) {
+            if (!filter || !filter.values || filter.values.length <= 0 || !this.HRD_IDS[filter.id.replace('hrt_', '')]) {
+                continue;
+            }
+            res.push(filter);
+        }
+
+        return res;
+    }
+    extractResolvableIds(filters: HumanReadableFilter[]): Map<string, string> {
         const obJCache = new Map<string, string>();
 
         for (const filter of filters) {
-            if (!filter || !filter.values || filter.values.length <= 0 || !this.HRD_IDS[filter.id.replace('hrt_', '')]) {
+            if (!filter || !filter.values || filter.values.length <= 0) {
                 continue;
             }
 
@@ -238,7 +253,6 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
 
         return obJCache;
     }
-
 
     searchFormToHumanReadableFilter(sdocSearchForm: SDocSearchForm): HumanReadableFilter[] {
         const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
