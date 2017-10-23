@@ -4,6 +4,12 @@ import {GenericSearchFormSearchFormConverter} from '../../../shared/search-commo
 import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
 import {TranslateService} from '@ngx-translate/core';
 
+export interface HumanReadableFilter {
+    id: string;
+    prefix: string;
+    values: string[];
+}
+
 @Injectable()
 export class SDocSearchFormConverter implements GenericSearchFormSearchFormConverter<SDocSearchForm> {
     private splitter = '_,_';
@@ -80,7 +86,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             ['locId:', 'loc:', 'nearby:', 'nearbyAddress:']);
         let where = '';
         if (whereValues.has('loc:')) {
-           where = this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('loc:'), 'loc:', ',');
+            where = this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('loc:'), 'loc:', ',');
         }
         if (whereValues.has('unknown')) {
             where += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('unknown'), '', ',');
@@ -177,10 +183,34 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         searchForm.pageNum = +params['pageNum'] || 1;
     }
 
-    searchFormToHumanReadableText(sdocSearchForm: SDocSearchForm): string {
+    searchFormToHumanReadableText(sdocSearchForm: SDocSearchForm, textOnly: boolean): string {
+        return this.searchFormToHumanReadableMarkup(sdocSearchForm, true);
+    }
+
+    searchFormToHumanReadableMarkup(sdocSearchForm: SDocSearchForm, textOnly: boolean): string {
+        const filters: HumanReadableFilter[] = this.searchFormToHumanReadableFilter(sdocSearchForm);
+        const str = [];
+
+        for (const filter of filters) {
+            if (filter && filter.values && filter.values.length > 0) {
+                if (textOnly) {
+                    str.push([(filter.prefix ? filter.prefix + ' ' : ''), '"', filter.values.join(','), '"'].join(' '));
+                } else {
+                    str.push(['<div class="filter filter_' + filter.id + '">',
+                        '<span class="filterPrefix filterPrefix_' + filter.id + '">', (filter.prefix ? filter.prefix + ' ' : ''), '</span>',
+                        '<span class="filterValue filterValue_' + filter.id + '">', '"', filter.values.join(','), '"', '</span>', '</div>'
+                    ].join(''));
+                }
+            }
+        }
+
+        return str.join(' ');
+    }
+
+    searchFormToHumanReadableFilter(sdocSearchForm: SDocSearchForm): HumanReadableFilter[] {
         const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
 
-        const res = [];
+        const res: HumanReadableFilter[] = [];
         res.push(this.translateService.instant('hrt_search') || 'search');
         res.push(this.valueToHumanReadableText(sdocSearchForm.type, 'hrt_type', 'hrt_alltypes', true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.where, 'hrt_in', undefined, true));
@@ -195,6 +225,14 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             .replace(new RegExp('kw_', 'g'), '');
         res.push(this.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
+        const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(sdocSearchForm.moreFilter, this.splitter,
+            ['track_id_i', 'trip_id_i', 'trip_id_is', 'news_id_i', 'news_id_is', 'loc_id_i', 'loc_lochirarchie_ids_txt',
+                'image_id_i', 'route_id_i', 'route_id_is', 'loc_parent_id_i']);
+        moreFilterValues.forEach((value, key) => {
+            const moreValue = this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get(key), key + ':', ',');
+            res.push(this.valueToHumanReadableText(moreValue, key === 'unknown' ? 'hrt_moreFilter' : 'hrt_' + key, undefined, true));
+        });
+
         res.push(this.valueToHumanReadableText(sdocSearchForm.fulltext, 'hrt_fulltext', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.techDataAltitudeMax, 'hrt_techDataAltitudeMax', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.techDataAscent, 'hrt_techDataAscent', undefined, true));
@@ -202,30 +240,35 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
 
-        return res.join(' ');
+        return res;
     }
 
-    private valueToHumanReadableText(valueString: any, prefix: string, defaultValue: string, translate: boolean): string {
-        let res = '';
-        if (valueString) {
+    private valueToHumanReadableText(valueString: any, prefix: string, defaultValue: string, translate: boolean): HumanReadableFilter {
+        let res: HumanReadableFilter;
+        if (valueString && valueString.toString() !== '') {
+            res = {
+                id: prefix,
+                prefix: undefined,
+                values: []
+            };
             if (prefix) {
-                res += (translate ? this.translateService.instant(prefix) : prefix)
-                    + ' ';
+                res.prefix = (translate ? this.translateService.instant(prefix) : prefix);
             }
             const values = valueString.toString().split(',');
-            if (values.length > 1) {
-                res += '"';
-            }
             for (const value of values) {
-                res += (translate ? this.translateService.instant(value) || value : value)
-                    + ', ';
-            }
-            res = res.slice(0, res.length - 2);
-            if (values.length > 1) {
-                res += '"';
+                const safeValue = this.searchParameterUtils.escapeHtml(value);
+                res.values.push((translate ? this.translateService.instant(safeValue) || safeValue : safeValue));
             }
         } else if (defaultValue) {
-            res = (translate ? this.translateService.instant(defaultValue) : defaultValue);
+            res = {
+                id: prefix,
+                prefix: undefined,
+                values: []
+            };
+            if (prefix) {
+                res.prefix = (translate ? this.translateService.instant(prefix) : prefix);
+            }
+            res.values.push((translate ? this.translateService.instant(defaultValue) : defaultValue));
         }
 
         return res;

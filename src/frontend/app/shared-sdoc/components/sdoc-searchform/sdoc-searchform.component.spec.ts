@@ -9,6 +9,7 @@ import {SearchFormUtils} from '../../../../shared/angular-commons/services/searc
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {DomSanitizer} from '@angular/platform-browser';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -22,6 +23,7 @@ describe('SDocSearchformComponent', () => {
                 TranslateModule.forRoot()
             ],
             providers: [
+                DomSanitizer,
                 SDocSearchFormUtils,
                 SDocSearchFormConverter,
                 SearchFormUtils,

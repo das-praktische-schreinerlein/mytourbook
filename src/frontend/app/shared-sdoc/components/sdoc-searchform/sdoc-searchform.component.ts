@@ -8,6 +8,7 @@ import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angul
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoLocationService} from '../../../../shared/commons/services/geolocation.service';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -163,7 +164,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         searchPlaceholder: 'Find',
         defaultTitle: 'Dauer',
         allSelected: 'Alle'};
-    public humanReadableSearchForm = '';
+    public humanReadableSearchForm: SafeHtml = '';
 
     @Input()
     public short? = false;
@@ -208,6 +209,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         nearbyAddress: '',
         nearbyDistance: '10',
         what: [],
+        moreFilter: '',
         fulltext: '',
         techDataAscent: [],
         techDataAltitudeMax: [],
@@ -221,7 +223,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         pageNum: 1
     });
 
-    constructor(public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils,
+    constructor(private sanitizer: DomSanitizer, public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils,
                 private searchFormConverter: SDocSearchFormConverter) {
     }
 
@@ -281,6 +283,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             nearbyDistance: '10',
             nearby: values.nearby,
             fulltext: values.fulltext,
+            moreFilter: values.moreFilter,
             actiontype: [(values.actiontype ? values.actiontype.split(/,/) : [])],
             techDataAscent: [(values.techDataAscent ? values.techDataAscent.split(/,/) : [])],
             techDataAltitudeMax: [(values.techDataAltitudeMax ? values.techDataAltitudeMax.split(/,/) : [])],
@@ -344,7 +347,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             me.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
 
-        this.humanReadableSearchForm = this.searchFormConverter.searchFormToHumanReadableText(sdocSearchSearchResult.searchForm);
+        this.humanReadableSearchForm = this.sanitizer.bypassSecurityTrustHtml(
+            this.searchFormConverter.searchFormToHumanReadableMarkup(sdocSearchSearchResult.searchForm, false));
     }
 
     initGeoCodeAutoComplete(timeout?: number): void {
