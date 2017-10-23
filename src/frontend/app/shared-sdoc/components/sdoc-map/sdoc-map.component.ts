@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
@@ -40,7 +40,7 @@ export class SDocMapComponent implements OnChanges {
     @Output()
     public sdocClicked: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(private contentUtils: SDocContentUtils) {}
+    constructor(private contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {
@@ -54,15 +54,18 @@ export class SDocMapComponent implements OnChanges {
 
     onMapElementsLoaded(mapElements: MapElement[]) {
         this.showLoadingSpinner = false;
+        this.cd.detectChanges();
     }
 
     renderMap() {
         this.mapElementsReverseMap.clear();
         if (!this.sdocs) {
             this.mapElements = [];
+            this.showLoadingSpinner = false;
             return;
         }
 
+        this.showLoadingSpinner = (this.sdocs.length > 0 ? true : false);
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
 
@@ -71,6 +74,5 @@ export class SDocMapComponent implements OnChanges {
             }
         }
         this.mapElements = Array.from(this.mapElementsReverseMap.keys());
-        this.showLoadingSpinner = this.mapElements.length > 0;
     }
 }

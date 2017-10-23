@@ -38,6 +38,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
     map: L.Map;
     private featureGroup: L.MarkerClusterGroup;
     private loadedMapElements: MapElement[];
+    private noCoorElements: MapElement[];
 
     @Input()
     public mapId: string;
@@ -106,6 +107,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
             this.map.removeLayer(this.featureGroup);
         }
         this.loadedMapElements = [];
+        this.noCoorElements = [];
 
         const center = this.center || new LatLng(43, 16);
         this.map.setView(center, this.zoom);
@@ -159,13 +161,19 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
 
                 me.map.fitBounds(me.featureGroup.getBounds());
                 me.pushLoadedMapElement(mapElement);
+            } else {
+                me.noCoorElements.push(mapElement);
             }
+        }
+
+        if (this.mapElements.length === 0) {
+            this.mapElementsLoaded.emit(this.loadedMapElements);
         }
     }
 
     private pushLoadedMapElement(loadedMapElement: MapElement) {
         this.loadedMapElements.push(loadedMapElement);
-        if (this.loadedMapElements.length === this.mapElements.length) {
+        if (this.mapElements.length + this.noCoorElements.length === this.loadedMapElements.length) {
             this.mapElementsLoaded.emit(this.loadedMapElements);
         }
     }
