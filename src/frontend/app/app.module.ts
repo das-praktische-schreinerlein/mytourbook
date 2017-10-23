@@ -26,6 +26,7 @@ import {MinimalHttpBackendClient} from '../shared/commons/services/minimal-http-
 import {AngularHtmlService} from '../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../shared/angular-commons/services/common-routing.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {SDocDataCacheService} from './shared-sdoc/services/sdoc-datacache.service';
 
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
@@ -65,6 +66,7 @@ export function createTranslateLoader(http: HttpClient) {
         SDocDataService,
         PDocDataStore,
         PDocDataService,
+        SDocDataCacheService,
         SearchFormUtils,
         AngularHtmlService,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },

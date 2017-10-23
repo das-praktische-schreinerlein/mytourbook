@@ -12,8 +12,20 @@ export interface HumanReadableFilter {
 
 @Injectable()
 export class SDocSearchFormConverter implements GenericSearchFormSearchFormConverter<SDocSearchForm> {
-    private splitter = '_,_';
+    public HRD_IDS = {
+        track_id_i: 'TRACK',
+        trip_id_i: 'TRIP',
+        trip_id_is: 'TRIP',
+        news_id_i: 'NEWS',
+        news_id_is: 'NEWS',
+        loc_id_i: 'LOCATION',
+        loc_lochirarchie_ids_txt: 'LOCATION',
+        image_id_i: 'IMAGE',
+        route_id_i: 'ROUTE',
+        route_id_is: 'ROUTE',
+        loc_parent_id_i: 'LOCATION'};
 
+    private splitter = '_,_';
     constructor(private searchParameterUtils: SearchParameterUtils, private translateService: TranslateService) {
     }
 
@@ -183,22 +195,26 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         searchForm.pageNum = +params['pageNum'] || 1;
     }
 
-    searchFormToHumanReadableText(sdocSearchForm: SDocSearchForm, textOnly: boolean): string {
-        return this.searchFormToHumanReadableMarkup(sdocSearchForm, true);
+    searchFormToHumanReadableText(filters: HumanReadableFilter[], textOnly: boolean, obJCache: Map<string, string>): string {
+        return this.searchFormToHumanReadableMarkup(filters, true, obJCache);
     }
 
-    searchFormToHumanReadableMarkup(sdocSearchForm: SDocSearchForm, textOnly: boolean): string {
-        const filters: HumanReadableFilter[] = this.searchFormToHumanReadableFilter(sdocSearchForm);
+    searchFormToHumanReadableMarkup(filters: HumanReadableFilter[], textOnly: boolean, obJCache: Map<string, string>): string {
         const str = [];
 
         for (const filter of filters) {
             if (filter && filter.values && filter.values.length > 0) {
+                const resolvedValues = [];
+                for (const value of filter.values) {
+                    const resolvedValue = obJCache.get(this.HRD_IDS[filter.id.replace('hrt_', '')] + '_' + value);
+                    resolvedValues.push(resolvedValue ? resolvedValue : value);
+                }
                 if (textOnly) {
-                    str.push([(filter.prefix ? filter.prefix + ' ' : ''), '"', filter.values.join(','), '"'].join(' '));
+                    str.push([(filter.prefix ? filter.prefix + ' ' : ''), '"', resolvedValues.join(','), '"'].join(' '));
                 } else {
                     str.push(['<div class="filter filter_' + filter.id + '">',
                         '<span class="filterPrefix filterPrefix_' + filter.id + '">', (filter.prefix ? filter.prefix + ' ' : ''), '</span>',
-                        '<span class="filterValue filterValue_' + filter.id + '">', '"', filter.values.join(','), '"', '</span>', '</div>'
+                        '<span class="filterValue filterValue_' + filter.id + '">', '"', resolvedValues.join(','), '"', '</span>', '</div>'
                     ].join(''));
                 }
             }
@@ -206,6 +222,23 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
 
         return str.join(' ');
     }
+
+    extractResolvableIdsFrom(filters: HumanReadableFilter[]): Map<string, string> {
+        const obJCache = new Map<string, string>();
+
+        for (const filter of filters) {
+            if (!filter || !filter.values || filter.values.length <= 0 || !this.HRD_IDS[filter.id.replace('hrt_', '')]) {
+                continue;
+            }
+
+            for (const value of filter.values) {
+                obJCache.set(this.HRD_IDS[filter.id.replace('hrt_', '')] + '_' + value, undefined);
+            }
+        }
+
+        return obJCache;
+    }
+
 
     searchFormToHumanReadableFilter(sdocSearchForm: SDocSearchForm): HumanReadableFilter[] {
         const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));
@@ -226,8 +259,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         res.push(this.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(sdocSearchForm.moreFilter, this.splitter,
-            ['track_id_i', 'trip_id_i', 'trip_id_is', 'news_id_i', 'news_id_is', 'loc_id_i', 'loc_lochirarchie_ids_txt',
-                'image_id_i', 'route_id_i', 'route_id_is', 'loc_parent_id_i']);
+            Object.getOwnPropertyNames(this.HRD_IDS));
         moreFilterValues.forEach((value, key) => {
             const moreValue = this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get(key), key + ':', ',');
             res.push(this.valueToHumanReadableText(moreValue, key === 'unknown' ? 'hrt_moreFilter' : 'hrt_' + key, undefined, true));

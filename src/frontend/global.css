@@ -162,3 +162,7 @@ div#TRIPIMAGE div.card-block-image h5.record-type {
 div#TRACKIMAGE div.card-block-image h5 {
     display: none !IMPORTANT;
 }
+
+div.humanReadableSearchFilter div.filter {
+    display: inline;
+}

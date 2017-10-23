@@ -9,7 +9,7 @@
     <ng-container>
         <div class="row hidden-print">
             <div class="col-sm-12">
-                <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter"></div>
+                Suche <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter"></div>
                 <ng-container *ngIf="!short">
                     <button *ngIf="!showDetails" class="btn btn-configure btn-sm float-right" (click)="showForm = showDetails = true" i18n="button show Detailsform|Buttontext to show Detailsform@@button.searchform.show.Detailsform">"Details" filtern</button>
                     <button *ngIf="!showFulltext" class="btn btn-configure btn-sm float-right" (click)="showForm = showFulltext = true" i18n="button show Fulltextform|Buttontext to show Fulltextform@@button.searchform.show.Fulltextform">"Text" filtern</button>
