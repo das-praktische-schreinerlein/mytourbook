@@ -37,13 +37,15 @@ let sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
 SitemapGeneratorModule.generateSiteMapFiles(
     SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig, true),
     sitemapConfig,
-    new SDocSearchForm({})
+    new SDocSearchForm({ type: 'track,route,location,trip,news', sort: 'relevance'})
 );
+
 sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
     fileBase: 'sitemap-pdoc-',
     showBaseUrl: generatorConfig.sitemapConfig.showBaseUrl + 'sections/',
     urlGenerator: function(config: SitemapConfig, doc: PDocRecord): string[] {
-        return [config.showBaseUrl + doc.id, config.showBaseUrl + doc.id + '/search/'];
+        return [config.showBaseUrl + doc.id, config.showBaseUrl + doc.id
+        + '/search/jederzeit/ueberall/alles/egal/ungefiltert/ratePers/route,location/10/1'];
     }
 });
 SitemapGeneratorModule.generateSiteMapFiles(
