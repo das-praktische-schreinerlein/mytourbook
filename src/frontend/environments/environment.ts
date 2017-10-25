@@ -6,6 +6,6 @@
 export const environment = {
     production: false,
     backendApiBaseUrl: 'http://localhost:4100/api/v1/',
-    tracksBaseUrl: 'http://localhost:4100/tracks/',
-    picsBaseUrl: 'http://localhost/michas//digifotos/'
+    tracksBaseUrl: 'http://localhost:4100/api/assets/tracks/',
+    picsBaseUrl: 'http://localhost:4100/api/static/pictures/'
 };

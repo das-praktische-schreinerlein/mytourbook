@@ -1,33 +1,15 @@
 import {SDocSearchResult} from '../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchForm, SDocSearchFormValidator} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {SDocDataStore, SDocTeamFilterConfig} from '../shared/sdoc-commons/services/sdoc-data.store';
-import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
-import {SDocSolrAdapter} from '../shared/sdoc-commons/services/sdoc-solr.adapter';
 import {Router} from 'js-data-express';
-import axios from 'axios';
 import express from 'express';
-import * as fs from 'fs';
 import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
 import {Facets} from '../shared/search-commons/model/container/facets';
-import {HttpAdapter} from 'js-data-http';
 import {GenericSearchOptions} from '../shared/search-commons/services/generic-search.service';
 
 export class SDocServerModule {
-    private static dataService: SDocDataService;
-
-    public static getDataService(backendConfig: {}): SDocDataService {
-        if (!this.dataService) {
-            this.dataService = SDocServerModule.createDataService(backendConfig);
-        }
-
-        return this.dataService;
-    }
-
-    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
-        const dataService: SDocDataService = SDocServerModule.getDataService(backendConfig);
-
+    public static configureRoutes(app: express.Application, apiPrefix: string, dataService: SDocDataService, readOnly: boolean) {
         // configure express
         const idValidationRule = new IdValidationRule(true);
         app.param('id', function(req, res, next, id) {
@@ -121,36 +103,5 @@ export class SDocServerModule {
                     return next('not found');
                 }
             });
-    }
-
-    private static createDataService(backendConfig: {}): SDocDataService {
-        // configure store
-        const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
-        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
-        for (const themeName in themeFilters) {
-            filterConfig.set(themeName, themeFilters[themeName]);
-        }
-        const dataStore: SDocDataStore = new SDocDataStore(new SearchParameterUtils(), filterConfig);
-        const dataService: SDocDataService = new SDocDataService(dataStore);
-
-        // configure solr-adapter
-        const options = {
-            basePath: backendConfig['solrCoreSDoc'],
-            suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
-            http: axios,
-            beforeHTTP: function (config, opts) {
-                config.auth = {
-                    username: backendConfig['solrCoreSDocReadUsername'],
-                    password: backendConfig['solrCoreSDocReadPassword']
-                };
-
-                // Now do the default behavior
-                return HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
-            }
-        };
-        const adapter = new SDocSolrAdapter(options);
-        dataStore.setAdapter('http', adapter, '', {});
-
-        return dataService;
     }
 }

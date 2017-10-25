@@ -12,10 +12,13 @@ if (!debug) {
 const filePathConfigJson = 'config/backend.json';
 const filePathFirewallConfigJson = 'config/firewall.json';
 const serverConfig: ServerConfig = {
-    apiPrefix: '/api/v1',
+    apiDataPrefix: '/api/v1',
+    apiAssetsPrefix: '/api/assets',
+    apiPublicPrefix: '/api/static',
     filePathErrorDocs: './error_docs/',
     backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
-    firewallConfig: JSON.parse(fs.readFileSync(filePathFirewallConfigJson, { encoding: 'utf8' }))
+    firewallConfig: JSON.parse(fs.readFileSync(filePathFirewallConfigJson, { encoding: 'utf8' })),
+    readOnly: true
 };
 
 // create server

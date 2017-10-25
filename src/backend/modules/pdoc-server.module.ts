@@ -1,29 +1,12 @@
 import {PDocSearchResult} from '../shared/pdoc-commons/model/container/pdoc-searchresult';
 import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
-import {PDocDataStore} from '../shared/pdoc-commons/services/pdoc-data.store';
-import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {PDocDataService} from '../shared/pdoc-commons/services/pdoc-data.service';
-import {PDocInMemoryAdapter} from '../shared/pdoc-commons/services/pdoc-inmemory.adapter';
-import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {arser, Router} from 'js-data-express';
 import express from 'express';
-import * as fs from 'fs';
-import marked from 'marked';
-import htmlToText from 'html-to-text';
 
 export class PDocServerModule {
-    private static dataService: PDocDataService;
-
-    public static getDataService(backendConfig: {}, locale: string): PDocDataService {
-        if (!this.dataService) {
-            this.dataService = PDocServerModule.createDataService(backendConfig, locale);
-        }
-
-        return this.dataService;
-    }
-
-    public static configureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}, locale: string) {
-        const dataService: PDocDataService = PDocServerModule.getDataService(backendConfig, locale);
+    public static configureRoutes(app: express.Application, apiPrefix: string, dataService: PDocDataService, locale: string,
+                                  readOnly: boolean) {
         const mapper = dataService.getMapper('pdoc');
 
         // configure express
@@ -64,47 +47,5 @@ export class PDocServerModule {
                     return next('not found');
                 }
             });
-    }
-
-    private static createDataService(backendConfig: {}, locale: string): PDocDataService {
-        // configure store
-        const dataStore: PDocDataStore = new PDocDataStore(new SearchParameterUtils());
-        const dataService: PDocDataService = new PDocDataService(dataStore);
-        marked.setOptions({
-            gfm: true,
-            tables: true,
-            breaks: true,
-            pedantic: false,
-            sanitize: true,
-            smartLists: true,
-            smartypants: true
-        });
-
-        const fileName = backendConfig['filePathPDocJson'].replace('.json', '-' + locale + '.json');
-        const docs: any[] = JSON.parse(fs.readFileSync(fileName, { encoding: 'utf8' })).pdocs;
-        for (const doc of docs) {
-            if (!doc['descHtml']) {
-                doc['descHtml'] = marked(doc['descMd']);
-            }
-            if (!doc['descTxt']) {
-                doc['descTxt'] = htmlToText.fromString(doc['descHtml'], {
-                    wordwrap: 80
-                });
-            }
-        }
-        dataService.addMany(docs).then(function doneAddMany(records: PDocRecord[]) {
-                console.log('loaded pdocs from assets', records);
-            },
-            function errorCreate(reason: any) {
-                console.error('loading pdocs failed:' + reason);
-            }
-        );
-
-        // configure dummy-adapter
-        const options = {};
-        const adapter = new PDocInMemoryAdapter(options);
-        dataStore.setAdapter('inmemory', adapter, '', {});
-
-        return dataService;
     }
 }

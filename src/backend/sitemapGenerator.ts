@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import {SitemapConfig, SitemapGeneratorModule} from './modules/sitemap-generator.module';
 import {SDocSearchForm} from './shared/sdoc-commons/model/forms/sdoc-searchform';
-import {SDocServerModule} from './modules/sdoc-server.module';
 import minimist from 'minimist';
-import {PDocServerModule} from './modules/pdoc-server.module';
 import {PDocSearchForm} from './shared/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocRecord} from './shared/pdoc-commons/model/records/pdoc-record';
+import {SDocDataServiceModule} from './modules/sdoc-dataservice.module';
+import {PDocDataServiceModule} from './modules/pdoc-dataservice.module';
 
 // disable debug-logging
 const debug = false;
@@ -35,7 +35,7 @@ let sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
     }
 });
 SitemapGeneratorModule.generateSiteMapFiles(
-    SDocServerModule.getDataService(generatorConfig.backendConfig),
+    SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig, true),
     sitemapConfig,
     new SDocSearchForm({})
 );
@@ -47,7 +47,8 @@ sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
     }
 });
 SitemapGeneratorModule.generateSiteMapFiles(
-    PDocServerModule.getDataService(generatorConfig.backendConfig, sitemapConfig.locale),
+    PDocDataServiceModule.getDataService('pdocSolr' + sitemapConfig.locale + 'ReadOnly', generatorConfig.backendConfig,
+        sitemapConfig.locale, true),
     sitemapConfig,
     new PDocSearchForm({})
 );
