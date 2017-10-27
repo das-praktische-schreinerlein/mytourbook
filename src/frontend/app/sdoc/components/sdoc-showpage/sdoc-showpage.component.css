@@ -13,3 +13,6 @@ ul.props {
     list-style: none;
     font-size: 0.75rem;
 }
+span.fx-bg-name {
+    width: 100%;
+}

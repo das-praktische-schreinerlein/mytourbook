@@ -9,7 +9,7 @@
     <ng-container *ngIf="pdoc.flgShowSearch || pdoc.flgShowTopTen">
         <div class="container content-container">
             <ng-container *ngIf="pdoc.flgShowSearch">
-                <div class="hint_tosearch"><a href="{{getToSearchUrl()}}" (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
+                <div class="hint_tosearch"><a class="btn btn-action btn-sm" href="{{getToSearchUrl()}}" (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
             </ng-container>
 
             <ng-container *ngIf="pdoc.flgShowSearch && pdoc.flgShowTopTen">
@@ -57,14 +57,14 @@
 
     <ng-container *ngIf="pdoc.flgShowTopTen">
         <div class="container content-container">
-            <h5 i18n="heading shortSearch sectionPage|Heading to shortSearch sectionPage@@heading.sectionPage.shortSearch">Schnellsuche</h5>
+            <h5><span class="fx-bg-name" i18n="heading shortSearch sectionPage|Heading to shortSearch sectionPage@@heading.sectionPage.shortSearch">Schnellsuche</span></h5>
             <div class="shortsearchform">
                 <app-sdoc-searchform [searchResult]="sdocSearchResult"
                                      [short]="'true'"
                                      (search)="onSearchSDoc($event)"></app-sdoc-searchform>
 
             </div>
-            <h5 i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</h5>
+            <h5><span class="fx-bg-type" i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</span></h5>
             <ngb-tabset>
                 <ngb-tab title="Routen">
                     <ng-template ngbTabContent>
@@ -163,7 +163,7 @@
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>
-            <h5 i18n="heading favorite-results sectionPage|Heading to favorite-results sectionPage@@heading.sectionPage.favoriteResults">Favorites</h5>
+            <h5><span class="fx-bg-type" i18n="heading favorite-results sectionPage|Heading to favorite-results sectionPage@@heading.sectionPage.favoriteResults">Favorites</span></h5>
             <ngb-tabset>
                 <ngb-tab title="Bilder">
                     <ng-template ngbTabContent>

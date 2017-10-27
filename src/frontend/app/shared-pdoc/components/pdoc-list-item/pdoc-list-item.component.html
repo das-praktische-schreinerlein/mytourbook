@@ -1,7 +1,5 @@
 <div class="text-center">
     <ng-container [ngSwitch]="record.type">
-        <ng-container *ngSwitchCase="'IMAGE'">
-        </ng-container>
         <ng-container *ngSwitchDefault="">
             <div class="card-img-top">
                 <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)">
@@ -9,7 +7,7 @@
                 </a>
             </div>
             <div class="card-block">
-                <h6 class="card-title"><a class="" [href]="getShowUrl(record)" (click)="submitShow(record)">{{record.name}}</a></h6>
+                <h6 class="card-title"><a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><span class="fx-bg-theme">{{record.name}}</span></a></h6>
                 <p class="card-text">{{record.descTxt | truncate: 100}}</p>
                 <a class="btn btn-navigation pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
             </div>

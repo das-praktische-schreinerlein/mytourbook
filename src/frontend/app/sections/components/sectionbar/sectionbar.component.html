@@ -1,6 +1,6 @@
 <ng-container *ngIf="pdoc !== undefined">
-    <div [formGroup]="themeFormGroup" class="container content-container hide-on-fullpage" *ngIf="pdoc.heading !== undefined && pdoc.heading.length > 0">
-        <h5>{{pdoc.heading}}
+    <div [formGroup]="themeFormGroup" class="container content-container hide-on-fullpage fx-bg-theme" *ngIf="pdoc.heading !== undefined && pdoc.heading.length > 0">
+        <h5><span class="fx-bg-name">{{pdoc.heading}}</span>
             <div>
                 <div style="width: 200px;" class="float-right form-inline input-group input-group-sm hidden-print">
                     <select class="form-control input-sm" name="theme" id="theme" formControlName="theme" (change)="onThemeChange()">
@@ -25,6 +25,6 @@
                 </div>
             </div>
         </h5>
-        <div>{{pdoc.teaser}}</div>
+        <div class="fx-bg-teaser-text">{{pdoc.teaser}}</div>
     </div>
 </ng-container>
