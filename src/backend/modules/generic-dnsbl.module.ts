@@ -1,6 +1,7 @@
 import express from 'express';
 import {DnsBLConfig, FirewallCommons, FirewallConfig} from './firewall.commons';
 import * as redis from 'redis';
+import isIP from 'validator/lib/isIP';
 
 export enum DnsBLCacheEntryState {
     OK, BLOCKED, NORESULT
@@ -103,6 +104,16 @@ export abstract class GenericDnsBLModule {
         const me = this;
         me.app.use(function(req, res, _next) {
             const ip = req['clientIp'];
+            // check for valid ip4
+            if (isIP(ip, '6')) {
+                return _next();
+            }
+            if (!isIP(ip, '4')) {
+                console.error('DnsBLModule: BLOCKED invalid IP:' + ip + ' URL:' + req.url);
+                return FirewallCommons.resolveBlocked(req, res, me.firewallConfig, me.filePathErrorDocs);
+            }
+
+            // check for dnsbl
             me.getCachedResult(ip).then(value => {
                 const cacheEntry: DnsBLCacheEntry = value;
                 const query = me.createQuery(ip, req, res, _next);
