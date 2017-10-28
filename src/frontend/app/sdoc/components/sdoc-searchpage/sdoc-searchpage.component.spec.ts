@@ -15,6 +15,9 @@ import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {Angulartics2} from 'angulartics2';
+import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 
 describe('SDocSearchpageComponent', () => {
     let component: SDocSearchpageComponent;
@@ -38,7 +41,9 @@ describe('SDocSearchpageComponent', () => {
                 ToastsManager,
                 TranslateService,
                 ErrorResolver,
-                PageUtils
+                PageUtils,
+                GenericTrackingService,
+                { provide: Angulartics2, useValue: new Angulartics2Stub() },
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

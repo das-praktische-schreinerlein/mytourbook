@@ -46,6 +46,7 @@
     "angular-2-dropdown-multiselect": "1.6.0",
     "angular2-lightbox": "1.2.1",
     "angular2-markdown": "1.6.0",
+    "angulartics2": "3.2.0",
     "axios": "0.16.2",
     "body-parser": "1.18.2",
     "bootstrap": "4.0.0-alpha.6",

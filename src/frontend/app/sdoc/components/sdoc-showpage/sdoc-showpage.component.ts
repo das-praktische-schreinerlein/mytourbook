@@ -17,6 +17,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
+import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -39,7 +40,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef) {
+                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -90,6 +91,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     this.pageUtils.setMetaLanguage();
 
                     me.cd.markForCheck();
+
+                    this.trackingProvider.trackPageView();
                     return;
                 }
 
