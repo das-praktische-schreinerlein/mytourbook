@@ -31,22 +31,19 @@ export class SectionsSearchFormResolver implements Resolve<ResolvedData<SDocSear
                     searchForm.theme = this.idValidationRule.sanitize(id);
                     if (!SDocSearchFormValidator.isValid(searchForm)) {
                         result.error = new ResolverError(SectionsSearchFormResolver.ERROR_INVALID_SDOC_SEARCHFORM, searchForm, undefined);
-                        resolve(result);
-                        return;
+                        return resolve(result);
                     }
                     if (!this.idValidationRule.isValid(id)) {
                         result.error = new ResolverError(SectionsSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID,
                             searchForm, undefined);
-                        resolve(result);
-                        return;
+                        return resolve(result);
                     }
 
                     result.data = searchForm;
-                    resolve(result);
+                    return resolve(result);
                 } else if (appState === AppState.Failed) {
                     result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
-                    resolve(result);
-                    return;
+                    return resolve(result);
                 }
             });
         });

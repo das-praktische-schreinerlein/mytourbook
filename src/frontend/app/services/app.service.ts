@@ -73,10 +73,10 @@ export class AppService extends GenericAppService {
                     console.log('initially loaded config from assets', config);
                     me.appConfig.components = config['components'];
                     me.appConfig.services = config['services'];
-                    resolve(true);
+                    return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:' + reason);
-                    reject(false);
+                    return reject(false);
             });
         });
     }
@@ -103,10 +103,10 @@ export class AppService extends GenericAppService {
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded pdocs from server', records);
-                    resolve(true);
+                    return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:' + reason);
-                    reject(false);
+                    return reject(false);
                 });
             });
     }
@@ -132,10 +132,10 @@ export class AppService extends GenericAppService {
                     return me.sdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded sdocs from assets', records);
-                    resolve(true);
+                    return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:' + reason);
-                    reject(false);
+                    return reject(false);
                 });
             });
     }

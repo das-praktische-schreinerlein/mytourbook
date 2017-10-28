@@ -24,16 +24,14 @@ export class SDocSearchFormResolver implements Resolve<ResolvedData<SDocSearchFo
                     this.searchFormConverter.paramsToSearchForm(route.params, route.data['searchFormDefaults'], searchForm);
                     if (!SDocSearchFormValidator.isValid(searchForm)) {
                         result.error = new ResolverError(SDocSearchFormResolver.ERROR_INVALID_SDOC_SEARCHFORM, searchForm, undefined);
-                        resolve(result);
-                        return;
+                        return resolve(result);
                     }
 
                     result.data = searchForm;
-                    resolve(result);
+                    return resolve(result);
                 } else if (appState === AppState.Failed) {
                     result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
-                    resolve(result);
-                    return;
+                    return resolve(result);
                 }
             });
         });

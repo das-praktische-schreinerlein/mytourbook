@@ -36,10 +36,10 @@ export class SDocDataCacheService {
                             me.recordCache.set(record.id.toString(), record);
                         }
                     }
-                    resolve(me.nameCache);
+                    return resolve(me.nameCache);
                 }).catch(function errorSearch(reason) {
                     console.error('resolve resolveNamesForIds failed:' + reason);
-                    reject(reason);
+                    return reject(reason);
             });
         });
 

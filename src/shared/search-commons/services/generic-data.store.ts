@@ -186,10 +186,10 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     return me.facets(mapperName, query, options);
                 }).then(function doneFacets(facets: Facets) {
                     searchResult.facets = facets;
-                    resolve(searchResult);
+                    return resolve(searchResult);
                 }).catch(function errorHandling(reason) {
                     console.error('search failed:' + reason);
-                    reject(reason);
+                    return reject(reason);
                 });
             } else {
                 opts = opts || {};
@@ -201,10 +201,10 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     searchResult.facets = genericSearchResult.facets;
                     searchResult.currentRecords = genericSearchResult.currentRecords;
                     searchResult.recordCount = genericSearchResult.recordCount;
-                    resolve(searchResult);
+                    return resolve(searchResult);
                 }).catch(function errorHandling(reason) {
                     console.error('search failed:' + reason);
-                    reject(reason);
+                    return reject(reason);
                 });
             }
         });
