@@ -68,13 +68,18 @@ export abstract class GenericDnsBLModule {
 
                 if (err) {
                     // NORESULT
-                    console.warn('DnsBLModule: error while reading for query:' + [query.ip, query.req.url].join(' '), err);
-                    if (!potCacheEntry) {
-                        potCacheEntry.state = DnsBLCacheEntryState.NORESULT;
-                    } else if (potCacheEntry.state === DnsBLCacheEntryState.OK) {
-                        potCacheEntry.state = DnsBLCacheEntryState.NORESULT;
+                    if (err.code === 'ENOTFOUND') {
+                        // not known: OK
+                        potCacheEntry.ttl = (Date.now() + this.config.dnsttl);
+                        potCacheEntry.state = DnsBLCacheEntryState.OK;
+                    } else {
+                        // ERROR
+                        console.warn('DnsBLModule: error while reading for query:' + [query.ip, query.req.url].join(' '), err);
+                        if (potCacheEntry.state !== DnsBLCacheEntryState.BLOCKED) {
+                            potCacheEntry.state = DnsBLCacheEntryState.NORESULT;
+                        }
+                        potCacheEntry.ttl = (Date.now() + this.config.errttl);
                     }
-                    potCacheEntry.ttl = (Date.now() + this.config.errttl);
                 } else if (!blocked) {
                     // OK
                     potCacheEntry.ttl = (Date.now() + this.config.dnsttl);

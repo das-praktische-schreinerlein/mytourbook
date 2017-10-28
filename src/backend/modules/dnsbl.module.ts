@@ -26,7 +26,6 @@ export class DnsBLModule extends GenericDnsBLModule {
 
     protected callDnsBLClient(query: DnsBLQuery): Promise<DnsBLCacheEntry> {
         const me = this;
-
         return new Promise<DnsBLCacheEntry>((resolve, reject) => {
             query.timeoutTimer = setTimeout(() => {
                 me.checkResultOfDnsBLClient(query, 'timeout after ' + me.config.timeout, false,
