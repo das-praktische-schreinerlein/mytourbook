@@ -13,6 +13,8 @@ export interface DnsBLConfig {
     timeout: number;
     apiKey: string;
     whitelistIps: string[];
+    cacheRedisUrl: string;
+    cacheRedisPass: string;
 }
 
 export class FirewallCommons {
