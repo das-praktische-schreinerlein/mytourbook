@@ -1,5 +1,6 @@
 import express from 'express';
 import * as fs from 'fs';
+import minimist from 'minimist';
 import {ServerConfig, ServerModuleLoader} from './server-module.loader';
 
 // disable debug-logging
@@ -9,8 +10,10 @@ if (!debug) {
     console.log = function() {};
 }
 
-const filePathConfigJson = 'config/backend.json';
-const filePathFirewallConfigJson = 'config/firewall.json';
+const argv = minimist(process.argv.slice(2));
+
+const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+const filePathFirewallConfigJson = argv['f'] || argv['firewall'] || 'config/firewall.json';
 const serverConfig: ServerConfig = {
     apiDataPrefix: '/api/v1',
     apiAssetsPrefix: '/api/assets',

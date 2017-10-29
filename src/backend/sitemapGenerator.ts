@@ -16,8 +16,8 @@ if (!debug) {
 
 const argv = minimist(process.argv.slice(2));
 
-const filePathConfigJson = 'config/backend.json';
-const filePathSitemapConfigJson = argv['_'][0];
+const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+const filePathSitemapConfigJson = argv['s'] || argv['sitemap'] || argv['_'][0];
 const generatorConfig = {
     backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
     sitemapConfig: JSON.parse(fs.readFileSync(filePathSitemapConfigJson, { encoding: 'utf8' }))
@@ -44,8 +44,9 @@ sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
     fileBase: 'sitemap-pdoc-',
     showBaseUrl: generatorConfig.sitemapConfig.showBaseUrl + 'sections/',
     urlGenerator: function(config: SitemapConfig, doc: PDocRecord): string[] {
-        return [config.showBaseUrl + doc.id, config.showBaseUrl + doc.id
-        + '/search/jederzeit/ueberall/alles/egal/ungefiltert/ratePers/route,location/10/1'];
+        return [config.showBaseUrl + doc.id,
+        //    config.showBaseUrl + doc.id + '/search/jederzeit/ueberall/alles/egal/ungefiltert/ratePers/route,location/10/1'
+        ];
     }
 });
 SitemapGeneratorModule.generateSiteMapFiles(
