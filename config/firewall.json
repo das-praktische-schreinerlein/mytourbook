@@ -66,6 +66,7 @@
         "timeout": 3000,
         "whitelistIps": ["::1", "127.0.0.1"],
         "cacheRedisUrl": "redis://localhost:6379/",
-        "cacheRedisPass": "blablub"
+        "cacheRedisPass": "blablub",
+        "cacheRedisDB": "1"
     }
 }

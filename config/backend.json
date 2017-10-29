@@ -1,5 +1,5 @@
 {
-    "solrCoreSDoc": "http://localhost:8983/solr/mytb/",
+    "solrCoreSDoc": "http://localhost:8983/solr/mytbdev/",
     "solrCoreSDocReadUsername": "mytbread",
     "solrCoreSDocReadPassword": "SolrRocks",
     "filePathPDocJson": "config/pdocs.json",

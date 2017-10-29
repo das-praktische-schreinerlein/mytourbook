@@ -45,7 +45,8 @@ export abstract class GenericDnsBLModule {
 
     protected configureRedisStore() {
         if (this.config.cacheRedisUrl) {
-            this.redisClient = redis.createClient({url: this.config.cacheRedisUrl, password: this.config.cacheRedisPass});
+            this.redisClient = redis.createClient({url: this.config.cacheRedisUrl, password: this.config.cacheRedisPass,
+                db: this.config.cacheRedisDB});
         }
     }
 

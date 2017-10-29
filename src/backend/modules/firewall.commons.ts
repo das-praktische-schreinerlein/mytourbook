@@ -15,6 +15,7 @@ export interface DnsBLConfig {
     whitelistIps: string[];
     cacheRedisUrl: string;
     cacheRedisPass: string;
+    cacheRedisDB: string;
 }
 
 export class FirewallCommons {
