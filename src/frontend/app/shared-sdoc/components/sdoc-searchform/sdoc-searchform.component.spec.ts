@@ -9,6 +9,11 @@ import {SearchFormUtils} from '../../../../shared/angular-commons/services/searc
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {SDocDataStore, SDocTeamFilterConfig} from '../../../../shared/sdoc-commons/services/sdoc-data.store';
+import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {SDocDataCacheService} from '../../services/sdoc-datacache.service';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 
 describe('SDocSearchformComponent', () => {
     let component: SDocSearchformComponent;
@@ -19,13 +24,19 @@ describe('SDocSearchformComponent', () => {
             declarations: [SDocSearchformComponent],
             imports: [
                 ReactiveFormsModule,
+                ToastModule.forRoot(),
                 TranslateModule.forRoot()
             ],
             providers: [
+                DomSanitizer,
+                { provide: SDocDataStore, useValue: new SDocDataStore(new SearchParameterUtils(), new SDocTeamFilterConfig()) },
+                { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                SDocDataCacheService,
                 SDocSearchFormUtils,
                 SDocSearchFormConverter,
                 SearchFormUtils,
-                { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
+                { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
+                ToastsManager
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

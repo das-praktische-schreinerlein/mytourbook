@@ -26,15 +26,18 @@ export class DnsBLModule extends GenericDnsBLModule {
 
     protected callDnsBLClient(query: DnsBLQuery): Promise<DnsBLCacheEntry> {
         const me = this;
-
         return new Promise<DnsBLCacheEntry>((resolve, reject) => {
             query.timeoutTimer = setTimeout(() => {
-                resolve(me.checkResultOfDnsBLClient(query, 'timeout after ' + me.config.timeout, false,
-                    'timeout after ' + me.config.timeout));
+                me.checkResultOfDnsBLClient(query, 'timeout after ' + me.config.timeout, false,
+                    'timeout after ' + me.config.timeout).then(value => {
+                    return resolve(value);
+                });
             }, me.config.timeout);
             console.log('DnsBLModule: call DnsBL for IP:' + query.ip + ' URL:' + query.req.url);
             this.pot.query(query.ip, function (potErr, potRes) {
-                resolve(me.checkResultOfDnsBLClient(query, potErr, !(!potRes), potRes));
+                me.checkResultOfDnsBLClient(query, potErr, !(!potRes), potRes).then(value => {
+                    return resolve(value);
+                });
             });
         });
     }

@@ -1,4 +1,14 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnInit,
+    Output,
+    ViewContainerRef
+} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -7,7 +17,10 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoLocationService} from '../../../../shared/commons/services/geolocation.service';
-import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {HumanReadableFilter, SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {ToastsManager} from 'ng2-toastr';
+import {SDocDataCacheService} from '../../services/sdoc-datacache.service';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -163,7 +176,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         searchPlaceholder: 'Find',
         defaultTitle: 'Dauer',
         allSelected: 'Alle'};
-    public humanReadableSearchForm = '';
+    public humanReadableSearchForm: SafeHtml = '';
+    public humanReadableSpecialFilter = '';
 
     @Input()
     public short? = false;
@@ -187,6 +201,9 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public showDetails? = this.showForm;
 
     @Input()
+    public showSpecialFilter? = this.showForm;
+
+    @Input()
     public set searchResult(value: SDocSearchResult) {
         // set the latest value for _data BehaviorSubject
         this._searchResult.next(value);
@@ -208,6 +225,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         nearbyAddress: '',
         nearbyDistance: '10',
         what: [],
+        moreFilter: '',
         fulltext: '',
         techDataAscent: [],
         techDataAltitudeMax: [],
@@ -221,8 +239,10 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         pageNum: 1
     });
 
-    constructor(public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils,
-                private searchFormConverter: SDocSearchFormConverter) {
+    constructor(private sanitizer: DomSanitizer, public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils,
+                private searchFormConverter: SDocSearchFormConverter, private sdocDataCacheService: SDocDataCacheService,
+                private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef) {
+        this.toastr.setRootViewContainerRef(vcr);
     }
 
     ngOnInit() {
@@ -281,6 +301,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             nearbyDistance: '10',
             nearby: values.nearby,
             fulltext: values.fulltext,
+            moreFilter: values.moreFilter,
             actiontype: [(values.actiontype ? values.actiontype.split(/,/) : [])],
             techDataAscent: [(values.techDataAscent ? values.techDataAscent.split(/,/) : [])],
             techDataAltitudeMax: [(values.techDataAltitudeMax ? values.techDataAltitudeMax.split(/,/) : [])],
@@ -344,7 +365,31 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             me.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
 
-        this.humanReadableSearchForm = this.searchFormConverter.searchFormToHumanReadableText(sdocSearchSearchResult.searchForm);
+        me.humanReadableSpecialFilter = '';
+        this.humanReadableSearchForm = '';
+        const filters: HumanReadableFilter[] = this.searchFormConverter.searchFormToHumanReadableFilter(sdocSearchSearchResult.searchForm);
+        const resolveableFilters = this.searchFormConverter.extractResolvableFilters(filters);
+        if (resolveableFilters.length > 0) {
+            const resolveableIds = this.searchFormConverter.extractResolvableIds(resolveableFilters);
+            this.sdocDataCacheService.resolveNamesForIds(Array.from(resolveableIds.keys())).then(nameCache => {
+                me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
+                    me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, nameCache));
+                me.humanReadableSpecialFilter = me.searchFormConverter.searchFormToHumanReadableMarkup(resolveableFilters, true, nameCache);
+
+                me.cd.markForCheck();
+            }).catch(function onRejected(reason) {
+                me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
+                console.error('resolve moreFilterIds failed:' + reason);
+                me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
+                    me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
+                me.humanReadableSpecialFilter = me.searchFormConverter.searchFormToHumanReadableMarkup(resolveableFilters, true, undefined);
+
+                me.cd.markForCheck();
+            });
+        } else {
+            this.humanReadableSearchForm = this.sanitizer.bypassSecurityTrustHtml(
+                this.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
+        }
     }
 
     initGeoCodeAutoComplete(timeout?: number): void {
@@ -353,6 +398,12 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             me.initGeoCodeAutoCompleteField('.nearbyAddressAutocomplete');
             me.initGeoCodeAutoCompleteField('.nearbyAddressAutocompleteShort');
         }, timeout || 0);
+    }
+
+    removeMoreIdFilters(): void {
+        const values = this.searchFormGroup.getRawValue();
+        this.searchFormGroup.patchValue({'moreFilter': undefined});
+        this.search.emit(values);
     }
 
     private initGeoCodeAutoCompleteField(selector: string): void {

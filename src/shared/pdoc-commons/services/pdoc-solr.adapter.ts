@@ -59,11 +59,11 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         return record;
     }
 
-    getAdapterFields(mapper: Mapper, params: any, opts: any): string[] {
+    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[] {
         return ['id', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'keywords_txt', 'name_txt', 'type_txt'];
     };
 
-    getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+    getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const facetParams = new Map<string, any>();
         facetParams.set('facet', 'on');
 
@@ -76,13 +76,13 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         return facetParams;
     };
 
-    getSpatialParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+    getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const spatialParams = new Map<string, any>();
         return spatialParams;
     };
 
 
-    getSortParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
+    getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const sortParams = new Map<string, any>();
 
         const form = opts.originalSearchForm || {};

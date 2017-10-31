@@ -68,6 +68,13 @@ export class PageUtils {
         if (!element) {
             return;
         }
-        element.remove();
+        // Chrome, Edge, Fiefox, ...
+        if (Element.prototype.hasOwnProperty('remove')) {
+            return element.remove();
+        }
+        if (element.parentNode !== null) {
+            // IE
+            return element.parentNode.removeChild(element);
+        }
     }
 }

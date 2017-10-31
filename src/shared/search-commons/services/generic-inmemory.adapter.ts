@@ -13,7 +13,7 @@ export abstract class GenericInMemoryAdapter <R extends Record, F extends Generi
     }
 
     _count(mapper: Mapper, query: any, opts?: any): Promise<any> {
-        return Promise.resolve((<DataStore>mapper['datastore']).filter(mapper.name, query, opts).length);
+        return Promise.resolve((<DataStore>mapper['datastore']).filter(mapper.name, query, opts));
     }
     _create(mapper: any, props: any, opts?: any): Promise<any> {
         return Promise.resolve((<DataStore>mapper['datastore']).add(mapper.name, props));

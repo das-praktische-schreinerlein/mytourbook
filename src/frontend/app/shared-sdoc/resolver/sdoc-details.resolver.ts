@@ -29,8 +29,7 @@ export class SDocRecordResolver implements Resolve<ResolvedData<SDocRecord>> {
                     if (!this.idValidationRule.isValid(id)) {
                         console.error('error no id for sdoc:', id);
                         result.error = new ResolverError(SDocRecordResolver.ERROR_INVALID_SDOC_ID, id, undefined);
-                        resolve(result);
-                        return;
+                        return resolve(result);
                     }
 
                     id = this.idValidationRule.sanitize(id);
@@ -39,24 +38,20 @@ export class SDocRecordResolver implements Resolve<ResolvedData<SDocRecord>> {
                             if (sdoc === undefined) {
                                 console.error('error no sdoc for id:' + id);
                                 result.error = new ResolverError(SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID, id, undefined);
-                                resolve(result);
-                                return;
+                                return resolve(result);
                             }
 
                             result.data = sdoc;
-                            resolve(result);
-                            return;
+                            return resolve(result);
                         }).catch(function errorGetById(reason: any) {
                             console.error('error sdoc for id:' + id, reason);
                             result.error = new ResolverError(SDocRecordResolver.ERROR_READING_SDOC_ID, id, reason);
-                            resolve(result);
-                            return;
+                            return resolve(result);
                         }
                     );
                 } else if (appState === AppState.Failed) {
                     result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
-                    resolve(result);
-                    return;
+                    return resolve(result);
                 }
             });
         });

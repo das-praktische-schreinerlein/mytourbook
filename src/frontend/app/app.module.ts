@@ -26,10 +26,18 @@ import {MinimalHttpBackendClient} from '../shared/commons/services/minimal-http-
 import {AngularHtmlService} from '../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../shared/angular-commons/services/common-routing.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {SDocDataCacheService} from './shared-sdoc/services/sdoc-datacache.service';
+import {GenericTrackingService} from '../shared/angular-commons/services/generic-tracking.service';
+import {TrackingService} from './services/tracking.service';
+import {Angulartics2Module} from 'angulartics2';
 
 // AoT requires an exported function for factories
-export function createTranslateLoader(http: HttpClient) {
+export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     return new TranslateHttpLoader(http, './assets/locales/locale-', '.json');
+}
+
+export function getAngulartics2Providers(): Object[] {
+    return TrackingService.getTrackingProvider();
 }
 
 @NgModule({
@@ -51,6 +59,7 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
+        Angulartics2Module.forRoot(getAngulartics2Providers()),
         AngularCommonsModule,
         SDocModule,
         SectionsModule,
@@ -65,7 +74,9 @@ export function createTranslateLoader(http: HttpClient) {
         SDocDataService,
         PDocDataStore,
         PDocDataService,
+        SDocDataCacheService,
         SearchFormUtils,
+        { provide: GenericTrackingService, useClass: TrackingService },
         AngularHtmlService,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },
         PageUtils

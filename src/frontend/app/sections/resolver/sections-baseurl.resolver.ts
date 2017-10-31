@@ -20,13 +20,12 @@ export class SectionsBaseUrlResolver implements Resolve<ResolvedData<string>> {
             let id: string = route.params['section'] || route.parent.params['section'];
             if (!this.idValidationRule.isValid(id)) {
                 result.error = new ResolverError(SectionsBaseUrlResolver.ERROR_INVALID_SECTION_ID, id, undefined);
-                resolve(result);
-                return;
+                return resolve(result);
             }
 
             id = this.idValidationRule.sanitize(id);
             result.data = 'sections/' + id + '/';
-            resolve(result);
+            return resolve(result);
         });
     }
 }

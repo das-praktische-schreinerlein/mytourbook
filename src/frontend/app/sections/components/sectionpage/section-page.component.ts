@@ -18,6 +18,7 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
+import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -40,7 +41,7 @@ export class SectionPageComponent implements OnInit {
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef) {
+                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -68,6 +69,8 @@ export class SectionPageComponent implements OnInit {
                     this.pageUtils.setMetaLanguage();
 
                     me.cd.markForCheck();
+
+                    this.trackingProvider.trackPageView();
                     return;
                 }
 

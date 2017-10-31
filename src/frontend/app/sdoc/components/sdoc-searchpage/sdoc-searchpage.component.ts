@@ -18,6 +18,7 @@ import {GenericAppService} from '../../../../shared/commons/services/generic-app
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import * as L from 'leaflet';
+import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -44,7 +45,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
+                private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -104,6 +105,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                         this.pageUtils.setRobots(false, false);
                     }
                     this.pageUtils.setMetaLanguage();
+
+                    this.trackingProvider.trackPageView();
 
                     return this.doSearch();
                 }

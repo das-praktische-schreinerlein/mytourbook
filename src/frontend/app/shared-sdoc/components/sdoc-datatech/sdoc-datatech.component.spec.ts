@@ -5,6 +5,7 @@ import {SDocDataTechComponent} from './sdoc-datatech.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
+import {DomSanitizer} from '@angular/platform-browser';
 
 describe('SDocDataTechComponent', () => {
     let component: SDocDataTechComponent;
@@ -13,6 +14,7 @@ describe('SDocDataTechComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SDocDataTechComponent],
+            providers: [DomSanitizer],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot()]

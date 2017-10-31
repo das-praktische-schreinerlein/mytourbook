@@ -31,8 +31,7 @@ export class SectionsPDocRecordResolver implements Resolve<ResolvedData<PDocReco
                     if (!this.idValidationRule.isValid(id)) {
                         console.error('error no id for pdoc:', id);
                         result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID, id, undefined);
-                        resolve(result);
-                        return;
+                        return resolve(result);
                     }
 
                     id = this.idValidationRule.sanitize(id);
@@ -41,27 +40,23 @@ export class SectionsPDocRecordResolver implements Resolve<ResolvedData<PDocReco
                             if (pdoc === undefined) {
                                 console.error('error no pdoc for id:' + id);
                                 result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID, id, undefined);
-                                resolve(result);
-                                return;
+                                return resolve(result);
                             }
 
                             if (pdoc.id !== undefined) {
                                 me.routingService.setLastBaseUrl('sections/' + pdoc.id + '/');
                             }
                             result.data = pdoc;
-                            resolve(result);
-                            return;
+                            return resolve(result);
                         }).catch(function errorGetById(reason: any) {
                             console.error('error pdoc for id:' + id, reason);
                             result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_READING_SECTION_ID, id, reason);
-                            resolve(result);
-                            return;
+                            return resolve(result);
                         }
                     );
                 } else if (appState === AppState.Failed) {
                     result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
-                    resolve(result);
-                    return;
+                    return resolve(result);
                 }
             });
         });

@@ -5,7 +5,7 @@
             <div>
                 <ng-container [ngSwitch]="record.type">
                     <ng-container *ngSwitchCase="'IMAGE'">
-                            <h5>{{record.type | translate }} {{record.datevon | date: 'dd.MM.yyyy'}} {{record.name}}</h5>
+                        <h5><span class="fx-bg-type">{{record.type | translate }}</span> <span class="fx-bg-name">{{record.datevon | date: 'dd.MM.yyyy'}} {{record.name}}</span></h5>
                             <div class="image-container">
                                 <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                     <img class="picture-big" width="600px" [src]="contentUtils.getFullUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
@@ -14,12 +14,12 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault="">
                         <div style="width: 200px; float: left; margin-right: 10px">
-                            <h5>{{record.type | translate }}</h5>
+                            <h5 class="fx-bg-type">{{record.type | translate }}</h5>
                             <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                 <img class="picture-small" width="200px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                             </ng-container>
                         </div>
-                        <h5>{{record.name}}</h5>
+                        <h5><span class="fx-bg-name">{{record.name}}</span></h5>
                     </ng-container>
                 </ng-container>
                 <div id="desc"></div>
@@ -28,8 +28,8 @@
                 <app-sdoc-ratepers-difficulty [record]="record"></app-sdoc-ratepers-difficulty>
                 <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
                 <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
-                <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
                 <app-sdoc-datainfo [record]="record"></app-sdoc-datainfo >
+                <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
             </div>
             <br clear="all" />
         </div>
@@ -75,6 +75,7 @@
                                             [loadTrack]="'true'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -83,6 +84,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.SMALL"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
@@ -91,6 +93,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
@@ -99,6 +102,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'ROUTE'">
@@ -117,6 +121,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.SMALL"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
@@ -133,6 +138,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRACK'">
@@ -166,6 +172,7 @@
                                             [htmlId]="'TRACKIMAGE'"
                                             [showForm]="false"
                                             [layout]="Layout.SMALL"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
@@ -226,6 +233,7 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
@@ -235,6 +243,7 @@
                                             [showResultList]="true"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Alle'"
                                             [loadTrack]="'true'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
@@ -244,6 +253,7 @@
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
                                             [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -251,6 +261,7 @@
                                             [htmlId]="'TRIPIMAGE'"
                                             [showForm]="false"
                                             [layout]="Layout.SMALL"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
@@ -277,7 +288,8 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
-                                            [loadTrack]="'true'"
+                                            [searchLinkLabel]="'Alle'"
+                                            [loadTrack]="'Alle'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
@@ -286,6 +298,7 @@
                                             [htmlId]="'NEWSIMAGE'"
                                             [showForm]="false"
                                             [layout]="Layout.SMALL"
+                                            [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
         </ng-container>

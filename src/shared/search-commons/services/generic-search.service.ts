@@ -45,11 +45,11 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         const result = new Promise<R[]>((resolve, reject) => {
             this.search(searchForm, opts).then(function doneSearch(searchResultData: S) {
                     console.log('findCurList searchResultData', searchResultData);
-                    resolve(<R[]>searchResultData.currentRecords);
+                    return resolve(<R[]>searchResultData.currentRecords);
                 },
                 function errorSearch(reason) {
                     console.error('findCurList failed:' + reason);
-                    reject(reason);
+                    return reject(reason);
                 });
         });
 
@@ -64,11 +64,11 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         const result = new Promise<S>((resolve, reject) => {
             searchResultObs.then(function doneSearch(searchResultData: S) {
                     console.log('search searchResultData', searchResultData);
-                    resolve(searchResultData);
+                    return resolve(searchResultData);
                 },
                 function errorSearch(reason) {
                     console.error('search failed:' + reason);
-                    reject(reason);
+                    return reject(reason);
                 });
         });
 

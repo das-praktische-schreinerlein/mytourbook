@@ -1,11 +1,15 @@
 {
-    "solrCoreSDoc": "http://localhost:8983/solr/mytb/",
+    "solrCoreSDoc": "http://localhost:8983/solr/mytbdev/",
     "solrCoreSDocReadUsername": "mytbread",
     "solrCoreSDocReadPassword": "SolrRocks",
     "filePathPDocJson": "config/pdocs.json",
     "filePathThemeFilterJson": "config/themeFilterConfig.json",
-    "proxyUrlTracks": "http://localhost/michas/",
-    "proxyUrlPictures": "http://localhost/michas/",
+    "apiRouteTracks": "/tracks/",
+    "apiRoutePictures": "/pictures/",
+    "apiRouteTracksStaticDir": "D:/webs/www.michas-ausflugstipps.de/dataDB/tracks/",
+    "apiRoutePicturesStaticDir": "D:/Bilder/www.michas-ausflugstipps.de/",
+    "proxyTrackRouteToUrl": "http://localhost/michas/",
+    "proxyPicturesRouteToUrl": "http://localhost/michas/",
     "port": 4100,
     "corsOrigin": true
 }

@@ -23,18 +23,15 @@ export class SectionsPDocsResolver implements Resolve<ResolvedData<PDocRecord[]>
                     this.dataService.getAll(undefined).then(
                         function doneGetAll(pdocs: any) {
                             result.data = pdocs;
-                            resolve(result);
-                            return;
+                            return resolve(result);
                         }).catch(function errorGetAll(reason: any) {
                             console.error('error loading pdocs', reason);
                             result.error = new ResolverError(SectionsPDocsResolver.ERROR_READING_SECTIONS, undefined, reason);
-                            resolve(result);
-                            return;
+                            return resolve(result);
                         });
                 } else if (appState === AppState.Failed) {
                     result.error = new ResolverError(GenericAppService.ERROR_APP_NOT_INITIALIZED, undefined, undefined);
-                    resolve(result);
-                    return;
+                    return resolve(result);
                 }
             });
         });

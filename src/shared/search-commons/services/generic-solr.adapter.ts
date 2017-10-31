@@ -420,13 +420,13 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     abstract mapToAdapterDocument(props: any): any;
 
-    abstract getAdapterFields(mapper: Mapper, params: any, opts: any): string[];
+    abstract getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[];
 
-    abstract getFacetParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+    abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
-    abstract getSpatialParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+    abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
-    abstract getSortParams(mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+    abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
     getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
@@ -487,28 +487,32 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     }
 
     private queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
-        const query = this.createAdapterQuery(mapper, params, opts);
+        return this.queryTransformToAdapterQueryWithMethod(undefined, mapper, params, opts);
+    }
 
-        const fields = this.getAdapterFields(mapper, params, opts);
+    private queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): any {
+        const query = this.createAdapterQuery(method, mapper, params, opts);
+
+        const fields = this.getAdapterFields(method, mapper, params, opts);
         if (fields !== undefined && fields.length > 0) {
             query.fl = fields.join(' ');
         }
 
-        const facetParams = this.getFacetParams(mapper, params, opts, query);
+        const facetParams = this.getFacetParams(method, mapper, params, opts, query);
         if (facetParams !== undefined && facetParams.size > 0) {
             facetParams.forEach(function (value, key) {
                 query[key] = value;
             });
         }
 
-        const spatialParams = this.getSpatialParams(mapper, params, opts, query);
+        const spatialParams = this.getSpatialParams(method, mapper, params, opts, query);
         if (spatialParams !== undefined && spatialParams.size > 0) {
             spatialParams.forEach(function (value, key) {
                 query[key] = value;
             });
         }
 
-        const sortParams = this.getSortParams(mapper, params, opts, query);
+        const sortParams = this.getSortParams(method, mapper, params, opts, query);
         if (sortParams !== undefined && sortParams.size > 0) {
             sortParams.forEach(function (value, key) {
                 query[key] = value;
@@ -520,7 +524,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return query;
     }
 
-    private createAdapterQuery(mapper: Mapper, params: any, opts: any): any {
+    private createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
         // console.log('createAdapterQuery params:', params);
         // console.log('createAdapterQuery opts:', opts);
 

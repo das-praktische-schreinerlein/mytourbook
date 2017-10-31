@@ -18,6 +18,9 @@ import {MarkdownModule, MarkdownService} from 'angular2-markdown';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {Angulartics2} from 'angulartics2';
+import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -44,7 +47,9 @@ describe('SDocShowpageComponent', () => {
                 AngularMarkdownService,
                 AngularHtmlService,
                 ErrorResolver,
-                PageUtils
+                PageUtils,
+                GenericTrackingService,
+                { provide: Angulartics2, useValue: new Angulartics2Stub() },
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })
