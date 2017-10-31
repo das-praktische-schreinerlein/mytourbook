@@ -3,6 +3,6 @@
         <div *ngIf="sdocdatainfo.region !== undefined && sdocdatainfo.region.length > 0" class="entry"><div class="label">Region:</div><div class="value">{{sdocdatainfo.region}}</div></div>
         <div *ngIf="sdocdatainfo.baseloc !== undefined && sdocdatainfo.baseloc.length > 0" class="entry"><div class="label">Talort:</div><div class="value">{{sdocdatainfo.baseloc}}</div></div>
         <div *ngIf="sdocdatainfo.destloc !== undefined && sdocdatainfo.destloc.length > 0" class="entry"><div class="label">Ziel:</div><div class="value">{{sdocdatainfo.destloc}}</div></div>
-        <div *ngIf="sdocdatainfo.guides !== undefined && sdocdatainfo.guides.length > 0" class="entry"><div class="label">Führer:</div><div class="value">{{sdocdatainfo.guides}}</div></div>
+        <div *ngIf="sdocdatainfo.guides !== undefined && sdocdatainfo.guides.length > 0" class="entry"><div class="label">Führer:</div><div class="value" [innerHTML]="guides" ></div></div>
     </div>
 </ng-container>

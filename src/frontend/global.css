@@ -125,25 +125,6 @@ div.relative-container {
     background: gold;
 }
 
-
-div.techvaluetable {
-    display: inline-grid;
-    border: 1px solid #bfccd3;
-}
-div.techvaluetable .entry {
-    font-size: 0.75rem;
-}
-div.techvaluetable .entry .label {
-    min-width: 75px;
-    display: inline-grid;
-    font-weight: bold;
-    white-space: nowrap;
-}
-div.techvaluetable .entry .value {
-    display: inline-grid;
-    min-width: 50px;
-}
-
 div#LOCATIONIMAGE div.card-block-image div.techvaluetable,
 div#NEWSIMAGE div.card-block-image div.techvaluetable,
 div#ROUTEIMAGE div.card-block-image div.techvaluetable,
@@ -216,4 +197,12 @@ div.humanReadableSearchFilter div.filter {
     background: -ms-linear-gradient(top, #fcf1b5 0%, #fefcea 100%);
     background: linear-gradient(to bottom, #fcf1b5 0%, #fefcea 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcf1b5', endColorstr='#fefcea', GradientType=0 );
+}
+
+
+/** override IE-styles**/
+@media all and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+}
+/** override Edge-styles**/
+@supports (-ms-ime-align: auto) {
 }

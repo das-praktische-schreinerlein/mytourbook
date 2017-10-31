@@ -29,6 +29,7 @@
         "../..//node_modules/angular2-lightbox/lightbox.css",
         "spinner.css",
         "responsive.css",
+        "tables.css",
         "global.css",
         "global-overrides.css",
         "print.css",
