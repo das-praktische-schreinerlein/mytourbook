@@ -37,7 +37,7 @@ let sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
 SitemapGeneratorModule.generateSiteMapFiles(
     SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig, true),
     sitemapConfig,
-    new SDocSearchForm({ type: 'track,route,location,trip,news', sort: 'relevance'})
+    new SDocSearchForm(sitemapConfig.sdocSearchForm)
 );
 
 sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
