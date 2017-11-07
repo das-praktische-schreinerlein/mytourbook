@@ -62,13 +62,14 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         return values;
     }
 
-    mapResponseDocument(mapper: Mapper, doc: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any, opts: any): Record {
         const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
         const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
         const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
-
+console.error("opts", opts);
+        console.error("doc", doc);
         const values = {};
         values['id'] = this.getAdapterValue(doc, 'id', undefined);
 

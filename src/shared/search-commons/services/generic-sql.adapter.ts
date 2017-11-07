@@ -8,6 +8,8 @@ import 'rxjs/add/operator/map';
 import {Adapter} from 'js-data-adapter';
 import knex from 'knex';
 import toString from 'lodash.tostring';
+import {GenericSearchAdapter} from './generic-search.adapter';
+import {isArray} from 'util';
 
 export class AdapterFilterActions {
     static LIKEI = 'likei';
@@ -136,7 +138,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 // Allow for re-assignment from lifecycle hook
                 op = opts.op = 'count';
                 this.dbg(op, mapper, query, opts);
-                return utils.resolve(this.count(mapper, query, opts));
+                return utils.resolve(this._facets(mapper, query, opts));
             })
             .then((results) => {
                 let [data, result] = results;
@@ -174,7 +176,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 // Allow for re-assignment from lifecycle hook
                 op = opts.op = 'count';
                 this.dbg(op, mapper, query, opts);
-                return utils.resolve(this.count(mapper, query, opts));
+                return utils.resolve(this._search(mapper, query, opts));
             })
             .then((results) => {
                 let [data, result] = results;
@@ -225,9 +227,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     afterSearch(mapper: Mapper, props: IDict, opts: any, result: any): Promise<S> {
-        const count: number = this.extractCountFromRequestResult(mapper, result);
-        const records: R[] = this.extractRecordsFromRequestResult(mapper, result);
-        const facets: Facets = this.extractFacetsFromRequestResult(mapper, result);
+        const count: number = this.extractCountFromRequestResult(mapper, result, opts);
+        const records: R[] = this.extractRecordsFromRequestResult(mapper, result, opts);
+        const facets: Facets = this.extractFacetsFromRequestResult(mapper, result, opts);
         const searchResult = new GenericSearchResult(undefined, count, records, facets);
         return utils.Promise.resolve(<S>searchResult);
     }
@@ -273,6 +275,24 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         return sqlBuilder.raw(this.queryTransformToSql(opts.query));
+    };
+
+    _facets(mapper, query, opts) {
+        query = query || {};
+        opts = opts || {};
+
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        return sqlBuilder.raw(this.queryTransformToSql(opts.query));
+    };
+
+    _search(mapper, query, opts) {
+        query = query || {};
+        opts = opts || {};
+
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        const raw = sqlBuilder.raw(this.queryTransformToSql(opts.query));
+        console.error("raw:", raw);
+        return raw;
     };
 
     deserialize(mapper: Mapper, response: any, opts: any) {
@@ -343,7 +363,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         // count
         if (opts.adapterCount) {
-            return this.extractCountFromRequestResult(mapper, response.data);
+            return this.extractCountFromRequestResult(mapper, response.data, opts);
         }
 
         // facet
@@ -358,7 +378,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 return undefined;
             }
 
-            return this.extractFacetsFromRequestResult(mapper, response.data);
+            return this.extractFacetsFromRequestResult(mapper, response.data, opts);
         }
 
         // search records
@@ -366,45 +386,36 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             return undefined;
         }
 
-        return this.extractRecordsFromRequestResult(mapper, response.data);
+        return this.extractRecordsFromRequestResult(mapper, response.data, opts);
 
     }
 
-    extractCountFromRequestResult(mapper: Mapper, result: any): number {
-        return result.response.numFound;
+    extractCountFromRequestResult(mapper: Mapper, result: any, opts: any): number {
+        return isArray(result) ? result.length : 0;
     }
 
-    extractRecordsFromRequestResult(mapper: Mapper, result: any): R[] {
+    extractRecordsFromRequestResult(mapper: Mapper, result: any, opts: any): R[] {
+        if (!isArray(result)) {
+            return [];
+        }
+
         // got documents
-        const docs = result.response.docs;
+        const docs = result;
         const records = [];
         for (const doc of docs) {
-            records.push(this.mapResponseDocument(mapper, doc));
+            records.push(this.mapResponseDocument(mapper, doc, opts));
         }
-        // console.log('extractRecordsFromRequestResult:', records);
+        console.log('extractRecordsFromRequestResult:', records);
 
         return records;
     }
 
-    extractFacetsFromRequestResult(mapper: Mapper, result: any): Facets {
-        if (result.facet_counts === undefined ||
-            result.facet_counts.facet_fields === undefined) {
-            return new Facets();
-        }
-
-        const facets = new Facets();
-        for (const field in result.facet_counts.facet_fields) {
-            const values = this.splitPairs(result.facet_counts.facet_fields[field]);
-            const facet = new Facet();
-            facet.facet = values;
-            facets.facets.set(field, facet);
-        }
-
-        return facets;
+    extractFacetsFromRequestResult(mapper: Mapper, result: any, opts: any): Facets {
+        return new Facets();
     }
 
 
-    mapResponseDocument(mapper: Mapper, doc: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any, opts: any): Record {
         const values = {};
         values['id'] = Number(this.getAdapterValue(doc, 'id', undefined));
         // console.log('mapResponseDocument values:', values);
