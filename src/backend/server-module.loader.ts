@@ -38,7 +38,11 @@ export class ServerModuleLoader {
         SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, serverConfig.readOnly);
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de', serverConfig.readOnly);
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en', serverConfig.readOnly);
-        AssetsServerModule.configureTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
-        AssetsServerModule.configurePictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
+        AssetsServerModule.configureStaticTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
+        AssetsServerModule.configureStaticPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
+        AssetsServerModule.configureStoredTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig,
+            serverConfig.firewallConfig.routerErrorsConfigs['tracks'].file, serverConfig.filePathErrorDocs);
+        AssetsServerModule.configureStoredPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
+            serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
     }
 }

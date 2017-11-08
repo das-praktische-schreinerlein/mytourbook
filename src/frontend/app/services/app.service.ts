@@ -16,6 +16,7 @@ export class AppService extends GenericAppService {
         backendApiBaseUrl: environment.backendApiBaseUrl,
         tracksBaseUrl: environment.tracksBaseUrl,
         picsBaseUrl: environment.picsBaseUrl,
+        useAssetStoreUrls: environment.useAssetStoreUrls,
         components: {},
         services: {}
     };

@@ -35,6 +35,7 @@ export class SDocServerModule {
             );
         });
 
+        console.log('configure route sdoc:', apiPrefix + '/:locale' + '/sdoc/:id');
         app.route(apiPrefix + '/:locale' + '/sdoc/:id')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
@@ -53,6 +54,7 @@ export class SDocServerModule {
             });
 
         // use own wrapper for search
+        console.log('configure route sdocsearch:', apiPrefix + '/:locale/sdocsearch');
         app.route(apiPrefix + '/:locale/sdocsearch')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {

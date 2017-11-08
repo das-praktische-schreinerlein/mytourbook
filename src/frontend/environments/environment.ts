@@ -8,7 +8,8 @@ import {Angulartics2Piwik} from 'angulartics2';
 export const environment = {
     production: false,
     backendApiBaseUrl: 'http://localhost:4100/api/v1/',
-    tracksBaseUrl: 'http://localhost:4100/api/assets/tracks/',
-    picsBaseUrl: 'http://localhost:4100/api/static/pictures/',
+    tracksBaseUrl: 'http://localhost:4100/api/assets/trackstore/',
+    picsBaseUrl: 'http://localhost:4100/api/static/picturestore/',
+    useAssetStoreUrls: true,
     trackingProviders: [Angulartics2Piwik]
 };

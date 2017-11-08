@@ -40,7 +40,11 @@ export class SDocProfileMapComponent implements OnChanges {
             const record =  this.sdocs[i];
             const trackUrl = record.gpsTrackBasefile;
             if (trackUrl !== undefined && trackUrl.length > 0) {
-                tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json');
+                if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
+                    tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + 'json/' + record.id);
+                } else {
+                    tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json');
+                }
             }
         }
         this.trackUrls = tmpList;

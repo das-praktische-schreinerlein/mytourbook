@@ -59,7 +59,7 @@ export class SDocContentUtils {
     }
 
     getThumbnail(image: SDocImageRecord): string {
-        return this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x100/' + image.fileName;
+        return this.getImageUrl(image, 'x100');
     }
 
     getThumbnailUrl(image: SDocImageRecord): SafeUrl {
@@ -67,7 +67,7 @@ export class SDocContentUtils {
     }
 
     getPreview(image: SDocImageRecord): string {
-        return this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName;
+        return this.getImageUrl(image, 'x600');
     }
 
     getPreviewUrl(image: SDocImageRecord): SafeUrl {
@@ -75,8 +75,15 @@ export class SDocContentUtils {
     }
 
     getFullUrl(image: SDocImageRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName);
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getImageUrl(image, 'x600'));
+    }
+
+    getImageUrl(image: SDocImageRecord, resolution: string): string {
+        if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
+            return this.appService.getAppConfig()['picsBaseUrl'] + resolution + '/' + image.sdoc_id;
+        } else {
+            return this.appService.getAppConfig()['picsBaseUrl'] + 'pics_' + resolution + '/' + image.fileName;
+        }
     }
 
     getStyleClassForRecord(record: SDocRecord, layout: string): string[] {
@@ -217,10 +224,16 @@ export class SDocContentUtils {
         const mapElements: MapElement[] = [];
 
         if (showTrack) {
+            let storeUrl;
+            if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
+                storeUrl = this.appService.getAppConfig()['tracksBaseUrl'] + 'json/' + record.id;
+            } else {
+                storeUrl = this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json';
+            }
             const mapElement: MapElement = {
                 id: record.id,
                 name: record.name,
-                trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json',
+                trackUrl: storeUrl,
                 trackSrc: record.gpsTrack,
                 popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                 type: record.type
