@@ -33,6 +33,8 @@ import {SDocKeywordsComponent} from './components/sdoc-keywords/sdoc-keywords.co
 import {SDocDataInfoComponent} from './components/sdoc-datainfo/sdoc-datainfo.component';
 import {SDocDistanceComponent} from './components/sdoc-distance/sdoc-distance.component';
 import {SDocListItemThinComponent} from './components/sdoc-list-item-thin/sdoc-list-item-thin.component';
+import {SDocDateFormatPipe} from './pipes/sdoc-dateformat.pipe';
+import {DatePipe} from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -59,7 +61,8 @@ import {SDocListItemThinComponent} from './components/sdoc-list-item-thin/sdoc-l
         SDocDataInfoComponent,
         SDocRateTechComponent,
         SDocDistanceComponent,
-        SDocTimetableComponent
+        SDocTimetableComponent,
+        SDocDateFormatPipe
     ],
     imports: [
         ToastModule,
@@ -77,6 +80,7 @@ import {SDocListItemThinComponent} from './components/sdoc-list-item-thin/sdoc-l
         LightboxModule
     ],
     providers: [
+        DatePipe
     ],
     exports: [
         SDocListComponent,
@@ -102,7 +106,8 @@ import {SDocListItemThinComponent} from './components/sdoc-list-item-thin/sdoc-l
         SDocDataInfoComponent,
         SDocRateTechComponent,
         SDocDistanceComponent,
-        SDocTimetableComponent
+        SDocTimetableComponent,
+        SDocDateFormatPipe
     ]
 })
 export class SharedSDocModule {}

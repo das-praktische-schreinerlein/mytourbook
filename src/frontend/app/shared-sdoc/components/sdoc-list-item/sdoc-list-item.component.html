@@ -39,7 +39,7 @@
             </p>
         </div>
         <div class="card-footer">
-            <small class="text-muted">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</small>
+            <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
             </div>
@@ -90,7 +90,7 @@
             </p>
         </div>
         <div class="card-footer">
-            <small class="text-muted">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</small>
+            <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
             </div>

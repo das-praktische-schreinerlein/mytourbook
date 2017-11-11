@@ -11,7 +11,7 @@
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
                     </ng-container>
-                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord | sdocdate}}</h5></a>
                     <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers >
                 </div>
             </div>
