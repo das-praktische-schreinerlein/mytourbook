@@ -2,6 +2,7 @@ import express from 'express';
 import honeypot from 'honeypot';
 import {DnsBLConfig, FirewallConfig} from './firewall.commons';
 import {DnsBLCacheEntry, DnsBLQuery, GenericDnsBLModule} from './generic-dnsbl.module';
+import {DataCacheModule} from './datacache.module';
 
 export class DnsBLModule extends GenericDnsBLModule {
     private pot;
@@ -12,12 +13,13 @@ export class DnsBLModule extends GenericDnsBLModule {
             return;
         }
 
-        return new DnsBLModule(app, firewallConfig, firewallConfig.dnsBLConfig, filePathErrorDocs);
+        const cache = new DataCacheModule(firewallConfig.dnsBLConfig);
+        return new DnsBLModule(app, firewallConfig, firewallConfig.dnsBLConfig, filePathErrorDocs, cache);
     }
 
     constructor(protected app: express.Application, protected firewallConfig: FirewallConfig, protected config: DnsBLConfig,
-                protected filePathErrorDocs: string) {
-        super(app, firewallConfig, firewallConfig.dnsBLConfig, filePathErrorDocs);
+                protected filePathErrorDocs: string, protected cache: DataCacheModule) {
+        super(app, firewallConfig, firewallConfig.dnsBLConfig, filePathErrorDocs, cache);
     }
 
     protected configureDnsBLClient() {

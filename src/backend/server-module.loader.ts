@@ -9,13 +9,16 @@ import {PDocDataServiceModule} from './modules/pdoc-dataservice.module';
 import {SDocDataServiceModule} from './modules/sdoc-dataservice.module';
 import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service';
 import {AssetsServerModule} from './modules/assets-server.module';
+import {CacheConfig, DataCacheModule} from './modules/datacache.module';
 
 export interface ServerConfig {
     apiDataPrefix: string;
     apiAssetsPrefix: string;
     apiPublicPrefix: string;
     filePathErrorDocs: string;
-    backendConfig: {};
+    backendConfig: {
+        cacheConfig: CacheConfig;
+    };
     firewallConfig: FirewallConfig;
     readOnly: boolean;
 }
@@ -33,9 +36,10 @@ export class ServerModuleLoader {
             serverConfig.backendConfig, 'de', serverConfig.readOnly);
         const pdocDataServiceEN: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrEN' + serverConfig.readOnly,
             serverConfig.backendConfig, 'en', serverConfig.readOnly);
+        const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
 
         // add routes
-        SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, serverConfig.readOnly);
+        SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache, serverConfig.readOnly);
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de', serverConfig.readOnly);
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en', serverConfig.readOnly);
         AssetsServerModule.configureStaticTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);

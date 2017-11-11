@@ -7,36 +7,37 @@ import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
 import {Facets} from '../shared/search-commons/model/container/facets';
 import {GenericSearchOptions} from '../shared/search-commons/services/generic-search.service';
+import {DataCacheModule} from './datacache.module';
 
 export class SDocServerModule {
-    public static configureRoutes(app: express.Application, apiPrefix: string, dataService: SDocDataService, readOnly: boolean) {
+    public idValidationRule = new IdValidationRule(true);
+
+    public static configureRoutes(app: express.Application, apiPrefix: string, dataService: SDocDataService,
+                                  cache: DataCacheModule, readOnly: boolean) {
+        const sdocServerModule = new SDocServerModule(dataService, cache);
+
         // configure express
-        const idValidationRule = new IdValidationRule(true);
-        app.param('id', function(req, res, next, id) {
+        app.param('resolveSdocBySdocId', function(req, res, next, id) {
             const idParam = (id || '');
-            if (!idValidationRule.isValid(idParam)) {
+            if (!sdocServerModule.idValidationRule.isValid(idParam)) {
                 return next('not found');
             }
-            const searchForm = new SDocSearchForm({moreFilter: 'id:' + idValidationRule.sanitize(idParam)});
-            dataService.search(searchForm).then(
-                function searchDone(searchResult: SDocSearchResult) {
-                    if (!searchResult || searchResult.recordCount !== 1) {
-                        req['sdoc'] = undefined;
-                        return next();
-                    }
-                    req['sdoc'] = searchResult.currentRecords[0];
+
+            const cacheKey = 'cache_solr_sdocId_' + id;
+            cache.get(cacheKey).then(value => {
+                if (value !== undefined) {
+                    req['sdoc'] = Object.assign(new SDocRecord(), value.details);
                     return next();
                 }
-            ).catch(
-                function searchError(error) {
-                    console.error('error thrown: ', error);
-                    return next('not found');
-                }
-            );
+
+                return sdocServerModule.getById(req, next, cacheKey, id);
+            }).catch(reason => {
+                return sdocServerModule.getById(req, next, cacheKey, id);
+            });
         });
 
-        console.log('configure route sdoc:', apiPrefix + '/:locale' + '/sdoc/:id');
-        app.route(apiPrefix + '/:locale' + '/sdoc/:id')
+        console.log('configure route sdoc:', apiPrefix + '/:locale' + '/sdoc/:resolveSdocBySdocId');
+        app.route(apiPrefix + '/:locale' + '/sdoc/:resolveSdocBySdocId')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
                     return next('not allowed');
@@ -105,5 +106,30 @@ export class SDocServerModule {
                     return next('not found');
                 }
             });
+    }
+
+    private constructor(private dataService: SDocDataService, private cache: DataCacheModule) {
+    }
+
+    private getById(req, next, cacheKey, id): Promise<SDocSearchResult> {
+        const searchForm = new SDocSearchForm({moreFilter: 'id:' + this.idValidationRule.sanitize(id)});
+        const me = this;
+        return me.dataService.search(searchForm).then(
+            function searchDone(searchResult: SDocSearchResult) {
+                if (!searchResult || searchResult.recordCount !== 1) {
+                    req['sdoc'] = undefined;
+                    return next();
+                }
+                req['sdoc'] = searchResult.currentRecords[0];
+                const cachedSDoc = req['sdoc'].toSerializableJsonObj();
+                me.cache.set(cacheKey, {details: cachedSDoc, created: new Date().getDate(), updated: new Date().getDate()});
+                return next();
+            }
+        ).catch(
+            function searchError(error) {
+                console.error('error thrown: ', error);
+                return next('not found');
+            }
+        );
     }
 }

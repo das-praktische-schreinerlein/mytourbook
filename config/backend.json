@@ -7,14 +7,19 @@
     "apiRouteTracks": "/tracks/",
     "apiRoutePictures": "/pictures/",
     "apiRouteTracksStaticDir": "D:/webs/www.michas-ausflugstipps.de/dataDB/tracks/",
-    "apiRouteTracksStaticEnabled": true,
+    "apiRouteTracksStaticEnabled": false,
     "apiRoutePicturesStaticDir": "D:/Bilder/www.michas-ausflugstipps.de/",
-    "apiRoutePicturesStaticEnabled": true,
+    "apiRoutePicturesStaticEnabled": false,
     "apiRouteStoredTracks": "/trackstore/",
     "apiRouteStoredPictures": "/picturestore/",
     "apiRouteStoredPicturesResolutionPrefix": "pics_",
     "proxyTrackRouteToUrl": "http://localhost/michas/",
     "proxyPicturesRouteToUrl": "http://localhost/michas/",
+    "cacheConfig": {
+        "cacheRedisUrl": "redis://localhost:6379/",
+        "cacheRedisPass": "blablub",
+        "cacheRedisDB": "2"
+    },
     "port": 4100,
     "corsOrigin": true
 }

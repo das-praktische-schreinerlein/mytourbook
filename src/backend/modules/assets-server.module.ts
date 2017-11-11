@@ -42,7 +42,7 @@ export class AssetsServerModule {
                                                errorFile: string, filePathErrorDocs: string) {
         if (backendConfig['apiRouteStoredTracks'] && backendConfig['apiRouteTracksStaticDir']) {
             console.log('configure route trackstore:',
-                apiPrefix + backendConfig['apiRouteStoredTracks'] + ':resolution/:id'
+                apiPrefix + backendConfig['apiRouteStoredTracks'] + ':resolution/:resolveSdocBySdocId'
                 + ' to ' + backendConfig['apiRouteTracksStaticDir']);
             app.param('trackFormat', function(req, res, next, trackFormat) {
                 req['trackFormat'] = undefined;
@@ -53,7 +53,7 @@ export class AssetsServerModule {
                 return next();
             });
             // use id: param to read from solr
-            app.route(apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:id')
+            app.route(apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveSdocBySdocId')
                 .all(function(req, res, next) {
                     if (req.method !== 'GET') {
                         return next('not allowed');
@@ -107,7 +107,7 @@ export class AssetsServerModule {
                                                errorFile: string, filePathErrorDocs: string) {
         if (backendConfig['apiRouteStoredPictures'] && backendConfig['apiRoutePicturesStaticDir']) {
             console.log('configure route picturestore:',
-                apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:id'
+                apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveSdocBySdocId'
                 + ' to ' + backendConfig['apiRoutePicturesStaticDir']);
             app.param('resolution', function(req, res, next, resolution) {
                 req['resolution'] = undefined;
@@ -118,7 +118,7 @@ export class AssetsServerModule {
                 return next();
             });
             // use id: param to read from solr
-            app.route(apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:id')
+            app.route(apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveSdocBySdocId')
                 .all(function(req, res, next) {
                     if (req.method !== 'GET') {
                         return next('not allowed');
