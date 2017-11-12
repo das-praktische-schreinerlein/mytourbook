@@ -9,7 +9,7 @@ export class SDocRecord extends BaseEntityRecord {
     imageId: number;
 
     actiontypes: string;
-    datevon: Date;
+    dateshow: Date;
     descTxt: string;
     descMd: string;
     descHtml: string;

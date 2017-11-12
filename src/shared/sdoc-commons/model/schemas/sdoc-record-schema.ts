@@ -16,7 +16,7 @@ export const SDocRecordSchema = new Schema({
         newsId: {type: 'number'},
 
 // TODO
-//        datevon: {type: 'Date'},
+//        dateshow: {type: 'Date'},
         actiontypes: {type: 'string'},
         descTxt: {type: 'string'},
         descMd: {type: 'string'},

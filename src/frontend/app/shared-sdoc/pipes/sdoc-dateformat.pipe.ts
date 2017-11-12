@@ -15,7 +15,7 @@ export class SDocDateFormatPipe implements PipeTransform {
             return '';
         }
 
-        let date = sdoc.datevon;
+        let date = sdoc.dateshow;
         if (date === undefined || date === null) {
             return '';
         }
