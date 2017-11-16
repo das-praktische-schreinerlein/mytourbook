@@ -23,16 +23,16 @@ export class SDocServerModule {
                 return next('not found');
             }
 
-            const cacheKey = 'cache_solr_sdocId_' + id;
+            const cacheKey = sdocServerModule.generateCacheKey(id);
             cache.get(cacheKey).then(value => {
                 if (value !== undefined) {
                     req['sdoc'] = Object.assign(new SDocRecord(), value.details);
                     return next();
                 }
 
-                return sdocServerModule.getById(req, next, cacheKey, id);
+                return sdocServerModule.getById(req, next, id);
             }).catch(reason => {
-                return sdocServerModule.getById(req, next, cacheKey, id);
+                return sdocServerModule.getById(req, next, id);
             });
         });
 
@@ -108,11 +108,12 @@ export class SDocServerModule {
             });
     }
 
-    private constructor(private dataService: SDocDataService, private cache: DataCacheModule) {
+    public constructor(private dataService: SDocDataService, private cache: DataCacheModule) {
     }
 
-    private getById(req, next, cacheKey, id): Promise<SDocSearchResult> {
+    public getById(req, next, id): Promise<SDocSearchResult> {
         const searchForm = new SDocSearchForm({moreFilter: 'id:' + this.idValidationRule.sanitize(id)});
+        const cacheKey = this.generateCacheKey(id);
         const me = this;
         return me.dataService.search(searchForm).then(
             function searchDone(searchResult: SDocSearchResult) {
@@ -131,5 +132,9 @@ export class SDocServerModule {
                 return next('not found');
             }
         );
+    }
+
+    public generateCacheKey(id: any): string {
+        return 'cache_solr_sdocId_' + id;
     }
 }

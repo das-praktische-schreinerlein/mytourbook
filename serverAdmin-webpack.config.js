@@ -12,11 +12,11 @@ fs.readdirSync('node_modules')
     });
 
 module.exports = {
-    entry: './dist/tsc-out/backend/sitemapGenerator.js',
+    entry: './dist/tsc-out/backend/serverAdmin.js',
     target: 'async-node',
     output: {
         path: path.join(__dirname, 'dist/backend/'),
-        filename: 'sitemapGenerator.js'
+        filename: 'serverAdmin.js'
     },
     resolveLoader: {
         moduleExtensions: ['-loader']
@@ -29,10 +29,10 @@ module.exports = {
     externals: nodeModules,
     plugins: [
         new webpack.IgnorePlugin(/\.(css|less)$/)
-/**
-        new webpack.BannerPlugin('require("source-map-support").install();',
-            { raw: true, entryOnly: false })
-**/
+        /**
+         new webpack.BannerPlugin('require("source-map-support").install();',
+         { raw: true, entryOnly: false })
+         **/
     ],
     devtool: 'sourcemap',
     node: {
