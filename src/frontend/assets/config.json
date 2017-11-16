@@ -25,5 +25,10 @@
             "blacklist": ["OFFEN", "Mom", "Pa", "Dani", "Micha", "Verena",
                 "Booga", "Harry", "Rudi", "Pelle"]
         }
+    },
+    "services": {
+        "seo": {
+            "sdocIndexableTypes": ["ROUTE", "LOCATION", "NEWS"]
+        }
     }
 }
