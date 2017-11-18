@@ -7,8 +7,9 @@
   "apps": [
     {
       "name": "frontend",
+      "platform": "browser",
       "root": "src/frontend",
-      "outDir": "dist",
+      "outDir": "dist/browser/",
       "assets": [
         "assets",
         "manifest.json"
@@ -69,6 +70,9 @@
   "defaults": {
     "styleExt": "css",
     "prefixInterfaces": false,
+    "build": {
+      "preserveSymlinks": true
+    },
     "inline": {
       "style": false,
       "template": false
