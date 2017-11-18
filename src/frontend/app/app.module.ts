@@ -50,7 +50,7 @@ export function getAngulartics2Providers(): Object[] {
         HttpModule,
         HttpClientModule,
         NgbModule.forRoot(),
-        BrowserModule,
+        BrowserModule.withServerTransition({appId: 'sdoc-app'}),
         ToastModule.forRoot(),
         TranslateModule.forRoot({
             loader: {

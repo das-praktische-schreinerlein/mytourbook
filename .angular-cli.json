@@ -44,6 +44,44 @@
             "dev": "environments/environment.ts",
             "prod": "environments/environment.prod.ts"
       }
+    },
+    {
+      "name": "server",
+      "platform": "server",
+      "root": "src/frontend",
+      "outDir": "dist/server",
+      "assets": [
+        "assets",
+        "manifest.json"
+      ],
+      "index": "index.html",
+      "main": "main.server.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.server.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "../../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+        "../../node_modules/leaflet/dist/leaflet.css",
+        "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+        "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
+        "../..//node_modules/angular2-lightbox/lightbox.css",
+        "spinner.css",
+        "responsive.css",
+        "tables.css",
+        "global.css",
+        "global-overrides.css",
+        "print.css",
+        "print-overrides.css"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "beta": "environments/environment.beta.ts",
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
     }
   ],
   "e2e": {
