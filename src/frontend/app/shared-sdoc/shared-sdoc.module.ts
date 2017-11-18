@@ -12,7 +12,7 @@ import {SDocListItemSmallComponent} from './components/sdoc-list-item-small/sdoc
 import {SDocListItemFlatComponent} from './components/sdoc-list-item-flat/sdoc-list-item-flat.component';
 import {AngularMapsModule} from '../../shared/angular-maps/angular-maps.module';
 import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
-import {HttpModule, JsonpModule} from '@angular/http';
+import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule} from '@ngx-translate/core';
@@ -74,7 +74,6 @@ import {DatePipe} from '@angular/common';
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        JsonpModule,
         AngularCommonsModule,
         AngularMapsModule,
         LightboxModule

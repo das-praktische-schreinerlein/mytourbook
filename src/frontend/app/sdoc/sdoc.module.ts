@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {HttpModule, JsonpModule} from '@angular/http';
+import {HttpModule} from '@angular/http';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
 import {SDocSearchFormConverter} from '../shared-sdoc/services/sdoc-searchform-converter.service';
 import {SDocShowpageComponent} from './components/sdoc-showpage/sdoc-showpage.component';
@@ -34,7 +34,6 @@ import {CommonRoutingService} from '../../shared/angular-commons/services/common
         NgbModule,
         ToastModule,
         HttpModule,
-        JsonpModule,
         AngularCommonsModule,
         SharedSDocModule,
         SDocRoutingModule
