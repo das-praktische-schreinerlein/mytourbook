@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack && webpack --config serverAdmin-webpack.config.js",
+    "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js",
     "backend-build-serve": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js && node dist/backend/backend.js",
     "build-dev-de": "ng build --base-href=/mytbdev/de/ --target=production --environment=dev --aot true --app=frontend --output-path dist/mytbdev/de --locale de --i18n-format xlf --i18n-file src/frontend/locales/messages.de.xlf",
     "build-dev-en": "ng build --base-href=/mytbdev/en/ --target=production --environment=dev --aot true --app=frontend --output-path dist/mytbdev/en --locale en --i18n-format xlf --i18n-file src/frontend/locales/messages.en.xlf",
