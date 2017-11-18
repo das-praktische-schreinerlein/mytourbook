@@ -3,7 +3,7 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
-import {Angulartics2Piwik} from 'angulartics2';
+import {Angulartics2Piwik} from 'angulartics2/piwik';
 
 export const environment = {
     production: false,
