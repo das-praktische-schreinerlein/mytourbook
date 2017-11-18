@@ -1,4 +1,4 @@
-import {Angulartics2Piwik} from 'angulartics2';
+import {Angulartics2Piwik} from 'angulartics2/piwik';
 
 export const environment = {
     production: true,

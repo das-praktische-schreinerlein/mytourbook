@@ -36,7 +36,7 @@ export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
     return new TranslateHttpLoader(http, './assets/locales/locale-', '.json');
 }
 
-export function getAngulartics2Providers(): Object[] {
+export function getAngulartics2Providers(): any {
     return TrackingService.getTrackingProvider();
 }
 
