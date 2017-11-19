@@ -135,6 +135,6 @@ export class SDocServerModule {
     }
 
     public generateCacheKey(id: any): string {
-        return 'cache_solr_sdocId_' + id;
+        return 'cachev1_solr_sdocId_' + id;
     }
 }

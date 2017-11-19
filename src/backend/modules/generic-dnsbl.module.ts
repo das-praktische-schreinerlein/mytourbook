@@ -26,7 +26,7 @@ export interface DnsBLQuery {
 export abstract class GenericDnsBLModule {
     private dnsBLResultCache = {};
     private queryCache = {};
-    private redisPrefix = 'dnsbl_';
+    private redisPrefix = 'dnsblv1_';
 
     constructor(protected app: express.Application, protected firewallConfig: FirewallConfig, protected config: DnsBLConfig,
                 protected filePathErrorDocs: string, protected cache: DataCacheModule) {
