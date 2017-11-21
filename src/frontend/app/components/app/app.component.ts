@@ -1,10 +1,14 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
+import {
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, LOCALE_ID, Optional,
+    ViewContainerRef
+} from '@angular/core';
 import {ToastsManager} from 'ng2-toastr';
 import {TranslateService} from '@ngx-translate/core';
 import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
 import {CommonRoutingService, RoutingState} from '../../../shared/angular-commons/services/common-routing.service';
+import {APP_BASE_HREF} from '@angular/common';
 
 @Component({
     selector: 'app-root',
@@ -19,7 +23,8 @@ export class AppComponent {
 
     constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,
-                private http: Http, private commonRoutingService: CommonRoutingService, private cd: ChangeDetectorRef) {
+                private http: Http, private commonRoutingService: CommonRoutingService, private cd: ChangeDetectorRef,
+                @Optional() @Inject(APP_BASE_HREF) private origin: string) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(locale);
 
@@ -38,13 +43,15 @@ export class AppComponent {
         );
 
         // load overrides
-        this.http.request(`./assets/locales/locale-${locale}-overrides.json`).toPromise()
+        const url = this.origin + `./assets/locales/locale-${locale}-overrides.json`;
+        console.log('load locale-override', url);
+        this.http.request(url).toPromise()
             .then(function onDocsLoaded(res: any) {
                 const i18n: any[] = res.json();
                 translate.setTranslation(locale, i18n, true);
                 appService.initApp();
             }).catch(function onError(reason: any) {
-                console.error('loading locale-overrides failed:' + reason);
+                console.error('loading locale-overrides failed:' + url, reason);
                 appService.initApp();
             });
 
