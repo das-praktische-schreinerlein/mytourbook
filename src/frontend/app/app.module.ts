@@ -30,14 +30,15 @@ import {SDocDataCacheService} from './shared-sdoc/services/sdoc-datacache.servic
 import {GenericTrackingService} from '../shared/angular-commons/services/generic-tracking.service';
 import {TrackingService} from './services/tracking.service';
 import {Angulartics2Module} from 'angulartics2';
-import {APP_BASE_HREF, registerLocaleData} from '@angular/common';
+import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
+import {AssetsService} from '../shared/angular-commons/services/assets.service';
 
 registerLocaleData(localeDe);
 
 // AoT requires an exported function for factories
-export function createTranslateLoader(http: HttpClient, origin: string): TranslateHttpLoader {
-    const url = origin + `./assets/locales/locale-`;
+export function createTranslateLoader(http: HttpClient, assetsService: AssetsService): TranslateHttpLoader {
+    const url = assetsService.getAssetsUrl('./assets/locales/locale-');
     console.log('use translate-baseul', url);
     return new TranslateHttpLoader(http, url, '.json');
 }
@@ -62,7 +63,7 @@ export function getAngulartics2Providers(): any {
             loader: {
                 provide: TranslateLoader,
                 useFactory: (createTranslateLoader),
-                deps: [HttpClient, APP_BASE_HREF]
+                deps: [HttpClient, AssetsService]
             }
         }),
         Angulartics2Module.forRoot(getAngulartics2Providers()),
@@ -86,7 +87,7 @@ export function getAngulartics2Providers(): any {
         AngularHtmlService,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },
         PageUtils,
-        { provide: APP_BASE_HREF, useValue: ''}
+        { provide: AssetsService, useClass: AssetsService}
     ],
     bootstrap: [AppComponent]
 })

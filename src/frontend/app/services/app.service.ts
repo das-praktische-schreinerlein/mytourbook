@@ -1,4 +1,4 @@
-import {Inject, Injectable, LOCALE_ID, Optional} from '@angular/core';
+import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
 import {Http} from '@angular/http';
 import {SDocDataStore} from '../../shared/sdoc-commons/services/sdoc-data.store';
@@ -9,7 +9,7 @@ import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.serv
 import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';
 import {MinimalHttpBackendClient} from '../../shared/commons/services/minimal-http-backend-client';
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
-import {APP_BASE_HREF} from '@angular/common';
+import {AssetsService} from '../../shared/angular-commons/services/assets.service';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -25,7 +25,7 @@ export class AppService extends GenericAppService {
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
                 private http: Http, private commonRoutingService: CommonRoutingService,
-                private backendHttpClient: MinimalHttpBackendClient, @Optional() @Inject(APP_BASE_HREF) private origin: string) {
+                private backendHttpClient: MinimalHttpBackendClient, private assetsService: AssetsService) {
         super();
     }
 
@@ -69,7 +69,7 @@ export class AppService extends GenericAppService {
     initAppConfig(): Promise<any> {
         const me = this;
         return new Promise<boolean>((resolve, reject) => {
-            const url = me.origin + `./assets/config.json`
+            const url = me.assetsService.getAssetsUrl(`./assets/config.json`);
             console.log('load config:', url);
             me.http.request(url).toPromise()
                 .then(function onConfigLoaded(res: any) {

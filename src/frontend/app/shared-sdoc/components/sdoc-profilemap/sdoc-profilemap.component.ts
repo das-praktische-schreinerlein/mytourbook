@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, Input, OnChanges, PLATFORM_ID, SimpleChange} from '@angular/core';
 
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
     selector: 'app-sdoc-profilemap',
@@ -21,10 +22,10 @@ export class SDocProfileMapComponent implements OnChanges {
     @Input()
     public sdocs: SDocRecord[];
 
-    constructor(private appService: GenericAppService) {}
+    constructor(private appService: GenericAppService, @Inject(PLATFORM_ID) protected platformId: Object) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
+        if (isPlatformBrowser(this.platformId) && ComponentUtils.hasNgChanged(changes)) {
             this.renderMap();
         }
     }
