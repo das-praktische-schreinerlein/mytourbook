@@ -56,7 +56,7 @@ FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.
 MytbAngularModule.configureRoutes(app, distFolder, distProfile, distServerProfile);
 
 // Start up the Node server
-app.listen(serverConfig.frontendPort['port'], function () {
-    console.log('MyTB app listening on port ' + serverConfig.frontendPort['port']);
+app.listen(serverConfig.frontendPort, function () {
+    console.log('MyTB app listening on port ' + serverConfig.frontendPort);
 });
 
