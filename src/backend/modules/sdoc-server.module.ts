@@ -7,7 +7,7 @@ import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
 import {Facets} from '../shared/search-commons/model/container/facets';
 import {GenericSearchOptions} from '../shared/search-commons/services/generic-search.service';
-import {DataCacheModule} from './datacache.module';
+import {DataCacheModule} from '../shared-node/server-commons/datacache.module';
 
 export class SDocServerModule {
     public idValidationRule = new IdValidationRule(true);

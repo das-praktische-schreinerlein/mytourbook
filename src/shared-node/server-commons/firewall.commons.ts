@@ -16,6 +16,7 @@ export interface DnsBLConfig {
     cacheRedisUrl: string;
     cacheRedisPass: string;
     cacheRedisDB: string;
+    maxThreatScore?: number;
 }
 
 export class FirewallCommons {

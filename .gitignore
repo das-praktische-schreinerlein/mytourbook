@@ -42,4 +42,7 @@ Thumbs.db
 /installer/docker/solr/cores/*
 /documentation/
 /src/frontend/shared
+/src/frontendserver/shared
+/src/frontendserver/shared-node
 /src/backend/shared
+/src/backend/shared-node

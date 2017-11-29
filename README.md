@@ -7,7 +7,7 @@ This project was generated with [angular-cli](https://github.com/angular/angular
 - add symlinks
     - on windows in admin-console
 ```
-cd src\frontend\ && mklink /D shared ..\shared && cd ..\backend\ && mklink /D shared ..\shared
+cd src\frontend\ && mklink /D shared ..\shared && cd ..\backend\ && mklink /D shared ..\shared  && mklink /D shared-node ..\shared-node && cd ..\frontendserver\ && mklink /D shared ..\shared && mklink /D shared-node ..\shared-node
 ```
 - run `npm install`
 - fix mytourbook/node_modules/@types/vis/index.d.ts

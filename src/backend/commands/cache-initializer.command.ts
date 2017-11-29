@@ -3,7 +3,7 @@ import {ServerConfig} from '../server-module.loader';
 import * as fs from 'fs';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
-import {DataCacheModule} from '../modules/datacache.module';
+import {DataCacheModule} from '../shared-node/server-commons/datacache.module';
 import {SDocServerModule} from '../modules/sdoc-server.module';
 import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericSearchResult} from '../shared/search-commons/model/container/generic-searchresult';
