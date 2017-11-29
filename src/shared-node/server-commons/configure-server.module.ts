@@ -6,7 +6,6 @@ import {json, urlencoded} from 'body-parser';
 import protect from '@risingstack/protect';
 import requestIp from 'request-ip';
 
-
 export class ConfigureServerModule {
     public static configureServer(app: express.Application, backendConfig: {}) {
         // configure parsing

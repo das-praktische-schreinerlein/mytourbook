@@ -61,6 +61,7 @@
     ],
     "dnsBLConfig": {
         "apiKey": "",
+        "maxThreatScore": 20,
         "dnsttl": 3600000,
         "errttl": 60000,
         "timeout": 3000,

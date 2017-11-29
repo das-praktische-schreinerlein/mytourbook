@@ -1,15 +1,15 @@
-import {ConfigureServerModule} from './modules/configure-server.module';
+import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
 import {SDocServerModule} from './modules/sdoc-server.module';
 import {PDocServerModule} from './modules/pdoc-server.module';
-import {FirewallConfig} from './modules/firewall.commons';
-import {DnsBLModule} from './modules/dnsbl.module';
-import {FirewallModule} from './modules/firewall.module';
+import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
+import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
+import {FirewallModule} from './shared-node/server-commons/firewall.module';
 import {PDocDataService} from './shared/pdoc-commons/services/pdoc-data.service';
 import {PDocDataServiceModule} from './modules/pdoc-dataservice.module';
 import {SDocDataServiceModule} from './modules/sdoc-dataservice.module';
 import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service';
 import {AssetsServerModule} from './modules/assets-server.module';
-import {CacheConfig, DataCacheModule} from './modules/datacache.module';
+import {CacheConfig, DataCacheModule} from './shared-node/server-commons/datacache.module';
 
 export interface ServerConfig {
     apiDataPrefix: string;
