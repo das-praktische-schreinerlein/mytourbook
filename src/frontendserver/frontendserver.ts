@@ -4,75 +4,59 @@ import 'reflect-metadata';
 import {enableProdMode} from '@angular/core';
 import * as express from 'express';
 import {join} from 'path';
-// Express Engine
-import {ngExpressEngine} from '@nguniversal/express-engine';
-// Import module map for lazy loading
-import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
+import minimist from 'minimist';
+import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
+import {CacheConfig} from './shared-node/server-commons/datacache.module';
+import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
+import {FirewallModule} from './shared-node/server-commons/firewall.module';
+import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
+import {MytbAngularModule} from './mytb-ngexpress.module';
+import * as fs from 'fs';
 
-// Faster server renders w/ Prod mode (dev mode never needed)
-enableProdMode();
-
-// Express server
-const app = express();
-
-const PORT = process.env.PORT || 4002;
-const DIST_FOLDER = join(process.cwd(), 'dist');
-
-const distProfile = 'DIST_PROFILE';
-const distServerProfile = 'DIST_SERVER_PROFILE';
-const indexFile = join(DIST_FOLDER, distProfile, 'index.html');
-const template = '<html><body></body></html>';
-
+// disable debug-logging
 const debug = false;
 if (!debug) {
     console.debug = function() {};
     console.log = function() {};
 }
 
-// simulate browser
-const domino = require('domino');
-const win = domino.createWindow(template);
-global['window'] = win;
-global['document'] = win.document;
-global['navigator'] = { userAgent: 'chrome', product: 'ReactNative', platform: 'Win'};
-global['window']['devicePixelRatio'] = 1;
-global['self'] = global['window'];
+const argv = []; //minimist(process.argv.slice(2));
 
-// import dependencies
-global['L'] = require('leaflet');
+// Faster server renders w/ Prod mode (dev mode never needed)
+enableProdMode();
 
-// * NOTE :: leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('../../dist/' + distServerProfile + 'main.bundle');
+const distFolder = join(process.cwd(), 'dist');
+const distProfile = 'DIST_PROFILE';
+const distServerProfile = 'DIST_SERVER_PROFILE';
+const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+const filePathFirewallConfigJson = argv['f'] || argv['firewall'] || 'config/firewall.json';
 
-app.engine('html', ngExpressEngine({
-    bootstrap: AppServerModuleNgFactory,
-    providers: [
-        provideModuleMap(LAZY_MODULE_MAP)
-    ]
-}));
-
-/* Server-side rendering */
-function angularRouter(req, res) {
-    /* Server-side rendering */
-    res.render(indexFile,
-        { req, res, providers: [{ provide: 'baseUrl', useValue: `${req.protocol}://${req.get('host')}/${distProfile}`}]
-        }
-    );
+export interface ServerConfig {
+    filePathErrorDocs: string;
+    backendConfig: {
+        cacheConfig: CacheConfig;
+    };
+    firewallConfig: FirewallConfig;
+    frontendPort: number;
 }
 
-app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, ''));
+const serverConfig: ServerConfig = {
+    filePathErrorDocs: './error_docs/',
+    backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
+    firewallConfig: JSON.parse(fs.readFileSync(filePathFirewallConfigJson, { encoding: 'utf8' })),
+    frontendPort: 4002
+};
 
-// Serve static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, '')));
+// Express server
+const app = express();
 
-// All regular routes use the Universal engine
-app.get('*', (req, res) => {
-    //global['navigator'] = req['headers']['user-agent'];
-    angularRouter(req, res);
-});
+// ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
+FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
+// DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
+MytbAngularModule.configureRoutes(app, distFolder, distProfile, distServerProfile);
 
 // Start up the Node server
-app.listen(PORT, () => {
-    console.log(`Node server listening on http://localhost:${PORT}`);
+app.listen(serverConfig.frontendPort['port'], function () {
+    console.log('MyTB app listening on port ' + serverConfig.frontendPort['port']);
 });
+
