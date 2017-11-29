@@ -17,6 +17,10 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            DIST_PROFILE: JSON.stringify("mytbdev/de/"),
+            DIST_SERVER_PROFILE: JSON.stringify("mytbdev-server/de/")
+        }),
         // Temporary Fix for issue: https://github.com/angular/angular/issues/11580
         // for "WARNING Critical dependency: the request of a dependency is an expression"
         new webpack.ContextReplacementPlugin(

@@ -18,8 +18,8 @@ const app = express();
 const PORT = process.env.PORT || 4002;
 const DIST_FOLDER = join(process.cwd(), 'dist');
 
-const distProfile = 'mytbdev/de/';
-const distServerProfile = 'mytbdev-server/de/';
+const distProfile = 'DIST_PROFILE';
+const distServerProfile = 'DIST_SERVER_PROFILE';
 const indexFile = join(DIST_FOLDER, distProfile, 'index.html');
 const template = '<html><body></body></html>';
 
@@ -59,7 +59,6 @@ function angularRouter(req, res) {
         }
     );
 }
-
 
 app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, ''));
