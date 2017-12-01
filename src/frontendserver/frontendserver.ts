@@ -20,14 +20,14 @@ if (!debug) {
     console.log = function() {};
 }
 
-const argv = []; //minimist(process.argv.slice(2));
+const argv = minimist(process.argv.slice(2));
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
 
 const distFolder = join(process.cwd(), 'dist');
-const distProfile = 'DIST_PROFILE';
-const distServerProfile = 'DIST_SERVER_PROFILE';
+const distProfile = 'mytbdev/de/'; //'DIST_PROFILE'; 'mytbdev/de/';
+const distServerProfile = 'mytbdev-server/de/'; //'DIST_SERVER_PROFILE'; 'mytbdev-server/de/';
 const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
 const filePathFirewallConfigJson = argv['f'] || argv['firewall'] || 'config/firewall.json';
 
@@ -50,9 +50,9 @@ const serverConfig: ServerConfig = {
 // Express server
 const app = express();
 
-// ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
+ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
 FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
-// DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
+//DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 MytbAngularModule.configureRoutes(app, distFolder, distProfile, distServerProfile);
 
 // Start up the Node server

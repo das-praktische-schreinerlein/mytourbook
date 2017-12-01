@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 describe('SDocMapComponent', () => {
     let component: SDocMapComponent;
@@ -24,6 +25,7 @@ describe('SDocMapComponent', () => {
             providers: [
                 DomSanitizer,
                 { provide: Router, useValue: new RouterStub() },
+                PlatformService,
                 CommonRoutingService,
                 SDocRoutingService,
                 SDocContentUtils,

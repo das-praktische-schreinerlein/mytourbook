@@ -47,10 +47,10 @@ export class MytbAngularModule {
         app.set('views', join(distFolder, ''));
 
         // Serve static files from /browser
-        app.get('*.*', express.static(join(distFolder, '')));
+        app.get('/' + distProfile + '*.*', express.static(join(distFolder, '')));
 
         // All regular routes use the Universal engine
-        app.get('*', (req, res) => {
+        app.get('/' + distProfile + '*', (req, res) => {
             //global['navigator'] = req['headers']['user-agent'];
             angularRouter(req, res);
         });

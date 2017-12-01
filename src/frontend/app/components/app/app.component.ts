@@ -5,7 +5,7 @@ import {AppState, GenericAppService} from '../../../shared/commons/services/gene
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
 import {CommonRoutingService, RoutingState} from '../../../shared/angular-commons/services/common-routing.service';
-import {AssetsService} from '../../../shared/angular-commons/services/assets.service';
+import {PlatformService} from '../../../shared/angular-commons/services/platform.service';
 
 @Component({
     selector: 'app-root',
@@ -21,7 +21,7 @@ export class AppComponent {
     constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,
                 private http: Http, private commonRoutingService: CommonRoutingService, private cd: ChangeDetectorRef,
-                private assetsService: AssetsService) {
+                private platformService: PlatformService) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(locale);
 
@@ -31,7 +31,7 @@ export class AppComponent {
         this.toastr.setRootViewContainerRef(vcr);
         appService.getAppState().subscribe(
             appState => {
-                if (appState === AppState.Ready) {
+                if (appState === AppState.Ready && this.platformService.isClient()) {
                     this.toastr.info('App wurde initialisiert. Viel Spaß :-)', 'Fertig');
                 } else if (appState === AppState.Failed) {
                     this.router.navigateByUrl('errorpage');
@@ -40,7 +40,7 @@ export class AppComponent {
         );
 
         // load overrides
-        const url = this.assetsService.getAssetsUrl(`./assets/locales/locale-${locale}-overrides.json`);
+        const url = this.platformService.getAssetsUrl(`./assets/locales/locale-${locale}-overrides.json`);
         console.log('load locale-override', url);
         this.http.request(url).toPromise()
             .then(function onDocsLoaded(res: any) {

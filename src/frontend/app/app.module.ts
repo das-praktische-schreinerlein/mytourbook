@@ -32,13 +32,13 @@ import {TrackingService} from './services/tracking.service';
 import {Angulartics2Module} from 'angulartics2';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
-import {AssetsService} from '../shared/angular-commons/services/assets.service';
+import {PlatformService} from '../shared/angular-commons/services/platform.service';
 
 registerLocaleData(localeDe);
 
 // AoT requires an exported function for factories
-export function createTranslateLoader(http: HttpClient, assetsService: AssetsService): TranslateHttpLoader {
-    const url = assetsService.getAssetsUrl('./assets/locales/locale-');
+export function createTranslateLoader(http: HttpClient, platformService: PlatformService): TranslateHttpLoader {
+    const url = platformService.getAssetsUrl('./assets/locales/locale-');
     console.log('use translate-baseul', url);
     return new TranslateHttpLoader(http, url, '.json');
 }
@@ -63,7 +63,7 @@ export function getAngulartics2Providers(): any {
             loader: {
                 provide: TranslateLoader,
                 useFactory: (createTranslateLoader),
-                deps: [HttpClient, AssetsService]
+                deps: [HttpClient, PlatformService]
             }
         }),
         Angulartics2Module.forRoot(getAngulartics2Providers()),
@@ -87,7 +87,7 @@ export function getAngulartics2Providers(): any {
         AngularHtmlService,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },
         PageUtils,
-        { provide: AssetsService, useClass: AssetsService}
+        { provide: PlatformService, useClass: PlatformService}
     ],
     bootstrap: [AppComponent]
 })
