@@ -4,7 +4,6 @@ import 'reflect-metadata';
 import {enableProdMode} from '@angular/core';
 import * as express from 'express';
 import {join} from 'path';
-import minimist from 'minimist';
 import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
 import {CacheConfig} from './shared-node/server-commons/datacache.module';
 import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
@@ -12,6 +11,7 @@ import {FirewallModule} from './shared-node/server-commons/firewall.module';
 import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
 import {MytbAngularModule} from './mytb-ngexpress.module';
 import * as fs from 'fs';
+const minimist = require ('minimist');
 
 // disable debug-logging
 const debug = false;

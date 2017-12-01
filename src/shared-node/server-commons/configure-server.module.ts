@@ -1,10 +1,10 @@
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import compression from 'compression';
 import {json, urlencoded} from 'body-parser';
-import protect from '@risingstack/protect';
-import requestIp from 'request-ip';
+const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
+const protect = require('@risingstack/protect');
+const requestIp = require('request-ip');
 
 export class ConfigureServerModule {
     public static configureServer(app: express.Application, backendConfig: {}) {
