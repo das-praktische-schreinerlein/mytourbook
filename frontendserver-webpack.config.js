@@ -1,15 +1,29 @@
 const path = require('path');
 const webpack = require('webpack');
+const fs = require('fs');
+
+const nodeModules = {};
+fs.readdirSync('node_modules')
+    .filter(function(x) {
+        return ['.bin'].indexOf(x) === -1 && 'redis'.indexOf(x) === -1;
+    })
+    .forEach(function(mod) {
+        nodeModules[mod] = 'commonjs ' + mod;
+    });
 
 module.exports = {
     entry: {  frontendserver: './src/frontendserver/frontendserver.ts' },
-    resolve: { extensions: ['.js', '.ts'] },
+    resolve: { extensions: ['.js', '.ts', '.json'] },
     target: 'node',
     // this makes sure we include node_modules and other 3rd party libraries
-    externals: [/(node_modules|main\..*\.js)/],
+    externals: {
+        include: /(node_modules|main\..*\.js)/,
+        exclude: /(.*redis.*)/
+    },
+     // nodeModules,
     output: {
         path: path.join(__dirname, 'dist/frontendserver/'),
-        filename: '[name].js'
+        filename: 'frontendserver.js'
     },
     module: {
         rules: [
