@@ -8,9 +8,9 @@ import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
 import {CacheConfig} from './shared-node/server-commons/datacache.module';
 import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
 import {FirewallModule} from './shared-node/server-commons/firewall.module';
-import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
-import {MytbAngularModule} from './mytb-ngexpress.module';
+import {MytbAngularUniversalModule} from './mytb-angular-universal.module';
 import * as fs from 'fs';
+
 const minimist = require ('minimist');
 
 // disable debug-logging
@@ -53,7 +53,7 @@ const app = express();
 ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
 FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 //DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
-MytbAngularModule.configureRoutes(app, distFolder, distProfile, distServerProfile);
+MytbAngularUniversalModule.configureDefaultServer(app, distFolder, distServerProfile, distProfile);
 
 // Start up the Node server
 app.listen(serverConfig.frontendPort, function () {
