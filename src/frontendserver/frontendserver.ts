@@ -8,7 +8,7 @@ import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
 import {CacheConfig} from './shared-node/server-commons/datacache.module';
 import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
 import {FirewallModule} from './shared-node/server-commons/firewall.module';
-import {MytbAngularUniversalModule} from './mytb-angular-universal.module';
+import {CacheModeType, MytbAngularUniversalModule, UniversalModuleConfig} from './mytb-angular-universal.module';
 import * as fs from 'fs';
 
 const minimist = require ('minimist');
@@ -47,13 +47,21 @@ const serverConfig: ServerConfig = {
     frontendPort: 4002
 };
 
+const frontendConfig: UniversalModuleConfig = {
+    distServerProfile: distServerProfile,
+    distFolder: distFolder,
+    distProfile: distProfile,
+    cacheFolder: 'cache/',
+    cacheMode: CacheModeType.CACHED_ONLY
+};
+
 // Express server
 const app = express();
 
 ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
 FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 //DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
-MytbAngularUniversalModule.configureDefaultServer(app, distFolder, distServerProfile, distProfile);
+MytbAngularUniversalModule.configureDefaultServer(app, frontendConfig);
 
 // Start up the Node server
 app.listen(serverConfig.frontendPort, function () {
