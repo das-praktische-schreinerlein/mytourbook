@@ -46,3 +46,4 @@ Thumbs.db
 /src/frontendserver/shared-node
 /src/backend/shared
 /src/backend/shared-node
+/cache/
