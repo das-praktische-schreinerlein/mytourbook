@@ -30,10 +30,17 @@ import {SDocDataCacheService} from './shared-sdoc/services/sdoc-datacache.servic
 import {GenericTrackingService} from '../shared/angular-commons/services/generic-tracking.service';
 import {TrackingService} from './services/tracking.service';
 import {Angulartics2Module} from 'angulartics2';
+import {registerLocaleData} from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import {PlatformService} from '../shared/angular-commons/services/platform.service';
+
+registerLocaleData(localeDe);
 
 // AoT requires an exported function for factories
-export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
-    return new TranslateHttpLoader(http, './assets/locales/locale-', '.json');
+export function createTranslateLoader(http: HttpClient, platformService: PlatformService): TranslateHttpLoader {
+    const url = platformService.getAssetsUrl('./assets/locales/locale-');
+    console.log('use translate-baseul', url);
+    return new TranslateHttpLoader(http, url, '.json');
 }
 
 export function getAngulartics2Providers(): any {
@@ -50,13 +57,13 @@ export function getAngulartics2Providers(): any {
         HttpModule,
         HttpClientModule,
         NgbModule.forRoot(),
-        BrowserModule,
+        BrowserModule.withServerTransition({appId: 'sdoc-app'}),
         ToastModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
                 useFactory: (createTranslateLoader),
-                deps: [HttpClient]
+                deps: [HttpClient, PlatformService]
             }
         }),
         Angulartics2Module.forRoot(getAngulartics2Providers()),
@@ -79,7 +86,8 @@ export function getAngulartics2Providers(): any {
         { provide: GenericTrackingService, useClass: TrackingService },
         AngularHtmlService,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },
-        PageUtils
+        PageUtils,
+        { provide: PlatformService, useClass: PlatformService}
     ],
     bootstrap: [AppComponent]
 })

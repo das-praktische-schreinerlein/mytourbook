@@ -23,6 +23,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {SDocDateFormatPipe} from '../../../shared-sdoc/pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -41,6 +42,7 @@ describe('SDocShowpageComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 DatePipe,
                 CommonRoutingService,
+                PlatformService,
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 SDocRoutingService,

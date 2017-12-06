@@ -9,6 +9,7 @@ import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.serv
 import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';
 import {MinimalHttpBackendClient} from '../../shared/commons/services/minimal-http-backend-client';
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
+import {PlatformService} from '../../shared/angular-commons/services/platform.service';
 
 @Injectable()
 export class AppService extends GenericAppService {
@@ -24,7 +25,7 @@ export class AppService extends GenericAppService {
     constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
                 private http: Http, private commonRoutingService: CommonRoutingService,
-                private backendHttpClient: MinimalHttpBackendClient) {
+                private backendHttpClient: MinimalHttpBackendClient, private platformService: PlatformService) {
         super();
     }
 
@@ -68,7 +69,9 @@ export class AppService extends GenericAppService {
     initAppConfig(): Promise<any> {
         const me = this;
         return new Promise<boolean>((resolve, reject) => {
-            me.http.request('./assets/config.json').toPromise()
+            const url = me.platformService.getAssetsUrl(`./assets/config.json`);
+            console.log('load config:', url);
+            me.http.request(url).toPromise()
                 .then(function onConfigLoaded(res: any) {
                     const config: {} = res.json();
                     console.log('initially loaded config from assets', config);

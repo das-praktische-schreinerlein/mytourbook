@@ -21,6 +21,7 @@ import {RouterStub} from '../../../../shared/angular-commons/testing/router-stub
 import {Angulartics2} from 'angulartics2';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 describe('SectionPageComponent', () => {
     let component: SectionPageComponent;
@@ -39,6 +40,7 @@ describe('SectionPageComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
                 CommonRoutingService,
+                PlatformService,
                 SDocSearchFormConverter,
                 SDocRoutingService,
                 SearchParameterUtils,

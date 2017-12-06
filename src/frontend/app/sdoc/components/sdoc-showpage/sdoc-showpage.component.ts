@@ -18,6 +18,7 @@ import {AngularMarkdownService} from '../../../../shared/angular-commons/service
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -40,7 +41,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService) {
+                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,
+                private platformService: PlatformService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -174,9 +176,13 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         );
     }
 
-    renderDesc(): void {
+    renderDesc(): string {
         if (this.flgDescRendered || !this.record) {
             return;
+        }
+
+        if (!this.platformService.isClient()) {
+            return this.record.descTxt || '';
         }
 
         if (this.record.descHtml) {
@@ -185,6 +191,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             const desc = this.record.descMd ? this.record.descMd : '';
             this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
         }
+
+        return '';
     }
 
     onTracksFound(searchresult: SDocSearchResult) {

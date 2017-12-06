@@ -5,6 +5,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {SDocProfileMapComponent} from './sdoc-profilemap.component';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 describe('SDocProfileMapComponent', () => {
     let component: SDocProfileMapComponent;
@@ -16,7 +17,8 @@ describe('SDocProfileMapComponent', () => {
             imports: [ReactiveFormsModule],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
-                { provide: GenericAppService, useValue: new AppServiceStub() }
+                { provide: GenericAppService, useValue: new AppServiceStub() },
+                PlatformService
             ]
         })
             .compileComponents();
