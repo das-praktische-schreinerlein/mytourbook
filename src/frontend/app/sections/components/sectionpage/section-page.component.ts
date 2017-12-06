@@ -19,6 +19,7 @@ import {AngularMarkdownService} from '../../../../shared/angular-commons/service
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -41,7 +42,7 @@ export class SectionPageComponent implements OnInit {
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
+                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private platformService: PlatformService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -128,7 +129,7 @@ export class SectionPageComponent implements OnInit {
         );
     }
 
-    renderDesc(): void {
+    renderDesc(): string {
         if (this.flgDescRendered) {
             return;
         }
@@ -138,12 +139,18 @@ export class SectionPageComponent implements OnInit {
             return;
         }
 
+        if (!this.platformService.isClient()) {
+            return this.pdoc.descTxt || '';
+        }
+
         if (this.pdoc.descHtml) {
             this.flgDescRendered = this.angularHtmlService.renderHtml('#desc', this.pdoc.descHtml, true);
         } else {
             const desc = this.pdoc.descMd ? this.pdoc.descMd : '';
             this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
         }
+
+        return '';
     }
 
     getFiltersForType(record: PDocRecord, type: string, sort?: string): any {

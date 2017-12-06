@@ -10,25 +10,20 @@ import {ConfigureServerModule} from './shared-node/server-commons/configure-serv
 import {FirewallModule} from './shared-node/server-commons/firewall.module';
 import {CacheModeType, MytbAngularUniversalModule, UniversalModuleConfig} from './mytb-angular-universal.module';
 import * as fs from 'fs';
+import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
 
 const minimist = require ('minimist');
-
-// disable debug-logging
-const debug = false;
-if (!debug) {
-    console.debug = function() {};
-    console.log = function() {};
-}
 
 const argv = minimist(process.argv.slice(2));
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
-
+const debug = argv['debug'] || false;
 const distFolder = join(process.cwd(), 'dist');
-const distProfile = 'mytbdev/de/'; //'DIST_PROFILE'; 'mytbdev/de/';
-const distServerProfile = 'mytbdev-server/de/'; //'DIST_SERVER_PROFILE'; 'mytbdev-server/de/';
-const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+const distProfile = 'DIST_PROFILE';
+const distServerProfile = 'DIST_SERVER_PROFILE';
+const filePathConfigJson = argv['frontend'] || 'config/frontend.json';
+const filePathBackendConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
 const filePathFirewallConfigJson = argv['f'] || argv['firewall'] || 'config/firewall.json';
 
 export interface ServerConfig {
@@ -37,21 +32,24 @@ export interface ServerConfig {
         cacheConfig: CacheConfig;
     };
     firewallConfig: FirewallConfig;
-    frontendPort: number;
+    frontendConfig: {
+        port: number,
+        cacheFolder: string
+    };
 }
 
 const serverConfig: ServerConfig = {
     filePathErrorDocs: './error_docs/',
-    backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
+    backendConfig: JSON.parse(fs.readFileSync(filePathBackendConfigJson, { encoding: 'utf8' })),
     firewallConfig: JSON.parse(fs.readFileSync(filePathFirewallConfigJson, { encoding: 'utf8' })),
-    frontendPort: 4002
+    frontendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' }))
 };
 
 const frontendConfig: UniversalModuleConfig = {
     distServerProfile: distServerProfile,
     distFolder: distFolder,
     distProfile: distProfile,
-    cacheFolder: 'cache/',
+    cacheFolder: serverConfig.frontendConfig.cacheFolder,
     cacheMode: CacheModeType.CACHED_ONLY
 };
 
@@ -60,11 +58,16 @@ const app = express();
 
 ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
 FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
-//DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
+DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 MytbAngularUniversalModule.configureDefaultServer(app, frontendConfig);
 
 // Start up the Node server
-app.listen(serverConfig.frontendPort, function () {
-    console.log('MyTB app listening on port ' + serverConfig.frontendPort);
-});
+app.listen(serverConfig.frontendConfig.port, function () {
+    console.log('MyTB app listening on port ' + serverConfig.frontendConfig.port);
 
+    // disable debug-logging
+    if (!debug) {
+        console.debug = function() {};
+        console.log = function() {};
+    }
+});

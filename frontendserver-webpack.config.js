@@ -1,15 +1,43 @@
 const path = require('path');
 const webpack = require('webpack');
 const fs = require('fs');
+const minimist = require ('minimist');
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
     .filter(function(x) {
-        return ['.bin'].indexOf(x) === -1 && 'redis'.indexOf(x) === -1;
+        return ['.bin'].indexOf(x) === -1;
     })
     .forEach(function(mod) {
         nodeModules[mod] = 'commonjs ' + mod;
     });
+
+const argv = minimist(process.argv.slice(2));
+const profile = argv['profile'];
+let replacements = [];
+let distPath = '';
+if (profile === 'prod-de') {
+    replacements = [
+        {search: 'DIST_PROFILE', replace: 'mytb/de/'},
+        {search: 'DIST_SERVER_PROFILE', replace: 'mytb-server/de/'}
+    ];
+    distPath = 'dist/frontendserver-de/';
+} else if (profile === 'beta-de') {
+    replacements = [
+        {search: 'DIST_PROFILE', replace: 'mytbbeta/de/'},
+        {search: 'DIST_SERVER_PROFILE', replace: 'mytbbeta-server/de/'}
+    ];
+    distPath = 'dist/frontendserver-beta-de/';
+} else if (profile === 'dev-de') {
+    replacements = [
+        {search: 'DIST_PROFILE', replace: 'mytbdev/de/'},
+        {search: 'DIST_SERVER_PROFILE', replace: 'mytbdev-server/de/'}
+    ];
+    distPath = 'dist/frontendserver-dev-de/';
+} else {
+    console.error("unknown profile:", profile);
+    process.exit(2);
+}
 
 module.exports = {
     entry: {  frontendserver: './src/frontendserver/frontendserver.ts' },
@@ -22,19 +50,16 @@ module.exports = {
     },
      // nodeModules,
     output: {
-        path: path.join(__dirname, 'dist/frontendserver/'),
+        path: path.join(__dirname, distPath),
         filename: 'frontendserver.js'
     },
     module: {
         rules: [
-            { test: /\.ts$/, loader: 'ts-loader' }
+            { test: /\.ts$/, loader: 'ts-loader' },
+            { test: /\.ts$/, loader: 'string-replace-loader', query: { multiple: replacements} }
         ]
     },
     plugins: [
-        new webpack.DefinePlugin({
-            DIST_PROFILE: JSON.stringify("mytbdev/de/"),
-            DIST_SERVER_PROFILE: JSON.stringify("mytbdev-server/de/")
-        }),
         // Temporary Fix for issue: https://github.com/angular/angular/issues/11580
         // for "WARNING Critical dependency: the request of a dependency is an expression"
         new webpack.ContextReplacementPlugin(
@@ -46,6 +71,7 @@ module.exports = {
             /(.+)?express(\\|\/)(.+)?/,
             path.join(__dirname, 'src'),
             {}
-        )
+        ),
+        new webpack.IgnorePlugin(/hiredis/)
     ]
 };

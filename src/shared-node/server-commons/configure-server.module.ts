@@ -20,10 +20,12 @@ export class ConfigureServerModule {
         });
         app.use(mycors);
         app.use(helmet());
+        /**
         app.use(protect.express.sqlInjection({
             body: true,
             loggerFunction: console.error
         }));
+         */
         app.use(protect.express.xss({
             body: true,
             loggerFunction: console.error
