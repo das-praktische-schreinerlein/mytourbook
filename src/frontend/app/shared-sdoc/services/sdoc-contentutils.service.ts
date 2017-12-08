@@ -135,8 +135,8 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
-            } else if (type === 'ROUTE' && record.routeId) {
-                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'ROUTE') {
+                filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'TRIP' && record.tripId) {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
             } else if (type === 'LOCATION' && record.locId) {
@@ -154,7 +154,7 @@ export class SDocContentUtils {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
-            } else if (type === 'TRIP' && record.routeId) {
+            } else if (type === 'TRIP') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
@@ -172,8 +172,8 @@ export class SDocContentUtils {
         } else if (record.type === 'IMAGE') {
             if (type === 'TRACK' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
-            } else if (type === 'ROUTE' && record.routeId) {
-                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+            } else if (type === 'ROUTE' && record.trackId) {
+                filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'TRIP' && record.tripId) {
@@ -199,7 +199,7 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'trip_id_is:' + record.tripId;
             }
         } else if (record.type === 'NEWS') {
-            filters['moreFilter'] = 'news_id_i:' + record.newsId;
+            filters['moreFilter'] = 'news_id_is:' + record.newsId;
             if (type === 'IMAGE') {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
