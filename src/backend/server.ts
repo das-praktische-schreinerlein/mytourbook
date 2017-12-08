@@ -3,15 +3,9 @@ import * as fs from 'fs';
 import minimist from 'minimist';
 import {ServerConfig, ServerModuleLoader} from './server-module.loader';
 
-// disable debug-logging
-const debug = false;
-if (!debug) {
-    console.debug = function() {};
-    console.log = function() {};
-}
-
 const argv = minimist(process.argv.slice(2));
 
+const debug = argv['debug'] || false;
 const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
 const filePathFirewallConfigJson = argv['f'] || argv['firewall'] || 'config/firewall.json';
 const serverConfig: ServerConfig = {
@@ -33,5 +27,9 @@ ServerModuleLoader.loadModules(app, serverConfig);
 // start server
 app.listen(serverConfig.backendConfig['port'], function () {
     console.log('MyTB app listening on port ' + serverConfig.backendConfig['port']);
+    if (!debug) {
+        console.debug = function() {};
+        console.log = function() {};
+    }
 });
 
