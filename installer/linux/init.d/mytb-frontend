@@ -1,13 +1,13 @@
 #!/bin/sh
 
-APP_NAME="mytb"
+APP_NAME="mytb-frontend"
 USER="mytb"
 GROUP="mytbusers"
 NODE_ENV="production"
-PORT="4100"
+PORT="4301"
 APP_DIR="/opt/mytb/app/mytb"
-NODE_APP="dist/backend/backend.js"
-KWARGS="-c config/backend.prod.json -f config/firewall.prod.json"
+NODE_APP="dist/frontendserver/frontendserver.js"
+KWARGS="-c config/backend.prod.json -f config/firewall.prod.json --frontend config/frontend.prod.json"
 CONFIG_DIR="$APP_DIR"
 PID_DIR="$APP_DIR/pid"
 PID_FILE="$PID_DIR/$APP_NAME.pid"
@@ -22,7 +22,7 @@ NODE_EXEC=$(which node)
 # chkconfig: - 58 74
 # description: node-app is the script for starting a node app on boot.
 ### BEGIN INIT INFO
-# Provides: mytb
+# Provides: mytb-frontend
 # Required-Start:    $network $remote_fs $local_fs
 # Required-Stop:     $network $remote_fs $local_fs
 # Default-Start:     2 3 4 5
