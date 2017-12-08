@@ -59,7 +59,7 @@ export class SDocContentUtils {
     }
 
     getThumbnail(image: SDocImageRecord): string {
-        return this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x100/' + image.fileName;
+        return this.getImageUrl(image, 'x100');
     }
 
     getThumbnailUrl(image: SDocImageRecord): SafeUrl {
@@ -67,7 +67,7 @@ export class SDocContentUtils {
     }
 
     getPreview(image: SDocImageRecord): string {
-        return this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName;
+        return this.getImageUrl(image, 'x600');
     }
 
     getPreviewUrl(image: SDocImageRecord): SafeUrl {
@@ -75,8 +75,15 @@ export class SDocContentUtils {
     }
 
     getFullUrl(image: SDocImageRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(
-            this.appService.getAppConfig()['picsBaseUrl'] + '/pics_x600/' + image.fileName);
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getImageUrl(image, 'x600'));
+    }
+
+    getImageUrl(image: SDocImageRecord, resolution: string): string {
+        if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
+            return this.appService.getAppConfig()['picsBaseUrl'] + resolution + '/' + image.sdoc_id;
+        } else {
+            return this.appService.getAppConfig()['picsBaseUrl'] + 'pics_' + resolution + '/' + image.fileName;
+        }
     }
 
     getStyleClassForRecord(record: SDocRecord, layout: string): string[] {
@@ -128,8 +135,8 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
-            } else if (type === 'ROUTE' && record.routeId) {
-                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'ROUTE') {
+                filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'TRIP' && record.tripId) {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
             } else if (type === 'LOCATION' && record.locId) {
@@ -147,7 +154,7 @@ export class SDocContentUtils {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
-            } else if (type === 'TRIP' && record.routeId) {
+            } else if (type === 'TRIP') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
@@ -165,8 +172,8 @@ export class SDocContentUtils {
         } else if (record.type === 'IMAGE') {
             if (type === 'TRACK' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
-            } else if (type === 'ROUTE' && record.routeId) {
-                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+            } else if (type === 'ROUTE' && record.trackId) {
+                filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'TRIP' && record.tripId) {
@@ -192,7 +199,7 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'trip_id_is:' + record.tripId;
             }
         } else if (record.type === 'NEWS') {
-            filters['moreFilter'] = 'news_id_i:' + record.newsId;
+            filters['moreFilter'] = 'news_id_is:' + record.newsId;
             if (type === 'IMAGE') {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
@@ -217,10 +224,16 @@ export class SDocContentUtils {
         const mapElements: MapElement[] = [];
 
         if (showTrack) {
+            let storeUrl;
+            if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
+                storeUrl = this.appService.getAppConfig()['tracksBaseUrl'] + 'json/' + record.id;
+            } else {
+                storeUrl = this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json';
+            }
             const mapElement: MapElement = {
                 id: record.id,
                 name: record.name,
-                trackUrl: this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json',
+                trackUrl: storeUrl,
                 trackSrc: record.gpsTrack,
                 popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                 type: record.type

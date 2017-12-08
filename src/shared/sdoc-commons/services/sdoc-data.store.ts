@@ -22,6 +22,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
     private validMoreFilterNames = {
         id: true,
         track_id_i: true,
+        track_id_is:  true,
         trip_id_i: true,
         trip_id_is: true,
         news_id_i: true,

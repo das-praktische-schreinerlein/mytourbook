@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Angulartics2, Angulartics2Piwik} from 'angulartics2';
+import {Angulartics2} from 'angulartics2';
+import {Angulartics2Piwik} from 'angulartics2/piwik';
 import {GenericTrackingService} from '../../shared/angular-commons/services/generic-tracking.service';
 import {environment} from '../../environments/environment';
 

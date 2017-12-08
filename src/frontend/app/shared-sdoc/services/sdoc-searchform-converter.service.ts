@@ -14,7 +14,8 @@ export interface HumanReadableFilter {
 export class SDocSearchFormConverter implements GenericSearchFormSearchFormConverter<SDocSearchForm> {
     public HRD_IDS = {
         track_id_i: 'TRACK',
-        trip_id_i: 'TRIP',
+        track_id_i: 'TRACK',
+        trip_id_is: 'TRIP',
         trip_id_is: 'TRIP',
         news_id_i: 'NEWS',
         news_id_is: 'NEWS',

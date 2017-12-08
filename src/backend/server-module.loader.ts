@@ -1,21 +1,24 @@
-import {ConfigureServerModule} from './modules/configure-server.module';
+import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
 import {SDocServerModule} from './modules/sdoc-server.module';
 import {PDocServerModule} from './modules/pdoc-server.module';
-import {FirewallConfig} from './modules/firewall.commons';
-import {DnsBLModule} from './modules/dnsbl.module';
-import {FirewallModule} from './modules/firewall.module';
+import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
+import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
+import {FirewallModule} from './shared-node/server-commons/firewall.module';
 import {PDocDataService} from './shared/pdoc-commons/services/pdoc-data.service';
 import {PDocDataServiceModule} from './modules/pdoc-dataservice.module';
 import {SDocDataServiceModule} from './modules/sdoc-dataservice.module';
 import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service';
 import {AssetsServerModule} from './modules/assets-server.module';
+import {CacheConfig, DataCacheModule} from './shared-node/server-commons/datacache.module';
 
 export interface ServerConfig {
     apiDataPrefix: string;
     apiAssetsPrefix: string;
     apiPublicPrefix: string;
     filePathErrorDocs: string;
-    backendConfig: {};
+    backendConfig: {
+        cacheConfig: CacheConfig;
+    };
     firewallConfig: FirewallConfig;
     readOnly: boolean;
 }
@@ -33,12 +36,17 @@ export class ServerModuleLoader {
             serverConfig.backendConfig, 'de', serverConfig.readOnly);
         const pdocDataServiceEN: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrEN' + serverConfig.readOnly,
             serverConfig.backendConfig, 'en', serverConfig.readOnly);
+        const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
 
         // add routes
-        SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, serverConfig.readOnly);
+        SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache, serverConfig.readOnly);
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de', serverConfig.readOnly);
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en', serverConfig.readOnly);
-        AssetsServerModule.configureTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
-        AssetsServerModule.configurePictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
+        AssetsServerModule.configureStaticTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
+        AssetsServerModule.configureStaticPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
+        AssetsServerModule.configureStoredTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig,
+            serverConfig.firewallConfig.routerErrorsConfigs['tracks'].file, serverConfig.filePathErrorDocs);
+        AssetsServerModule.configureStoredPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
+            serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
     }
 }

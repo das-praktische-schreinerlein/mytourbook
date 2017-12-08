@@ -9,7 +9,7 @@ import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-rec
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pdoc-details.resolver';
-import {IdValidationRule, KeyParamsValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {IdValidationRule, KeywordValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
@@ -18,6 +18,7 @@ import {AngularMarkdownService} from '../../../../shared/angular-commons/service
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -28,7 +29,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 export class SDocShowpageComponent implements OnInit, OnDestroy {
     private flgDescRendered = false;
     idValidationRule = new IdValidationRule(true);
-    keyParamsValidationRule = new KeyParamsValidationRule(true);
+    keywordsValidationRule = new KeywordValidationRule(true);
     public contentUtils: SDocContentUtils;
     public record: SDocRecord;
     public Layout = Layout;
@@ -40,7 +41,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
+                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,
+                private platformService: PlatformService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -52,6 +54,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
+                const config = me.appService.getAppConfig();
                 const flgSDocError = ErrorResolver.isResolverError(data.record);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
@@ -67,15 +70,22 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                         me.tracks = [];
                     }
 
-                    // TODO
-                    const recordName = me.keyParamsValidationRule.sanitize(me.record.name);
+                    const recordName = me.keywordsValidationRule.sanitize(me.record.name);
                     if (me.pdoc) {
                         this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
                             {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
                         this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
                             {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
                         this.pageUtils.setRobots(false, false);
-                        if ((me.pdoc.id === 'start')) {
+
+                        let indexableTypes = [];
+                        if (config['services']
+                            && config['services']['seo']
+                            && config['services']['seo']['sdocIndexableTypes']) {
+                            indexableTypes = config['services']['seo']['sdocIndexableTypes'];
+                        }
+
+                        if (me.pdoc.id === 'start' && indexableTypes.indexOf(me.record.type) >= 0) {
                             this.pageUtils.setRobots(true, true);
                         } else {
                             this.pageUtils.setRobots(false, false);
@@ -166,9 +176,13 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         );
     }
 
-    renderDesc(): void {
+    renderDesc(): string {
         if (this.flgDescRendered || !this.record) {
             return;
+        }
+
+        if (!this.platformService.isClient()) {
+            return this.record.descTxt || '';
         }
 
         if (this.record.descHtml) {
@@ -177,6 +191,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             const desc = this.record.descMd ? this.record.descMd : '';
             this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
         }
+
+        return '';
     }
 
     onTracksFound(searchresult: SDocSearchResult) {

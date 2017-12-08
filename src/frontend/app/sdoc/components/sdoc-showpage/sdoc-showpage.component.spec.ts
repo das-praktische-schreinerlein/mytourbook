@@ -21,6 +21,9 @@ import {RouterStub} from '../../../../shared/angular-commons/testing/router-stub
 import {Angulartics2} from 'angulartics2';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
+import {SDocDateFormatPipe} from '../../../shared-sdoc/pipes/sdoc-dateformat.pipe';
+import {DatePipe} from '@angular/common';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -28,7 +31,7 @@ describe('SDocShowpageComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SDocShowpageComponent],
+            declarations: [SDocShowpageComponent, SDocDateFormatPipe],
             imports: [
                 NgbModule.forRoot(),
                 ToastModule.forRoot(),
@@ -37,7 +40,9 @@ describe('SDocShowpageComponent', () => {
             providers: [
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
+                DatePipe,
                 CommonRoutingService,
+                PlatformService,
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 SDocRoutingService,

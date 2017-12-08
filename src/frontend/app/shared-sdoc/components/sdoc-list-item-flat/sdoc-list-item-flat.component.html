@@ -24,7 +24,7 @@
             </div>
             <div class="col-3 location layout-big">
                 <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
-                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
             </div>
 
             <!--- SMALL -->
@@ -50,7 +50,7 @@
                                 <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
                             </div>
                             <div class="col-8">
-                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
                                 <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
                                 <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
                                 <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
@@ -70,7 +70,7 @@
                                 <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
                                 <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
                                 <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
-                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                             <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
                             <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
                             <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
-                            <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                            <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
                         </div>
                     </div>
                 </ng-container>
@@ -110,7 +110,7 @@
                         <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
                         <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
                         <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
-                        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.datevon | date: 'dd.MM.yyyy'}}</h5></a>
+                        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
                     </div>
                 </ng-container>
             </ng-container>

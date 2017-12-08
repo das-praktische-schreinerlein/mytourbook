@@ -1,19 +1,16 @@
 import express from 'express';
 import {DnsBLConfig, FirewallCommons, FirewallConfig} from './firewall.commons';
-import * as redis from 'redis';
 import isIP from 'validator/lib/isIP';
+import {CacheEntry, DataCacheModule} from './datacache.module';
 
 export enum DnsBLCacheEntryState {
     OK, BLOCKED, NORESULT
 }
 
-export interface DnsBLCacheEntry {
-    created: number;
-    updated: number;
+export interface DnsBLCacheEntry extends CacheEntry {
     ip: string;
     ttl: number;
     state: DnsBLCacheEntryState;
-    details: any;
 }
 
 export interface DnsBLQuery {
@@ -29,26 +26,17 @@ export interface DnsBLQuery {
 export abstract class GenericDnsBLModule {
     private dnsBLResultCache = {};
     private queryCache = {};
-    private redisClient;
-    private redisPrefix = 'dnsbl:';
+    private redisPrefix = 'dnsblv1_';
 
     constructor(protected app: express.Application, protected firewallConfig: FirewallConfig, protected config: DnsBLConfig,
-                protected filePathErrorDocs: string) {
+                protected filePathErrorDocs: string, protected cache: DataCacheModule) {
         this.configureDnsBLClient();
         this.configureMiddleware();
-        this.configureRedisStore();
     }
 
     protected abstract configureDnsBLClient();
 
     protected abstract callDnsBLClient(query: DnsBLQuery): Promise<DnsBLCacheEntry>;
-
-    protected configureRedisStore() {
-        if (this.config.cacheRedisUrl) {
-            this.redisClient = redis.createClient({url: this.config.cacheRedisUrl, password: this.config.cacheRedisPass,
-                db: this.config.cacheRedisDB});
-        }
-    }
 
     protected checkResultOfDnsBLClient(query: DnsBLQuery, err, blocked: boolean, details: any): Promise<DnsBLCacheEntry> {
         return new Promise<DnsBLCacheEntry>((resolve, reject) => {
@@ -192,23 +180,12 @@ export abstract class GenericDnsBLModule {
         return new Promise<DnsBLCacheEntry>((resolve, reject) => {
             if (this.dnsBLResultCache[ip]) {
                 return resolve(this.dnsBLResultCache[ip]);
-            } else if (this.redisClient) {
-                this.redisClient.get(this.redisPrefix + ip, function (er, data) {
-                    if (er) {
-                        console.error('DnsBLModule: error while calling redis:', er);
-                    }
-                    if (!data || data === null || data === 'null') {
-                        return resolve();
-                    }
-
-                    let result;
-                    try {
-                        result = JSON.parse(data.toString());
-                    } catch (er) {
-                        console.error('DnsBLModule: cant parse redisresult:', data);
-                        return resolve();
-                    }
-                    return resolve(result);
+            } else if (this.cache) {
+                this.cache.get(this.redisPrefix + ip).then(value => {
+                    return resolve(<DnsBLCacheEntry>value);
+                }).catch(reason => {
+                    console.error('DnsBLModule: cant read cache:', reason);
+                    return resolve();
                 });
             } else {
                 return resolve();
@@ -218,7 +195,9 @@ export abstract class GenericDnsBLModule {
 
     protected putCachedResult(ip: string, cacheEntry: DnsBLCacheEntry) {
         this.dnsBLResultCache[ip] = cacheEntry;
-        this.redisClient.set(this.redisPrefix + ip, JSON.stringify(cacheEntry));
+        if (this.cache) {
+            this.cache.set(this.redisPrefix + ip, cacheEntry);
+        }
     }
 
     protected getCachedQuery(ip: string): Promise<DnsBLCacheEntry> {

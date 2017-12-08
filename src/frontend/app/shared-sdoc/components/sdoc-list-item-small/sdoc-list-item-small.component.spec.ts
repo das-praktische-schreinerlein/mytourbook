@@ -13,6 +13,8 @@ import {AppServiceStub} from '../../../../shared/angular-commons/testing/appserv
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {SDocDateFormatPipe} from '../../pipes/sdoc-dateformat.pipe';
+import {DatePipe} from '@angular/common';
 
 describe('SDocListItemSmallComponent', () => {
     let component: SDocListItemSmallComponent;
@@ -20,13 +22,14 @@ describe('SDocListItemSmallComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SDocListItemSmallComponent],
+            declarations: [SDocListItemSmallComponent, SDocDateFormatPipe],
             providers: [
                 DomSanitizer,
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 SDocRoutingService,
                 SDocContentUtils,
+                DatePipe,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA],

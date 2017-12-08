@@ -133,6 +133,12 @@ export class KeyParamsValidationRule extends RegExValidationReplaceRule {
     }
 }
 
+export class KeywordValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-a-zA-Z_0-9äöüßÄÖÜ,;: ]*$/gi, /[^-a-zA-Z_0-9äöüßÄÖÜ,;: ]*/gi, '');
+    }
+}
+
 export class NearbyParamValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required, /^[-0-9._]*$/gi, /[^-0-9._]*/gi, '');

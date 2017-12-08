@@ -3,6 +3,7 @@ import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 @Component({
     selector: 'app-sdoc-profilemap',
@@ -21,10 +22,10 @@ export class SDocProfileMapComponent implements OnChanges {
     @Input()
     public sdocs: SDocRecord[];
 
-    constructor(private appService: GenericAppService) {}
+    constructor(private appService: GenericAppService, private platformService: PlatformService) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
+        if (this.platformService.isClient() && ComponentUtils.hasNgChanged(changes)) {
             this.renderMap();
         }
     }
@@ -40,7 +41,11 @@ export class SDocProfileMapComponent implements OnChanges {
             const record =  this.sdocs[i];
             const trackUrl = record.gpsTrackBasefile;
             if (trackUrl !== undefined && trackUrl.length > 0) {
-                tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json');
+                if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
+                    tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + 'json/' + record.id);
+                } else {
+                    tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json');
+                }
             }
         }
         this.trackUrls = tmpList;

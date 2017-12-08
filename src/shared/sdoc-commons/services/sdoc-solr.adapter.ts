@@ -34,7 +34,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             track_id_i: props.trackId,
             trip_id_i: props.tripId,
             news_id_i: props.newsId,
-            date_dt: props.datevon,
+            dateshow_dt: props.dateshow,
             desc_txt: props.descTxt,
             desc_md_txt: props.descMd,
             desc_html_txt: props.descHtml,
@@ -83,7 +83,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
            values['subtypes'] = subtypeField.join(',');
         }
-        values['datevon'] = this.getAdapterValue(doc, 'date_dt', undefined);
+        values['dateshow'] = this.getAdapterValue(doc, 'dateshow_dt', undefined);
         values['descTxt'] = this.getAdapterValue(doc, 'desc_txt', undefined);
         values['descHtml'] = this.getAdapterValue(doc, 'desc_html_txt', undefined);
         values['descMd'] = this.getAdapterValue(doc, 'desc_md_txt', undefined);
@@ -234,7 +234,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
     getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[] {
         const fields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i',
-            'date_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
+            'dateshow_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
             'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
             'data_tech_dist_f', 'data_tech_dur_f',
             'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s',

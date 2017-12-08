@@ -3,12 +3,15 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
-import {Angulartics2Piwik} from 'angulartics2';
+import {Angulartics2Piwik} from 'angulartics2/piwik';
+
+
 
 export const environment = {
     production: false,
     backendApiBaseUrl: 'http://localhost:4100/api/v1/',
-    tracksBaseUrl: 'http://localhost:4100/api/assets/tracks/',
-    picsBaseUrl: 'http://localhost:4100/api/static/pictures/',
+    tracksBaseUrl: 'http://localhost:4100/api/assets/trackstore/',
+    picsBaseUrl: 'http://localhost:4100/api/static/picturestore/',
+    useAssetStoreUrls: true,
     trackingProviders: [Angulartics2Piwik]
 };

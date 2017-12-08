@@ -5,6 +5,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 @Component({
     selector: 'app-sdoc-map',
@@ -40,10 +41,11 @@ export class SDocMapComponent implements OnChanges {
     @Output()
     public sdocClicked: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(private contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {}
+    constructor(private contentUtils: SDocContentUtils, private cd: ChangeDetectorRef,
+                private platformService: PlatformService) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
+        if (this.platformService.isClient() && ComponentUtils.hasNgChanged(changes)) {
             this.renderMap();
         }
     }

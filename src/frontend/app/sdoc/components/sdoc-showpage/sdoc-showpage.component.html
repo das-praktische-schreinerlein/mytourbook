@@ -5,7 +5,7 @@
             <div>
                 <ng-container [ngSwitch]="record.type">
                     <ng-container *ngSwitchCase="'IMAGE'">
-                        <h5><span class="fx-bg-type">{{record.type | translate }}</span> <span class="fx-bg-name">{{record.datevon | date: 'dd.MM.yyyy'}} {{record.name}}</span></h5>
+                        <h5><span class="fx-bg-type">{{record.type | translate }}</span> <span class="fx-bg-name">{{record | sdocdate}} {{record.name}}</span></h5>
                             <div class="image-container">
                                 <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                     <img class="picture-big" width="600px" [src]="contentUtils.getFullUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
@@ -298,6 +298,14 @@
                                             [htmlId]="'NEWSIMAGE'"
                                             [showForm]="false"
                                             [layout]="Layout.SMALL"
+                                            [searchLinkLabel]="'Alle'"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Routen'"
+                                            i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
+                                            [params]="getFiltersForType(record, 'ROUTE')"
+                                            [htmlId]="'ROUTE'"
+                                            [showForm]="false"
+                                            [layout]="Layout.THIN"
                                             [searchLinkLabel]="'Alle'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
