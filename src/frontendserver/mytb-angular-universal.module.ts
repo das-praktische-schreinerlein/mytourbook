@@ -42,6 +42,7 @@ export class MytbAngularUniversalModule {
         const domino = require('domino');
         const win = domino.createWindow(template);
         global['window'] = win;
+        Object.defineProperty(win.document, 'referrer', {get : function(){ return "https://www.michas-ausflugstipps.de"; }});
         global['document'] = win.document;
         global['navigator'] = { userAgent: 'chrome', product: 'ReactNative', platform: 'Win'};
         global['window']['devicePixelRatio'] = 1;
