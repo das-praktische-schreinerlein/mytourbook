@@ -10,6 +10,8 @@ import {CommonRoutingService, RoutingState} from '../../../shared/angular-common
 })
 @Injectable()
 export class ErrorPageComponent implements  OnInit {
+    date: number;
+
     constructor(private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService) {
     }
 
@@ -19,6 +21,7 @@ export class ErrorPageComponent implements  OnInit {
         this.pageUtils.setRobots(false, false);
         this.pageUtils.setMetaLanguage();
         this.commonRoutingService.setRoutingState(RoutingState.DONE);
+        this.date = (new Date()).getTime();
         return;
     }
 }
