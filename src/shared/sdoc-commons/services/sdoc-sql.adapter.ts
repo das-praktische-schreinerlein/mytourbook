@@ -4,258 +4,242 @@ import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 import {GenericSqlAdapter} from '../../search-commons/services/generic-sql.adapter';
+import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
+    public static tableFieldMappings = {
+        'kategorie_full': {
+            id: 'id',
+            image_id_i: 'i_id',
+            loc_id_i: 'l_id',
+            route_id_i: 't_id',
+            track_id_i: 'k_id',
+            trip_id_i: 'tr_id',
+            news_id_i: 'n_id',
+            dateshow_dt: 'k_dateshow',
+            html_txt: 'k_html',
+             desc_txt: 'desc_txt',
+             desc_md_txt: 'k_meta_shortdesc_md',
+             desc_html_txt: 'k_meta_shortdesc_html',
+             geo_lon_s: 'k_gps_lon',
+             geo_lat_s: 'k_gps_lat',
+             geo_loc_p: 'k_gps_loc',
+             data_tech_alt_asc_i: 'altAsc',
+             data_tech_alt_desc_i: 'altDesc',
+             data_tech_alt_min_i: 'altMin',
+             data_tech_alt_max_i: 'altMax',
+             data_tech_dist_f: 'dist',
+             data_tech_dur_f: 'dur',
+             rate_pers_ausdauer_i: 'ausdauer',
+             rate_pers_bildung_i: 'bildung',
+             rate_pers_gesamt_i: 'gesamt',
+             rate_pers_kraft_i: 'kraft',
+             rate_pers_mental_i: 'mental',
+             rate_pers_motive_i: 'motive',
+             rate_pers_schwierigkeit_i: 'schwierigkeit',
+             rate_pers_wichtigkeit_i: 'wichtigkeit',
+             gpstracks_basefile_s: 'k_gpstracks_basefile',
+             keywords_txt: 'k_keywords',
+             loc_lochirarchie_s: 'l_lochirarchietxt',
+             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            name_s: 'k_name',
+            type_s: 'type',
+            actiontype_ss: 'k_type',
+            subtype_s: 'subtype_s',
+            i_fav_url_txt: 'i_fav_url_txt'
+        },
+        'route': {
+            id: 'k_id',
+            image_id_i: 'i_id',
+            loc_id_i: 'l_id',
+            route_id_i: 't_id',
+            track_id_i: 'k_id',
+            trip_id_i: 'tr_id',
+            news_id_i: 'n_id',
+            dateshow_dt: 'k_dateshow',
+            html_txt: 'k_html',
+            desc_txt: 'desc_txt',
+            desc_md_txt: 'k_meta_shortdesc_md',
+            desc_html_txt: 'k_meta_shortdesc_html',
+            geo_lon_s: 'k_gps_lon',
+            geo_lat_s: 'k_gps_lat',
+            geo_loc_p: 'k_gps_loc',
+            data_tech_alt_asc_i: 'altAsc',
+            data_tech_alt_desc_i: 'altDesc',
+            data_tech_alt_min_i: 'altMin',
+            data_tech_alt_max_i: 'altMax',
+            data_tech_dist_f: 'dist',
+            data_tech_dur_f: 'dur',
+            data_info_guides_s: 'data_info_guides_s',
+            data_info_region_s: 'data_info_region_s',
+            data_info_baseloc_s: 'data_info_baseloc_s',
+            data_info_destloc_s: 'data_info_destloc_s',
+            rate_pers_ausdauer_i: 'ausdauer',
+            rate_pers_bildung_i: 'bildung',
+            rate_pers_gesamt_i: 'gesamt',
+            rate_pers_kraft_i: 'kraft',
+            rate_pers_mental_i: 'mental',
+            rate_pers_motive_i: 'motive',
+            rate_pers_schwierigkeit_i: 'schwierigkeit',
+            rate_pers_wichtigkeit_i: 'wichtigkeit',
+            rate_tech_overall_s: 'rate_tech_overall_s',
+            rate_tech_ks_s: 'rate_tech_ks_s',
+            rate_tech_firn_s: 'rate_tech_firn_s',
+            rate_tech_gletscher_s: 'rate_tech_gletscher_s',
+            rate_tech_klettern_s: 'rate_tech_klettern_s',
+            rate_tech_bergtour_s: 'rate_tech_bergtour_s',
+            rate_tech_schneeschuh_s: 'rate_tech_schneeschuh_s',
+            gpstracks_basefile_s: 'k_gpstracks_basefile',
+            keywords_txt: 'k_keywords',
+            loc_lochirarchie_s: 'l_lochirarchietxt',
+            loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            name_s: 'k_name',
+            type_s: 'type',
+            actiontype_ss: 'k_type',
+            subtype_s: 'subtype_s',
+            i_fav_url_txt: 'i_fav_url_txt'
+        }
+    };
+
+    public static tableFrom = {
+        'kategorie_full': 'kategorie_full inner join location on kategorie_full.l_id = location.l_id'
+    };
+
+    public static tableFieldLists = {
+        'kategorie_full': ['"TRACK" as type',
+            'concat("ac_", kategorie_full.k_type) as actiontype',
+            'concat("ac_", kategorie_full.k_type) as subtype',
+            'concat("TRACK", "_", kategorie_full.k_id) as id',
+            'kategorie_full.k_id',
+            'kategorie_full.t_id',
+            'kategorie_full.k_t_ids',
+            'kategorie_full.tr_id',
+            'kategorie_full.l_id',
+            'n_id',
+            'k_name',
+            'k_html',
+            'concat(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt) as html',
+            'k_dateshow',
+            'k_datevon',
+            'DATE_FORMAT (k_datevon, GET_FORMAT(DATE, "ISO")) as dateonly',
+            'week(k_datevon) AS week',
+            'month(k_datevon) as month',
+            'k_gpstracks_basefile',
+            'k_keywords',
+            'k_meta_shortdesc_md',
+            'k_meta_shortdesc_html',
+            'k_rate_gesamt',
+            'cast(k_gps_lat as char(50)) as k_gps_lat',
+            'cast(k_gps_lon as char(50)) as k_gps_lon',
+            'concat(k_gps_lat, ",", k_gps_lon) as k_gps_loc',
+            'l_lochirarchietxt',
+            'l_lochirarchieids',
+            '`K_ALTITUDE_ASC` as altAsc',
+            '`K_ALTITUDE_DESC` as altDesc',
+            '`K_ALTITUDE_MIN` as altMin',
+            '`K_ALTITUDE_MAX` as altMax',
+            '`K_DISTANCE` as dist',
+            '`K_RATE_AUSDAUER` as ausdauer',
+            '`K_RATE_BILDUNG` as bildung',
+            '`K_RATE_GESAMT` as gesamt',
+            '`K_RATE_KRAFT` as kraft',
+            '`K_RATE_MENTAL` as mental',
+            '`K_RATE_MOTIVE` as motive',
+            '`K_RATE_SCHWIERIGKEIT` as schwierigkeit',
+            '`K_RATE_WICHTIGKEIT` as wichtigkeit',
+            'round((K_ALTITUDE_ASC / 500))*500 as altAscFacet',
+            'round((K_ALTITUDE_MAX / 500))*500 as altMaxFacet',
+            'round((K_DISTANCE / 5))*5 as distFacet',
+            'TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 as dur',
+            'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 * 2) / 2, 1) as durFacet']
+    };
+
+    private mapper: SDocAdapterResponseMapper = new SDocAdapterResponseMapper();
+
     constructor(config: any) {
         super(config);
     }
 
-    mapToAdapterFieldName(fieldName: string): string {
+    protected extractTable(method: string, mapper: Mapper, params: any, opts: any): string {
+        const tables = {
+            'track': 'kategorie_full'
+        };
+
+        const types = params.where['type_txt'];
+        if (types !== undefined && types.in !== undefined && types.in.length === 1) {
+            return tables[types.in[0]] || undefined;
+        }
+        const ids = params.where['id'];
+        if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
+            const tabName = ids.in[0].replace(/_.*/, '').toLowerCase();
+            return tables[tabName] || undefined;
+        }
+
+        return undefined;
+    }
+
+    protected getMappingForTable(table: string): string {
+        return SDocSqlAdapter.tableFieldMappings[table] || {};
+    }
+
+    protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
+        if (fieldName === 'type_txt') {
+            return undefined;
+        }
+
+        if (fieldName === 'id') {
+            return super.mapFilterToAdapterQuery(mapper, 'k_id', action,
+                [this.mapperUtils.prepareSingleValue(value, '_').replace(/.*_/, '')], table);
+        }
+
+        return super.mapFilterToAdapterQuery(mapper, fieldName, action, value, table);
+    }
+
+    protected mapToAdapterFieldName(table, fieldName: string): string {
         switch (fieldName) {
             case 'name':
-                return 'name_s';
+                return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'name_s');
             case 'html':
-                return 'html_txt';
+                return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'html_txt');
             case 'descTxt':
-                return 'desc_txt';
+                return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'desc_txt');
+            case 'type_txt':
+                return undefined;
             default:
                 break;
         }
 
-        return super.mapToAdapterFieldName(fieldName);
+        return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), fieldName);
     }
 
-    mapToAdapterDocument(props: any): any {
-        const values = {
-            id: props.id,
-            image_id_i: props.imageId,
-            loc_id_i: props.locId,
-            route_id_i: props.routeId,
-            track_id_i: props.trackId,
-            trip_id_i: props.tripId,
-            news_id_i: props.newsId,
-            date_dt: props.datevon,
-            desc_txt: props.descTxt,
-            desc_md_txt: props.descMd,
-            desc_html_txt: props.descHtml,
-            geo_lon_s: props.geoLon,
-            geo_lat_s: props.geoLat,
-            geo_loc_p: props.geoLoc,
-            gpstrack_s: props.gpsTrack,
-            gpstracks_basefile_s: props.gpsTrackBasefile,
-            keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
-            loc_lochirarchie_s: (props.locHirarchie ? props.locHirarchie
-                .toLowerCase()
-                .replace(/[ ]*->[ ]*/g, ',,')
-                .replace(/ /g, '_') : ''),
-            loc_lochirarchie_ids_s: (props.locHirarchieIds ? props.locHirarchieIds
-                .toLowerCase()
-                .replace(/,/g, ',,')
-                .replace(/ /g, '_') : ''),
-            name_s: props.name,
-            type_s: props.type,
-
-        };
-
-        values['html_txt'] = [values.desc_txt, values.name_s, values.keywords_txt, values.type_s].join(' ');
-
-        return values;
+    mapToAdapterDocument(table: string, props: any): any {
+        return this.mapper.mapToAdapterDocument(this.getMappingForTable(table), props);
     }
 
-    mapResponseDocument(mapper: Mapper, doc: any, opts: any): Record {
-        const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
-        const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
-        const imageMapper = mapper['datastore']._mappers['sdocimage'];
-        const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];
-        const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
-console.error("opts", opts);
-        console.error("doc", doc);
-        const values = {};
-        values['id'] = this.getAdapterValue(doc, 'id', undefined);
-
-        values['imageId'] = Number(this.getAdapterValue(doc, 'image_id_i', undefined));
-        values['locId'] = Number(this.getAdapterValue(doc, 'loc_id_i', undefined));
-        values['routeId'] = Number(this.getAdapterValue(doc, 'route_id_i', undefined));
-        values['trackId'] = Number(this.getAdapterValue(doc, 'track_id_i', undefined));
-        values['tripId'] = Number(this.getAdapterValue(doc, 'trip_id_i', undefined));
-        values['newsId'] = Number(this.getAdapterValue(doc, 'news_id_i', undefined));
-
-        const subtypeField = doc['subtypes_ss'];
-        if (subtypeField !== undefined && Array.isArray(subtypeField)) {
-           values['subtypes'] = subtypeField.join(',');
-        }
-        values['datevon'] = this.getAdapterValue(doc, 'date_dt', undefined);
-        values['descTxt'] = this.getAdapterValue(doc, 'desc_txt', undefined);
-        values['descHtml'] = this.getAdapterValue(doc, 'desc_html_txt', undefined);
-        values['descMd'] = this.getAdapterValue(doc, 'desc_md_txt', undefined);
-        values['geoDistance'] = this.getAdapterCoorValue(doc, 'distance', undefined);
-        values['geoLon'] = this.getAdapterCoorValue(doc, 'geo_lon_s', undefined);
-        values['geoLat'] = this.getAdapterCoorValue(doc, 'geo_lat_s', undefined);
-        values['geoLoc'] = this.getAdapterCoorValue(doc, 'geo_loc_p', undefined);
-        values['gpsTrack'] = this.getAdapterValue(doc, 'gpstrack_s', undefined);
-        values['gpsTrackBasefile'] = this.getAdapterValue(doc, 'gpstracks_basefile_s', undefined);
-        values['keywords'] = this.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
-        values['name'] = this.getAdapterValue(doc, 'name_s', undefined);
-        values['subtype'] = this.getAdapterValue(doc, 'subtype_s', undefined);
-        values['type'] = this.getAdapterValue(doc, 'type_s', undefined);
-        values['locHirarchie'] = this.getAdapterValue(doc, 'loc_lochirarchie_s', '')
-            .replace(/,,/g, ' -> ')
-            .replace(/,/g, ' ')
-            .replace(/_/g, ' ')
-            .trim();
-        values['locHirarchieIds'] = this.getAdapterValue(doc, 'loc_lochirarchie_ids_s', '')
-            .replace(/_/g, ' ').trim()
-            .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
-
-        // console.log('mapResponseDocument values:', values);
-
-        const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
-
-        const images: SDocImageRecord[] = [];
-        const imageField = doc['i_fav_url_txt'];
-        if (imageField !== undefined && Array.isArray(imageField)) {
-            let id = 1;
-            if (record.type === 'TRACK') {
-                id = Number(record.trackId);
-            } else if (record.type === 'ROUTE') {
-                id = Number(record.routeId);
-            } else if (record.type === 'LOCATION') {
-                id = Number(record.locId);
-            } else if (record.type === 'IMAGE') {
-                id = Number(record.imageId);
-            } else if (record.type === 'TRIP') {
-                id = Number(record.tripId);
-            } else if (record.type === 'NEWS') {
-                id = Number(record.newsId);
-            }
-            id = id * 1000000;
-
-            for (const imageDoc of imageField) {
-                const imageValues = {};
-                imageValues['name'] = values['name'];
-                imageValues['id'] = (id++).toString();
-                imageValues['fileName'] = imageDoc;
-                const imageRecord = imageMapper.createRecord(imageValues);
-                images.push(imageRecord);
-            }
-        }
-        record.set('sdocimages', images);
-        // console.log('mapResponseDocument record full:', record);
-
-
-        const dataTechValues = {};
-        dataTechValues['altAsc'] = this.getAdapterValue(doc, 'data_tech_alt_asc_i', undefined);
-        dataTechValues['altDesc'] = this.getAdapterValue(doc, 'data_tech_alt_desc_i', undefined);
-        dataTechValues['altMin'] = this.getAdapterValue(doc, 'data_tech_alt_min_i', undefined);
-        dataTechValues['altMax'] = this.getAdapterValue(doc, 'data_tech_alt_max_i', undefined);
-        dataTechValues['dist'] = this.getAdapterValue(doc, 'data_tech_dist_f', undefined);
-        dataTechValues['dur'] = this.getAdapterValue(doc, 'data_tech_dur_f', undefined);
-        let dataTechSet = false;
-        for (const field in dataTechValues) {
-            if (dataTechValues[field] !== undefined && dataTechValues[field] !== 0) {
-                dataTechSet = true;
-                break;
-            }
-        }
-
-        if (dataTechSet) {
-            record.set('sdocdatatech', dataTechMapper.createRecord(dataTechValues));
-        } else {
-            record.set('sdocdatatech', undefined);
-        }
-
-        const rateTechValues = {};
-        rateTechValues['overall'] = this.getAdapterValue(doc, 'rate_tech_overall_s', undefined);
-        rateTechValues['ks'] = this.getAdapterValue(doc, 'rate_tech_ks_s', undefined);
-        rateTechValues['firn'] = this.getAdapterValue(doc, 'rate_tech_firn_s', undefined);
-        rateTechValues['gletscher'] = this.getAdapterValue(doc, 'rate_tech_gletscher_s', undefined);
-        rateTechValues['klettern'] = this.getAdapterValue(doc, 'rate_tech_klettern_s', undefined);
-        rateTechValues['bergtour'] = this.getAdapterValue(doc, 'rate_tech_bergtour_s', undefined);
-        rateTechValues['schneeschuh'] = this.getAdapterValue(doc, 'rate_tech_schneeschuh_s', undefined);
-        let rateTechSet = false;
-        for (const field in rateTechValues) {
-            if (rateTechValues[field] !== undefined && (rateTechValues[field] + '').length > 0) {
-                rateTechSet = true;
-                break;
-            }
-        }
-
-        if (rateTechSet) {
-            record.set('sdocratetech', rateTechMapper.createRecord(rateTechValues));
-        } else {
-            record.set('sdocratetech', undefined);
-        }
-
-        const ratePersValues = {};
-        ratePersValues['ausdauer'] = this.getAdapterValue(doc, 'rate_pers_ausdauer_i', undefined);
-        ratePersValues['bildung'] = this.getAdapterValue(doc, 'rate_pers_bildung_i', undefined);
-        ratePersValues['gesamt'] = this.getAdapterValue(doc, 'rate_pers_gesamt_i', undefined);
-        ratePersValues['kraft'] = this.getAdapterValue(doc, 'rate_pers_kraft_i', undefined);
-        ratePersValues['mental'] = this.getAdapterValue(doc, 'rate_pers_mental_i', undefined);
-        ratePersValues['motive'] = this.getAdapterValue(doc, 'rate_pers_motive_i', undefined);
-        ratePersValues['schwierigkeit'] = this.getAdapterValue(doc, 'rate_pers_schwierigkeit_i', undefined);
-        ratePersValues['wichtigkeit'] = this.getAdapterValue(doc, 'rate_pers_wichtigkeit_i', undefined);
-        let ratePersSet = false;
-        for (const field in ratePersValues) {
-            if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 && ratePersValues[field] > 0) {
-                ratePersSet = true;
-                break;
-            }
-        }
-
-        if (ratePersSet) {
-            record.set('sdocratepers', ratePersMapper.createRecord(ratePersValues));
-        } else {
-            record.set('sdocratepers', undefined);
-        }
-
-        const dataInfoValues = {};
-        dataInfoValues['guides'] = this.getAdapterValue(doc, 'data_info_guides_s', undefined);
-        dataInfoValues['region'] = this.getAdapterValue(doc, 'data_info_region_s', undefined);
-        dataInfoValues['baseloc'] = this.getAdapterValue(doc, 'data_info_baseloc_s', undefined);
-        dataInfoValues['destloc'] = this.getAdapterValue(doc, 'data_info_destloc_s', undefined);
-        let dataInfoSet = false;
-        for (const field in dataInfoValues) {
-            if (dataInfoValues[field] !== undefined && (dataInfoValues[field] + '').length > 0) {
-                dataInfoSet = true;
-                break;
-            }
-        }
-
-        if (dataInfoSet) {
-            record.set('sdocdatainfo', dataInfoMapper.createRecord(dataInfoValues));
-        } else {
-            record.set('sdocdatainfo', undefined);
-        }
-
-        // console.log('mapResponseDocument record full:', record);
-
-        return record;
+    mapResponseDocument(mapper: Mapper, doc: any, table: string, opts: any): Record {
+        return this.mapper.mapResponseDocument(mapper, doc, this.getMappingForTable(table), opts);
     }
 
-    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[] {
-        const fields = ['id', 'image_id_i', 'loc_id_i', 'route_id_i', 'track_id_i', 'trip_id_i', 'news_id_i',
-            'date_dt', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'geo_lon_s', 'geo_lat_s', 'geo_loc_p',
-            'data_tech_alt_asc_i', 'data_tech_alt_desc_i', 'data_tech_alt_min_i', 'data_tech_alt_max_i',
-            'data_tech_dist_f', 'data_tech_dur_f',
-            'data_info_guides_s', 'data_info_region_s', 'data_info_baseloc_s', 'data_info_destloc_s',
-            'rate_pers_ausdauer_i', 'rate_pers_bildung_i', 'rate_pers_gesamt_i', 'rate_pers_kraft_i', 'rate_pers_mental_i',
-            'rate_pers_motive_i', 'rate_pers_schwierigkeit_i', 'rate_pers_wichtigkeit_i',
-            'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
-            'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
-            'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
-            'actiontype_ss', 'subtype_s', 'i_fav_url_txt'];
+    getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+        return SDocSqlAdapter.tableFrom[query.table] || '';
+    }
+
+    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+        const fields = [];
+        for (const field of SDocSqlAdapter.tableFieldLists[query.table]) {
+            fields.push(field);
+        }
 
         if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
             params.spatial.geo_loc_p.nearby !== undefined) {
             fields.push('distance:geodist()');
         }
         if (opts.loadTrack === true) {
-            fields.push('gpstrack_s');
+//            fields.push(this.mapper.mapToAdapterFieldName('gpstrack_s'));
         }
 
         return fields;
-    };
+    }
 
     getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const facetConfigs = {
@@ -407,12 +391,10 @@ console.error("opts", opts);
         return sortParams;
     };
 
-    getHttpEndpoint(method: string): string {
-        const updateMethods = ['create', 'destroy', 'update'];
-        if (updateMethods.indexOf(method.toLowerCase()) >= 0) {
-            return 'update?';
-        }
-        return 'select?';
+    getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any, query: any) {
+        const path = 'kategorie_full';
+        console.log('sqltable:', path);
+        return path;
     }
 }
 

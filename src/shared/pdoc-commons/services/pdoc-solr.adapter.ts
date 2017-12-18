@@ -41,14 +41,14 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
 
     mapResponseDocument(mapper: Mapper, doc: any): Record {
         const values = {};
-        values['id'] = this.getAdapterValue(doc, 'id', undefined);
+        values['id'] = this.mapperUtils.getAdapterValue(doc, 'id', undefined);
 
-        values['descTxt'] = this.getAdapterValue(doc, 'desc_txt', undefined);
-        values['descMd'] = this.getAdapterValue(doc, 'desc_md_txt', undefined);
-        values['descHtml'] = this.getAdapterValue(doc, 'desc_html_txt', undefined);
-        values['keywords'] = this.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
-        values['name'] = this.getAdapterValue(doc, 'name_txt', undefined);
-        values['type'] = this.getAdapterValue(doc, 'type_txt', undefined);
+        values['descTxt'] = this.mapperUtils.getAdapterValue(doc, 'desc_txt', undefined);
+        values['descMd'] = this.mapperUtils.getAdapterValue(doc, 'desc_md_txt', undefined);
+        values['descHtml'] = this.mapperUtils.getAdapterValue(doc, 'desc_html_txt', undefined);
+        values['keywords'] = this.mapperUtils.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
+        values['name'] = this.mapperUtils.getAdapterValue(doc, 'name_txt', undefined);
+        values['type'] = this.mapperUtils.getAdapterValue(doc, 'type_txt', undefined);
 
         // console.log('mapResponseDocument values:', values);
 

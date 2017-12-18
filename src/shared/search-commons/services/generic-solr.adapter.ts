@@ -6,6 +6,7 @@ import {GenericSearchForm} from '../model/forms/generic-searchform';
 import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
+import {MapperUtils} from './mapper.utils';
 
 export class AdapterFilterActions {
     static LIKEI = 'likei';
@@ -22,6 +23,7 @@ export class AdapterFilterActions {
 
 export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> extends GenericSearchHttpAdapter<R, F, S> {
+    protected mapperUtils = new MapperUtils();
 
     constructor(config: any) {
         super(config);
@@ -382,7 +384,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
         const facets = new Facets();
         for (const field in result.facet_counts.facet_fields) {
-            const values = this.splitPairs(result.facet_counts.facet_fields[field]);
+            const values = this.mapperUtils.splitPairs(result.facet_counts.facet_fields[field]);
             const facet = new Facet();
             facet.facet = values;
             facets.facets.set(field, facet);
@@ -394,7 +396,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     mapResponseDocument(mapper: Mapper, doc: any): Record {
         const values = {};
-        values['id'] = Number(this.getAdapterValue(doc, 'id', undefined));
+        values['id'] = Number(this.mapperUtils.getAdapterValue(doc, 'id', undefined));
         // console.log('mapResponseDocument values:', values);
         return mapper.createRecord(values);
     }
@@ -428,32 +430,6 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
-    getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
-        let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
-            if (Array.isArray(adapterDocument[adapterFieldName])) {
-                value = adapterDocument[adapterFieldName][0];
-            } else {
-                value = adapterDocument[adapterFieldName];
-            }
-        }
-
-        return value;
-    }
-
-    getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
-        let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
-            if (Array.isArray(adapterDocument[adapterFieldName])) {
-                value = adapterDocument[adapterFieldName][0];
-            } else if (adapterDocument[adapterFieldName] !== '0' && adapterDocument[adapterFieldName] !== '0,0') {
-                value = adapterDocument[adapterFieldName];
-            }
-        }
-
-        return value;
-    }
-
     buildUrl(url, params) {
         if (!params) {
             return url;
@@ -486,11 +462,11 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return url;
     }
 
-    private queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
+    protected queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
         return this.queryTransformToAdapterQueryWithMethod(undefined, mapper, params, opts);
     }
 
-    private queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): any {
+    protected queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): any {
         const query = this.createAdapterQuery(method, mapper, params, opts);
 
         const fields = this.getAdapterFields(method, mapper, params, opts);
@@ -524,7 +500,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return query;
     }
 
-    private createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
+    protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
         // console.log('createAdapterQuery params:', params);
         // console.log('createAdapterQuery opts:', opts);
 
@@ -557,75 +533,31 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return query;
     }
 
-    private mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
+    protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
         let query = '';
 
         if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
         } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
+            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '")';
         } else if (action === AdapterFilterActions.GT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
+            query = this.mapToAdapterFieldName(fieldName) + ':{"' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
         } else if (action === AdapterFilterActions.GE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
+            query = this.mapToAdapterFieldName(fieldName) + ':["' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
         } else if (action === AdapterFilterActions.LT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
+            query = this.mapToAdapterFieldName(fieldName) + ':{ * TO "' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"}';
         } else if (action === AdapterFilterActions.LE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
+            query = this.mapToAdapterFieldName(fieldName) + ':[ * TO "' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"]';
         } else if (action === AdapterFilterActions.IN) {
             query = this.mapToAdapterFieldName(fieldName) + ':("' + value.map(
-                    inValue => this.escapeAdapterValue(inValue.toString())
+                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
                 ).join('" OR "') + '")';
         } else if (action === AdapterFilterActions.NOTIN) {
             query = this.mapToAdapterFieldName(fieldName) + ':(-"' + value.map(
-                    inValue => this.escapeAdapterValue(inValue.toString())
+                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
                 ).join('" AND -"') + '")';
         }
         return query;
-    }
-
-    prepareEscapedSingleValue(value: any, splitter: string, joiner: string): string {
-        value = this.prepareSingleValue(value, ' ');
-        value = this.escapeAdapterValue(value);
-        const values = this.prepareValueToArray(value, splitter);
-        value = values.map(inValue => this.escapeAdapterValue(inValue)).join(joiner);
-        return value;
-    }
-
-    private prepareSingleValue(value: any, joiner: string): string {
-        switch (typeof value) {
-            case 'string':
-                return value.toString();
-            case 'number':
-                return '' + value;
-            default:
-        }
-        if (Array.isArray(value)) {
-            return value.join(joiner);
-        }
-
-        return value.toString();
-    }
-
-    private prepareValueToArray(value: any, splitter: string): string[] {
-        return value.toString().split(splitter);
-    }
-
-    private escapeAdapterValue(value: any): string {
-        value = value.toString().replace(/[%]/g, ' ').replace(/[:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
-        return value;
-    }
-
-    private splitPairs(arr: Array<any>): Array<Array<any>> {
-        const pairs = [];
-        for (let i = 0; i < arr.length; i += 2) {
-            if (arr[i + 1] !== undefined) {
-                pairs.push([arr[i], arr[i + 1]]);
-            } else {
-                pairs.push([arr[i]]);
-            }
-        }
-        return pairs;
     }
 }
 

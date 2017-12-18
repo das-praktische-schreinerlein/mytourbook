@@ -10,6 +10,7 @@ import knex from 'knex';
 import toString from 'lodash.tostring';
 import {GenericSearchAdapter} from './generic-search.adapter';
 import {isArray} from 'util';
+import {MapperUtils} from './mapper.utils';
 
 export class AdapterFilterActions {
     static LIKEI = 'likei';
@@ -34,6 +35,7 @@ export function Response (data, meta, op) {
 export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> extends Adapter {
     protected knex: any;
+    protected mapperUtils = new MapperUtils();
 
     constructor(config: any) {
         super(config);
@@ -48,6 +50,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         opts.adapterCount = true;
         const me = this;
         query = me.queryTransformToAdapterQuery('count', mapper, query, opts);
+        if (query === undefined) {
+            return utils.resolve(0);
+        }
 
         return super.count(mapper, query, opts);
     }
@@ -60,7 +65,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         opts.params = this.queryTransform(mapper, opts.params, opts);
         const query = {
             add: {
-                doc: this.mapToAdapterDocument(props)
+                doc: this.mapToAdapterDocument(this.extractTable('create', mapper, props, opts), props)
             },
             commit: {}
         };
@@ -93,25 +98,12 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
         opts = opts || {};
-
-        opts.adapterQuery = true;
-        const me = this;
-        opts.params = opts.params || {};
-        opts.params.where = opts.params.where || {};
-        opts.params.where.id = { '==': id};
-        opts.offset = 0;
-        opts.limit = 10;
-
         return super.find(mapper, id, opts);
     }
 
     findAll<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<T[]> {
         query = query || {};
         opts = opts || {};
-
-        opts.adapterQuery = true;
-        const me = this;
-        query = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
 
         return super.findAll(mapper, query, opts);
     }
@@ -162,6 +154,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         opts.adapterFacet = true;
         const me = this;
         query = me.queryTransformToAdapterQuery('search', mapper, query, opts);
+        if (query === undefined) {
+            return utils.resolve({});
+        }
 
         opts.params = this.getParams(opts);
         opts.params.count = true;
@@ -203,7 +198,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         opts.params = this.queryTransform(mapper, opts.params, opts);
         const query = {
             add: {
-                doc: this.mapToAdapterDocument(props)
+                doc: this.mapToAdapterDocument(this.extractTable('update', mapper, props, opts), props)
             },
             commit: {}
         };
@@ -265,21 +260,43 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     _find(mapper: Mapper, id: string | number, opts: any) {
         opts = opts || {};
 
+        opts.adapterQuery = true;
+        const me = this;
+        opts.params = opts.params || {};
+        opts.params.where = opts.params.where || {};
+        opts.params.where.id = { '==': id};
+        opts.offset = 0;
+        opts.limit = 10;
+
+        const query = me.queryTransformToAdapterQuery('find', mapper, {}, opts);
+        if (query === undefined) {
+            return utils.resolve([]);
+        }
+
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        return sqlBuilder.raw(this.queryTransformToSql(opts.query));
+        return sqlBuilder.raw(this.queryTransformToSql(query));
     };
 
     _findAll(mapper, query, opts) {
         query = query || {};
         opts = opts || {};
+        opts.query = opts.query || query;
+
+        opts.adapterQuery = true;
+        const me = this;
+        query = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
+        if (query === undefined) {
+            return utils.resolve([]);
+        }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        return sqlBuilder.raw(this.queryTransformToSql(opts.query));
+        return sqlBuilder.raw(this.queryTransformToSql(query));
     };
 
     _facets(mapper, query, opts) {
         query = query || {};
         opts = opts || {};
+        opts.query = opts.query || query;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         return sqlBuilder.raw(this.queryTransformToSql(opts.query));
@@ -288,10 +305,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     _search(mapper, query, opts) {
         query = query || {};
         opts = opts || {};
+        opts.query = opts.query || query;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const raw = sqlBuilder.raw(this.queryTransformToSql(opts.query));
-        console.error("raw:", raw);
         return raw;
     };
 
@@ -317,10 +334,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.copy(opts.params);
     }
 
-    getPath(method: string, mapper: Mapper, id: string | number, opts: any) {
+    getPath(method: string, mapper: Mapper, id: string | number, opts: any, query: any) {
         let path = '';
         if (opts.adapterQuery) {
-            path = this.getAdapterPath(method, mapper, id, opts);
+            path = this.getAdapterPath(method, mapper, id, opts, query);
         }
         return path;
     }
@@ -403,9 +420,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const docs = result;
         const records = [];
         for (const doc of docs) {
-            records.push(this.mapResponseDocument(mapper, doc, opts));
+            records.push(this.mapResponseDocument(mapper, doc, opts.query.table, opts));
         }
-        console.log('extractRecordsFromRequestResult:', records);
 
         return records;
     }
@@ -415,21 +431,30 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
 
-    mapResponseDocument(mapper: Mapper, doc: any, opts: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any, table: string, opts: any): Record {
         const values = {};
-        values['id'] = Number(this.getAdapterValue(doc, 'id', undefined));
+        values['id'] = Number(this.mapperUtils.getAdapterValue(doc, 'id', undefined));
         // console.log('mapResponseDocument values:', values);
         return mapper.createRecord(values);
     }
 
-    // TODO
-    getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any) {
-        const path = '';
-        console.log('solrurl:', path);
-        return path;
-    }
+    protected abstract mapToAdapterDocument(table: string, props: any): any;
 
-    mapToAdapterFieldName(fieldName: string): string {
+    protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;
+
+    protected abstract getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[];
+
+    protected abstract getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string[];
+
+    protected abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+
+    protected abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+
+    protected abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+
+    protected abstract getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any, query: any): string
+
+    protected mapToAdapterFieldName(table, fieldName: string): string {
         switch (fieldName) {
             default:
                 break;
@@ -438,75 +463,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return fieldName;
     }
 
-    abstract mapToAdapterDocument(props: any): any;
-
-    abstract getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[];
-
-    abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
-        let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
-            if (Array.isArray(adapterDocument[adapterFieldName])) {
-                value = adapterDocument[adapterFieldName][0];
-            } else {
-                value = adapterDocument[adapterFieldName];
-            }
-        }
-
-        return value;
-    }
-
-    getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
-        let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
-            if (Array.isArray(adapterDocument[adapterFieldName])) {
-                value = adapterDocument[adapterFieldName][0];
-            } else if (adapterDocument[adapterFieldName] !== '0' && adapterDocument[adapterFieldName] !== '0,0') {
-                value = adapterDocument[adapterFieldName];
-            }
-        }
-
-        return value;
-    }
-
-    buildUrl(url, params) {
-        if (!params) {
-            return url;
-        }
-
-        const parts = [];
-
-        utils.forOwn(params, function (val, key) {
-            if (val === null || typeof val === 'undefined') {
-                return;
-            }
-            if (!utils.isArray(val)) {
-                val = [val];
-            }
-
-            val.forEach(function (v) {
-                if (typeof window !== 'undefined' && window.toString.call(v) === '[object Date]') {
-                    v = v.toISOString().trim();
-                } else if (utils.isObject(v)) {
-                    v = utils.toJson(v).trim();
-                }
-                parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(v));
-            });
-        });
-
-        if (parts.length > 0) {
-            url += (url.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
-        }
-
-        return url;
-    }
-
-    queryTransform(mapper, params, opts) {
+    protected queryTransform(mapper, params, opts) {
         opts = opts || {};
         if (utils.isFunction(opts.queryTransform)) {
             return opts.queryTransform(mapper, params, opts);
@@ -517,23 +474,25 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return params;
     }
 
-    private queryTransformToSql(query: any): string {
-        console.error("query:", query);
-/**
-        const table = this.getPath(query);
-        const fields = this.getAdapterFields('find', mapper, id, opts);
+    protected queryTransformToSql(query: any): string {
+        /**
         return this.filterQuery(this.selectTable(mapper, opts), query, opts).then((rows) => [rows || [], {}]);
         return 'select ' + query.from + ' ' + query.where + ''
  **/
-    return 'select * from image limit 10';
+    return 'select ' +
+        (query.fields ? query.fields : '') + ' ' +
+        'from ' + query.from + ' ' +
+        (query.where && query.where.length > 0 ? 'where ' + query.where.join(' AND ') : '') + ' ' +
+        (query.limit ? 'limit ' + (query.offset || 0) + ', ' + query.limit : '');
     }
 
-    private queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
-        console.error("nmethod:" + method, params);
+    protected queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
         const query = this.createAdapterQuery(method, mapper, params, opts);
+        if (query === undefined) {
+            return undefined;
+        }
 
-
-        const fields = this.getAdapterFields(method, mapper, params, opts);
+        const fields = this.getAdapterFields(method, mapper, params, opts, query);
         if (fields !== undefined && fields.length > 0) {
             query['fields'] = fields.join(', ');
         }
@@ -559,14 +518,21 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             });
         }
 
-        console.log('sqlQuery:', query);
+        query['from'] = this.getAdapterFrom(method, mapper, params, opts, query);
+
+        console.error('sqlQuery:', query);
 
         return query;
     }
 
-    private createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
+    protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
         // console.log('createAdapterQuery params:', params);
         // console.log('createAdapterQuery opts:', opts);
+
+        const table = this.extractTable(method, mapper, params, opts);
+        if (table === undefined || table === '') {
+            return undefined;
+        }
 
         const newParams = [];
         if (params.where) {
@@ -574,7 +540,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 const filter = params.where[fieldName];
                 const action = Object.getOwnPropertyNames(filter)[0];
                 const value = params.where[fieldName][action];
-                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
+                const res = this.mapFilterToAdapterQuery(mapper, fieldName, action, value, table);
+                if (res !== undefined) {
+                    newParams.push(res);
+                }
             }
         }
         if (params.additionalWhere) {
@@ -582,7 +551,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 const filter = params.additionalWhere[fieldName];
                 const action = Object.getOwnPropertyNames(filter)[0];
                 const value = params.additionalWhere[fieldName][action];
-                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
+                const res = this.mapFilterToAdapterQuery(mapper, fieldName, action, value, table);
+                if (res !== undefined) {
+                    newParams.push(res);
+                }
             }
         }
 
@@ -592,8 +564,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 'offset': opts.offset * opts.limit,
                 'limit': opts.limit,
                 'sort': '',
+                'table': table,
+                'from': 'dual',
                 'fields': ''};
-            console.log('createAdapterQuery result:', query);
+            console.error('createAdapterQuery result:', query);
             return query;
         }
 
@@ -601,81 +575,45 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             'where': newParams,
             'offset': opts.offset * opts.limit,
             'limit': opts.limit,
+            'from': 'dual',
+            'table': table,
             'sort': '',
             'fields': ''};
         console.log('createAdapterQuery result:', query);
         return query;
     }
 
-    private mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
+    protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
         let query = '';
 
         if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' like "%'
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%", "%') + '%" ';
         } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' = "'
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '", "') + '" ';
         } else if (action === AdapterFilterActions.GT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' > "'
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.GE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' >= "'
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.LT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' < "'
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.LE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' <= "'
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.IN) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + value.map(
-                    inValue => this.escapeAdapterValue(inValue.toString())
-                ).join('" OR "') + '")';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' in ("' + value.map(
+                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
+                ).join('", "') + '")';
         } else if (action === AdapterFilterActions.NOTIN) {
-            query = this.mapToAdapterFieldName(fieldName) + ':(-"' + value.map(
-                    inValue => this.escapeAdapterValue(inValue.toString())
-                ).join('" AND -"') + '")';
+            query = this.mapToAdapterFieldName(table, fieldName) + ' not in ("' + value.map(
+                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
+                ).join('", W"') + '")';
         }
         return query;
-    }
-
-    prepareEscapedSingleValue(value: any, splitter: string, joiner: string): string {
-        value = this.prepareSingleValue(value, ' ');
-        value = this.escapeAdapterValue(value);
-        const values = this.prepareValueToArray(value, splitter);
-        value = values.map(inValue => this.escapeAdapterValue(inValue)).join(joiner);
-        return value;
-    }
-
-    private prepareSingleValue(value: any, joiner: string): string {
-        switch (typeof value) {
-            case 'string':
-                return value.toString();
-            case 'number':
-                return '' + value;
-            default:
-        }
-        if (Array.isArray(value)) {
-            return value.join(joiner);
-        }
-
-        return value.toString();
-    }
-
-    private prepareValueToArray(value: any, splitter: string): string[] {
-        return value.toString().split(splitter);
-    }
-
-    private escapeAdapterValue(value: any): string {
-        value = value.toString().replace(/[%]/g, ' ').replace(/[:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
-        return value;
-    }
-
-    private splitPairs(arr: Array<any>): Array<Array<any>> {
-        const pairs = [];
-        for (let i = 0; i < arr.length; i += 2) {
-            if (arr[i + 1] !== undefined) {
-                pairs.push([arr[i], arr[i + 1]]);
-            } else {
-                pairs.push([arr[i]]);
-            }
-        }
-        return pairs;
     }
 }
 

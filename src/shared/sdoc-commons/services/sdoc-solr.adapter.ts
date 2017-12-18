@@ -70,39 +70,39 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
 
         const values = {};
-        values['id'] = this.getAdapterValue(doc, 'id', undefined);
+        values['id'] = this.mapperUtils.getAdapterValue(doc, 'id', undefined);
 
-        values['imageId'] = Number(this.getAdapterValue(doc, 'image_id_i', undefined));
-        values['locId'] = Number(this.getAdapterValue(doc, 'loc_id_i', undefined));
-        values['routeId'] = Number(this.getAdapterValue(doc, 'route_id_i', undefined));
-        values['trackId'] = Number(this.getAdapterValue(doc, 'track_id_i', undefined));
-        values['tripId'] = Number(this.getAdapterValue(doc, 'trip_id_i', undefined));
-        values['newsId'] = Number(this.getAdapterValue(doc, 'news_id_i', undefined));
+        values['imageId'] = Number(this.mapperUtils.getAdapterValue(doc, 'image_id_i', undefined));
+        values['locId'] = Number(this.mapperUtils.getAdapterValue(doc, 'loc_id_i', undefined));
+        values['routeId'] = Number(this.mapperUtils.getAdapterValue(doc, 'route_id_i', undefined));
+        values['trackId'] = Number(this.mapperUtils.getAdapterValue(doc, 'track_id_i', undefined));
+        values['tripId'] = Number(this.mapperUtils.getAdapterValue(doc, 'trip_id_i', undefined));
+        values['newsId'] = Number(this.mapperUtils.getAdapterValue(doc, 'news_id_i', undefined));
 
         const subtypeField = doc['subtypes_ss'];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
            values['subtypes'] = subtypeField.join(',');
         }
-        values['dateshow'] = this.getAdapterValue(doc, 'dateshow_dt', undefined);
-        values['descTxt'] = this.getAdapterValue(doc, 'desc_txt', undefined);
-        values['descHtml'] = this.getAdapterValue(doc, 'desc_html_txt', undefined);
-        values['descMd'] = this.getAdapterValue(doc, 'desc_md_txt', undefined);
-        values['geoDistance'] = this.getAdapterCoorValue(doc, 'distance', undefined);
-        values['geoLon'] = this.getAdapterCoorValue(doc, 'geo_lon_s', undefined);
-        values['geoLat'] = this.getAdapterCoorValue(doc, 'geo_lat_s', undefined);
-        values['geoLoc'] = this.getAdapterCoorValue(doc, 'geo_loc_p', undefined);
-        values['gpsTrack'] = this.getAdapterValue(doc, 'gpstrack_s', undefined);
-        values['gpsTrackBasefile'] = this.getAdapterValue(doc, 'gpstracks_basefile_s', undefined);
-        values['keywords'] = this.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
-        values['name'] = this.getAdapterValue(doc, 'name_s', undefined);
-        values['subtype'] = this.getAdapterValue(doc, 'subtype_s', undefined);
-        values['type'] = this.getAdapterValue(doc, 'type_s', undefined);
-        values['locHirarchie'] = this.getAdapterValue(doc, 'loc_lochirarchie_s', '')
+        values['dateshow'] = this.mapperUtils.getAdapterValue(doc, 'dateshow_dt', undefined);
+        values['descTxt'] = this.mapperUtils.getAdapterValue(doc, 'desc_txt', undefined);
+        values['descHtml'] = this.mapperUtils.getAdapterValue(doc, 'desc_html_txt', undefined);
+        values['descMd'] = this.mapperUtils.getAdapterValue(doc, 'desc_md_txt', undefined);
+        values['geoDistance'] = this.mapperUtils.getAdapterCoorValue(doc, 'distance', undefined);
+        values['geoLon'] = this.mapperUtils.getAdapterCoorValue(doc, 'geo_lon_s', undefined);
+        values['geoLat'] = this.mapperUtils.getAdapterCoorValue(doc, 'geo_lat_s', undefined);
+        values['geoLoc'] = this.mapperUtils.getAdapterCoorValue(doc, 'geo_loc_p', undefined);
+        values['gpsTrack'] = this.mapperUtils.getAdapterValue(doc, 'gpstrack_s', undefined);
+        values['gpsTrackBasefile'] = this.mapperUtils.getAdapterValue(doc, 'gpstracks_basefile_s', undefined);
+        values['keywords'] = this.mapperUtils.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
+        values['name'] = this.mapperUtils.getAdapterValue(doc, 'name_s', undefined);
+        values['subtype'] = this.mapperUtils.getAdapterValue(doc, 'subtype_s', undefined);
+        values['type'] = this.mapperUtils.getAdapterValue(doc, 'type_s', undefined);
+        values['locHirarchie'] = this.mapperUtils.getAdapterValue(doc, 'loc_lochirarchie_s', '')
             .replace(/,,/g, ' -> ')
             .replace(/,/g, ' ')
             .replace(/_/g, ' ')
             .trim();
-        values['locHirarchieIds'] = this.getAdapterValue(doc, 'loc_lochirarchie_ids_s', '')
+        values['locHirarchieIds'] = this.mapperUtils.getAdapterValue(doc, 'loc_lochirarchie_ids_s', '')
             .replace(/_/g, ' ').trim()
             .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
 
@@ -143,12 +143,12 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
 
 
         const dataTechValues = {};
-        dataTechValues['altAsc'] = this.getAdapterValue(doc, 'data_tech_alt_asc_i', undefined);
-        dataTechValues['altDesc'] = this.getAdapterValue(doc, 'data_tech_alt_desc_i', undefined);
-        dataTechValues['altMin'] = this.getAdapterValue(doc, 'data_tech_alt_min_i', undefined);
-        dataTechValues['altMax'] = this.getAdapterValue(doc, 'data_tech_alt_max_i', undefined);
-        dataTechValues['dist'] = this.getAdapterValue(doc, 'data_tech_dist_f', undefined);
-        dataTechValues['dur'] = this.getAdapterValue(doc, 'data_tech_dur_f', undefined);
+        dataTechValues['altAsc'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_asc_i', undefined);
+        dataTechValues['altDesc'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_desc_i', undefined);
+        dataTechValues['altMin'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_min_i', undefined);
+        dataTechValues['altMax'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_max_i', undefined);
+        dataTechValues['dist'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_dist_f', undefined);
+        dataTechValues['dur'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_dur_f', undefined);
         let dataTechSet = false;
         for (const field in dataTechValues) {
             if (dataTechValues[field] !== undefined && dataTechValues[field] !== 0) {
@@ -164,13 +164,13 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         }
 
         const rateTechValues = {};
-        rateTechValues['overall'] = this.getAdapterValue(doc, 'rate_tech_overall_s', undefined);
-        rateTechValues['ks'] = this.getAdapterValue(doc, 'rate_tech_ks_s', undefined);
-        rateTechValues['firn'] = this.getAdapterValue(doc, 'rate_tech_firn_s', undefined);
-        rateTechValues['gletscher'] = this.getAdapterValue(doc, 'rate_tech_gletscher_s', undefined);
-        rateTechValues['klettern'] = this.getAdapterValue(doc, 'rate_tech_klettern_s', undefined);
-        rateTechValues['bergtour'] = this.getAdapterValue(doc, 'rate_tech_bergtour_s', undefined);
-        rateTechValues['schneeschuh'] = this.getAdapterValue(doc, 'rate_tech_schneeschuh_s', undefined);
+        rateTechValues['overall'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_overall_s', undefined);
+        rateTechValues['ks'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_ks_s', undefined);
+        rateTechValues['firn'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_firn_s', undefined);
+        rateTechValues['gletscher'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_gletscher_s', undefined);
+        rateTechValues['klettern'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_klettern_s', undefined);
+        rateTechValues['bergtour'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_bergtour_s', undefined);
+        rateTechValues['schneeschuh'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_schneeschuh_s', undefined);
         let rateTechSet = false;
         for (const field in rateTechValues) {
             if (rateTechValues[field] !== undefined && (rateTechValues[field] + '').length > 0) {
@@ -186,14 +186,14 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         }
 
         const ratePersValues = {};
-        ratePersValues['ausdauer'] = this.getAdapterValue(doc, 'rate_pers_ausdauer_i', undefined);
-        ratePersValues['bildung'] = this.getAdapterValue(doc, 'rate_pers_bildung_i', undefined);
-        ratePersValues['gesamt'] = this.getAdapterValue(doc, 'rate_pers_gesamt_i', undefined);
-        ratePersValues['kraft'] = this.getAdapterValue(doc, 'rate_pers_kraft_i', undefined);
-        ratePersValues['mental'] = this.getAdapterValue(doc, 'rate_pers_mental_i', undefined);
-        ratePersValues['motive'] = this.getAdapterValue(doc, 'rate_pers_motive_i', undefined);
-        ratePersValues['schwierigkeit'] = this.getAdapterValue(doc, 'rate_pers_schwierigkeit_i', undefined);
-        ratePersValues['wichtigkeit'] = this.getAdapterValue(doc, 'rate_pers_wichtigkeit_i', undefined);
+        ratePersValues['ausdauer'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_ausdauer_i', undefined);
+        ratePersValues['bildung'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_bildung_i', undefined);
+        ratePersValues['gesamt'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_gesamt_i', undefined);
+        ratePersValues['kraft'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_kraft_i', undefined);
+        ratePersValues['mental'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_mental_i', undefined);
+        ratePersValues['motive'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_motive_i', undefined);
+        ratePersValues['schwierigkeit'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_schwierigkeit_i', undefined);
+        ratePersValues['wichtigkeit'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_wichtigkeit_i', undefined);
         let ratePersSet = false;
         for (const field in ratePersValues) {
             if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 && ratePersValues[field] > 0) {
@@ -209,10 +209,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         }
 
         const dataInfoValues = {};
-        dataInfoValues['guides'] = this.getAdapterValue(doc, 'data_info_guides_s', undefined);
-        dataInfoValues['region'] = this.getAdapterValue(doc, 'data_info_region_s', undefined);
-        dataInfoValues['baseloc'] = this.getAdapterValue(doc, 'data_info_baseloc_s', undefined);
-        dataInfoValues['destloc'] = this.getAdapterValue(doc, 'data_info_destloc_s', undefined);
+        dataInfoValues['guides'] = this.mapperUtils.getAdapterValue(doc, 'data_info_guides_s', undefined);
+        dataInfoValues['region'] = this.mapperUtils.getAdapterValue(doc, 'data_info_region_s', undefined);
+        dataInfoValues['baseloc'] = this.mapperUtils.getAdapterValue(doc, 'data_info_baseloc_s', undefined);
+        dataInfoValues['destloc'] = this.mapperUtils.getAdapterValue(doc, 'data_info_destloc_s', undefined);
         let dataInfoSet = false;
         for (const field in dataInfoValues) {
             if (dataInfoValues[field] !== undefined && (dataInfoValues[field] + '').length > 0) {
