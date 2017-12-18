@@ -176,8 +176,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                 orderBy: [['created_at', 'descTxt']]
             };
             if (this.getAdapterForMapper(mapperName) === undefined ||
-                (!(this.getAdapterForMapper(mapperName) instanceof GenericSearchHttpAdapter)
-                && !(this.getAdapterForMapper(mapperName) instanceof GenericSqlAdapter)) ||
+                (!(this.getAdapterForMapper(mapperName) instanceof GenericSearchHttpAdapter)) ||
                 (opts && opts.forceLocalStore)) {
                 // the resolve / reject functions control the fate of the promise
                 me.findAll(mapperName, query, options).then(function doneFindAll(documents: R[]) {

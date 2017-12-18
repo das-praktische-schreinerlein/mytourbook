@@ -225,6 +225,10 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
     }
 
     getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+        if (method === 'count') {
+            return ['count(*)'];
+        }
+
         const fields = [];
         for (const field of SDocSqlAdapter.tableFieldLists[query.table]) {
             fields.push(field);

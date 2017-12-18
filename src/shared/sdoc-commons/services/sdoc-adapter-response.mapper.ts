@@ -52,8 +52,7 @@ export class SDocAdapterResponseMapper {
         const imageMapper = mapper['datastore']._mappers['sdocimage'];
         const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
-console.error("opts", opts);
-        console.error("doc", doc);
+
         const values = {};
         values['id'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'id', undefined);
 
