@@ -1,9 +1,8 @@
-import {Mapper, Record} from 'js-data';
+import {Mapper} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
-import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {GenericSqlAdapter, TableConfig} from '../../search-commons/services/generic-sql.adapter';
+import {GenericSqlAdapter, TableConfig, TableFacetConfig} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
@@ -58,6 +57,50 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'round((K_DISTANCE / 5))*5 as distFacet',
                 'TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 as dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 * 2) / 2, 1) as durFacet'],
+            facetConfigs: {
+                'actiontype_ss': {
+                    selectField: 'concat("ac_", kategorie_full.k_type)'
+                },
+                'data_tech_alt_asc_facet_is': {
+                    selectField: 'round((K_ALTITUDE_ASC / 500))*500'
+                },
+                'data_tech_alt_max_facet_is': {
+                    selectField: 'round((K_ALTITUDE_MAX / 500))*500'
+                },
+                'data_tech_dist_facets_fs': {
+                    selectField: 'round((K_DISTANCE / 5))*5'
+                },
+                'data_tech_dur_facet_fs': {
+                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 * 2) / 2, 1)'
+                },
+                'keywords_txt': {
+                },
+                'loc_id_i': {
+                },
+                'loc_lochirarchie_txt': {
+//                    selectField: 'l_lochirarchietxt'
+                },
+                'month_is': {
+                    selectField: 'month(k_datevon)'
+                },
+                'rate_pers_gesamt_is': {
+                    selectField: 'K_RATE_GESAMT'
+                },
+                'rate_pers_schwierigkeit_is': {
+                    selectField: 'K_RATE_SCHWIERIGKEIT'
+                },
+                'rate_tech_overall_ss': {
+                },
+                'subtype_ss': {
+                    selectField: 'concat("ac_", kategorie_full.k_type)'
+                },
+                'type_txt': {
+                    constValues: ['track', 'route']
+                },
+                'week_is': {
+                    selectField: 'week(k_datevon)'
+                }
+            },
             fieldMapping: {
                 id: 'id',
                 image_id_i: 'i_id',
@@ -239,79 +282,50 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         return fields;
     }
 
-    getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
-        const facetConfigs = {
-            'actiontype_ss': {
-                'f.actiontype_ss.facet.limit': '-1',
-                'f.actiontype_ss.facet.sort': 'index'
-            },
-            'data_tech_alt_asc_facet_is': {
-                'f.data_tech_alt_asc_facet_is.facet.limit': '-1',
-                'f.data_tech_alt_asc_facet_is.facet.sort': 'index'
-            },
-            'data_tech_alt_max_facet_is': {
-                'f.data_tech_alt_max_facet_is.facet.limit': '-1',
-                'f.data_tech_alt_max_facet_is.facet.sort': 'index'
-            },
-            'data_tech_dist_facets_fs': {
-                'f.data_tech_dist_facets_fs.facet.limit': '-1',
-                'f.data_tech_dist_facets_fs.facet.sort': 'index'
-            },
-            'data_tech_dur_facet_fs': {
-                'f.data_tech_dur_facet_fs.facet.limit': '-1',
-                'f.data_tech_dur_facet_fs.facet.sort': 'index'
-            },
-            'keywords_txt': {
-                'f.keywords_txt.facet.prefix': 'kw_',
-                'f.keywords_txt.facet.limit': '-1',
-                'f.keywords_txt.facet.sort': 'count'
-            },
-            'loc_id_i': {},
-            'loc_lochirarchie_txt': {},
-            'month_is': {
-                'f.month_is.facet.limit': '-1',
-                'f.month_is.facet.sort': 'index'
-            },
-            'rate_pers_gesamt_is': {
-                'f.rate_pers_gesamt_is.facet.limit': '-1',
-                'f.rate_pers_gesamt_is.facet.sort': 'index'
-            },
-            'rate_pers_schwierigkeit_is': {
-                'f.rate_pers_schwierigkeit_is.facet.limit': '-1',
-                'f.rate_pers_schwierigkeit_is.facet.sort': 'index'
-            },
-            'rate_tech_overall_ss': {
-                'f.rate_tech_overall_ss.facet.limit': '-1',
-                'f.rate_tech_overall_ss.facet.sort': 'index'
-            },
-            'subtype_ss': {
-                'f.subtype_ss.facet.limit': '-1',
-                'f.subtype_ss.facet.sort': 'index'
-            },
-            'type_txt': {},
-            'week_is': {
-                'f.week_is.facet.limit': '-1',
-                'f.week_is.facet.sort': 'index'
-            }
-        };
+    getFacetFilter(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
+        const facetConfigs = tableConfig.facetConfigs;
 
-        const facetParams = new Map<string, any>();
         const facets = [];
         for (const key in facetConfigs) {
+            const facetConfig: TableFacetConfig = facetConfigs[key];
+            if (!facetConfig) {
+                continue;
+            }
+            // TODO
+        }
+
+        return facets;
+    };
+
+    getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, string> {
+        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
+        const facetConfigs = tableConfig.facetConfigs;
+
+        const facets = new Map<string, string>();
+        for (const key in facetConfigs) {
             if (opts.showFacets === true || (opts.showFacets instanceof Array && opts.showFacets.indexOf(key) >= 0)) {
-                facets.push(key);
-                for (const paramKey in facetConfigs[key]) {
-                    facetParams.set(paramKey, facetConfigs[key][paramKey]);
+                const facetConfig: TableFacetConfig = facetConfigs[key];
+                if (!facetConfig) {
+                    continue;
+                }
+
+
+                if (facetConfig.selectField !== undefined) {
+                    facets.set(key, 'select count(*) as count, ' + facetConfig.selectField + ' as value '
+                    + 'from ' + tableConfig.tableName + ' group by value order by count desc');
+                } else if (facetConfig.constValues !== undefined) {
+                    const sqls = [];
+                    facetConfig.constValues.forEach(value => {
+                        sqls.push('select 0 as count, "' + value + '" as value');
+                    });
+
+                    facets.set(key, sqls.join(' union all '));
                 }
             }
         }
 
-        if (facets.length > 0) {
-            facetParams.set('facet', 'on');
-            facetParams.set('facet.field', facets);
-        }
-
-        return facetParams;
+        return facets;
     };
 
     getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {

@@ -7,6 +7,7 @@ import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter'
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import {MapperUtils} from './mapper.utils';
+import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
 
 export class AdapterFilterActions {
     static LIKEI = 'likei';
@@ -21,8 +22,9 @@ export class AdapterFilterActions {
     static NOTIN = 'notin';
 }
 
-export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm,
-    S extends GenericSearchResult<R, F>> extends GenericSearchHttpAdapter<R, F, S> {
+export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
+    extends GenericSearchHttpAdapter<R, F, S>
+    implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
     protected mapperUtils = new MapperUtils();
 
     constructor(config: any) {

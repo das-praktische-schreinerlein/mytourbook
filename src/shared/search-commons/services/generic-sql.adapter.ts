@@ -7,8 +7,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import {Adapter} from 'js-data-adapter';
 import knex from 'knex';
-import toString from 'lodash.tostring';
-import {GenericSearchAdapter} from './generic-search.adapter';
+import {GenericFacetAdapter} from './generic-search.adapter';
 import {isArray} from 'util';
 import {MapperUtils} from './mapper.utils';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
@@ -37,15 +36,15 @@ export interface QueryData {
 }
 
 export interface TableFacetConfig {
-    selectValues: string;
-
+    selectField?: string;
+    constValues?: string [];
 }
 
 export interface TableConfig {
     tableName: string;
     selectFrom: string;
     selectFieldList: string[];
-    facets: {};
+    facetConfigs: {};
     fieldMapping: {};
 }
 
@@ -56,8 +55,8 @@ export function Response (data, meta, op) {
     this.op = op;
 }
 
-export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm,
-    S extends GenericSearchResult<R, F>> extends Adapter {
+export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
+    extends Adapter implements GenericFacetAdapter<R, F, S> {
     protected knex: any;
     protected mapperUtils = new MapperUtils();
     protected mapper: GenericAdapterResponseMapper;
@@ -132,15 +131,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         query = query || {};
         opts = opts || {};
 
-        opts.adapterQuery = true;
         opts.adapterFacet = true;
         const me = this;
-        query = this.queryTransform(mapper, query, opts);
-
-        opts.params = this.getParams(opts);
-        opts.params.count = true;
-        utils.deepMixIn(opts.params, query);
-        opts.params = this.queryTransform(mapper, opts.params, opts);
 
         // beforeCount lifecycle hook
         op = opts.op = 'beforeFacets';
@@ -149,18 +141,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 // Allow for re-assignment from lifecycle hook
                 op = opts.op = 'count';
                 this.dbg(op, mapper, query, opts);
-                return utils.resolve(this._facets(mapper, query, opts));
+                return this._facets(mapper, query, opts);
             })
             .then((results) => {
                 let [data, result] = results;
-                result = result || {};
-                let response = new Response(data, result, op);
-                response = this.respond(response, opts);
-
-                // afterCount lifecycle hook
-                op = opts.op = 'afterFacets';
-                return utils.resolve(this[op](mapper, query, opts, response))
-                    .then((_response) => _response === undefined ? response : _response);
+                return utils.resolve(data);
             });
     }
 
@@ -218,6 +203,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.Promise.resolve(result[0]);
     }
 
+    afterFacets(mapper: Mapper, props: IDict, opts: any, result: any): Promise<number> {
+        return utils.Promise.resolve(result);
+    }
+
     afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
         return utils.Promise.resolve(<T>undefined);
     }
@@ -245,9 +234,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     response = me.respond(response, opts);
                     const count = me.extractCountFromRequestResult(mapper, response, opts);
                     return resolve(count);
-                },
-                function errorSearch(reason) {
-                    console.error('_count failed:' + reason);
+                }).catch(function errorSearch(reason) {
+                    console.error('_facets failed:' + reason);
                     return reject(reason);
                 });
         });
@@ -258,7 +246,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     _find(mapper: Mapper, id: string | number, opts: any) {
         opts = opts || {};
 
+        const a = true;
+        if (a) { throw new Error('Not implemented'); } // TODO
+
         opts.adapterQuery = true;
+
         const me = this;
         opts.params = opts.params || {};
         opts.params.where = opts.params.where || {};
@@ -270,6 +262,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         if (queryData === undefined) {
             return utils.resolve([]);
         }
+
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         return sqlBuilder.raw(this.queryTransformToSql(queryData));
@@ -299,8 +292,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
                     const records: R[] = me.extractRecordsFromRequestResult(mapper, response, opts);
                     return resolve([records]);
-                },
-                function errorSearch(reason) {
+                }).catch(function errorSearch(reason) {
                     console.error('_findAll failed:' + reason);
                     return reject(reason);
                 });
@@ -313,10 +305,54 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         query = query || {};
         opts = opts || {};
         opts.query = opts.query || query;
-        // return utils.resolve({});
+
+        // init data with dummy-query
+        opts.adapterQuery = true;
+        const me = this;
+        const queryData = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
+        if (queryData === undefined) {
+            return utils.resolve([[]]);
+        }
+        opts.query = queryData;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        return sqlBuilder.raw(this.queryTransformToSql(opts.query));
+        const result = new Promise((allResolve, allReject) => {
+            const queries = me.getFacetSql('facet', mapper, query, opts, query);
+            const promises = [];
+            queries.forEach((value, key) => {
+                const raw = sqlBuilder.raw(value);
+                promises.push(new Promise((resolve, reject) => {
+                    raw.then(function doneSearch(dbresults: any) {
+                            let [dbdata, dbresult] = dbresults;
+                            dbresult = dbresult || {};
+                            let response = new Response(dbdata, dbresult, 'count');
+                            response = me.respond(response, opts);
+                            const facet: Facet = me.extractFacetFromRequestResult(mapper, response, opts);
+
+                            return resolve([key, facet]);
+                        },
+                        function errorSearch(reason) {
+                            console.error('_facets failed:' + reason);
+
+                            return reject(reason);
+                        });
+                }));
+            });
+
+            Promise.all(promises).then(function doneSearch(facetResults: any[]) {
+                    const facets = new Facets();
+                    facetResults.forEach(facet => {
+                        facets.facets.set(facet[0], facet[1]);
+                    });
+
+                    return allResolve([facets]);
+                }).catch(function errorSearch(reason) {
+                    console.error('_facets failed:' + reason);
+                    return allReject(reason);
+                });
+        });
+
+        return result;
     };
 
     deserialize(mapper: Mapper, response: any, opts: any) {
@@ -374,17 +410,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             return this.deserializeCommon(mapper, response, opts);
         }
 
-        // check for adapter-response
-        if (response.data.responseHeader === undefined) {
-            return this.deserializeCommon(mapper, response, opts);
-        }
-        if (response.data.responseHeader.status !== 0) {
-            return undefined;
-        }
-        if (response.data.response === undefined) {
-            return undefined;
-        }
-
         // count
         if (opts.adapterCount) {
             return this.extractCountFromRequestResult(mapper, response.data, opts);
@@ -392,22 +417,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         // facet
         if (opts.adapterFacet) {
-            if (response.data.facet_counts === undefined) {
-                return undefined;
-            }
-            if (response.data.facet_counts.facet_queries === undefined) {
-                return undefined;
-            }
-            if (response.data.facet_counts.facet_queries.facet_fields === undefined) {
-                return undefined;
-            }
-
-            return this.extractFacetsFromRequestResult(mapper, response.data, opts);
-        }
-
-        // search records
-        if (response.data.response.docs === undefined) {
-            return undefined;
+            return this.extractFacetFromRequestResult(mapper, response.data, opts);
         }
 
         return this.extractRecordsFromRequestResult(mapper, response.data, opts);
@@ -438,8 +448,20 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return records;
     }
 
-    extractFacetsFromRequestResult(mapper: Mapper, result: any, opts: any): Facets {
-        return new Facets();
+    extractFacetFromRequestResult(mapper: Mapper, result: any, opts: any): Facet {
+        if (!isArray(result)) {
+            return undefined;
+        }
+
+        // got documents
+        const values = [];
+        const facet = new Facet();
+        for (const doc of result) {
+            values.push([doc['value'] + '', doc['count']]);
+        }
+        facet.facet = values;
+
+        return facet;
     }
 
 
@@ -465,7 +487,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected abstract getTableConfigForTable(table: string): TableConfig;
 
-    protected abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+    protected abstract getFacetFilter(method: string, mapper: Mapper, params: any, opts: any, query: any): string[];
+
+    protected abstract getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, string>;
 
     protected abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
@@ -525,10 +549,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             query['fields'] = fields.join(', ');
         }
 
-        const facetParams = this.getFacetParams(method, mapper, params, opts, query);
-        if (facetParams !== undefined && facetParams.size > 0) {
-            facetParams.forEach(function (value, key) {
-                // TODO query[key] = value;
+        const facetFilter = this.getFacetFilter(method, mapper, params, opts, query);
+        if (facetFilter !== undefined && facetFilter.length > 0) {
+            facetFilter.forEach(function (value) {
+                query.where.push(value);
             });
         }
 
@@ -542,19 +566,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const sortParams = this.getSortParams(method, mapper, params, opts, query);
         if (sortParams !== undefined && sortParams.size > 0) {
             sortParams.forEach(function (value, key) {
-                query['sort'] += ' ' + key + ' ' + value;
+                query.sort += ' ' + key + ' ' + value;
             });
         }
 
         query.from = this.getAdapterFrom(method, mapper, params, opts, query);
-
         console.error('sqlQuery:', query);
 
         return query;
-    }
-
-    protected queryTransformToAdapterFacetQueries(method: string, mapper: Mapper, params: any, opts: any): QueryData[] {
-        return [];
     }
 
     protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
@@ -603,7 +622,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 query.offset = opts.offset * opts.limit;
                 query.limit = opts.limit;
             }
-            console.error('createAdapterQuery result:', query);
             return query;
         }
 

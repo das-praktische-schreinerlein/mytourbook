@@ -2,11 +2,9 @@
 import {DataStore, Mapper, Record, Schema, utils} from 'js-data';
 import {Adapter} from 'js-data-adapter';
 import {Facets} from '../model/container/facets';
-import {GenericSolrAdapter} from './generic-solr.adapter';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
-import {GenericSearchHttpAdapter} from './generic-search-http.adapter';
-import {GenericSqlAdapter} from './generic-sql.adapter';
+import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
 
 export abstract class GenericDataStore <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> {
@@ -118,7 +116,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
 
     public facets(mapperName: string, query?: any, opts?: any): Promise<Facets> {
         if (this.getAdapterForMapper(mapperName) === undefined ||
-            (! (this.getAdapterForMapper(mapperName) instanceof GenericSolrAdapter)) ||
+            (!(typeof this.getAdapterForMapper(mapperName)['facets'] === 'function')) ||
             (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(undefined);
         } else {
@@ -128,7 +126,8 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
             opts.force = true;
 
             const mapper = this.store.getMapper(mapperName);
-            return (<GenericSolrAdapter<R, F, S>>this.getAdapterForMapper(mapperName)).facets(mapper, query, opts);
+            const adapter: any = this.getAdapterForMapper(mapperName);
+            return (<GenericFacetAdapter<R, F, S>>adapter).facets(mapper, query, opts);
         }
     }
 
@@ -176,7 +175,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                 orderBy: [['created_at', 'descTxt']]
             };
             if (this.getAdapterForMapper(mapperName) === undefined ||
-                (!(this.getAdapterForMapper(mapperName) instanceof GenericSearchHttpAdapter)) ||
+                (!(typeof me.getAdapterForMapper(mapperName)['search'] === 'function')) ||
                 (opts && opts.forceLocalStore)) {
                 // the resolve / reject functions control the fate of the promise
                 me.findAll(mapperName, query, options).then(function doneFindAll(documents: R[]) {
@@ -197,7 +196,8 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                 options.force = true;
 
                 const mapper = this.store.getMapper(mapperName);
-                (<GenericSolrAdapter<R, F, S>>me.getAdapterForMapper(mapperName)).search(mapper, query, options)
+                const adapter: any = me.getAdapterForMapper(mapperName);
+                (<GenericSearchAdapter<R, F, S>>adapter).search(mapper, query, options)
                     .then(function doneSearch(genericSearchResult: S) {
                     searchResult.facets = genericSearchResult.facets;
                     searchResult.currentRecords = genericSearchResult.currentRecords;

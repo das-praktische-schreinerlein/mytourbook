@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import {GenericInMemoryAdapter} from './generic-inmemory.adapter';
 import {Facet, Facets} from '../model/container/facets';
 import {AdapterFilterActions} from './generic-solr.adapter';
-import {GenericSearchAdapter} from './generic-search.adapter';
+import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
 
 export interface ItemJsResultPagionation {
     per_page: number;
@@ -31,8 +31,8 @@ export interface ItemJsResult {
     data: ItemJsResultData;
 }
 
-export abstract class GenericItemsJsAdapter <R extends Record, F extends GenericSearchForm,
-    S extends GenericSearchResult<R, F>> extends GenericInMemoryAdapter<R, F, S> implements GenericSearchAdapter<R, F, S> {
+export abstract class GenericItemsJsAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
+    extends GenericInMemoryAdapter<R, F, S> implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
     protected itemJs;
 
     constructor(config: any, data: any[], itemJsConfig: {}) {

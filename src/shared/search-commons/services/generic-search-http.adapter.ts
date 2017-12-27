@@ -5,7 +5,7 @@ import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {GenericSearchAdapter} from './generic-search.adapter';
+import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
 
 export function Response (data, meta, op) {
     meta = meta || {};
@@ -14,8 +14,8 @@ export function Response (data, meta, op) {
     this.op = op;
 }
 
-export abstract class GenericSearchHttpAdapter <R extends Record, F extends GenericSearchForm,
-    S extends GenericSearchResult<R, F>> extends HttpAdapter implements GenericSearchAdapter<R, F, S> {
+export abstract class GenericSearchHttpAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
+    extends HttpAdapter implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
 
     constructor(config: any) {
         super(config);
