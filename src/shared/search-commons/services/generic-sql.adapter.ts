@@ -664,7 +664,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
         const tableConfig = this.getTableConfigForTable(table);
-        let realFieldName = fieldName;
+        let realFieldName = undefined;
         if (tableConfig.facetConfigs.hasOwnProperty(realFieldName)) {
             realFieldName = tableConfig.facetConfigs[realFieldName].selectField || tableConfig.facetConfigs[realFieldName].filterField;
         }
