@@ -221,7 +221,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
     }
 
     getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
-        return SDocSqlAdapter.tableFrom[query.table] || '';
+        return [SDocSqlAdapter.tableFrom[query.table] || ''];
     }
 
     getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {

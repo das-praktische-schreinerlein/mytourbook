@@ -25,6 +25,16 @@ export class AdapterFilterActions {
     static NOTIN = 'notin';
 }
 
+export interface QueryData {
+    where: string[];
+    offset: number;
+    limit: number;
+    sort: string;
+    table: string;
+    from: string;
+    fields: string;
+}
+
 export function Response (data, meta, op) {
     meta = meta || {};
     this.data = data;
@@ -202,14 +212,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         opts.adapterQuery = true;
         const me = this;
-        query = me.queryTransformToAdapterQuery('count', mapper, query, opts);
-        if (query === undefined) {
+        const queryData = me.queryTransformToAdapterQuery('count', mapper, query, opts);
+        if (queryData === undefined) {
             return utils.resolve([0]);
         }
-        opts.query = query;
+        opts.query = queryData;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const raw = sqlBuilder.raw(this.queryTransformToSql(query));
+        const raw = sqlBuilder.raw(this.queryTransformToSql(queryData));
         const result = new Promise((resolve, reject) => {
             raw.then(function doneSearch(dbresults: any) {
                     let [dbdata, dbresult] = dbresults;
@@ -239,13 +249,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         opts.offset = 0;
         opts.limit = 10;
 
-        const query = me.queryTransformToAdapterQuery('find', mapper, {}, opts);
-        if (query === undefined) {
+        const queryData = me.queryTransformToAdapterQuery('find', mapper, {}, opts);
+        if (queryData === undefined) {
             return utils.resolve([]);
         }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        return sqlBuilder.raw(this.queryTransformToSql(query));
+        return sqlBuilder.raw(this.queryTransformToSql(queryData));
     };
 
     _findAll(mapper, query, opts) {
@@ -255,14 +265,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         opts.adapterQuery = true;
         const me = this;
-        query = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
-        if (query === undefined) {
+        const queryData = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
+        if (queryData === undefined) {
             return utils.resolve([[]]);
         }
-        opts.query = query;
+        opts.query = queryData;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const raw = sqlBuilder.raw(this.queryTransformToSql(query));
+        const raw = sqlBuilder.raw(this.queryTransformToSql(queryData));
         const result = new Promise((resolve, reject) => {
             raw.then(function doneSearch(dbresults: any) {
                     let [dbdata, dbresult] = dbresults;
@@ -286,10 +296,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         query = query || {};
         opts = opts || {};
         opts.query = opts.query || query;
-        return utils.resolve({});
+        // return utils.resolve({});
 
-//        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-//        return sqlBuilder.raw(this.queryTransformToSql(opts.query));
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        return sqlBuilder.raw(this.queryTransformToSql(opts.query));
     };
 
     deserialize(mapper: Mapper, response: any, opts: any) {
@@ -459,11 +469,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return params;
     }
 
-    protected queryTransformToSql(query: any): string {
-        /**
-        return this.filterQuery(this.selectTable(mapper, opts), query, opts).then((rows) => [rows || [], {}]);
-        return 'select ' + query.from + ' ' + query.where + ''
- **/
+    protected queryTransformToSql(query: QueryData): string {
     return 'select ' +
         (query.fields ? query.fields : '') + ' ' +
         'from ' + query.from + ' ' +
@@ -471,7 +477,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         (query.limit ? 'limit ' + (query.offset || 0) + ', ' + query.limit : '');
     }
 
-    protected queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
+    protected queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
         const query = this.createAdapterQuery(method, mapper, params, opts);
         if (query === undefined) {
             return undefined;
@@ -503,14 +509,18 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             });
         }
 
-        query['from'] = this.getAdapterFrom(method, mapper, params, opts, query);
+        query.from = this.getAdapterFrom(method, mapper, params, opts, query).join(' ');
 
         console.error('sqlQuery:', query);
 
         return query;
     }
 
-    protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
+    protected queryTransformToAdapterFacetQueries(method: string, mapper: Mapper, params: any, opts: any): {} {
+        return {};
+    }
+
+    protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
         // console.log('createAdapterQuery params:', params);
         // console.log('createAdapterQuery opts:', opts);
 
@@ -544,14 +554,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         }
 
         if (newParams.length <= 0) {
-            const query = {
-                'where': '',
-                'offset': undefined,
-                'limit': undefined,
-                'sort': '',
-                'table': table,
-                'from': 'dual',
-                'fields': ''};
+            const query: QueryData = {
+                where: [],
+                offset: undefined,
+                limit: undefined,
+                sort: '',
+                table: table,
+                from: 'dual',
+                fields: ''};
             if (method === 'findAll') {
                 query.offset = opts.offset * opts.limit;
                 query.limit = opts.limit;
@@ -560,14 +570,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             return query;
         }
 
-        const query = {
-            'where': newParams,
-            'offset': undefined,
-            'limit': undefined,
-            'from': 'dual',
-            'table': table,
-            'sort': '',
-            'fields': ''};
+        const query: QueryData = {
+            where: newParams,
+            offset: undefined,
+            limit: undefined,
+            from: 'dual',
+            table: table,
+            sort: '',
+            fields: ''};
         if (method === 'findAll') {
             query.offset = opts.offset * opts.limit;
             query.limit = opts.limit;
