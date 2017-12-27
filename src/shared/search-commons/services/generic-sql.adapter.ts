@@ -35,6 +35,19 @@ export interface QueryData {
     fields: string;
 }
 
+export interface TableFacetConfig {
+    selectValues: string;
+
+}
+
+export interface TableConfig {
+    tableName: string;
+    selectFrom: string;
+    selectFieldList: string[];
+    facets: {};
+    fieldMapping: {};
+}
+
 export function Response (data, meta, op) {
     meta = meta || {};
     this.data = data;
@@ -437,9 +450,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;
 
+    protected abstract getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig;
+
     protected abstract getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[];
 
-    protected abstract getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string[];
+    protected abstract getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string;
 
     protected abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
@@ -509,15 +524,15 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             });
         }
 
-        query.from = this.getAdapterFrom(method, mapper, params, opts, query).join(' ');
+        query.from = this.getAdapterFrom(method, mapper, params, opts, query);
 
         console.error('sqlQuery:', query);
 
         return query;
     }
 
-    protected queryTransformToAdapterFacetQueries(method: string, mapper: Mapper, params: any, opts: any): {} {
-        return {};
+    protected queryTransformToAdapterFacetQueries(method: string, mapper: Mapper, params: any, opts: any): QueryData[] {
+        return [];
     }
 
     protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
