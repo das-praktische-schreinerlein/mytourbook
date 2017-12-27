@@ -95,11 +95,28 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectField: 'concat("ac_", kategorie_full.k_type)'
                 },
                 'type_txt': {
-                    constValues: ['track', 'route']
+                    constValues: ['track', 'route'],
+                    filterField: '"track"'
                 },
                 'week_is': {
                     selectField: 'week(k_datevon)'
                 }
+            },
+            sortMapping: {
+                'date': 'k_datevon desc',
+                'dateAsc': 'k_datevon asc',
+                'distance': 'geodist() asc',
+                'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 desc',
+                'dataTechAltDesc': 'k_altitude_asc desc',
+                'dataTechMaxDesc': 'k_altitude_max desc',
+                'dataTechDistDesc': 'k_distance desc',
+                'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 asc',
+                'dataTechAltAsc': 'k_altitude_asc asc',
+                'dataTechMaxAsc': 'k_altitude_max asc',
+                'dataTechDistAsc': 'k_distance asc',
+                'ratePers': 'k_rate_gesamt desc',
+                'location': 'l_lochirarchietxt asc',
+                'relevance': 'k_datevon desc'
             },
             fieldMapping: {
                 id: 'id',
@@ -282,52 +299,6 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         return fields;
     }
 
-    getFacetFilter(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
-        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
-        const facetConfigs = tableConfig.facetConfigs;
-
-        const facets = [];
-        for (const key in facetConfigs) {
-            const facetConfig: TableFacetConfig = facetConfigs[key];
-            if (!facetConfig) {
-                continue;
-            }
-            // TODO
-        }
-
-        return facets;
-    };
-
-    getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, string> {
-        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
-        const facetConfigs = tableConfig.facetConfigs;
-
-        const facets = new Map<string, string>();
-        for (const key in facetConfigs) {
-            if (opts.showFacets === true || (opts.showFacets instanceof Array && opts.showFacets.indexOf(key) >= 0)) {
-                const facetConfig: TableFacetConfig = facetConfigs[key];
-                if (!facetConfig) {
-                    continue;
-                }
-
-
-                if (facetConfig.selectField !== undefined) {
-                    facets.set(key, 'select count(*) as count, ' + facetConfig.selectField + ' as value '
-                    + 'from ' + tableConfig.tableName + ' group by value order by count desc');
-                } else if (facetConfig.constValues !== undefined) {
-                    const sqls = [];
-                    facetConfig.constValues.forEach(value => {
-                        sqls.push('select 0 as count, "' + value + '" as value');
-                    });
-
-                    facets.set(key, sqls.join(' union all '));
-                }
-            }
-        }
-
-        return facets;
-    };
-
     getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
         const spatialParams = new Map<string, any>();
 
@@ -343,70 +314,5 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
 
         return spatialParams;
     };
-
-
-    getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
-        const sortParams = new Map<string, any>();
-
-        const form = opts.originalSearchForm || {};
-
-        // set commons: relevance
-        sortParams.set('sort', 'dateonly_s desc');
-
-        switch (form.sort) {
-            case 'date':
-                sortParams.set('sort', 'dateonly_s desc');
-                break;
-            case 'dateAsc':
-                sortParams.set('sort', 'date_dt asc');
-                break;
-            case 'distance':
-                sortParams.set('sort', 'geodist() asc');
-                break;
-            case 'dataTechDurDesc':
-                sortParams.set('sort', 'data_tech_dur_f desc');
-                break;
-            case 'dataTechAltDesc':
-                sortParams.set('sort', 'data_tech_alt_asc_i desc');
-                break;
-            case 'dataTechMaxDesc':
-                sortParams.set('sort', 'data_tech_alt_max_i desc');
-                break;
-            case 'dataTechDistDesc':
-                sortParams.set('sort', 'data_tech_dist_f desc');
-                break;
-            case 'dataTechDurAsc':
-                sortParams.set('sort', 'data_tech_dur_f asc');
-                break;
-            case 'dataTechAltAsc':
-                sortParams.set('sort', 'data_tech_alt_asc_i asc');
-                break;
-            case 'dataTechMaxAsc':
-                sortParams.set('sort', 'data_tech_alt_max_i asc');
-                break;
-            case 'dataTechDistAsc':
-                sortParams.set('sort', 'data_tech_dist_f asc');
-                break;
-            case 'ratePers':
-                sortParams.set('sort', 'sub(15, rate_pers_gesamt_i) asc, dateonly_s desc');
-                sortParams.set('bq',
-                    'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:IMAGE^1');
-                sortParams.set('boost', 'product( recip( rord(date_dts), 1, 1000, 1000), 1)');
-                break;
-            case 'location':
-                sortParams.set('sort', 'loc_lochirarchie_s asc');
-                break;
-            case 'relevance':
-            default:
-        }
-
-        return sortParams;
-    };
-
-    getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any, query: any) {
-        const path = 'kategorie_full';
-        console.log('sqltable:', path);
-        return path;
-    }
 }
 

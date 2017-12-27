@@ -46,6 +46,7 @@ export interface TableConfig {
     selectFieldList: string[];
     facetConfigs: {};
     fieldMapping: {};
+    sortMapping: {};
 }
 
 export function Response (data, meta, op) {
@@ -377,14 +378,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.copy(opts.params);
     }
 
-    getPath(method: string, mapper: Mapper, id: string | number, opts: any, query: any) {
-        let path = '';
-        if (opts.adapterQuery) {
-            path = this.getAdapterPath(method, mapper, id, opts, query);
-        }
-        return path;
-    }
-
     deserializeCommon(mapper, response, opts): any {
         opts = opts || {};
         if (utils.isFunction(opts.deserialize)) {
@@ -473,6 +466,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return this.mapper.mapToAdapterDocument(this.getMappingForTable(table), props);
     }
 
+    protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;
+
+    protected abstract getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig;
+
+    protected abstract getTableConfigForTable(table: string): TableConfig;
+
+    protected abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+
     protected getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
         return this.getTableConfigForTable(query.table).selectFrom || '';
     }
@@ -481,21 +482,49 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return this.getTableConfigForTable(table).fieldMapping || {};
     }
 
-    protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;
+    protected getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
+        const sortParams = new Map<string, any>();
+        const form = opts.originalSearchForm || {};
 
-    protected abstract getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig;
+        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
+        const sortMapping = tableConfig.sortMapping;
 
-    protected abstract getTableConfigForTable(table: string): TableConfig;
+        if (sortMapping.hasOwnProperty(form.sort)) {
+            return sortMapping[form.sort];
+        }
 
-    protected abstract getFacetFilter(method: string, mapper: Mapper, params: any, opts: any, query: any): string[];
+        return sortMapping['default'];
+    };
 
-    protected abstract getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, string>;
+    protected getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, string> {
+        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
+        const facetConfigs = tableConfig.facetConfigs;
 
-    protected abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+        const facets = new Map<string, string>();
+        for (const key in facetConfigs) {
+            if (opts.showFacets === true || (opts.showFacets instanceof Array && opts.showFacets.indexOf(key) >= 0)) {
+                const facetConfig: TableFacetConfig = facetConfigs[key];
+                if (!facetConfig) {
+                    continue;
+                }
 
-    protected abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
-    protected abstract getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any, query: any): string
+                if (facetConfig.selectField !== undefined) {
+                    facets.set(key, 'select count(*) as count, ' + facetConfig.selectField + ' as value '
+                        + 'from ' + tableConfig.tableName + ' group by value order by count desc');
+                } else if (facetConfig.constValues !== undefined) {
+                    const sqls = [];
+                    facetConfig.constValues.forEach(value => {
+                        sqls.push('select 0 as count, "' + value + '" as value');
+                    });
+
+                    facets.set(key, sqls.join(' union all '));
+                }
+            }
+        }
+
+        return facets;
+    };
 
     protected getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
         if (method === 'count') {
@@ -535,6 +564,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         (query.fields ? query.fields : '') + ' ' +
         'from ' + query.from + ' ' +
         (query.where && query.where.length > 0 ? 'where ' + query.where.join(' AND ') : '') + ' ' +
+        (query.sort ? 'order by ' + query.sort + ' ' : '') +
         (query.limit ? 'limit ' + (query.offset || 0) + ', ' + query.limit : '');
     }
 
@@ -549,13 +579,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             query['fields'] = fields.join(', ');
         }
 
-        const facetFilter = this.getFacetFilter(method, mapper, params, opts, query);
-        if (facetFilter !== undefined && facetFilter.length > 0) {
-            facetFilter.forEach(function (value) {
-                query.where.push(value);
-            });
-        }
-
         const spatialParams = this.getSpatialParams(method, mapper, params, opts, query);
         if (spatialParams !== undefined && spatialParams.size > 0) {
             spatialParams.forEach(function (value, key) {
@@ -564,10 +587,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         }
 
         const sortParams = this.getSortParams(method, mapper, params, opts, query);
-        if (sortParams !== undefined && sortParams.size > 0) {
-            sortParams.forEach(function (value, key) {
-                query.sort += ' ' + key + ' ' + value;
-            });
+        if (sortParams !== undefined) {
+            query.sort = sortParams;
         }
 
         query.from = this.getAdapterFrom(method, mapper, params, opts, query);
@@ -642,34 +663,48 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
+        const tableConfig = this.getTableConfigForTable(table);
+        let realFieldName = fieldName;
+        if (tableConfig.facetConfigs.hasOwnProperty(realFieldName)) {
+            realFieldName = tableConfig.facetConfigs[realFieldName].selectField || tableConfig.facetConfigs[realFieldName].filterField;
+        }
+        if (realFieldName === undefined) {
+            realFieldName = this.mapToAdapterFieldName(table, fieldName);
+        }
+
+
+        return this.generateFilter(mapper, realFieldName, action, value, table);
+    }
+
+    protected generateFilter(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
         let query = '';
 
         if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' like "%'
+            query = fieldName + ' like "%'
                 + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%", "%') + '%" ';
         } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' = "'
+            query = fieldName + ' = "'
                 + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '", "') + '" ';
         } else if (action === AdapterFilterActions.GT) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' > "'
+            query = fieldName + ' > "'
                 + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.GE) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' >= "'
+            query = fieldName + ' >= "'
                 + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.LT) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' < "'
+            query = fieldName + ' < "'
                 + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.LE) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' <= "'
+            query = fieldName + ' <= "'
                 + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
         } else if (action === AdapterFilterActions.IN) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' in ("' + value.map(
+            query = fieldName + ' in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
                 ).join('", "') + '")';
         } else if (action === AdapterFilterActions.NOTIN) {
-            query = this.mapToAdapterFieldName(table, fieldName) + ' not in ("' + value.map(
+            query = fieldName + ' not in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
-                ).join('", W"') + '")';
+                ).join('", "') + '")';
         }
         return query;
     }
