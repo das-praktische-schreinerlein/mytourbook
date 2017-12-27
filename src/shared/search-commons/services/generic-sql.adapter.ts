@@ -11,6 +11,7 @@ import toString from 'lodash.tostring';
 import {GenericSearchAdapter} from './generic-search.adapter';
 import {isArray} from 'util';
 import {MapperUtils} from './mapper.utils';
+import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 
 export class AdapterFilterActions {
     static LIKEI = 'likei';
@@ -59,10 +60,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     S extends GenericSearchResult<R, F>> extends Adapter {
     protected knex: any;
     protected mapperUtils = new MapperUtils();
+    protected mapper: GenericAdapterResponseMapper;
 
-    constructor(config: any) {
+
+    constructor(config: any, mapper: GenericAdapterResponseMapper) {
         super(config);
         this.knex = knex(config.knexOpts);
+        this.mapper = mapper;
     }
 
     count(mapper: Mapper, query: any, opts?: any): Promise<number> {
@@ -440,21 +444,26 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
 
     mapResponseDocument(mapper: Mapper, doc: any, table: string, opts: any): Record {
-        const values = {};
-        values['id'] = Number(this.mapperUtils.getAdapterValue(doc, 'id', undefined));
-        // console.log('mapResponseDocument values:', values);
-        return mapper.createRecord(values);
+        return this.mapper.mapResponseDocument(mapper, doc, this.getMappingForTable(table), opts);
     }
 
-    protected abstract mapToAdapterDocument(table: string, props: any): any;
+    mapToAdapterDocument(table: string, props: any): any {
+        return this.mapper.mapToAdapterDocument(this.getMappingForTable(table), props);
+    }
+
+    protected getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
+        return this.getTableConfigForTable(query.table).selectFrom || '';
+    }
+
+    protected getMappingForTable(table: string): {} {
+        return this.getTableConfigForTable(table).fieldMapping || {};
+    }
 
     protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;
 
     protected abstract getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig;
 
-    protected abstract getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[];
-
-    protected abstract getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string;
+    protected abstract getTableConfigForTable(table: string): TableConfig;
 
     protected abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
@@ -463,6 +472,19 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     protected abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
 
     protected abstract getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any, query: any): string
+
+    protected getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+        if (method === 'count') {
+            return ['count(*)'];
+        }
+
+        const fields = [];
+        for (const field of this.getTableConfigForTable(query.table).selectFieldList) {
+            fields.push(field);
+        }
+
+        return fields;
+    }
 
     protected mapToAdapterFieldName(table, fieldName: string): string {
         switch (fieldName) {

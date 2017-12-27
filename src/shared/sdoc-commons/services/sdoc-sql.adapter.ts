@@ -157,10 +157,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         }
     };
 
-    private mapper: SDocAdapterResponseMapper = new SDocAdapterResponseMapper();
-
     constructor(config: any) {
-        super(config);
+        super(config, new SDocAdapterResponseMapper());
     }
 
     protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig {
@@ -194,10 +192,6 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         return undefined;
     }
 
-    protected getMappingForTable(table: string): {} {
-        return this.getTableConfigForTable(table).fieldMapping || {};
-    }
-
     protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
         if (fieldName === 'type_txt') {
             return undefined;
@@ -228,28 +222,12 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), fieldName);
     }
 
-    mapToAdapterDocument(table: string, props: any): any {
-        return this.mapper.mapToAdapterDocument(this.getMappingForTable(table), props);
-    }
-
-    mapResponseDocument(mapper: Mapper, doc: any, table: string, opts: any): Record {
-        return this.mapper.mapResponseDocument(mapper, doc, this.getMappingForTable(table), opts);
-    }
-
-    getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
-        return this.getTableConfigForTable(query.table).selectFrom || '';
-    }
-
     getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
         if (method === 'count') {
             return ['count(*)'];
         }
 
-        const fields = [];
-        for (const field of this.getTableConfigForTable(query.table).selectFieldList) {
-            fields.push(field);
-        }
-
+        const fields = super.getAdapterFields(method, mapper, params, opts, query);
         if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
             params.spatial.geo_loc_p.nearby !== undefined) {
             fields.push('distance:geodist()');

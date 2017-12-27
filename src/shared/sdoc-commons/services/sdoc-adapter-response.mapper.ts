@@ -2,8 +2,9 @@ import {Mapper, Record} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {MapperUtils} from '../../search-commons/services/mapper.utils';
+import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
 
-export class SDocAdapterResponseMapper {
+export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
 
     mapToAdapterDocument(mapping: {}, props: any): any {
