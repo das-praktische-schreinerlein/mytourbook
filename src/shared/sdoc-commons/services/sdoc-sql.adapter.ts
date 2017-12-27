@@ -2,7 +2,7 @@ import {Mapper} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {GenericSqlAdapter, TableConfig, TableFacetConfig} from '../../search-commons/services/generic-sql.adapter';
+import {AdapterFilterActions, GenericSqlAdapter, TableConfig, TableFacetConfig} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
@@ -74,11 +74,29 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 * 2) / 2, 1)'
                 },
                 'keywords_txt': {
+                    selectSql: 'select 0 as count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(kategorie_full.k_keywords, ",", numbers.n), ",", -1) as value ' +
+                    ' from' +
+                    '  (select 1 n union all select 2 union all select 3 union all select 4 union all' +
+                    '   select 5 union all select 6 union all select 7 union all select 8 union all' +
+                    '   select 10 union all select 11 union all select 12 union all select 13 union all ' +
+                    '   select 14 union all select 15 union all select 16 union all select 17 union all' +
+                    '   select 18 union all select 19 union all select 20) numbers INNER JOIN kategorie_full ' +
+                    '  on CHAR_LENGTH(kategorie_full.k_keywords)-CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", ""))>=numbers.n-1 ' +
+                    '  group by count, value' +
+                    '  order by value',
+                    filterField: 'k_keywords',
+                    action: AdapterFilterActions.LIKEIN
                 },
                 'loc_id_i': {
                 },
                 'loc_lochirarchie_txt': {
-//                    selectField: 'l_lochirarchietxt'
+                    selectSql: 'select count(*) as count, l_name as value' +
+                    ' from kategorie_full inner join location on kategorie_full.l_id = location.l_id ' +
+                    ' group by l_name' +
+                    ' order by count desc',
+                    filterField: 'l_lochirarchietxt',
+                    action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
                     selectField: 'month(k_datevon)'

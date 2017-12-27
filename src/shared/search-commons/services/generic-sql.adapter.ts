@@ -22,6 +22,7 @@ export class AdapterFilterActions {
     static LT = '<';
     static LE = '<=';
     static IN = 'in';
+    static LIKEIN = 'likein';
     static NOTIN = 'notin';
 }
 
@@ -37,7 +38,9 @@ export interface QueryData {
 
 export interface TableFacetConfig {
     selectField?: string;
+    selectSql?: string;
     constValues?: string [];
+    action: string;
 }
 
 export interface TableConfig {
@@ -512,6 +515,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 if (facetConfig.selectField !== undefined) {
                     facets.set(key, 'select count(*) as count, ' + facetConfig.selectField + ' as value '
                         + 'from ' + tableConfig.tableName + ' group by value order by count desc');
+                } else if (facetConfig.selectSql !== undefined) {
+                    facets.set(key, facetConfig.selectSql);
                 } else if (facetConfig.constValues !== undefined) {
                     const sqls = [];
                     facetConfig.constValues.forEach(value => {
@@ -665,8 +670,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
         const tableConfig = this.getTableConfigForTable(table);
         let realFieldName = undefined;
-        if (tableConfig.facetConfigs.hasOwnProperty(realFieldName)) {
-            realFieldName = tableConfig.facetConfigs[realFieldName].selectField || tableConfig.facetConfigs[realFieldName].filterField;
+        if (tableConfig.facetConfigs.hasOwnProperty(fieldName)) {
+            realFieldName = tableConfig.facetConfigs[fieldName].selectField || tableConfig.facetConfigs[fieldName].filterField;
+            action = tableConfig.facetConfigs[fieldName].action || action;
         }
         if (realFieldName === undefined) {
             realFieldName = this.mapToAdapterFieldName(table, fieldName);
@@ -705,6 +711,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             query = fieldName + ' not in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
                 ).join('", "') + '")';
+        } else if (action === AdapterFilterActions.LIKEIN) {
+            query = '(' + value.map(
+                inValue => {
+                    return fieldName + ' like "%'
+                        + this.mapperUtils.escapeAdapterValue(inValue.toString()) + '%" ';
+                }
+            ).join(' or ') + ')';
         }
         return query;
     }
