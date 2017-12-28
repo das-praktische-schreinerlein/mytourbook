@@ -112,10 +112,15 @@ export class SDocServerModule {
     }
 
     public getById(req, next, id): Promise<SDocSearchResult> {
+        const searchOptions: GenericSearchOptions = {
+            showForm: false,
+            loadTrack: false,
+            showFacets: false
+        };
         const searchForm = new SDocSearchForm({moreFilter: 'id:' + this.idValidationRule.sanitize(id)});
         const cacheKey = this.generateCacheKey(id);
         const me = this;
-        return me.dataService.search(searchForm).then(
+        return me.dataService.search(searchForm, searchOptions).then(
             function searchDone(searchResult: SDocSearchResult) {
                 if (!searchResult || searchResult.recordCount !== 1) {
                     req['sdoc'] = undefined;
