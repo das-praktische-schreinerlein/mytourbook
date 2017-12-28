@@ -116,7 +116,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image'],
+                    constValues: ['track', 'route', 'image', 'location'],
                     filterField: '"track"'
                 },
                 'week_is': {
@@ -327,7 +327,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image'],
+                    constValues: ['image', 'track', 'route', 'location'],
                     filterField: '"image"'
                 },
                 'week_is': {
@@ -520,7 +520,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectField: 'CONCAT("ac_", tour.t_typ)'
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image'],
+                    constValues: ['route', 'track', 'image', 'location'],
                     filterField: '"route"'
                 },
                 'week_is': {
@@ -565,7 +565,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
                 dateshow_dt: 't_dateshow',
-                html_txt: 'k_html_lisr',
+                html_txt: 'k_html_list',
                 desc_txt: 'desc_txt',
                 desc_md_txt: 't_meta_shortdesc_md',
                 desc_html_txt: 't_meta_shortdesc_html',
@@ -606,6 +606,109 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 actiontype_ss: 't_typ',
                 subtype_s: 'subtype_s',
                 i_fav_url_txt: 'i_fav_url_txt'
+            }
+        },
+        'location': {
+            tableName: 'location',
+            selectFrom: 'location',
+            selectFieldList: [
+                '"LOCATION" AS type',
+                'CONCAT(location.l_typ) AS subtype',
+                'CONCAT("LOCATION", "_", location.l_id) AS id',
+                'location.l_id',
+                'l_name',
+                'l_html',
+                'CONCAT(l_name, " ", l_keywords, " ", l_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
+                'l_keywords',
+                'l_meta_shortdesc_md',
+                'l_meta_shortdesc_html',
+                'CAST(l_gps_lat AS CHAR(50)) AS l_gps_lat',
+                'CAST(l_gps_lon AS CHAR(50)) AS l_gps_lon',
+                'CONCAT(l_gps_lat, ",", l_gps_lon) AS l_gps_loc',
+                'l_lochirarchietxt',
+                'l_lochirarchieids'],
+            facetConfigs: {
+                'actiontype_ss': {
+                    selectField: 'CONCAT("ac_", location.l_typ)'
+                },
+                'data_tech_alt_asc_facet_is': {
+                },
+                'data_tech_alt_max_facet_is': {
+                },
+                'data_tech_dist_facets_fs': {
+                },
+                'data_tech_dur_facet_fs': {
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(location.l_keywords, ",", numbers.n), ",", -1) AS value ' +
+                    ' FROM' +
+                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    '  numbers INNER JOIN location ON ' +
+                    '   CHAR_LENGTH(location.l_keywords) - CHAR_LENGTH(REPLACE(location.l_keywords, ",", "")) >= numbers.n - 1' +
+                    '  GROUP BY count, value' +
+                    '  ORDER BY value',
+                    filterField: 'l_keywords',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                },
+                'loc_lochirarchie_txt': {
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    ' FROM location' +
+                    ' GROUP BY l_name' +
+                    ' ORDER BY count DESC',
+                    filterField: 'l_lochirarchietxt',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'month_is': {
+                },
+                'rate_pers_gesamt_is': {
+                },
+                'rate_pers_schwierigkeit_is': {
+                },
+                'rate_tech_overall_ss': {
+                },
+                'subtype_ss': {
+                },
+                'type_txt': {
+                    constValues: ['location', 'track', 'route', 'image'],
+                    filterField: '"location"'
+                },
+                'week_is': {
+                }
+            },
+            sortMapping: {
+                'distance': 'geodist() ASC',
+                'location': 'l_lochirarchietxt ASC',
+                'relevance': 'l_lochirarchietxt ASC'
+            },
+            filterMapping: {
+                id: 'location.l_id',
+                loc_id_i: 'location.l_id',
+                loc_id_is: 'location.l_id'
+            },
+            fieldMapping: {
+                id: 'id',
+                loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
+                html_txt: 'l_html',
+                desc_txt: 'desc_txt',
+                desc_md_txt: 'l_meta_shortdesc_md',
+                desc_html_txt: 'l_meta_shortdesc_html',
+                geo_lon_s: 'l_gps_lon',
+                geo_lat_s: 'l_gps_lat',
+                geo_loc_p: 'l_gps_loc',
+                keywords_txt: 'l_keywords',
+                loc_lochirarchie_s: 'l_lochirarchietxt',
+                loc_lochirarchie_ids_s: 'l_lochirarchieids',
+                name_s: 'l_name',
+                type_s: 'type',
+                subtype_s: 'subtype_s',
             }
         }
     };
