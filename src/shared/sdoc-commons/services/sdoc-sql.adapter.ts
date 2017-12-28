@@ -266,6 +266,22 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'keywords_txt': {
+                    // use only kat-keywords because of performance-issues
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(kategorie_full.k_keywords, ",", numbers.n), ",", -1) AS value ' +
+                    ' FROM' +
+                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    '  numbers INNER JOIN kategorie_full ON ' +
+                    '   CHAR_LENGTH(kategorie_full.k_keywords) - CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", "")) >= numbers.n - 1' +
+                    '  GROUP BY count, value' +
+                    '  ORDER BY value',
+                    filterField: 'i_keywords',
+                    action: AdapterFilterActions.LIKEIN
+/**
                     selectSql: 'SELECT 0 AS count, ' +
                     '  SUBSTRING_INDEX(SUBSTRING_INDEX(image.i_keywords, ",", numbers.n), ",", -1) AS value ' +
                     ' FROM' +
@@ -280,6 +296,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     '  ORDER BY value',
                     filterField: 'i_keywords',
                     action: AdapterFilterActions.LIKEIN
+**/
                 },
                 'loc_id_i': {
                 },
