@@ -141,10 +141,12 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
             },
             filterMapping: {
                 id: 'kategorie_full.k_id',
-                track_id_i: 'kategorie_full.k_id',
-                track_id_is: 'kategorie_full.k_id',
                 loc_id_i: 'kategorie_full.l_id',
-                loc_id_is: 'kategorie_full.l_id'
+                loc_id_is: 'kategorie_full.l_id',
+                route_id_i: 'kategorie_full.t_id',
+                route_id_is: 'kategorie_full.t_id',
+                track_id_i: 'kategorie_full.k_id',
+                track_id_is: 'kategorie_full.k_id'
             },
             fieldMapping: {
                 id: 'id',
@@ -352,6 +354,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
+                route_id_i: 'kategorie_full.t_id',
+                route_id_is: 'kategorie_full.t_id',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id'
             },
@@ -405,33 +409,179 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         'route': {
             tableName: 'tour',
             selectFrom: 'tour INNER JOIN location ON tour.l_id = location.l_id',
-            selectFieldList: [],
+            selectFieldList: [
+                '"ROUTE" AS type',
+                'CONCAT("ac_", tour.t_typ) AS actiontype',
+                'CONCAT("ac_", tour.t_typ) AS subtype',
+                'CONCAT("ROUTE", "_", tour.t_id) AS id',
+                'tour.k_id',
+                'tour.t_id',
+                'tour.l_id',
+                't_name',
+                't_html_list',
+                'CONCAT(t_name, " ", t_keywords, " ", t_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
+                't_datevon as t_date_show',
+                't_datevon',
+                'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
+                'WEEK(t_datevon) AS week',
+                'MONTH(t_datevon) AS month',
+                't_gpstracks_basefile',
+                't_keywords',
+                't_meta_shortdesc_md',
+                't_meta_shortdesc_html',
+                't_rate_gesamt',
+                'CAST(t_gps_lat AS CHAR(50)) AS t_gps_lat',
+                'CAST(t_gps_lon AS CHAR(50)) AS t_gps_lon',
+                'CONCAT(t_gps_lat, ",", t_gps_lon) AS t_gps_loc',
+                'l_lochirarchietxt',
+                'l_lochirarchieids',
+                't_route_hm AS altAsc',
+                't_ele_max AS altMax',
+                't_route_m AS dist',
+                't_rate_ausdauer AS ausdauer',
+                't_rate_bildung AS bildung',
+                't_rate_gesamt AS gesamt',
+                't_rate_kraft AS kraft',
+                't_rate_mental AS mental',
+                't_rate_motive AS motive',
+                't_rate_schwierigkeit AS schwierigkeit',
+                't_rate_wichtigkeit AS wichtigkeit',
+                't_rate as overall',
+                't_rate_ks as ks',
+                't_rate_firn as firn',
+                't_rate_gletscher as gletscher',
+                't_rate_klettern as klettern',
+                't_rate_bergtour as bergtour',
+                't_rate_schneeschuh as schneeschuh',
+                't_desc_fuehrer_full as guides',
+                't_desc_gebiet as region',
+                't_desc_talort as baseloc',
+                't_desc_ziel as destloc',
+                'ROUND((t_route_hm / 500))*500 AS altAscFacet',
+                'ROUND((t_ele_max / 500))*500 AS altMaxFacet',
+                'ROUND((t_route_m / 5))*5 AS distFacet',
+                't_route_dauer AS dur',
+                'ROUND(ROUND(t_route_dauer * 2) / 2, 1) AS durFacet'],
+            facetConfigs: {
+                'actiontype_ss': {
+                    selectField: 'CONCAT("ac_", tour.t_typ)'
+                },
+                'data_tech_alt_asc_facet_is': {
+                    selectField: 'ROUND((t_route_m / 500))*500'
+                },
+                'data_tech_alt_max_facet_is': {
+                    selectField: 'ROUND((t_ele_max / 500))*500'
+                },
+                'data_tech_dist_facets_fs': {
+                    selectField: 'ROUND((t_route_m / 5))*5'
+                },
+                'data_tech_dur_facet_fs': {
+                    selectField: 'ROUND(ROUND(t_route_dauer * 2) / 2, 1)'
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(tour.t_keywords, ",", numbers.n), ",", -1) AS value ' +
+                    ' FROM' +
+                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    '  numbers INNER JOIN tour ON ' +
+                    '   CHAR_LENGTH(tour.t_keywords) - CHAR_LENGTH(REPLACE(tour.t_keywords, ",", "")) >= numbers.n - 1' +
+                    '  GROUP BY count, value' +
+                    '  ORDER BY value',
+                    filterField: 't_keywords',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                },
+                'loc_lochirarchie_txt': {
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    ' FROM tour INNER JOIN location ON tour.l_id = location.l_id ' +
+                    ' GROUP BY l_name' +
+                    ' ORDER BY count DESC',
+                    filterField: 'l_lochirarchietxt',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'month_is': {
+                    selectField: 'MONTH(t_datevon)'
+                },
+                'rate_pers_gesamt_is': {
+                    selectField: 't_rate_gesamt'
+                },
+                'rate_pers_schwierigkeit_is': {
+                    selectField: 't_rate_schwierigkeit'
+                },
+                'rate_tech_overall_ss': {
+                    selectField: 't_rate'
+                },
+                'subtype_ss': {
+                    selectField: 'CONCAT("ac_", tour.t_typ)'
+                },
+                'type_txt': {
+                    constValues: ['track', 'route', 'image'],
+                    filterField: '"route"'
+                },
+                'week_is': {
+                    selectField: 'WEEK(t_datevon)'
+                }
+            },
+            sortMapping: {
+                'date': 't_datevon DESC',
+                'dateAsc': 't_datevon ASC',
+                'distance': 'geodist() ASC',
+                'dataTechDurDesc': 't_route_dauer DESC',
+                'dataTechAltDesc': 't_route_hm DESC',
+                'dataTechMaxDesc': 't_ele_max DESC',
+                'dataTechDistDesc': 't_route_m DESC',
+                'dataTechDurAsc': 't_route_dauer ASC',
+                'dataTechAltAsc': 't_route_hm ASC',
+                'dataTechMaxAsc': 't_ele_max ASC',
+                'dataTechDistAsc': 't_route_m ASC',
+                'ratePers': 't_rate_gesamt DESC',
+                'location': 'l_lochirarchietxt ASC',
+                'relevance': 't_datevon DESC'
+            },
+            filterMapping: {
+                id: 'tour.t_id',
+                route_id_i: 'tour.t_id',
+                route_id_is: 'tour.t_id',
+                loc_id_i: 'tour.l_id',
+                loc_id_is: 'tour.l_id'
+            },
             fieldMapping: {
-                id: 'k_id',
+                id: 'id',
                 image_id_i: 'i_id',
+                image_id_is: 'i_id',
                 loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
                 route_id_i: 't_id',
+                route_id_is: 't_id',
                 track_id_i: 'k_id',
+                track_id_is: 'k_id',
                 trip_id_i: 'tr_id',
+                trip_id_is: 'tr_id',
                 news_id_i: 'n_id',
-                dateshow_dt: 'k_dateshow',
-                html_txt: 'k_html',
+                news_id_is: 'n_id',
+                dateshow_dt: 't_dateshow',
+                html_txt: 'k_html_lisr',
                 desc_txt: 'desc_txt',
-                desc_md_txt: 'k_meta_shortdesc_md',
-                desc_html_txt: 'k_meta_shortdesc_html',
-                geo_lon_s: 'k_gps_lon',
-                geo_lat_s: 'k_gps_lat',
-                geo_loc_p: 'k_gps_loc',
+                desc_md_txt: 't_meta_shortdesc_md',
+                desc_html_txt: 't_meta_shortdesc_html',
+                geo_lon_s: 't_gps_lon',
+                geo_lat_s: 't_gps_lat',
+                geo_loc_p: 't_gps_loc',
                 data_tech_alt_asc_i: 'altAsc',
                 data_tech_alt_desc_i: 'altDesc',
                 data_tech_alt_min_i: 'altMin',
                 data_tech_alt_max_i: 'altMax',
                 data_tech_dist_f: 'dist',
                 data_tech_dur_f: 'dur',
-                data_info_guides_s: 'data_info_guides_s',
-                data_info_region_s: 'data_info_region_s',
-                data_info_baseloc_s: 'data_info_baseloc_s',
-                data_info_destloc_s: 'data_info_destloc_s',
+                data_info_guides_s: 'guides',
+                data_info_region_s: 'region',
+                data_info_baseloc_s: 'baseloc',
+                data_info_destloc_s: 'destloc',
                 rate_pers_ausdauer_i: 'ausdauer',
                 rate_pers_bildung_i: 'bildung',
                 rate_pers_gesamt_i: 'gesamt',
@@ -440,20 +590,20 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 rate_pers_motive_i: 'motive',
                 rate_pers_schwierigkeit_i: 'schwierigkeit',
                 rate_pers_wichtigkeit_i: 'wichtigkeit',
-                rate_tech_overall_s: 'rate_tech_overall_s',
-                rate_tech_ks_s: 'rate_tech_ks_s',
-                rate_tech_firn_s: 'rate_tech_firn_s',
-                rate_tech_gletscher_s: 'rate_tech_gletscher_s',
-                rate_tech_klettern_s: 'rate_tech_klettern_s',
-                rate_tech_bergtour_s: 'rate_tech_bergtour_s',
-                rate_tech_schneeschuh_s: 'rate_tech_schneeschuh_s',
-                gpstracks_basefile_s: 'k_gpstracks_basefile',
-                keywords_txt: 'k_keywords',
+                rate_tech_overall_s: 'overall',
+                rate_tech_ks_s: 'ks',
+                rate_tech_firn_s: 'firn',
+                rate_tech_gletscher_s: 'gletscher',
+                rate_tech_klettern_s: 'klettern',
+                rate_tech_bergtour_s: 'bergtour',
+                rate_tech_schneeschuh_s: 'schneeschuh',
+                gpstracks_basefile_s: 't_gpstracks_basefile',
+                keywords_txt: 't_keywords',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
-                name_s: 'k_name',
+                name_s: 't_name',
                 type_s: 'type',
-                actiontype_ss: 'k_type',
+                actiontype_ss: 't_typ',
                 subtype_s: 'subtype_s',
                 i_fav_url_txt: 'i_fav_url_txt'
             }
