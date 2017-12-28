@@ -5,7 +5,7 @@ import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 import {AdapterFilterActions, GenericSqlAdapter, TableConfig} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
-export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
+export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public static tableConfigs = {
         'track': {
             tableName: 'kategorie_full',
@@ -928,18 +928,18 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
     }
 
     protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig {
-        return SDocSqlAdapter.tableConfigs[this.extractTable(method, mapper, params, opts)];
+        return SDocMytbSqlAdapter.tableConfigs[this.extractTable(method, mapper, params, opts)];
     }
 
     protected getTableConfigForTable(table: string): TableConfig {
-        return SDocSqlAdapter.tableConfigs[table];
+        return SDocMytbSqlAdapter.tableConfigs[table];
     }
 
     protected extractTable(method: string, mapper: Mapper, params: any, opts: any): string {
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
             const tabName = types.in[0];
-            if (SDocSqlAdapter.tableConfigs[tabName] !== undefined) {
+            if (SDocMytbSqlAdapter.tableConfigs[tabName] !== undefined) {
                 return tabName;
             }
 
@@ -948,7 +948,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         const ids = params.where['id'];
         if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
             const tabName = ids.in[0].replace(/_.*/, '').toLowerCase();
-            if (SDocSqlAdapter.tableConfigs[tabName] !== undefined) {
+            if (SDocMytbSqlAdapter.tableConfigs[tabName] !== undefined) {
                 return tabName;
             }
 
