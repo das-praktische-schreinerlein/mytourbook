@@ -101,7 +101,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
 
         const images: SDocImageRecord[] = [];
         const imageField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_fav_url_txt')];
-        if (imageField !== undefined && Array.isArray(imageField)) {
+        if (imageField !== undefined) {
             let id = 1;
             if (record.type === 'TRACK') {
                 id = Number(record.trackId);
@@ -118,7 +118,17 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
             }
             id = id * 1000000;
 
-            for (const imageDoc of imageField) {
+            let imageDocs = [];
+            if (Array.isArray(imageField)) {
+                imageDocs = imageField;
+            } else {
+                imageDocs.push(imageField);
+            }
+
+            for (const imageDoc of imageDocs) {
+                if (imageDoc === undefined || imageDoc === null) {
+                    continue;
+                }
                 const imageValues = {};
                 imageValues['name'] = values['name'];
                 imageValues['id'] = (id++).toString();

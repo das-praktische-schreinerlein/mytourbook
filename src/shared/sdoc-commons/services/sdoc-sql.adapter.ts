@@ -9,7 +9,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
     public static tableConfigs = {
         'track': {
             tableName: 'kategorie_full',
-            selectFrom: 'kategorie_full INNER JOIN location ON kategorie_full.l_id = location.l_id',
+            selectFrom: 'kategorie_full inner join location on location.l_id = kategorie_full.l_id left join image on kategorie_full.i_id=image.i_id',
             selectFieldList: [
                 '"TRACK" AS type',
                 'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
@@ -39,19 +39,20 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'CONCAT(k_gps_lat, ",", k_gps_lon) AS k_gps_loc',
                 'l_lochirarchietxt',
                 'l_lochirarchieids',
-                '`k_altitude_asc` AS altAsc',
-                '`k_altitude_desc` AS altDesc',
-                '`k_altitude_min` AS altMin',
-                '`k_altitude_max` AS altMax',
-                '`k_distance` AS dist',
-                '`k_rate_ausdauer` AS ausdauer',
-                '`k_rate_bildung` AS bildung',
-                '`k_rate_gesamt` AS gesamt',
-                '`k_rate_kraft` AS kraft',
-                '`k_rate_mental` AS mental',
-                '`k_rate_motive` AS motive',
-                '`k_rate_schwierigkeit` AS schwierigkeit',
-                '`k_rate_wichtigkeit` AS wichtigkeit',
+                'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
+                'k_altitude_asc AS altAsc',
+                'k_altitude_desc AS altDesc',
+                'k_altitude_min AS altMin',
+                'k_altitude_max AS altMax',
+                'k_distance AS dist',
+                'k_rate_ausdauer AS ausdauer',
+                'k_rate_bildung AS bildung',
+                'k_rate_gesamt AS gesamt',
+                'k_rate_kraft AS kraft',
+                'k_rate_mental AS mental',
+                'k_rate_motive AS motive',
+                'k_rate_schwierigkeit AS schwierigkeit',
+                'k_rate_wichtigkeit AS wichtigkeit',
                 'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
                 'ROUND((k_altitude_max / 500))*500 AS altMaxFacet',
                 'ROUND((k_distance / 5))*5 AS distFacet',
@@ -277,7 +278,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         }
 
         if (fieldName === 'id') {
-            return super.mapFilterToAdapterQuery(mapper, 'k_id', action,
+            return super.mapFilterToAdapterQuery(mapper, 'kategorie_full.k_id', action,
                 [this.mapperUtils.prepareSingleValue(value, '_').replace(/.*_/, '')], table);
         }
 
