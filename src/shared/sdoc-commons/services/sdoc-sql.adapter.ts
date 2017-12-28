@@ -9,7 +9,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
     public static tableConfigs = {
         'track': {
             tableName: 'kategorie_full',
-            selectFrom: 'kategorie_full inner join location on location.l_id = kategorie_full.l_id left join image on kategorie_full.i_id=image.i_id',
+            selectFrom: 'kategorie_full inner join location on location.l_id = kategorie_full.l_id ' +
+                        'left join image on kategorie_full.i_id=image.i_id',
             selectFieldList: [
                 '"TRACK" AS type',
                 'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
@@ -27,6 +28,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'CONCAT(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
                 'k_dateshow',
                 'k_datevon',
+                'k_datebis',
                 'DATE_FORMAT(k_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(k_datevon) AS week',
                 'MONTH(k_datevon) AS month',
@@ -116,7 +118,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image', 'location'],
+                    constValues: ['track', 'route', 'image', 'location', 'trip', 'news'],
                     filterField: '"track"'
                 },
                 'week_is': {
@@ -126,7 +128,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
             sortMapping: {
                 'date': 'k_datevon DESC',
                 'dateAsc': 'k_datevon ASC',
-                'distance': 'geodist() ASC',
+                'distance': 'geodist ASC',
                 'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
                 'dataTechAltDesc': 'k_altitude_asc DESC',
                 'dataTechMaxDesc': 'k_altitude_max DESC',
@@ -147,6 +149,10 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 route_id_is: 'kategorie_full.t_id',
                 track_id_i: 'kategorie_full.k_id',
                 track_id_is: 'kategorie_full.k_id'
+            },
+            spartialConfig: {
+                lat: 'k_gps_lat',
+                lon: 'k_gps_lon'
             },
             fieldMapping: {
                 id: 'id',
@@ -197,7 +203,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         },
         'image': {
             tableName: 'image',
-            selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id INNER JOIN location ON location.l_id = kategorie_full.l_id',
+            selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id ' +
+                        'INNER JOIN location ON location.l_id = kategorie_full.l_id',
             selectFieldList: [
                 '"IMAGE" AS type',
                 'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
@@ -304,7 +311,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
-                    ' FROM image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
+                    ' FROM image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
+                    '   INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
                     ' GROUP BY l_name' +
                     ' ORDER BY count DESC',
                     filterField: 'l_lochirarchietxt',
@@ -327,7 +335,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'type_txt': {
-                    constValues: ['image', 'track', 'route', 'location'],
+                    constValues: ['image', 'track', 'route', 'location', 'trip', 'news'],
                     filterField: '"image"'
                 },
                 'week_is': {
@@ -337,7 +345,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
             sortMapping: {
                 'date': 'i_date DESC',
                 'dateAsc': 'i_date ASC',
-                'distance': 'geodist() ASC',
+                'distance': 'geodist ASC',
                 'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
                 'dataTechAltDesc': 'k_altitude_asc DESC',
                 'dataTechMaxDesc': 'i_gps_ele DESC',
@@ -349,6 +357,10 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'ratePers': 'i_rate DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'
+            },
+            spartialConfig: {
+                lat: 'i_gps_lat',
+                lon: 'i_gps_lon'
             },
             filterMapping: {
                 id: 'image.i_id',
@@ -520,7 +532,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectField: 'CONCAT("ac_", tour.t_typ)'
                 },
                 'type_txt': {
-                    constValues: ['route', 'track', 'image', 'location'],
+                    constValues: ['route', 'track', 'image', 'location', 'trip', 'news'],
                     filterField: '"route"'
                 },
                 'week_is': {
@@ -530,7 +542,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
             sortMapping: {
                 'date': 't_datevon DESC',
                 'dateAsc': 't_datevon ASC',
-                'distance': 'geodist() ASC',
+                'distance': 'geodist ASC',
                 'dataTechDurDesc': 't_route_dauer DESC',
                 'dataTechAltDesc': 't_route_hm DESC',
                 'dataTechMaxDesc': 't_ele_max DESC',
@@ -542,6 +554,10 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'ratePers': 't_rate_gesamt DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 't_datevon DESC'
+            },
+            spartialConfig: {
+                lat: 't_gps_lat',
+                lon: 't_gps_lon'
             },
             filterMapping: {
                 id: 'tour.t_id',
@@ -676,16 +692,20 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'subtype_ss': {
                 },
                 'type_txt': {
-                    constValues: ['location', 'track', 'route', 'image'],
+                    constValues: ['location', 'track', 'route', 'trip', 'image', 'news'],
                     filterField: '"location"'
                 },
                 'week_is': {
                 }
             },
             sortMapping: {
-                'distance': 'geodist() ASC',
+                'distance': 'geodist ASC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'l_lochirarchietxt ASC'
+            },
+            spartialConfig: {
+                lat: 'l_gps_lat',
+                lon: 'l_gps_lon'
             },
             filterMapping: {
                 id: 'location.l_id',
@@ -707,6 +727,190 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'l_name',
+                type_s: 'type',
+                subtype_s: 'subtype_s',
+            }
+        },
+        'trip': {
+            tableName: 'trip',
+            selectFrom: 'trip',
+            selectFieldList: [
+                '"TRIP" AS type',
+                'CONCAT("TRIP", "_", trip.tr_id) AS id',
+                'trip.tr_id',
+                'trip.tr_name',
+                'CONCAT(tr_name, " ", tr_keywords, " ", tr_meta_shortdesc_md) AS html',
+                'tr_dateshow',
+                'tr_datevon',
+                'tr_datebis',
+                'DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
+                'WEEK(tr_datevon) AS week',
+                'MONTH(tr_datevon) AS month',
+                'tr_keywords',
+                'tr_meta_shortdesc_md',
+                'tr_meta_shortdesc_html'],
+            facetConfigs: {
+                'actiontype_ss': {
+                },
+                'data_tech_alt_asc_facet_is': {
+                },
+                'data_tech_alt_max_facet_is': {
+                },
+                'data_tech_dist_facets_fs': {
+                },
+                'data_tech_dur_facet_fs': {
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(trip.tr_keywords, ",", numbers.n), ",", -1) AS value ' +
+                    ' FROM' +
+                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    '  numbers INNER JOIN trip ON ' +
+                    '   CHAR_LENGTH(trip.tr_keywords) - CHAR_LENGTH(REPLACE(trip.tr_keywords, ",", "")) >= numbers.n - 1' +
+                    '  GROUP BY count, value' +
+                    '  ORDER BY value',
+                    filterField: 'tr_keywords',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                },
+                'loc_lochirarchie_txt': {
+                },
+                'month_is': {
+                    selectField: 'MONTH(tr_datevon)'
+                },
+                'rate_pers_gesamt_is': {
+                },
+                'rate_pers_schwierigkeit_is': {
+                },
+                'rate_tech_overall_ss': {
+                },
+                'subtype_ss': {
+                },
+                'type_txt': {
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
+                    filterField: '"trip"'
+                },
+                'week_is': {
+                    selectField: 'WEEK(tr_datevon)'
+                }
+            },
+            sortMapping: {
+                'date': 'tr_datevon DESC',
+                'dateAsc': 'tr_datevon ASC',
+                'relevance': 'tr_datevon ASC'
+            },
+            filterMapping: {
+                id: 'trip.tr_id',
+                trip_id_i: 'trip.tr_id',
+                trip_id_is: 'trip.tr_id'
+            },
+            fieldMapping: {
+                id: 'id',
+                trip_id_i: 'tr_id',
+                trip_id_is: 'tr_id',
+                dateshow_dt: 'tr_dateshow',
+                desc_txt: 'desc_txt',
+                desc_md_txt: 'tr_meta_shortdesc_md',
+                desc_html_txt: 'tr_meta_shortdesc_html',
+                keywords_txt: 'tr_keywords',
+                name_s: 'tr_name',
+                type_s: 'type',
+                subtype_s: 'subtype_s',
+            }
+        },
+        'news': {
+            tableName: 'news',
+            selectFrom: 'news',
+            selectFieldList: [
+                '"NEWS" AS type',
+                'CONCAT("NEWS", "_", news.n_id) AS id',
+                'news.n_id',
+                'n_headline',
+                'CONCAT(n_headline, " ", n_keywords, " ", n_message_md) AS html',
+                'n_date',
+                'n_datevon',
+                'n_datebis',
+                'DATE_FORMAT(n_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
+                'WEEK(n_date) AS week',
+                'MONTH(n_date) AS month',
+                'n_keywords',
+                'n_message_md',
+                'n_message_html'],
+            facetConfigs: {
+                'actiontype_ss': {
+                },
+                'data_tech_alt_asc_facet_is': {
+                },
+                'data_tech_alt_max_facet_is': {
+                },
+                'data_tech_dist_facets_fs': {
+                },
+                'data_tech_dur_facet_fs': {
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(news.n_keywords, ",", numbers.n), ",", -1) AS value ' +
+                    ' FROM' +
+                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    '  numbers INNER JOIN news ON ' +
+                    '   CHAR_LENGTH(news.n_keywords) - CHAR_LENGTH(REPLACE(news.n_keywords, ",", "")) >= numbers.n - 1' +
+                    '  GROUP BY count, value' +
+                    '  ORDER BY value',
+                    filterField: 'n_keywords',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                },
+                'loc_lochirarchie_txt': {
+                },
+                'month_is': {
+                    selectField: 'MONTH(n_date)'
+                },
+                'rate_pers_gesamt_is': {
+                },
+                'rate_pers_schwierigkeit_is': {
+                },
+                'rate_tech_overall_ss': {
+                },
+                'subtype_ss': {
+                },
+                'type_txt': {
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
+                    filterField: '"trip"'
+                },
+                'week_is': {
+                    selectField: 'WEEK(n_date)'
+                }
+            },
+            sortMapping: {
+                'date': 'n_date DESC',
+                'dateAsc': 'n_date ASC',
+                'relevance': 'n_date ASC'
+            },
+            filterMapping: {
+                id: 'news.n_id',
+                news_id_i: 'news.n_id',
+                news_id_is: 'news.n_id'
+            },
+            fieldMapping: {
+                id: 'id',
+                news_id_i: 'n_id',
+                news_id_is: 'n_id',
+                dateshow_dt: 'n_date',
+                desc_txt: 'desc_txt',
+                desc_md_txt: 'n_message_md',
+                desc_html_txt: 'n_message_html',
+                keywords_txt: 'n_keywords',
+                name_s: 'n_headline',
                 type_s: 'type',
                 subtype_s: 'subtype_s',
             }
@@ -779,36 +983,16 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
     }
 
     getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+        const fields = super.getAdapterFields(method, mapper, params, opts, query);
         if (method === 'count') {
-            return ['count(*)'];
+            return fields;
         }
 
-        const fields = super.getAdapterFields(method, mapper, params, opts, query);
-        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
-            params.spatial.geo_loc_p.nearby !== undefined) {
-            fields.push('distance:geodist()');
-        }
         if (opts.loadTrack === true) {
 //            fields.push(this.mapper.mapToAdapterFieldName('gpstrack_s'));
         }
 
         return fields;
     }
-
-    getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
-        const spatialParams = new Map<string, any>();
-
-        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
-            params.spatial.geo_loc_p.nearby !== undefined) {
-            const [lat, lon, distance] = params.spatial.geo_loc_p.nearby.split(/_/);
-
-            spatialParams.set('fq', '{!geofilt cache=false}');
-            spatialParams.set('sfield', 'geo_loc_p');
-            spatialParams.set('pt', lat + ',' + lon);
-            spatialParams.set('d', distance);
-        }
-
-        return spatialParams;
-    };
 }
 

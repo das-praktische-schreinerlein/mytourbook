@@ -34,6 +34,7 @@ export interface QueryData {
     table: string;
     from: string;
     fields: string;
+    having: string[];
 }
 
 export interface TableFacetConfig {
@@ -52,6 +53,10 @@ export interface TableConfig {
     filterMapping: {};
     fieldMapping: {};
     sortMapping: {};
+    spartialConfig: {
+        lat: string;
+        lon: string
+    };
 }
 
 export function Response (data, meta, op) {
@@ -477,8 +482,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected abstract getTableConfigForTable(table: string): TableConfig;
 
-    protected abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
     protected getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
         return this.getTableConfigForTable(query.table).selectFrom || '';
     }
@@ -499,6 +502,38 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         return sortMapping['default'];
     };
+
+    protected getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any, spatialField: string): string {
+        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
+        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
+            params.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
+            const [lat, lon, distance] = this.mapperUtils.escapeAdapterValue(params.spatial.geo_loc_p.nearby).split(/_/);
+            return spatialField + ' <= ' + distance;
+        }
+
+        return undefined;
+    };
+
+    protected getSpatialSql(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
+        const tableConfig = this.getTableConfigForTable(query.table);
+        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
+            params.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
+            const [lat, lon, distance] = this.mapperUtils.escapeAdapterValue(params.spatial.geo_loc_p.nearby).split(/_/);
+            const distanceSql =
+                '(3959 ' +
+                ' * acos (' +
+                '     cos ( radians(' + lat + ') )' +
+                '     * cos( radians(' + tableConfig.spartialConfig.lat + ') )' +
+                '     * cos( radians(' + tableConfig.spartialConfig.lon + ') - radians(' + lon + ') )' +
+                '     + sin ( radians(' + lat + ') )' +
+                '     * sin( radians(' + tableConfig.spartialConfig.lat + ') )' +
+                ' )' +
+                ')';
+            return distanceSql;
+        }
+
+        return undefined;
+    }
 
     protected getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, string> {
         const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
@@ -538,9 +573,15 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             return ['count(*)'];
         }
 
+        const tableConfig = this.getTableConfigForTable(query.table);
         const fields = [];
-        for (const field of this.getTableConfigForTable(query.table).selectFieldList) {
+        for (const field of tableConfig.selectFieldList) {
             fields.push(field);
+        }
+
+        const distanceSql = this.getSpatialSql(method, mapper, params, opts, query);
+        if (distanceSql !== undefined) {
+            fields.push(distanceSql + ' as geodist');
         }
 
         return fields;
@@ -571,6 +612,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         (query.fields ? query.fields : '') + ' ' +
         'from ' + query.from + ' ' +
         (query.where && query.where.length > 0 ? 'where ' + query.where.join(' AND ') : '') + ' ' +
+        (query.having && query.having.length > 0 ? 'having ' + query.having.join(' AND ') : '') + ' ' +
         (query.sort ? 'order by ' + query.sort + ' ' : '') +
         (query.limit ? 'limit ' + (query.offset || 0) + ', ' + query.limit : '');
     }
@@ -586,11 +628,17 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             query['fields'] = fields.join(', ');
         }
 
-        const spatialParams = this.getSpatialParams(method, mapper, params, opts, query);
-        if (spatialParams !== undefined && spatialParams.size > 0) {
-            spatialParams.forEach(function (value, key) {
-                // TODO query[key] = value;
-            });
+        let spatialField = 'geodist';
+        if (method === 'count') {
+            spatialField = this.getSpatialSql(method, mapper, params, opts, query);
+        }
+        const spatialParams = this.getSpatialParams(method, mapper, params, opts, query, spatialField);
+        if (spatialParams !== undefined && spatialParams.length > 0) {
+            if (method === 'count') {
+                query.where.push(spatialParams);
+            } else {
+                query.having.push(spatialParams);
+            }
         }
 
         const sortParams = this.getSortParams(method, mapper, params, opts, query);
@@ -640,6 +688,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         if (newParams.length <= 0) {
             const query: QueryData = {
                 where: [],
+                having: [],
                 offset: undefined,
                 limit: undefined,
                 sort: '',
@@ -655,6 +704,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         const query: QueryData = {
             where: newParams,
+            having: [],
             offset: undefined,
             limit: undefined,
             from: 'dual',
