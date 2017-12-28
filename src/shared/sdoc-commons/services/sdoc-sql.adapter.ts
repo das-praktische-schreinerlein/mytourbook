@@ -9,12 +9,12 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
     public static tableConfigs = {
         'track': {
             tableName: 'kategorie_full',
-            selectFrom: 'kategorie_full inner join location on kategorie_full.l_id = location.l_id',
+            selectFrom: 'kategorie_full INNER JOIN location ON kategorie_full.l_id = location.l_id',
             selectFieldList: [
-                '"TRACK" as type',
-                'concat("ac_", kategorie_full.k_type) as actiontype',
-                'concat("ac_", kategorie_full.k_type) as subtype',
-                'concat("TRACK", "_", kategorie_full.k_id) as id',
+                '"TRACK" AS type',
+                'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
+                'CONCAT("ac_", kategorie_full.k_type) AS subtype',
+                'CONCAT("TRACK", "_", kategorie_full.k_id) AS id',
                 'kategorie_full.k_id',
                 'kategorie_full.t_id',
                 'kategorie_full.k_t_ids',
@@ -23,118 +23,119 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'n_id',
                 'k_name',
                 'k_html',
-                'concat(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt) as html',
+                'CONCAT(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
                 'k_dateshow',
                 'k_datevon',
-                'DATE_FORMAT (k_datevon, GET_FORMAT(DATE, "ISO")) as dateonly',
-                'week(k_datevon) AS week',
-                'month(k_datevon) as month',
+                'DATE_FORMAT(k_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
+                'WEEK(k_datevon) AS week',
+                'MONTH(k_datevon) AS month',
                 'k_gpstracks_basefile',
                 'k_keywords',
                 'k_meta_shortdesc_md',
                 'k_meta_shortdesc_html',
                 'k_rate_gesamt',
-                'cast(k_gps_lat as char(50)) as k_gps_lat',
-                'cast(k_gps_lon as char(50)) as k_gps_lon',
-                'concat(k_gps_lat, ",", k_gps_lon) as k_gps_loc',
+                'CAST(k_gps_lat AS CHAR(50)) AS k_gps_lat',
+                'CAST(k_gps_lon AS CHAR(50)) AS k_gps_lon',
+                'CONCAT(k_gps_lat, ",", k_gps_lon) AS k_gps_loc',
                 'l_lochirarchietxt',
                 'l_lochirarchieids',
-                '`K_ALTITUDE_ASC` as altAsc',
-                '`K_ALTITUDE_DESC` as altDesc',
-                '`K_ALTITUDE_MIN` as altMin',
-                '`K_ALTITUDE_MAX` as altMax',
-                '`K_DISTANCE` as dist',
-                '`K_RATE_AUSDAUER` as ausdauer',
-                '`K_RATE_BILDUNG` as bildung',
-                '`K_RATE_GESAMT` as gesamt',
-                '`K_RATE_KRAFT` as kraft',
-                '`K_RATE_MENTAL` as mental',
-                '`K_RATE_MOTIVE` as motive',
-                '`K_RATE_SCHWIERIGKEIT` as schwierigkeit',
-                '`K_RATE_WICHTIGKEIT` as wichtigkeit',
-                'round((K_ALTITUDE_ASC / 500))*500 as altAscFacet',
-                'round((K_ALTITUDE_MAX / 500))*500 as altMaxFacet',
-                'round((K_DISTANCE / 5))*5 as distFacet',
-                'TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 as dur',
-                'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 * 2) / 2, 1) as durFacet'],
+                '`k_altitude_asc` AS altAsc',
+                '`k_altitude_desc` AS altDesc',
+                '`k_altitude_min` AS altMin',
+                '`k_altitude_max` AS altMax',
+                '`k_distance` AS dist',
+                '`k_rate_ausdauer` AS ausdauer',
+                '`k_rate_bildung` AS bildung',
+                '`k_rate_gesamt` AS gesamt',
+                '`k_rate_kraft` AS kraft',
+                '`k_rate_mental` AS mental',
+                '`k_rate_motive` AS motive',
+                '`k_rate_schwierigkeit` AS schwierigkeit',
+                '`k_rate_wichtigkeit` AS wichtigkeit',
+                'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
+                'ROUND((k_altitude_max / 500))*500 AS altMaxFacet',
+                'ROUND((k_distance / 5))*5 AS distFacet',
+                'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
+                'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
                 'actiontype_ss': {
-                    selectField: 'concat("ac_", kategorie_full.k_type)'
+                    selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
                 'data_tech_alt_asc_facet_is': {
-                    selectField: 'round((K_ALTITUDE_ASC / 500))*500'
+                    selectField: 'ROUND((k_altitude_asc / 500))*500'
                 },
                 'data_tech_alt_max_facet_is': {
-                    selectField: 'round((K_ALTITUDE_MAX / 500))*500'
+                    selectField: 'ROUND((k_altitude_max / 500))*500'
                 },
                 'data_tech_dist_facets_fs': {
-                    selectField: 'round((K_DISTANCE / 5))*5'
+                    selectField: 'ROUND((k_distance / 5))*5'
                 },
                 'data_tech_dur_facet_fs': {
-                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 * 2) / 2, 1)'
+                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)'
                 },
                 'keywords_txt': {
-                    selectSql: 'select 0 as count, ' +
-                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(kategorie_full.k_keywords, ",", numbers.n), ",", -1) as value ' +
-                    ' from' +
-                    '  (select 1 n union all select 2 union all select 3 union all select 4 union all' +
-                    '   select 5 union all select 6 union all select 7 union all select 8 union all' +
-                    '   select 10 union all select 11 union all select 12 union all select 13 union all ' +
-                    '   select 14 union all select 15 union all select 16 union all select 17 union all' +
-                    '   select 18 union all select 19 union all select 20) numbers INNER JOIN kategorie_full ' +
-                    '  on CHAR_LENGTH(kategorie_full.k_keywords)-CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", ""))>=numbers.n-1 ' +
-                    '  group by count, value' +
-                    '  order by value',
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(kategorie_full.k_keywords, ",", numbers.n), ",", -1) AS value ' +
+                    ' FROM' +
+                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    '  numbers INNER JOIN kategorie_full ON ' +
+                    '   CHAR_LENGTH(kategorie_full.k_keywords) - CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", "")) >= numbers.n - 1' +
+                    '  GROUP BY count, value' +
+                    '  ORDER BY value',
                     filterField: 'k_keywords',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'loc_id_i': {
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'select count(*) as count, l_name as value' +
-                    ' from kategorie_full inner join location on kategorie_full.l_id = location.l_id ' +
-                    ' group by l_name' +
-                    ' order by count desc',
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    ' FROM kategorie_full INNER JOIN location ON kategorie_full.l_id = location.l_id ' +
+                    ' GROUP BY l_name' +
+                    ' ORDER BY count DESC',
                     filterField: 'l_lochirarchietxt',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
-                    selectField: 'month(k_datevon)'
+                    selectField: 'MONTH(k_datevon)'
                 },
                 'rate_pers_gesamt_is': {
-                    selectField: 'K_RATE_GESAMT'
+                    selectField: 'k_rate_gesamt'
                 },
                 'rate_pers_schwierigkeit_is': {
-                    selectField: 'K_RATE_SCHWIERIGKEIT'
+                    selectField: 'k_rate_schwierigkeit'
                 },
                 'rate_tech_overall_ss': {
                 },
                 'subtype_ss': {
-                    selectField: 'concat("ac_", kategorie_full.k_type)'
+                    selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
                 'type_txt': {
                     constValues: ['track', 'route'],
                     filterField: '"track"'
                 },
                 'week_is': {
-                    selectField: 'week(k_datevon)'
+                    selectField: 'WEEK(k_datevon)'
                 }
             },
             sortMapping: {
-                'date': 'k_datevon desc',
-                'dateAsc': 'k_datevon asc',
-                'distance': 'geodist() asc',
-                'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 desc',
-                'dataTechAltDesc': 'k_altitude_asc desc',
-                'dataTechMaxDesc': 'k_altitude_max desc',
-                'dataTechDistDesc': 'k_distance desc',
-                'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON))/3600 asc',
-                'dataTechAltAsc': 'k_altitude_asc asc',
-                'dataTechMaxAsc': 'k_altitude_max asc',
-                'dataTechDistAsc': 'k_distance asc',
-                'ratePers': 'k_rate_gesamt desc',
-                'location': 'l_lochirarchietxt asc',
-                'relevance': 'k_datevon desc'
+                'date': 'k_datevon DESC',
+                'dateAsc': 'k_datevon ASC',
+                'distance': 'geodist() ASC',
+                'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
+                'dataTechAltDesc': 'k_altitude_asc DESC',
+                'dataTechMaxDesc': 'k_altitude_max DESC',
+                'dataTechDistDesc': 'k_distance DESC',
+                'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC',
+                'dataTechAltAsc': 'k_altitude_asc ASC',
+                'dataTechMaxAsc': 'k_altitude_max ASC',
+                'dataTechDistAsc': 'k_distance ASC',
+                'ratePers': 'k_rate_gesamt DESC',
+                'location': 'l_lochirarchietxt ASC',
+                'relevance': 'k_datevon DESC'
             },
             fieldMapping: {
                 id: 'id',
@@ -179,7 +180,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         },
         'route': {
             tableName: 'tour',
-            selectFrom: 'tour inner join location on tour.l_id = location.l_id',
+            selectFrom: 'tour INNER JOIN location ON tour.l_id = location.l_id',
             selectFieldList: [],
             fieldMapping: {
                 id: 'k_id',
