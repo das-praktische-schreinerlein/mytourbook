@@ -2,7 +2,7 @@ import {Mapper} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {AdapterFilterActions, GenericSqlAdapter, TableConfig, TableFacetConfig} from '../../search-commons/services/generic-sql.adapter';
+import {AdapterFilterActions, GenericSqlAdapter, TableConfig} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
@@ -80,16 +80,16 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                     '  SUBSTRING_INDEX(SUBSTRING_INDEX(kategorie_full.k_keywords, ",", numbers.n), ",", -1) AS value ' +
-                    ' FROM' +
-                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
-                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
-                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
-                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
-                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
-                    '  numbers INNER JOIN kategorie_full ON ' +
-                    '   CHAR_LENGTH(kategorie_full.k_keywords) - CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", "")) >= numbers.n - 1' +
-                    '  GROUP BY count, value' +
-                    '  ORDER BY value',
+                    'FROM' +
+                    ' (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '  SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '  SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '  SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '  SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    ' numbers INNER JOIN kategorie_full ON ' +
+                    '  CHAR_LENGTH(kategorie_full.k_keywords) - CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", "")) >= numbers.n - 1' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
                     filterField: 'k_keywords',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -279,16 +279,16 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     // use only kat-keywords because of performance-issues
                     selectSql: 'SELECT 0 AS count, ' +
                     '  SUBSTRING_INDEX(SUBSTRING_INDEX(kategorie_full.k_keywords, ",", numbers.n), ",", -1) AS value ' +
-                    ' FROM' +
-                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
-                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
-                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
-                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
-                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    'FROM' +
+                    ' (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '  SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '  SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '  SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '  SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
                     '  numbers INNER JOIN kategorie_full ON ' +
-                    '   CHAR_LENGTH(kategorie_full.k_keywords) - CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", "")) >= numbers.n - 1' +
-                    '  GROUP BY count, value' +
-                    '  ORDER BY value',
+                    '  CHAR_LENGTH(kategorie_full.k_keywords) - CHAR_LENGTH(REPLACE(kategorie_full.k_keywords, ",", "")) >= numbers.n - 1' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
                     filterField: 'i_keywords',
                     action: AdapterFilterActions.LIKEIN
 /**
