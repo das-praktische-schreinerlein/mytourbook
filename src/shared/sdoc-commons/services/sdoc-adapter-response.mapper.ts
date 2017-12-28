@@ -56,7 +56,6 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
 
         const values = {};
         values['id'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'id', undefined);
-
         values['imageId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'image_id_i', undefined));
         values['locId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'loc_id_i', undefined));
         values['routeId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'route_id_i', undefined));

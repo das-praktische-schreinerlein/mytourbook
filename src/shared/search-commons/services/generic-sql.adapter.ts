@@ -38,6 +38,7 @@ export interface QueryData {
 
 export interface TableFacetConfig {
     selectField?: string;
+    selectFrom?: string;
     selectSql?: string;
     constValues?: string [];
     action: string;
@@ -48,6 +49,7 @@ export interface TableConfig {
     selectFrom: string;
     selectFieldList: string[];
     facetConfigs: {};
+    filterMapping: {};
     fieldMapping: {};
     sortMapping: {};
 }
@@ -486,7 +488,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     protected getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
-        const sortParams = new Map<string, any>();
         const form = opts.originalSearchForm || {};
 
         const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
@@ -513,8 +514,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
 
                 if (facetConfig.selectField !== undefined) {
+                    const from = facetConfig.selectFrom !== undefined ? facetConfig.selectFrom : tableConfig.tableName;
                     facets.set(key, 'select count(*) as count, ' + facetConfig.selectField + ' as value '
-                        + 'from ' + tableConfig.tableName + ' group by value order by count desc');
+                        + 'from ' + from + ' group by value order by count desc');
                 } else if (facetConfig.selectSql !== undefined) {
                     facets.set(key, facetConfig.selectSql);
                 } else if (facetConfig.constValues !== undefined) {
@@ -673,6 +675,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         if (tableConfig.facetConfigs.hasOwnProperty(fieldName)) {
             realFieldName = tableConfig.facetConfigs[fieldName].selectField || tableConfig.facetConfigs[fieldName].filterField;
             action = tableConfig.facetConfigs[fieldName].action || action;
+        }
+        if (realFieldName === undefined && tableConfig.filterMapping.hasOwnProperty(fieldName)) {
+            realFieldName = tableConfig.filterMapping[fieldName];
         }
         if (realFieldName === undefined) {
             realFieldName = this.mapToAdapterFieldName(table, fieldName);

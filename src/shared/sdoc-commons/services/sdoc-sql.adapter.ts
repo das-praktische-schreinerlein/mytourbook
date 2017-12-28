@@ -15,6 +15,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
                 'CONCAT("ac_", kategorie_full.k_type) AS subtype',
                 'CONCAT("TRACK", "_", kategorie_full.k_id) AS id',
+                'kategorie_full.i_id',
                 'kategorie_full.k_id',
                 'kategorie_full.t_id',
                 'kategorie_full.k_t_ids',
@@ -115,7 +116,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
                 'type_txt': {
-                    constValues: ['track', 'route'],
+                    constValues: ['track', 'route', 'image'],
                     filterField: '"track"'
                 },
                 'week_is': {
@@ -138,14 +139,27 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'k_datevon DESC'
             },
+            filterMapping: {
+                id: 'kategorie_full.k_id',
+                track_id_i: 'kategorie_full.k_id',
+                track_id_is: 'kategorie_full.k_id',
+                loc_id_i: 'kategorie_full.l_id',
+                loc_id_is: 'kategorie_full.l_id'
+            },
             fieldMapping: {
                 id: 'id',
                 image_id_i: 'i_id',
+                image_id_is: 'i_id',
                 loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
                 route_id_i: 't_id',
+                route_id_is: 't_id',
                 track_id_i: 'k_id',
+                track_id_is: 'k_id',
                 trip_id_i: 'tr_id',
+                trip_id_is: 'tr_id',
                 news_id_i: 'n_id',
+                news_id_is: 'n_id',
                 dateshow_dt: 'k_dateshow',
                 html_txt: 'k_html',
                 desc_txt: 'desc_txt',
@@ -173,6 +187,198 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'k_name',
+                type_s: 'type',
+                actiontype_ss: 'k_type',
+                subtype_s: 'subtype_s',
+                i_fav_url_txt: 'i_fav_url_txt'
+            }
+        },
+        'image': {
+            tableName: 'image',
+            selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id INNER JOIN location ON location.l_id = kategorie_full.l_id',
+            selectFieldList: [
+                '"IMAGE" AS type',
+                'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
+                'CONCAT("ac_", kategorie_full.k_type) AS subtype',
+                'CONCAT("IMAGE", "_", image.i_id) AS id',
+                'image.i_id',
+                'image.k_id',
+                'kategorie_full.t_id',
+                'kategorie_full.k_t_ids',
+                'kategorie_full.tr_id',
+                'kategorie_full.l_id',
+                'n_id',
+                'i_katname',
+                'k_html',
+                'CONCAT(i_katname, " ", i_keywords, " ", l_lochirarchietxt) AS html',
+                'k_dateshow',
+                'i_date',
+                'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
+                'WEEK(i_date) AS week',
+                'MONTH(i_date) AS month',
+                'k_gpstracks_basefile',
+                'i_keywords',
+                'k_meta_shortdesc_md',
+                'k_meta_shortdesc_html',
+                'i_rate',
+                'CAST(i_gps_lat AS CHAR(50)) AS i_gps_lat',
+                'CAST(i_gps_lon AS CHAR(50)) AS i_gps_lon',
+                'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',
+                'l_lochirarchietxt',
+                'l_lochirarchieids',
+                'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
+                'k_altitude_asc AS altAsc',
+                'k_altitude_desc AS altDesc',
+                'i_gps_ele AS altMin',
+                'i_gps_ele AS altMax',
+                'k_distance AS dist',
+                'k_rate_ausdauer AS ausdauer',
+                'k_rate_bildung AS bildung',
+                'i_rate AS gesamt',
+                'k_rate_kraft AS kraft',
+                'k_rate_mental AS mental',
+                'i_rate_motive AS motive',
+                'k_rate_schwierigkeit AS schwierigkeit',
+                'i_rate_wichtigkeit AS wichtigkeit',
+                'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
+                'ROUND((i_gps_ele / 500))*500 AS altMaxFacet',
+                'ROUND((k_distance / 5))*5 AS distFacet',
+                'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
+                'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
+            facetConfigs: {
+                'actiontype_ss': {
+                    selectField: 'CONCAT("ac_", kategorie_full.k_type)',
+                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                },
+                'data_tech_alt_asc_facet_is': {
+                    selectField: 'ROUND((k_altitude_asc / 500))*500',
+                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                },
+                'data_tech_alt_max_facet_is': {
+                    selectField: 'ROUND((i_gps_ele / 500))*500'
+                },
+                'data_tech_dist_facets_fs': {
+                    selectField: 'ROUND((k_distance / 5))*5',
+                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                },
+                'data_tech_dur_facet_fs': {
+                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
+                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  SUBSTRING_INDEX(SUBSTRING_INDEX(image.i_keywords, ",", numbers.n), ",", -1) AS value ' +
+                    ' FROM' +
+                    '  (SELECT 1 n UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL' +
+                    '   SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL' +
+                    '   SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL ' +
+                    '   SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL' +
+                    '   SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20) ' +
+                    '  numbers INNER JOIN image ON ' +
+                    '   CHAR_LENGTH(image.i_keywords) - CHAR_LENGTH(REPLACE(image.i_keywords, ",", "")) >= numbers.n - 1' +
+                    '  GROUP BY count, value' +
+                    '  ORDER BY value',
+                    filterField: 'i_keywords',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                },
+                'loc_lochirarchie_txt': {
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    ' FROM image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
+                    ' GROUP BY l_name' +
+                    ' ORDER BY count DESC',
+                    filterField: 'l_lochirarchietxt',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'month_is': {
+                    selectField: 'MONTH(i_date)'
+                },
+                'rate_pers_gesamt_is': {
+                    selectField: 'i_rate'
+                },
+                'rate_pers_schwierigkeit_is': {
+                    selectField: 'k_rate_schwierigkeit',
+                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                },
+                'rate_tech_overall_ss': {
+                },
+                'subtype_ss': {
+                    selectField: 'CONCAT("ac_", kategorie_full.k_type)',
+                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                },
+                'type_txt': {
+                    constValues: ['track', 'route', 'image'],
+                    filterField: '"image"'
+                },
+                'week_is': {
+                    selectField: 'WEEK(i_date)'
+                }
+            },
+            sortMapping: {
+                'date': 'i_date DESC',
+                'dateAsc': 'i_date ASC',
+                'distance': 'geodist() ASC',
+                'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
+                'dataTechAltDesc': 'k_altitude_asc DESC',
+                'dataTechMaxDesc': 'i_gps_ele DESC',
+                'dataTechDistDesc': 'k_distance DESC',
+                'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC',
+                'dataTechAltAsc': 'k_altitude_asc ASC',
+                'dataTechMaxAsc': 'i_gps_ele ASC',
+                'dataTechDistAsc': 'k_distance ASC',
+                'ratePers': 'i_rate DESC',
+                'location': 'l_lochirarchietxt ASC',
+                'relevance': 'i_date DESC'
+            },
+            filterMapping: {
+                id: 'image.i_id',
+                image_id_i: 'image.i_id',
+                image_id_is: 'image.i_id',
+                track_id_i: 'image.k_id',
+                track_id_is: 'image.k_id'
+            },
+            fieldMapping: {
+                id: 'id',
+                image_id_i: 'i_id',
+                image_id_is: 'i_id',
+                loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
+                route_id_i: 't_id',
+                route_id_is: 't_id',
+                track_id_i: 'k_id',
+                track_id_is: 'k_id',
+                trip_id_i: 'tr_id',
+                trip_id_is: 'tr_id',
+                news_id_i: 'n_id',
+                news_id_is: 'n_id',
+                dateshow_dt: 'i_date',
+                html_txt: 'k_html',
+                desc_txt: 'desc_txt',
+                desc_md_txt: 'k_meta_shortdesc_md',
+                desc_html_txt: 'k_meta_shortdesc_html',
+                geo_lon_s: 'i_gps_lon',
+                geo_lat_s: 'i_gps_lat',
+                geo_loc_p: 'i_gps_loc',
+                data_tech_alt_asc_i: 'altAsc',
+                data_tech_alt_desc_i: 'altDesc',
+                data_tech_alt_min_i: 'altMin',
+                data_tech_alt_max_i: 'altMax',
+                data_tech_dist_f: 'dist',
+                data_tech_dur_f: 'dur',
+                rate_pers_ausdauer_i: 'ausdauer',
+                rate_pers_bildung_i: 'bildung',
+                rate_pers_gesamt_i: 'gesamt',
+                rate_pers_kraft_i: 'kraft',
+                rate_pers_mental_i: 'mental',
+                rate_pers_motive_i: 'motive',
+                rate_pers_schwierigkeit_i: 'schwierigkeit',
+                rate_pers_wichtigkeit_i: 'wichtigkeit',
+                gpstracks_basefile_s: 'k_gpstracks_basefile',
+                keywords_txt: 'i_keywords',
+                loc_lochirarchie_s: 'l_lochirarchietxt',
+                loc_lochirarchie_ids_s: 'l_lochirarchieids',
+                name_s: 'i_katname',
                 type_s: 'type',
                 actiontype_ss: 'k_type',
                 subtype_s: 'subtype_s',
@@ -278,7 +484,7 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
         }
 
         if (fieldName === 'id') {
-            return super.mapFilterToAdapterQuery(mapper, 'kategorie_full.k_id', action,
+            return super.mapFilterToAdapterQuery(mapper, 'id', action,
                 [this.mapperUtils.prepareSingleValue(value, '_').replace(/.*_/, '')], table);
         }
 
