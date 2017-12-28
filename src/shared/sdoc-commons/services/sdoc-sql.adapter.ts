@@ -148,7 +148,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 route_id_i: 'kategorie_full.t_id',
                 route_id_is: 'kategorie_full.t_id',
                 track_id_i: 'kategorie_full.k_id',
-                track_id_is: 'kategorie_full.k_id'
+                track_id_is: 'kategorie_full.k_id',
+                loc_lochirarchie_ids_txt: 'location.l_id'
             },
             spartialConfig: {
                 lat: 'k_gps_lat',
@@ -369,7 +370,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 route_id_i: 'kategorie_full.t_id',
                 route_id_is: 'kategorie_full.t_id',
                 track_id_i: 'image.k_id',
-                track_id_is: 'image.k_id'
+                track_id_is: 'image.k_id',
+                loc_lochirarchie_ids_txt: 'location.l_id'
             },
             fieldMapping: {
                 id: 'id',
@@ -564,7 +566,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
                 loc_id_i: 'tour.l_id',
-                loc_id_is: 'tour.l_id'
+                loc_id_is: 'tour.l_id',
+                loc_lochirarchie_ids_txt: 'location.l_id'
             },
             fieldMapping: {
                 id: 'id',
@@ -710,7 +713,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
             filterMapping: {
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
-                loc_id_is: 'location.l_id'
+                loc_id_is: 'location.l_id',
+                loc_parent_id_i: 'l_parent_id'
             },
             fieldMapping: {
                 id: 'id',
@@ -807,7 +811,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
             filterMapping: {
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
-                trip_id_is: 'trip.tr_id'
+                trip_id_is: 'trip.tr_id',
+                loc_lochirarchie_ids_txt: '"dummy"'
             },
             fieldMapping: {
                 id: 'id',
@@ -899,7 +904,8 @@ export class SDocSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm
             filterMapping: {
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
-                news_id_is: 'news.n_id'
+                news_id_is: 'news.n_id',
+                loc_lochirarchie_ids_txt: '"dummy"'
             },
             fieldMapping: {
                 id: 'id',
