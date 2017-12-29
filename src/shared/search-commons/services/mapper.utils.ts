@@ -13,7 +13,7 @@ export class MapperUtils {
 
     public getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
+        if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {
             if (Array.isArray(adapterDocument[adapterFieldName])) {
                 value = adapterDocument[adapterFieldName][0];
             } else {
