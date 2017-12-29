@@ -208,16 +208,20 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             tableName: 'image',
             selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id ' +
                         'INNER JOIN location ON location.l_id = kategorie.l_id ' +
-                        'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
-                        'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
-            groupbBySelectFieldList: true,
-            groupbBySelectFieldListIgnore: ['i_keywords'],
+                        '',
+                        // use kategorie_keywords for performance
+                        // 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
+                        // 'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
+                        // 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
+                        // 'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
+            // groupbBySelectFieldList: true,
+            // groupbBySelectFieldListIgnore: ['i_keywords'],
             selectFieldList: [
                 '"IMAGE" AS type',
                 'CONCAT("ac_", kategorie.k_type) AS actiontype',
                 'CONCAT("ac_", kategorie.k_type) AS subtype',
                 'CONCAT("IMAGE", "_", image.i_id) AS id',
-//                'n_id',
+                // 'n_id',
                 'image.i_id',
                 'image.k_id',
                 'kategorie.t_id',
@@ -230,7 +234,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'WEEK(i_date) AS week',
                 'MONTH(i_date) AS month',
                 'k_gpstracks_basefile',
-                'GROUP_CONCAT(keyword.kw_name separator ", ") AS i_keywords',
+                // 'GROUP_CONCAT(keyword.kw_name separator ", ") AS i_keywords',
                 'i_meta_shortdesc',
                 'i_meta_shortdesc AS i_meta_shortdesc_md',
                 'i_meta_shortdesc AS i_meta_shortdesc_html',
@@ -280,6 +284,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id'
                 },
                 'keywords_txt': {
+                    /**
                     selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
                     'FROM' +
@@ -289,6 +294,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     ' ORDER BY value',
                     filterField: 'kw_name',
                     action: AdapterFilterActions.LIKEIN
+                    **/
+                    noFacet: true
                 },
                 'loc_id_i': {
                     noFacet: true
