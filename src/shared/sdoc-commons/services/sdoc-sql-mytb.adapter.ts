@@ -5,12 +5,12 @@ import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 import {AdapterFilterActions, GenericSqlAdapter, TableConfig} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
-export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
+export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public static tableConfigs = {
         'track': {
             tableName: 'kategorie_full',
-            selectFrom: 'kategorie_full inner join location on location.l_id = kategorie_full.l_id ' +
-                        'left join image on kategorie_full.i_id=image.i_id',
+            selectFrom: 'kategorie_full INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
+                        'LEFT JOIN image ON kategorie_full.i_id=image.i_id',
             selectFieldList: [
                 '"TRACK" AS type',
                 'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
@@ -34,6 +34,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'MONTH(k_datevon) AS month',
                 'k_gpstracks_basefile',
                 'k_keywords',
+                'k_meta_shortdesc',
                 'k_meta_shortdesc_md',
                 'k_meta_shortdesc_html',
                 'k_rate_gesamt',
@@ -94,9 +95,10 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'loc_id_i': {
+                    noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value' +
                     ' FROM kategorie_full INNER JOIN location ON kategorie_full.l_id = location.l_id ' +
                     ' GROUP BY l_name' +
                     ' ORDER BY count DESC',
@@ -113,6 +115,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectField: 'k_rate_schwierigkeit'
                 },
                 'rate_tech_overall_ss': {
+                    noFacet: true
                 },
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)'
@@ -149,7 +152,8 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 route_id_is: 'kategorie_full.t_id',
                 track_id_i: 'kategorie_full.k_id',
                 track_id_is: 'kategorie_full.k_id',
-                loc_lochirarchie_ids_txt: 'location.l_id'
+                loc_lochirarchie_ids_txt: 'location.l_id',
+                html: 'CONCAT(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             spartialConfig: {
                 lat: 'k_gps_lat',
@@ -171,7 +175,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 news_id_is: 'n_id',
                 dateshow_dt: 'k_dateshow',
                 html_txt: 'k_html',
-                desc_txt: 'desc_txt',
+                desc_txt: 'k_meta_shortdesc',
                 desc_md_txt: 'k_meta_shortdesc_md',
                 desc_html_txt: 'k_meta_shortdesc_html',
                 geo_lon_s: 'k_gps_lon',
@@ -204,7 +208,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
         },
         'image': {
             tableName: 'image',
-            selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id ' +
+            selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
                         'INNER JOIN location ON location.l_id = kategorie_full.l_id',
             selectFieldList: [
                 '"IMAGE" AS type',
@@ -228,6 +232,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'MONTH(i_date) AS month',
                 'k_gpstracks_basefile',
                 'i_keywords',
+                'i_meta_shortdesc',
                 'k_meta_shortdesc_md',
                 'k_meta_shortdesc_html',
                 'i_rate',
@@ -262,18 +267,18 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((k_altitude_asc / 500))*500',
-                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'data_tech_alt_max_facet_is': {
                     selectField: 'ROUND((i_gps_ele / 500))*500'
                 },
                 'data_tech_dist_facets_fs': {
                     selectField: 'ROUND((k_distance / 5))*5',
-                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'data_tech_dur_facet_fs': {
                     selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
-                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'keywords_txt': {
                     // use only kat-keywords because of performance-issues
@@ -309,9 +314,10 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
 **/
                 },
                 'loc_id_i': {
+                    noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value' +
                     ' FROM image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
                     '   INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
                     ' GROUP BY l_name' +
@@ -327,13 +333,14 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'rate_pers_schwierigkeit_is': {
                     selectField: 'k_rate_schwierigkeit',
-                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'rate_tech_overall_ss': {
+                    noFacet: true
                 },
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)',
-                    selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
                 },
                 'type_txt': {
                     constValues: ['image', 'track', 'route', 'location', 'trip', 'news'],
@@ -371,7 +378,8 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 route_id_is: 'kategorie_full.t_id',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id',
-                loc_lochirarchie_ids_txt: 'location.l_id'
+                loc_lochirarchie_ids_txt: 'location.l_id',
+                html: 'CONCAT(i_katname, " ", i_keywords, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
                 id: 'id',
@@ -389,7 +397,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 news_id_is: 'n_id',
                 dateshow_dt: 'i_date',
                 html_txt: 'k_html',
-                desc_txt: 'desc_txt',
+                desc_txt: 'k_meta_shortdesc',
                 desc_md_txt: 'k_meta_shortdesc_md',
                 desc_html_txt: 'k_meta_shortdesc_html',
                 geo_lon_s: 'i_gps_lon',
@@ -441,6 +449,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'MONTH(t_datevon) AS month',
                 't_gpstracks_basefile',
                 't_keywords',
+                't_meta_shortdesc',
                 't_meta_shortdesc_md',
                 't_meta_shortdesc_html',
                 't_rate_gesamt',
@@ -509,6 +518,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'loc_id_i': {
+                    noFacet: true
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
@@ -567,7 +577,8 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 route_id_is: 'tour.t_id',
                 loc_id_i: 'tour.l_id',
                 loc_id_is: 'tour.l_id',
-                loc_lochirarchie_ids_txt: 'location.l_id'
+                loc_lochirarchie_ids_txt: 'location.l_id',
+                html: 'CONCAT(t_name, " ", t_keywords, " ", t_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
                 id: 'id',
@@ -584,8 +595,8 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
                 dateshow_dt: 't_dateshow',
-                html_txt: 'k_html_list',
-                desc_txt: 'desc_txt',
+                html_txt: 't_html_list',
+                desc_txt: 't_meta_shortdesc',
                 desc_md_txt: 't_meta_shortdesc_md',
                 desc_html_txt: 't_meta_shortdesc_html',
                 geo_lon_s: 't_gps_lon',
@@ -639,6 +650,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'l_html',
                 'CONCAT(l_name, " ", l_keywords, " ", l_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
                 'l_keywords',
+                'l_meta_shortdesc',
                 'l_meta_shortdesc_md',
                 'l_meta_shortdesc_html',
                 'CAST(l_gps_lat AS CHAR(50)) AS l_gps_lat',
@@ -651,12 +663,16 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectField: 'CONCAT("ac_", location.l_typ)'
                 },
                 'data_tech_alt_asc_facet_is': {
+                    noFacet: true
                 },
                 'data_tech_alt_max_facet_is': {
+                    noFacet: true
                 },
                 'data_tech_dist_facets_fs': {
+                    noFacet: true
                 },
                 'data_tech_dur_facet_fs': {
+                    noFacet: true
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -685,20 +701,26 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
+                    noFacet: true
                 },
                 'rate_pers_gesamt_is': {
+                    noFacet: true
                 },
                 'rate_pers_schwierigkeit_is': {
+                    noFacet: true
                 },
                 'rate_tech_overall_ss': {
+                    noFacet: true
                 },
                 'subtype_ss': {
+                    noFacet: true
                 },
                 'type_txt': {
                     constValues: ['location', 'track', 'route', 'trip', 'image', 'news'],
                     filterField: '"location"'
                 },
                 'week_is': {
+                    noFacet: true
                 }
             },
             sortMapping: {
@@ -714,14 +736,15 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
-                loc_parent_id_i: 'l_parent_id'
+                loc_parent_id_i: 'l_parent_id',
+                html: 'CONCAT(l_name, " ", l_html, " " , l_keywords, " ", l_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
                 id: 'id',
                 loc_id_i: 'l_id',
                 loc_id_is: 'l_id',
                 html_txt: 'l_html',
-                desc_txt: 'desc_txt',
+                desc_txt: 'l_meta_shortdesc',
                 desc_md_txt: 'l_meta_shortdesc_md',
                 desc_html_txt: 'l_meta_shortdesc_html',
                 geo_lon_s: 'l_gps_lon',
@@ -751,18 +774,24 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'WEEK(tr_datevon) AS week',
                 'MONTH(tr_datevon) AS month',
                 'tr_keywords',
+                'tr_meta_shortdesc',
                 'tr_meta_shortdesc_md',
                 'tr_meta_shortdesc_html'],
             facetConfigs: {
                 'actiontype_ss': {
+                    noFacet: true
                 },
                 'data_tech_alt_asc_facet_is': {
+                    noFacet: true
                 },
                 'data_tech_alt_max_facet_is': {
+                    noFacet: true
                 },
                 'data_tech_dist_facets_fs': {
+                    noFacet: true
                 },
                 'data_tech_dur_facet_fs': {
+                    noFacet: true
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -781,19 +810,25 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'loc_id_i': {
+                    noFacet: true
                 },
                 'loc_lochirarchie_txt': {
+                    noFacet: true
                 },
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
                 'rate_pers_gesamt_is': {
+                    noFacet: true
                 },
                 'rate_pers_schwierigkeit_is': {
+                    noFacet: true
                 },
                 'rate_tech_overall_ss': {
+                    noFacet: true
                 },
                 'subtype_ss': {
+                    noFacet: true
                 },
                 'type_txt': {
                     constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
@@ -812,14 +847,15 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
-                loc_lochirarchie_ids_txt: '"dummy"'
+                loc_lochirarchie_ids_txt: '"dummy"',
+                html: 'CONCAT(tr_name, " ", tr_keywords, " ", tr_meta_shortdesc_md)'
             },
             fieldMapping: {
                 id: 'id',
                 trip_id_i: 'tr_id',
                 trip_id_is: 'tr_id',
                 dateshow_dt: 'tr_dateshow',
-                desc_txt: 'desc_txt',
+                desc_txt: 'tr_meta_shortdesc',
                 desc_md_txt: 'tr_meta_shortdesc_md',
                 desc_html_txt: 'tr_meta_shortdesc_html',
                 keywords_txt: 'tr_keywords',
@@ -844,18 +880,24 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'WEEK(n_date) AS week',
                 'MONTH(n_date) AS month',
                 'n_keywords',
+                'n_message',
                 'n_message_md',
                 'n_message_html'],
             facetConfigs: {
                 'actiontype_ss': {
+                    noFacet: true
                 },
                 'data_tech_alt_asc_facet_is': {
+                    noFacet: true
                 },
                 'data_tech_alt_max_facet_is': {
+                    noFacet: true
                 },
                 'data_tech_dist_facets_fs': {
+                    noFacet: true
                 },
                 'data_tech_dur_facet_fs': {
+                    noFacet: true
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -874,19 +916,25 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'loc_id_i': {
+                    noFacet: true
                 },
                 'loc_lochirarchie_txt': {
+                    noFacet: true
                 },
                 'month_is': {
                     selectField: 'MONTH(n_date)'
                 },
                 'rate_pers_gesamt_is': {
+                    noFacet: true
                 },
                 'rate_pers_schwierigkeit_is': {
+                    noFacet: true
                 },
                 'rate_tech_overall_ss': {
+                    noFacet: true
                 },
                 'subtype_ss': {
+                    noFacet: true
                 },
                 'type_txt': {
                     constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
@@ -905,14 +953,15 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
-                loc_lochirarchie_ids_txt: '"dummy"'
+                loc_lochirarchie_ids_txt: '"dummy"',
+                html: 'CONCAT(n_headline, " ", n_keywords, " ", n_message_md)'
             },
             fieldMapping: {
                 id: 'id',
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
                 dateshow_dt: 'n_date',
-                desc_txt: 'desc_txt',
+                desc_txt: 'n_message',
                 desc_md_txt: 'n_message_md',
                 desc_html_txt: 'n_message_html',
                 keywords_txt: 'n_keywords',
@@ -928,18 +977,18 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
     }
 
     protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig {
-        return SDocMytbSqlAdapter.tableConfigs[this.extractTable(method, mapper, params, opts)];
+        return SDocSqlMytbAdapter.tableConfigs[this.extractTable(method, mapper, params, opts)];
     }
 
     protected getTableConfigForTable(table: string): TableConfig {
-        return SDocMytbSqlAdapter.tableConfigs[table];
+        return SDocSqlMytbAdapter.tableConfigs[table];
     }
 
     protected extractTable(method: string, mapper: Mapper, params: any, opts: any): string {
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
             const tabName = types.in[0];
-            if (SDocMytbSqlAdapter.tableConfigs[tabName] !== undefined) {
+            if (SDocSqlMytbAdapter.tableConfigs[tabName] !== undefined) {
                 return tabName;
             }
 
@@ -948,7 +997,7 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
         const ids = params.where['id'];
         if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
             const tabName = ids.in[0].replace(/_.*/, '').toLowerCase();
-            if (SDocMytbSqlAdapter.tableConfigs[tabName] !== undefined) {
+            if (SDocSqlMytbAdapter.tableConfigs[tabName] !== undefined) {
                 return tabName;
             }
 
@@ -975,8 +1024,6 @@ export class SDocMytbSqlAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
         switch (fieldName) {
             case 'name':
                 return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'name_s');
-            case 'html':
-                return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'html_txt');
             case 'descTxt':
                 return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'desc_txt');
             case 'type_txt':
