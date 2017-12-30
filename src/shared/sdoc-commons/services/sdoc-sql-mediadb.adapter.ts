@@ -2,18 +2,23 @@ import {Mapper} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {AdapterFilterActions, GenericSqlAdapter, TableConfig} from '../../search-commons/services/generic-sql.adapter';
+import {AdapterFilterActions, GenericSqlAdapter, QueryData, TableConfig} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public static tableConfigs = {
         'track': {
             tableName: 'kategorie',
-            selectFrom: 'kategorie INNER JOIN location ON location.l_id = kategorie.l_id ' +
+            selectFrom: 'kategorie INNER JOIN location ON location.l_id = kategorie.l_id ',
 //                        'LEFT JOIN image ON kategorie.i_id=image.i_id ' +
-                        'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
-                        'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
-            groupbBySelectFieldList: true,
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
+                          'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt'],
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS k_keywords']
+                }
+            ],
             groupbBySelectFieldListIgnore: ['k_keywords'],
             selectFieldList: [
                 '"TRACK" AS type',
@@ -36,7 +41,6 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'WEEK(k_datevon) AS week',
                 'MONTH(k_datevon) AS month',
                 'k_gpstracks_basefile',
-                'GROUP_CONCAT(keyword.kw_name separator ", ") AS k_keywords',
                 'k_meta_shortdesc',
                 'k_meta_shortdesc AS k_meta_shortdesc_md',
                 'k_meta_shortdesc AS k_meta_shortdesc_html',
@@ -140,7 +144,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'dataTechDistAsc': 'k_distance ASC',
                 'ratePers': 'k_rate_gesamt DESC',
                 'location': 'l_name ASC',
-                'relevance': 'k_datevon DESC'
+                'relevance': 'k_datevon DESC',
+                'default': 'k_datevon DESC'
             },
             filterMapping: {
                 id: 'kategorie.k_id',
@@ -150,6 +155,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 route_id_is: 'kategorie.t_id',
                 track_id_i: 'kategorie.k_id',
                 track_id_is: 'kategorie.k_id',
+                news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(k_name, " ", k_meta_shortdesc, " ", l_name)'
@@ -207,15 +213,16 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         'image': {
             tableName: 'image',
             selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id ' +
-                        'INNER JOIN location ON location.l_id = kategorie.l_id ' +
-                        '',
-                        // use kategorie_keywords for performance
-                        // 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
-                        // 'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
-                        // 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
-                        // 'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
-            // groupbBySelectFieldList: true,
-            // groupbBySelectFieldListIgnore: ['i_keywords'],
+                        'INNER JOIN location ON location.l_id = kategorie.l_id ',
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
+                          'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt'],
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS i_keywords']
+                }
+            ],
+            groupbBySelectFieldListIgnore: ['i_keywords'],
             selectFieldList: [
                 '"IMAGE" AS type',
                 'CONCAT("ac_", kategorie.k_type) AS actiontype',
@@ -234,7 +241,6 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'WEEK(i_date) AS week',
                 'MONTH(i_date) AS month',
                 'k_gpstracks_basefile',
-                // 'GROUP_CONCAT(keyword.kw_name separator ", ") AS i_keywords',
                 'i_meta_shortdesc',
                 'i_meta_shortdesc AS i_meta_shortdesc_md',
                 'i_meta_shortdesc AS i_meta_shortdesc_html',
@@ -284,7 +290,6 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id'
                 },
                 'keywords_txt': {
-                    /**
                     selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
                     'FROM' +
@@ -294,8 +299,6 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     ' ORDER BY value',
                     filterField: 'kw_name',
                     action: AdapterFilterActions.LIKEIN
-                    **/
-                    noFacet: true
                 },
                 'loc_id_i': {
                     noFacet: true
@@ -348,7 +351,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'dataTechDistAsc': 'k_distance ASC',
                 'ratePers': 'i_rate DESC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 'i_date DESC'
+                'relevance': 'i_date DESC',
+                'default': 'i_date DESC'
             },
             spartialConfig: {
                 lat: 'i_gps_lat',
@@ -362,6 +366,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 route_id_is: 'kategorie.t_id',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id',
+                news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(i_meta_name, " ", l_name)'
@@ -414,10 +419,15 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         },
         'route': {
             tableName: 'tour',
-            selectFrom: 'tour INNER JOIN location ON tour.l_id = location.l_id ' +
-            'LEFT JOIN tour_keyword ON tour.t_id=tour_keyword.t_id ' +
-            'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
-            groupbBySelectFieldList: true,
+            selectFrom: 'tour INNER JOIN location ON tour.l_id = location.l_id ',
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN tour_keyword ON tour.t_id=tour_keyword.t_id ' +
+                          'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt'],
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS t_keywords']
+                }
+            ],
             groupbBySelectFieldListIgnore: ['t_keywords'],
             selectFieldList: [
                 '"ROUTE" AS type',
@@ -435,7 +445,6 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'WEEK(t_datevon) AS week',
                 'MONTH(t_datevon) AS month',
                 't_gpstracks_basefile',
-                'GROUP_CONCAT(keyword.kw_name separator ", ") AS t_keywords',
                 't_meta_shortdesc',
                 't_meta_shortdesc AS t_meta_shortdesc_md',
                 't_meta_shortdesc AS t_meta_shortdesc_html',
@@ -547,7 +556,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'dataTechDistAsc': 't_route_m ASC',
                 'ratePers': 't_rate_gesamt DESC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 't_datevon DESC'
+                'relevance': 't_datevon DESC',
+                'default': 't_datevon DESC'
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
@@ -557,6 +567,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
+                news_id_is: '"dummy"',
+                trip_id_is: '"dummy"',
                 loc_id_i: 'tour.l_id',
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
@@ -622,10 +634,15 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         },
         'location': {
             tableName: 'location',
-            selectFrom: 'location ' +
-                        'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
-                        'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
-            groupbBySelectFieldList: true,
+            selectFrom: 'location ',
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
+                          'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt'],
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS l_keywords']
+                }
+            ],
             groupbBySelectFieldListIgnore: ['l_keywords'],
             selectFieldList: [
                 '"LOCATION" AS type',
@@ -634,7 +651,6 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'location.l_id',
                 'l_name',
                 'CONCAT(l_name, " ", l_meta_shortdesc) AS html',
-                'GROUP_CONCAT(keyword.kw_name separator ", ") AS l_keywords',
                 'l_meta_shortdesc',
                 'l_meta_shortdesc AS l_meta_shortdesc_md',
                 'l_meta_shortdesc AS l_meta_shortdesc_html',
@@ -707,7 +723,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sortMapping: {
                 'distance': 'geodist ASC',
                 'location': 'l_name ASC',
-                'relevance': 'l_name ASC'
+                'relevance': 'l_name ASC',
+                'default': 'l_id DESC'
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
@@ -718,6 +735,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
+                trip_id_is: '"dummy"',
                 html: 'CONCAT(l_name, " ", l_meta_shortdesc)'
             },
             fieldMapping: {
@@ -807,14 +825,17 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sortMapping: {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
-                'relevance': 'tr_datevon ASC'
+                'relevance': 'tr_datevon ASC',
+                'default': 'tr_datevon DESC'
             },
             filterMapping: {
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
+                image_id_i: '"dummy"',
                 track_id_i: '"dummy"',
                 route_id_is: '"dummy"',
+                news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(tr_name, " ", tr_meta_shortdesc)'
@@ -902,13 +923,16 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sortMapping: {
                 'date': 'n_date DESC',
                 'dateAsc': 'n_date ASC',
-                'relevance': 'n_date ASC'
+                'relevance': 'n_date ASC',
+                'default': 'n_date DESC'
             },
             filterMapping: {
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
+                image_id_i: '"dummy"',
                 track_id_i: '"dummy"',
+                trip_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(n_headline, " ", n_message)'
@@ -933,7 +957,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         super(config, new SDocAdapterResponseMapper());
     }
 
-    protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig {
+    protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): TableConfig {
         return SDocSqlMediadbAdapter.tableConfigs[this.extractTable(method, mapper, params, opts)];
     }
 
@@ -992,7 +1016,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), fieldName);
     }
 
-    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string[] {
         const fields = super.getAdapterFields(method, mapper, params, opts, query);
         if (method === 'count') {
             return fields;

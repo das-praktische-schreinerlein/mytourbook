@@ -2,7 +2,7 @@ import {Mapper} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {AdapterFilterActions, GenericSqlAdapter, TableConfig} from '../../search-commons/services/generic-sql.adapter';
+import {AdapterFilterActions, GenericSqlAdapter, QueryData, TableConfig} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
@@ -142,7 +142,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'dataTechDistAsc': 'k_distance ASC',
                 'ratePers': 'k_rate_gesamt DESC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 'k_datevon DESC'
+                'relevance': 'k_datevon DESC',
+                'default': 'k_datevon DESC'
             },
             filterMapping: {
                 id: 'kategorie_full.k_id',
@@ -232,7 +233,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'MONTH(i_date) AS month',
                 'k_gpstracks_basefile',
                 'i_keywords',
-                'i_meta_shortdesc',
+                'k_meta_shortdesc',
                 'k_meta_shortdesc_md',
                 'k_meta_shortdesc_html',
                 'i_rate',
@@ -364,7 +365,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'dataTechDistAsc': 'k_distance ASC',
                 'ratePers': 'i_rate DESC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 'i_date DESC'
+                'relevance': 'i_date DESC',
+                'default': 'i_date DESC'
             },
             spartialConfig: {
                 lat: 'i_gps_lat',
@@ -565,7 +567,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'dataTechDistAsc': 't_route_m ASC',
                 'ratePers': 't_rate_gesamt DESC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 't_datevon DESC'
+                'relevance': 't_datevon DESC',
+                'default': 't_datevon DESC'
             },
             spartialConfig: {
                 lat: 't_gps_lat',
@@ -575,6 +578,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
+                news_id_is: '"dummy"',
+                trip_id_is: '"dummy"',
                 loc_id_i: 'tour.l_id',
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
@@ -726,7 +731,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             sortMapping: {
                 'distance': 'geodist ASC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 'l_lochirarchietxt ASC'
+                'relevance': 'l_lochirarchietxt ASC',
+                'default': 'l_id DESC'
             },
             spartialConfig: {
                 lat: 'l_gps_lat',
@@ -737,6 +743,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
+                news_id_is: '"dummy"',
+                trip_id_is: '"dummy"',
                 html: 'CONCAT(l_name, " ", l_html, " " , l_keywords, " ", l_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -841,12 +849,15 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             sortMapping: {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
-                'relevance': 'tr_datevon ASC'
+                'relevance': 'tr_datevon ASC',
+                'default': 'tr_datevon DESC'
             },
             filterMapping: {
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
+                route_id_is: '"dummy"',
+                news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
                 html: 'CONCAT(tr_name, " ", tr_keywords, " ", tr_meta_shortdesc_md)'
             },
@@ -947,12 +958,16 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             sortMapping: {
                 'date': 'n_date DESC',
                 'dateAsc': 'n_date ASC',
-                'relevance': 'n_date ASC'
+                'relevance': 'n_date ASC',
+                'default': 'n_date DESC'
             },
             filterMapping: {
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
+                trip_id_is: '"dummy"',
+                location_id_is: '"dummy"',
+                route_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
                 html: 'CONCAT(n_headline, " ", n_keywords, " ", n_message_md)'
             },
@@ -976,7 +991,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
         super(config, new SDocAdapterResponseMapper());
     }
 
-    protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig {
+    protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): TableConfig {
         return SDocSqlMytbAdapter.tableConfigs[this.extractTable(method, mapper, params, opts)];
     }
 
@@ -1035,7 +1050,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
         return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), fieldName);
     }
 
-    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string[] {
         const fields = super.getAdapterFields(method, mapper, params, opts, query);
         if (method === 'count') {
             return fields;

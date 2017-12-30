@@ -30,11 +30,11 @@ export interface QueryData {
     where: string[];
     offset: number;
     limit: number;
-    sort: string;
+    sort: string[];
     table: string;
     from: string;
-    groupByFields: string;
-    fields: string;
+    groupByFields: string[];
+    fields: string[];
     having: string[];
 }
 
@@ -47,6 +47,12 @@ export interface TableFacetConfig {
     action: string;
 }
 
+export interface OptionalGroupByConfig {
+    triggerParams?: string[];
+    from?: string;
+    groupByFields?: string[];
+}
+
 export interface TableConfig {
     tableName: string;
     selectFrom: string;
@@ -57,6 +63,7 @@ export interface TableConfig {
     sortMapping: {};
     groupbBySelectFieldList: boolean;
     groupbBySelectFieldListIgnore: string[];
+    optionalGroupBy: OptionalGroupByConfig[];
     spartialConfig: {
         lat: string;
         lon: string
@@ -435,7 +442,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const docs: any[] = result;
         if (docs.length === 1) {
             for (const fieldName of Object.getOwnPropertyNames(docs[0])) {
-                if (fieldName.startsWith('count(')) {
+                if (fieldName.startsWith('COUNT(')) {
                     return [docs[0][fieldName]];
                 }
             }
@@ -486,11 +493,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;
 
-    protected abstract getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: any): TableConfig;
+    protected abstract getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): TableConfig;
 
     protected abstract getTableConfigForTable(table: string): TableConfig;
 
-    protected getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
+    protected getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string {
         return this.getTableConfigForTable(query.table).selectFrom || '';
     }
 
@@ -498,7 +505,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return this.getTableConfigForTable(table).fieldMapping || {};
     }
 
-    protected getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
+    protected getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string[] {
         if (method === 'count') {
             return undefined;
         }
@@ -509,13 +516,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const sortMapping = tableConfig.sortMapping;
 
         if (sortMapping.hasOwnProperty(form.sort)) {
-            return sortMapping[form.sort];
+            return [sortMapping[form.sort]];
         }
 
-        return sortMapping['default'];
+        return [sortMapping['default']];
     };
 
-    protected getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any, spatialField: string): string {
+    protected getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: QueryData, spatialField: string): string {
         const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
         if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
             params.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
@@ -526,19 +533,19 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return undefined;
     };
 
-    protected getSpatialSql(method: string, mapper: Mapper, params: any, opts: any, query: any): string {
+    protected getSpatialSql(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string {
         const tableConfig = this.getTableConfigForTable(query.table);
         if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
             params.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
             const [lat, lon, distance] = this.mapperUtils.escapeAdapterValue(params.spatial.geo_loc_p.nearby).split(/_/);
             const distanceSql =
                 '(3959 ' +
-                ' * acos (' +
-                '     cos ( radians(' + lat + ') )' +
-                '     * cos( radians(' + tableConfig.spartialConfig.lat + ') )' +
-                '     * cos( radians(' + tableConfig.spartialConfig.lon + ') - radians(' + lon + ') )' +
-                '     + sin ( radians(' + lat + ') )' +
-                '     * sin( radians(' + tableConfig.spartialConfig.lat + ') )' +
+                ' * ACOS (' +
+                '     COS ( RADIANS(' + lat + ') )' +
+                '     * COS( RADIANS(' + tableConfig.spartialConfig.lat + ') )' +
+                '     * COS( RADIANS(' + tableConfig.spartialConfig.lon + ') - RADIANS(' + lon + ') )' +
+                '     + SIN ( RADIANS(' + lat + ') )' +
+                '     * SIN( RADIANS(' + tableConfig.spartialConfig.lat + ') )' +
                 ' )' +
                 ')';
             return distanceSql;
@@ -547,7 +554,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return undefined;
     }
 
-    protected getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, string> {
+    protected getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): Map<string, string> {
         const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
         const facetConfigs = tableConfig.facetConfigs;
 
@@ -562,17 +569,17 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
                 if (facetConfig.selectField !== undefined) {
                     const from = facetConfig.selectFrom !== undefined ? facetConfig.selectFrom : tableConfig.tableName;
-                    facets.set(key, 'select count(*) as count, ' + facetConfig.selectField + ' as value '
-                        + 'from ' + from + ' group by value order by count desc');
+                    facets.set(key, 'SELECT count(*) AS count, ' + facetConfig.selectField + ' AS value '
+                        + 'FROM ' + from + ' GROUP BY value ORDER By count desc');
                 } else if (facetConfig.selectSql !== undefined) {
                     facets.set(key, facetConfig.selectSql);
                 } else if (facetConfig.constValues !== undefined) {
                     const sqls = [];
                     facetConfig.constValues.forEach(value => {
-                        sqls.push('select 0 as count, "' + value + '" as value');
+                        sqls.push('SELECT 0 AS count, "' + value + '" AS value');
                     });
 
-                    facets.set(key, sqls.join(' union all '));
+                    facets.set(key, sqls.join(' UNION ALL '));
                 }
             }
         }
@@ -580,10 +587,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return facets;
     };
 
-    protected getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
+    protected getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string[] {
         const tableConfig = this.getTableConfigForTable(query.table);
         if (method === 'count') {
-            return ['count( distinct ' + tableConfig.filterMapping['id'] + ')'];
+            return ['COUNT( DISTINCT ' + tableConfig.filterMapping['id'] + ')'];
         }
 
         const fields = [];
@@ -593,32 +600,52 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         const distanceSql = this.getSpatialSql(method, mapper, params, opts, query);
         if (distanceSql !== undefined) {
-            fields.push(distanceSql + ' as geodist');
+            fields.push(distanceSql + ' AS geodist');
         }
 
         return fields;
     }
 
-    protected getGroupByFields(method: string, mapper: Mapper, params: any, opts: any, query: any): string[] {
-        if (method === 'count') {
-            return [];
-        }
-
+    protected generateGroupByForQuery(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): void {
         const tableConfig = this.getTableConfigForTable(query.table);
-        if (tableConfig.groupbBySelectFieldList !== true) {
-            return [];
+        let addFields = [];
+
+        if (tableConfig.optionalGroupBy !== undefined) {
+            for (const groupByConfig of tableConfig.optionalGroupBy) {
+                for (const fieldName of groupByConfig.triggerParams) {
+                    if (params.where.hasOwnProperty(fieldName)) {
+                        query.from += ' ' + groupByConfig.from;
+                        addFields = addFields.concat(groupByConfig.groupByFields);
+                        break;
+                    }
+                }
+            }
         }
 
-        const fields = this.getAdapterFields(method, mapper, params, opts, query);
+        if (method === 'count') {
+            return;
+        }
+
+        if (tableConfig.groupbBySelectFieldList !== true && addFields.length <= 0) {
+            return;
+        }
+
+        const fields = query.fields;
         const groupFields = [];
         fields.forEach(field => {
             const newField = field.replace(/.*? AS /gi, '');
-            if (tableConfig.groupbBySelectFieldListIgnore.indexOf(newField) < 0) {
-                groupFields.push(newField);
+            if (tableConfig.groupbBySelectFieldListIgnore !== undefined &&
+                tableConfig.groupbBySelectFieldListIgnore.indexOf(newField) >= 0) {
+                return;
             }
+
+            groupFields.push(newField);
         });
 
-        return groupFields;
+        if (groupFields !== undefined && groupFields.length > 0) {
+            query.groupByFields = query.groupByFields.concat(groupFields);
+        }
+        query.fields = query.fields.concat(addFields);
     }
 
     protected mapToAdapterFieldName(table, fieldName: string): string {
@@ -643,12 +670,12 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected queryTransformToSql(query: QueryData): string {
         const sql = 'select ' +
-            (query.fields ? query.fields : '') + ' ' +
+            (query.fields && query.fields.length > 0 ? query.fields.join(', ') : '') + ' ' +
             'from ' + query.from + ' ' +
             (query.where && query.where.length > 0 ? 'where ' + query.where.join(' AND ') : '') + ' ' +
-            (query.groupByFields ? ' group by ' + query.groupByFields : '') + ' ' +
+            (query.groupByFields && query.groupByFields.length > 0 ? ' group by ' + query.groupByFields.join(', ') : '') + ' ' +
             (query.having && query.having.length > 0 ? 'having ' + query.having.join(' AND ') : '') + ' ' +
-            (query.sort ? 'order by ' + query.sort + ' ' : '') +
+            (query.sort && query.sort.length > 0 ? 'order by ' + query.sort.join(', ') + ' ' : '') +
             (query.limit ? 'limit ' + (query.offset || 0) + ', ' + query.limit : '');
         // console.error("sql:", sql);
         return sql;
@@ -662,12 +689,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         const fields = this.getAdapterFields(method, mapper, params, opts, query);
         if (fields !== undefined && fields.length > 0) {
-            query['fields'] = fields.join(', ');
-        }
-
-        const groupByFields = this.getGroupByFields(method, mapper, params, opts, query);
-        if (groupByFields !== undefined && groupByFields.length > 0) {
-            query['groupByFields'] = groupByFields.join(', ');
+            query.fields = fields;
         }
 
         let spatialField = 'geodist';
@@ -689,7 +711,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         }
 
         query.from = this.getAdapterFrom(method, mapper, params, opts, query);
-        // console.error('sqlQuery:', query);
+
+        this.generateGroupByForQuery(method, mapper, params, opts, query);
 
         return query;
     }
@@ -733,11 +756,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 having: [],
                 offset: undefined,
                 limit: undefined,
-                sort: '',
+                sort: [],
                 table: table,
                 from: 'dual',
-                groupByFields: '',
-                fields: ''};
+                groupByFields: [],
+                fields: []};
             if (method === 'findAll') {
                 query.offset = opts.offset * opts.limit;
                 query.limit = opts.limit;
@@ -752,9 +775,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             limit: undefined,
             from: 'dual',
             table: table,
-            sort: '',
-            groupByFields: '',
-            fields: ''};
+            sort: [],
+            groupByFields: [],
+            fields: []};
         if (method === 'findAll') {
             query.offset = opts.offset * opts.limit;
             query.limit = opts.limit;
