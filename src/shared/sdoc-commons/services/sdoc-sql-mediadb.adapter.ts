@@ -687,7 +687,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     action: AdapterFilterActions.LIKEIN
                 },
                 'loc_id_i': {
-                    selectField: 'location.l_parent_id'
+                    selectField: 'location.l_id'
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
