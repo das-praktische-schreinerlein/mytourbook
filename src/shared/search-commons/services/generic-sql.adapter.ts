@@ -90,26 +90,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         this.mapper = mapper;
     }
 
-    count(mapper: Mapper, query: any, opts?: any): Promise<number> {
-        query = query || {};
-        opts = opts || {};
-
-        return super.count(mapper, query, opts);
-    }
-
     create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
-        opts = opts || {};
-
-        opts.adapterQuery = true;
-        opts.params = this.getParams(opts);
-        opts.params = this.queryTransform(mapper, opts.params, opts);
-        const query = {
-            add: {
-                doc: this.mapToAdapterDocument(this.extractTable('create', mapper, props, opts), props)
-            },
-            commit: {}
-        };
-        return super.create(mapper, query, opts);
+        throw new Error('create not implemented');
     }
 
     createMany<T extends Record>(mapper: Mapper, props: any, opts: any): Promise<T> {
@@ -117,19 +99,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     destroy(mapper: Mapper, id: string | number, opts?: any): Promise<any> {
-        opts = opts || {};
-
-        opts.adapterQuery = true;
-        opts.params = this.getParams(opts);
-        opts.params = this.queryTransform(mapper, opts.params, opts);
-        const query = {
-            delete: {
-                id: id
-            },
-            commit: {}
-        };
-        opts.adapterDeletequery = query;
-        return super.destroy(mapper, id, opts);
+        throw new Error('destroy not implemented');
     }
 
     destroyAll(mapper: Mapper, query: any, opts: any): Promise<any> {
@@ -137,38 +107,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
-        opts = opts || {};
-        return super.find(mapper, id, opts);
-    }
-
-    findAll<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<T[]> {
-        query = query || {};
-        opts = opts || {};
-
-        return super.findAll(mapper, query, opts);
-    }
-
-    facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
-        let op;
-        query = query || {};
-        opts = opts || {};
-
-        opts.adapterFacet = true;
-        const me = this;
-
-        // beforeCount lifecycle hook
-        op = opts.op = 'beforeFacets';
-        return utils.resolve(this[op](mapper, query, opts))
-            .then(() => {
-                // Allow for re-assignment from lifecycle hook
-                op = opts.op = 'count';
-                this.dbg(op, mapper, query, opts);
-                return this._facets(mapper, query, opts);
-            })
-            .then((results) => {
-                let [data, result] = results;
-                return utils.resolve(data);
-            });
+        throw new Error('find not implemented');
     }
 
     sum (mapper: Mapper, field: string, query: any, opts?: any): Promise<any> {
@@ -176,18 +115,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts: any): Promise<T> {
-        opts = opts || {};
-
-        opts.adapterQuery = true;
-        opts.params = this.getParams(opts);
-        opts.params = this.queryTransform(mapper, opts.params, opts);
-        const query = {
-            add: {
-                doc: this.mapToAdapterDocument(this.extractTable('update', mapper, props, opts), props)
-            },
-            commit: {}
-        };
-        return super.update(mapper, id, query, opts);
+        throw new Error('update not implemented');
     }
 
     updateAll(mapper: Mapper, props: any, query: any, opts?: any): Promise<any> {
@@ -198,39 +126,31 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         throw new Error('updateMany not implemented');
     }
 
-    beforeFacets(mapper: Mapper, query: IDict, opts: IDict): any {
-        return utils.Promise.resolve(true);
+    count(mapper: Mapper, query: any, opts?: any): Promise<number> {
+        query = query || {};
+        opts = opts || {};
+
+        return super.count(mapper, query, opts);
+    }
+
+    findAll<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<T[]> {
+        query = query || {};
+        opts = opts || {};
+
+        return super.findAll(mapper, query, opts);
+    }
+
+    facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+        query = query || {};
+        opts = opts || {};
+
+        opts.adapterFacet = true;
+
+        return this._facets(mapper, query, opts);
     }
 
     afterCount(mapper: Mapper, props: IDict, opts: any, result: any): Promise<number> {
         return utils.Promise.resolve(result);
-    }
-
-    afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
-        return this.find(mapper, props['add']['doc']['id'], opts);
-    }
-
-    afterUpdate<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        return this.find(mapper, id, opts);
-    }
-
-    afterFind<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        if (! (Array.isArray(result))) {
-            return utils.Promise.reject('generic-solr-adapter.afterFind: no array as result');
-        }
-        if (result.length !== 1) {
-            return utils.Promise.reject('generic-solr-adapter.afterFind: result is not unique');
-        }
-
-        return utils.Promise.resolve(result[0]);
-    }
-
-    afterFacets(mapper: Mapper, props: IDict, opts: any, result: any): Promise<number> {
-        return utils.Promise.resolve(result);
-    }
-
-    afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        return utils.Promise.resolve(<T>undefined);
     }
 
     _count(mapper, query, opts) {
@@ -263,31 +183,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         });
 
         return result;
-    };
-
-    _find(mapper: Mapper, id: string | number, opts: any) {
-        opts = opts || {};
-
-        const a = true;
-        if (a) { throw new Error('Not implemented'); } // TODO
-
-        opts.adapterQuery = true;
-
-        const me = this;
-        opts.params = opts.params || {};
-        opts.params.where = opts.params.where || {};
-        opts.params.where.id = { '==': id};
-        opts.offset = 0;
-        opts.limit = 10;
-
-        const queryData = me.queryTransformToAdapterQuery('find', mapper, {}, opts);
-        if (queryData === undefined) {
-            return utils.resolve([]);
-        }
-
-
-        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        return sqlBuilder.raw(this.queryTransformToSql(queryData));
     };
 
     _findAll(mapper, query, opts) {
@@ -367,7 +262,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                         facets.facets.set(facet[0], facet[1]);
                     });
 
-                    return allResolve([facets]);
+                    return allResolve(facets);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:' + reason);
                     return allReject(reason);
