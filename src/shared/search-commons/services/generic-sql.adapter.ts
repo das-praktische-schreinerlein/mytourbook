@@ -54,6 +54,12 @@ export interface OptionalGroupByConfig {
     groupByFields?: string[];
 }
 
+export interface LoadDetailDataConfig {
+    profile: string[];
+    sql: string;
+    parameterNames: string[];
+}
+
 export interface TableConfig {
     tableName: string;
     selectFrom: string;
@@ -62,10 +68,11 @@ export interface TableConfig {
     filterMapping: {};
     fieldMapping: {};
     sortMapping: {};
-    groupbBySelectFieldList: boolean;
-    groupbBySelectFieldListIgnore: string[];
-    optionalGroupBy: OptionalGroupByConfig[];
-    spartialConfig: {
+    groupbBySelectFieldList?: boolean;
+    groupbBySelectFieldListIgnore?: string[];
+    optionalGroupBy?: OptionalGroupByConfig[];
+    loadDetailData?: LoadDetailDataConfig[];
+    spartialConfig?: {
         lat: string;
         lon: string
     };
@@ -203,17 +210,21 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const raw = sqlBuilder.raw(this.queryTransformToSql(queryData));
         const result = new Promise((resolve, reject) => {
             raw.then(function doneSearch(dbresults: any) {
-                    let [dbdata, dbresult] = dbresults;
-                    dbresult = dbresult || {};
-                    let response = new Response(dbdata, dbresult, 'count');
-                    response = me.respond(response, opts);
+                let [dbdata, dbresult] = dbresults;
+                dbresult = dbresult || {};
+                let response = new Response(dbdata, dbresult, 'count');
+                response = me.respond(response, opts);
 
-                    const records: R[] = me.extractRecordsFromRequestResult(mapper, response, opts);
-                    return resolve([records]);
-                }).catch(function errorSearch(reason) {
-                    console.error('_findAll failed:' + reason);
-                    return reject(reason);
-                });
+                const records: R[] = me.extractRecordsFromRequestResult(mapper, response, opts);
+                return utils.resolve(records);
+            }).then(function doneSearch(records: R[]) {
+                return me.loadDetailData('findAll', mapper, query, opts, records);
+            }).then(function doneSearch(records: R[]) {
+                return resolve([records]);
+            }).catch(function errorSearch(reason) {
+                console.error('_findAll failed:' + reason);
+                return reject(reason);
+            });
         });
 
         return result;
@@ -390,6 +401,56 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     mapToAdapterDocument(table: string, props: any): any {
         return this.mapper.mapToAdapterDocument(this.getMappingForTable(table), props);
+    }
+
+    loadDetailData(method: string, mapper: Mapper, params: any, opts: any, records: R[]): Promise<R[]> {
+        const tableConfig = this.getTableConfig('facets', mapper, params, opts, params);
+        const loadDetailDataConfigs = tableConfig.loadDetailData;
+        if (loadDetailDataConfigs === undefined || loadDetailDataConfigs.length <= 0 || records.length <= 0) {
+            return utils.resolve(records);
+        }
+
+        const me = this;
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        const result: Promise<R[]> = new Promise((allResolve, allReject) => {
+            const promises = [];
+            records.forEach(record => {
+                loadDetailDataConfigs.forEach((loadDetailDataConfig) => {
+                    let sql = loadDetailDataConfig.sql;
+                    loadDetailDataConfig.parameterNames.forEach(parameterName => {
+                        let value = this.mapperUtils.prepareSingleValue(record[parameterName], '_');
+                        if (value !== undefined && parameterName === 'id') {
+                            value = value.replace(/.*_/, '');
+                        }
+                        sql = sql.replace(':' + parameterName, value);
+                    });
+                    const raw = sqlBuilder.raw(sql);
+                    promises.push(new Promise((resolve, reject) => {
+                        raw.then(function doneSearch(dbresults: any) {
+                            return resolve([loadDetailDataConfig.profile, record, dbresults[0]]);
+                        },
+                        function errorSearch(reason) {
+                            console.error('loadDetailData failed:' + reason);
+
+                            return reject(reason);
+                        });
+                    }));
+                });
+            });
+
+            Promise.all(promises).then(function doneSearch(loadDetailsResults: any[]) {
+                loadDetailsResults.forEach(loadDetailsResult => {
+                    const [profile, record, dbresults] = loadDetailsResult;
+                    me.mapper.mapDetailDataToAdapterDocument(mapper, profile, record, dbresults);
+                });
+                return allResolve(records);
+            }).catch(function errorSearch(reason) {
+                console.error('loadDetailData failed:' + reason);
+                return allReject(reason);
+            });
+        });
+
+        return result;
     }
 
     protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;

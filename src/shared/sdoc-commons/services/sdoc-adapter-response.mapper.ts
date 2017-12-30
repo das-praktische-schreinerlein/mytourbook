@@ -50,7 +50,6 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     mapResponseDocument(mapper: Mapper, doc: any, mapping: {}, opts: any): Record {
         const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
         const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
-        const imageMapper = mapper['datastore']._mappers['sdocimage'];
         const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
 
@@ -98,45 +97,18 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         // console.log('mapResponseDocument values:', values);
         const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
 
-        const images: SDocImageRecord[] = [];
         const imageField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_fav_url_txt')];
+        let imageDocs = [];
         if (imageField !== undefined) {
-            let id = 1;
-            if (record.type === 'TRACK') {
-                id = Number(record.trackId);
-            } else if (record.type === 'ROUTE') {
-                id = Number(record.routeId);
-            } else if (record.type === 'LOCATION') {
-                id = Number(record.locId);
-            } else if (record.type === 'IMAGE') {
-                id = Number(record.imageId);
-            } else if (record.type === 'TRIP') {
-                id = Number(record.tripId);
-            } else if (record.type === 'NEWS') {
-                id = Number(record.newsId);
-            }
-            id = id * 1000000;
-
-            let imageDocs = [];
             if (Array.isArray(imageField)) {
                 imageDocs = imageField;
             } else {
                 imageDocs.push(imageField);
             }
-
-            for (const imageDoc of imageDocs) {
-                if (imageDoc === undefined || imageDoc === null) {
-                    continue;
-                }
-                const imageValues = {};
-                imageValues['name'] = values['name'];
-                imageValues['id'] = (id++).toString();
-                imageValues['fileName'] = imageDoc;
-                const imageRecord = imageMapper.createRecord(imageValues);
-                images.push(imageRecord);
-            }
+            this.mapImageDocsToAdapterDocument(mapper, record, imageDocs);
+        } else {
+            record.set('sdocimages', []);
         }
-        record.set('sdocimages', images);
         // console.log('mapResponseDocument record full:', record);
 
 
@@ -229,5 +201,53 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
 
         return record;
     }
+
+    mapDetailDataToAdapterDocument(mapper: Mapper, profile: string, record: Record, docs: any[]): void {
+        switch (profile) {
+            case 'image':
+                const imageUrls = [];
+                docs.forEach(doc => {
+                    imageUrls.push(doc['i_fav_url_txt']);
+                });
+                this.mapImageDocsToAdapterDocument(mapper, <SDocRecord>record, imageUrls);
+                break;
+        }
+    }
+
+    private mapImageDocsToAdapterDocument(mapper: Mapper, record: SDocRecord, imageDocs: any[]) {
+        const imageMapper = mapper['datastore']._mappers['sdocimage'];
+        const images: SDocImageRecord[] = [];
+        if (imageDocs !== undefined) {
+            let id = 1;
+            if (record.type === 'TRACK') {
+                id = Number(record.trackId);
+            } else if (record.type === 'ROUTE') {
+                id = Number(record.routeId);
+            } else if (record.type === 'LOCATION') {
+                id = Number(record.locId);
+            } else if (record.type === 'IMAGE') {
+                id = Number(record.imageId);
+            } else if (record.type === 'TRIP') {
+                id = Number(record.tripId);
+            } else if (record.type === 'NEWS') {
+                id = Number(record.newsId);
+            }
+            id = id * 1000000;
+
+            for (const imageDoc of imageDocs) {
+                if (imageDoc === undefined || imageDoc === null) {
+                    continue;
+                }
+                const imageValues = {};
+                imageValues['name'] = record.name;
+                imageValues['id'] = (id++).toString();
+                imageValues['fileName'] = imageDoc;
+                const imageRecord = imageMapper.createRecord(imageValues);
+                images.push(imageRecord);
+            }
+        }
+        record.set('sdocimages', images);
+    }
+
 }
 

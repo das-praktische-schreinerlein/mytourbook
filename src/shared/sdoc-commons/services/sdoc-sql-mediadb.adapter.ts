@@ -20,6 +20,15 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 }
             ],
             groupbBySelectFieldListIgnore: ['k_keywords'],
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                         'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
+                         'WHERE image.k_id in (:id) and p_id in (18)',
+                    parameterNames: ['id']
+                }
+            ],
             selectFieldList: [
                 '"TRACK" AS type',
                 'CONCAT("ac_", kategorie.k_type) AS actiontype',
