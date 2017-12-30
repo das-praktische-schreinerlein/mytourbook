@@ -51,7 +51,7 @@ export class SitemapGeneratorModule {
                     fs.writeFileSync(sitemapConfig.fileDir + fileName, sitemap.toString());
                     searchForm.pageNum++;
                     pDocSiteMaps.push(sitemapConfig.sitemapBaseUrl + fileName);
-                    if (searchForm.pageNum < searchResult.recordCount / searchForm.perPage) {
+                    if (searchForm.pageNum < (searchResult.recordCount / searchForm.perPage + 1)) {
                         createNextSitemap();
                     } else {
                         createSitemapIndex();
