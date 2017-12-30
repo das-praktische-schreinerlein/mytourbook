@@ -155,10 +155,14 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
     extractFacetsFromRequestResult(mapper: Mapper, result: any): Facets {
         const facets: Facets = new Facets();
         const facetsValues =  result.facets.facets;
+        const selectLimits =  result.facets.selectLimits;
         for (const key in facetsValues) {
             if (facetsValues.hasOwnProperty(key)) {
                 const facet = new Facet();
                 facet.facet = facetsValues[key];
+                if (selectLimits.hasOwnProperty(key)) {
+                    facet.selectLimit = selectLimits[key];
+                }
                 facets.facets.set(key, facet);
             }
         }

@@ -341,6 +341,10 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
                 .sort(function (a, b) {
                     return a.name.localeCompare(b.name);
                 });
+        if (this.searchFormUtils.getTypeLimit(sdocSearchSearchResult) > 0) {
+            this.settingsSelectType.autoUnselect = true;
+            this.settingsSelectType.selectionLimit = 1;
+        }
         this.optionsSelectTechRateOverall = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.searchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true),

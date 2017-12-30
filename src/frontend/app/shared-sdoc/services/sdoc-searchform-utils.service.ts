@@ -56,6 +56,14 @@ export class SDocSearchFormUtils {
             this.searchParameterUtils.extractFacetValues(searchResult.facets, 'type_txt', '', ''));
     }
 
+    getTypeLimit(searchResult: SDocSearchResult): number {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return 0;
+        }
+
+        return this.searchParameterUtils.extractFacetSelectLimit(searchResult.facets, 'type_txt');
+    }
+
     getPersonalRateOverallValues(searchResult: SDocSearchResult): any[] {
         if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
             return [];

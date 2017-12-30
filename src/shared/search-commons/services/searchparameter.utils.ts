@@ -6,17 +6,16 @@ export class SearchParameterUtils {
 
     public extractFacetValues(facets: Facets, facetName: string, valuePrefix: string, labelPrefix: string): any[] {
         const values = [];
-
+        if (facetName === undefined || facetName.length <= 0) {
+            return values;
+        }
         const facet = facets.facets.get(facetName);
         if (facet === undefined || facet.facet === undefined) {
             return values;
         }
 
-        for (const idx in facets.facets.get(facetName).facet) {
-            if (facetName === undefined || facetName.length <= 0) {
-                continue;
-            }
-            const facetValue = facets.facets.get(facetName).facet[idx];
+        for (const idx in facet.facet) {
+            const facetValue = facet.facet[idx];
             if (facetValue[0] === undefined || facetValue[0].toString().length <= 0) {
                 continue;
             }
@@ -24,6 +23,18 @@ export class SearchParameterUtils {
         }
 
         return values;
+    }
+
+    public extractFacetSelectLimit(facets: Facets, facetName: string): number {
+        if (facetName === undefined || facetName.length <= 0) {
+            return 0;
+        }
+        const facet = facets.facets.get(facetName);
+        if (facet === undefined || facet.selectLimit === undefined) {
+            return 0;
+        }
+
+        return facet.selectLimit;
     }
 
     public splitValuesByPrefixes(src: string, splitter: string, prefixes: string[]): Map<string, string[]> {
