@@ -1,7 +1,4 @@
 {
-    "solrCoreSDoc": "http://localhost:8983/solr/mytbdev/",
-    "solrCoreSDocReadUsername": "mytbread",
-    "solrCoreSDocReadPassword": "SolrRocks",
     "filePathPDocJson": "config/pdocs.json",
     "filePathThemeFilterJson": "config/themeFilterConfig.json",
     "apiRouteTracks": "/tracks/",
@@ -15,6 +12,28 @@
     "apiRouteStoredPicturesResolutionPrefix": "pics_",
     "proxyTrackRouteToUrl": "http://localhost/michas/",
     "proxyPicturesRouteToUrl": "http://localhost/michas/",
+    "sdocDataStoreAdapter": "SDocSolrAdapter",
+    "SDocSqlMediadbAdapter": {
+        "client": "mysql",
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "mediadb",
+        "port": "3306"
+    },
+    "SDocSqlMytbAdapter": {
+        "client": "mysql",
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "mytb",
+        "port": "3306"
+    },
+    "SDocSolrAdapter": {
+        "solrCoreSDoc": "http://localhost:8983/solr/mytbdev/",
+        "solrCoreSDocReadUsername": "mytbread",
+        "solrCoreSDocReadPassword": "SolrRocks"
+    },
     "cacheConfig": {
         "cacheRedisUrl": "redis://localhost:6379/",
         "cacheRedisPass": "blablub",
