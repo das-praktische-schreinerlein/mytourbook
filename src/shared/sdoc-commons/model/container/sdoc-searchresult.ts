@@ -23,7 +23,8 @@ export class SDocSearchResult extends GenericSearchResult <SDocRecord, SDocSearc
             'searchForm': this.searchForm,
             'currentRecords': [],
             'facets': {
-                facets: {}
+                facets: {},
+                selectLimits: {}
             }
         };
         if (Array.isArray(this.currentRecords)) {
@@ -43,6 +44,7 @@ export class SDocSearchResult extends GenericSearchResult <SDocRecord, SDocSearc
         if (this.facets && this.facets.facets) {
             this.facets.facets.forEach((value: Facet, key: string) => {
                 result.facets.facets[key] = this.facets.facets.get(key).facet;
+                result.facets.selectLimits[key] = this.facets.facets.get(key).selectLimit;
             });
         }
         return result;

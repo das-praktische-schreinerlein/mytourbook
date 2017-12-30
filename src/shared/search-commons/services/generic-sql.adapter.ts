@@ -41,6 +41,7 @@ export interface QueryData {
 export interface TableFacetConfig {
     selectField?: string;
     selectFrom?: string;
+    selectLimit?: number;
     noFacet?: boolean;
     selectSql?: string;
     constValues?: string [];
@@ -232,6 +233,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         }
         opts.query = queryData;
 
+        const tableConfig = this.getTableConfig('facets', mapper, query, opts, query);
+        const facetConfigs = tableConfig.facetConfigs;
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((allResolve, allReject) => {
             const queries = me.getFacetSql('facet', mapper, query, opts, query);
@@ -245,6 +248,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                             let response = new Response(dbdata, dbresult, 'count');
                             response = me.respond(response, opts);
                             const facet: Facet = me.extractFacetFromRequestResult(mapper, response, opts);
+                            if (facetConfigs[key] && facetConfigs[key].selectLimit > 0) {
+                                facet.selectLimit = facetConfigs[key].selectLimit;
+                            }
 
                             return resolve([key, facet]);
                         },

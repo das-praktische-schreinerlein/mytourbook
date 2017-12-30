@@ -122,7 +122,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'type_txt': {
                     constValues: ['track', 'route', 'image', 'location', 'trip', 'news'],
-                    filterField: '"track"'
+                    filterField: '"track"',
+                    selectLimit: 1
                 },
                 'week_is': {
                     selectField: 'WEEK(k_datevon)'
@@ -345,7 +346,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'type_txt': {
                     constValues: ['image', 'track', 'route', 'location', 'trip', 'news'],
-                    filterField: '"image"'
+                    filterField: '"image"',
+                    selectLimit: 1
                 },
                 'week_is': {
                     selectField: 'WEEK(i_date)'
@@ -547,7 +549,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'type_txt': {
                     constValues: ['route', 'track', 'image', 'location', 'trip', 'news'],
-                    filterField: '"route"'
+                    filterField: '"route"',
+                    selectLimit: 1
                 },
                 'week_is': {
                     selectField: 'WEEK(t_datevon)'
@@ -722,7 +725,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'type_txt': {
                     constValues: ['location', 'track', 'route', 'trip', 'image', 'news'],
-                    filterField: '"location"'
+                    filterField: '"location"',
+                    selectLimit: 1
                 },
                 'week_is': {
                     noFacet: true
@@ -840,7 +844,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'type_txt': {
                     constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
-                    filterField: '"trip"'
+                    filterField: '"trip"',
+                    selectLimit: 1
                 },
                 'week_is': {
                     selectField: 'WEEK(tr_datevon)'
@@ -949,7 +954,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'type_txt': {
                     constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
-                    filterField: '"trip"'
+                    filterField: '"trip"',
+                    selectLimit: 1
                 },
                 'week_is': {
                     selectField: 'WEEK(n_date)'

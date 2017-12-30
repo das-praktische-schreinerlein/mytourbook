@@ -1,5 +1,6 @@
 export class Facet {
     public facet: Array<Array<any>> = [];
+    public selectLimit?: number;
 }
 
 export class Facets {
