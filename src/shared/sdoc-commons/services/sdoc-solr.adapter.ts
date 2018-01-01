@@ -4,10 +4,12 @@ import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
+import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
+
     constructor(config: any) {
-        super(config);
+        super(config, new SDocAdapterResponseMapper());
     }
 
     mapToAdapterFieldName(fieldName: string): string {
@@ -60,176 +62,6 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         values['html_txt'] = [values.desc_txt, values.name_s, values.keywords_txt, values.type_s].join(' ');
 
         return values;
-    }
-
-    mapResponseDocument(mapper: Mapper, doc: any): Record {
-        const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
-        const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
-        const imageMapper = mapper['datastore']._mappers['sdocimage'];
-        const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];
-        const rateTechMapper = mapper['datastore']._mappers['sdocratetech'];
-
-        const values = {};
-        values['id'] = this.mapperUtils.getAdapterValue(doc, 'id', undefined);
-
-        values['imageId'] = Number(this.mapperUtils.getAdapterValue(doc, 'image_id_i', undefined));
-        values['locId'] = Number(this.mapperUtils.getAdapterValue(doc, 'loc_id_i', undefined));
-        values['routeId'] = Number(this.mapperUtils.getAdapterValue(doc, 'route_id_i', undefined));
-        values['trackId'] = Number(this.mapperUtils.getAdapterValue(doc, 'track_id_i', undefined));
-        values['tripId'] = Number(this.mapperUtils.getAdapterValue(doc, 'trip_id_i', undefined));
-        values['newsId'] = Number(this.mapperUtils.getAdapterValue(doc, 'news_id_i', undefined));
-
-        const subtypeField = doc['subtypes_ss'];
-        if (subtypeField !== undefined && Array.isArray(subtypeField)) {
-           values['subtypes'] = subtypeField.join(',');
-        }
-        values['dateshow'] = this.mapperUtils.getAdapterValue(doc, 'dateshow_dt', undefined);
-        values['descTxt'] = this.mapperUtils.getAdapterValue(doc, 'desc_txt', undefined);
-        values['descHtml'] = this.mapperUtils.getAdapterValue(doc, 'desc_html_txt', undefined);
-        values['descMd'] = this.mapperUtils.getAdapterValue(doc, 'desc_md_txt', undefined);
-        values['geoDistance'] = this.mapperUtils.getAdapterCoorValue(doc, 'distance', undefined);
-        values['geoLon'] = this.mapperUtils.getAdapterCoorValue(doc, 'geo_lon_s', undefined);
-        values['geoLat'] = this.mapperUtils.getAdapterCoorValue(doc, 'geo_lat_s', undefined);
-        values['geoLoc'] = this.mapperUtils.getAdapterCoorValue(doc, 'geo_loc_p', undefined);
-        values['gpsTrack'] = this.mapperUtils.getAdapterValue(doc, 'gpstrack_s', undefined);
-        values['gpsTrackBasefile'] = this.mapperUtils.getAdapterValue(doc, 'gpstracks_basefile_s', undefined);
-        values['keywords'] = this.mapperUtils.getAdapterValue(doc, 'keywords_txt', '').split(',,').join(', ').replace(/KW_/g, '');
-        values['name'] = this.mapperUtils.getAdapterValue(doc, 'name_s', undefined);
-        values['subtype'] = this.mapperUtils.getAdapterValue(doc, 'subtype_s', undefined);
-        values['type'] = this.mapperUtils.getAdapterValue(doc, 'type_s', undefined);
-        values['locHirarchie'] = this.mapperUtils.getAdapterValue(doc, 'loc_lochirarchie_s', '')
-            .replace(/,,/g, ' -> ')
-            .replace(/,/g, ' ')
-            .replace(/_/g, ' ')
-            .trim();
-        values['locHirarchieIds'] = this.mapperUtils.getAdapterValue(doc, 'loc_lochirarchie_ids_s', '')
-            .replace(/_/g, ' ').trim()
-            .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
-
-        // console.log('mapResponseDocument values:', values);
-
-        const record: SDocRecord = <SDocRecord>mapper.createRecord(values);
-
-        const images: SDocImageRecord[] = [];
-        const imageField = doc['i_fav_url_txt'];
-        if (imageField !== undefined && Array.isArray(imageField)) {
-            let id = 1;
-            if (record.type === 'TRACK') {
-                id = Number(record.trackId);
-            } else if (record.type === 'ROUTE') {
-                id = Number(record.routeId);
-            } else if (record.type === 'LOCATION') {
-                id = Number(record.locId);
-            } else if (record.type === 'IMAGE') {
-                id = Number(record.imageId);
-            } else if (record.type === 'TRIP') {
-                id = Number(record.tripId);
-            } else if (record.type === 'NEWS') {
-                id = Number(record.newsId);
-            }
-            id = id * 1000000;
-
-            for (const imageDoc of imageField) {
-                const imageValues = {};
-                imageValues['name'] = values['name'];
-                imageValues['id'] = (id++).toString();
-                imageValues['fileName'] = imageDoc;
-                const imageRecord = imageMapper.createRecord(imageValues);
-                images.push(imageRecord);
-            }
-        }
-        record.set('sdocimages', images);
-        // console.log('mapResponseDocument record full:', record);
-
-
-        const dataTechValues = {};
-        dataTechValues['altAsc'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_asc_i', undefined);
-        dataTechValues['altDesc'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_desc_i', undefined);
-        dataTechValues['altMin'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_min_i', undefined);
-        dataTechValues['altMax'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_alt_max_i', undefined);
-        dataTechValues['dist'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_dist_f', undefined);
-        dataTechValues['dur'] = this.mapperUtils.getAdapterValue(doc, 'data_tech_dur_f', undefined);
-        let dataTechSet = false;
-        for (const field in dataTechValues) {
-            if (dataTechValues[field] !== undefined && dataTechValues[field] !== 0) {
-                dataTechSet = true;
-                break;
-            }
-        }
-
-        if (dataTechSet) {
-            record.set('sdocdatatech', dataTechMapper.createRecord(dataTechValues));
-        } else {
-            record.set('sdocdatatech', undefined);
-        }
-
-        const rateTechValues = {};
-        rateTechValues['overall'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_overall_s', undefined);
-        rateTechValues['ks'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_ks_s', undefined);
-        rateTechValues['firn'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_firn_s', undefined);
-        rateTechValues['gletscher'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_gletscher_s', undefined);
-        rateTechValues['klettern'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_klettern_s', undefined);
-        rateTechValues['bergtour'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_bergtour_s', undefined);
-        rateTechValues['schneeschuh'] = this.mapperUtils.getAdapterValue(doc, 'rate_tech_schneeschuh_s', undefined);
-        let rateTechSet = false;
-        for (const field in rateTechValues) {
-            if (rateTechValues[field] !== undefined && (rateTechValues[field] + '').length > 0) {
-                rateTechSet = true;
-                break;
-            }
-        }
-
-        if (rateTechSet) {
-            record.set('sdocratetech', rateTechMapper.createRecord(rateTechValues));
-        } else {
-            record.set('sdocratetech', undefined);
-        }
-
-        const ratePersValues = {};
-        ratePersValues['ausdauer'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_ausdauer_i', undefined);
-        ratePersValues['bildung'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_bildung_i', undefined);
-        ratePersValues['gesamt'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_gesamt_i', undefined);
-        ratePersValues['kraft'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_kraft_i', undefined);
-        ratePersValues['mental'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_mental_i', undefined);
-        ratePersValues['motive'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_motive_i', undefined);
-        ratePersValues['schwierigkeit'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_schwierigkeit_i', undefined);
-        ratePersValues['wichtigkeit'] = this.mapperUtils.getAdapterValue(doc, 'rate_pers_wichtigkeit_i', undefined);
-        let ratePersSet = false;
-        for (const field in ratePersValues) {
-            if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 && ratePersValues[field] > 0) {
-                ratePersSet = true;
-                break;
-            }
-        }
-
-        if (ratePersSet) {
-            record.set('sdocratepers', ratePersMapper.createRecord(ratePersValues));
-        } else {
-            record.set('sdocratepers', undefined);
-        }
-
-        const dataInfoValues = {};
-        dataInfoValues['guides'] = this.mapperUtils.getAdapterValue(doc, 'data_info_guides_s', undefined);
-        dataInfoValues['region'] = this.mapperUtils.getAdapterValue(doc, 'data_info_region_s', undefined);
-        dataInfoValues['baseloc'] = this.mapperUtils.getAdapterValue(doc, 'data_info_baseloc_s', undefined);
-        dataInfoValues['destloc'] = this.mapperUtils.getAdapterValue(doc, 'data_info_destloc_s', undefined);
-        let dataInfoSet = false;
-        for (const field in dataInfoValues) {
-            if (dataInfoValues[field] !== undefined && (dataInfoValues[field] + '').length > 0) {
-                dataInfoSet = true;
-                break;
-            }
-        }
-
-        if (dataInfoSet) {
-            record.set('sdocdatainfo', dataInfoMapper.createRecord(dataInfoValues));
-        } else {
-            record.set('sdocdatainfo', undefined);
-        }
-
-        // console.log('mapResponseDocument record full:', record);
-
-        return record;
     }
 
     getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[] {

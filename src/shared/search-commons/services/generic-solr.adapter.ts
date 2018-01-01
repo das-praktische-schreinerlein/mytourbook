@@ -8,14 +8,17 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import {AdapterFilterActions, MapperUtils} from './mapper.utils';
 import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
+import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 
 export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends GenericSearchHttpAdapter<R, F, S>
     implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
     protected mapperUtils = new MapperUtils();
+    protected mapper: GenericAdapterResponseMapper;
 
-    constructor(config: any) {
+    constructor(config: any, mapper: GenericAdapterResponseMapper) {
         super(config);
+        this.mapper = mapper;
     }
 
     count(mapper: Mapper, query: any, opts?: any): Promise<number> {
@@ -384,10 +387,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
 
     mapResponseDocument(mapper: Mapper, doc: any): Record {
-        const values = {};
-        values['id'] = Number(this.mapperUtils.getAdapterValue(doc, 'id', undefined));
-        // console.log('mapResponseDocument values:', values);
-        return mapper.createRecord(values);
+        return this.mapper.mapResponseDocument(mapper, doc, {});
     }
 
     getAdapterPath(method: string, mapper: Mapper, id: string | number, opts: any) {

@@ -6,7 +6,7 @@ import {PDocSearchResult} from '../model/container/pdoc-searchresult';
 
 export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchForm, PDocSearchResult> {
     constructor(config: any) {
-        super(config);
+        super(config, undefined);
     }
 
     mapToAdapterFieldName(fieldName: string): string {
