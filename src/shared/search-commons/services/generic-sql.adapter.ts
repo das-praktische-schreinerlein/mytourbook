@@ -9,74 +9,9 @@ import {Adapter} from 'js-data-adapter';
 import knex from 'knex';
 import {GenericFacetAdapter} from './generic-search.adapter';
 import {isArray} from 'util';
-import {MapperUtils} from './mapper.utils';
+import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
-
-export class AdapterFilterActions {
-    static LIKEI = 'likei';
-    static LIKE = 'like';
-    static EQ1 = '==';
-    static EQ2 = 'eq';
-    static GT = '>';
-    static GE = '>=';
-    static LT = '<';
-    static LE = '<=';
-    static IN = 'in';
-    static LIKEIN = 'likein';
-    static NOTIN = 'notin';
-}
-
-export interface QueryData {
-    where: string[];
-    offset: number;
-    limit: number;
-    sort: string[];
-    table: string;
-    from: string;
-    groupByFields: string[];
-    fields: string[];
-    having: string[];
-}
-
-export interface TableFacetConfig {
-    selectField?: string;
-    selectFrom?: string;
-    selectLimit?: number;
-    noFacet?: boolean;
-    selectSql?: string;
-    constValues?: string [];
-    action: string;
-}
-
-export interface OptionalGroupByConfig {
-    triggerParams?: string[];
-    from?: string;
-    groupByFields?: string[];
-}
-
-export interface LoadDetailDataConfig {
-    profile: string[];
-    sql: string;
-    parameterNames: string[];
-}
-
-export interface TableConfig {
-    tableName: string;
-    selectFrom: string;
-    selectFieldList: string[];
-    facetConfigs: {};
-    filterMapping: {};
-    fieldMapping: {};
-    sortMapping: {};
-    groupbBySelectFieldList?: boolean;
-    groupbBySelectFieldListIgnore?: string[];
-    optionalGroupBy?: OptionalGroupByConfig[];
-    loadDetailData?: LoadDetailDataConfig[];
-    spartialConfig?: {
-        lat: string;
-        lon: string
-    };
-}
+import {QueryData, SqlQueryBuilder, TableConfig} from './sql-query.builder';
 
 export function Response (data, meta, op) {
     meta = meta || {};
@@ -89,8 +24,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     extends Adapter implements GenericFacetAdapter<R, F, S> {
     protected knex: any;
     protected mapperUtils = new MapperUtils();
+    protected sqlQueryBuilder: SqlQueryBuilder = new SqlQueryBuilder();
     protected mapper: GenericAdapterResponseMapper;
-
 
     constructor(config: any, mapper: GenericAdapterResponseMapper) {
         super(config);
@@ -172,7 +107,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         if (queryData === undefined) {
             return utils.resolve([0]);
         }
-        opts.query = queryData;
+        opts.queryData = queryData;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const raw = sqlBuilder.raw(this.queryTransformToSql(queryData));
@@ -182,7 +117,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     dbresult = dbresult || {};
                     let response = new Response(dbdata, dbresult, 'count');
                     response = me.respond(response, opts);
-                    const count = me.extractCountFromRequestResult(mapper, response, opts);
+                    const count = me.extractCountFromRequestResult(response);
                     return resolve(count);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:' + reason);
@@ -204,7 +139,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         if (queryData === undefined) {
             return utils.resolve([[]]);
         }
-        opts.query = queryData;
+        opts.queryData = queryData;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const raw = sqlBuilder.raw(this.queryTransformToSql(queryData));
@@ -215,7 +150,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 let response = new Response(dbdata, dbresult, 'count');
                 response = me.respond(response, opts);
 
-                const records: R[] = me.extractRecordsFromRequestResult(mapper, response, opts);
+                const records: R[] = me.extractRecordsFromRequestResult(mapper, response, queryData);
                 return utils.resolve(records);
             }).then(function doneSearch(records: R[]) {
                 return me.loadDetailData('findAll', mapper, query, opts, records);
@@ -244,11 +179,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         }
         opts.query = queryData;
 
-        const tableConfig = this.getTableConfig('facets', mapper, query, opts, query);
+        const tableConfig = this.getTableConfig(<AdapterQuery>query);
         const facetConfigs = tableConfig.facetConfigs;
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((allResolve, allReject) => {
-            const queries = me.getFacetSql('facet', mapper, query, opts, query);
+            const queries = me.getFacetSql(<AdapterQuery>query, <AdapterOpts>opts);
             const promises = [];
             queries.forEach((value, key) => {
                 const raw = sqlBuilder.raw(value);
@@ -258,7 +193,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                             dbresult = dbresult || {};
                             let response = new Response(dbdata, dbresult, 'count');
                             response = me.respond(response, opts);
-                            const facet: Facet = me.extractFacetFromRequestResult(mapper, response, opts);
+                            const facet: Facet = me.extractFacetFromRequestResult(response);
                             if (facetConfigs[key] && facetConfigs[key].selectLimit > 0) {
                                 facet.selectLimit = facetConfigs[key].selectLimit;
                             }
@@ -338,19 +273,19 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         // count
         if (opts.adapterCount) {
-            return this.extractCountFromRequestResult(mapper, response.data, opts);
+            return this.extractCountFromRequestResult(response.data);
         }
 
         // facet
         if (opts.adapterFacet) {
-            return this.extractFacetFromRequestResult(mapper, response.data, opts);
+            return this.extractFacetFromRequestResult(response.data);
         }
 
-        return this.extractRecordsFromRequestResult(mapper, response.data, opts);
+        return this.extractRecordsFromRequestResult(mapper, response.data, <QueryData>opts.queryData);
 
     }
 
-    extractCountFromRequestResult(mapper: Mapper, result: any, opts: any): [number] {
+    extractCountFromRequestResult(result: any): [number] {
         const docs: any[] = result;
         if (docs.length === 1) {
             for (const fieldName of Object.getOwnPropertyNames(docs[0])) {
@@ -363,7 +298,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return [0];
     }
 
-    extractRecordsFromRequestResult(mapper: Mapper, result: any, opts: any): R[] {
+    extractRecordsFromRequestResult(mapper: Mapper, result: any, queryData: QueryData): R[] {
         if (!isArray(result)) {
             return [];
         }
@@ -372,13 +307,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const docs = result;
         const records = [];
         for (const doc of docs) {
-            records.push(this.mapResponseDocument(mapper, doc, opts.query.table, opts));
+            records.push(this.mapResponseDocument(mapper, doc, queryData.tableConfig));
         }
 
         return records;
     }
 
-    extractFacetFromRequestResult(mapper: Mapper, result: any, opts: any): Facet {
+    extractFacetFromRequestResult(result: any): Facet {
         if (!isArray(result)) {
             return undefined;
         }
@@ -395,16 +330,16 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
 
-    mapResponseDocument(mapper: Mapper, doc: any, table: string, opts: any): Record {
-        return this.mapper.mapResponseDocument(mapper, doc, this.getMappingForTable(table), opts);
+    mapResponseDocument(mapper: Mapper, doc: any, tableConfig: TableConfig): Record {
+        return this.mapper.mapResponseDocument(mapper, doc, tableConfig.fieldMapping);
     }
 
-    mapToAdapterDocument(table: string, props: any): any {
-        return this.mapper.mapToAdapterDocument(this.getMappingForTable(table), props);
+    mapToAdapterDocument(tableConfig: TableConfig, props: any): any {
+        return this.mapper.mapToAdapterDocument(tableConfig.fieldMapping, props);
     }
 
     loadDetailData(method: string, mapper: Mapper, params: any, opts: any, records: R[]): Promise<R[]> {
-        const tableConfig = this.getTableConfig('facets', mapper, params, opts, params);
+        const tableConfig = this.getTableConfig(<AdapterQuery>params);
         const loadDetailDataConfigs = tableConfig.loadDetailData;
         if (loadDetailDataConfigs === undefined || loadDetailDataConfigs.length <= 0 || records.length <= 0) {
             return utils.resolve(records);
@@ -453,361 +388,22 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     }
 
-    protected abstract extractTable(method: string, mapper: Mapper, params: any, opts: any): string;
+    protected abstract extractTable(params: AdapterQuery): string;
 
-    protected abstract getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): TableConfig;
+    protected abstract getTableConfig(params: AdapterQuery): TableConfig;
 
-    protected abstract getTableConfigForTable(table: string): TableConfig;
-
-    protected getAdapterFrom(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string {
-        return this.getTableConfigForTable(query.table).selectFrom || '';
-    }
-
-    protected getMappingForTable(table: string): {} {
-        return this.getTableConfigForTable(table).fieldMapping || {};
-    }
-
-    protected getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string[] {
-        if (method === 'count') {
-            return undefined;
-        }
-
-        const form = opts.originalSearchForm || {};
-
-        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
-        const sortMapping = tableConfig.sortMapping;
-
-        if (sortMapping.hasOwnProperty(form.sort)) {
-            return [sortMapping[form.sort]];
-        }
-
-        return [sortMapping['default']];
+    protected getFacetSql(adapterQuery: AdapterQuery, adapterOpts: AdapterOpts): Map<string, string> {
+        const tableConfig = this.getTableConfig(adapterQuery);
+        return this.sqlQueryBuilder.getFacetSql(tableConfig, adapterOpts);
     };
-
-    protected getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: QueryData, spatialField: string): string {
-        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
-        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
-            params.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
-            const [lat, lon, distance] = this.mapperUtils.escapeAdapterValue(params.spatial.geo_loc_p.nearby).split(/_/);
-            return spatialField + ' <= ' + distance;
-        }
-
-        return undefined;
-    };
-
-    protected getSpatialSql(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string {
-        const tableConfig = this.getTableConfigForTable(query.table);
-        if (params !== undefined && params.spatial !== undefined && params.spatial.geo_loc_p !== undefined &&
-            params.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
-            const [lat, lon, distance] = this.mapperUtils.escapeAdapterValue(params.spatial.geo_loc_p.nearby).split(/_/);
-            const distanceSql =
-                '(3959 ' +
-                ' * ACOS (' +
-                '     COS ( RADIANS(' + lat + ') )' +
-                '     * COS( RADIANS(' + tableConfig.spartialConfig.lat + ') )' +
-                '     * COS( RADIANS(' + tableConfig.spartialConfig.lon + ') - RADIANS(' + lon + ') )' +
-                '     + SIN ( RADIANS(' + lat + ') )' +
-                '     * SIN( RADIANS(' + tableConfig.spartialConfig.lat + ') )' +
-                ' )' +
-                ')';
-            return distanceSql;
-        }
-
-        return undefined;
-    }
-
-    protected getFacetSql(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): Map<string, string> {
-        const tableConfig = this.getTableConfig(method, mapper, params, opts, query);
-        const facetConfigs = tableConfig.facetConfigs;
-
-        const facets = new Map<string, string>();
-        for (const key in facetConfigs) {
-            if (opts.showFacets === true || (opts.showFacets instanceof Array && opts.showFacets.indexOf(key) >= 0)) {
-                const facetConfig: TableFacetConfig = facetConfigs[key];
-                if (!facetConfig) {
-                    continue;
-                }
-
-
-                if (facetConfig.selectField !== undefined) {
-                    const from = facetConfig.selectFrom !== undefined ? facetConfig.selectFrom : tableConfig.tableName;
-                    facets.set(key, 'SELECT count(*) AS count, ' + facetConfig.selectField + ' AS value '
-                        + 'FROM ' + from + ' GROUP BY value ORDER By count desc');
-                } else if (facetConfig.selectSql !== undefined) {
-                    facets.set(key, facetConfig.selectSql);
-                } else if (facetConfig.constValues !== undefined) {
-                    const sqls = [];
-                    facetConfig.constValues.forEach(value => {
-                        sqls.push('SELECT 0 AS count, "' + value + '" AS value');
-                    });
-
-                    facets.set(key, sqls.join(' UNION ALL '));
-                }
-            }
-        }
-
-        return facets;
-    };
-
-    protected getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string[] {
-        const tableConfig = this.getTableConfigForTable(query.table);
-        if (method === 'count') {
-            return ['COUNT( DISTINCT ' + tableConfig.filterMapping['id'] + ')'];
-        }
-
-        const fields = [];
-        for (const field of tableConfig.selectFieldList) {
-            fields.push(field);
-        }
-
-        const distanceSql = this.getSpatialSql(method, mapper, params, opts, query);
-        if (distanceSql !== undefined) {
-            fields.push(distanceSql + ' AS geodist');
-        }
-
-        return fields;
-    }
-
-    protected generateGroupByForQuery(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): void {
-        const tableConfig = this.getTableConfigForTable(query.table);
-        let addFields = [];
-
-        if (tableConfig.optionalGroupBy !== undefined) {
-            for (const groupByConfig of tableConfig.optionalGroupBy) {
-                for (const fieldName of groupByConfig.triggerParams) {
-                    if (params.where.hasOwnProperty(fieldName)) {
-                        query.from += ' ' + groupByConfig.from;
-                        addFields = addFields.concat(groupByConfig.groupByFields);
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (method === 'count') {
-            return;
-        }
-
-        if (tableConfig.groupbBySelectFieldList !== true && addFields.length <= 0) {
-            return;
-        }
-
-        const fields = query.fields;
-        const groupFields = [];
-        fields.forEach(field => {
-            const newField = field.replace(/.*? AS /gi, '');
-            if (tableConfig.groupbBySelectFieldListIgnore !== undefined &&
-                tableConfig.groupbBySelectFieldListIgnore.indexOf(newField) >= 0) {
-                return;
-            }
-
-            groupFields.push(newField);
-        });
-
-        if (groupFields !== undefined && groupFields.length > 0) {
-            query.groupByFields = query.groupByFields.concat(groupFields);
-        }
-        query.fields = query.fields.concat(addFields);
-    }
-
-    protected mapToAdapterFieldName(table, fieldName: string): string {
-        switch (fieldName) {
-            default:
-                break;
-        }
-
-        return fieldName;
-    }
-
-    protected queryTransform(mapper, params, opts) {
-        opts = opts || {};
-        if (utils.isFunction(opts.queryTransform)) {
-            return opts.queryTransform(mapper, params, opts);
-        }
-        if (utils.isFunction(mapper.queryTransform)) {
-            return mapper.queryTransform(mapper, params, opts);
-        }
-        return params;
-    }
 
     protected queryTransformToSql(query: QueryData): string {
-        const sql = 'select ' +
-            (query.fields && query.fields.length > 0 ? query.fields.join(', ') : '') + ' ' +
-            'from ' + query.from + ' ' +
-            (query.where && query.where.length > 0 ? 'where ' + query.where.join(' AND ') : '') + ' ' +
-            (query.groupByFields && query.groupByFields.length > 0 ? ' group by ' + query.groupByFields.join(', ') : '') + ' ' +
-            (query.having && query.having.length > 0 ? 'having ' + query.having.join(' AND ') : '') + ' ' +
-            (query.sort && query.sort.length > 0 ? 'order by ' + query.sort.join(', ') + ' ' : '') +
-            (query.limit ? 'limit ' + (query.offset || 0) + ', ' + query.limit : '');
-        // console.error("sql:", sql);
-        return sql;
+        return this.sqlQueryBuilder.queryTransformToSql(query);
     }
 
     protected queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
-        const query = this.createAdapterQuery(method, mapper, params, opts);
-        if (query === undefined) {
-            return undefined;
-        }
-
-        const fields = this.getAdapterFields(method, mapper, params, opts, query);
-        if (fields !== undefined && fields.length > 0) {
-            query.fields = fields;
-        }
-
-        let spatialField = 'geodist';
-        if (method === 'count') {
-            spatialField = this.getSpatialSql(method, mapper, params, opts, query);
-        }
-        const spatialParams = this.getSpatialParams(method, mapper, params, opts, query, spatialField);
-        if (spatialParams !== undefined && spatialParams.length > 0) {
-            if (method === 'count') {
-                query.where.push(spatialParams);
-            } else {
-                query.having.push(spatialParams);
-            }
-        }
-
-        const sortParams = this.getSortParams(method, mapper, params, opts, query);
-        if (sortParams !== undefined) {
-            query.sort = sortParams;
-        }
-
-        query.from = this.getAdapterFrom(method, mapper, params, opts, query);
-
-        this.generateGroupByForQuery(method, mapper, params, opts, query);
-
-        return query;
-    }
-
-    protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
-        // console.log('createAdapterQuery params:', params);
-        // console.log('createAdapterQuery opts:', opts);
-
-        const table = this.extractTable(method, mapper, params, opts);
-        if (table === undefined || table === '') {
-            return undefined;
-        }
-
-        const newParams = [];
-        if (params.where) {
-            for (const fieldName of Object.getOwnPropertyNames(params.where)) {
-                const filter = params.where[fieldName];
-                const action = Object.getOwnPropertyNames(filter)[0];
-                const value = params.where[fieldName][action];
-                const res = this.mapFilterToAdapterQuery(mapper, fieldName, action, value, table);
-                if (res !== undefined) {
-                    newParams.push(res);
-                }
-            }
-        }
-        if (params.additionalWhere) {
-            for (const fieldName of Object.getOwnPropertyNames(params.additionalWhere)) {
-                const filter = params.additionalWhere[fieldName];
-                const action = Object.getOwnPropertyNames(filter)[0];
-                const value = params.additionalWhere[fieldName][action];
-                const res = this.mapFilterToAdapterQuery(mapper, fieldName, action, value, table);
-                if (res !== undefined) {
-                    newParams.push(res);
-                }
-            }
-        }
-
-        if (newParams.length <= 0) {
-            const query: QueryData = {
-                where: [],
-                having: [],
-                offset: undefined,
-                limit: undefined,
-                sort: [],
-                table: table,
-                from: 'dual',
-                groupByFields: [],
-                fields: []};
-            if (method === 'findAll') {
-                query.offset = opts.offset * opts.limit;
-                query.limit = opts.limit;
-            }
-            return query;
-        }
-
-        const query: QueryData = {
-            where: newParams,
-            having: [],
-            offset: undefined,
-            limit: undefined,
-            from: 'dual',
-            table: table,
-            sort: [],
-            groupByFields: [],
-            fields: []};
-        if (method === 'findAll') {
-            query.offset = opts.offset * opts.limit;
-            query.limit = opts.limit;
-        }
-        console.log('createAdapterQuery result:', query);
-        return query;
-    }
-
-    protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
-        const tableConfig = this.getTableConfigForTable(table);
-        let realFieldName = undefined;
-        if (tableConfig.facetConfigs.hasOwnProperty(fieldName)) {
-            if (tableConfig.facetConfigs[fieldName].noFacet === true) {
-                return undefined;
-            }
-
-            realFieldName = tableConfig.facetConfigs[fieldName].selectField || tableConfig.facetConfigs[fieldName].filterField;
-            action = tableConfig.facetConfigs[fieldName].action || action;
-        }
-        if (realFieldName === undefined && tableConfig.filterMapping.hasOwnProperty(fieldName)) {
-            realFieldName = tableConfig.filterMapping[fieldName];
-        }
-        if (realFieldName === undefined) {
-            realFieldName = this.mapToAdapterFieldName(table, fieldName);
-        }
-
-
-        return this.generateFilter(mapper, realFieldName, action, value, table);
-    }
-
-    protected generateFilter(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
-        let query = '';
-
-        if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
-            query = fieldName + ' like "%'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%", "%') + '%" ';
-        } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
-            query = fieldName + ' = "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '", "') + '" ';
-        } else if (action === AdapterFilterActions.GT) {
-            query = fieldName + ' > "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
-        } else if (action === AdapterFilterActions.GE) {
-            query = fieldName + ' >= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
-        } else if (action === AdapterFilterActions.LT) {
-            query = fieldName + ' < "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
-        } else if (action === AdapterFilterActions.LE) {
-            query = fieldName + ' <= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
-        } else if (action === AdapterFilterActions.IN) {
-            query = fieldName + ' in ("' + value.map(
-                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
-                ).join('", "') + '")';
-        } else if (action === AdapterFilterActions.NOTIN) {
-            query = fieldName + ' not in ("' + value.map(
-                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
-                ).join('", "') + '")';
-        } else if (action === AdapterFilterActions.LIKEIN) {
-            query = '(' + value.map(
-                inValue => {
-                    return fieldName + ' like "%'
-                        + this.mapperUtils.escapeAdapterValue(inValue.toString()) + '%" ';
-                }
-            ).join(' or ') + ')';
-        }
-        return query;
+        const tableConfig = this.getTableConfig(<AdapterQuery>params);
+        return this.sqlQueryBuilder.queryTransformToAdapterQuery(tableConfig, method, <AdapterQuery>params, <AdapterOpts>opts);
     }
 }
 

@@ -47,7 +47,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         return values;
     }
 
-    mapResponseDocument(mapper: Mapper, doc: any, mapping: {}, opts: any): Record {
+    mapResponseDocument(mapper: Mapper, doc: any, mapping: {}): Record {
         const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
         const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
         const ratePersMapper = mapper['datastore']._mappers['sdocratepers'];

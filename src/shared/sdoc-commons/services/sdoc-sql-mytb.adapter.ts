@@ -1,9 +1,10 @@
-import {Mapper} from 'js-data';
 import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {AdapterFilterActions, GenericSqlAdapter, QueryData, TableConfig} from '../../search-commons/services/generic-sql.adapter';
+import {GenericSqlAdapter} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
+import {TableConfig} from '../../search-commons/services/sql-query.builder';
+import {AdapterFilterActions, AdapterQuery} from '../../search-commons/services/mapper.utils';
 
 export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public static tableConfigs = {
@@ -494,7 +495,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectField: 'CONCAT("ac_", tour.t_typ)'
                 },
                 'data_tech_alt_asc_facet_is': {
-                    selectField: 'ROUND((t_route_m / 500))*500'
+                    selectField: 'ROUND((t_route_hm / 500))*500'
                 },
                 'data_tech_alt_max_facet_is': {
                     selectField: 'ROUND((t_ele_max / 500))*500'
@@ -954,7 +955,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'type_txt': {
                     constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
-                    filterField: '"trip"',
+                    filterField: '"news"',
                     selectLimit: 1
                 },
                 'week_is': {
@@ -997,15 +998,15 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
         super(config, new SDocAdapterResponseMapper());
     }
 
-    protected getTableConfig(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): TableConfig {
-        return SDocSqlMytbAdapter.tableConfigs[this.extractTable(method, mapper, params, opts)];
+    protected getTableConfig(params: AdapterQuery): TableConfig {
+        return SDocSqlMytbAdapter.tableConfigs[this.extractTable(params)];
     }
 
     protected getTableConfigForTable(table: string): TableConfig {
         return SDocSqlMytbAdapter.tableConfigs[table];
     }
 
-    protected extractTable(method: string, mapper: Mapper, params: any, opts: any): string {
+    protected extractTable(params: AdapterQuery): string {
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
             const tabName = types.in[0];
@@ -1026,47 +1027,6 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
         }
 
         return undefined;
-    }
-
-    protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any, table: string): string {
-        if (fieldName === 'type_txt') {
-            return undefined;
-        }
-
-        if (fieldName === 'id') {
-            return super.mapFilterToAdapterQuery(mapper, 'id', action,
-                [this.mapperUtils.prepareSingleValue(value, '_').replace(/.*_/, '')], table);
-        }
-
-        return super.mapFilterToAdapterQuery(mapper, fieldName, action, value, table);
-    }
-
-    protected mapToAdapterFieldName(table, fieldName: string): string {
-        switch (fieldName) {
-            case 'name':
-                return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'name_s');
-            case 'descTxt':
-                return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), 'desc_txt');
-            case 'type_txt':
-                return undefined;
-            default:
-                break;
-        }
-
-        return this.mapperUtils.mapToAdapterFieldName(this.getMappingForTable(table), fieldName);
-    }
-
-    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any, query: QueryData): string[] {
-        const fields = super.getAdapterFields(method, mapper, params, opts, query);
-        if (method === 'count') {
-            return fields;
-        }
-
-        if (opts.loadTrack === true) {
-//            fields.push(this.mapper.mapToAdapterFieldName('gpstrack_s'));
-        }
-
-        return fields;
     }
 }
 

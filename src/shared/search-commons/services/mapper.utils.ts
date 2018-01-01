@@ -1,3 +1,35 @@
+import {GenericSearchForm} from '../model/forms/generic-searchform';
+
+export interface AdapterQuery {
+    where?: {};
+    additionalWhere?: {};
+    spatial?: {
+        geo_loc_p: {
+            nearby: string;
+        };
+    };
+}
+export interface AdapterOpts {
+    limit?: number;
+    offset?: number;
+    originalSearchForm?: GenericSearchForm;
+    showFacets?: any;
+}
+
+export class AdapterFilterActions {
+    static LIKEI = 'likei';
+    static LIKE = 'like';
+    static EQ1 = '==';
+    static EQ2 = 'eq';
+    static GT = '>';
+    static GE = '>=';
+    static LT = '<';
+    static LE = '<=';
+    static IN = 'in';
+    static LIKEIN = 'likein';
+    static NOTIN = 'notin';
+}
+
 export class MapperUtils {
     public mapToAdapterFieldName(mapping: {}, fieldName: string): string {
         if (mapping.hasOwnProperty(fieldName)) {

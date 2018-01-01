@@ -5,8 +5,8 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import {GenericInMemoryAdapter} from './generic-inmemory.adapter';
 import {Facet, Facets} from '../model/container/facets';
-import {AdapterFilterActions} from './generic-solr.adapter';
 import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
+import {AdapterFilterActions} from './mapper.utils';
 
 export interface ItemJsResultPagionation {
     per_page: number;

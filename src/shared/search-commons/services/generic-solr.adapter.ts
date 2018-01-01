@@ -6,21 +6,8 @@ import {GenericSearchForm} from '../model/forms/generic-searchform';
 import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {MapperUtils} from './mapper.utils';
+import {AdapterFilterActions, MapperUtils} from './mapper.utils';
 import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
-
-export class AdapterFilterActions {
-    static LIKEI = 'likei';
-    static LIKE = 'like';
-    static EQ1 = '==';
-    static EQ2 = 'eq';
-    static GT = '>';
-    static GE = '>=';
-    static LT = '<';
-    static LE = '<=';
-    static IN = 'in';
-    static NOTIN = 'notin';
-}
 
 export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends GenericSearchHttpAdapter<R, F, S>
