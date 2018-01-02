@@ -99,6 +99,7 @@
     "listSorts_distance": "distance to search",
     "listSorts_location": "location",
     "listSorts_date": "date",
+    "listSorts_dateAsc": "date asc",
     "listSorts_ratePers": "personal rating",
     "listSorts_dataTechDurDesc": "duration desc",
     "listSorts_dataTechAltDesc": "ascend desc",

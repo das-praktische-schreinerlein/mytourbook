@@ -384,6 +384,13 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             facets.facets.set(field, facet);
         }
 
+        const sortFacet = new Facet();
+        sortFacet.facet = [];
+        for (const sortKey in this.getSolrConfig().sortMapping) {
+            sortFacet.facet.push([sortKey, 0]);
+        }
+        facets.facets.set('sorts', sortFacet);
+
         return facets;
     }
 

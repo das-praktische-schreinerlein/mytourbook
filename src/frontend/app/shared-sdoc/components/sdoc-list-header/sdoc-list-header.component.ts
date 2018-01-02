@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
+import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 
 @Component({
     selector: 'app-sdoc-list-header',
@@ -9,7 +10,7 @@ import {FormBuilder} from '@angular/forms';
     styleUrls: ['./sdoc-list-header.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListHeaderComponent implements OnInit {
+export class SDocListHeaderComponent implements OnInit, OnChanges {
 
     public Layout = Layout;
 
@@ -63,6 +64,17 @@ export class SDocListHeaderComponent implements OnInit {
             perPage: this.perPage,
             layout: this.layout
         });
+    }
+
+    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+        if (ComponentUtils.hasNgChanged(changes)) {
+            const facets = this.searchResult.facets;
+            if (facets !== undefined && facets.facets.get('sorts') !== undefined) {
+                this.availableSorts = facets.facets.get('sorts').facet.map(facet => {
+                    return facet[0];
+                });
+            }
+        }
     }
 
     onPageChange(page: number) {

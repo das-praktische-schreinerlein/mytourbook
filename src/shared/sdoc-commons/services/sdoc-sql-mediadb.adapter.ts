@@ -155,8 +155,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'dataTechDistAsc': 'k_distance ASC',
                 'ratePers': 'k_rate_gesamt DESC',
                 'location': 'l_name ASC',
-                'relevance': 'k_datevon DESC',
-                'default': 'k_datevon DESC'
+                'relevance': 'k_datevon DESC'
             },
             filterMapping: {
                 id: 'kategorie.k_id',
@@ -363,8 +362,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'dataTechDistAsc': 'k_distance ASC',
                 'ratePers': 'i_rate DESC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 'i_date DESC',
-                'default': 'i_date DESC'
+                'relevance': 'i_date DESC'
             },
             spartialConfig: {
                 lat: 'i_gps_lat',
@@ -569,8 +567,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'dataTechDistAsc': 't_route_m ASC',
                 'ratePers': 't_rate_gesamt DESC',
                 'location': 'l_lochirarchietxt ASC',
-                'relevance': 't_datevon DESC',
-                'default': 't_datevon DESC'
+                'relevance': 't_datevon DESC'
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
@@ -736,8 +733,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sortMapping: {
                 'distance': 'geodist ASC',
                 'location': 'l_name ASC',
-                'relevance': 'l_name ASC',
-                'default': 'l_id DESC'
+                'relevance': 'l_name ASC'
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
@@ -839,8 +835,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sortMapping: {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
-                'relevance': 'tr_datevon ASC',
-                'default': 'tr_datevon DESC'
+                'relevance': 'tr_datevon ASC'
             },
             filterMapping: {
                 id: 'trip.tr_id',
@@ -938,8 +933,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sortMapping: {
                 'date': 'n_date DESC',
                 'dateAsc': 'n_date ASC',
-                'relevance': 'n_date ASC',
-                'default': 'n_date DESC'
+                'relevance': 'n_date ASC'
             },
             filterMapping: {
                 id: 'news.n_id',

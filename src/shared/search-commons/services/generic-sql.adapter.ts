@@ -214,6 +214,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                         facets.facets.set(facet[0], facet[1]);
                     });
 
+                    const sortFacet = new Facet();
+                    sortFacet.facet = [];
+                    for (const sortKey in tableConfig.sortMapping) {
+                        sortFacet.facet.push([sortKey, 0]);
+                    }
+                    facets.facets.set('sorts', sortFacet);
+
                     return allResolve(facets);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:' + reason);
