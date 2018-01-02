@@ -6,14 +6,16 @@ import {GenericSearchForm} from '../model/forms/generic-searchform';
 import {GenericSearchHttpAdapter, Response} from './generic-search-http.adapter';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {AdapterFilterActions, MapperUtils} from './mapper.utils';
+import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
+import {SolrConfig, SolrQueryBuilder} from './solr-query.builder';
 
 export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends GenericSearchHttpAdapter<R, F, S>
     implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
     protected mapperUtils = new MapperUtils();
+    protected solrQueryBuilder: SolrQueryBuilder = new SolrQueryBuilder();
     protected mapper: GenericAdapterResponseMapper;
 
     constructor(config: any, mapper: GenericAdapterResponseMapper) {
@@ -400,153 +402,21 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return path;
     }
 
-    mapToAdapterFieldName(fieldName: string): string {
-        switch (fieldName) {
-            default:
-                break;
-        }
-
-        return fieldName;
+    buildUrl(url, params) {
+        return this.solrQueryBuilder.buildUrl(url, params);
     }
 
     abstract mapToAdapterDocument(props: any): any;
 
-    abstract getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[];
-
-    abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    buildUrl(url, params) {
-        if (!params) {
-            return url;
-        }
-
-        const parts = [];
-
-        utils.forOwn(params, function (val, key) {
-            if (val === null || typeof val === 'undefined') {
-                return;
-            }
-            if (!utils.isArray(val)) {
-                val = [val];
-            }
-
-            val.forEach(function (v) {
-                if (typeof window !== 'undefined' && window.toString.call(v) === '[object Date]') {
-                    v = v.toISOString().trim();
-                } else if (utils.isObject(v)) {
-                    v = utils.toJson(v).trim();
-                }
-                parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(v));
-            });
-        });
-
-        if (parts.length > 0) {
-            url += (url.indexOf('?') === -1 ? '?' : '&') + parts.join('&');
-        }
-
-        return url;
-    }
+    abstract getSolrConfig(): SolrConfig;
 
     protected queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
         return this.queryTransformToAdapterQueryWithMethod(undefined, mapper, params, opts);
     }
 
     protected queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): any {
-        const query = this.createAdapterQuery(method, mapper, params, opts);
-
-        const fields = this.getAdapterFields(method, mapper, params, opts);
-        if (fields !== undefined && fields.length > 0) {
-            query.fl = fields.join(' ');
-        }
-
-        const facetParams = this.getFacetParams(method, mapper, params, opts, query);
-        if (facetParams !== undefined && facetParams.size > 0) {
-            facetParams.forEach(function (value, key) {
-                query[key] = value;
-            });
-        }
-
-        const spatialParams = this.getSpatialParams(method, mapper, params, opts, query);
-        if (spatialParams !== undefined && spatialParams.size > 0) {
-            spatialParams.forEach(function (value, key) {
-                query[key] = value;
-            });
-        }
-
-        const sortParams = this.getSortParams(method, mapper, params, opts, query);
-        if (sortParams !== undefined && sortParams.size > 0) {
-            sortParams.forEach(function (value, key) {
-                query[key] = value;
-            });
-        }
-
-        console.log('solQuery:', query);
-
-        return query;
+        return this.solrQueryBuilder.queryTransformToAdapterQuery(this.getSolrConfig(), method, <AdapterQuery>params, <AdapterOpts>opts);
     }
 
-    protected createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
-        // console.log('createAdapterQuery params:', params);
-        // console.log('createAdapterQuery opts:', opts);
-
-        const newParams = [];
-        if (params.where) {
-            for (const fieldName of Object.getOwnPropertyNames(params.where)) {
-                const filter = params.where[fieldName];
-                const action = Object.getOwnPropertyNames(filter)[0];
-                const value = params.where[fieldName][action];
-                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
-            }
-        }
-        if (params.additionalWhere) {
-            for (const fieldName of Object.getOwnPropertyNames(params.additionalWhere)) {
-                const filter = params.additionalWhere[fieldName];
-                const action = Object.getOwnPropertyNames(filter)[0];
-                const value = params.additionalWhere[fieldName][action];
-                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
-            }
-        }
-
-        if (newParams.length <= 0) {
-            const query = {'q': '*:*', 'start': opts.offset * opts.limit, 'rows': opts.limit};
-            // console.log('createAdapterQuery result:', query);
-            return query;
-        }
-
-        const query = {'q': '(' + newParams.join(' AND ') + ')', 'start': opts.offset * opts.limit, 'rows': opts.limit};
-        console.log('createAdapterQuery result:', query);
-        return query;
-    }
-
-    protected mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
-        let query = '';
-
-        if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
-        } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '")';
-        } else if (action === AdapterFilterActions.GT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{"' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
-        } else if (action === AdapterFilterActions.GE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':["' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
-        } else if (action === AdapterFilterActions.LT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{ * TO "' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"}';
-        } else if (action === AdapterFilterActions.LE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':[ * TO "' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"]';
-        } else if (action === AdapterFilterActions.IN) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + value.map(
-                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
-                ).join('" OR "') + '")';
-        } else if (action === AdapterFilterActions.NOTIN) {
-            query = this.mapToAdapterFieldName(fieldName) + ':(-"' + value.map(
-                    inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
-                ).join('" AND -"') + '")';
-        }
-        return query;
-    }
 }
 

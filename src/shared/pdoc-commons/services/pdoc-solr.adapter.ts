@@ -3,23 +3,36 @@ import {Mapper, Record} from 'js-data';
 import {PDocRecord} from '../model/records/pdoc-record';
 import {PDocSearchForm} from '../model/forms/pdoc-searchform';
 import {PDocSearchResult} from '../model/container/pdoc-searchresult';
+import {SolrConfig} from '../../search-commons/services/solr-query.builder';
 
 export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchForm, PDocSearchResult> {
+    public static solrConfig: SolrConfig = {
+        spatialField: 'geo_loc_p',
+        fieldList: ['id', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'keywords_txt', 'name_txt', 'type_txt'],
+        facetConfigs: {
+            'keywords_txt': {
+                'f.keywords_txt.facet.prefix': 'kw_',
+                'f.keywords_txt.facet.limit': '-1',
+                'f.keywords_txt.facet.sort': 'count'
+            },
+            'type_txt': {}
+        },
+        commonSortOptions: {
+            'qf': 'name_txt^10.0 desc_txt^8.0 keywords_txt^6.0',
+            'defType': 'edismax'
+        },
+        sortMapping: {
+            'relevance': {
+            }
+        },
+        filterMapping: {
+            'html': 'html_txt'
+        },
+        fieldMapping: {}
+    };
+
     constructor(config: any) {
         super(config, undefined);
-    }
-
-    mapToAdapterFieldName(fieldName: string): string {
-        switch (fieldName) {
-            case 'name':
-                return 'name_txt';
-            case 'descTxt':
-                return 'desc_txt';
-            default:
-                break;
-        }
-
-        return super.mapToAdapterFieldName(fieldName);
     }
 
     mapToAdapterDocument(props: any): any {
@@ -59,48 +72,16 @@ export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchFo
         return record;
     }
 
-    getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[] {
-        return ['id', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'keywords_txt', 'name_txt', 'type_txt'];
-    };
-
-    getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
-        const facetParams = new Map<string, any>();
-        facetParams.set('facet', 'on');
-
-        facetParams.set('facet.field', ['keywords_txt', 'type_txt']);
-
-        facetParams.set('f.keywords_txt.facet.prefix', 'kw_');
-        facetParams.set('f.keywords_txt.facet.limit', '-1');
-        facetParams.set('f.keywords_txt.facet.sort', 'count');
-
-        return facetParams;
-    };
-
-    getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
-        const spatialParams = new Map<string, any>();
-        return spatialParams;
-    };
-
-
-    getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any> {
-        const sortParams = new Map<string, any>();
-
-        const form = opts.originalSearchForm || {};
-        switch (form.sort) {
-            default:
-                sortParams.set('qf', 'name_txt^10.0 desc_txt^8.0 keywords_txt^6.0');
-                sortParams.set('defType', 'edismax');
-        }
-
-        return sortParams;
-    };
-
     getHttpEndpoint(method: string): string {
         const updateMethods = ['create', 'destroy', 'update'];
         if (updateMethods.indexOf(method.toLowerCase()) >= 0) {
             return 'update?';
         }
         return 'select?';
+    }
+
+    getSolrConfig(): SolrConfig {
+        return PDocSolrAdapter.solrConfig;
     }
 }
 

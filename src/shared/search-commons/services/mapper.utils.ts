@@ -8,6 +8,7 @@ export interface AdapterQuery {
             nearby: string;
         };
     };
+    loadTrack: any;
 }
 export interface AdapterOpts {
     limit?: number;
