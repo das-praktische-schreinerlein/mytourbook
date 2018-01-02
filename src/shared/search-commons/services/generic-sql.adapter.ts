@@ -175,7 +175,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const me = this;
         const queryData = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
         if (queryData === undefined) {
-            return utils.resolve([[]]);
+            return utils.resolve(this.getDefaultFacets());
         }
         opts.query = queryData;
 
@@ -404,8 +404,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected abstract getTableConfig(params: AdapterQuery): TableConfig;
 
+    protected abstract getDefaultFacets(): Facets;
+
     protected getFacetSql(adapterQuery: AdapterQuery, adapterOpts: AdapterOpts): Map<string, string> {
         const tableConfig = this.getTableConfig(adapterQuery);
+        if (tableConfig === undefined) {
+            return undefined;
+        }
+
         return this.sqlQueryBuilder.getFacetSql(tableConfig, adapterOpts);
     };
 
@@ -415,6 +421,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
         const tableConfig = this.getTableConfig(<AdapterQuery>params);
+        if (tableConfig === undefined) {
+            return undefined;
+        }
+
         return this.sqlQueryBuilder.queryTransformToAdapterQuery(tableConfig, method, <AdapterQuery>params, <AdapterOpts>opts);
     }
 }

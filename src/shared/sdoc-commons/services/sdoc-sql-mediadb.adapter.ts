@@ -5,6 +5,7 @@ import {GenericSqlAdapter} from '../../search-commons/services/generic-sql.adapt
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 import {TableConfig} from '../../search-commons/services/sql-query.builder';
 import {AdapterFilterActions, AdapterQuery} from '../../search-commons/services/mapper.utils';
+import {Facet, Facets} from '../../search-commons/model/container/facets';
 
 export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public static tableConfigs = {
@@ -982,7 +983,24 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         return SDocSqlMediadbAdapter.tableConfigs[table];
     }
 
+    protected getDefaultFacets(): Facets {
+        const facets = new Facets();
+        let facet = new Facet();
+        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'news'].map(value => {return [value, 0]; });
+        facet.selectLimit = 1;
+        facets.facets.set('type_txt', facet);
+        facet = new Facet();
+        facet.facet = ['relevance'].map(value => {return [value, 0]; });
+        facets.facets.set('sorts', facet);
+
+        return facets;
+    }
+
     protected extractTable(params: AdapterQuery): string {
+        if (params.where === undefined) {
+            return undefined;
+        }
+
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
             const tabName = types.in[0];
