@@ -48,7 +48,9 @@ export interface TableConfig {
     loadDetailData?: LoadDetailDataConfig[];
     spartialConfig?: {
         lat: string;
-        lon: string
+        lon: string;
+        spatialField: string;
+        spatialSortKey: string;
     };
 }
 
@@ -81,20 +83,22 @@ export class SqlQueryBuilder {
             query.fields = fields;
         }
 
-        let spatialField = 'geodist';
-        if (method === 'count') {
-            spatialField = this.getSpatialSql(tableConfig, adapterQuery);
-        }
-        const spatialParams = this.getSpatialParams(tableConfig, adapterQuery, spatialField);
-        if (spatialParams !== undefined && spatialParams.length > 0) {
+        if (this.isSpatialQuery(tableConfig, adapterQuery)) {
+            let spatialField = tableConfig.spartialConfig.spatialField;
             if (method === 'count') {
-                query.where.push(spatialParams);
-            } else {
-                query.having.push(spatialParams);
+                spatialField = this.getSpatialSql(tableConfig, adapterQuery);
+            }
+            const spatialParams = this.getSpatialParams(tableConfig, adapterQuery, spatialField);
+            if (spatialParams !== undefined && spatialParams.length > 0) {
+                if (method === 'count') {
+                    query.where.push(spatialParams);
+                } else {
+                    query.having.push(spatialParams);
+                }
             }
         }
 
-        const sortParams = this.getSortParams(tableConfig, method, adapterOpts);
+        const sortParams = this.getSortParams(tableConfig, method, adapterQuery, adapterOpts);
         if (sortParams !== undefined) {
             query.sort = sortParams;
         }
@@ -136,6 +140,15 @@ export class SqlQueryBuilder {
         }
 
         return facets;
+    };
+
+    public isSpatialQuery(tableConfig: TableConfig, adapterQuery: AdapterQuery): boolean {
+        if (adapterQuery !== undefined && adapterQuery.spatial !== undefined && adapterQuery.spatial.geo_loc_p !== undefined &&
+            adapterQuery.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
+            return true;
+        }
+
+        return false;
     };
 
     protected createAdapterQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
@@ -190,17 +203,26 @@ export class SqlQueryBuilder {
         return tableConfig.selectFrom || '';
     }
 
-    protected getSortParams(tableConfig: TableConfig, method: string, adapterOpts: AdapterOpts): string[] {
+    protected getSortParams(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery, adapterOpts: AdapterOpts): string[] {
         if (method === 'count') {
             return undefined;
         }
 
         const form = adapterOpts.originalSearchForm;
         const sortMapping = tableConfig.sortMapping;
-        let sortKey = 'relevance';
+        let sortKey: string;
         if (form && form.sort) {
             sortKey = form.sort;
         }
+        // ignore distance-sort if not spatial-search
+        if (!this.isSpatialQuery(tableConfig, adapterQuery) && tableConfig.spartialConfig !== undefined &&
+            tableConfig.spartialConfig.spatialSortKey === sortKey) {
+            sortKey = 'relevance';
+        }
+        if (sortKey === undefined || sortKey.length < 1)  {
+            sortKey = 'relevance';
+        }
+
         if (sortMapping.hasOwnProperty(sortKey)) {
             return [sortMapping[sortKey]];
         }
@@ -209,8 +231,7 @@ export class SqlQueryBuilder {
     };
 
     protected getSpatialParams(tableConfig: TableConfig, adapterQuery: AdapterQuery, spatialField: string): string {
-        if (adapterQuery !== undefined && adapterQuery.spatial !== undefined && adapterQuery.spatial.geo_loc_p !== undefined &&
-            adapterQuery.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
+        if (this.isSpatialQuery(tableConfig, adapterQuery)) {
             const [lat, lon, distance] = this.mapperUtils.escapeAdapterValue(adapterQuery.spatial.geo_loc_p.nearby).split(/_/);
             return spatialField + ' <= ' + distance;
         }
@@ -219,8 +240,7 @@ export class SqlQueryBuilder {
     };
 
     protected getSpatialSql(tableConfig: TableConfig, adapterQuery: AdapterQuery): string {
-        if (adapterQuery !== undefined && adapterQuery.spatial !== undefined && adapterQuery.spatial.geo_loc_p !== undefined &&
-            adapterQuery.spatial.geo_loc_p.nearby !== undefined && tableConfig.spartialConfig !== undefined) {
+        if (this.isSpatialQuery(tableConfig, adapterQuery)) {
             const [lat, lon, distance] = this.mapperUtils.escapeAdapterValue(adapterQuery.spatial.geo_loc_p.nearby).split(/_/);
             const distanceSql =
                 '(3959 ' +

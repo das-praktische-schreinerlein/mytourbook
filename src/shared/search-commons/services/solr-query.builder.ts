@@ -17,7 +17,8 @@ export interface SolrConfig {
     fieldMapping: {};
     sortMapping: {};
     commonSortOptions: {};
-    spatialField: string;
+    spatialField?: string;
+    spatialSortKey?: string;
 }
 
 export class SolrQueryBuilder {
@@ -81,7 +82,7 @@ export class SolrQueryBuilder {
             });
         }
 
-        const sortParams = this.getSortParams(solrConfig, method, adapterOpts);
+        const sortParams = this.getSortParams(solrConfig, method, adapterQuery, adapterOpts);
         if (sortParams !== undefined && sortParams.size > 0) {
             sortParams.forEach(function (value, key) {
                 query[key] = value;
@@ -92,6 +93,15 @@ export class SolrQueryBuilder {
 
         return query;
     }
+
+    public isSpatialQuery(solrConfig: SolrConfig, adapterQuery: AdapterQuery): boolean {
+        if (adapterQuery !== undefined && adapterQuery.spatial !== undefined && adapterQuery.spatial.geo_loc_p !== undefined &&
+            adapterQuery.spatial.geo_loc_p.nearby !== undefined && solrConfig.spatialField !== undefined) {
+            return true;
+        }
+
+        return false;
+    };
 
     protected createAdapterQuery(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery,
                                  adapterOpts: AdapterOpts): SolrQueryData {
@@ -128,13 +138,22 @@ export class SolrQueryBuilder {
         return query;
     }
 
-    protected getSortParams(solrConfig: SolrConfig, method: string, adapterOpts: AdapterOpts): Map<string, any> {
+    protected getSortParams(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery,
+                            adapterOpts: AdapterOpts): Map<string, any> {
         const form = adapterOpts.originalSearchForm;
         const sortMapping = solrConfig.sortMapping;
         const sortParams = new Map<string, any>();
-        let sortKey = 'relevance';
+        let sortKey: string;
         if (form && form.sort) {
             sortKey = form.sort;
+        }
+        // ignore distance-sort if not spatial-search
+        if (!this.isSpatialQuery(solrConfig, adapterQuery) && solrConfig.spatialField !== undefined &&
+            solrConfig.spatialSortKey === sortKey) {
+            sortKey = 'relevance';
+        }
+        if (sortKey === undefined || sortKey.length < 1)  {
+            sortKey = 'relevance';
         }
 
         for (const key in solrConfig.commonSortOptions) {
@@ -153,8 +172,7 @@ export class SolrQueryBuilder {
     protected getSpatialParams(solrConfig: SolrConfig, adapterQuery: AdapterQuery): Map<string, any> {
         const spatialParams = new Map<string, any>();
 
-        if (adapterQuery !== undefined && adapterQuery.spatial !== undefined && adapterQuery.spatial.geo_loc_p !== undefined &&
-            adapterQuery.spatial.geo_loc_p.nearby !== undefined) {
+        if (this.isSpatialQuery(solrConfig, adapterQuery)) {
             const [lat, lon, distance] = adapterQuery.spatial.geo_loc_p.nearby.split(/_/);
 
             spatialParams.set('fq', '{!geofilt cache=false}');

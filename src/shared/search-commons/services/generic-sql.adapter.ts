@@ -217,6 +217,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     const sortFacet = new Facet();
                     sortFacet.facet = [];
                     for (const sortKey in tableConfig.sortMapping) {
+                        // ignore distance if configured but no spatial query
+                        if (!me.sqlQueryBuilder.isSpatialQuery(tableConfig, <AdapterQuery>query) &&
+                            tableConfig.spartialConfig !== undefined && tableConfig.spartialConfig.spatialSortKey === sortKey) {
+                            continue;
+                        }
                         sortFacet.facet.push([sortKey, 0]);
                     }
                     facets.facets.set('sorts', sortFacet);

@@ -7,7 +7,6 @@ import {SolrConfig} from '../../search-commons/services/solr-query.builder';
 
 export class PDocSolrAdapter extends GenericSolrAdapter<PDocRecord, PDocSearchForm, PDocSearchResult> {
     public static solrConfig: SolrConfig = {
-        spatialField: 'geo_loc_p',
         fieldList: ['id', 'desc_txt', 'desc_md_txt', 'desc_html_txt', 'keywords_txt', 'name_txt', 'type_txt'],
         facetConfigs: {
             'keywords_txt': {

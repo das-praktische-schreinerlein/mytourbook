@@ -159,7 +159,9 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             },
             spartialConfig: {
                 lat: 'k_gps_lat',
-                lon: 'k_gps_lon'
+                lon: 'k_gps_lon',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             fieldMapping: {
                 id: 'id',
@@ -371,7 +373,9 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             },
             spartialConfig: {
                 lat: 'i_gps_lat',
-                lon: 'i_gps_lon'
+                lon: 'i_gps_lon',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             filterMapping: {
                 id: 'image.i_id',
@@ -573,7 +577,9 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             },
             spartialConfig: {
                 lat: 't_gps_lat',
-                lon: 't_gps_lon'
+                lon: 't_gps_lon',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             filterMapping: {
                 id: 'tour.t_id',
@@ -737,7 +743,9 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             },
             spartialConfig: {
                 lat: 'l_gps_lat',
-                lon: 'l_gps_lon'
+                lon: 'l_gps_lon',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             filterMapping: {
                 id: 'location.l_id',

@@ -172,7 +172,9 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
-                lon: 'l_geo_longdeg'
+                lon: 'l_geo_longdeg',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             fieldMapping: {
                 id: 'id',
@@ -366,7 +368,9 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             },
             spartialConfig: {
                 lat: 'i_gps_lat',
-                lon: 'i_gps_lon'
+                lon: 'i_gps_lon',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             filterMapping: {
                 id: 'image.i_id',
@@ -571,7 +575,9 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
-                lon: 'l_geo_longdeg'
+                lon: 'l_geo_longdeg',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             filterMapping: {
                 id: 'tour.t_id',
@@ -737,7 +743,9 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
-                lon: 'l_geo_longdeg'
+                lon: 'l_geo_longdeg',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
             },
             filterMapping: {
                 id: 'location.l_id',
