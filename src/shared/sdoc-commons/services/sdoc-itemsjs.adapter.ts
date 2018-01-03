@@ -46,6 +46,8 @@ export class SDocItemsJsAdapter extends GenericItemsJsAdapter<SDocRecord, SDocSe
             },
             'type_txt': {},
             'id': {},
+            'track_id_i': {},
+            'track_id_is': {},
             'week_is': {
             }
         },
@@ -106,7 +108,8 @@ export class SDocItemsJsAdapter extends GenericItemsJsAdapter<SDocRecord, SDocSe
             }
         },
         filterMapping: {
-            'html': 'html_txt'
+            'html': 'html_txt',
+            'track_id_is': 'track_id_i'
         },
         fieldMapping: {
         }
