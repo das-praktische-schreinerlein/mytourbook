@@ -34,7 +34,7 @@ export class ItemsJsQueryBuilder {
             query.sort = sorts;
         }
 
-        console.error('itemsJsQuery:', query);
+        console.log('itemsJsQuery:', query);
 
         return query;
     }
