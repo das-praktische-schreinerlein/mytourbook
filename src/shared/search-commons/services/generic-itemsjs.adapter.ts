@@ -3,12 +3,14 @@ import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {GenericInMemoryAdapter} from './generic-inmemory.adapter';
+import {Adapter} from 'js-data-adapter';
 import {Facet, Facets} from '../model/container/facets';
 import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
-import {AdapterFilterActions} from './mapper.utils';
+import {AdapterOpts, AdapterQuery} from './mapper.utils';
+import {ItemsJsConfig, ItemsJsQueryBuilder, ItemsJsQueryData} from './itemsjs-query.builder';
+import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 
-export interface ItemJsResultPagionation {
+export interface ItemJsResultPagination {
     per_page: number;
     page: number;
     total: number;
@@ -24,87 +26,121 @@ export interface ItemJsResultAggregation {
 }
 export interface ItemJsResultData {
     items: any[];
-    aggregations: ItemJsResultAggregation[];
+    aggregations: {};
 }
 export interface ItemJsResult {
-    pagination: ItemJsResultPagionation;
+    pagination: ItemJsResultPagination;
     data: ItemJsResultData;
 }
 
 export abstract class GenericItemsJsAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
-    extends GenericInMemoryAdapter<R, F, S> implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
+    extends Adapter implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
     protected itemJs;
+    protected itemsJsQueryBuilder = new ItemsJsQueryBuilder();
+    protected mapper: GenericAdapterResponseMapper;
 
-    constructor(config: any, data: any[], itemJsConfig: {}) {
+    constructor(config: any, mapper: GenericAdapterResponseMapper, data: any[], itemJsConfig: ItemsJsConfig) {
         super(config);
-        //this.itemJs = require('itemsjs')(data, itemJsConfig);
+        this.mapper = mapper;
+        this.itemJs = require('itemsjs')(data, itemJsConfig);
     }
 
-    _doQuery(query: any, opts: any): ItemJsResult {
-        const itemJsQuery = {};
-        const result: ItemJsResult = this.itemJs.search(itemJsQuery);
-        return result;
-    };
+    create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
+        throw new Error('create not implemented');
+    }
 
-    _count(mapper: Mapper, query: any, opts?: any): Promise<any> {
-        const result = this._doQuery(query, opts);
-        return Promise.resolve(this.extractCountFromRequestResult(mapper, result));
+    createMany<T extends Record>(mapper: Mapper, props: any, opts: any): Promise<T> {
+        throw new Error('createMany not implemented');
     }
-    _create(mapper: any, props: any, opts?: any): Promise<any> {
-        return Promise.reject('create not implemented');
-    }
-    _createMany(mapper: any, props: any, opts?: any): Promise<any> {
-        return Promise.reject('createMany not implemented');
-    }
-    _destroy(mapper: any, id: string | number, opts?: any): Promise<any> {
-        return Promise.reject('destroy not implemented');
-    }
-    _destroyAll(mapper: any, query: any, opts?: any): Promise<any> {
-        return Promise.reject('destroyAll not implemented');
-    }
-    _find(mapper: any, id: string | number, opts?: any): Promise<any> {
-        opts.params.where.id = { '==': id};
-        const result = this._doQuery({}, opts);
-        const records = this.extractRecordsFromRequestResult(mapper, result);
-        if (! (Array.isArray(result))) {
-            return utils.Promise.reject('generic-solr-adapter.afterFind: no array as result');
-        }
-        if (result.length !== 1) {
-            return utils.Promise.reject('generic-solr-adapter.afterFind: result is not unique');
-        }
 
-        return utils.Promise.resolve(result[0]);
+    destroy(mapper: Mapper, id: string | number, opts?: any): Promise<any> {
+        throw new Error('destroy not implemented');
     }
-    _findAll(mapper: any, query: any, opts?: any): Promise<any> {
-        const result = this._doQuery({}, opts);
-        const records = this.extractRecordsFromRequestResult(mapper, result);
-        if (! (Array.isArray(result))) {
-            return utils.Promise.reject('generic-solr-adapter.afterFind: no array as result');
-        }
 
-        return utils.Promise.resolve(result);
+    destroyAll(mapper: Mapper, query: any, opts: any): Promise<any> {
+        throw new Error('destroyAll not implemented');
     }
-    _sum(mapper: any, field: any, query: any, opts?: any): Promise<any> {
-        return Promise.reject('sum not implemented');
+
+    find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
+        throw new Error('find not implemented');
     }
-    _update(mapper: any, id: any, props: any, opts?: any): Promise<any> {
-        return Promise.reject('update not implemented');
+
+    sum (mapper: Mapper, field: string, query: any, opts?: any): Promise<any> {
+        throw new Error('sum not implemented');
     }
-    _updateAll(mapper: any, props: any, query: any, opts?: any): Promise<any> {
-        return Promise.reject('updateAll not implemented');
+
+    update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts: any): Promise<T> {
+        throw new Error('update not implemented');
     }
-    _updateMany(mapper: any, records: any, opts?: any): Promise<any> {
-        return Promise.reject('updateMany not implemented');
+
+    updateAll(mapper: Mapper, props: any, query: any, opts?: any): Promise<any> {
+        throw new Error('updateAll not implemented');
+    }
+
+    updateMany<T extends Record>(mapper: Mapper, records: T[], opts?: any): Promise<any> {
+        throw new Error('updateMany not implemented');
+    }
+
+    count(mapper: Mapper, query: any, opts?: any): Promise<number> {
+        query = query || {};
+        opts = opts || {};
+
+        return super.count(mapper, query, opts);
+    }
+
+    findAll<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<T[]> {
+        query = query || {};
+        opts = opts || {};
+
+        return super.findAll(mapper, query, opts);
     }
 
     facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
-        const result = this._doQuery({}, opts);
+        query = query || {};
+        opts = opts || {};
+
+        opts.adapterFacet = true;
+
+        return this._facets(mapper, query, opts);
+    }
+
+    search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+        query = query || {};
+        opts = opts || {};
+
+        opts.adapterFacet = true;
+
+        return this._search(mapper, query, opts);
+    }
+
+    afterCount(mapper: Mapper, props: any, opts: any, result: any): Promise<number> {
+        return utils.Promise.resolve(result);
+    }
+
+    _facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+        opts.adapterQuery = true;
+        const me = this;
+        const queryData = me.queryTransformToAdapterQuery( mapper, query, opts);
+        if (queryData === undefined) {
+            return utils.resolve([0]);
+        }
+        opts.queryData = queryData;
+
+        const result = this.doQuery(queryData);
         const facets: Facets = this.extractFacetsFromRequestResult(mapper, result);
         return utils.Promise.resolve(facets);
     }
 
-    search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
-        const result = this._doQuery({}, opts);
+    _search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+        opts.adapterQuery = true;
+        const me = this;
+        const queryData = me.queryTransformToAdapterQuery(mapper, query, opts);
+        if (queryData === undefined) {
+            return utils.resolve([0]);
+        }
+        opts.queryData = queryData;
+
+        const result = this.doQuery(queryData);
         const count: number = this.extractCountFromRequestResult(mapper, result);
         const records: R[] = this.extractRecordsFromRequestResult(mapper, result);
         const facets: Facets = this.extractFacetsFromRequestResult(mapper, result);
@@ -112,6 +148,36 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return utils.Promise.resolve(<S>searchResult);
     }
 
+    _count(mapper: Mapper, query: any, opts?: any): Promise<any> {
+        opts.adapterQuery = true;
+        const me = this;
+        const queryData = me.queryTransformToAdapterQuery(mapper, query, opts);
+        if (queryData === undefined) {
+            return utils.resolve([0]);
+        }
+        opts.queryData = queryData;
+
+        const result = this.doQuery(query);
+        return Promise.resolve(this.extractCountFromRequestResult(mapper, result));
+    }
+
+    _findAll(mapper: any, query: any, opts?: any): Promise<any> {
+        opts.adapterQuery = true;
+        const me = this;
+        const queryData = me.queryTransformToAdapterQuery(mapper, query, opts);
+        if (queryData === undefined) {
+            return utils.resolve([[]]);
+        }
+        opts.queryData = queryData;
+
+        const result = this.doQuery(queryData);
+        const records = this.extractRecordsFromRequestResult(mapper, result);
+        if (! (Array.isArray(result))) {
+            return utils.Promise.reject('generic-solr-adapter.afterFind: no array as result');
+        }
+
+        return utils.Promise.resolve(result);
+    }
 
     deserializeResponse(mapper: Mapper, response: ItemJsResult, opts: any) {
         // console.log('deserializeResponse:', response);
@@ -159,7 +225,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         const docs = result.data.items;
         const records = [];
         for (const doc of docs) {
-            records.push(this.mapResponseDocument(mapper, doc));
+            records.push(this.mapResponseDocument(mapper, doc, this.getItemsJsConfig()));
         }
         // console.log('extractRecordsFromRequestResult:', records);
 
@@ -173,12 +239,12 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         }
 
         const facets = new Facets();
-        for (let i = 0; i <= result.data.aggregations.length; i++) {
-            const aggregation = result.data.aggregations.length[i];
+        for (const name in result.data.aggregations) {
+            const aggregation: ItemJsResultAggregation = <ItemJsResultAggregation>result.data.aggregations[name];
             const buckets = aggregation.buckets;
             const facet = new Facet();
             facet.facet = [];
-            for (let j = 0; j <= buckets.length; j++) {
+            for (let j = 0; j < buckets.length; j++) {
                 facet.facet.push([buckets[j].key, buckets[j].doc_count]);
             }
             facets.facets.set(aggregation.name, facet);
@@ -188,198 +254,26 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
     }
 
 
-    mapResponseDocument(mapper: Mapper, doc: any): Record {
-        const values = {};
-        values['id'] = Number(this.getAdapterValue(doc, 'id', undefined));
-        // console.log('mapResponseDocument values:', values);
-        return mapper.createRecord(values);
-    }
-
-    mapToAdapterFieldName(fieldName: string): string {
-        switch (fieldName) {
-            default:
-                break;
-        }
-
-        return fieldName;
+    mapResponseDocument(mapper: Mapper, doc: any, itemsJsConfig: ItemsJsConfig): Record {
+        return this.mapper.mapResponseDocument(mapper, doc, itemsJsConfig.fieldMapping);
     }
 
     abstract mapToAdapterDocument(props: any): any;
 
-    abstract getAdapterFields(method: string, mapper: Mapper, params: any, opts: any): string[];
+    abstract getItemsJsConfig(): ItemsJsConfig;
 
-    abstract getFacetParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
+    protected doQuery(query: ItemsJsQueryData): ItemJsResult {
+        const result: ItemJsResult = this.itemJs.search(query);
+        return result;
+    };
 
-    abstract getSpatialParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    abstract getSortParams(method: string, mapper: Mapper, params: any, opts: any, query: any): Map<string, any>;
-
-    getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
-        let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
-            if (Array.isArray(adapterDocument[adapterFieldName])) {
-                value = adapterDocument[adapterFieldName][0];
-            } else {
-                value = adapterDocument[adapterFieldName];
-            }
-        }
-
-        return value;
+    protected queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): ItemsJsQueryData {
+        return this.queryTransformToAdapterQueryWithMethod(undefined, mapper, params, opts);
     }
 
-    getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
-        let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
-            if (Array.isArray(adapterDocument[adapterFieldName])) {
-                value = adapterDocument[adapterFieldName][0];
-            } else if (adapterDocument[adapterFieldName] !== '0' && adapterDocument[adapterFieldName] !== '0,0') {
-                value = adapterDocument[adapterFieldName];
-            }
-        }
-
-        return value;
-    }
-
-    private queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
-        return this.queryTransformToAdapterQueryWithMethod('', mapper, params, opts);
-    }
-
-    private queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): any {
-        const query = this.createAdapterQuery(method, mapper, params, opts);
-
-        const fields = this.getAdapterFields(method, mapper, params, opts);
-        if (fields !== undefined && fields.length > 0) {
-            query.fl = fields.join(' ');
-        }
-
-        const facetParams = this.getFacetParams(method, mapper, params, opts, query);
-        if (facetParams !== undefined && facetParams.size > 0) {
-            facetParams.forEach(function (value, key) {
-                query[key] = value;
-            });
-        }
-
-        const spatialParams = this.getSpatialParams(method, mapper, params, opts, query);
-        if (spatialParams !== undefined && spatialParams.size > 0) {
-            spatialParams.forEach(function (value, key) {
-                query[key] = value;
-            });
-        }
-
-        const sortParams = this.getSortParams(method, mapper, params, opts, query);
-        if (sortParams !== undefined && sortParams.size > 0) {
-            sortParams.forEach(function (value, key) {
-                query[key] = value;
-            });
-        }
-
-        console.log('solQuery:', query);
-
-        return query;
-    }
-
-    private createAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): any {
-        // console.log('createAdapterQuery params:', params);
-        // console.log('createAdapterQuery opts:', opts);
-
-        const newParams = [];
-        if (params.where) {
-            for (const fieldName of Object.getOwnPropertyNames(params.where)) {
-                const filter = params.where[fieldName];
-                const action = Object.getOwnPropertyNames(filter)[0];
-                const value = params.where[fieldName][action];
-                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
-            }
-        }
-        if (params.additionalWhere) {
-            for (const fieldName of Object.getOwnPropertyNames(params.additionalWhere)) {
-                const filter = params.additionalWhere[fieldName];
-                const action = Object.getOwnPropertyNames(filter)[0];
-                const value = params.additionalWhere[fieldName][action];
-                newParams.push(this.mapFilterToAdapterQuery(mapper, fieldName, action, value));
-            }
-        }
-
-        if (newParams.length <= 0) {
-            const query = {'query': '', 'page': opts.offset, 'per_page': opts.limit, filters: []};
-            // console.log('createAdapterQuery result:', query);
-            return query;
-        }
-
-        const query = {'query': '(' + newParams.join(' AND ') + ')', 'page': opts.offset, 'per_page': opts.limit, filters: []};
-        console.log('createAdapterQuery result:', query);
-        return query;
-    }
-
-    private mapFilterToAdapterQuery(mapper: Mapper, fieldName: string, action: string, value: any): string {
-        let query = '';
-
-        if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '" AND "') + '")';
-        } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + this.prepareEscapedSingleValue(value, ' ', '') + '")';
-        } else if (action === AdapterFilterActions.GT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{"' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *}';
-        } else if (action === AdapterFilterActions.GE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':["' + this.prepareEscapedSingleValue(value, ' ', '') + '" TO *]';
-        } else if (action === AdapterFilterActions.LT) {
-            query = this.mapToAdapterFieldName(fieldName) + ':{ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"}';
-        } else if (action === AdapterFilterActions.LE) {
-            query = this.mapToAdapterFieldName(fieldName) + ':[ * TO "' + this.prepareEscapedSingleValue(value, ' ', '') + '"]';
-        } else if (action === AdapterFilterActions.IN) {
-            query = this.mapToAdapterFieldName(fieldName) + ':("' + value.map(
-                    inValue => this.escapeAdapterValue(inValue.toString())
-                ).join('" OR "') + '")';
-        } else if (action === AdapterFilterActions.NOTIN) {
-            query = this.mapToAdapterFieldName(fieldName) + ':(-"' + value.map(
-                    inValue => this.escapeAdapterValue(inValue.toString())
-                ).join('" AND -"') + '")';
-        }
-        return query;
-    }
-
-    prepareEscapedSingleValue(value: any, splitter: string, joiner: string): string {
-        value = this.prepareSingleValue(value, ' ');
-        value = this.escapeAdapterValue(value);
-        const values = this.prepareValueToArray(value, splitter);
-        value = values.map(inValue => this.escapeAdapterValue(inValue)).join(joiner);
-        return value;
-    }
-
-    private prepareSingleValue(value: any, joiner: string): string {
-        switch (typeof value) {
-            case 'string':
-                return value.toString();
-            case 'number':
-                return '' + value;
-            default:
-        }
-        if (Array.isArray(value)) {
-            return value.join(joiner);
-        }
-
-        return value.toString();
-    }
-
-    private prepareValueToArray(value: any, splitter: string): string[] {
-        return value.toString().split(splitter);
-    }
-
-    private escapeAdapterValue(value: any): string {
-        value = value.toString().replace(/[%]/g, ' ').replace(/[-+:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
-        return value;
-    }
-
-    private splitPairs(arr: Array<any>): Array<Array<any>> {
-        const pairs = [];
-        for (let i = 0; i < arr.length; i += 2) {
-            if (arr[i + 1] !== undefined) {
-                pairs.push([arr[i], arr[i + 1]]);
-            } else {
-                pairs.push([arr[i]]);
-            }
-        }
-        return pairs;
+    protected queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): ItemsJsQueryData {
+        return this.itemsJsQueryBuilder.queryTransformToAdapterQuery(this.getItemsJsConfig(), method, <AdapterQuery>params,
+            <AdapterOpts>opts);
     }
 }
 

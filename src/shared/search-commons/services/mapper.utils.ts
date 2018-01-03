@@ -44,6 +44,9 @@ export class MapperUtils {
         return this.getAdapterValue(adapterDocument, this.mapToAdapterFieldName(mapping, adapterFieldName), defaultValue);
     }
 
+    public getMappedAdapterNumberValue(mapping: {}, adapterDocument: any, adapterFieldName: string, defaultValue: any): number {
+        return this.getAdapterNumberValue(adapterDocument, this.mapToAdapterFieldName(mapping, adapterFieldName), defaultValue);
+    }
     public getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
         if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {
@@ -57,6 +60,21 @@ export class MapperUtils {
         return value;
     }
 
+    public getAdapterNumberValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): number {
+        let value = defaultValue;
+        if (adapterDocument[adapterFieldName] !== undefined) {
+            if (Array.isArray(adapterDocument[adapterFieldName])) {
+                value = adapterDocument[adapterFieldName][0];
+            } else {
+                value = adapterDocument[adapterFieldName];
+            }
+            if (typeof value === 'string') {
+                value = Number.parseFloat(value);
+            }
+        }
+
+        return value;
+    }
     public getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
         if (adapterDocument[adapterFieldName] !== undefined) {
@@ -98,7 +116,10 @@ export class MapperUtils {
     }
 
     public escapeAdapterValue(value: any): string {
-        value = value.toString().replace(/[%]/g, ' ').replace(/[:\()\[\]\\]/g, ' ').replace(/[ ]+/, ' ').trim();
+        value = value.toString().replace(/[%]/g, ' ')
+            .replace(/[\"\':\()\[\]\\]/g, ' ')
+            .replace(/[ ]+/, ' ')
+            .trim();
         return value;
     }
 
