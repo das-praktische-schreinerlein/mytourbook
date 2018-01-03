@@ -113,12 +113,12 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
 
 
         const dataTechValues = {};
-        dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
-        dataTechValues['altDesc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_tech_alt_desc_i', undefined);
-        dataTechValues['altMin'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_tech_alt_min_i', undefined);
-        dataTechValues['altMax'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_tech_alt_max_i', undefined);
-        dataTechValues['dist'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_tech_dist_f', undefined);
-        dataTechValues['dur'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'data_tech_dur_f', undefined);
+        dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
+        dataTechValues['altDesc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_desc_i', undefined);
+        dataTechValues['altMin'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_min_i', undefined);
+        dataTechValues['altMax'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_max_i', undefined);
+        dataTechValues['dist'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_dist_f', undefined);
+        dataTechValues['dur'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_dur_f', undefined);
         let dataTechSet = false;
         for (const field in dataTechValues) {
             if (dataTechValues[field] !== undefined && dataTechValues[field] !== 0) {
@@ -156,14 +156,15 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         }
 
         const ratePersValues = {};
-        ratePersValues['ausdauer'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_ausdauer_i', undefined);
-        ratePersValues['bildung'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_bildung_i', undefined);
-        ratePersValues['gesamt'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_gesamt_i', undefined);
-        ratePersValues['kraft'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_kraft_i', undefined);
-        ratePersValues['mental'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_mental_i', undefined);
-        ratePersValues['motive'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_motive_i', undefined);
-        ratePersValues['schwierigkeit'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_schwierigkeit_i', undefined);
-        ratePersValues['wichtigkeit'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'rate_pers_wichtigkeit_i', undefined);
+        ratePersValues['ausdauer'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_ausdauer_i', undefined);
+        ratePersValues['bildung'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_bildung_i', undefined);
+        ratePersValues['gesamt'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_gesamt_i', undefined);
+        ratePersValues['kraft'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_kraft_i', undefined);
+        ratePersValues['mental'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_mental_i', undefined);
+        ratePersValues['motive'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_motive_i', undefined);
+        ratePersValues['schwierigkeit'] =
+            this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_schwierigkeit_i', undefined);
+        ratePersValues['wichtigkeit'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_wichtigkeit_i', undefined);
         let ratePersSet = false;
         for (const field in ratePersValues) {
             if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 && ratePersValues[field] > 0) {
