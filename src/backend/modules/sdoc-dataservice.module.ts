@@ -89,13 +89,7 @@ export class SDocDataServiceModule {
         const options = {
             knexOpts: {
                 client: sqlConfig['client'],
-                connection: {
-                    host: sqlConfig['host'],
-                    user: sqlConfig['user'],
-                    password: sqlConfig['password'],
-                    database: sqlConfig['database'],
-                    port: sqlConfig['port']
-                }
+                connection: sqlConfig['connection']
             }
         };
         const adapter = new SDocSqlMediadbAdapter(options);
@@ -122,13 +116,7 @@ export class SDocDataServiceModule {
         const options = {
             knexOpts: {
                 client: sqlConfig['client'],
-                connection: {
-                    host: sqlConfig['host'],
-                    user: sqlConfig['user'],
-                    password: sqlConfig['password'],
-                    database: sqlConfig['database'],
-                    port: sqlConfig['port']
-                }
+                connection: sqlConfig['connection']
             }
         };
         const adapter = new SDocSqlMytbAdapter(options);

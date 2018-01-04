@@ -15,22 +15,26 @@
     "sdocDataStoreAdapter": "SDocSolrAdapter",
     "SDocSqlMediadbAdapter": {
         "client": "mysql",
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "mediadb",
-        "port": "3306"
+        "connection": {
+            "host": "localhost",
+            "user": "root",
+            "password": "",
+            "database": "mediadb",
+            "port": "3306"
+        }
     },
     "SDocItemsJsAdapter": {
         "dataFile": "D:/Bilder/mytbbase/mytb.json"
     },
     "SDocSqlMytbAdapter": {
         "client": "mysql",
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "mytb",
-        "port": "3306"
+        "connection": {
+            "host": "localhost",
+            "user": "root",
+            "password": "",
+            "database": "mytb",
+            "port": "3306"
+        }
     },
     "SDocSolrAdapter": {
         "solrCoreSDoc": "http://localhost:8983/solr/mytbdev/",
