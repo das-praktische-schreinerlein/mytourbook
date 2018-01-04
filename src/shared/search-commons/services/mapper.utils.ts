@@ -118,7 +118,7 @@ export class MapperUtils {
     public escapeAdapterValue(value: any): string {
         value = value.toString().replace(/[%]/g, ' ')
             .replace(/[\"\':\()\[\]\\]/g, ' ')
-            .replace(/[ ]+/, ' ')
+            .replace(/[ ]+/g, ' ')
             .trim();
         return value;
     }

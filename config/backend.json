@@ -21,6 +21,9 @@
         "database": "mediadb",
         "port": "3306"
     },
+    "SDocItemsJsAdapter": {
+        "dataFile": "D:/Bilder/mytbbase/mytb.json"
+    },
     "SDocSqlMytbAdapter": {
         "client": "mysql",
         "host": "localhost",

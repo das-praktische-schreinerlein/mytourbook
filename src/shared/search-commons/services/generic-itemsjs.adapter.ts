@@ -9,6 +9,7 @@ import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapte
 import {AdapterOpts, AdapterQuery} from './mapper.utils';
 import {ItemsJsConfig, ItemsJsQueryBuilder, ItemsJsQueryData} from './itemsjs-query.builder';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
+import itemsjs from 'itemsjs';
 
 export interface ItemJsResultPagination {
     per_page: number;
@@ -42,7 +43,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
     constructor(config: any, mapper: GenericAdapterResponseMapper, data: any[], itemJsConfig: ItemsJsConfig) {
         super(config);
         this.mapper = mapper;
-        this.itemJs = require('itemsjs')(data, itemJsConfig);
+        this.itemJs = itemsjs(data, itemJsConfig);
     }
 
     create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
@@ -139,7 +140,6 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
             return utils.resolve([0]);
         }
         opts.queryData = queryData;
-
         const result = this.doQuery(queryData);
         const count: number = this.extractCountFromRequestResult(mapper, result);
         const records: R[] = this.extractRecordsFromRequestResult(mapper, result);

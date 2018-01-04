@@ -329,7 +329,7 @@ export class SqlQueryBuilder {
     protected mapFilterToAdapterQuery(tableConfig: TableConfig, fieldName: string, action: string, value: any): string {
         let realFieldName = undefined;
         if (fieldName === 'id') {
-            value = [this.mapperUtils.prepareSingleValue(value, '_').replace(/.*_/, '')];
+            value = [this.mapperUtils.prepareSingleValue(value, '_').replace(/.*_/g, '')];
         }
 
         if (tableConfig.facetConfigs.hasOwnProperty(fieldName)) {

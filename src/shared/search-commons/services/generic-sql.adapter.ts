@@ -367,7 +367,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     loadDetailDataConfig.parameterNames.forEach(parameterName => {
                         let value = this.mapperUtils.prepareSingleValue(record[parameterName], '_');
                         if (value !== undefined && parameterName === 'id') {
-                            value = value.replace(/.*_/, '');
+                            value = value.replace(/.*_/g, '');
                         }
                         sql = sql.replace(':' + parameterName, value);
                     });

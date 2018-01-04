@@ -1012,7 +1012,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         }
         const ids = params.where['id'];
         if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
-            const tabName = ids.in[0].replace(/_.*/, '').toLowerCase();
+            const tabName = ids.in[0].replace(/_.*/g, '').toLowerCase();
             if (SDocSqlMediadbAdapter.tableConfigs[tabName] !== undefined) {
                 return tabName;
             }
