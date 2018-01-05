@@ -29,6 +29,10 @@ export class CacheInitializerCommand implements AbstractCommand {
         const sdocServerModule = new SDocServerModule(sdocDataService, cache);
         const searchForm = new SDocSearchForm({});
 
+        const getById = function(id) {
+            return sdocServerModule.getById({}, function () {}, id);
+        };
+
         const createNextCache = function() {
             console.log('DO - search for page: ' + searchForm.pageNum);
             sdocDataService.search(searchForm).then(
@@ -39,9 +43,6 @@ export class CacheInitializerCommand implements AbstractCommand {
                     }
 
                     console.log('DO - initcache for page: ' + searchForm.pageNum + ' sdocs:', ids);
-                    const getById = function(id) {
-                        return sdocServerModule.getById({}, function () {}, id);
-                    };
 
                     const actions = ids.map(getById); // run the function over all items
 
