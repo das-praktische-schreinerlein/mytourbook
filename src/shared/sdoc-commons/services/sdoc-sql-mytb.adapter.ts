@@ -11,7 +11,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
     public static tableConfigs = {
         'track': {
             tableName: 'kategorie_full',
-            selectFrom: 'kategorie_full INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
+            selectFrom: 'kategorie_full LEFT JOIN location ON location.l_id = kategorie_full.l_id ' +
                         'LEFT JOIN image ON kategorie_full.i_id=image.i_id',
             selectFieldList: [
                 '"TRACK" AS type',
@@ -39,26 +39,25 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'k_meta_shortdesc',
                 'k_meta_shortdesc_md',
                 'k_meta_shortdesc_html',
-                'k_rate_gesamt',
                 'CAST(k_gps_lat AS CHAR(50)) AS k_gps_lat',
                 'CAST(k_gps_lon AS CHAR(50)) AS k_gps_lon',
                 'CONCAT(k_gps_lat, ",", k_gps_lon) AS k_gps_loc',
                 'l_lochirarchietxt',
                 'l_lochirarchieids',
                 'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
-                'k_altitude_asc AS altAsc',
-                'k_altitude_desc AS altDesc',
-                'k_altitude_min AS altMin',
-                'k_altitude_max AS altMax',
-                'k_distance AS dist',
-                'k_rate_ausdauer AS ausdauer',
-                'k_rate_bildung AS bildung',
-                'k_rate_gesamt AS gesamt',
-                'k_rate_kraft AS kraft',
-                'k_rate_mental AS mental',
-                'k_rate_motive AS motive',
-                'k_rate_schwierigkeit AS schwierigkeit',
-                'k_rate_wichtigkeit AS wichtigkeit',
+                'k_altitude_asc',
+                'k_altitude_desc',
+                'k_altitude_min',
+                'k_altitude_max',
+                'k_distance',
+                'k_rate_ausdauer',
+                'k_rate_bildung',
+                'k_rate_gesamt',
+                'k_rate_kraft',
+                'k_rate_mental',
+                'k_rate_motive',
+                'k_rate_schwierigkeit',
+                'k_rate_wichtigkeit',
                 'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
                 'ROUND((k_altitude_max / 500))*500 AS altMaxFacet',
                 'ROUND((k_distance / 5))*5 AS distFacet',
@@ -69,16 +68,20 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
                 'data_tech_alt_asc_facet_is': {
-                    selectField: 'ROUND((k_altitude_asc / 500))*500'
+                    selectField: 'ROUND((k_altitude_asc / 500))*500',
+                    orderBy: 'value ASC'
                 },
                 'data_tech_alt_max_facet_is': {
-                    selectField: 'ROUND((k_altitude_max / 500))*500'
+                    selectField: 'ROUND((k_altitude_max / 500))*500',
+                    orderBy: 'value asc'
                 },
                 'data_tech_dist_facets_fs': {
-                    selectField: 'ROUND((k_distance / 5))*5'
+                    selectField: 'ROUND((k_distance / 5))*5',
+                    orderBy: 'value asc'
                 },
                 'data_tech_dur_facet_fs': {
-                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)'
+                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
+                    orderBy: 'value asc'
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -108,13 +111,16 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
-                    selectField: 'MONTH(k_datevon)'
+                    selectField: 'MONTH(k_datevon)',
+                    orderBy: 'value asc'
                 },
                 'rate_pers_gesamt_is': {
-                    selectField: 'k_rate_gesamt'
+                    selectField: 'k_rate_gesamt',
+                    orderBy: 'value asc'
                 },
                 'rate_pers_schwierigkeit_is': {
-                    selectField: 'k_rate_schwierigkeit'
+                    selectField: 'k_rate_schwierigkeit',
+                    orderBy: 'value asc'
                 },
                 'rate_tech_overall_ss': {
                     noFacet: true
@@ -128,7 +134,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectLimit: 1
                 },
                 'week_is': {
-                    selectField: 'WEEK(k_datevon)'
+                    selectField: 'WEEK(k_datevon)',
+                    orderBy: 'value asc'
                 }
             },
             sortMapping: {
@@ -183,38 +190,39 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 desc_txt: 'k_meta_shortdesc',
                 desc_md_txt: 'k_meta_shortdesc_md',
                 desc_html_txt: 'k_meta_shortdesc_html',
+                distance: 'geodist',
                 geo_lon_s: 'k_gps_lon',
                 geo_lat_s: 'k_gps_lat',
                 geo_loc_p: 'k_gps_loc',
-                data_tech_alt_asc_i: 'altAsc',
-                data_tech_alt_desc_i: 'altDesc',
-                data_tech_alt_min_i: 'altMin',
-                data_tech_alt_max_i: 'altMax',
-                data_tech_dist_f: 'dist',
+                data_tech_alt_asc_i: 'k_altitude_asc',
+                data_tech_alt_desc_i: 'k_altitude_desc',
+                data_tech_alt_min_i: 'k_altitude_min',
+                data_tech_alt_max_i: 'k_altitude_max',
+                data_tech_dist_f: 'k_distance',
                 data_tech_dur_f: 'dur',
-                rate_pers_ausdauer_i: 'ausdauer',
-                rate_pers_bildung_i: 'bildung',
-                rate_pers_gesamt_i: 'gesamt',
-                rate_pers_kraft_i: 'kraft',
-                rate_pers_mental_i: 'mental',
-                rate_pers_motive_i: 'motive',
-                rate_pers_schwierigkeit_i: 'schwierigkeit',
-                rate_pers_wichtigkeit_i: 'wichtigkeit',
+                rate_pers_ausdauer_i: 'k_rate_ausdauer',
+                rate_pers_bildung_i: 'k_rate_bildung',
+                rate_pers_gesamt_i: 'k_rate_gesamt',
+                rate_pers_kraft_i: 'k_rate_kraft',
+                rate_pers_mental_i: 'k_rate_mental',
+                rate_pers_motive_i: 'k_rate_motive',
+                rate_pers_schwierigkeit_i: 'k_rate_schwierigkeit',
+                rate_pers_wichtigkeit_i: 'k_rate_wichtigkeit',
                 gpstracks_basefile_s: 'k_gpstracks_basefile',
                 keywords_txt: 'k_keywords',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'k_name',
                 type_s: 'type',
-                actiontype_ss: 'k_type',
-                subtype_s: 'subtype_s',
+                actiontype_s: 'actionType',
+                subtype_s: 'subtype',
                 i_fav_url_txt: 'i_fav_url_txt'
             }
         },
         'image': {
             tableName: 'image',
             selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
-                        'INNER JOIN location ON location.l_id = kategorie_full.l_id',
+                        'LEFT JOIN location ON location.l_id = kategorie_full.l_id',
             selectFieldList: [
                 '"IMAGE" AS type',
                 'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
@@ -247,19 +255,19 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'l_lochirarchietxt',
                 'l_lochirarchieids',
                 'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
-                'k_altitude_asc AS altAsc',
-                'k_altitude_desc AS altDesc',
-                'i_gps_ele AS altMin',
-                'i_gps_ele AS altMax',
-                'k_distance AS dist',
-                'k_rate_ausdauer AS ausdauer',
-                'k_rate_bildung AS bildung',
-                'i_rate AS gesamt',
-                'k_rate_kraft AS kraft',
-                'k_rate_mental AS mental',
-                'i_rate_motive AS motive',
-                'k_rate_schwierigkeit AS schwierigkeit',
-                'i_rate_wichtigkeit AS wichtigkeit',
+                'k_altitude_asc',
+                'k_altitude_desc',
+                'i_gps_ele',
+                'i_gps_ele',
+                'k_distance',
+                'k_rate_ausdauer',
+                'k_rate_bildung',
+                'i_rate',
+                'k_rate_kraft',
+                'k_rate_mental',
+                'i_rate_motive',
+                'k_rate_schwierigkeit',
+                'i_rate_wichtigkeit',
                 'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
                 'ROUND((i_gps_ele / 500))*500 AS altMaxFacet',
                 'ROUND((k_distance / 5))*5 AS distFacet',
@@ -272,18 +280,22 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((k_altitude_asc / 500))*500',
-                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',
+                    orderBy: 'value asc'
                 },
                 'data_tech_alt_max_facet_is': {
-                    selectField: 'ROUND((i_gps_ele / 500))*500'
+                    selectField: 'ROUND((i_gps_ele / 500))*500',
+                    orderBy: 'value asc'
                 },
                 'data_tech_dist_facets_fs': {
                     selectField: 'ROUND((k_distance / 5))*5',
-                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',
+                    orderBy: 'value asc'
                 },
                 'data_tech_dur_facet_fs': {
                     selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
-                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',
+                    orderBy: 'value asc'
                 },
                 'keywords_txt': {
                     // use only kat-keywords because of performance-issues
@@ -331,21 +343,25 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
-                    selectField: 'MONTH(i_date)'
+                    selectField: 'MONTH(i_date)',
+                    orderBy: 'value asc'
                 },
                 'rate_pers_gesamt_is': {
-                    selectField: 'i_rate'
+                    selectField: 'i_rate',
+                    orderBy: 'value asc'
                 },
                 'rate_pers_schwierigkeit_is': {
                     selectField: 'k_rate_schwierigkeit',
-                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',
+                    orderBy: 'value asc'
                 },
                 'rate_tech_overall_ss': {
                     noFacet: true
                 },
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)',
-                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id'
+                    selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',
+                    orderBy: 'value asc'
                 },
                 'type_txt': {
                     constValues: ['image', 'track', 'route', 'location', 'trip', 'news'],
@@ -353,7 +369,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectLimit: 1
                 },
                 'week_is': {
-                    selectField: 'WEEK(i_date)'
+                    selectField: 'WEEK(i_date)',
+                    orderBy: 'value asc'
                 }
             },
             sortMapping: {
@@ -408,37 +425,38 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 desc_txt: 'k_meta_shortdesc',
                 desc_md_txt: 'k_meta_shortdesc_md',
                 desc_html_txt: 'k_meta_shortdesc_html',
+                distance: 'geodist',
                 geo_lon_s: 'i_gps_lon',
                 geo_lat_s: 'i_gps_lat',
                 geo_loc_p: 'i_gps_loc',
-                data_tech_alt_asc_i: 'altAsc',
-                data_tech_alt_desc_i: 'altDesc',
-                data_tech_alt_min_i: 'altMin',
-                data_tech_alt_max_i: 'altMax',
-                data_tech_dist_f: 'dist',
+                data_tech_alt_asc_i: 'k_altitude_asc',
+                data_tech_alt_desc_i: 'k_altitude_desc',
+                data_tech_alt_min_i: 'i_gps_ele',
+                data_tech_alt_max_i: 'i_gps_ele',
+                data_tech_dist_f: 'k_distance',
                 data_tech_dur_f: 'dur',
-                rate_pers_ausdauer_i: 'ausdauer',
-                rate_pers_bildung_i: 'bildung',
-                rate_pers_gesamt_i: 'gesamt',
-                rate_pers_kraft_i: 'kraft',
-                rate_pers_mental_i: 'mental',
-                rate_pers_motive_i: 'motive',
-                rate_pers_schwierigkeit_i: 'schwierigkeit',
-                rate_pers_wichtigkeit_i: 'wichtigkeit',
+                rate_pers_ausdauer_i: 'k_rate_ausdauer',
+                rate_pers_bildung_i: 'k_rate_bildung',
+                rate_pers_gesamt_i: 'i_rate',
+                rate_pers_kraft_i: 'k_rate_kraft',
+                rate_pers_mental_i: 'k_rate_mental',
+                rate_pers_motive_i: 'i_rate_motive',
+                rate_pers_schwierigkeit_i: 'k_rate_schwierigkeit',
+                rate_pers_wichtigkeit_i: 'i_rate_wichtigkeit',
                 gpstracks_basefile_s: 'k_gpstracks_basefile',
                 keywords_txt: 'i_keywords',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'i_katname',
                 type_s: 'type',
-                actiontype_ss: 'k_type',
-                subtype_s: 'subtype_s',
+                actiontype_s: 'actionType',
+                subtype_s: 'subtype',
                 i_fav_url_txt: 'i_fav_url_txt'
             }
         },
         'route': {
             tableName: 'tour',
-            selectFrom: 'tour INNER JOIN location ON tour.l_id = location.l_id',
+            selectFrom: 'tour LEFT JOIN location ON tour.l_id = location.l_id',
             selectFieldList: [
                 '"ROUTE" AS type',
                 'CONCAT("ac_", tour.t_typ) AS actiontype',
@@ -466,48 +484,52 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'CONCAT(t_gps_lat, ",", t_gps_lon) AS t_gps_loc',
                 'l_lochirarchietxt',
                 'l_lochirarchieids',
-                't_route_hm AS altAsc',
-                't_ele_max AS altMax',
-                't_route_m AS dist',
-                't_rate_ausdauer AS ausdauer',
-                't_rate_bildung AS bildung',
-                't_rate_gesamt AS gesamt',
-                't_rate_kraft AS kraft',
-                't_rate_mental AS mental',
-                't_rate_motive AS motive',
-                't_rate_schwierigkeit AS schwierigkeit',
-                't_rate_wichtigkeit AS wichtigkeit',
-                't_rate as overall',
-                't_rate_ks as ks',
-                't_rate_firn as firn',
-                't_rate_gletscher as gletscher',
-                't_rate_klettern as klettern',
-                't_rate_bergtour as bergtour',
-                't_rate_schneeschuh as schneeschuh',
-                't_desc_fuehrer_full as guides',
-                't_desc_gebiet as region',
-                't_desc_talort as baseloc',
-                't_desc_ziel as destloc',
+                't_route_hm',
+                't_ele_max',
+                't_route_m',
+                't_rate_ausdauer',
+                't_rate_bildung',
+                't_rate_gesamt',
+                't_rate_kraft',
+                't_rate_mental',
+                't_rate_motive',
+                't_rate_schwierigkeit',
+                't_rate_wichtigkeit',
+                't_rate',
+                't_rate_ks',
+                't_rate_firn',
+                't_rate_gletscher',
+                't_rate_klettern',
+                't_rate_bergtour',
+                't_rate_schneeschuh',
+                't_desc_fuehrer',
+                't_desc_gebiet',
+                't_desc_talort',
+                't_desc_ziel',
                 'ROUND((t_route_hm / 500))*500 AS altAscFacet',
                 'ROUND((t_ele_max / 500))*500 AS altMaxFacet',
                 'ROUND((t_route_m / 5))*5 AS distFacet',
-                't_route_dauer AS dur',
+                't_route_dauer',
                 'ROUND(ROUND(t_route_dauer * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
                 },
                 'data_tech_alt_asc_facet_is': {
-                    selectField: 'ROUND((t_route_hm / 500))*500'
+                    selectField: 'ROUND((t_route_hm / 500))*500',
+                    orderBy: 'value asc'
                 },
                 'data_tech_alt_max_facet_is': {
-                    selectField: 'ROUND((t_ele_max / 500))*500'
+                    selectField: 'ROUND((t_ele_max / 500))*500',
+                    orderBy: 'value asc'
                 },
                 'data_tech_dist_facets_fs': {
-                    selectField: 'ROUND((t_route_m / 5))*5'
+                    selectField: 'ROUND((t_route_m / 5))*5',
+                    orderBy: 'value asc'
                 },
                 'data_tech_dur_facet_fs': {
-                    selectField: 'ROUND(ROUND(t_route_dauer * 2) / 2, 1)'
+                    selectField: 'ROUND(ROUND(t_route_dauer * 2) / 2, 1)',
+                    orderBy: 'value asc'
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -537,16 +559,20 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
-                    selectField: 'MONTH(t_datevon)'
+                    selectField: 'MONTH(t_datevon)',
+                    orderBy: 'value asc'
                 },
                 'rate_pers_gesamt_is': {
-                    selectField: 't_rate_gesamt'
+                    selectField: 't_rate_gesamt',
+                    orderBy: 'value asc'
                 },
                 'rate_pers_schwierigkeit_is': {
-                    selectField: 't_rate_schwierigkeit'
+                    selectField: 't_rate_schwierigkeit',
+                    orderBy: 'value asc'
                 },
                 'rate_tech_overall_ss': {
-                    selectField: 't_rate'
+                    selectField: 't_rate',
+                    orderBy: 'value asc'
                 },
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
@@ -557,7 +583,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectLimit: 1
                 },
                 'week_is': {
-                    selectField: 'WEEK(t_datevon)'
+                    selectField: 'WEEK(t_datevon)',
+                    orderBy: 'value asc'
                 }
             },
             sortMapping: {
@@ -612,42 +639,43 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 desc_txt: 't_meta_shortdesc',
                 desc_md_txt: 't_meta_shortdesc_md',
                 desc_html_txt: 't_meta_shortdesc_html',
+                distance: 'geodist',
                 geo_lon_s: 't_gps_lon',
                 geo_lat_s: 't_gps_lat',
                 geo_loc_p: 't_gps_loc',
-                data_tech_alt_asc_i: 'altAsc',
+                data_tech_alt_asc_i: 't_route_hm',
                 data_tech_alt_desc_i: 'altDesc',
                 data_tech_alt_min_i: 'altMin',
-                data_tech_alt_max_i: 'altMax',
-                data_tech_dist_f: 'dist',
-                data_tech_dur_f: 'dur',
-                data_info_guides_s: 'guides',
-                data_info_region_s: 'region',
-                data_info_baseloc_s: 'baseloc',
-                data_info_destloc_s: 'destloc',
-                rate_pers_ausdauer_i: 'ausdauer',
-                rate_pers_bildung_i: 'bildung',
-                rate_pers_gesamt_i: 'gesamt',
-                rate_pers_kraft_i: 'kraft',
-                rate_pers_mental_i: 'mental',
-                rate_pers_motive_i: 'motive',
-                rate_pers_schwierigkeit_i: 'schwierigkeit',
-                rate_pers_wichtigkeit_i: 'wichtigkeit',
-                rate_tech_overall_s: 'overall',
-                rate_tech_ks_s: 'ks',
-                rate_tech_firn_s: 'firn',
-                rate_tech_gletscher_s: 'gletscher',
-                rate_tech_klettern_s: 'klettern',
-                rate_tech_bergtour_s: 'bergtour',
-                rate_tech_schneeschuh_s: 'schneeschuh',
+                data_tech_alt_max_i: 't_ele_max',
+                data_tech_dist_f: 't_route_m',
+                data_tech_dur_f: 't_route_dauer',
+                data_info_guides_s: 't_desc_fuehrer',
+                data_info_region_s: 't_desc_gebiet',
+                data_info_baseloc_s: 't_desc_talort',
+                data_info_destloc_s: 't_desc_ziel',
+                rate_pers_ausdauer_i: 't_rate_ausdauer',
+                rate_pers_bildung_i: 't_rate_bildung',
+                rate_pers_gesamt_i: 't_rate_gesamt',
+                rate_pers_kraft_i: 't_rate_kraft',
+                rate_pers_mental_i: 't_rate_mental',
+                rate_pers_motive_i: 't_rate_motive',
+                rate_pers_schwierigkeit_i: 't_rate_schwierigkeit',
+                rate_pers_wichtigkeit_i: 't_rate_wichtigkeit',
+                rate_tech_overall_s: 't_rate',
+                rate_tech_ks_s: 't_rate_ks',
+                rate_tech_firn_s: 't_rate_firn',
+                rate_tech_gletscher_s: 't_rate_gletscher',
+                rate_tech_klettern_s: 't_rate_klettern',
+                rate_tech_bergtour_s: 't_rate_bergtour',
+                rate_tech_schneeschuh_s: 't_rate_schneeschuh',
                 gpstracks_basefile_s: 't_gpstracks_basefile',
                 keywords_txt: 't_keywords',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 't_name',
                 type_s: 'type',
-                actiontype_ss: 't_typ',
-                subtype_s: 'subtype_s',
+                actiontype_s: 'actionType',
+                subtype_s: 'subtype',
                 i_fav_url_txt: 'i_fav_url_txt'
             }
         },
@@ -656,7 +684,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             selectFrom: 'location',
             selectFieldList: [
                 '"LOCATION" AS type',
-                'CONCAT(location.l_typ) AS subtype',
+                'location.l_typ',
+                'CONCAT("loc_", l_typ) AS subtype',
                 'CONCAT("LOCATION", "_", location.l_id) AS id',
                 'location.l_id',
                 'l_name',
@@ -765,6 +794,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 desc_txt: 'l_meta_shortdesc',
                 desc_md_txt: 'l_meta_shortdesc_md',
                 desc_html_txt: 'l_meta_shortdesc_html',
+                distance: 'geodist',
                 geo_lon_s: 'l_gps_lon',
                 geo_lat_s: 'l_gps_lat',
                 geo_loc_p: 'l_gps_loc',
@@ -773,7 +803,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'l_name',
                 type_s: 'type',
-                subtype_s: 'subtype_s',
+                subtype_s: 'subtype'
             }
         },
         'trip': {
@@ -866,6 +896,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
+                track_id_i: '"dummy"',
                 route_id_is: '"dummy"',
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
@@ -881,8 +912,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 desc_html_txt: 'tr_meta_shortdesc_html',
                 keywords_txt: 'tr_keywords',
                 name_s: 'tr_name',
-                type_s: 'type',
-                subtype_s: 'subtype_s',
+                type_s: 'type'
             }
         },
         'news': {
@@ -991,8 +1021,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 desc_html_txt: 'n_message_html',
                 keywords_txt: 'n_keywords',
                 name_s: 'n_headline',
-                type_s: 'type',
-                subtype_s: 'subtype_s',
+                type_s: 'type'
             }
         }
     };
