@@ -5,7 +5,7 @@
             <div>
                 <ng-container [ngSwitch]="record.type">
                     <ng-container *ngSwitchCase="'IMAGE'">
-                        <h5><span class="fx-bg-type">{{record.type | translate }}</span> <span class="fx-bg-name">{{record | sdocdate}} {{record.name}}</span></h5>
+                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | sdocdate}} {{record.name}}</span></h5>
                             <div class="image-container">
                                 <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                     <img class="picture-big" width="600px" [src]="contentUtils.getFullUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
@@ -14,7 +14,7 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault="">
                         <div style="width: 200px; float: left; margin-right: 10px">
-                            <h5 class="fx-bg-type">{{record.type | translate }}</h5>
+                            <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
                             <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                 <img class="picture-small" width="200px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
                             </ng-container>

@@ -5,7 +5,7 @@
                 <app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div>
-                    <h5>{{listItem.currentRecord.type | translate }}</h5>
+                    <h5 class="fx-bg-type">{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</h5>
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-big" width="600px"
                              [src]="listItem.previewUrl"
@@ -49,7 +49,7 @@
                 <app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
             <div>
                 <div style="width: 300px; float: left">
-                    <h5>{{listItem.currentRecord.type | translate }}</h5>
+                    <h5 class="fx-bg-type">{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</h5>
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="300px"
                              [src]="listItem.previewUrl"
