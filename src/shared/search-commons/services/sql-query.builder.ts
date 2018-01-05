@@ -15,6 +15,7 @@ export interface QueryData {
 export interface TableFacetConfig {
     selectField?: string;
     selectFrom?: string;
+    orderBy?: string;
     selectLimit?: number;
     noFacet?: boolean;
     selectSql?: string;
@@ -56,6 +57,27 @@ export interface TableConfig {
 
 export class SqlQueryBuilder {
     protected mapperUtils = new MapperUtils();
+
+    public transformToSqlDialect(sql: string, client: string): string {
+        if (client === 'sqlite3') {
+            const replace = ' CONCAT(';
+            while (sql.indexOf(replace) > 0) {
+                const start = sql.indexOf(replace);
+                const end = sql.indexOf(')', start);
+                const sqlPre = sql.substr(0, start + 1);
+                const sqlAfter = sql.substr(end + 1);
+                const toBeConverted = sql.substr(start + replace.length, end - start - replace.length);
+                sql = sqlPre + toBeConverted.replace(/, /g, ' || ') + sqlAfter;
+            }
+            sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'datetime($1)');
+            sql = sql.replace(/WEEK\((.*?)\)/g, 'strftime("%W", $1)');
+            sql = sql.replace(/GROUP_CONCAT\((.*?) separator (.*?)\)/g, 'GROUP_CONCAT($1, $2)');
+            sql = sql.replace(/MONTH\((.*?)\)/g, 'strftime("%m", $1)');
+            sql = sql.replace(/TIME_TO_SEC\(TIMEDIFF\((.*?), (.*?)\)\)\/3600/g, '(JulianDay($1) - JulianDay($2)) * 24');
+        }
+
+        return sql;
+    }
 
     public queryTransformToSql(query: QueryData): string {
         const sql = 'select ' +
@@ -123,9 +145,10 @@ export class SqlQueryBuilder {
 
 
                 if (facetConfig.selectField !== undefined) {
+                    const orderBy = facetConfig.orderBy ? facetConfig.orderBy : 'count desc'
                     const from = facetConfig.selectFrom !== undefined ? facetConfig.selectFrom : tableConfig.tableName;
                     facets.set(key, 'SELECT count(*) AS count, ' + facetConfig.selectField + ' AS value '
-                        + 'FROM ' + from + ' GROUP BY value ORDER By count desc');
+                        + 'FROM ' + from + ' GROUP BY value ORDER BY ' + orderBy);
                 } else if (facetConfig.selectSql !== undefined) {
                     facets.set(key, facetConfig.selectSql);
                 } else if (facetConfig.constValues !== undefined) {

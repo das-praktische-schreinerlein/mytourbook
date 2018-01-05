@@ -13,22 +13,17 @@ import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 import {QueryData, SqlQueryBuilder, TableConfig} from './sql-query.builder';
 
-export function Response (data, meta, op) {
-    meta = meta || {};
-    this.data = data;
-    utils.fillIn(this, meta);
-    this.op = op;
-}
-
 export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends Adapter implements GenericFacetAdapter<R, F, S> {
     protected knex: any;
     protected mapperUtils = new MapperUtils();
     protected sqlQueryBuilder: SqlQueryBuilder = new SqlQueryBuilder();
     protected mapper: GenericAdapterResponseMapper;
+    protected config;
 
     constructor(config: any, mapper: GenericAdapterResponseMapper) {
         super(config);
+        this.config = config;
         this.knex = knex(config.knexOpts);
         this.mapper = mapper;
     }
@@ -113,10 +108,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const raw = sqlBuilder.raw(this.queryTransformToSql(queryData));
         const result = new Promise((resolve, reject) => {
             raw.then(function doneSearch(dbresults: any) {
-                    let [dbdata, dbresult] = dbresults;
-                    dbresult = dbresult || {};
-                    let response = new Response(dbdata, dbresult, 'count');
-                    response = me.respond(response, opts);
+                    const response = me.extractDbResult(dbresults);
                     const count = me.extractCountFromRequestResult(response);
                     return resolve(count);
                 }).catch(function errorSearch(reason) {
@@ -142,14 +134,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         opts.queryData = queryData;
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const raw = sqlBuilder.raw(this.queryTransformToSql(queryData));
+        const sql = this.queryTransformToSql(queryData);
+        const raw = sqlBuilder.raw(sql);
         const result = new Promise((resolve, reject) => {
             raw.then(function doneSearch(dbresults: any) {
-                let [dbdata, dbresult] = dbresults;
-                dbresult = dbresult || {};
-                let response = new Response(dbdata, dbresult, 'count');
-                response = me.respond(response, opts);
-
+                const response = me.extractDbResult(dbresults);
                 const records: R[] = me.extractRecordsFromRequestResult(mapper, response, queryData);
                 return utils.resolve(records);
             }).then(function doneSearch(records: R[]) {
@@ -186,25 +175,26 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             const queries = me.getFacetSql(<AdapterQuery>query, <AdapterOpts>opts);
             const promises = [];
             queries.forEach((value, key) => {
-                const raw = sqlBuilder.raw(value);
+                const sql = this.transformToSqlDialect(value);
+                const raw = sqlBuilder.raw(sql);
                 promises.push(new Promise((resolve, reject) => {
                     raw.then(function doneSearch(dbresults: any) {
-                            let [dbdata, dbresult] = dbresults;
-                            dbresult = dbresult || {};
-                            let response = new Response(dbdata, dbresult, 'count');
-                            response = me.respond(response, opts);
-                            const facet: Facet = me.extractFacetFromRequestResult(response);
-                            if (facetConfigs[key] && facetConfigs[key].selectLimit > 0) {
-                                facet.selectLimit = facetConfigs[key].selectLimit;
-                            }
+                        const response = me.extractDbResult(dbresults);
+                        let facet: Facet = me.extractFacetFromRequestResult(response);
+                        if (!facet) {
+                            facet = new Facet();
+                        }
+                        if (facetConfigs[key] && facetConfigs[key].selectLimit > 0) {
+                            facet.selectLimit = facetConfigs[key].selectLimit;
+                        }
 
-                            return resolve([key, facet]);
-                        },
-                        function errorSearch(reason) {
-                            console.error('_facets failed:' + reason);
+                        return resolve([key, facet]);
+                    },
+                    function errorSearch(reason) {
+                        console.error('_facets failed:' + reason);
 
-                            return reject(reason);
-                        });
+                        return reject(reason);
+                    });
                 }));
             });
 
@@ -363,7 +353,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             const promises = [];
             records.forEach(record => {
                 loadDetailDataConfigs.forEach((loadDetailDataConfig) => {
-                    let sql = loadDetailDataConfig.sql;
+                    let sql = this.transformToSqlDialect(loadDetailDataConfig.sql);
                     loadDetailDataConfig.parameterNames.forEach(parameterName => {
                         let value = this.mapperUtils.prepareSingleValue(record[parameterName], '_');
                         if (value !== undefined && parameterName === 'id') {
@@ -374,7 +364,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     const raw = sqlBuilder.raw(sql);
                     promises.push(new Promise((resolve, reject) => {
                         raw.then(function doneSearch(dbresults: any) {
-                            return resolve([loadDetailDataConfig.profile, record, dbresults[0]]);
+                            const response = me.extractDbResult(dbresults);
+                            return resolve([loadDetailDataConfig.profile, record, response]);
                         },
                         function errorSearch(reason) {
                             console.error('loadDetailData failed:' + reason);
@@ -416,7 +407,21 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     };
 
     protected queryTransformToSql(query: QueryData): string {
-        return this.sqlQueryBuilder.queryTransformToSql(query);
+        let  sql = this.sqlQueryBuilder.queryTransformToSql(query);
+        sql = this.transformToSqlDialect(sql);
+        return sql;
+    }
+
+    protected transformToSqlDialect(sql: string): string {
+        return this.sqlQueryBuilder.transformToSqlDialect(sql, this.config.knexOpts.client);
+    }
+
+    protected extractDbResult(dbresult: any): any {
+        if (this.config.knexOpts.client === 'mysql') {
+            return dbresult[0];
+        }
+
+        return dbresult;
     }
 
     protected queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
