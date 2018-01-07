@@ -27,6 +27,7 @@ export class AdapterFilterActions {
     static LT = '<';
     static LE = '<=';
     static IN = 'in';
+    static IN_NUMBER = 'in_number';
     static LIKEIN = 'likein';
     static NOTIN = 'notin';
 }

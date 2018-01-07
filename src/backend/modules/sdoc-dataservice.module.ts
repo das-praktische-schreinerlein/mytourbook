@@ -140,7 +140,7 @@ export class SDocDataServiceModule {
         if (itemsJsConfig === undefined) {
             throw new Error('config for SDocItemsJsAdapter not exists');
         }
-        const records = SDocFileUtils.readRecordsFromFile(itemsJsConfig['dataFile']);
+        const records = SDocFileUtils.parseRecordsFromJson(fs.readFileSync(itemsJsConfig['dataFile'], { encoding: 'utf8' }));
 
         const adapter = new SDocItemsJsAdapter({}, records);
         dataStore.setAdapter('http', adapter, '', {});

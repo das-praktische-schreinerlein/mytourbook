@@ -11,7 +11,7 @@ import {GenericFacetAdapter} from './generic-search.adapter';
 import {isArray} from 'util';
 import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
-import {QueryData, SqlQueryBuilder, TableConfig} from './sql-query.builder';
+import {SelectQueryData, SqlQueryBuilder, TableConfig} from './sql-query.builder';
 
 export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends Adapter implements GenericFacetAdapter<R, F, S> {
@@ -29,7 +29,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
-        throw new Error('create not implemented');
+        props = props || {};
+        opts = opts || {};
+
+        return super.create(mapper, props, opts);
     }
 
     createMany<T extends Record>(mapper: Mapper, props: any, opts: any): Promise<T> {
@@ -45,7 +48,29 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
-        throw new Error('find not implemented');
+        const adapterQuery: AdapterQuery = {
+            loadTrack: false,
+            where: {
+                id: id
+            }
+        };
+
+        const me = this;
+        const result = new Promise<T>((resolve, reject) => {
+            me._findAll(mapper, adapterQuery, opts).then(value => {
+                const [records] = value;
+                if (records.length === 1) {
+                    resolve(records[0]);
+                } else {
+                    reject('records not found or not unique:' + records.length + ' for query:' + adapterQuery);
+                }
+            }).catch(reason => {
+                console.error('_find failed:' + reason);
+                return reject(reason);
+            });
+        });
+
+        return result;
     }
 
     sum (mapper: Mapper, field: string, query: any, opts?: any): Promise<any> {
@@ -91,6 +116,20 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.Promise.resolve(result);
     }
 
+    _create(mapper, props, opts) {
+        props = props || {};
+        opts = opts || {};
+
+        const tableName = props.type;
+        const tableConfig = this.getTableConfigForTable(tableName);
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        const result = new Promise((allResolve, allReject) => {
+
+        });
+
+        return result;
+    }
+
     _count(mapper, query, opts) {
         query = query || {};
         opts = opts || {};
@@ -98,7 +137,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         opts.adapterQuery = true;
         const me = this;
-        const queryData = me.queryTransformToAdapterQuery('count', mapper, query, opts);
+        const queryData = me.queryTransformToAdapterSelectQuery('count', mapper, query, opts);
         if (queryData === undefined) {
             return utils.resolve([0]);
         }
@@ -127,7 +166,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         opts.adapterQuery = true;
         const me = this;
-        const queryData = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
+        const queryData = me.queryTransformToAdapterSelectQuery('findAll', mapper, query, opts);
         if (queryData === undefined) {
             return utils.resolve([[]]);
         }
@@ -162,7 +201,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         // init data with dummy-query
         opts.adapterQuery = true;
         const me = this;
-        const queryData = me.queryTransformToAdapterQuery('findAll', mapper, query, opts);
+        const queryData = me.queryTransformToAdapterSelectQuery('findAll', mapper, query, opts);
         if (queryData === undefined) {
             return utils.resolve(this.getDefaultFacets());
         }
@@ -283,7 +322,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             return this.extractFacetFromRequestResult(response.data);
         }
 
-        return this.extractRecordsFromRequestResult(mapper, response.data, <QueryData>opts.queryData);
+        return this.extractRecordsFromRequestResult(mapper, response.data, <SelectQueryData>opts.queryData);
 
     }
 
@@ -300,7 +339,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return [0];
     }
 
-    extractRecordsFromRequestResult(mapper: Mapper, result: any, queryData: QueryData): R[] {
+    extractRecordsFromRequestResult(mapper: Mapper, result: any, queryData: SelectQueryData): R[] {
         if (!isArray(result)) {
             return [];
         }
@@ -395,6 +434,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected abstract getTableConfig(params: AdapterQuery): TableConfig;
 
+    protected abstract getTableConfigForTable(table: string): TableConfig;
+
     protected abstract getDefaultFacets(): Facets;
 
     protected getFacetSql(adapterQuery: AdapterQuery, adapterOpts: AdapterOpts): Map<string, string> {
@@ -406,8 +447,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return this.sqlQueryBuilder.getFacetSql(tableConfig, adapterOpts);
     };
 
-    protected queryTransformToSql(query: QueryData): string {
-        let  sql = this.sqlQueryBuilder.queryTransformToSql(query);
+    protected queryTransformToSql(query: SelectQueryData): string {
+        let  sql = this.sqlQueryBuilder.selectQueryTransformToSql(query);
         sql = this.transformToSqlDialect(sql);
         return sql;
     }
@@ -424,13 +465,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return dbresult;
     }
 
-    protected queryTransformToAdapterQuery(method: string, mapper: Mapper, params: any, opts: any): QueryData {
+    protected queryTransformToAdapterSelectQuery(method: string, mapper: Mapper, params: any, opts: any): SelectQueryData {
         const tableConfig = this.getTableConfig(<AdapterQuery>params);
         if (tableConfig === undefined) {
             return undefined;
         }
 
-        return this.sqlQueryBuilder.queryTransformToAdapterQuery(tableConfig, method, <AdapterQuery>params, <AdapterOpts>opts);
+        return this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, <AdapterQuery>params, <AdapterOpts>opts);
     }
 }
 

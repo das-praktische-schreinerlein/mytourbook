@@ -25,6 +25,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             loadDetailData: [
                 {
                     profile: 'image',
+                    // TODO: check security
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
                          'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                          'WHERE image.k_id in (:id) and p_id in (18)',
@@ -184,6 +185,33 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 lon: 'l_geo_longdeg',
                 spatialField: 'geodist',
                 spatialSortKey: 'distance'
+            },
+            writeMapping: {
+                'kategorie.t_id': ':route_id_i',
+                'kategorie.i_id': ':image_id_i',
+                'kategorie.l_id': ':loc_id_i',
+                'kategorie.tr_id': ':trip_id_i',
+                'kategorie.n_id': ':news_id_i',
+                'kategorie.k_dateshow': ':dateshow_dt',
+                'kategorie.k_meta_shortdesc': ':desc_txt',
+                'kategorie.k_meta_shortdesc_md': ':desc_md_txt',
+                'kategorie.k_meta_shortdesc_html': ':desc_html_txt',
+                'kategorie.k_altitude_asc': ':data_tech_alt_asc_i',
+                'kategorie.k_altitude_desc': ':data_tech_alt_desc_i',
+                'kategorie.k_altitude_min': ':data_tech_alt_min_i',
+                'kategorie.k_altitude_max': ':data_tech_alt_max_i',
+                'kategorie.k_distance': ':data_tech_dist_f',
+                'kategorie.k_rate_ausdauer': ':rate_pers_ausdauer_i',
+                'kategorie.k_rate_bildung': ':rate_pers_bildung_i',
+                'kategorie.k_rate_gesamt': ':rate_pers_gesamt_i',
+                'kategorie.k_rate_kraft': ':rate_pers_kraft_i',
+                'kategorie.k_rate_mental': ':rate_pers_mental_i',
+                'kategorie.k_rate_motive': ':rate_pers_motive_i',
+                'kategorie.k_rate_schwierigkeit': ':rate_pers_schwierigkeit_i',
+                'kategorie.k_rate_wichtigkeit': ':rate_pers_wichtigkeit_i',
+                'kategorie.k_gpstracks_basefile': ':gpstracks_basefile_s',
+                'kategorie.k_name': ':name_s',
+                'kategorie.k_type': ':actiontype'
             },
             fieldMapping: {
                 id: 'id',
@@ -404,6 +432,23 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(i_meta_name, " ", l_name)'
             },
+            writeMapping: {
+                'image.l_id': ':loc_id_i',
+                'image.k_id': ':track_id_i',
+                'image.i_date': ':dateshow_dt',
+                'image.i_meta_shortdesc': ':desc_txt',
+                'image.i_meta_shortdesc_md': ':desc_md_txt',
+                'image.i_meta_shortdesc_html': ':desc_html_txt',
+                'image.i_gps_lon': ':geo_lon_s',
+                'image.i_gps_lat': ':geo_lat_s',
+                'image.i_gps_ele': ':data_tech_alt_max_i',
+                'image.i_rate': ':rate_pers_gesamt_i',
+                'image.i_rate_motive': ':rate_pers_motive_i',
+                'image.i_rate_wichtigkeit': ':rate_pers_wichtigkeit_i',
+                'image.i_meta_name': ':name_s',
+                'image.i_dir': ':i_fav_url_txt',
+                'image.i_file': ':i_fav_url_txt'
+            },
             fieldMapping: {
                 id: 'id',
                 image_id_i: 'i_id',
@@ -620,6 +665,40 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(t_name, " ", t_meta_shortdesc, " ", l_name)'
             },
+            writeMapping: {
+                'tour.l_id': ':loc_id_i',
+                'tour.k_id': ':track_id_i',
+                'tour.t_dateshow': ':dateshow_dt',
+                'tour.t_meta_shortdesc': ':desc_txt',
+                'tour.t_meta_shortdesc_md': ':desc_md_txt',
+                'tour.t_meta_shortdesc_html': ':desc_html_txt',
+                'tour.t_route_hm': ':data_tech_alt_asc_i',
+                'tour.t_ele_max': ':data_tech_alt_max_i',
+                'tour.t_route_m': ':data_tech_dist_f',
+                'tour.t_route_dauer': ':data_tech_dur_f',
+                'tour.t_desc_fuehrer': ':data_info_guides_s',
+                'tour.t_desc_gebiet': ':data_info_region_s',
+                'tour.t_desc_talort': ':data_info_baseloc_s',
+                'tour.t_desc_ziel': ':data_info_destloc_s',
+                'tour.t_rate_ausdauer': ':rate_pers_ausdauer_i',
+                'tour.t_rate_bildung': ':rate_pers_bildung_i',
+                'tour.t_rate_gesamt': ':rate_pers_gesamt_i',
+                'tour.t_rate_kraft': ':rate_pers_kraft_i',
+                'tour.t_rate_mental': ':rate_pers_mental_i',
+                'tour.t_rate_motive': ':rate_pers_motive_i',
+                'tour.t_rate_schwierigkeit': ':rate_pers_schwierigkeit_i',
+                'tour.t_rate_wichtigkeit': ':rate_pers_wichtigkeit_i',
+                'tour.t_rate': ':rate_tech_overall_s',
+                'tour.t_rate_ks': ':rate_tech_ks_s',
+                'tour.t_rate_firn': ':rate_tech_firn_s',
+                'tour.t_rate_gletscher': ':rate_tech_gletscher_s',
+                'tour.t_rate_klettern': ':rate_tech_klettern_s',
+                'tour.t_rate_bergtour': ':rate_tech_bergtour_s',
+                'tour.t_rate_schneeschuh': ':rate_tech_schneeschuh_s',
+                'tour.t_gpstracks_basefile': ':gpstracks_basefile_s',
+                'tour.t_name': ':name_s',
+                'tour.t_typ': ':actiontype_s'
+            },
             fieldMapping: {
                 id: 'id',
                 image_id_i: 'i_id',
@@ -786,6 +865,16 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 trip_id_is: '"dummy"',
                 html: 'CONCAT(l_name, " ", l_meta_shortdesc)'
             },
+            writeMapping: {
+                'location.l_meta_shortdesc': ':desc_txt',
+                'location.l_meta_shortdesc_md': ':desc_md_txt',
+                'location.l_meta_shortdesc_html': ':desc_html_txt',
+                'location.l_geo_longdeg': ':geo_lon_s',
+                'location.l_geo_latdeg': ':geo_lat_s',
+                'location.l_gps_loc': ':geo_loc_p',
+                'location.l_name': ':name_s',
+                'location.l_typ': ':subtype_s'
+            },
             fieldMapping: {
                 id: 'id',
                 loc_id_i: 'l_id',
@@ -889,6 +978,13 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(tr_name, " ", tr_meta_shortdesc)'
             },
+            writeMapping: {
+                'trip.tr_dateshow': ':dateshow_dt',
+                'trip.tr_meta_shortdesc': ':desc_txt',
+                'trip.tr_meta_shortdesc_md': ':desc_md_txt',
+                'trip.tr_meta_shortdesc_html': ':desc_html_txt',
+                'trip.tr_name': ':name_s'
+            },
             fieldMapping: {
                 id: 'id',
                 trip_id_i: 'tr_id',
@@ -985,6 +1081,14 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(n_headline, " ", n_message)'
             },
+            writeMapping: {
+                'news.n_date': ':dateshow_dt',
+                'news.n_message': ':desc_txt',
+                'news.n_message_md': ':desc_md_txt',
+                'news.n_message_html': ':desc_html_txt',
+                'news.n_keywords': ':keywords_txt',
+                'news.n_headline': ':name_s'
+            },
             fieldMapping: {
                 id: 'id',
                 news_id_i: 'n_id',
@@ -1040,8 +1144,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             return undefined;
         }
         const ids = params.where['id'];
-        if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
-            const tabName = ids.in[0].replace(/_.*/g, '').toLowerCase();
+        if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
+            const tabName = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
             if (SDocSqlMediadbAdapter.tableConfigs[tabName] !== undefined) {
                 return tabName;
             }

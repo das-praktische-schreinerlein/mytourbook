@@ -59,13 +59,13 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             if (whenValues.has('week')) {
                 filter = filter || {};
                 filter['week_is'] = {
-                    'in': this.searchParameterUtils.joinValuesAndReplacePrefix(whenValues.get('week'), 'week', ',').split(/,/)
+                    'in_number': this.searchParameterUtils.joinValuesAndReplacePrefix(whenValues.get('week'), 'week', ',').split(/,/)
                 };
             }
             if (whenValues.has('month')) {
                 filter = filter || {};
                 filter['month_is'] = {
-                    'in': this.searchParameterUtils.joinValuesAndReplacePrefix(whenValues.get('month'), 'month', ',').split(/,/)
+                    'in_number': this.searchParameterUtils.joinValuesAndReplacePrefix(whenValues.get('month'), 'month', ',').split(/,/)
                 };
             }
         }
@@ -73,7 +73,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         if (searchForm.locId !== undefined && searchForm.locId.length > 0) {
             filter = filter || {};
             filter['loc_id_i'] = {
-                'in': searchForm.locId.split(/,/)
+                'in_number': searchForm.locId.split(/,/)
             };
         }
         if (searchForm.nearby !== undefined && searchForm.nearby.length > 0) {
@@ -89,7 +89,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             if (whereValues.has('locId')) {
                 filter = filter || {};
                 filter['loc_id_i'] = {
-                    'in': this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId'), 'locId', ',').split(/,/)
+                    'in_number': this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId'), 'locId', ',').split(/,/)
                 };
             }
             if (whereValues.has('nearby')) {
@@ -131,7 +131,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
                 const [filterName, values] = moreFilter.split(/:/);
                 if (filterName && values && this.validMoreFilterNames[filterName] === true) {
                     filter[filterName] = {
-                        'in': values.split(/,/)
+                        'in_number': values.split(/,/)
                     };
                 }
             }
@@ -140,25 +140,25 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         if (searchForm.techDataAltitudeMax !== undefined && searchForm.techDataAltitudeMax.length > 0) {
             filter = filter || {};
             filter['data_tech_alt_max_facet_is'] = {
-                'in': searchForm.techDataAltitudeMax.split(/,/)
+                'in_number': searchForm.techDataAltitudeMax.split(/,/)
             };
         }
         if (searchForm.techDataAscent !== undefined && searchForm.techDataAscent.length > 0) {
             filter = filter || {};
             filter['data_tech_alt_asc_facet_is'] = {
-                'in': searchForm.techDataAscent.split(/,/)
+                'in_number': searchForm.techDataAscent.split(/,/)
             };
         }
         if (searchForm.techDataDistance !== undefined && searchForm.techDataDistance.length > 0) {
             filter = filter || {};
             filter['data_tech_dist_facets_fs'] = {
-                'in': searchForm.techDataDistance.split(/,/)
+                'in_number': searchForm.techDataDistance.split(/,/)
             };
         }
         if (searchForm.techDataDuration !== undefined && searchForm.techDataDuration.length > 0) {
             filter = filter || {};
             filter['data_tech_dur_facet_fs'] = {
-                'in': searchForm.techDataDuration.split(/,/)
+                'in_number': searchForm.techDataDuration.split(/,/)
             };
         }
         if (searchForm.techRateOverall !== undefined && searchForm.techRateOverall.length > 0) {

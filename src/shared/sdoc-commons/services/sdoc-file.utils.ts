@@ -1,12 +1,7 @@
 import {SDocRecord} from '../model/records/sdoc-record';
-import * as fs from 'fs';
 import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
 
 export class SDocFileUtils {
-    public static readRecordsFromFile(fileName: string): SDocRecord[] {
-        return SDocFileUtils.parseRecordsFromJson(fs.readFileSync(fileName, { encoding: 'utf8' }));
-    }
-
     public static parseRecordsFromJson(json: string): SDocRecord[] {
         const data = JSON.parse(json);
         const records = [];

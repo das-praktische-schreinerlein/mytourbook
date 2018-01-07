@@ -7,7 +7,7 @@ import {Adapter} from 'js-data-adapter';
 import {Facet, Facets} from '../model/container/facets';
 import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
 import {AdapterOpts, AdapterQuery} from './mapper.utils';
-import {ItemsJsConfig, ItemsJsQueryBuilder, ItemsJsQueryData} from './itemsjs-query.builder';
+import {ItemsJsConfig, ItemsJsQueryBuilder, ItemsJsSelectQueryData} from './itemsjs-query.builder';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 import itemsjs from 'itemsjs';
 
@@ -262,17 +262,17 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
 
     abstract getItemsJsConfig(): ItemsJsConfig;
 
-    protected doQuery(query: ItemsJsQueryData): ItemJsResult {
+    protected doQuery(query: ItemsJsSelectQueryData): ItemJsResult {
         const result: ItemJsResult = this.itemJs.search(query);
         return result;
     };
 
-    protected queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): ItemsJsQueryData {
+    protected queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): ItemsJsSelectQueryData {
         return this.queryTransformToAdapterQueryWithMethod(undefined, mapper, params, opts);
     }
 
-    protected queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): ItemsJsQueryData {
-        return this.itemsJsQueryBuilder.queryTransformToAdapterQuery(this.getItemsJsConfig(), method, <AdapterQuery>params,
+    protected queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): ItemsJsSelectQueryData {
+        return this.itemsJsQueryBuilder.queryTransformToAdapterSelectQuery(this.getItemsJsConfig(), method, <AdapterQuery>params,
             <AdapterOpts>opts);
     }
 }

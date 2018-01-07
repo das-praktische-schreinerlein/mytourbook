@@ -58,12 +58,12 @@ export class SolrQueryBuilder {
         return url;
     }
 
-    public queryTransformToAdapterQuery(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery,
+    public queryTransformToAdapterSelectQuery(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery,
                                         adapterOpts: AdapterOpts): SolrQueryData {
 
-        const query = this.createAdapterQuery(solrConfig, method, adapterQuery, adapterOpts);
+        const query = this.createAdapterSelectQuery(solrConfig, method, adapterQuery, adapterOpts);
 
-        const fields = this.getAdapterFields(solrConfig, method, adapterQuery);
+        const fields = this.getAdapterSelectFields(solrConfig, method, adapterQuery);
         if (fields !== undefined && fields.length > 0) {
             query.fl = fields.join(' ');
         }
@@ -103,10 +103,10 @@ export class SolrQueryBuilder {
         return false;
     };
 
-    protected createAdapterQuery(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery,
-                                 adapterOpts: AdapterOpts): SolrQueryData {
-        // console.log('createAdapterQuery adapterQuery:', adapterQuery);
-        // console.log('createAdapterQuery adapterOpts:', adapterOpts);
+    protected createAdapterSelectQuery(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery,
+                                       adapterOpts: AdapterOpts): SolrQueryData {
+        // console.log('createAdapterSelectQuery adapterQuery:', adapterQuery);
+        // console.log('createAdapterSelectQuery adapterOpts:', adapterOpts);
 
         const newParams = [];
         if (adapterQuery.where) {
@@ -134,7 +134,7 @@ export class SolrQueryBuilder {
             query.q = '(' + newParams.join(' AND ') + ')';
         }
 
-        console.log('createAdapterQuery result:', query);
+        console.log('createAdapterSelectQuery result:', query);
         return query;
     }
 
@@ -184,7 +184,7 @@ export class SolrQueryBuilder {
         return spatialParams;
     };
 
-    protected getAdapterFields(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery): string[] {
+    protected getAdapterSelectFields(solrConfig: SolrConfig, method: string, adapterQuery: AdapterQuery): string[] {
         const fields = solrConfig.fieldList.slice(0);
 
         if (adapterQuery !== undefined && adapterQuery.spatial !== undefined && adapterQuery.spatial.geo_loc_p !== undefined &&
@@ -266,7 +266,7 @@ export class SolrQueryBuilder {
             query = fieldName + ':{ * TO "' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"}';
         } else if (action === AdapterFilterActions.LE) {
             query = fieldName + ':[ * TO "' + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"]';
-        } else if (action === AdapterFilterActions.IN) {
+        } else if (action === AdapterFilterActions.IN || action === AdapterFilterActions.IN_NUMBER) {
             query = fieldName + ':("' + value.map(
                 inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
             ).join('" OR "') + '")';

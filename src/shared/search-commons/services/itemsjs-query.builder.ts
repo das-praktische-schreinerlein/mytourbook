@@ -1,6 +1,6 @@
 import {AdapterFilterActions, AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 
-export interface ItemsJsQueryData {
+export interface ItemsJsSelectQueryData {
     page: number;
     per_page: number;
     sort?: string;
@@ -21,10 +21,10 @@ export interface ItemsJsConfig {
 export class ItemsJsQueryBuilder {
     protected mapperUtils = new MapperUtils();
 
-    public queryTransformToAdapterQuery(itemsJsConfig: ItemsJsConfig, method: string, adapterQuery: AdapterQuery,
-                                        adapterOpts: AdapterOpts): ItemsJsQueryData {
+    public queryTransformToAdapterSelectQuery(itemsJsConfig: ItemsJsConfig, method: string, adapterQuery: AdapterQuery,
+                                              adapterOpts: AdapterOpts): ItemsJsSelectQueryData {
 
-        const query = this.createAdapterQuery(itemsJsConfig, method, adapterQuery, adapterOpts);
+        const query = this.createAdapterSelectQuery(itemsJsConfig, method, adapterQuery, adapterOpts);
 
         const facetParams = this.getFacetParams(itemsJsConfig, adapterOpts);
         const spatialParams = this.getSpatialParams(itemsJsConfig, adapterQuery);
@@ -48,12 +48,12 @@ export class ItemsJsQueryBuilder {
         return false;
     };
 
-    protected createAdapterQuery(itemsJsConfig: ItemsJsConfig, method: string, adapterQuery: AdapterQuery,
-                                 adapterOpts: AdapterOpts): ItemsJsQueryData {
-        // console.log('createAdapterQuery adapterQuery:', adapterQuery);
-        // console.log('createAdapterQuery adapterOpts:', adapterOpts);
+    protected createAdapterSelectQuery(itemsJsConfig: ItemsJsConfig, method: string, adapterQuery: AdapterQuery,
+                                       adapterOpts: AdapterOpts): ItemsJsSelectQueryData {
+        // console.log('createAdapterSelectQuery adapterQuery:', adapterQuery);
+        // console.log('createAdapterSelectQuery adapterOpts:', adapterOpts);
 
-        let newParams = {};
+        const newParams = {};
         if (adapterQuery.where) {
             for (const fieldName of Object.getOwnPropertyNames(adapterQuery.where)) {
                 const filter = adapterQuery.where[fieldName];
@@ -71,14 +71,14 @@ export class ItemsJsQueryBuilder {
             }
         }
 
-        const query: ItemsJsQueryData = {
+        const query: ItemsJsSelectQueryData = {
             query: '',
             page: adapterOpts.offset,
             per_page: adapterOpts.limit,
             filters: newParams
         };
 
-        console.log('createAdapterQuery result:', query);
+        console.log('createAdapterSelectQuery result:', query);
         return query;
     }
 
@@ -116,7 +116,7 @@ export class ItemsJsQueryBuilder {
         return spatialParams;
     };
 
-    protected getAdapterFields(itemsJsConfig: ItemsJsConfig, method: string, adapterQuery: AdapterQuery): string[] {
+    protected getAdapterSelectFields(itemsJsConfig: ItemsJsConfig, method: string, adapterQuery: AdapterQuery): string[] {
         const fields = itemsJsConfig.searchableFields.slice(0);
 
         if (adapterQuery !== undefined && adapterQuery.spatial !== undefined && adapterQuery.spatial.geo_loc_p !== undefined &&
@@ -198,7 +198,7 @@ export class ItemsJsQueryBuilder {
             throw new Error ('not implemented');
         } else if (action === AdapterFilterActions.LE) {
             throw new Error ('not implemented');
-        } else if (action === AdapterFilterActions.IN) {
+        } else if (action === AdapterFilterActions.IN, action === AdapterFilterActions.IN_NUMBER) {
             query[fieldName] = value;
         } else if (action === AdapterFilterActions.NOTIN) {
             throw new Error ('not implemented');

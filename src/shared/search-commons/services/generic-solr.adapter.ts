@@ -31,7 +31,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts.adapterQuery = true;
         opts.adapterCount = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterSelectQuery.apply(me, args); };
 
         return super.count(mapper, query, opts);
     }
@@ -90,7 +90,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts.params.where.id = { '==': id};
         opts.offset = 0;
         opts.limit = 10;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterSelectQuery.apply(me, args); };
 
         return super.find(mapper, id, opts);
     }
@@ -102,7 +102,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts.endpoint = this.getHttpEndpoint('findAll');
         opts.adapterQuery = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterSelectQuery.apply(me, args); };
 
         return super.findAll(mapper, query, opts);
     }
@@ -116,7 +116,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts.adapterQuery = true;
         opts.adapterFacet = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterSelectQuery.apply(me, args); };
 
         opts.params = this.getParams(opts);
         opts.params.count = true;
@@ -155,7 +155,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         opts.adapterQuery = true;
         opts.adapterFacet = true;
         const me = this;
-        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterQuery.apply(me, args); };
+        opts['queryTransform'] = function(...args) { return me.queryTransformToAdapterSelectQuery.apply(me, args); };
 
         opts.params = this.getParams(opts);
         opts.params.count = true;
@@ -417,12 +417,13 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
 
     abstract getSolrConfig(): SolrConfig;
 
-    protected queryTransformToAdapterQuery(mapper: Mapper, params: any, opts: any): any {
-        return this.queryTransformToAdapterQueryWithMethod(undefined, mapper, params, opts);
+    protected queryTransformToAdapterSelectQuery(mapper: Mapper, params: any, opts: any): any {
+        return this.queryTransformToAdapterSelectQueryWithMethod(undefined, mapper, params, opts);
     }
 
-    protected queryTransformToAdapterQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): any {
-        return this.solrQueryBuilder.queryTransformToAdapterQuery(this.getSolrConfig(), method, <AdapterQuery>params, <AdapterOpts>opts);
+    protected queryTransformToAdapterSelectQueryWithMethod(method: string, mapper: Mapper, params: any, opts: any): any {
+        return this.solrQueryBuilder.queryTransformToAdapterSelectQuery(this.getSolrConfig(), method, <AdapterQuery>params,
+            <AdapterOpts>opts);
     }
 
 }

@@ -1066,8 +1066,8 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
             return undefined;
         }
         const ids = params.where['id'];
-        if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
-            const tabName = ids.in[0].replace(/_.*/g, '').toLowerCase();
+        if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
+            const tabName = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
             if (SDocSqlMytbAdapter.tableConfigs[tabName] !== undefined) {
                 return tabName;
             }

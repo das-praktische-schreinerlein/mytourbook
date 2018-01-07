@@ -1,6 +1,6 @@
 import {AdapterFilterActions, AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 
-export interface QueryData {
+export interface SelectQueryData {
     where: string[];
     offset: number;
     limit: number;
@@ -43,6 +43,7 @@ export interface TableConfig {
     filterMapping: {};
     fieldMapping: {};
     sortMapping: {};
+    writeMapping?: {};
     groupbBySelectFieldList?: boolean;
     groupbBySelectFieldListIgnore?: string[];
     optionalGroupBy?: OptionalGroupByConfig[];
@@ -67,6 +68,7 @@ export class SqlQueryBuilder {
                 const sqlPre = sql.substr(0, start + 1);
                 const sqlAfter = sql.substr(end + 1);
                 const toBeConverted = sql.substr(start + replace.length, end - start - replace.length);
+// TODO: check security
                 sql = sqlPre + toBeConverted.replace(/, /g, ' || ') + sqlAfter;
             }
             sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'datetime($1)');
@@ -79,7 +81,7 @@ export class SqlQueryBuilder {
         return sql;
     }
 
-    public queryTransformToSql(query: QueryData): string {
+    public selectQueryTransformToSql(query: SelectQueryData): string {
         const sql = 'select ' +
             (query.fields && query.fields.length > 0 ? query.fields.join(', ') : '') + ' ' +
             'from ' + query.from + ' ' +
@@ -93,14 +95,14 @@ export class SqlQueryBuilder {
         return sql;
     }
 
-    public queryTransformToAdapterQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
-                                           adapterOpts: AdapterOpts): QueryData {
-        const query = this.createAdapterQuery(tableConfig, method, adapterQuery, adapterOpts);
+    public queryTransformToAdapterSelectQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
+                                              adapterOpts: AdapterOpts): SelectQueryData {
+        const query = this.createAdapterSelectQuery(tableConfig, method, adapterQuery, adapterOpts);
         if (query === undefined) {
             return undefined;
         }
 
-        const fields = this.getAdapterFields(tableConfig, method, adapterQuery);
+        const fields = this.getAdapterSelectFields(tableConfig, method, adapterQuery);
         if (fields !== undefined && fields.length > 0) {
             query.fields = fields;
         }
@@ -145,7 +147,7 @@ export class SqlQueryBuilder {
 
 
                 if (facetConfig.selectField !== undefined) {
-                    const orderBy = facetConfig.orderBy ? facetConfig.orderBy : 'count desc'
+                    const orderBy = facetConfig.orderBy ? facetConfig.orderBy : 'count desc';
                     const from = facetConfig.selectFrom !== undefined ? facetConfig.selectFrom : tableConfig.tableName;
                     facets.set(key, 'SELECT count(*) AS count, ' + facetConfig.selectField + ' AS value '
                         + 'FROM ' + from + ' GROUP BY value ORDER BY ' + orderBy);
@@ -174,10 +176,10 @@ export class SqlQueryBuilder {
         return false;
     };
 
-    protected createAdapterQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
-                                 adapterOpts: AdapterOpts): QueryData {
-        // console.log('createAdapterQuery adapterQuery:', adapterQuery);
-        // console.log('createAdapterQuery adapterOpts:', adapterOpts);
+    protected createAdapterSelectQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
+                                       adapterOpts: AdapterOpts): SelectQueryData {
+        console.error('createAdapterSelectQuery adapterQuery:', adapterQuery);
+        // console.log('createAdapterSelectQuery adapterOpts:', adapterOpts);
 
         const newParams = [];
         if (adapterQuery.where) {
@@ -203,7 +205,7 @@ export class SqlQueryBuilder {
             }
         }
 
-        const query: QueryData = {
+        const query: SelectQueryData = {
             where: newParams.length <= 0 ? [] : newParams,
             having: [],
             offset: undefined,
@@ -217,7 +219,7 @@ export class SqlQueryBuilder {
             query.offset = adapterOpts.offset * adapterOpts.limit;
             query.limit = adapterOpts.limit;
         }
-        // console.log('createAdapterQuery result:', query);
+        // console.log('createAdapterSelectQuery result:', query);
 
         return query;
     }
@@ -281,7 +283,7 @@ export class SqlQueryBuilder {
         return undefined;
     }
 
-    protected getAdapterFields(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery): string[] {
+    protected getAdapterSelectFields(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery): string[] {
         if (method === 'count') {
             return ['COUNT( DISTINCT ' + tableConfig.filterMapping['id'] + ')'];
         }
@@ -299,7 +301,7 @@ export class SqlQueryBuilder {
         return fields;
     }
 
-    protected generateGroupByForQuery(tableConfig: TableConfig, method: string, query: QueryData, adapterQuery: AdapterQuery): void {
+    protected generateGroupByForQuery(tableConfig: TableConfig, method: string, query: SelectQueryData, adapterQuery: AdapterQuery): void {
         let addFields = [];
 
         if (tableConfig.optionalGroupBy !== undefined) {
@@ -399,6 +401,10 @@ export class SqlQueryBuilder {
             query = fieldName + ' in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
                 ).join('", "') + '")';
+        } else if (action === AdapterFilterActions.IN_NUMBER) {
+            query = fieldName + ' in (CAST("' + value.map(
+                inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
+            ).join('" AS INT), CAST("') + '" AS INT))';
         } else if (action === AdapterFilterActions.NOTIN) {
             query = fieldName + ' not in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())

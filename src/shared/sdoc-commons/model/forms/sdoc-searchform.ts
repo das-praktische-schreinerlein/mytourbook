@@ -1,10 +1,6 @@
 import {GenericSearchForm, GenericSearchFormFieldConfig} from '../../../search-commons/model/forms/generic-searchform';
 import {
-    GenericValidatorDatatypes,
-    IdCsvValidationRule,
-    IdValidationRule,
-    KeyParamsValidationRule,
-    NearbyParamValidationRule,
+    GenericValidatorDatatypes, IdCsvValidationRule, IdValidationRule, KeyParamsValidationRule, NearbyParamValidationRule,
     TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
