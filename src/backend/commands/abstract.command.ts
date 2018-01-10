@@ -1,3 +1,3 @@
 export interface AbstractCommand  {
-    process(argv: any): void;
+    process(argv: any): Promise<any>;
 }
