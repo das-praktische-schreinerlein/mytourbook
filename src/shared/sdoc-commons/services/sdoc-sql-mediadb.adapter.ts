@@ -3,9 +3,11 @@ import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 import {GenericSqlAdapter} from '../../search-commons/services/generic-sql.adapter';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
-import {TableConfig} from '../../search-commons/services/sql-query.builder';
+import {TableConfig, WriteQueryData} from '../../search-commons/services/sql-query.builder';
 import {AdapterFilterActions, AdapterQuery} from '../../search-commons/services/mapper.utils';
 import {Facet, Facets} from '../../search-commons/model/container/facets';
+import {Mapper} from 'js-data';
+import {SDocImageRecord} from '../model/records/sdocimage-record';
 
 export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public static tableConfigs = {
@@ -1153,6 +1155,23 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         }
 
         return undefined;
+    }
+
+    protected queryTransformToAdapterWriteQuery(method: string, mapper: Mapper, props: any, opts: any): WriteQueryData {
+        const query = super.queryTransformToAdapterWriteQuery(method, mapper, props, opts);
+        if (query.tableConfig.tableName === 'image') {
+            let file = null;
+            let dir = null;
+            if (props.get('sdocimages') && props.get('sdocimages').length > 0) {
+                const image: SDocImageRecord = props.get('sdocimages')[0];
+                file = image.fileName.replace(/^.*\/(.*?)$/, '$1');
+                dir = image.fileName.replace(/^(.*)\/(.*?)$/, '$1').replace(/\\/g, '/');
+            }
+            query.fields['i_dir'] = dir;
+            query.fields['i_file'] = file;
+        }
+
+        return query;
     }
 }
 
