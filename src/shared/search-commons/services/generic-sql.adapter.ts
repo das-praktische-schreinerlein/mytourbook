@@ -11,7 +11,7 @@ import {GenericFacetAdapter} from './generic-search.adapter';
 import {isArray} from 'util';
 import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
-import {SelectQueryData, SqlQueryBuilder, TableConfig} from './sql-query.builder';
+import {SelectQueryData, SqlQueryBuilder, TableConfig, WriteQueryData} from './sql-query.builder';
 
 export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends Adapter implements GenericFacetAdapter<R, F, S> {
@@ -31,7 +31,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
         props = props || {};
         opts = opts || {};
-
         return super.create(mapper, props, opts);
     }
 
@@ -116,15 +115,59 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.Promise.resolve(result);
     }
 
-    _create(mapper, props, opts) {
+    afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
+        opts.realResult = result;
+        return utils.resolve(result);
+    }
+
+    _create<T extends Record>(mapper, props, opts): Promise<any> {
+        if (opts.realSource) {
+            props = opts.realSource;
+        }
+        console.error("generic create", props);
         props = props || {};
         opts = opts || {};
 
-        const tableName = props.type;
-        const tableConfig = this.getTableConfigForTable(tableName);
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const result = new Promise((allResolve, allReject) => {
-
+        const me = this;
+        const result: Promise<any> = new Promise((allResolve, allReject) => {
+            const writeQuery = me.queryTransformToAdapterWriteQuery('create', mapper, props, opts);
+            if (writeQuery) {
+                const queryFields = [];
+                const queryValues = [];
+                for (const field in writeQuery.fields) {
+                    queryFields.push(field);
+                    queryValues.push(writeQuery.fields[field]);
+                }
+                //me.knex.insert(me.knex.raw(' (' + queryFields.join(', ') + ') values (' + queryValues.join(', ') + ')'))
+                me.knex.insert([writeQuery.fields])
+                    .into(writeQuery.from)
+                    .returning(writeQuery.tableConfig.filterMapping['id'])
+                    .then(values => {
+                        const id = values[0];
+                        const query = {
+                            where: {
+                                id: {
+                                    'in': [id]
+                                },
+                                type_txt: {
+                                    'in': [props.type.toLowerCase()]
+                                }
+                            }
+                        };
+                        return me.findAll(mapper, query, opts);
+                    }).then(searchResult => {
+                        if (!searchResult || searchResult.length !== 1) {
+                            return allResolve(undefined);
+                        }
+                        return allResolve([searchResult[0]]);
+                    }).catch(function errorSearch(reason) {
+                        console.error('_create failed:' + reason);
+                        return allReject(reason);
+                    });
+            } else {
+                return allReject('no query generated for props:' + props);
+            }
         });
 
         return result;
@@ -139,7 +182,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const me = this;
         const queryData = me.queryTransformToAdapterSelectQuery('count', mapper, query, opts);
         if (queryData === undefined) {
-            return utils.resolve([0]);
+            return utils.reject('something went wrong');
         }
         opts.queryData = queryData;
 
@@ -168,7 +211,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const me = this;
         const queryData = me.queryTransformToAdapterSelectQuery('findAll', mapper, query, opts);
         if (queryData === undefined) {
-            return utils.resolve([[]]);
+            return utils.reject('something went wrong');
         }
         opts.queryData = queryData;
 
@@ -472,6 +515,22 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         }
 
         return this.sqlQueryBuilder.queryTransformToAdapterSelectQuery(tableConfig, method, <AdapterQuery>params, <AdapterOpts>opts);
+    }
+
+    protected queryTransformToAdapterWriteQuery(method: string, mapper: Mapper, props: any, opts: any): WriteQueryData {
+        if (props.type === undefined) {
+            return undefined;
+        }
+
+        const tableName = props.type.toLowerCase();
+        const tableConfig = this.getTableConfigForTable(tableName);
+        if (tableConfig === undefined) {
+            return undefined;
+        }
+
+        const mappedProps = this.mapToAdapterDocument(tableConfig, props);
+
+        return this.sqlQueryBuilder.queryTransformToAdapterWriteQuery(tableConfig, method, mappedProps, <AdapterOpts>opts);
     }
 }
 

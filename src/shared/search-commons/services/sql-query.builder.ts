@@ -12,6 +12,12 @@ export interface SelectQueryData {
     having: string[];
 }
 
+export interface WriteQueryData {
+    tableConfig: TableConfig;
+    from: string;
+    fields: {};
+}
+
 export interface TableFacetConfig {
     selectField?: string;
     selectFrom?: string;
@@ -77,6 +83,7 @@ export class SqlQueryBuilder {
             sql = sql.replace(/MONTH\((.*?)\)/g, 'strftime("%m", $1)');
             sql = sql.replace(/TIME_TO_SEC\(TIMEDIFF\((.*?), (.*?)\)\)\/3600/g, '(JulianDay($1) - JulianDay($2)) * 24');
         }
+        // console.error("sql", sql);
 
         return sql;
     }
@@ -93,6 +100,56 @@ export class SqlQueryBuilder {
         // console.error("sql:", sql);
 
         return sql;
+    }
+
+    public queryTransformToAdapterWriteQuery(tableConfig: TableConfig, method: string, props: any,
+                                              adapterOpts: AdapterOpts): WriteQueryData {
+        const query: WriteQueryData = {
+            from: tableConfig.tableName,
+            fields: {},
+            tableConfig: tableConfig
+        };
+
+        for (const key in tableConfig.writeMapping) {
+            const prop = tableConfig.writeMapping[key];
+            const fieldName = key.replace(tableConfig.tableName + '.', '');
+            let value;
+            if (props[prop]) {
+                value = props[prop];
+            } else {
+                // extract with :field:
+                value = prop;
+                const replacers = prop.toString().match(/:.*?:/g);
+                if (replacers.length === 1) {
+                    for (const replacer of replacers) {
+                        const propKey = replacer.replace(/^:(.*):$/, '$1');
+                        if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
+                            value = value.replace(replacer, props[propKey]);
+                        } else {
+                            value = undefined;
+                        }
+                    }
+                } else {
+                    for (const replacer of replacers) {
+                        const propKey = replacer.replace(/^:(.*):$/, '$1');
+                        value = value.replace(replacer, props[propKey]);
+                        if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
+                            value = value.replace(replacer, props[propKey]);
+                        } else {
+                            value = 'NULL';
+                        }
+                    }
+                }
+
+                if (value === undefined) {
+                    value = 'NULL';
+                }
+            }
+            query.fields[fieldName] = value;
+        }
+        // console.error("query", query.fields);
+
+        return query;
     }
 
     public queryTransformToAdapterSelectQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
@@ -178,7 +235,7 @@ export class SqlQueryBuilder {
 
     protected createAdapterSelectQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
                                        adapterOpts: AdapterOpts): SelectQueryData {
-        console.error('createAdapterSelectQuery adapterQuery:', adapterQuery);
+        // console.error('createAdapterSelectQuery adapterQuery:', adapterQuery);
         // console.log('createAdapterSelectQuery adapterOpts:', adapterOpts);
 
         const newParams = [];

@@ -7,42 +7,47 @@ import {GenericAdapterResponseMapper} from '../../search-commons/services/generi
 export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
 
-    mapToAdapterDocument(mapping: {}, props: any): any {
+    mapToAdapterDocument(mapping: {}, props: SDocRecord): any {
         const values = {};
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'id')] = props.id;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'image_id_i')] = props.imageId;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'loc_id_i')] = props.locId;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'route_id_i')] = props.routeId;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'track_id_i')] = props.trackId;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'trip_id_i')] = props.tripId;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'news_id_i')] = props.newsId;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'dateshow_dt')] = props.dateshow;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'desc_txt')] = props.descTxt;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'desc_md_txt')] = props.descMd;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'desc_html_txt')] = props.descHtml;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'geo_lon_s')] = props.geoLon;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'geo_lat_s')] = props.geoLat;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'geo_loc_p')] = props.geoLoc;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'gpstrack_s')] = props.gpsTrack;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'gpstracks_basefile_s')] = props.gpsTrackBasefile;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'keywords_txt')] =
+        values['id'] = props.id;
+        values['image_id_i'] = props.imageId;
+        values['loc_id_i'] = props.locId;
+        values['route_id_i'] = props.routeId;
+        values['track_id_i'] = props.trackId;
+        values['trip_id_i'] = props.tripId;
+        values['news_id_i'] = props.newsId;
+        values['dateshow_dt'] = props.dateshow;
+        values['desc_txt'] = props.descTxt;
+        values['desc_md_txt'] = props.descMd;
+        values['desc_html_txt'] = props.descHtml;
+        values['geo_lon_s'] = props.geoLon;
+        values['geo_lat_s'] = props.geoLat;
+        values['geo_loc_p'] = props.geoLoc;
+        values['gpstrack_s'] = props.gpsTrack;
+        values['gpstracks_basefile_s'] = props.gpsTrackBasefile;
+        values['keywords_txt'] =
             (props.keywords ? props.keywords.split(', ').join(',,KW_') : '');
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'loc_lochirarchie_s')] = (props.locHirarchie ? props.locHirarchie
+        values['loc_lochirarchie_s'] = (props.locHirarchie ? props.locHirarchie
             .toLowerCase()
             .replace(/[ ]*->[ ]*/g, ',,')
             .replace(/ /g, '_') : '');
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'loc_lochirarchie_ids_s')] = (props.locHirarchieIds ? props.locHirarchieIds
+        values['loc_lochirarchie_ids_s'] = (props.locHirarchieIds ? props.locHirarchieIds
             .toLowerCase()
             .replace(/,/g, ',,')
             .replace(/ /g, '_') : '');
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'name_s')] = props.name;
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'type_s')] = props.type;
+        values['name_s'] = props.name;
+        values['type_s'] = props.type;
 
-        values[this.mapperUtils.mapToAdapterFieldName(mapping, 'html_txt')] = [
-            values[this.mapperUtils.mapToAdapterFieldName(mapping, 'desc_txt')],
-            values[this.mapperUtils.mapToAdapterFieldName(mapping, 'name_s')],
-            values[this.mapperUtils.mapToAdapterFieldName(mapping, 'keywords_txt')],
-            values[this.mapperUtils.mapToAdapterFieldName(mapping, 'type_s')]].join(' ');
+        values['html_txt'] = [
+            values['desc_txt'],
+            values['name_s'],
+            values['keywords_txt'],
+            values['type_s']].join(' ');
+
+        if (props.get('sdocimages') && props.get('sdocimages').length > 0) {
+            const image: SDocImageRecord = props.get('sdocimages')[0];
+            values['i_fav_url_txt'] = image.fileName;
+        }
 
         return values;
     }

@@ -49,6 +49,16 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     }
                      **/
                     return result;
+                },
+                beforeCreate(props: any, opts: any) {
+                    opts.realSource = props;
+                    return utils.resolve(props);
+                },
+                afterCreate<T extends Record>(props: any, opts: any, result: any): Promise<T> {
+                    if (opts.realResult) {
+                        result = opts.realResult;
+                    }
+                    return utils.resolve(result);
                 }
             }
         });

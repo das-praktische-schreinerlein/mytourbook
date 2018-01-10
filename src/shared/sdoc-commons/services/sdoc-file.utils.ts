@@ -1,8 +1,7 @@
-import {SDocRecord} from '../model/records/sdoc-record';
 import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
 
 export class SDocFileUtils {
-    public static parseRecordsFromJson(json: string): SDocRecord[] {
+    public static parseRecordSourceFromJson(json: string): any[] {
         const data = JSON.parse(json);
         const records = [];
         const idValidator = new IdValidationRule(true);
