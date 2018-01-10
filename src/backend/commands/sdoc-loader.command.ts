@@ -11,7 +11,7 @@ import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-ad
 
 export class SDocLoaderCommand implements AbstractCommand {
     public process(argv): Promise<any> {
-        const perRun = 10;
+        const perRun = 1;
         const typeMapping = {
             image: 'imageId',
             track: 'trackId',
@@ -81,10 +81,10 @@ export class SDocLoaderCommand implements AbstractCommand {
             const opts = {};
 
             for (const idFieldName of idMappings) {
-                if (recordIdMapping[record[idFieldName]]) {
+                if (recordIdMapping[idFieldName] && recordIdMapping[idFieldName][record[idFieldName]]) {
                     console.log('map ref ' + idFieldName + ' ' + record[idFieldName]
-                        + '->' + recordIdMapping[record[idFieldName]][record[idFieldName]]);
-                    record[idFieldName] = recordIdMapping[record[idFieldName]][record[idFieldName]];
+                        + '->' + recordIdMapping[idFieldName][record[idFieldName]]);
+                    record[idFieldName] = recordIdMapping[idFieldName][record[idFieldName]];
                 }
             }
 

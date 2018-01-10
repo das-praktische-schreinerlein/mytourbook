@@ -136,13 +136,13 @@ export class SqlQueryBuilder {
                         if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
                             value = value.replace(replacer, props[propKey]);
                         } else {
-                            value = 'NULL';
+                            value = null;
                         }
                     }
                 }
 
                 if (value === undefined) {
-                    value = 'NULL';
+                    value = null;
                 }
             }
             query.fields[fieldName] = value;
