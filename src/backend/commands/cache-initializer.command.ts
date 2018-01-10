@@ -9,9 +9,10 @@ import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform
 import {GenericSearchResult} from '../shared/search-commons/model/container/generic-searchresult';
 import {BaseEntityRecord} from '../shared/search-commons/model/records/base-entity-record';
 import {GenericSearchForm} from '../shared/search-commons/model/forms/generic-searchform';
+import {utils} from 'js-data';
 
 export class CacheInitializerCommand implements AbstractCommand {
-    public process(argv): void {
+    public process(argv): Promise<any> {
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const serverConfig: ServerConfig = {
             apiDataPrefix: '/api/v1',
@@ -33,9 +34,9 @@ export class CacheInitializerCommand implements AbstractCommand {
             return sdocServerModule.getById({}, function () {}, id);
         };
 
-        const createNextCache = function() {
+        const createNextCache = function(): Promise<any> {
             console.log('DO - search for page: ' + searchForm.pageNum);
-            sdocDataService.search(searchForm).then(
+            return sdocDataService.search(searchForm).then(
                 function searchDone(searchResult: GenericSearchResult<BaseEntityRecord, GenericSearchForm>) {
                     const ids = [];
                     for (const doc of searchResult.currentRecords) {
@@ -49,23 +50,22 @@ export class CacheInitializerCommand implements AbstractCommand {
                     // we now have a promises array and we want to wait for it
                     const results = Promise.all(actions); // pass array of promises
 
-                    results.then(data => {
+                    return results.then(data => {
                         console.log('DONE - initcache for page: ' + searchForm.pageNum + ' sdocs:', ids);
                         searchForm.pageNum++;
                         if (searchForm.pageNum < searchResult.recordCount / searchForm.perPage) {
-                            createNextCache();
+                            return createNextCache();
                         } else {
                             console.log('DONE - initializing cache');
+                            return utils.resolve('WELL DONE');
                         }
                     });
-                }
-            ).catch(
-                function searchError(error) {
+                }).catch(function searchError(error) {
                     console.error('error thrown: ', error);
-                }
-            );
+                    return utils.reject(error);
+                });
         };
 
-        createNextCache();
+        return createNextCache();
     }
 }

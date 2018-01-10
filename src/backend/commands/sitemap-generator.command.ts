@@ -8,7 +8,7 @@ import {PDocDataServiceModule} from '../modules/pdoc-dataservice.module';
 import {AbstractCommand} from './abstract.command';
 
 export class SiteMapGeneratorCommand implements AbstractCommand {
-    public process(argv): void {
+    public process(argv): Promise<any> {
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const filePathSitemapConfigJson = argv['s'] || argv['sitemap'] || argv['_'][0];
         const generatorConfig = {
@@ -27,27 +27,27 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
                 return [config.showBaseUrl + name + '/' + doc.id];
             }
         });
-        SitemapGeneratorModule.generateSiteMapFiles(
+
+        return SitemapGeneratorModule.generateSiteMapFiles(
             SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig, true),
             sitemapConfig,
             new SDocSearchForm(sitemapConfig.sdocSearchForm)
-        );
-
-        sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
-            fileBase: 'sitemap-pdoc-',
-            showBaseUrl: generatorConfig.sitemapConfig.showBaseUrl + 'sections/',
-            urlGenerator: function (config: SitemapConfig, doc: PDocRecord): string[] {
-                return [config.showBaseUrl + doc.id,
-                    //    config.showBaseUrl + doc.id + '/search/jederzeit/ueberall/alles/egal/ungefiltert/ratePers/route,location/10/1'
-                ];
-            }
+        ).then(value => {
+            sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
+                fileBase: 'sitemap-pdoc-',
+                showBaseUrl: generatorConfig.sitemapConfig.showBaseUrl + 'sections/',
+                urlGenerator: function (config: SitemapConfig, doc: PDocRecord): string[] {
+                    return [config.showBaseUrl + doc.id,
+                        //    config.showBaseUrl + doc.id + '/search/jederzeit/ueberall/alles/egal/ungefiltert/ratePers/route,location/10/1'
+                    ];
+                }
+            });
+            return SitemapGeneratorModule.generateSiteMapFiles(
+                PDocDataServiceModule.getDataService('pdocSolr' + sitemapConfig.locale + 'ReadOnly', generatorConfig.backendConfig,
+                    sitemapConfig.locale, true),
+                sitemapConfig,
+                new PDocSearchForm({})
+            );
         });
-        SitemapGeneratorModule.generateSiteMapFiles(
-            PDocDataServiceModule.getDataService('pdocSolr' + sitemapConfig.locale + 'ReadOnly', generatorConfig.backendConfig,
-                sitemapConfig.locale, true),
-            sitemapConfig,
-            new PDocSearchForm({})
-        );
-
     }
 }
