@@ -5,6 +5,7 @@ import {GenericSearchResult} from '../shared/search-commons/model/container/gene
 import {GenericSearchForm} from '../shared/search-commons/model/forms/generic-searchform';
 import {BaseEntityRecord} from '../shared/search-commons/model/records/base-entity-record';
 import {GenericSearchService} from '../shared/search-commons/services/generic-search.service';
+import {utils} from 'js-data';
 
 export interface SitemapConfig {
     sitemapBaseUrl: string;
@@ -26,15 +27,16 @@ export class SitemapGeneratorModule {
         searchForm.pageNum = 1;
         const pDocSiteMaps = [];
 
-        const createSitemapIndex = function () {
+        const createSitemapIndex = function(): Promise<any> {
             const sitemapIndex = sm.buildSitemapIndex({
                 urls: pDocSiteMaps
             });
             const fileName = sitemapConfig.fileBase + sitemapConfig.locale + '.xml';
             fs.writeFileSync(sitemapConfig.fileDir + fileName, sitemapIndex.toString());
+            return utils.resolve('WELL DONE');
         };
-        const createNextSitemap = function() {
-            dataService.search(searchForm).then(
+        const createNextSitemap = function(): Promise<any> {
+            return dataService.search(searchForm).then(
                 function searchDone(searchResult: GenericSearchResult<BaseEntityRecord, GenericSearchForm>) {
                     const urls = [];
                     for (const doc of searchResult.currentRecords) {
@@ -52,18 +54,17 @@ export class SitemapGeneratorModule {
                     searchForm.pageNum++;
                     pDocSiteMaps.push(sitemapConfig.sitemapBaseUrl + fileName);
                     if (searchForm.pageNum < (searchResult.recordCount / searchForm.perPage + 1)) {
-                        createNextSitemap();
+                        return createNextSitemap();
                     } else {
-                        createSitemapIndex();
+                        return createSitemapIndex();
                     }
                 }
-            ).catch(
-                function searchError(error) {
+            ).catch(function searchError(error) {
                     console.error('error thrown: ', error);
-                }
-            );
+                    return utils.reject(error);
+            });
         };
 
-        createNextSitemap();
+        return createNextSitemap();
     }
 }
