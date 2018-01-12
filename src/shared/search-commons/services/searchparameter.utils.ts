@@ -19,7 +19,16 @@ export class SearchParameterUtils {
             if (facetValue[0] === undefined || facetValue[0].toString().length <= 0) {
                 continue;
             }
-            values.push([labelPrefix, facetValue[0], valuePrefix, facetValue[1]]);
+            const convertedValue = [labelPrefix, facetValue[0], valuePrefix, facetValue[1]];
+            if (facetValue.length > 2) {
+                // label
+                convertedValue.push(facetValue[2]);
+            } else {
+                // no label
+                convertedValue.push(undefined);
+            }
+
+            values.push(convertedValue);
         }
 
         return values;

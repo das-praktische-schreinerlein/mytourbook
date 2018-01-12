@@ -17,16 +17,20 @@ export class SearchFormUtils {
         const me = this;
         return values.map(function (value) {
             let name: string = value[1];
-            if (name && translate) {
-                name = me.translateService.instant(name) || name;
-            }
-            if (name && removements && (Array.isArray(removements))) {
-                for (const replacement of removements) {
-                    name = name.replace(replacement, '');
+            if (value.length >= 5 && value[4] !== undefined) {
+                name = value[4];
+            } else {
+                if (name && translate) {
+                    name = me.translateService.instant(name) || name;
                 }
-            }
-            if (name && translate) {
-                name = me.translateService.instant(name) || name;
+                if (name && removements && (Array.isArray(removements))) {
+                    for (const replacement of removements) {
+                        name = name.replace(replacement, '');
+                    }
+                }
+                if (name && translate) {
+                    name = me.translateService.instant(name) || name;
+                }
             }
             let label = value[0] + name;
             if (label && translate) {

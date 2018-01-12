@@ -124,7 +124,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         if (opts.realSource) {
             props = opts.realSource;
         }
-        console.error("generic create", props);
+
         props = props || {};
         opts = opts || {};
 
@@ -194,7 +194,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     const count = me.extractCountFromRequestResult(response);
                     return resolve(count);
                 }).catch(function errorSearch(reason) {
-                    console.error('_facets failed:' + reason);
+                    console.error('_count failed:' + reason);
                     return reject(reason);
                 });
         });
@@ -406,7 +406,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const values = [];
         const facet = new Facet();
         for (const doc of result) {
-            values.push([doc['value'] + '', doc['count']]);
+            const facetValue = [doc['value'] + '', doc['count']];
+            if (doc['label']) {
+                facetValue.push(doc['label']);
+            }
+            values.push(facetValue);
         }
         facet.facet = values;
 
