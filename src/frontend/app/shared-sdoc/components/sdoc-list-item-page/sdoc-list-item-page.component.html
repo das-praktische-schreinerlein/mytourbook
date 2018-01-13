@@ -16,7 +16,7 @@
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
             </div>
             <br clear="all" />
-            <p class="card-text">
+            <div class="card-text">
                 <ngb-accordion #acc="ngbAccordion" activeIds="" *ngIf="listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined">
                     <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.sdoc.title">
                         <ng-template ngbPanelContent>
@@ -31,10 +31,11 @@
                         <ng-template ngbPanelContent>
                             <app-sdoc-ratepers [record]="listItem.currentRecord"></app-sdoc-ratepers>
                             <app-sdoc-keywords [record]="listItem.currentRecord"></app-sdoc-keywords >
+                            <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta >
                         </ng-template>
                     </ngb-panel>
                 </ngb-accordion>
-            </p>
+            </div>
         </div>
         <div class="card-footer">
             <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
@@ -67,6 +68,7 @@
                 <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
                 <app-sdoc-keywords [record]="listItem.currentRecord"></app-sdoc-keywords>
                 <app-sdoc-datainfo [record]="listItem.currentRecord"></app-sdoc-datainfo >
+                <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta>
             </div>
             <br clear="all" />
             <p class="card-text">

@@ -13,6 +13,7 @@
                     </ng-container>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord | sdocdate}}</h5></a>
                     <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers >
+                    <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta>
                 </div>
             </div>
         </div>
@@ -38,6 +39,7 @@
                 <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
                 <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
                 <app-sdoc-datainfo [record]="listItem.currentRecord"></app-sdoc-datainfo >
+                <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta>
             </div>
         </div>
     </ng-container>

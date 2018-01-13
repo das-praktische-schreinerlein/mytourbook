@@ -35,6 +35,7 @@ import {SDocDistanceComponent} from './components/sdoc-distance/sdoc-distance.co
 import {SDocListItemThinComponent} from './components/sdoc-list-item-thin/sdoc-list-item-thin.component';
 import {SDocDateFormatPipe} from './pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
+import {SDocDataMetaComponent} from './components/sdoc-datameta/sdoc-datameta.component';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import {DatePipe} from '@angular/common';
         SDocRatePersonalDifficultyComponent,
         SDocKeywordsComponent,
         SDocDataInfoComponent,
+        SDocDataMetaComponent,
         SDocRateTechComponent,
         SDocDistanceComponent,
         SDocTimetableComponent,
@@ -103,6 +105,7 @@ import {DatePipe} from '@angular/common';
         SDocRatePersonalDifficultyComponent,
         SDocKeywordsComponent,
         SDocDataInfoComponent,
+        SDocDataMetaComponent,
         SDocRateTechComponent,
         SDocDistanceComponent,
         SDocTimetableComponent,

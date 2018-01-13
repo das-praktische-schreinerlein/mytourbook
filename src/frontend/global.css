@@ -96,6 +96,21 @@ div.relative-container {
 }
 
 
+.card-deck .card:not(:first-child) {
+    margin-left: 3px;
+}
+.card-deck .card:not(:last-child) {
+    margin-right: 3px;
+}
+.card-deck .card {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+ngb-accordion div.card div.card-header {
+    padding: 2px;
+}
+
+
 /**
 .lightbox {
     position: fixed;

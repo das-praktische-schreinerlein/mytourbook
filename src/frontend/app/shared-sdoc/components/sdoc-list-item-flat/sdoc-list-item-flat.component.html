@@ -18,7 +18,10 @@
                 <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
                 <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
             </div>
-            <div class="col-4 layout-big"><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
+            <div class="col-4 layout-big">
+                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
+                <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta >
+            </div>
             <div class="col-2 ratetech layout-big">
                 <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
             </div>
