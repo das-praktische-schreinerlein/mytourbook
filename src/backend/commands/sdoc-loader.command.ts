@@ -122,7 +122,7 @@ export class SDocLoaderCommand implements AbstractCommand {
         };
 
         const readUpdateOrInsert = function(start): Promise<any> {
-            console.log('RUN - load sdocs for chunk pos:' + (start + 1) + '/' + perRun);
+            console.log('RUN - load sdocs for chunk pos:' + (start + 1) + '/' + records.length);
             const chunk = records.slice(start, start + perRun);
             const promises = chunk.map(sdoc => {
                 return getById(sdoc);
@@ -131,8 +131,8 @@ export class SDocLoaderCommand implements AbstractCommand {
             const results = Promise.all(promises);
 
             return results.then(data => {
-                console.log('DONE - chunk pos:' + (start + 1) + '/' + perRun);
-                if (start + perRun > recordSrcs.length) {
+                console.log('DONE - chunk pos:' + (start + 1) + '/' + records.length);
+                if (start + perRun > records.length) {
                     console.log('DONE - load sdocs');
                     return utils.resolve('WELL DONE');
                 } else {
