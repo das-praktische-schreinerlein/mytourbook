@@ -113,9 +113,14 @@ export class MytbAngularUniversalModule {
             { req, res, providers: [{ provide: 'baseUrl', useValue: `${req.protocol}://${req.get('host')}/${this.config.distProfile}`}]
             }, (err, html) => {
                 res.status(200).send(html);
+                if (err) {
+                    console.error('error while getting url:' + res.url, err);
+                    return;
+                }
+
                 if (me.config.cacheMode !== CacheModeType.NO_CACHE) {
                     const filename = me.getCacheFilename(req.url);
-                    fs.writeFile(filename, html);
+                    fs.writeFileSync(filename, html);
                 }
             }
         );
