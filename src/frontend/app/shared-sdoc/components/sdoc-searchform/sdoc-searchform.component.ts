@@ -43,6 +43,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public optionsSelectTechDataAscent: IMultiSelectOption[] = [];
     public optionsSelectTechDataAltitudeMax: IMultiSelectOption[] = [];
     public optionsSelectTechDataDuration: IMultiSelectOption[] = [];
+    public optionsSelectPlaylists: IMultiSelectOption[] = [];
+    public optionsSelectPersons: IMultiSelectOption[] = [];
 
     public settingsSelectWhen: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
@@ -100,6 +102,19 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             enableSearch: true,
             showUncheckAll: true};
     public settingsSelectTechDataDuration: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true};
+
+    public settingsSelectPlaylists: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true};
+    public settingsSelectPersons: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
@@ -176,6 +191,22 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         searchPlaceholder: 'Find',
         defaultTitle: 'Dauer',
         allSelected: 'Alle'};
+
+    public textsSelectPlaylists: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Playlist ausgewählt',
+        checkedPlural: 'Playlist ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Playlist',
+        allSelected: 'Alle'};
+    public textsSelectPersons: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Person ausgewählt',
+        checkedPlural: 'Person ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Person',
+        allSelected: 'Alle'};
+
     public humanReadableSearchForm: SafeHtml = '';
     public humanReadableSpecialFilter = '';
 
@@ -232,6 +263,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         techDataDistance: [],
         techDataDuration: [],
         techRateOverall: [],
+        playlists: [],
+        persons: [],
         actionType: [],
         type: [],
         sort: '',
@@ -308,6 +341,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             techDataDistance: [(values.techDataDistance ? values.techDataDistance.split(/,/) : [])],
             techDataDuration: [(values.techDataDuration ? values.techDataDuration.split(/,/) : [])],
             techRateOverall: [(values.techRateOverall ? values.techRateOverall.split(/,/) : [])],
+            persons: [(values.persons ? values.persons.split(/,/) : [])],
+            playlists: [(values.playlists ? values.playlists.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]
         });
 
@@ -357,6 +392,11 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             this.searchFormUtils.getTechDataAltitudeMaxValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataDuration = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true);
+
+        this.optionsSelectPlaylists = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getPlaylistValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectPersons = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getPersonValues(sdocSearchSearchResult), true, [], true);
 
         const [lat, lon, dist] = this.searchFormUtils.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {

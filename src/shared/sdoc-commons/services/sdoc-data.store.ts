@@ -19,7 +19,7 @@ export class SDocTeamFilterConfig {
 
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {
 
-    private validMoreFilterNames = {
+    private validMoreNumberFilterNames = {
         id: true,
         track_id_i: true,
         track_id_is:  true,
@@ -33,6 +33,10 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         route_id_i: true,
         route_id_is: true,
         loc_parent_id_i: true
+    };
+    private validMoreInFilterNames = {
+        playlists_txt: true,
+        persons_txt: true
     };
 
     constructor(private searchParameterUtils: SearchParameterUtils, private teamFilterConfig: SDocTeamFilterConfig) {
@@ -123,17 +127,34 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
                 'in': searchForm.actiontype.split(/,/)
             };
         }
+        if (searchForm.persons !== undefined && searchForm.persons.length > 0) {
+            filter = filter || {};
+            filter['persons_txt'] = {
+                'in': searchForm.persons.split(/,/)
+            };
+        }
+        if (searchForm.playlists !== undefined && searchForm.playlists.length > 0) {
+            filter = filter || {};
+            filter['playlists_txt'] = {
+                'in': searchForm.playlists.split(/,/)
+            };
+        }
         if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
             filter = filter || {};
             const moreFilters = searchForm.moreFilter.split(/;/);
             for (const index in moreFilters) {
                 const moreFilter = moreFilters[index];
                 const [filterName, values] = moreFilter.split(/:/);
-                if (filterName && values && this.validMoreFilterNames[filterName] === true) {
+                if (filterName && values && this.validMoreNumberFilterNames[filterName] === true) {
                     filter[filterName] = {
                         'in_number': values.split(/,/)
                     };
+                } else if (filterName && values && this.validMoreInFilterNames[filterName] === true) {
+                    filter[filterName] = {
+                        'in': values.split(/,/)
+                    };
                 }
+
             }
         }
 

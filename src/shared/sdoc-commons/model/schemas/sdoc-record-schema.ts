@@ -31,6 +31,8 @@ export const SDocRecordSchema = new Schema({
         locHirarchie: {type: 'string'},
         locHirarchieIds: {type: 'string'},
         name: {type: 'string', minLength: 1, maxLength: 255},
+        persons: {type: 'string'},
+        playlists: {type: 'string'},
         subtype: {type: 'string'},
         type: {type: 'string'}
     }

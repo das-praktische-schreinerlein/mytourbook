@@ -20,7 +20,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
                           'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS k_keywords']
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS k_keywords']
                 }
             ],
             groupbBySelectFieldListIgnore: ['k_keywords'],
@@ -128,6 +128,12 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'month_is': {
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
+                },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
                 },
                 'rate_pers_gesamt_is': {
                     selectField: 'k_rate_gesamt',
@@ -271,10 +277,22 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     from: 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
                           'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS i_keywords']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
+                },
+                {
+                    from: 'LEFT JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
+                    'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
+                    triggerParams: ['id', 'playlists_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
+                },
+                {
+                    from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id '+
+                    'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
+                    triggerParams: ['id', 'persons_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons']
                 }
             ],
-            groupbBySelectFieldListIgnore: ['i_keywords'],
+            groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons'],
             selectFieldList: [
                 '"IMAGE" AS type',
                 'k_type',
@@ -372,6 +390,26 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
                 },
+                'persons_txt': {
+                    selectSql: 'SELECT COUNT(io_obj_type) AS count, ' +
+                    ' o_name AS value ' +
+                    'FROM' +
+                    ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                    filterField: 'o_name',
+                    action: AdapterFilterActions.IN
+                },
+                'playlists_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                    filterField: 'p_name',
+                    action: AdapterFilterActions.IN
+                },
                 'rate_pers_gesamt_is': {
                     selectField: 'i_rate',
                     orderBy: 'value asc'
@@ -465,6 +503,13 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 trip_id_is: 'tr_id',
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
+                actiontype_s: 'actionType',
+                data_tech_alt_asc_i: 'k_altitude_asc',
+                data_tech_alt_desc_i: 'k_altitude_desc',
+                data_tech_alt_min_i: 'i_gps_ele',
+                data_tech_alt_max_i: 'i_gps_ele',
+                data_tech_dist_f: 'k_distance',
+                data_tech_dur_f: 'dur',
                 dateshow_dt: 'i_date',
                 desc_txt: 'i_meta_shortdesc',
                 desc_md_txt: 'i_meta_shortdesc_md',
@@ -473,12 +518,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 geo_lon_s: 'i_gps_lon',
                 geo_lat_s: 'i_gps_lat',
                 geo_loc_p: 'i_gps_loc',
-                data_tech_alt_asc_i: 'k_altitude_asc',
-                data_tech_alt_desc_i: 'k_altitude_desc',
-                data_tech_alt_min_i: 'i_gps_ele',
-                data_tech_alt_max_i: 'i_gps_ele',
-                data_tech_dist_f: 'k_distance',
-                data_tech_dur_f: 'dur',
+                i_fav_url_txt: 'i_fav_url_txt',
                 rate_pers_ausdauer_i: 'k_rate_ausdauer',
                 rate_pers_bildung_i: 'k_rate_bildung',
                 rate_pers_gesamt_i: 'i_rate',
@@ -492,10 +532,10 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'i_meta_name',
-                type_s: 'type',
-                actiontype_s: 'actionType',
+                persons_txt: 'i_persons',
+                playlists_txt: 'i_playlists',
                 subtype_s: 'subtype',
-                i_fav_url_txt: 'i_fav_url_txt'
+                type_s: 'type'
             }
         },
         'route': {
@@ -506,7 +546,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     from: 'LEFT JOIN tour_keyword ON tour.t_id=tour_keyword.t_id ' +
                           'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS t_keywords']
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS t_keywords']
                 }
             ],
             groupbBySelectFieldListIgnore: ['t_keywords'],
@@ -607,6 +647,12 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'month_is': {
                     selectField: 'MONTH(t_datevon)',
                     orderBy: 'value asc'
+                },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
                 },
                 'rate_pers_gesamt_is': {
                     selectField: 't_rate_gesamt',
@@ -767,7 +813,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     from: 'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
                           'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name separator ", ") AS l_keywords']
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 }
             ],
             groupbBySelectFieldListIgnore: ['l_keywords'],
@@ -825,6 +871,12 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
+                    noFacet: true
+                },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
                     noFacet: true
                 },
                 'rate_pers_gesamt_is': {
@@ -942,6 +994,12 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
+                },
                 'rate_pers_gesamt_is': {
                     noFacet: true
                 },
@@ -1001,8 +1059,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             }
         },
         'news': {
-            tableName: 'musik.news',
-            selectFrom: 'musik.news',
+            tableName: 'news',
+            selectFrom: 'news',
             selectFieldList: [
                 '"NEWS" AS type',
                 'CONCAT("NEWS", "_", news.n_id) AS id',
@@ -1045,6 +1103,12 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 },
                 'month_is': {
                     selectField: 'MONTH(n_date)'
+                },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
                 },
                 'rate_pers_gesamt_is': {
                     noFacet: true

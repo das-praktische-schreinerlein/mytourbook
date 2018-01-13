@@ -204,7 +204,7 @@
             </div>
         </div>
         <div class="row hidden-print" *ngIf="showDetails">
-            <div class="col-sm-4 input-group input-group-sm">
+            <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectTechDataDistance.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataDistance label|Label for filter: techDataDistance@@label.searchform.sdoc.techDataDistance">Strecke:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectTechDataDistance"
                                          [settings]="settingsSelectTechDataDistance"
@@ -215,7 +215,7 @@
                                          (onAdded)="onChangeSelect()"
                                          (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
             </div>
-            <div class="col-sm-4 input-group input-group-sm">
+            <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectTechDataAltitudeMax.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataAltitudeMax label|Label for filter: techDataAltitudeMax@@label.searchform.sdoc.techDataAltitudeMax">Höhe:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectTechDataAltitudeMax"
                                          [settings]="settingsSelectTechDataAltitudeMax"
@@ -226,12 +226,36 @@
                                          (onAdded)="onChangeSelect()"
                                          (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
             </div>
-            <div class="col-sm-4 input-group input-group-sm">
+            <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectTechDataAscent.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataAscent label|Label for filter: techDataAscent@@label.searchform.sdoc.techDataAscent">Aufstieg:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectTechDataAscent"
                                          [settings]="settingsSelectTechDataAscent"
                                          [texts]="textsSelectTechDataAscent"
                                          formControlName="techDataAscent"
+                                         ngDefaultControl
+                                         class="fullwidth"
+                                         (onAdded)="onChangeSelect()"
+                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+            </div>
+        </div>
+        <div class="row hidden-print" *ngIf="showDetails && (optionsSelectPersons.length > 0 || optionsSelectPlaylists.length > 0)">
+            <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectPlaylists.length > 0">
+                <label class="col-xs-2 col-form-label mr-2" i18n="playlists label|Label for filter: playlists@@label.searchform.sdoc.playlists">Playlist:</label>
+                <ss-multiselect-dropdown [options]="optionsSelectPlaylists"
+                                         [settings]="settingsSelectPlaylists"
+                                         [texts]="textsSelectPlaylists"
+                                         formControlName="playlists"
+                                         ngDefaultControl
+                                         class="fullwidth"
+                                         (onAdded)="onChangeSelect()"
+                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+            </div>
+            <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectPersons.length > 0">
+                <label class="col-xs-2 col-form-label mr-2" i18n="persons label|Label for filter: persons@@label.searchform.sdoc.persons">Personen:</label>
+                <ss-multiselect-dropdown [options]="optionsSelectPersons"
+                                         [settings]="settingsSelectPersons"
+                                         [texts]="textsSelectPersons"
+                                         formControlName="persons"
                                          ngDefaultControl
                                          class="fullwidth"
                                          (onAdded)="onChangeSelect()"

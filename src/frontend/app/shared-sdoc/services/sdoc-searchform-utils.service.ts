@@ -127,6 +127,24 @@ export class SDocSearchFormUtils {
             this.searchParameterUtils.extractFacetValues(searchResult.facets, 'data_tech_dur_facet_fs', '', ''));
     }
 
+    getPlaylistValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        return [].concat(
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'playlists_txt', '', ''));
+    }
+
+    getPersonValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        return [].concat(
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'persons_txt', '', ''));
+    }
+
     getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,
                                                        removements: RegExp[], translate: boolean): IMultiSelectOption[] {
         return this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(

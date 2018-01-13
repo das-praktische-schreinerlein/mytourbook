@@ -163,6 +163,8 @@
     "hrt_route_id_i": "Spezialfilter Route:",
     "hrt_route_id_is": "Spezialfilter Route:",
     "hrt_loc_parent_id_i": "Spezialfilter Region:",
+    "hrt_persons": "Personen:",
+    "hrt_playlists": "Playlisten:",
     "hrt_techDataAltitudeMax": "max Höhe:",
     "hrt_techDataAscent": "Aufstieg:",
     "hrt_techDataDistance": "Strecke:",

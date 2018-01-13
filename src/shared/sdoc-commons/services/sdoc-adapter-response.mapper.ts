@@ -36,6 +36,10 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
             .replace(/,/g, ',,')
             .replace(/ /g, '_') : '');
         values['name_s'] = props.name;
+        values['persons_txt'] =
+            (props.persons ? props.persons.split(', ').join(',,') : '');
+        values['playlists_txt'] =
+            (props.playlists ? props.playlists.split(', ').join(',,') : '');
         values['type_s'] = props.type;
 
         values['html_txt'] = [
@@ -88,6 +92,10 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['keywords'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '')
             .split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'name_s', undefined);
+        values['persons'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'persons_txt', '')
+            .split(',,').join(', ');
+        values['playlists'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'playlists_txt', '')
+            .split(',,').join(', ');
         values['subtype'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'subtype_s', undefined);
         values['type'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'type_s', undefined);
         values['locHirarchie'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'loc_lochirarchie_s', '')

@@ -114,6 +114,12 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
                 },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
+                },
                 'rate_pers_gesamt_is': {
                     selectField: 'k_rate_gesamt',
                     orderBy: 'value asc'
@@ -346,6 +352,12 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
                 },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
+                },
                 'rate_pers_gesamt_is': {
                     selectField: 'i_rate',
                     orderBy: 'value asc'
@@ -562,6 +574,12 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     selectField: 'MONTH(t_datevon)',
                     orderBy: 'value asc'
                 },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
+                },
                 'rate_pers_gesamt_is': {
                     selectField: 't_rate_gesamt',
                     orderBy: 'value asc'
@@ -745,6 +763,12 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'month_is': {
                     noFacet: true
                 },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
+                },
                 'rate_pers_gesamt_is': {
                     noFacet: true
                 },
@@ -866,6 +890,12 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
+                },
                 'rate_pers_gesamt_is': {
                     noFacet: true
                 },
@@ -974,6 +1004,12 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 },
                 'month_is': {
                     selectField: 'MONTH(n_date)'
+                },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
                 },
                 'rate_pers_gesamt_is': {
                     noFacet: true

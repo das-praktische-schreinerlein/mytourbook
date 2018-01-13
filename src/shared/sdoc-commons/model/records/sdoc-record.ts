@@ -23,6 +23,8 @@ export class SDocRecord extends BaseEntityRecord {
     locHirarchie: string;
     locHirarchieIds: string;
     name: string;
+    persons: string;
+    playlists: string;
     subtype: string;
     type: string;
 

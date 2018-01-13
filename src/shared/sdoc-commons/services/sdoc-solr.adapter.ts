@@ -53,6 +53,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 'f.month_is.facet.limit': '-1',
                 'f.month_is.facet.sort': 'index'
             },
+            'persons_txt': {
+            },
+            'playlists_txt': {
+            },
             'rate_pers_gesamt_is': {
                 'f.rate_pers_gesamt_is.facet.limit': '-1',
                 'f.rate_pers_gesamt_is.facet.sort': 'index'
@@ -165,6 +169,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 .replace(/,/g, ',,')
                 .replace(/ /g, '_') : ''),
             name_s: props.name,
+            persons_txt: (props.persons ? props.persons.split(', ').join(',,') : ''),
+            playlists_txt: (props.playlists ? props.playlists.split(', ').join(',,') : ''),
             type_s: props.type,
 
         };

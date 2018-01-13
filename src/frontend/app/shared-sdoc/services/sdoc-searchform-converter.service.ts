@@ -65,6 +65,8 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         const whatMap = new Map();
         whatMap.set('keyword', searchForm.what);
         whatMap.set('action', searchForm.actiontype);
+        whatMap.set('persons', searchForm.persons);
+        whatMap.set('playlists', searchForm.playlists);
         return this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
     }
 
@@ -132,7 +134,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techRateOverall:'), 'techRateOverall:', ',') : '');
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
-            ['action:', 'keyword:']);
+            ['action:', 'keyword:', 'playlists:', 'persons:']);
         let whatFilter = '';
         if (whatFilterValues.has('unknown')) {
             whatFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('unknown'), '', ',');
@@ -143,6 +145,10 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
                 whatFilterValues.get('keyword:'), 'keyword:', ',') : '');
         const actiontype: string = (whatFilterValues.has('action:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('action:'), 'action:', ',') : '');
+        const playlists: string = (whatFilterValues.has('playlists:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('playlists:'), 'playlists:', ',') : '');
+        const persons: string = (whatFilterValues.has('persons:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('persons:'), 'persons:', ',') : '');
 
         searchForm.theme = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
@@ -168,6 +174,12 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         searchForm.actiontype = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(actiontype, /^alles$/, ''),
             defaults['actiontype'], '');
+        searchForm.playlists = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(playlists, /^alles$/, ''),
+            defaults['playlists'], '');
+        searchForm.persons = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(persons, /^alles$/, ''),
+            defaults['persons'], '');
         searchForm.fulltext = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
             defaults['fulltext'], '');
@@ -286,6 +298,8 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDistance, 'hrt_techDataDistance', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.persons, 'hrt_persons', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.playlists, 'hrt_playlists', undefined, true));
 
         return res;
     }

@@ -79,7 +79,8 @@ export class SqlQueryBuilder {
             }
             sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'datetime($1)');
             sql = sql.replace(/WEEK\((.*?)\)/g, 'strftime("%W", $1)');
-            sql = sql.replace(/GROUP_CONCAT\((.*?) separator (.*?)\)/g, 'GROUP_CONCAT($1, $2)');
+            sql = sql.replace(/GROUP_CONCAT\(DISTINCT (.*?) ORDER BY (.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $3)');
+            sql = sql.replace(/GROUP_CONCAT\((.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $2)');
             sql = sql.replace(/MONTH\((.*?)\)/g, 'strftime("%m", $1)');
             sql = sql.replace(/TIME_TO_SEC\(TIMEDIFF\((.*?), (.*?)\)\)\/3600/g, '(JulianDay($1) - JulianDay($2)) * 24');
         }
