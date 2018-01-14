@@ -441,22 +441,22 @@ export class SqlQueryBuilder {
 
         if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
             query = fieldName + ' like "%'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%", "%') + '%" ';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%" and ' + fieldName + ' like "%') + '%" ';
         } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
             query = fieldName + ' = "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '", "') + '" ';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '" and ' + fieldName + ' =  "') + '" ';
         } else if (action === AdapterFilterActions.GT) {
             query = fieldName + ' > "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' > ') + '"';
         } else if (action === AdapterFilterActions.GE) {
             query = fieldName + ' >= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' >= ') + '"';
         } else if (action === AdapterFilterActions.LT) {
             query = fieldName + ' < "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' < ') + '"';
         } else if (action === AdapterFilterActions.LE) {
             query = fieldName + ' <= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' <= ') + '"';
         } else if (action === AdapterFilterActions.IN) {
             query = fieldName + ' in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
