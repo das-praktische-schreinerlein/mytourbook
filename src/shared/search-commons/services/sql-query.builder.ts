@@ -77,8 +77,10 @@ export class SqlQueryBuilder {
 // TODO: check security
                 sql = sqlPre + toBeConverted.replace(/, /g, ' || ') + sqlAfter;
             }
-            sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'datetime($1)');
-            sql = sql.replace(/WEEK\((.*?)\)/g, 'strftime("%W", $1)');
+            sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'DATETIME($1)');
+            sql = sql.replace(/SUBSTRING_INDEX\(/g, 'SUBSTR(');
+            sql = sql.replace(/CHAR_LENGTH\(/g, 'LENGTH(');
+            sql = sql.replace(/WEEK\((.*?)\)/g, 'STRFTIME("%W", $1)');
             sql = sql.replace(/GROUP_CONCAT\(DISTINCT (.*?) ORDER BY (.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $3)');
             sql = sql.replace(/GROUP_CONCAT\((.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $2)');
             sql = sql.replace(/MONTH\((.*?)\)/g, 'strftime("%m", $1)');
@@ -439,22 +441,22 @@ export class SqlQueryBuilder {
 
         if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
             query = fieldName + ' like "%'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%", "%') + '%" ';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%" and ' + fieldName + ' like "%') + '%" ';
         } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
             query = fieldName + ' = "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '", "') + '" ';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '" and ' + fieldName + ' =  "') + '" ';
         } else if (action === AdapterFilterActions.GT) {
             query = fieldName + ' > "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' > ') + '"';
         } else if (action === AdapterFilterActions.GE) {
             query = fieldName + ' >= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' >= ') + '"';
         } else if (action === AdapterFilterActions.LT) {
             query = fieldName + ' < "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' < ') + '"';
         } else if (action === AdapterFilterActions.LE) {
             query = fieldName + ' <= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' <= ') + '"';
         } else if (action === AdapterFilterActions.IN) {
             query = fieldName + ' in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
