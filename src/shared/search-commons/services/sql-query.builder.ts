@@ -77,8 +77,10 @@ export class SqlQueryBuilder {
 // TODO: check security
                 sql = sqlPre + toBeConverted.replace(/, /g, ' || ') + sqlAfter;
             }
-            sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'datetime($1)');
-            sql = sql.replace(/WEEK\((.*?)\)/g, 'strftime("%W", $1)');
+            sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'DATETIME($1)');
+            sql = sql.replace(/SUBSTRING_INDEX\(/g, 'SUBSTR(');
+            sql = sql.replace(/CHAR_LENGTH\(/g, 'LENGTH(');
+            sql = sql.replace(/WEEK\((.*?)\)/g, 'STRFTIME("%W", $1)');
             sql = sql.replace(/GROUP_CONCAT\(DISTINCT (.*?) ORDER BY (.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $3)');
             sql = sql.replace(/GROUP_CONCAT\((.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $2)');
             sql = sql.replace(/MONTH\((.*?)\)/g, 'strftime("%m", $1)');
