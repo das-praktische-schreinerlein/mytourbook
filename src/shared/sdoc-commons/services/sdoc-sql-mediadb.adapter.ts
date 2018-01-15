@@ -62,7 +62,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'CAST(l_geo_latdeg AS CHAR(50)) AS k_gps_lat',
                 'CAST(l_geo_longdeg AS CHAR(50)) AS k_gps_lon',
                 'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS k_gps_loc',
-                'GetLocationNameAncestry(location.l_id, " -> ") AS l_lochirarchietxt',
+                'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
                 'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
 //                'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
                 'k_altitude_asc',
@@ -118,7 +118,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, GetLocationNameAncestry(location.l_id, " -> ") as label' +
+                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value,' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label' +
                     ' FROM kategorie INNER JOIN location ON kategorie.l_id = location.l_id ' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
@@ -286,7 +287,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
                 },
                 {
-                    from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id '+
+                    from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id ' +
                     'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
                     triggerParams: ['id', 'persons_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons']
@@ -573,7 +574,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'CAST(l_geo_latdeg AS CHAR(50)) AS t_gps_lat',
                 'CAST(l_geo_longdeg AS CHAR(50)) AS t_gps_lon',
                 'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS t_gps_loc',
-                'GetLocationNameAncestry(location.l_id, " -> ") AS l_lochirarchietxt',
+                'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
                 'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
                 't_route_hm',
                 't_ele_max',
@@ -637,7 +638,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, GetLocationNameAncestry(location.l_id, " -> ") as label' +
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value,' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label' +
                     ' FROM tour INNER JOIN location ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
@@ -831,8 +833,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'CAST(l_geo_latdeg AS CHAR(50)) AS l_geo_latdeg',
                 'CAST(l_geo_longdeg AS CHAR(50)) AS l_geo_longdeg',
                 'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS l_gps_loc',
-                'GetLocationNameAncestry(location.l_id, " -> ") AS l_lochirarchietxt',
-                'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',],
+                'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
+                'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids'],
             facetConfigs: {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", location.l_typ)'
@@ -863,7 +865,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'loc_id_i': {
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, GetLocationNameAncestry(location.l_id, " -> ") as label' +
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value,' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label' +
                     ' FROM location' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
@@ -1236,6 +1239,15 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         }
 
         return query;
+    }
+
+    protected transformToSqlDialect(sql: string): string {
+        if (this.config.knexOpts.client !== 'mysql') {
+            sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/, 'location.l_name');
+            sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/, 'CAST(location.l_id as CHAR(50))');
+        }
+
+        return super.transformToSqlDialect(sql);
     }
 }
 
