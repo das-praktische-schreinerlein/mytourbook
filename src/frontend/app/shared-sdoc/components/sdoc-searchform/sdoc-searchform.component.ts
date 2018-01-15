@@ -210,6 +210,11 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public humanReadableSearchForm: SafeHtml = '';
     public humanReadableSpecialFilter = '';
 
+    public showWhereAvailable = true;
+    public showWhenAvailable = true;
+    public showDetailsAvailable = true;
+    public showMetaAvailable = true;
+
     @Input()
     public short? = false;
 
@@ -230,6 +235,9 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
 
     @Input()
     public showDetails? = this.showForm;
+
+    @Input()
+    public showMeta? = this.showForm;
 
     @Input()
     public showSpecialFilter? = this.showForm;
@@ -408,6 +416,13 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         if (dist) {
             me.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
+
+        this.showWhereAvailable = (this.optionsSelectWhere.length > 0);
+        this.showWhenAvailable = (this.optionsSelectWhen.length > 0 || this.optionsSelectTechDataDuration.length > 0);
+        this.showDetailsAvailable = (this.optionsSelectWhat.length > 0 || this.optionsSelectTechRateOverall.length > 0 ||
+            this.optionsSelectTechDataDistance.length > 0 || this.optionsSelectTechDataAltitudeMax.length > 0 ||
+            this.optionsSelectTechDataAscent.length > 0);
+        this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0 || this.optionsSelectPersons.length > 0);
 
         me.humanReadableSpecialFilter = '';
         this.humanReadableSearchForm = '';

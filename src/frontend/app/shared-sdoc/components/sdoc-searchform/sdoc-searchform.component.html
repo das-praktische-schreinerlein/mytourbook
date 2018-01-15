@@ -5,28 +5,32 @@
         </div>
     </div>
 
+    <ng-template #noFilterValues><span class="col-form-label fullwidth">nichts zu filtern :-(</span></ng-template>
+
     <!-- infos -->
     <ng-container>
         <div class="row hidden-print">
             <div class="col-sm-12">
                 Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter" (click)="showForm = true"></div>
                 <ng-container *ngIf="!short">
-                    <button *ngIf="!showDetails" class="btn btn-configure btn-sm float-right" (click)="showForm = showDetails = true" i18n="button show Detailsform|Buttontext to show Detailsform@@button.searchform.show.Detailsform">"Details" filtern</button>
+                    <button *ngIf="!showMeta && showMetaAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showMeta = true" i18n="button show MetaDataform|Buttontext to show Metadataform@@button.searchform.show.Metadataform">"Metadaten" filtern</button>
+                    <button *ngIf="!showDetails && showDetailsAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showDetails = true" i18n="button show Detailsform|Buttontext to show Detailsform@@button.searchform.show.Detailsform">"Details" filtern</button>
                     <button *ngIf="!showFulltext" class="btn btn-configure btn-sm float-right" (click)="showForm = showFulltext = true" i18n="button show Fulltextform|Buttontext to show Fulltextform@@button.searchform.show.Fulltextform">"Text" filtern</button>
                     <button *ngIf="!showWhat" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhat = true" i18n="button show Whatform|Buttontext to show Whatform@@button.searchform.show.Whatform">"Was" filtern</button>
-                    <button *ngIf="!showWhen" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhen = true" i18n="button show Whenform|Buttontext to show Whatform@@button.searchform.show.Whenform">"Zeit" ändern</button>
-                    <button *ngIf="!showWhere" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhere = true; initGeoCodeAutoComplete(500);" i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</button>
+                    <button *ngIf="!showWhen && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhen = true" i18n="button show Whenform|Buttontext to show Whatform@@button.searchform.show.Whenform">"Zeit" ändern</button>
+                    <button *ngIf="!showWhere && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhere = true; initGeoCodeAutoComplete(500);" i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</button>
                     <button *ngIf="humanReadableSpecialFilter !== '' && !showSpecialFilter" class="btn btn-configure btn-sm float-right" (click)="showForm = showSpecialFilter = true;" i18n="button show Moreform|Buttontext to show Moreform@@button.searchform.show.Moreform">"Spezialfilter"</button>
                 </ng-container>
-                <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="showForm = showDetails = showWhen = showFulltext = showWhat = showWhere = showSpecialFilter = true; initGeoCodeAutoComplete(500);" i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</button>
+                <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="showForm = showMeta = showDetails = showWhen = showFulltext = showWhat = showWhere = showSpecialFilter = true; initGeoCodeAutoComplete(500);" i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</button>
                 <button *ngIf="!short && showForm" class="btn btn-action btn-sm float-right" (click)="showForm = false" i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</button>
             </div>
         </div>
     </ng-container>
 
+
     <!-- short searchform-->
     <ng-container *ngIf="short && showForm">
-        <div class="row hidden-print">
+        <div class="row hidden-print" *ngIf="showWhereAvailable">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectWhere"
@@ -54,25 +58,29 @@
         <div class="row hidden-print">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-form-label" i18n="when label|Label for filter: when@@label.searchform.sdoc.when">When:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectWhen"
-                                         [settings]="settingsSelectWhen"
-                                         [texts]="textsSelectWhen"
-                                         class="fullwidth"
-                                         formControlName="when"
-                                         ngDefaultControl
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectWhen"
+                                             [settings]="settingsSelectWhen"
+                                             [texts]="textsSelectWhen"
+                                             class="fullwidth"
+                                             formControlName="when"
+                                             ngDefaultControl
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectActionType"
-                                         [settings]="settingsSelectActionType"
-                                         [texts]="textsSelectActionType"
-                                         formControlName="actiontype"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectActionType"
+                                             [settings]="settingsSelectActionType"
+                                             [texts]="textsSelectActionType"
+                                             formControlName="actiontype"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm justify-content-end">
                 <button class="btn btn-action btn-sm" type="submit" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
@@ -83,7 +91,7 @@
 
     <!-- extended searchform-->
     <ng-container *ngIf="!short && showForm">
-        <div class="row hidden-print" *ngIf="showWhere">
+        <div class="row hidden-print" *ngIf="showWhere && showWhereAvailable">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
                 <ss-multiselect-dropdown [options]="optionsSelectWhere"
@@ -111,28 +119,32 @@
                 <button class="btn btn-configure btn-sm" (click)="showWhere = false" i18n="button hide Whereform|Buttontext to hide Whereform@@button.searchform.hide.Whereform">ausblenden</button>
             </div>
         </div>
-        <div class="row hidden-print" *ngIf="showWhen">
+        <div class="row hidden-print" *ngIf="showWhen && showWhenAvailable">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-form-label" i18n="when label|Label for filter: when@@label.searchform.sdoc.when">When:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectWhen"
-                                         [settings]="settingsSelectWhen"
-                                         [texts]="textsSelectWhen"
-                                         class="fullwidth"
-                                         formControlName="when"
-                                         ngDefaultControl
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectWhen"
+                                             [settings]="settingsSelectWhen"
+                                             [texts]="textsSelectWhen"
+                                             class="fullwidth"
+                                             formControlName="when"
+                                             ngDefaultControl
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataDuration label|Label for filter: techDataDuration@@label.searchform.sdoc.techDataDuration">Dauer:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectTechDataDuration"
-                                         [settings]="settingsSelectTechDataDuration"
-                                         [texts]="textsSelectTechDataDuration"
-                                         formControlName="techDataDuration"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectTechDataDuration.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectTechDataDuration"
+                                             [settings]="settingsSelectTechDataDuration"
+                                             [texts]="textsSelectTechDataDuration"
+                                             formControlName="techDataDuration"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm justify-content-end">
                 <button class="btn btn-configure btn-sm" (click)="showWhen = false" i18n="button hide Whenform|Buttontext to hide Whenform@@button.searchform.hide.Whenform">ausblenden</button>
@@ -141,14 +153,16 @@
         <div class="row hidden-print" *ngIf="showWhat">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectActionType"
-                                         [settings]="settingsSelectActionType"
-                                         [texts]="textsSelectActionType"
-                                         formControlName="actiontype"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectActionType"
+                                             [settings]="settingsSelectActionType"
+                                             [texts]="textsSelectActionType"
+                                             formControlName="actiontype"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-2 col-form-label mr-2" i18n="type label|Label for filter: type@@label.searchform.sdoc.type">Types:</label>
@@ -176,28 +190,32 @@
                 <button class="btn btn-configure btn-sm" (click)="showFulltext = false" i18n="button hide Fulltextform|Buttontext to hide Fulltextform@@button.searchform.hide.Fulltextform">ausblenden</button>
             </div>
         </div>
-        <div class="row hidden-print" *ngIf="showDetails">
+        <div class="row hidden-print" *ngIf="showDetails && showDetailsAvailable">
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-4 col-form-label mr-2" i18n="what label|Label for filter: what@@label.searchform.sdoc.what">What:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectWhat"
-                                         [settings]="settingsSelectWhat"
-                                         [texts]="textsSelectWhat"
-                                         formControlName="what"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectWhat.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectWhat"
+                                             [settings]="settingsSelectWhat"
+                                             [texts]="textsSelectWhat"
+                                             formControlName="what"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techRateOverall label|Label for filter: techRateOverall@@label.searchform.sdoc.techRateOverall">Bewertung:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectTechRateOverall"
-                                         [settings]="settingsSelectTechRateOverall"
-                                         [texts]="textsSelectTechRateOverall"
-                                         formControlName="techRateOverall"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectTechRateOverall.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectTechRateOverall"
+                                             [settings]="settingsSelectTechRateOverall"
+                                             [texts]="textsSelectTechRateOverall"
+                                             formControlName="techRateOverall"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm justify-content-end">
                 <button class="btn btn-configure btn-sm" (click)="showDetails = false" i18n="button hide Detailsform|Buttontext to hide Detailsform@@button.searchform.hide.Detailsform">ausblenden</button>
@@ -206,60 +224,70 @@
         <div class="row hidden-print" *ngIf="showDetails">
             <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectTechDataDistance.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataDistance label|Label for filter: techDataDistance@@label.searchform.sdoc.techDataDistance">Strecke:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectTechDataDistance"
-                                         [settings]="settingsSelectTechDataDistance"
-                                         [texts]="textsSelectTechDataDistance"
-                                         formControlName="techDataDistance"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectTechDataDistance.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectTechDataDistance"
+                                             [settings]="settingsSelectTechDataDistance"
+                                             [texts]="textsSelectTechDataDistance"
+                                             formControlName="techDataDistance"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectTechDataAltitudeMax.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataAltitudeMax label|Label for filter: techDataAltitudeMax@@label.searchform.sdoc.techDataAltitudeMax">Höhe:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectTechDataAltitudeMax"
-                                         [settings]="settingsSelectTechDataAltitudeMax"
-                                         [texts]="textsSelectTechDataAltitudeMax"
-                                         formControlName="techDataAltitudeMax"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectTechDataAltitudeMax.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectTechDataAltitudeMax"
+                                             [settings]="settingsSelectTechDataAltitudeMax"
+                                             [texts]="textsSelectTechDataAltitudeMax"
+                                             formControlName="techDataAltitudeMax"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectTechDataAscent.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="techDataAscent label|Label for filter: techDataAscent@@label.searchform.sdoc.techDataAscent">Aufstieg:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectTechDataAscent"
-                                         [settings]="settingsSelectTechDataAscent"
-                                         [texts]="textsSelectTechDataAscent"
-                                         formControlName="techDataAscent"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectTechDataAscent.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectTechDataAscent"
+                                             [settings]="settingsSelectTechDataAscent"
+                                             [texts]="textsSelectTechDataAscent"
+                                             formControlName="techDataAscent"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
         </div>
-        <div class="row hidden-print" *ngIf="showDetails && (optionsSelectPersons.length > 0 || optionsSelectPlaylists.length > 0)">
+        <div class="row hidden-print" *ngIf="showMeta && showMetaAvailable">
             <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectPlaylists.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="playlists label|Label for filter: playlists@@label.searchform.sdoc.playlists">Playlist:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectPlaylists"
-                                         [settings]="settingsSelectPlaylists"
-                                         [texts]="textsSelectPlaylists"
-                                         formControlName="playlists"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectPlaylists.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectPlaylists"
+                                             [settings]="settingsSelectPlaylists"
+                                             [texts]="textsSelectPlaylists"
+                                             formControlName="playlists"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
             <div class="col-sm-4 input-group input-group-sm" *ngIf="optionsSelectPersons.length > 0">
                 <label class="col-xs-2 col-form-label mr-2" i18n="persons label|Label for filter: persons@@label.searchform.sdoc.persons">Personen:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectPersons"
-                                         [settings]="settingsSelectPersons"
-                                         [texts]="textsSelectPersons"
-                                         formControlName="persons"
-                                         ngDefaultControl
-                                         class="fullwidth"
-                                         (onAdded)="onChangeSelect()"
-                                         (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                <ng-container *ngIf="optionsSelectPersons.length > 0; else noFilterValues">
+                    <ss-multiselect-dropdown [options]="optionsSelectPersons"
+                                             [settings]="settingsSelectPersons"
+                                             [texts]="textsSelectPersons"
+                                             formControlName="persons"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </ng-container>
             </div>
         </div>
         <div class="row hidden-print" *ngIf="showSpecialFilter && humanReadableSpecialFilter !== ''">
