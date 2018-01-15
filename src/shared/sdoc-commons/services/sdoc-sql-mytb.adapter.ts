@@ -103,9 +103,9 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value' +
+                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt as label' +
                     ' FROM kategorie_full INNER JOIN location ON kategorie_full.l_id = location.l_id ' +
-                    ' GROUP BY l_name' +
+                    ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
                     filterField: 'l_lochirarchietxt',
                     action: AdapterFilterActions.LIKEIN
@@ -340,10 +340,10 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value' +
+                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt as label' +
                     ' FROM image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
                     '   INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
-                    ' GROUP BY l_name' +
+                    ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
                     filterField: 'l_lochirarchietxt',
                     action: AdapterFilterActions.LIKEIN
@@ -563,9 +563,9 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt as label' +
                     ' FROM tour INNER JOIN location ON tour.l_id = location.l_id ' +
-                    ' GROUP BY l_name' +
+                    ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
                     filterField: 'l_lochirarchietxt',
                     action: AdapterFilterActions.LIKEIN
@@ -753,9 +753,9 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
                 'loc_id_i': {
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value' +
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt as label' +
                     ' FROM location' +
-                    ' GROUP BY l_name' +
+                    ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
                     filterField: 'l_lochirarchietxt',
                     action: AdapterFilterActions.LIKEIN
