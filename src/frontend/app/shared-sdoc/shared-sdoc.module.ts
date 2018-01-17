@@ -36,9 +36,13 @@ import {SDocListItemThinComponent} from './components/sdoc-list-item-thin/sdoc-l
 import {SDocDateFormatPipe} from './pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
 import {SDocDataMetaComponent} from './components/sdoc-datameta/sdoc-datameta.component';
+import {DynamicComponentHostDirective} from './directives/dynamic-component-host.directive';
+import {SDocActionsComponent} from './components/sdoc-actions/sdoc-actions.component';
+import {SDocListActionsComponent} from './components/sdoc-listactions/sdoc-listactions.component';
 
 @NgModule({
     declarations: [
+        DynamicComponentHostDirective,
         SDocListComponent,
         SDocListItemComponent,
         SDocListItemSmallComponent,
@@ -64,7 +68,9 @@ import {SDocDataMetaComponent} from './components/sdoc-datameta/sdoc-datameta.co
         SDocRateTechComponent,
         SDocDistanceComponent,
         SDocTimetableComponent,
-        SDocDateFormatPipe
+        SDocDateFormatPipe,
+        SDocActionsComponent,
+        SDocListActionsComponent
     ],
     imports: [
         ToastModule,
@@ -83,7 +89,9 @@ import {SDocDataMetaComponent} from './components/sdoc-datameta/sdoc-datameta.co
     providers: [
         DatePipe
     ],
+    entryComponents: [SDocListActionsComponent],
     exports: [
+        DynamicComponentHostDirective,
         SDocListComponent,
         SDocListItemComponent,
         SDocListItemSmallComponent,
@@ -109,7 +117,9 @@ import {SDocDataMetaComponent} from './components/sdoc-datameta/sdoc-datameta.co
         SDocRateTechComponent,
         SDocDistanceComponent,
         SDocTimetableComponent,
-        SDocDateFormatPipe
+        SDocDateFormatPipe,
+        SDocActionsComponent,
+        SDocListActionsComponent
     ]
 })
 export class SharedSDocModule {}

@@ -33,6 +33,8 @@ import {Angulartics2Module} from 'angulartics2';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import {PlatformService} from '../shared/angular-commons/services/platform.service';
+import {DynamicComponentService} from './shared-sdoc/services/sdoc-dynamic-components.service';
+import {SDocListActionsComponent} from './shared-sdoc/components/sdoc-listactions/sdoc-listactions.component';
 
 registerLocaleData(localeDe);
 
@@ -53,6 +55,7 @@ export function getAngulartics2Providers(): any {
         NavbarComponent,
         ErrorPageComponent
     ],
+    entryComponents: [SDocListActionsComponent],
     imports: [
         HttpModule,
         HttpClientModule,
@@ -76,6 +79,7 @@ export function getAngulartics2Providers(): any {
         { provide: MinimalHttpBackendClient, useClass: BackendHttpClient },
         CommonRoutingService,
         { provide: GenericAppService, useClass: AppService },
+        DynamicComponentService,
         SDocTeamFilterConfig,
         SDocDataStore,
         SDocDataService,
