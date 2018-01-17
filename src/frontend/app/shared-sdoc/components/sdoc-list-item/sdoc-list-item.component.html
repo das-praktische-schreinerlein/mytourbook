@@ -7,12 +7,12 @@
                 <div>
                     <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
                     <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                    <ng-container *ngIf="listItem.image">
-                        <img class="picture-small" width="200px"
+                    <div class="picture-small" *ngIf="listItem.image">
+                        <img class="picture-small" width="300px"
                              [src]="listItem.previewUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
-                    </ng-container>
+                    </div>
                 </div>
                 <br />
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
