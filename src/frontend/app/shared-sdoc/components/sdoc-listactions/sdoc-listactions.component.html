@@ -1,3 +1,12 @@
-<ng-container *ngIf="item.currentRecord !== undefined">
-    <a [href]="getShowUrl()" (click)="submitShow()">S</a>
+<ng-container *ngIf="item.currentRecord !== undefined && tags.length > 0">
+    <div class="tagContainer tagContainer{{type}} {{styleClass}}">
+        <ng-container *ngFor="let tag of tags">
+            <ng-container *ngIf="tag.active && tag.available">
+                <a (click)="unsetTag(tag)" class="tag{{tag.config.key}} tagActive tag{{tag.config.key}}Active">{{tag.config.shortName}}</a>
+            </ng-container>
+            <ng-container *ngIf="!tag.active && tag.available">
+                <a (click)="setTag(tag)" class="tag{{tag.config.key}} tagInActive tag{{tag.config.key}}InActive">{{tag.config.shortName}}</a>
+            </ng-container>
+        </ng-container>
+    </div>
 </ng-container>

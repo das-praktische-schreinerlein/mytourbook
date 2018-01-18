@@ -39,4 +39,5 @@ export class SDocActionsComponent implements OnChanges {
         viewContainerRef.clear();
         const componentRef = viewContainerRef.createComponent(componentFactory);
         (componentRef.instance)['record'] = this.record;
+        (componentRef.instance)['type'] = this.type;
     }}

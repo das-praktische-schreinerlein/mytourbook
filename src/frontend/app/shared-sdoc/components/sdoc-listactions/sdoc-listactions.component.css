@@ -1,0 +1,20 @@
+.tagActive {
+    color: black !important;
+    background-color: #a8e25b !important;
+    border: 2px red solid;
+    padding: 2px;
+}
+.tagInActive {
+    color: gray !important;
+    background-color: beige;
+    border: 2px lightgray solid;
+    padding: 2px;
+}
+
+.tagContainerlistActionsFlat, .tagContainerlistActionsSmall {
+    display: inline-block;
+}
+
+.tagContainerlistActionsBig {
+
+}
