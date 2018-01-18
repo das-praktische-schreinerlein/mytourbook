@@ -14,6 +14,7 @@ ul.props {
 
 div.picture-small {
     width: 300px;
+    max-width: 95%;
     max-height: 300px;
     overflow: hidden;
     border-radius: 10px;

@@ -12,6 +12,12 @@
     img.picture-big {
         width: 350px;
     }
+    img.picture-small {
+        width: 250px;
+    }
+    div.picture-small {
+        max-height: 250px !important;
+    }
 }
 @media(max-width: 360px) {
     img.picture-big {
@@ -21,6 +27,12 @@
 @media(max-width: 320px) {
     img.picture-big {
         width: 200px;
+    }
+    img.picture-small {
+        width: 200px;
+    }
+    div.picture-small {
+        max-height: 200px !important;
     }
 }
 
@@ -67,10 +79,5 @@
 @media (min-width: 1200px) {
     .container {
         width: 95%;
-    }
-    div.picture-small {
-        width: 280px !important;
-        max-height: 280px !important;
-        overflow: hidden !important;
     }
 }
