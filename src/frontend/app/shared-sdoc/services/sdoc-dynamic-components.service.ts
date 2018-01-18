@@ -4,8 +4,12 @@ import {SDocListActionsComponent} from '../components/sdoc-listactions/sdoc-list
 @Injectable()
 export class DynamicComponentService  {
     getComponent(componentName: string) {
-        if (componentName === 'listActions') {
-            return SDocListActionsComponent;
+        switch (componentName) {
+            case 'listActions':
+            case 'listActionsSmall':
+            case 'listActionsBig':
+            case 'listActionsFlat':
+              return SDocListActionsComponent;
         }
 
         return null;
