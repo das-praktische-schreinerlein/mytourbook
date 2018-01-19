@@ -51,6 +51,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     public showTimetable? = false;
 
     @Input()
+    public showLayout? = false;
+
+    @Input()
     public showResultList? = false;
 
     @Input()
@@ -127,6 +130,39 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
         this.searchForm.pageNum = +page;
         this.doSearch();
+        return false;
+    }
+
+    onPerPageChange(perPage: number) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.searchForm.perPage = perPage;
+        this.doSearch();
+        return false;
+    }
+
+    onSortChange(sort: string) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.searchForm.sort = sort;
+        this.doSearch();
+        return false;
+    }
+
+    onLayoutChange(layout: Layout) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.layout = layout;
+        this.cd.markForCheck();
         return false;
     }
 
