@@ -367,7 +367,8 @@ export class SqlQueryBuilder {
         if (tableConfig.optionalGroupBy !== undefined) {
             for (const groupByConfig of tableConfig.optionalGroupBy) {
                 for (const fieldName of groupByConfig.triggerParams) {
-                    if (adapterQuery.where.hasOwnProperty(fieldName)) {
+                    if (adapterQuery.where.hasOwnProperty(fieldName) ||
+                        (adapterQuery.additionalWhere && adapterQuery.additionalWhere.hasOwnProperty(fieldName))) {
                         query.from += ' ' + groupByConfig.from;
                         addFields = addFields.concat(groupByConfig.groupByFields);
                         break;
