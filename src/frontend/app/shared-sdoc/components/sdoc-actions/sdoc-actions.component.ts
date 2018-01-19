@@ -1,11 +1,9 @@
-import {
-    ChangeDetectionStrategy, Component, ComponentFactoryResolver, Input, OnChanges, OnInit, SimpleChange,
-    ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange, ViewChild} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {DynamicComponentService} from '../../services/sdoc-dynamic-components.service';
-import {DynamicComponentHostDirective} from '../../directives/dynamic-component-host.directive';
-import {ComponentUtils} from '../../../../../shared/angular-commons/services/component.utils';
+import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-components.service';
+import {DynamicComponentHostDirective} from '../../../../shared/angular-commons/components/directives/dynamic-component-host.directive';
+import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {ActionTagEvent} from '../sdoc-listactions/sdoc-listactions.component';
 
 @Component({
     selector: 'app-sdoc-action',
@@ -21,9 +19,13 @@ export class SDocActionsComponent implements OnChanges {
     @Input()
     public type: string;
 
-    @ViewChild(DynamicComponentHostDirective) widgetHost: DynamicComponentHostDirective;
-    constructor(private _componentFactoryResolver: ComponentFactoryResolver, private dynamicComponentService: DynamicComponentService ) {
+    @Output()
+    public actionTagEvent: EventEmitter<ActionTagEvent> = new EventEmitter();
 
+    @ViewChild(DynamicComponentHostDirective)
+    widgetHost: DynamicComponentHostDirective;
+
+    constructor(private dynamicComponentService: SDocDynamicComponentService ) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -33,11 +35,9 @@ export class SDocActionsComponent implements OnChanges {
     }
 
     renderComponents() {
-        const component: any = this.dynamicComponentService.getComponent(this.type);
-        const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
-        const viewContainerRef = this.widgetHost.viewContainerRef;
-        viewContainerRef.clear();
-        const componentRef = viewContainerRef.createComponent(componentFactory);
+        const componentRef = this.dynamicComponentService.createComponentByName(this.type, this.widgetHost);
         (componentRef.instance)['record'] = this.record;
         (componentRef.instance)['type'] = this.type;
-    }}
+        (componentRef.instance)['actionTagEvent'] = this.actionTagEvent;
+    }
+}

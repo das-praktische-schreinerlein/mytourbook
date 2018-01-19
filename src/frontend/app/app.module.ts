@@ -33,8 +33,9 @@ import {Angulartics2Module} from 'angulartics2';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import {PlatformService} from '../shared/angular-commons/services/platform.service';
-import {DynamicComponentService} from './shared-sdoc/services/sdoc-dynamic-components.service';
+import {SDocDynamicComponentService} from './shared-sdoc/services/sdoc-dynamic-components.service';
 import {SDocListActionsComponent} from './shared-sdoc/components/sdoc-listactions/sdoc-listactions.component';
+import {DynamicComponentService} from '../shared/angular-commons/services/dynamic-components.service';
 
 registerLocaleData(localeDe);
 
@@ -80,6 +81,7 @@ export function getAngulartics2Providers(): any {
         CommonRoutingService,
         { provide: GenericAppService, useClass: AppService },
         DynamicComponentService,
+        SDocDynamicComponentService,
         SDocTeamFilterConfig,
         SDocDataStore,
         SDocDataService,
