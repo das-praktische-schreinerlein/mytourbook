@@ -7,6 +7,17 @@
     img.picture-big {
         width: 350px;
     }
+
+    .card-deck .card:not(:first-child) {
+        margin-left: 1px!important;
+    }
+    .card-deck .card:not(:last-child) {
+        margin-right: 0px!important;;
+    }
+    .card-deck .card {
+        margin-left: 1px!important;;
+        margin-right: 0px!important;;
+    }
 }
 @media(max-width: 450px) {
     img.picture-big {
