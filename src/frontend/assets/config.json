@@ -24,6 +24,67 @@
             ],
             "blacklist": ["OFFEN", "Mom", "Pa", "Dani", "Micha", "Verena",
                 "Booga", "Harry", "Rudi", "Pelle"]
+        },
+        "sdoc-actions": {
+            "actionTags": [
+                {
+                    "key": "playlists_favorites",
+                    "name": "Favorite",
+                    "shortName": "F",
+                    "showFilter": [
+                        {
+                            "property": "playlists",
+                            "command": "CSVIN",
+                            "expectedValues": ["Favorites"]
+                        }
+                    ],
+                    "availability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_milestone",
+                    "name": "Personal Meilenstein",
+                    "shortName": "P*",
+                    "showFilter": [
+                        {
+                            "property": "sdocratepers.gesamt",
+                            "command": "GE",
+                            "expectedValues": [11]
+                        }
+                    ],
+                    "availability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_phantastic",
+                    "name": "Personal Phantastic",
+                    "shortName": "P**",
+                    "showFilter": [
+                        {
+                            "property": "sdocratepers.gesamt",
+                            "command": "GE",
+                            "expectedValues": [14]
+                        }
+                    ],
+                    "availability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ]
+                }
+            ]
         }
     },
     "services": {

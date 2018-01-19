@@ -20,6 +20,7 @@
             </div>
             <div class="col-4 layout-big">
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
+                <app-sdoc-action [record]="listItem.currentRecord" [type]="'listActionsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
                 <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta >
             </div>
             <div class="col-2 ratetech layout-big">

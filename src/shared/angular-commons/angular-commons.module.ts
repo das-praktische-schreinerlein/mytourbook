@@ -4,10 +4,12 @@ import {SwitchOnOfflineComponent} from './components/switch-onoffline/switch-ono
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {ShowBrowserOnOfflineComponent} from './components/show-browseronoffline/show-browseronoffline.component';
+import {DynamicComponentHostDirective} from './components/directives/dynamic-component-host.directive';
 
 @NgModule({
     declarations: [
         TruncatePipe,
+        DynamicComponentHostDirective,
         SwitchOnOfflineComponent,
         ShowBrowserOnOfflineComponent
     ],
@@ -18,6 +20,7 @@ import {ShowBrowserOnOfflineComponent} from './components/show-browseronoffline/
     ],
     exports: [
         TruncatePipe,
+        DynamicComponentHostDirective,
         SwitchOnOfflineComponent,
         ShowBrowserOnOfflineComponent
     ]

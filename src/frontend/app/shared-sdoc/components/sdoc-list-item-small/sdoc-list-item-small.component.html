@@ -14,6 +14,7 @@
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord | sdocdate}}</h5></a>
                     <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers >
                     <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta>
+                    <app-sdoc-action [record]="listItem.currentRecord" [type]="'listActionsSmall'"></app-sdoc-action>
                 </div>
             </div>
         </div>

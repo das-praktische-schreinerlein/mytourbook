@@ -3,6 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {ActionTagEvent} from '../sdoc-listactions/sdoc-listactions.component';
 
 @Component({
     selector: 'app-sdoc-list-item-flat',
@@ -53,6 +54,12 @@ export class SDocListItemFlatComponent implements OnChanges {
 
     public submitShowImage(sdoc: SDocRecord) {
         this.showImage.emit(sdoc);
+        return false;
+    }
+
+    public onActionTagEvent(event: ActionTagEvent) {
+        // TODO
+        console.error(event);
         return false;
     }
 
