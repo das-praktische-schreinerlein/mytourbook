@@ -3,6 +3,7 @@ import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {MapperUtils} from '../../search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
+import {BeanUtils} from '../../search-commons/utils/bean.utils';
 
 export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -52,6 +53,33 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
             const image: SDocImageRecord = props.get('sdocimages')[0];
             values['i_fav_url_txt'] = image.fileName;
         }
+
+        values['data_tech_alt_asc_i'] = BeanUtils.getValue(props, 'sdocdatatech.altAsc');
+        values['data_tech_alt_desc_i'] = BeanUtils.getValue(props, 'sdocdatatech.altDesc');
+        values['data_tech_alt_min_i'] = BeanUtils.getValue(props, 'sdocdatatech.altMin');
+        values['data_tech_alt_max_i'] = BeanUtils.getValue(props, 'sdocdatatech.altMax');
+        values['data_tech_dist_f'] = BeanUtils.getValue(props, 'sdocdatatech.dist');
+        values['data_tech_dur_f'] = BeanUtils.getValue(props, 'sdocdatatech.dur');
+
+        values['rate_tech_overall_s'] = BeanUtils.getValue(props, 'sdocratetech.overall');
+        values['rate_tech_ks_s'] = BeanUtils.getValue(props, 'sdocratetech.ks');
+        values['rate_tech_firn_s'] = BeanUtils.getValue(props, 'sdocratetech.firn');
+        values['rate_tech_gletscher_s'] = BeanUtils.getValue(props, 'sdocratetech.gletscher');
+        values['rate_tech_klettern_s'] = BeanUtils.getValue(props, 'sdocratetech.klettern');
+        values['rate_tech_bergtour_s'] = BeanUtils.getValue(props, 'sdocratetech.bergtour');
+        values['rate_tech_schneeschuh_s'] = BeanUtils.getValue(props, 'sdocratetech.schneeschuh');
+        values['rate_pers_ausdauer_i'] = BeanUtils.getValue(props, 'sdocratepers.ausdauer');
+        values['rate_pers_bildung_i'] = BeanUtils.getValue(props, 'sdocratepers.bildung');
+        values['rate_pers_gesamt_i'] = BeanUtils.getValue(props, 'sdocratepers.gesamt');
+        values['rate_pers_kraft_i'] = BeanUtils.getValue(props, 'sdocratepers.kraft');
+        values['rate_pers_mental_i'] = BeanUtils.getValue(props, 'sdocratepers.mental');
+        values['rate_pers_motive_i'] = BeanUtils.getValue(props, 'sdocratepers.motive');
+        values['rate_pers_schwierigkeit_i'] = BeanUtils.getValue(props, 'sdocratepers.schwierigkeit');
+        values['rate_pers_wichtigkeit_i'] = BeanUtils.getValue(props, 'sdocratepers.wichtigkeit');
+        values['data_info_guides_s'] = BeanUtils.getValue(props, 'sdocdatainfo.guides');
+        values['data_info_region_s'] = BeanUtils.getValue(props, 'sdocdatainfo.region');
+        values['data_info_baseloc_s'] = BeanUtils.getValue(props, 'sdocdatainfo.baseloc');
+        values['data_info_destloc_s'] = BeanUtils.getValue(props, 'sdocdatainfo.destloc');
 
         return values;
     }
