@@ -5,8 +5,7 @@ import {arser, Router} from 'js-data-express';
 import express from 'express';
 
 export class PDocServerModule {
-    public static configureRoutes(app: express.Application, apiPrefix: string, dataService: PDocDataService, locale: string,
-                                  readOnly: boolean) {
+    public static configureRoutes(app: express.Application, apiPrefix: string, dataService: PDocDataService, locale: string) {
         const mapper = dataService.getMapper('pdoc');
 
         // configure express

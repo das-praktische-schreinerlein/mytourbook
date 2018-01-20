@@ -13,20 +13,20 @@ import {SDocFileUtils} from '../shared/sdoc-commons/services/sdoc-file.utils';
 export class SDocDataServiceModule {
     private static dataServices = new Map<string, SDocDataService>();
 
-    public static getDataService(profile: string, backendConfig: {}, readOnly: boolean): SDocDataService {
+    public static getDataService(profile: string, backendConfig: {}): SDocDataService {
         if (!this.dataServices.has(profile)) {
             switch (backendConfig['sdocDataStoreAdapter']) {
                 case 'SDocSolrAdapter':
-                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceSolr(backendConfig, readOnly));
+                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceSolr(backendConfig));
                     break;
                 case 'SDocSqlMediadbAdapter':
-                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceMediadbSql(backendConfig, readOnly));
+                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceMediadbSql(backendConfig));
                     break;
                 case 'SDocSqlMytbAdapter':
-                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceMytbSql(backendConfig, readOnly));
+                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceMytbSql(backendConfig));
                     break;
                 case 'SDocItemsJsAdapter':
-                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceItemsJs(backendConfig, readOnly));
+                    this.dataServices.set(profile, SDocDataServiceModule.createDataServiceItemsJs(backendConfig));
                     break;
                 default:
                     throw new Error('configured sdocDataStoreAdapter not exist:' + backendConfig['sdocDataStoreAdapter']);
@@ -36,7 +36,7 @@ export class SDocDataServiceModule {
         return this.dataServices.get(profile);
     }
 
-    private static createDataServiceSolr(backendConfig: {}, readOnly: boolean): SDocDataService {
+    private static createDataServiceSolr(backendConfig: {}): SDocDataService {
         // configure store
         const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
         const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
@@ -71,7 +71,7 @@ export class SDocDataServiceModule {
         return dataService;
     }
 
-    private static createDataServiceMediadbSql(backendConfig: {}, readOnly: boolean): SDocDataService {
+    private static createDataServiceMediadbSql(backendConfig: {}): SDocDataService {
         // configure store
         const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
         const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
@@ -98,7 +98,7 @@ export class SDocDataServiceModule {
         return dataService;
     }
 
-    private static createDataServiceMytbSql(backendConfig: {}, readOnly: boolean): SDocDataService {
+    private static createDataServiceMytbSql(backendConfig: {}): SDocDataService {
         // configure store
         const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
         const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
@@ -125,7 +125,7 @@ export class SDocDataServiceModule {
         return dataService;
     }
 
-    private static createDataServiceItemsJs(backendConfig: {}, readOnly: boolean): SDocDataService {
+    private static createDataServiceItemsJs(backendConfig: {}): SDocDataService {
         // configure store
         const filterConfig: SDocTeamFilterConfig = new SDocTeamFilterConfig();
         const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));

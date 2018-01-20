@@ -14,6 +14,7 @@ import {SDocDataInfoRecord, SDocDataInfoRecordRelation} from '../model/records/s
 import {SDocDataInfoRecordSchema} from '../model/schemas/sdocdatainfo-record-schema';
 
 export class SDocDataService extends SDocSearchService {
+    private writable = false;
 
     constructor(dataStore: SDocDataStore) {
         super(dataStore);
@@ -35,21 +36,41 @@ export class SDocDataService extends SDocSearchService {
 
     // Simulate POST /sdocs
     add(sdoc: SDocRecord, opts?: any): Promise<SDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('SDocDataService configured: not writable');
+        }
         return this.dataStore.create('sdoc', sdoc, opts);
     }
 
     // Simulate POST /sdocs
     addMany(sdocs: SDocRecord[], opts?: any): Promise<SDocRecord[]> {
+        if (!this.isWritable()) {
+            throw new Error('SDocDataService configured: not writable');
+        }
         return this.dataStore.createMany('sdoc', sdocs, opts);
     }
 
     // Simulate DELETE /sdocs/:id
     deleteById(id: string, opts?: any): Promise<SDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('SDocDataService configured: not writable');
+        }
         return this.dataStore.destroy('sdoc', id, opts);
     }
 
     // Simulate PUT /sdocs/:id
     updateById(id: string, values: {}, opts?: any): Promise<SDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('SDocDataService configured: not writable');
+        }
         return this.dataStore.update('sdoc', id, values, opts);
+    }
+
+    setWritable(writable: boolean) {
+        this.writable = writable;
+    }
+
+    isWritable(): boolean {
+        return this.writable;
     }
 }

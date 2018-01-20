@@ -13,7 +13,7 @@ export class SDocServerModule {
     public idValidationRule = new IdValidationRule(true);
 
     public static configureRoutes(app: express.Application, apiPrefix: string, dataService: SDocDataService,
-                                  cache: DataCacheModule, readOnly: boolean): SDocServerModule {
+                                  cache: DataCacheModule): SDocServerModule {
         const sdocServerModule = new SDocServerModule(dataService, cache);
 
         // configure express

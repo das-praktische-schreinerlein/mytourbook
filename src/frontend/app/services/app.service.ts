@@ -104,12 +104,15 @@ export class AppService extends GenericAppService {
             me.backendHttpClient.makeHttpRequest({ method: 'get', url: options.basePath + 'pdoc/', withCredentials: true })
                 .then(function onDocsLoaded(res: any) {
                     const docs: any[] = (res['data'] || res.json());
+                    me.pdocDataService.setWritable(true);
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded pdocs from server', records);
+                    me.pdocDataService.setWritable(false);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:' + reason);
+                    me.pdocDataService.setWritable(false);
                     return reject(false);
                 });
             });
@@ -124,21 +127,26 @@ export class AppService extends GenericAppService {
             me.http.request('./assets/pdocs.json').toPromise()
                 .then(function onDocsLoaded(res: any) {
                     const docs: any[] = res.json().pdocs;
-
+                    me.pdocDataService.setWritable(true);
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded pdocs from assets', records);
+                    me.pdocDataService.setWritable(false);
 
                     return me.http.request('./assets/sdocs.json').toPromise();
                 }).then(function onDocsLoaded(res: any) {
                     const docs: any[] = res.json().sdocs;
+                    me.sdocDataService.setWritable(false);
 
                     return me.sdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded sdocs from assets', records);
+                    me.sdocDataService.setWritable(false);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:' + reason);
+                    me.pdocDataService.setWritable(false);
+                    me.sdocDataService.setWritable(false);
                     return reject(false);
                 });
             });

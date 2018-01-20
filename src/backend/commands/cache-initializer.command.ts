@@ -20,12 +20,10 @@ export class CacheInitializerCommand implements AbstractCommand {
             apiPublicPrefix: '/api/static',
             filePathErrorDocs: './error_docs/',
             backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
-            firewallConfig: undefined,
-            readOnly: true
+            firewallConfig: undefined
         };
 
-        const sdocDataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr' + serverConfig.readOnly,
-            serverConfig.backendConfig, serverConfig.readOnly);
+        const sdocDataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr', serverConfig.backendConfig);
         const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
         const sdocServerModule = new SDocServerModule(sdocDataService, cache);
         const searchForm = new SDocSearchForm({});

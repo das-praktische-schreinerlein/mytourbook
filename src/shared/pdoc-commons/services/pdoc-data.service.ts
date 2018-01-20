@@ -4,6 +4,7 @@ import {PDocSearchService} from './pdoc-search.service';
 import {PDocRecordSchema} from '../model/schemas/pdoc-record-schema';
 
 export class PDocDataService extends PDocSearchService {
+    private writable = false;
 
     constructor(dataStore: PDocDataStore) {
         super(dataStore);
@@ -20,21 +21,33 @@ export class PDocDataService extends PDocSearchService {
 
     // Simulate POST /pdocs
     add(pdoc: PDocRecord, opts?: any): Promise<PDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('PDocDataService configured: not writable');
+        }
         return this.dataStore.create('pdoc', pdoc, opts);
     }
 
     // Simulate POST /pdocs
     addMany(pdocs: PDocRecord[], opts?: any): Promise<PDocRecord[]> {
+        if (!this.isWritable()) {
+            throw new Error('PDocDataService configured: not writable');
+        }
         return this.dataStore.createMany('pdoc', pdocs, opts);
     }
 
     // Simulate DELETE /pdocs/:id
     deleteById(id: string, opts?: any): Promise<PDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('PDocDataService configured: not writable');
+        }
         return this.dataStore.destroy('pdoc', id, opts);
     }
 
     // Simulate PUT /pdocs/:id
     updateById(id: string, values: Object = {}, opts?: any): Promise<PDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('PDocDataService configured: not writable');
+        }
         return this.dataStore.update('pdoc', id, values, opts);
     }
 
@@ -59,5 +72,14 @@ export class PDocDataService extends PDocSearchService {
         }
 
         return sections;
+    }
+
+
+    setWritable(writable: boolean) {
+        this.writable = writable;
+    }
+
+    isWritable(): boolean {
+        return this.writable;
     }
 }

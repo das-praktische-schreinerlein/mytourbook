@@ -29,7 +29,7 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
         });
 
         return SitemapGeneratorModule.generateSiteMapFiles(
-            SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig, true),
+            SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig),
             sitemapConfig,
             new SDocSearchForm(sitemapConfig.sdocSearchForm)
         ).then(value => {
@@ -44,7 +44,7 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
             });
             return SitemapGeneratorModule.generateSiteMapFiles(
                 PDocDataServiceModule.getDataService('pdocSolr' + sitemapConfig.locale + 'ReadOnly', generatorConfig.backendConfig,
-                    sitemapConfig.locale, true),
+                    sitemapConfig.locale),
                 sitemapConfig,
                 new PDocSearchForm({})
             );

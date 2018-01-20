@@ -10,15 +10,15 @@ import htmlToText from 'html-to-text';
 export class PDocDataServiceModule {
     private static dataServices = new Map<string, PDocDataService>();
 
-    public static getDataService(profile: string, backendConfig: {}, locale: string, readOnly: boolean): PDocDataService {
+    public static getDataService(profile: string, backendConfig: {}, locale: string): PDocDataService {
         if (!this.dataServices.has(profile)) {
-            this.dataServices.set(profile, PDocDataServiceModule.createDataService(backendConfig, locale, readOnly));
+            this.dataServices.set(profile, PDocDataServiceModule.createDataService(backendConfig, locale));
         }
 
         return this.dataServices.get(profile);
     }
 
-    private static createDataService(backendConfig: {}, locale: string, readOnly: boolean): PDocDataService {
+    private static createDataService(backendConfig: {}, locale: string): PDocDataService {
         // configure store
         const dataStore: PDocDataStore = new PDocDataStore(new SearchParameterUtils());
         const dataService: PDocDataService = new PDocDataService(dataStore);
@@ -44,6 +44,8 @@ export class PDocDataServiceModule {
                 });
             }
         }
+
+        dataService.setWritable(true);
         dataService.addMany(docs).then(function doneAddMany(records: PDocRecord[]) {
                 console.log('loaded pdocs from assets', records);
             },
@@ -51,6 +53,7 @@ export class PDocDataServiceModule {
                 console.error('loading pdocs failed:' + reason);
             }
         );
+        dataService.setWritable(false);
 
         // configure dummy-adapter
         const options = {};

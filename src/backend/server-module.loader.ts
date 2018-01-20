@@ -20,7 +20,6 @@ export interface ServerConfig {
         cacheConfig: CacheConfig;
     };
     firewallConfig: FirewallConfig;
-    readOnly: boolean;
 }
 
 export class ServerModuleLoader {
@@ -30,18 +29,18 @@ export class ServerModuleLoader {
         DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 
         // configure dataservices
-        const sdocDataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr' + serverConfig.readOnly,
-            serverConfig.backendConfig, serverConfig.readOnly);
-        const pdocDataServiceDE: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrDE' + serverConfig.readOnly,
-            serverConfig.backendConfig, 'de', serverConfig.readOnly);
-        const pdocDataServiceEN: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrEN' + serverConfig.readOnly,
-            serverConfig.backendConfig, 'en', serverConfig.readOnly);
+        const sdocDataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr',
+            serverConfig.backendConfig);
+        const pdocDataServiceDE: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrDE',
+            serverConfig.backendConfig, 'de');
+        const pdocDataServiceEN: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrEN',
+            serverConfig.backendConfig, 'en');
         const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
 
         // add routes
-        SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache, serverConfig.readOnly);
-        PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de', serverConfig.readOnly);
-        PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en', serverConfig.readOnly);
+        const sdocServerModule = SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache);
+        PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de');
+        PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en');
         AssetsServerModule.configureStaticTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
         AssetsServerModule.configureStaticPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
         AssetsServerModule.configureStoredTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig,

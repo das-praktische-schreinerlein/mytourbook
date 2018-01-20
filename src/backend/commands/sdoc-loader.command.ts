@@ -36,9 +36,8 @@ export class SDocLoaderCommand implements AbstractCommand {
         }
         const recordSrcs = SDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(dataFileName, { encoding: 'utf8' }));
 
-        const dataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr' + serverConfig.readOnly,
-            serverConfig.backendConfig, serverConfig.readOnly);
-
+        const dataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr', serverConfig.backendConfig);
+        dataService.setWritable(true);
         const mapper: Mapper = dataService.getMapper('sdoc');
         const adapter: Adapter = dataService.getAdapterForMapper('sdoc');
         const responseMapper = new SDocAdapterResponseMapper();
