@@ -49,7 +49,7 @@ export class SDocDataService extends SDocSearchService {
     }
 
     // Simulate PUT /sdocs/:id
-    updateById(id: string, values: Object = {}, opts?: any): Promise<SDocRecord> {
+    updateById(id: string, values: {}, opts?: any): Promise<SDocRecord> {
         return this.dataStore.update('sdoc', id, values, opts);
     }
 }
