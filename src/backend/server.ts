@@ -14,8 +14,7 @@ const serverConfig: ServerConfig = {
     apiPublicPrefix: '/api/static',
     filePathErrorDocs: './error_docs/',
     backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
-    firewallConfig: JSON.parse(fs.readFileSync(filePathFirewallConfigJson, { encoding: 'utf8' })),
-    readOnly: true
+    firewallConfig: JSON.parse(fs.readFileSync(filePathFirewallConfigJson, { encoding: 'utf8' }))
 };
 
 // create server
