@@ -1,5 +1,5 @@
 import {BaseEntityRecord} from '../model/records/base-entity-record';
-import {FilterUtils, SimpleFilter} from '../../commons/utils/filter.utils';
+import {FilterUtils, SimpleFilter} from './filter.utils';
 
 export interface ActionTagConfig {
     key: string;

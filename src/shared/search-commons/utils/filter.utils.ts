@@ -1,4 +1,5 @@
-import {BaseEntityRecord} from '../../search-commons/model/records/base-entity-record';
+import {BaseEntityRecord} from '../model/records/base-entity-record';
+import {BeanUtils} from './bean.utils';
 
 export enum SimpleFilterCommands {
     CSVIN = 'CSVIN',
@@ -26,27 +27,7 @@ export abstract class FilterUtils {
     }
 
     public static checkFilter(filter: SimpleFilter, record: BaseEntityRecord): boolean {
-        let value = record[filter.property];
-        if (value === undefined) {
-            const hierarchy = filter.property.split('.');
-            let parent = record;
-            for (let i = 0; i < hierarchy.length; i++) {
-                const element = hierarchy[i];
-                if (parent instanceof BaseEntityRecord) {
-                    parent = parent.get(element);
-                } else if (parent) {
-                    parent = parent[element];
-                } else {
-                    i = hierarchy.length + 1000;
-                }
-
-                const propName = hierarchy.slice(i + 1, hierarchy.length).join('.');
-                if (parent && parent[propName]) {
-                    value = parent[propName];
-                    i = hierarchy.length + 1000;
-                }
-            }
-        }
+        const value = BeanUtils.getValue(record, filter.property);
         if (value === undefined) {
             return false;
         }
