@@ -77,7 +77,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     }
 
     update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts: any): Promise<T> {
-        throw new Error('update not implemented');
+        props = props || {};
+        opts = opts || {};
+        return super.update(mapper, id, props, opts);
     }
 
     updateAll(mapper: Mapper, props: any, query: any, opts?: any): Promise<any> {
@@ -120,6 +122,11 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.resolve(result);
     }
 
+    afterUpdate<T extends Record>(mapper: Mapper, id: string | number, props: IDict, opts: any, result: any): Promise<T> {
+        opts.realResult = result;
+        return utils.resolve(result);
+    }
+
     _create<T extends Record>(mapper, props, opts): Promise<any> {
         if (opts.realSource) {
             props = opts.realSource;
@@ -140,7 +147,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     queryValues.push(writeQuery.fields[field]);
                 }
                 //me.knex.insert(me.knex.raw(' (' + queryFields.join(', ') + ') values (' + queryValues.join(', ') + ')'))
-                me.knex.insert([writeQuery.fields])
+                console.error("createblablum", writeQuery);
+                if (1 === 1) {throw new Error("blim"); }
+                sqlBuilder.insert([writeQuery.fields])
                     .into(writeQuery.from)
                     .returning(writeQuery.tableConfig.filterMapping['id'])
                     .then(values => {
@@ -308,6 +317,65 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     };
 
+    _update<T extends Record>(mapper, id, props, opts): Promise<any> {
+        if (opts.realSource) {
+            props = opts.realSource;
+        }
+
+        props = props || {};
+        opts = opts || {};
+
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        const me = this;
+        const result: Promise<any> = new Promise((allResolve, allReject) => {
+            const writeQuery = me.queryTransformToAdapterWriteQuery('update', mapper, props, opts);
+            if (writeQuery) {
+                const queryFields = [];
+                const queryValues = [];
+                for (const field in writeQuery.fields) {
+                    queryFields.push(field);
+                    queryValues.push(writeQuery.fields[field]);
+                }
+
+
+
+
+                console.error("updateblablum", writeQuery);
+                if (1 === 1) {throw new Error("blim"); }
+
+
+                sqlBuilder.update([writeQuery.fields])
+                    .into(writeQuery.from)
+                    .where({ id: {'in': [id]}})
+                    .returning(writeQuery.tableConfig.filterMapping['id'])
+                    .then(values => {
+                        const query = {
+                            where: {
+                                id: {
+                                    'in': [id]
+                                },
+                                type_txt: {
+                                    'in': [props.type.toLowerCase()]
+                                }
+                            }
+                        };
+                        return me.findAll(mapper, query, opts);
+                    }).then(searchResult => {
+                    if (!searchResult || searchResult.length !== 1) {
+                        return allResolve(undefined);
+                    }
+                    return allResolve([searchResult[0]]);
+                }).catch(function errorSearch(reason) {
+                    console.error('_update failed:' + reason);
+                    return allReject(reason);
+                });
+            } else {
+                return allReject('no query generated for props:' + props);
+            }
+        });
+
+        return result;
+    }
     deserialize(mapper: Mapper, response: any, opts: any) {
         if (opts.adapterQuery) {
             if (response && (typeof response.data === 'string') && response.data.startsWith('JSONP_CALLBACK(')) {
