@@ -15,6 +15,7 @@ describe('PDocDataService', () => {
     beforeEach(() => {
         const datastore = new PDocDataStore(new SearchParameterUtils());
         service = new PDocDataService(datastore);
+        service.setWritable(true);
         pDoc1 = new PDocRecord({desc: '', name: 'TestpDoc1', persons: '', id: '1'});
         pDoc2 = new PDocRecord({desc: '', name: 'TestpDoc2', persons: '', id: '2'});
     });

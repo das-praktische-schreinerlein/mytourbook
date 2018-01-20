@@ -15,6 +15,7 @@ describe('SDocDataService', () => {
     beforeEach(() => {
         const datastore = new SDocDataStore(new SearchParameterUtils(), new SDocTeamFilterConfig());
         service = new SDocDataService(datastore);
+        service.setWritable(true);
         sdoc1 = new SDocRecord({desc: '', name: 'Testsdoc1', persons: '', id: '1'});
         sdoc2 = new SDocRecord({desc: '', name: 'Testsdoc2', persons: '', id: '2'});
     });
