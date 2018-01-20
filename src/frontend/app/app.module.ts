@@ -36,6 +36,7 @@ import {PlatformService} from '../shared/angular-commons/services/platform.servi
 import {SDocDynamicComponentService} from './shared-sdoc/services/sdoc-dynamic-components.service';
 import {SDocListActionsComponent} from './shared-sdoc/components/sdoc-listactions/sdoc-listactions.component';
 import {DynamicComponentService} from '../shared/angular-commons/services/dynamic-components.service';
+import {SDocAdminModule} from './sdoc-admin/sdoc-admin.module';
 
 registerLocaleData(localeDe);
 
@@ -73,6 +74,7 @@ export function getAngulartics2Providers(): any {
         Angulartics2Module.forRoot(getAngulartics2Providers()),
         AngularCommonsModule,
         SDocModule,
+        SDocAdminModule,
         SectionsModule,
         AppRoutingModule
     ],
