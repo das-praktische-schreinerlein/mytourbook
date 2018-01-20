@@ -13,6 +13,7 @@
     "proxyTrackRouteToUrl": "http://localhost/michas/",
     "proxyPicturesRouteToUrl": "http://localhost/michas/",
     "sdocDataStoreAdapter": "SDocSolrAdapter",
+    "sdocWritable": false,
     "SDocSqlMediadbAdapter": {
         "client": "mysql",
         "connection": {

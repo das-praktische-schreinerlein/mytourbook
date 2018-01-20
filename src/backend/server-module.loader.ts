@@ -10,6 +10,7 @@ import {SDocDataServiceModule} from './modules/sdoc-dataservice.module';
 import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service';
 import {AssetsServerModule} from './modules/assets-server.module';
 import {CacheConfig, DataCacheModule} from './shared-node/server-commons/datacache.module';
+import {SDocWriterServerModule} from './modules/sdoc-writer-server.module';
 
 export interface ServerConfig {
     apiDataPrefix: string;
@@ -39,6 +40,9 @@ export class ServerModuleLoader {
 
         // add routes
         const sdocServerModule = SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache);
+        if (serverConfig.backendConfig['sdocWritable'] === true || serverConfig.backendConfig['sdocWritable'] === 'true') {
+            SDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocServerModule);
+        }
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de');
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en');
         AssetsServerModule.configureStaticTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
