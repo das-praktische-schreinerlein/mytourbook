@@ -59,6 +59,16 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                         result = opts.realResult;
                     }
                     return utils.resolve(result);
+                },
+                beforeUpdate(id: any, props: any, opts: any) {
+                    opts.realSource = props;
+                    return utils.resolve(props);
+                },
+                afterUpdate<T extends Record>(id: any, props: any, opts: any, result: any): Promise<T> {
+                    if (opts.realResult) {
+                        result = opts.realResult;
+                    }
+                    return utils.resolve(result);
                 }
             }
         });
@@ -224,7 +234,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
 
-    public update<T extends Record>(mapperName: string, id: any, record: any, opts?: any): Promise<T> {
+    public update<T extends Record>(mapperName: string, id: string | number, record: any, opts?: any): Promise<T> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             if (id === undefined || id === null) {
                 return utils.Promise.reject('cant update records without id');

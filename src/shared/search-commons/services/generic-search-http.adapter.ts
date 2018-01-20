@@ -21,6 +21,20 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         super(config);
     }
 
+    create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
+        opts = opts || {};
+        opts.endpoint = this.getHttpEndpoint('create');
+
+        return super.create(mapper, props, opts);
+    }
+
+    update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts?: any): Promise<T> {
+        opts = opts || {};
+        opts.endpoint = this.getHttpEndpoint('update');
+
+        return super.update(mapper, id, props, opts);
+    }
+
     facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
         let op;
         query = query || {};
