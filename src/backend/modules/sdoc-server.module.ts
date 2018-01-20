@@ -13,7 +13,7 @@ export class SDocServerModule {
     public idValidationRule = new IdValidationRule(true);
 
     public static configureRoutes(app: express.Application, apiPrefix: string, dataService: SDocDataService,
-                                  cache: DataCacheModule, readOnly: boolean) {
+                                  cache: DataCacheModule, readOnly: boolean): SDocServerModule {
         const sdocServerModule = new SDocServerModule(dataService, cache);
 
         // configure express
@@ -106,6 +106,8 @@ export class SDocServerModule {
                     return next('not found');
                 }
             });
+
+        return sdocServerModule;
     }
 
     public constructor(private dataService: SDocDataService, private cache: DataCacheModule) {
@@ -142,4 +144,13 @@ export class SDocServerModule {
     public generateCacheKey(id: any): string {
         return 'cachev1_solr_sdocId_' + id;
     }
+
+    public getCache(): DataCacheModule {
+        return this.cache;
+    }
+
+    public getDataService(): SDocDataService {
+        return this.dataService;
+    }
+
 }
