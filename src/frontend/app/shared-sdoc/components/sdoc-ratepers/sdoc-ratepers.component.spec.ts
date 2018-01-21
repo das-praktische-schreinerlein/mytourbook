@@ -8,7 +8,6 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
-import {DomSanitizer} from '@angular/platform-browser';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {Router} from '@angular/router';
@@ -25,7 +24,6 @@ describe('SDocRatePersonalComponent', () => {
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot()],
             providers: [
-                DomSanitizer,
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 SDocRoutingService,
