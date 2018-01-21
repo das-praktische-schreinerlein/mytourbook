@@ -1,19 +1,24 @@
-import {BaseEntityRecord} from '../model/records/base-entity-record';
-
 export abstract class BeanUtils {
-    public static getValue(record: BaseEntityRecord, property: string): any {
+    public static getValue(record: any, property: string): any {
+        if (record === undefined) {
+            return undefined;
+        }
+
         let value = record[property];
         if (value === undefined) {
             const hierarchy = property.split('.');
             let parent = record;
             for (let i = 0; i < hierarchy.length; i++) {
                 const element = hierarchy[i];
-                if (parent instanceof BaseEntityRecord) {
-                    parent = parent.get(element);
-                } else if (parent) {
-                    parent = parent[element];
-                } else {
+                if (!parent) {
                     i = hierarchy.length + 1000;
+                    continue;
+                }
+
+                if (typeof parent['get'] === 'function') {
+                    parent = parent.get(element);
+                } else {
+                    parent = parent[element];
                 }
 
                 const propName = hierarchy.slice(i + 1, hierarchy.length).join('.');
@@ -23,6 +28,7 @@ export abstract class BeanUtils {
                 }
             }
         }
+
         return value;
     }
 }

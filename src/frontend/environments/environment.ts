@@ -13,5 +13,7 @@ export const environment = {
     tracksBaseUrl: 'http://localhost:4100/api/assets/trackstore/',
     picsBaseUrl: 'http://localhost:4100/api/static/picturestore/',
     useAssetStoreUrls: true,
+    sdocWritable: false,
+    sdocActionTagWritable: false,
     trackingProviders: [Angulartics2Piwik]
 };

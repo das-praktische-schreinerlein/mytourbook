@@ -1,9 +1,12 @@
-import {BaseEntityRecord} from '../model/records/base-entity-record';
 import {BeanUtils} from './bean.utils';
 
 export enum SimpleFilterCommands {
     CSVIN = 'CSVIN',
     NUMIN = 'NUMIN',
+    EQ = 'EQ',
+    SEQ = 'SEQ',
+    NEQ = 'NEQ',
+    SNEQ = 'SNEQ',
     LT = 'LT',
     LE = 'LE',
     GT = 'GT',
@@ -16,7 +19,11 @@ export interface SimpleFilter {
 }
 
 export abstract class FilterUtils {
-    public static checkFilters(filters: SimpleFilter[], record: BaseEntityRecord): boolean {
+    public static checkFilters(filters: SimpleFilter[], record: any): boolean {
+        if (record === undefined) {
+            return false;
+        }
+
         for (const filter of filters) {
             if (!FilterUtils.checkFilter(filter, record)) {
                 return false;
@@ -26,7 +33,11 @@ export abstract class FilterUtils {
         return true;
     }
 
-    public static checkFilter(filter: SimpleFilter, record: BaseEntityRecord): boolean {
+    public static checkFilter(filter: SimpleFilter, record: any): boolean {
+        if (record === undefined) {
+            return false;
+        }
+
         const value = BeanUtils.getValue(record, filter.property);
         if (value === undefined) {
             return false;
@@ -48,6 +59,14 @@ export abstract class FilterUtils {
                 return value > filter.expectedValues[0];
             case SimpleFilterCommands.GE:
                 return value >= filter.expectedValues[0];
+            case SimpleFilterCommands.EQ:
+                return value === filter.expectedValues[0];
+            case SimpleFilterCommands.SEQ:
+                return value + '' === filter.expectedValues[0] + '';
+            case SimpleFilterCommands.NEQ:
+                return value !== filter.expectedValues[0];
+            case SimpleFilterCommands.SNEQ:
+                return value + '' !== filter.expectedValues[0] + '';
         }
 
         for (const expected of filter.expectedValues) {

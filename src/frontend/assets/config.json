@@ -38,11 +38,18 @@
                             "expectedValues": ["Favorites"]
                         }
                     ],
-                    "availability": [
+                    "recordAvailability": [
                         {
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
                         }
                     ]
                 },
@@ -57,11 +64,18 @@
                             "expectedValues": [11]
                         }
                     ],
-                    "availability": [
+                    "recordAvailability": [
                         {
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
                         }
                     ]
                 },
@@ -76,11 +90,18 @@
                             "expectedValues": [14]
                         }
                     ],
-                    "availability": [
+                    "recordAvailability": [
                         {
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
                         }
                     ]
                 }

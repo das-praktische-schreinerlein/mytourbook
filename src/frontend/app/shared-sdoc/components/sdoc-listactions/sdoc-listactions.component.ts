@@ -7,7 +7,7 @@ import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {BaseEntityRecord} from '../../../../shared/search-commons/model/records/base-entity-record';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {ActionTag, ActionTagConfig, ActionTagUtils} from '../../../../shared/search-commons/utils/actiontag.utils';
+import {ActionTag, ActionTagConfig, ActionTagUtils} from '../../../../shared/commons/utils/actiontag.utils';
 
 export interface ActionTagEvent {
     config: ActionTagConfig;
@@ -35,6 +35,8 @@ export class SDocListActionsComponent implements OnInit, OnChanges {
     tags: ActionTag[] = [];
     styleClass = '';
 
+    private config;
+
     @Input()
     public record: SDocRecord;
 
@@ -51,11 +53,11 @@ export class SDocListActionsComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
-                const config = this.appService.getAppConfig();
-                if (config['components']
-                    && config['components']['sdoc-actions']
-                    && config['components']['sdoc-actions']['actionTags']) {
-                    this.tagConfigs = config['components']['sdoc-actions']['actionTags'];
+                this.config = this.appService.getAppConfig();
+                if (this.config['components']
+                    && this.config['components']['sdoc-actions']
+                    && this.config['components']['sdoc-actions']['actionTags']) {
+                    this.tagConfigs = this.config['components']['sdoc-actions']['actionTags'];
                 } else {
                     console.error('no valid tagConfigs found');
                     this.tagConfigs = [];
@@ -93,7 +95,7 @@ export class SDocListActionsComponent implements OnInit, OnChanges {
 
     private updateData() {
         this.contentUtils.updateItemData(this.item, this.record, 'default');
-        this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord);
+        this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord, this.config);
         if (this.type === 'listActionsBig') {
             this.styleClass = 'btn-navigation';
         } else {

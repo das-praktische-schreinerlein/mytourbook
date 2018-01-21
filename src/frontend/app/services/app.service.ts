@@ -18,6 +18,10 @@ export class AppService extends GenericAppService {
         tracksBaseUrl: environment.tracksBaseUrl,
         picsBaseUrl: environment.picsBaseUrl,
         useAssetStoreUrls: environment.useAssetStoreUrls,
+        permissions: {
+            sdocWritable: environment.sdocWritable,
+            sdocActionTagWritable: environment.sdocActionTagWritable
+        },
         components: {},
         services: {}
     };
