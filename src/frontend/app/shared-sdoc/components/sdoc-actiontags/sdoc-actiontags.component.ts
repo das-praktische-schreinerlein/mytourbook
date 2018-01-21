@@ -1,9 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {BaseEntityRecord} from '../../../../shared/search-commons/model/records/base-entity-record';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
@@ -16,12 +13,12 @@ export interface ActionTagEvent {
 }
 
 @Component({
-    selector: 'app-sdoc-listactions',
-    templateUrl: './sdoc-listactions.component.html',
-    styleUrls: ['./sdoc-listactions.component.css'],
+    selector: 'app-sdoc-actiontags',
+    templateUrl: './sdoc-actiontags.component.html',
+    styleUrls: ['./sdoc-actiontags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListActionsComponent implements OnInit, OnChanges {
+export class SDocActionTagsComponent implements OnInit, OnChanges {
     item: ItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
@@ -46,8 +43,7 @@ export class SDocListActionsComponent implements OnInit, OnChanges {
     @Input()
     public actionTagEvent: EventEmitter<ActionTagEvent>;
 
-    constructor(private appService: GenericAppService, private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
-                private sdocRoutingService: SDocRoutingService, private contentUtils: SDocContentUtils) {
+    constructor(private appService: GenericAppService, private contentUtils: SDocContentUtils) {
     }
 
     ngOnInit() {
@@ -74,15 +70,6 @@ export class SDocListActionsComponent implements OnInit, OnChanges {
         }
     }
 
-    public submitShow(): boolean {
-        this.commonRoutingService.navigateByUrl(this.getUrl(this.item.currentRecord));
-        return false;
-    }
-
-    public getShowUrl(): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustUrl(this.getUrl(this.item.currentRecord));
-    }
-
     public setTag(tag: ActionTag): boolean {
         this.actionTagEvent.emit({ config: tag.config, set: true, record: this.record });
         return false;
@@ -95,16 +82,15 @@ export class SDocListActionsComponent implements OnInit, OnChanges {
 
     private updateData() {
         this.contentUtils.updateItemData(this.item, this.record, 'default');
-        this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord, this.config);
-        if (this.type === 'listActionsBig') {
+        if (this.record === undefined) {
+            this.tags = [];
+        } else {
+            this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord, this.config);
+        }
+        if (this.type === 'actionTagsBig') {
             this.styleClass = 'btn-navigation';
         } else {
             this.styleClass = '';
         }
     }
-
-    private getUrl(sdocToShow: any): string {
-        return this.sdocRoutingService.getShowUrl(sdocToShow, '');
-    }
-
 }

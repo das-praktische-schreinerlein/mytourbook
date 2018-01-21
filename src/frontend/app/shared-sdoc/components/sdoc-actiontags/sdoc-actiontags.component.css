@@ -11,10 +11,10 @@
     padding: 2px;
 }
 
-.tagContainerlistActionsFlat, .tagContainerlistActionsSmall {
+.tagContaineractionTagsFlat, .tagContaineractionTagsSmall {
     display: inline-block;
 }
 
-.tagContainerlistActionsBig {
+.tagContaineractionTagsBig {
 
 }

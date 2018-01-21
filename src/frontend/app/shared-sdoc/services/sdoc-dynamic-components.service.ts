@@ -1,6 +1,6 @@
 import {ComponentFactoryResolver, Injectable, Type} from '@angular/core';
-import {SDocListActionsComponent} from '../components/sdoc-listactions/sdoc-listactions.component';
 import {DynamicComponentService} from '../../../shared/angular-commons/services/dynamic-components.service';
+import {SDocActionTagsComponent} from '../components/sdoc-actiontags/sdoc-actiontags.component';
 
 @Injectable()
 export class SDocDynamicComponentService extends DynamicComponentService {
@@ -10,11 +10,11 @@ export class SDocDynamicComponentService extends DynamicComponentService {
 
     public getComponent(componentName: string): Type<any> {
         switch (componentName) {
-            case 'listActions':
-            case 'listActionsSmall':
-            case 'listActionsBig':
-            case 'listActionsFlat':
-              return SDocListActionsComponent;
+            case 'actionTags':
+            case 'actionTagsSmall':
+            case 'actionTagsBig':
+            case 'actionTagsFlat':
+              return SDocActionTagsComponent;
         }
 
         return null;

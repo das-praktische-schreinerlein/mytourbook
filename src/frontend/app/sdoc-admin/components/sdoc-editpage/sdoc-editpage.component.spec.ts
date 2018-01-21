@@ -24,6 +24,8 @@ import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angul
 import {SDocDateFormatPipe} from '../../../shared-sdoc/pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -55,6 +57,7 @@ describe('SDocEditpageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
+                { provide: SDocDataService, useValue: new SDocDataServiceStub() }
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

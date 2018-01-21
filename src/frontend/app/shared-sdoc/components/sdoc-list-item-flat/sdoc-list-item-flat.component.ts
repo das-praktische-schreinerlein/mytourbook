@@ -3,7 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {ActionTagEvent} from '../sdoc-listactions/sdoc-listactions.component';
+import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 
 @Component({
     selector: 'app-sdoc-list-item-flat',

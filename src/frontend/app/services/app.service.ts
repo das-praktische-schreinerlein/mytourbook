@@ -113,6 +113,7 @@ export class AppService extends GenericAppService {
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded pdocs from server', records);
                     me.pdocDataService.setWritable(false);
+                    me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:' + reason);
@@ -140,12 +141,12 @@ export class AppService extends GenericAppService {
                     return me.http.request('./assets/sdocs.json').toPromise();
                 }).then(function onDocsLoaded(res: any) {
                     const docs: any[] = res.json().sdocs;
-                    me.sdocDataService.setWritable(false);
+                    me.sdocDataService.setWritable(true);
 
                     return me.sdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     console.log('initially loaded sdocs from assets', records);
-                    me.sdocDataService.setWritable(false);
+                    me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:' + reason);

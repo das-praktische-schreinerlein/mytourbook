@@ -37,7 +37,7 @@ import {SDocDateFormatPipe} from './pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
 import {SDocDataMetaComponent} from './components/sdoc-datameta/sdoc-datameta.component';
 import {SDocActionsComponent} from './components/sdoc-actions/sdoc-actions.component';
-import {SDocListActionsComponent} from './components/sdoc-listactions/sdoc-listactions.component';
+import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiontags.component';
 
 @NgModule({
     declarations: [
@@ -68,7 +68,7 @@ import {SDocListActionsComponent} from './components/sdoc-listactions/sdoc-lista
         SDocTimetableComponent,
         SDocDateFormatPipe,
         SDocActionsComponent,
-        SDocListActionsComponent
+        SDocActionTagsComponent
     ],
     imports: [
         ToastModule,
@@ -115,7 +115,7 @@ import {SDocListActionsComponent} from './components/sdoc-listactions/sdoc-lista
         SDocTimetableComponent,
         SDocDateFormatPipe,
         SDocActionsComponent,
-        SDocListActionsComponent
+        SDocActionTagsComponent
     ]
 })
 export class SharedSDocModule {}

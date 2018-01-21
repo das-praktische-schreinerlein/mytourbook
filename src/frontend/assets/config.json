@@ -28,6 +28,32 @@
         "sdoc-actions": {
             "actionTags": [
                 {
+                    "key": "edit",
+                    "name": "Edit",
+                    "shortName": "Edit",
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "playlists_favorites",
                     "name": "Favorite",
                     "shortName": "F",

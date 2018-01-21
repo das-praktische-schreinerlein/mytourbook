@@ -3,7 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-components.service';
 import {DynamicComponentHostDirective} from '../../../../shared/angular-commons/components/directives/dynamic-component-host.directive';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {ActionTagEvent} from '../sdoc-listactions/sdoc-listactions.component';
+import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 
 @Component({
     selector: 'app-sdoc-action',
@@ -36,8 +36,8 @@ export class SDocActionsComponent implements OnChanges {
 
     renderComponents() {
         const componentRef = this.dynamicComponentService.createComponentByName(this.type, this.widgetHost);
-        (componentRef.instance)['record'] = this.record;
         (componentRef.instance)['type'] = this.type;
         (componentRef.instance)['actionTagEvent'] = this.actionTagEvent;
+        (componentRef.instance)['record'] = this.record;
     }
 }
