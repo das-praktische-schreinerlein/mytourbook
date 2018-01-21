@@ -6,5 +6,7 @@ export const environment = {
     tracksBaseUrl: 'http://www.michas-ausflugstipps.de/api/assets/trackstore/',
     picsBaseUrl: 'http://www.michas-ausflugstipps.de/api/static/picturestore/',
     useAssetStoreUrls: true,
+    sdocWritable: false,
+    sdocActionTagWritable: false,
     trackingProviders: [Angulartics2Piwik]
 };

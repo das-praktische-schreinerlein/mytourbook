@@ -1,4 +1,3 @@
-import {BaseEntityRecord} from '../model/records/base-entity-record';
 import {FilterUtils, SimpleFilter} from './filter.utils';
 
 export interface ActionTagConfig {
@@ -6,7 +5,8 @@ export interface ActionTagConfig {
     name: string;
     shortName: string;
     showFilter: SimpleFilter[];
-    availability: SimpleFilter[];
+    recordAvailability: SimpleFilter[];
+    configAvailability: SimpleFilter[];
 }
 export interface ActionTag {
     config: ActionTagConfig;
@@ -15,10 +15,10 @@ export interface ActionTag {
 }
 
 export abstract class ActionTagUtils {
-    public static generateTags(tagConfigs: ActionTagConfig[], record: BaseEntityRecord): ActionTag[] {
+    public static generateTags(tagConfigs: ActionTagConfig[], record: {}, config: {}): ActionTag[] {
         const lTags: ActionTag[] = [];
-        for (const config of tagConfigs) {
-            const tag = ActionTagUtils.generateTag(config, record);
+        for (const tagConfig of tagConfigs) {
+            const tag = ActionTagUtils.generateTag(tagConfig, record, config);
             if (tag.available) {
                 lTags.push(tag);
             }
@@ -27,8 +27,9 @@ export abstract class ActionTagUtils {
         return lTags;
     }
 
-    public static generateTag(tagConfig: ActionTagConfig, record: BaseEntityRecord): ActionTag {
-        const available = FilterUtils.checkFilters(tagConfig.availability, record);
+    public static generateTag(tagConfig: ActionTagConfig, record: {}, config: {}): ActionTag {
+        let available = FilterUtils.checkFilters(tagConfig.configAvailability, config);
+        available = available && FilterUtils.checkFilters(tagConfig.recordAvailability, record);
         const active = available && FilterUtils.checkFilters(tagConfig.showFilter, record);
 
         return {

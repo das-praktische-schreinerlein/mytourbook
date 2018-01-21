@@ -3,7 +3,7 @@ import {SDocRecord} from '../model/records/sdoc-record';
 import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {MapperUtils} from '../../search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
-import {BeanUtils} from '../../search-commons/utils/bean.utils';
+import {BeanUtils} from '../../commons/utils/bean.utils';
 
 export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
