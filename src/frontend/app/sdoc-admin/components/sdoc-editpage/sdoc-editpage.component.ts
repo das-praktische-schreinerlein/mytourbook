@@ -216,7 +216,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
         const me = this;
 
         this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
-                me.sdocRoutingService.navigateBackToSearch();
+                me.sdocRoutingService.navigateToShow(me.record, '');
             },
             function errorCreate(reason: any) {
                 console.error('edit updateById failed:' + reason);

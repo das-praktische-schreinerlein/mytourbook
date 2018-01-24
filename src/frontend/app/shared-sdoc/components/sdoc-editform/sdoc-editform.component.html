@@ -1,5 +1,67 @@
-<form [formGroup]="editFormGroup" (ngSubmit)="submitSave($event)">
-    <input formControlName="name" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
-    <input formControlName="descMd" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.sdoc.desc">
-    <button type="submit" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
+<form [formGroup]="editFormGroup" (ngSubmit)="submitSave($event)" *ngIf="record !== undefined">
+    <ng-template #inputNameRow>
+        <div class="row">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.sdoc.name">Name:</label>
+                <input formControlName="name" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #inputDateShowRow>
+        <div class="row">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <label class="col-xs-3 col-form-label mr-2" i18n="dateshow label|Label for field: dateshow@@label.editform.sdoc.dateshow">Anzeigedatum:</label>
+                <input formControlName="dateshow" type="datetime-local" placeholder="dateshow" i18n-placeholder="dateshow placeholder|Placeholder for dateshow@@placeholder.form.sdoc.dateshow">
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #inputDescRow>
+        <div class="row">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.sdoc.descMd">Beschreibung Markdown:</label>
+                <input formControlName="descTxt" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.sdoc.desc">
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #submitRow>
+        <div class="row">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <button type="submit" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #selectTechRateOverall>
+            <div class="col-sm-4 form-inline input-group input-group-sm">
+                <label class="col-xs-3 col-form-label mr-2" i18n="persRateGesamt label|Label for field: persRateGesamt@@label.editform.sdoc.persRateGesamt">pers. Bewertungn:</label>
+                <ss-multiselect-dropdown [options]="optionsSelectPersRateGesamt"
+                                         [settings]="settingsSelectPersRateGesamt"
+                                         [texts]="textsSelectPersRateGesamt"
+                                         formControlName="sdocratepers.gesamt"
+                                         ngDefaultControl
+                                         class="fullwidth"></ss-multiselect-dropdown>
+            </div>
+    </ng-template>
+
+
+
+    <ng-container [ngSwitch]="record.type">
+        <ng-container *ngSwitchCase="'IMAGE'">
+            <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDateShowRow"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'TRACK'">
+            <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDateShowRow"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <ng-container *ngTemplateOutlet="selectTechRateOverall"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'LOCATION'">
+            <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        </ng-container>
+    </ng-container>
 </form>
