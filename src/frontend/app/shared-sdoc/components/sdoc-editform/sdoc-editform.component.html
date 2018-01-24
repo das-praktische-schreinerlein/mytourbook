@@ -30,18 +30,17 @@
             </div>
         </div>
     </ng-template>
-    <ng-template #selectTechRateOverall>
-            <div class="col-sm-4 form-inline input-group input-group-sm">
-                <label class="col-xs-3 col-form-label mr-2" i18n="persRateGesamt label|Label for field: persRateGesamt@@label.editform.sdoc.persRateGesamt">pers. Bewertungn:</label>
-                <ss-multiselect-dropdown [options]="optionsSelectPersRateGesamt"
-                                         [settings]="settingsSelectPersRateGesamt"
-                                         [texts]="textsSelectPersRateGesamt"
-                                         formControlName="sdocratepers.gesamt"
-                                         ngDefaultControl
-                                         class="fullwidth"></ss-multiselect-dropdown>
-            </div>
+    <ng-template #selectPersRate let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <ss-multiselect-dropdown [options]="optionsSelectPersRate[key]"
+                                     [settings]="settingsSelectPersRate"
+                                     [texts]="textsSelectPersRate"
+                                     formControlName="{{formControlName}}"
+                                     ngDefaultControl
+                                     class="fullwidth"></ss-multiselect-dropdown>
+        </div>
     </ng-template>
-
 
 
     <ng-container [ngSwitch]="record.type">
@@ -49,14 +48,30 @@
             <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
             <ng-container *ngTemplateOutlet="inputDateShowRow"></ng-container>
             <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+            </div>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         </ng-container>
         <ng-container *ngSwitchCase="'TRACK'">
             <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
             <ng-container *ngTemplateOutlet="inputDateShowRow"></ng-container>
             <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.bildung', formControlName: 'sdocratepers_bildung'}"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.kraft', formControlName: 'sdocratepers_kraft'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.mental', formControlName: 'sdocratepers_mental'}"></ng-container>
+            </div>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <ng-container *ngTemplateOutlet="selectTechRateOverall"></ng-container>
         </ng-container>
         <ng-container *ngSwitchCase="'LOCATION'">
             <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>

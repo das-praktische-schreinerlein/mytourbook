@@ -16,10 +16,37 @@ import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
     styleUrls: ['./sdoc-editform.component.css']
 })
 export class SDocEditformComponent implements OnChanges {
+    private numBeanFieldConfig = {
+        'sdocratepers.gesamt': { values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.ausdauer': { values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.bildung': { values: [0, 2, 8, 11]},
+        'sdocratepers.kraft': { values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.mental': { values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.motive': { values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.schwierigkeit': { values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.wichtigkeit': { values: [0, 2, 5, 8, 11, 14]}
+    };
+
     public optionsSelectLocation: IMultiSelectOption[] = [];
     public optionsSelectType: IMultiSelectOption[] = [];
     public optionsSelectActionType: IMultiSelectOption[] = [];
-    public optionsSelectPersRateGesamt: IMultiSelectOption[] = [];
+    public optionsSelectPersRate: {
+        'sdocratepers.gesamt': IMultiSelectOption[];
+        'sdocratepers.ausdauer': IMultiSelectOption[];
+        'sdocratepers.bildung': IMultiSelectOption[];
+        'sdocratepers.kraft': IMultiSelectOption[];
+        'sdocratepers.mental': IMultiSelectOption[];
+        'sdocratepers.motive': IMultiSelectOption[];
+        'sdocratepers.schwierigkeit': IMultiSelectOption[];
+        'sdocratepers.wichtigkeit': IMultiSelectOption[];
+    } = {'sdocratepers.gesamt': [],
+        'sdocratepers.ausdauer': [],
+        'sdocratepers.bildung': [],
+        'sdocratepers.kraft': [],
+        'sdocratepers.mental': [],
+        'sdocratepers.motive': [],
+        'sdocratepers.schwierigkeit': [],
+        'sdocratepers.wichtigkeit': []};
 
     public settingsSelectLocation: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
@@ -45,7 +72,7 @@ export class SDocEditformComponent implements OnChanges {
             showUncheckAll: true,
             autoUnselect: true,
             selectionLimit: 1};
-    public settingsSelectPersRateGesamt: IMultiSelectSettings =
+    public settingsSelectPersRate: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
@@ -75,7 +102,7 @@ export class SDocEditformComponent implements OnChanges {
         searchPlaceholder: 'Find',
         defaultTitle: 'Typen',
         allSelected: 'Alle'};
-    public textsSelectPersRateGesamt: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+    public textsSelectPersRate: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Bewertung ausgewählt',
         checkedPlural: 'Bewertung ausgewählt',
@@ -115,8 +142,7 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         const config = {
-            dateshow: [this.record.dateshow],
-            'sdocratepers.gesamt': [BeanUtils.getValue(this.record, 'sdocratepers.gesamt')]
+            dateshow: [this.record.dateshow]
         };
 
         const fields = this.record.toJSON();
@@ -125,9 +151,22 @@ export class SDocEditformComponent implements OnChanges {
                 config[key] = [fields[key]];
             }
         }
+        for (const key in this.numBeanFieldConfig) {
+            config[key.replace('.', '_')] = [[BeanUtils.getValue(this.record, key) + '']];
+            const options = [];
+            if (this.record.type === 'IMAGE' && key === 'sdocratepers.gesamt') {
+                for (const optionValue of [0, 2, 5, 6, 8, 9, 10, 11, 14]) {
+                    options.push(['label.image.' + key + '.', '' + optionValue, '', 0]);
+                }
+            } else {
+                for (const optionValue of this.numBeanFieldConfig[key]['values']) {
+                    options.push(['label.' + key + '.', '' + optionValue, '', 0]);
+                }
+            }
+            this.optionsSelectPersRate[key] =
+                this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(options, false, [], true);
+        }
 
-        this.optionsSelectPersRateGesamt = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            [['label.sdocratepers.gesamt.', 1, '', 0], ['label.sdocratepers.gesamt.', 3, '', 0], ['label.sdocratepers.gesamt.', 14, '', 0]], false, [], false);
 
         this.editFormGroup = this.fb.group(config);
     }
@@ -152,15 +191,16 @@ export class SDocEditformComponent implements OnChanges {
             return false;
         }
 
-        for (const numKey of ['sdocratepers.gesamt']) {
-            if (!values[numKey]) {
+        for (const key in this.numBeanFieldConfig) {
+            const formKey = key.replace('.', '_');
+            if (!values[formKey]) {
                 continue;
             }
 
-            if (Array.isArray(values[numKey])) {
-                values[numKey] = Number(values[numKey][0]);
+            if (Array.isArray(values[formKey])) {
+                values[key] = Number(values[formKey][0]);
             } else {
-                values[numKey] = Number(values[numKey]);
+                values[key] = Number(values[formKey]);
             }
         }
 
