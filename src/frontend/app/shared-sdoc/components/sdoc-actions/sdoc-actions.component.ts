@@ -4,6 +4,7 @@ import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-component
 import {DynamicComponentHostDirective} from '../../../../shared/angular-commons/components/directives/dynamic-component-host.directive';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-sdoc-action',
@@ -25,7 +26,16 @@ export class SDocActionsComponent implements OnChanges {
     @ViewChild(DynamicComponentHostDirective)
     widgetHost: DynamicComponentHostDirective;
 
-    constructor(private dynamicComponentService: SDocDynamicComponentService ) {
+    private childActionTagEvent: EventEmitter<ActionTagEvent> = new EventEmitter();
+
+    constructor(private dynamicComponentService: SDocDynamicComponentService, private router: Router) {
+        this.childActionTagEvent.asObservable().subscribe(actionTagEvent => {
+            if (actionTagEvent.config.key === 'edit') {
+                this.router.navigate([ 'sdocadmin', 'edit', 'anonym', actionTagEvent.record.id ] );
+            } else {
+                this.actionTagEvent.emit(actionTagEvent);
+            }
+        });
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -37,7 +47,8 @@ export class SDocActionsComponent implements OnChanges {
     renderComponents() {
         const componentRef = this.dynamicComponentService.createComponentByName(this.type, this.widgetHost);
         (componentRef.instance)['type'] = this.type;
-        (componentRef.instance)['actionTagEvent'] = this.actionTagEvent;
+        (componentRef.instance)['actionTagEvent'] = this.childActionTagEvent;
         (componentRef.instance)['record'] = this.record;
     }
+
 }

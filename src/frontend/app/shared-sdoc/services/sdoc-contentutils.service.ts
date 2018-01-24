@@ -79,6 +79,10 @@ export class SDocContentUtils {
     }
 
     getImageUrl(image: SDocImageRecord, resolution: string): string {
+        if (image === undefined) {
+            return 'not found';
+        }
+
         if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
             return this.appService.getAppConfig()['picsBaseUrl'] + resolution + '/' + image.sdoc_id;
         } else {
