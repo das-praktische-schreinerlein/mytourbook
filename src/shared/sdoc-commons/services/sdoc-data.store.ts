@@ -19,6 +19,7 @@ export class SDocTeamFilterConfig {
 
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {
 
+    static UPDATE_RELATION = ['sdocdatatech', 'sdocdatainfo', 'sdocratepers', 'sdocratetech'];
     private validMoreNumberFilterNames = {
         id: true,
         track_id_i: true,
@@ -40,7 +41,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
     };
 
     constructor(private searchParameterUtils: SearchParameterUtils, private teamFilterConfig: SDocTeamFilterConfig) {
-        super();
+        super(SDocDataStore.UPDATE_RELATION);
     }
 
     createQueryFromForm(searchForm: SDocSearchForm): Object {

@@ -34,6 +34,6 @@ export const SDocRecordSchema = new Schema({
         persons: {type: 'string'},
         playlists: {type: 'string'},
         subtype: {type: 'string'},
-        type: {type: 'string'}
+        type: {type: 'string', minLength: 1, maxLength: 255}
     }
 });

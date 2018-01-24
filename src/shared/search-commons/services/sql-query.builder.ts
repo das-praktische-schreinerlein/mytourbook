@@ -122,24 +122,29 @@ export class SqlQueryBuilder {
             } else {
                 // extract with :field:
                 value = prop;
-                const replacers = prop.toString().match(/:.*?:/g);
-                if (replacers.length === 1) {
-                    for (const replacer of replacers) {
-                        const propKey = replacer.replace(/^:(.*):$/, '$1');
-                        if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
-                            value = value.replace(replacer, props[propKey]);
-                        } else {
-                            value = undefined;
+
+                if (value !== undefined && value !== null) {
+                    const replacers = prop.toString().match(/:.*?:/g);
+                    if (replacers.length === 1) {
+                        for (const replacer of replacers) {
+                            const propKey = replacer.replace(/^:(.*):$/, '$1');
+                            if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
+                                value = value.replace(replacer, props[propKey]);
+                            } else {
+                                value = undefined;
+                                break;
+                            }
                         }
-                    }
-                } else {
-                    for (const replacer of replacers) {
-                        const propKey = replacer.replace(/^:(.*):$/, '$1');
-                        value = value.replace(replacer, props[propKey]);
-                        if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
+                    } else {
+                        for (const replacer of replacers) {
+                            const propKey = replacer.replace(/^:(.*):$/, '$1');
                             value = value.replace(replacer, props[propKey]);
-                        } else {
-                            value = null;
+                            if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
+                                value = value.replace(replacer, props[propKey]);
+                            } else {
+                                value = null;
+                                break;
+                            }
                         }
                     }
                 }

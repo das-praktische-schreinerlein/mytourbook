@@ -15,7 +15,11 @@ export class SDocHttpAdapter extends GenericSearchHttpAdapter<SDocRecord, SDocSe
     create<T extends Record>(mapper: Mapper, record: any, opts?: any): Promise<T> {
         opts = opts || {};
         opts.endpoint = this.getHttpEndpoint('create');
-        const props = this.mapRecordToAdapterValues(record);
+        if (opts.realSource) {
+            record = opts.realSource;
+        }
+
+        const props = this.mapRecordToAdapterValues(mapper, record);
 
         return super.create(mapper, props, opts);
     }
@@ -23,7 +27,10 @@ export class SDocHttpAdapter extends GenericSearchHttpAdapter<SDocRecord, SDocSe
     update<T extends Record>(mapper: Mapper, id: string | number, record: any, opts?: any): Promise<T> {
         opts = opts || {};
         opts.endpoint = this.getHttpEndpoint('update');
-        const props = this.mapRecordToAdapterValues(record);
+        if (opts.realSource) {
+            record = opts.realSource;
+        }
+        const props = this.mapRecordToAdapterValues(mapper, record);
 
         return super.update(mapper, id, props, opts);
     }
@@ -40,10 +47,10 @@ export class SDocHttpAdapter extends GenericSearchHttpAdapter<SDocRecord, SDocSe
         return 'sdocsearch';
     }
 
-    private mapRecordToAdapterValues(values: any): {} {
+    private mapRecordToAdapterValues(mapper: Mapper, values: any): {} {
         let record = values;
         if (!(record instanceof SDocRecord)) {
-            record = new SDocRecord(values);
+            record = this.responseMapper.mapValuesToRecord(mapper, values);
         }
 
         return this.responseMapper.mapToAdapterDocument({}, record);

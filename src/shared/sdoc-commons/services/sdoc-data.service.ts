@@ -12,8 +12,10 @@ import {SDocRatePersonalRecordSchema} from '../model/schemas/sdocratepers-record
 import {SDocRatePersonalRecord, SDocRatePersonalRecordRelation} from '../model/records/sdocratepers-record';
 import {SDocDataInfoRecord, SDocDataInfoRecordRelation} from '../model/records/sdocdatainfo-record';
 import {SDocDataInfoRecordSchema} from '../model/schemas/sdocdatainfo-record-schema';
+import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocDataService extends SDocSearchService {
+    private responseMapper = new SDocAdapterResponseMapper();
     private writable = false;
 
     constructor(dataStore: SDocDataStore) {
@@ -63,7 +65,14 @@ export class SDocDataService extends SDocSearchService {
         if (!this.isWritable()) {
             throw new Error('SDocDataService configured: not writable');
         }
-        return this.dataStore.update('sdoc', id, values, opts);
+
+        let record;
+        if (! (values instanceof SDocRecord)) {
+            record = this.responseMapper.mapValuesToRecord(this.dataStore.getMapper('sdoc'), values);
+        } else {
+            record = values;
+        }
+        return this.dataStore.update('sdoc', id, record, opts);
     }
 
     setWritable(writable: boolean) {

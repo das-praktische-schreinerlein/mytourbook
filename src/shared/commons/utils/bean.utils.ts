@@ -11,20 +11,25 @@ export abstract class BeanUtils {
             for (let i = 0; i < hierarchy.length; i++) {
                 const element = hierarchy[i];
                 if (!parent) {
-                    i = hierarchy.length + 1000;
-                    continue;
+                    break;
                 }
 
-                if (typeof parent['get'] === 'function') {
+                if (parent[element] !== undefined) {
+                    parent = parent[element];
+                } else if (typeof parent['get'] === 'function' && parent.get(element) !== undefined) {
                     parent = parent.get(element);
                 } else {
                     parent = parent[element];
                 }
 
+                if (!parent) {
+                    break;
+                }
+
                 const propName = hierarchy.slice(i + 1, hierarchy.length).join('.');
                 if (parent && parent[propName]) {
                     value = parent[propName];
-                    i = hierarchy.length + 1000;
+                    break;
                 }
             }
         }

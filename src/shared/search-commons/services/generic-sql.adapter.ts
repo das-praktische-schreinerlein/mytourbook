@@ -147,8 +147,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     queryValues.push(writeQuery.fields[field]);
                 }
                 //me.knex.insert(me.knex.raw(' (' + queryFields.join(', ') + ') values (' + queryValues.join(', ') + ')'))
-                console.error("createblablum", writeQuery);
-                if (1 === 1) {throw new Error("blim"); }
                 sqlBuilder.insert([writeQuery.fields])
                     .into(writeQuery.from)
                     .returning(writeQuery.tableConfig.filterMapping['id'])
@@ -324,7 +322,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         props = props || {};
         opts = opts || {};
-
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const me = this;
         const result: Promise<any> = new Promise((allResolve, allReject) => {
@@ -336,31 +333,25 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     queryFields.push(field);
                     queryValues.push(writeQuery.fields[field]);
                 }
-
-
-
-
-                console.error("updateblablum", writeQuery);
-                if (1 === 1) {throw new Error("blim"); }
-
-
-                sqlBuilder.update([writeQuery.fields])
-                    .into(writeQuery.from)
-                    .where({ id: {'in': [id]}})
-                    .returning(writeQuery.tableConfig.filterMapping['id'])
+                const dbId  = this.mapperUtils.prepareSingleValue(id, '_').replace(/.*_/g, '');
+                const idField = writeQuery.tableConfig.filterMapping['id'];
+                sqlBuilder.update(writeQuery.fields)
+                    .table(writeQuery.from)
+                    .where(idField, dbId)
+                    .returning(idField)
                     .then(values => {
                         const query = {
                             where: {
-                                id: {
-                                    'in': [id]
-                                },
                                 type_txt: {
                                     'in': [props.type.toLowerCase()]
                                 }
                             }
                         };
-                        return me.findAll(mapper, query, opts);
-                    }).then(searchResult => {
+                        query['where'][idField] = { 'in' : [dbId]};
+
+                        return me._findAll(mapper, query, opts);
+                    }).then(findResult => {
+                    const [searchResult] = findResult;
                     if (!searchResult || searchResult.length !== 1) {
                         return allResolve(undefined);
                     }
@@ -376,6 +367,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         return result;
     }
+
     deserialize(mapper: Mapper, response: any, opts: any) {
         if (opts.adapterQuery) {
             if (response && (typeof response.data === 'string') && response.data.startsWith('JSONP_CALLBACK(')) {

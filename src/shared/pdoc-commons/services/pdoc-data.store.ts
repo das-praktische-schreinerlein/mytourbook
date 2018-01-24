@@ -11,7 +11,7 @@ export class PDocDataStore extends GenericDataStore<PDocRecord, PDocSearchForm, 
     };
 
     constructor(private searchParameterUtils: SearchParameterUtils) {
-        super();
+        super([]);
     }
 
     createQueryFromForm(searchForm: PDocSearchForm): Object {

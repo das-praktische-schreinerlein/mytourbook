@@ -22,7 +22,8 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    constructor() {
+    constructor(private updateRelations: string[]) {
+        const me = this;
         this.store = new DataStore({
             mapperDefaults: {
                 // Override the original to make sure the date properties are actually Date
@@ -68,6 +69,16 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     if (opts.realResult) {
                         result = opts.realResult;
                     }
+
+                    // update relations
+                    for (const mapperKey of me.updateRelations) {
+                        if (result.get(mapperKey)) {
+                            const obj = result.get(mapperKey);
+                            me.store.add(mapperKey, obj);
+                            result.set(mapperKey, obj);
+                        }
+                    }
+
                     return utils.resolve(result);
                 }
             }

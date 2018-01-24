@@ -84,6 +84,28 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         return values;
     }
 
+    mapValuesToRecord(mapper: Mapper, values: {}): SDocRecord {
+        const record = new SDocRecord(values);
+
+        for (const mapperKey of ['sdocdatatech', 'sdocdatainfo', 'sdocratepers', 'sdocratetech']) {
+            const subMapper = mapper['datastore']._mappers[mapperKey];
+            let subValues;
+            for (const key in values) {
+                if (key.startsWith(mapperKey + '.')) {
+                    const subKey = key.replace(mapperKey + '.', '');
+                    subValues = subValues || {};
+                    subValues[subKey] = values[key];
+                }
+            }
+
+            if (subValues) {
+                record.set(mapperKey, subMapper.createRecord(subValues));
+            }
+        }
+
+        return record;
+    }
+
     mapResponseDocument(mapper: Mapper, doc: any, mapping: {}): Record {
         const dataTechMapper = mapper['datastore']._mappers['sdocdatatech'];
         const dataInfoMapper = mapper['datastore']._mappers['sdocdatainfo'];
