@@ -20,11 +20,18 @@ export class SearchParameterUtils {
                 continue;
             }
             const convertedValue = [labelPrefix, facetValue[0], valuePrefix, facetValue[1]];
-            if (facetValue.length > 2) {
+            if (facetValue.length > 2 && facetValue[2] !== null && facetValue[2] !== 'null') {
                 // label
                 convertedValue.push(facetValue[2]);
             } else {
                 // no label
+                convertedValue.push(undefined);
+            }
+            if (facetValue.length > 3 && facetValue[3] !== null && facetValue[3] !== 'null') {
+                // id
+                convertedValue.push(facetValue[3]);
+            } else {
+                // no id
                 convertedValue.push(undefined);
             }
 

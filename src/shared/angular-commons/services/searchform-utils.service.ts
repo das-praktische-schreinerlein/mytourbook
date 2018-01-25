@@ -41,6 +41,7 @@ export class SearchFormUtils {
             if (withCount && value[3] > 0) {
                 result.name += ' (' + value[3] + ')';
             }
+
             return result;
         });
     }

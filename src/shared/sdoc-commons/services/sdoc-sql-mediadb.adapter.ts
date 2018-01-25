@@ -118,10 +118,10 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label' +
-                    ' FROM kategorie INNER JOIN location ON kategorie.l_id = location.l_id ' +
-                    ' GROUP BY value, label' +
+                    selectSql: 'SELECT COUNT(kategorie.l_id) AS count, l_name AS value,' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, location.l_id as id' +
+                    ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
+                    ' GROUP BY value, label, id' +
                     ' ORDER BY count DESC',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN
@@ -379,10 +379,10 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value' +
-                    ' FROM image INNER JOIN kategorie ON kategorie.k_id=image.k_id ' +
-                    '   INNER JOIN location ON location.l_id = kategorie.l_id ' +
-                    ' GROUP BY l_name' +
+                    selectSql: 'SELECT COUNT(image.l_id) AS count, l_name AS value, location.l_id AS id' +
+                    ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                    ' LEFT JOIN image ON kategorie.k_id=image.k_id ' +
+                    ' GROUP BY l_name, location.l_id' +
                     ' ORDER BY count DESC',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN
@@ -638,10 +638,10 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label' +
-                    ' FROM tour INNER JOIN location ON tour.l_id = location.l_id ' +
-                    ' GROUP BY value, label' +
+                    selectSql: 'SELECT COUNt(tour.l_id) AS count, l_name AS value,' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, location.l_id as id' +
+                    ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
+                    ' GROUP BY value, label, id' +
                     ' ORDER BY count DESC',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN
@@ -866,9 +866,9 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNt(*) AS count, l_name AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, l_id as id' +
                     ' FROM location' +
-                    ' GROUP BY value, label' +
+                    ' GROUP BY value, label, id' +
                     ' ORDER BY count DESC',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN

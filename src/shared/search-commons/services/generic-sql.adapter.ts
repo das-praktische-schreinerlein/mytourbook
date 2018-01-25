@@ -467,8 +467,9 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         const facet = new Facet();
         for (const doc of result) {
             const facetValue = [doc['value'] + '', doc['count']];
-            if (doc['label']) {
+            if (doc['label'] || doc['id']) {
                 facetValue.push(doc['label']);
+                facetValue.push(doc['id']);
             }
             values.push(facetValue);
         }
