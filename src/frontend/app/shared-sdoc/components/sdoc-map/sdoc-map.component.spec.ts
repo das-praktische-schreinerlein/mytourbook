@@ -6,7 +6,6 @@ import {SDocMapComponent} from './sdoc-map.component';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
-import {DomSanitizer} from '@angular/platform-browser';
 import {Router} from '@angular/router';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
@@ -23,7 +22,6 @@ describe('SDocMapComponent', () => {
             imports: [ReactiveFormsModule],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
-                DomSanitizer,
                 { provide: Router, useValue: new RouterStub() },
                 PlatformService,
                 CommonRoutingService,

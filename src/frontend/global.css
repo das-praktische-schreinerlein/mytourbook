@@ -26,6 +26,13 @@ button.buttonselect {
     text-align: center;
 }
 
+fieldset {
+    border: 1px solid silver;
+    border-radius: 5px;
+    margin: 2px;
+    padding: .35em .625em .75em;
+}
+
 #markdown table {
     width: 100%;
 }

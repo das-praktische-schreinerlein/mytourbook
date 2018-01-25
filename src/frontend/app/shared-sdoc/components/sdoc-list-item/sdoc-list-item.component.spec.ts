@@ -2,7 +2,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemComponent} from './sdoc-list-item.component';
-import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
@@ -25,7 +24,6 @@ describe('SDocListItemPageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [SDocListItemComponent, SDocDateFormatPipe],
             providers: [
-                DomSanitizer,
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 SDocRoutingService,

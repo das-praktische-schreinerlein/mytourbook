@@ -2,7 +2,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {PDocListItemComponent} from './pdoc-list-item.component';
-import {DomSanitizer} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
@@ -20,7 +19,6 @@ describe('PDocListItemComponent', () => {
         TestBed.configureTestingModule({
             declarations: [PDocListItemComponent],
             providers: [
-                DomSanitizer,
                 { provide: Router, useValue: new RouterStub() },
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
