@@ -12,7 +12,9 @@
         </div>
     </div>
     <div class="container content-container">
-        <app-sdoc-editform [record]="record" (save)="submitSave($event)"></app-sdoc-editform>
+        <div class="container">
+            <app-sdoc-editform [record]="record" (save)="submitSave($event)"></app-sdoc-editform>
+        </div>
     </div>
 
     <div class="container content-container" *ngIf="tracks !== undefined && tracks.length > 0">

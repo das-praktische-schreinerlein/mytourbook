@@ -1,7 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewContainerRef} from '@angular/core';
-import {SDocRecord, SDocRecordRelation} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {FormBuilder, Validators} from '@angular/forms';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange,
+    ViewContainerRef
+} from '@angular/core';
+import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
+import {FormBuilder} from '@angular/forms';
 import {SDocRecordSchema} from '../../../../shared/sdoc-commons/model/schemas/sdoc-record-schema';
 import {ToastsManager} from 'ng2-toastr';
 import {SchemaValidationError} from 'js-data';
@@ -9,11 +11,14 @@ import {ComponentUtils} from '../../../../../shared/angular-commons/services/com
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 
 @Component({
     selector: 'app-sdoc-editform',
     templateUrl: './sdoc-editform.component.html',
-    styleUrls: ['./sdoc-editform.component.css']
+    styleUrls: ['./sdoc-editform.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocEditformComponent implements OnChanges {
     private numBeanFieldConfig = {
@@ -24,11 +29,17 @@ export class SDocEditformComponent implements OnChanges {
         'sdocratepers.mental': { values: [0, 2, 5, 8, 11, 14]},
         'sdocratepers.motive': { values: [0, 2, 5, 8, 11, 14]},
         'sdocratepers.schwierigkeit': { values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.wichtigkeit': { values: [0, 2, 5, 8, 11, 14]}
+        'sdocratepers.wichtigkeit': { values: [0, 2, 5, 8, 11, 14]},
+        'locId': {},
+    };
+    private stringBeanFieldConfig = {
+        'locHirarchie': {},
+        'subtype': {}
     };
 
-    public optionsSelectLocation: IMultiSelectOption[] = [];
-    public optionsSelectType: IMultiSelectOption[] = [];
+    public optionsSelectWhere: IMultiSelectOption[] = [];
+    public optionsSelectPlaylists: IMultiSelectOption[] = [];
+    public optionsSelectPersons: IMultiSelectOption[] = [];
     public optionsSelectActionType: IMultiSelectOption[] = [];
     public optionsSelectPersRate: {
         'sdocratepers.gesamt': IMultiSelectOption[];
@@ -48,7 +59,7 @@ export class SDocEditformComponent implements OnChanges {
         'sdocratepers.schwierigkeit': [],
         'sdocratepers.wichtigkeit': []};
 
-    public settingsSelectLocation: IMultiSelectSettings =
+    public settingsSelectWhere: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
@@ -64,7 +75,15 @@ export class SDocEditformComponent implements OnChanges {
             showUncheckAll: true,
             autoUnselect: true,
             selectionLimit: 1};
-    public settingsSelectType: IMultiSelectSettings =
+    public settingsSelectPersons: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true,
+            autoUnselect: true,
+            selectionLimit: 1};
+    public settingsSelectPlaylists: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
@@ -81,7 +100,7 @@ export class SDocEditformComponent implements OnChanges {
             autoUnselect: true,
             selectionLimit: 1};
 
-    public textsSelectLocation: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+    public textsSelectWhere: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Region ausgewählt',
         checkedPlural: 'Regionen ausgewählt',
@@ -95,7 +114,14 @@ export class SDocEditformComponent implements OnChanges {
         searchPlaceholder: 'Find',
         defaultTitle: 'Actions',
         allSelected: 'alles'};
-    public textsSelectType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+    public textsSelectPlaylists: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Typ ausgewählt',
+        checkedPlural: 'Typen ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Typen',
+        allSelected: 'Alle'};
+    public textsSelectPersons: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Typ ausgewählt',
         checkedPlural: 'Typen ausgewählt',
@@ -124,8 +150,8 @@ export class SDocEditformComponent implements OnChanges {
     @Output()
     public save: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private searchFormUtils: SDocSearchFormUtils) {
+    constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef,
+                private searchFormUtils: SDocSearchFormUtils, private sdocDataService: SDocDataService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -151,6 +177,10 @@ export class SDocEditformComponent implements OnChanges {
                 config[key] = [fields[key]];
             }
         }
+        for (const key in this.stringBeanFieldConfig) {
+            config[key.replace('.', '_')] = [[BeanUtils.getValue(this.record, key) + '']];
+        }
+
         for (const key in this.numBeanFieldConfig) {
             config[key.replace('.', '_')] = [[BeanUtils.getValue(this.record, key) + '']];
             const options = [];
@@ -158,7 +188,7 @@ export class SDocEditformComponent implements OnChanges {
                 for (const optionValue of [0, 2, 5, 6, 8, 9, 10, 11, 14]) {
                     options.push(['label.image.' + key + '.', '' + optionValue, '', 0]);
                 }
-            } else {
+            } else if (this.numBeanFieldConfig[key]['values']) {
                 for (const optionValue of this.numBeanFieldConfig[key]['values']) {
                     options.push(['label.' + key + '.', '' + optionValue, '', 0]);
                 }
@@ -166,9 +196,65 @@ export class SDocEditformComponent implements OnChanges {
             this.optionsSelectPersRate[key] =
                 this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(options, false, [], true);
         }
-
-
         this.editFormGroup = this.fb.group(config);
+
+        const me = this;
+        const searchForm = new SDocSearchForm({type: this.record.type});
+        const rawValues = this.editFormGroup.getRawValue();
+        this.sdocDataService.search(searchForm,
+            {
+                showFacets: true, // []
+                loadTrack: false,
+                showForm: false
+            }).then(function doneSearch(sdocSearchResult) {
+            if (sdocSearchResult !== undefined) {
+                console.log('update searchResult', sdocSearchResult);
+                const whereValues = [];
+                for (const whereValue of me.searchFormUtils.getWhereValues(sdocSearchResult)) {
+                    // use value as label if not set
+                    if (!whereValue[4]) {
+                        whereValue[4] = whereValue[1];
+                    }
+                    // use id as value instead of name
+                    if (whereValue[5]) {
+                        whereValue[1] = whereValue[5];
+                    }
+                    whereValues.push(whereValue);
+                }
+                me.optionsSelectWhere = me.searchFormUtils.moveSelectedToTop(
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [/^_+/, /_+$/], false),
+                    rawValues['locId']);
+
+                me.optionsSelectActionType = me.searchFormUtils.moveSelectedToTop(
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                        me.searchFormUtils.getActionTypeValues(sdocSearchResult), true, [], true)
+                        .sort(function (a, b) {
+                            if (a['count'] < b['count']) {
+                                return 1;
+                            }
+                            if (a['count'] > b['count']) {
+                                return -1;
+                            }
+                            return a.name.localeCompare(b.name);
+                        }),
+                    rawValues['subtype']);
+                me.optionsSelectPlaylists = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    me.searchFormUtils.getPlaylistValues(sdocSearchResult), true, [], true);
+                me.optionsSelectPersons = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                    me.searchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
+            } else {
+                console.log('empty searchResult', sdocSearchResult);
+                me.optionsSelectWhere = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [/^_+/, /_+$/], false);
+                me.optionsSelectActionType = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+                me.optionsSelectPlaylists = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+                me.optionsSelectPersons = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+            }
+            me.cd.markForCheck();
+        }).catch(function errorSearch(reason) {
+            me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
+            console.error('doSearch failed:' + reason);
+            me.cd.markForCheck();
+        });
     }
 
     submitSave(event: Event) {
@@ -179,16 +265,6 @@ export class SDocEditformComponent implements OnChanges {
             if (values.hasOwnProperty(key) && values[key] === undefined || values[key] === null) {
                 delete values[key];
             }
-        }
-
-        const errors: SchemaValidationError[] = SDocRecordSchema.validate(values);
-        if (errors !== undefined && errors.length > 0) {
-            let msg = '';
-            errors.map((value: SchemaValidationError, index, array) => {
-                msg += '- ' + value.path + ':' + value.expected + '<br>';
-            });
-            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
-            return false;
         }
 
         for (const key in this.numBeanFieldConfig) {
@@ -202,6 +278,28 @@ export class SDocEditformComponent implements OnChanges {
             } else {
                 values[key] = Number(values[formKey]);
             }
+        }
+
+        for (const key in this.stringBeanFieldConfig) {
+            const formKey = key.replace('.', '_');
+            if (!values[formKey]) {
+                continue;
+            }
+            if (Array.isArray(values[formKey])) {
+                values[key] = values[formKey][0] + '';
+            } else {
+                values[key] = values[formKey] + '';
+            }
+        }
+
+        const errors: SchemaValidationError[] = SDocRecordSchema.validate(values);
+        if (errors !== undefined && errors.length > 0) {
+            let msg = '';
+            errors.map((value: SchemaValidationError, index, array) => {
+                msg += '- ' + value.path + ':' + value.expected + '<br>';
+            });
+            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
+            return false;
         }
 
         this.save.emit(values);

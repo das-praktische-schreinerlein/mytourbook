@@ -1,35 +1,65 @@
-<form [formGroup]="editFormGroup" (ngSubmit)="submitSave($event)" *ngIf="record !== undefined">
-    <ng-template #inputNameRow>
-        <div class="row">
-            <div class="col-sm-12 form-inline input-group input-group-sm">
-                <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.sdoc.name">Name:</label>
-                <input formControlName="name" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
-            </div>
+<form [formGroup]="editFormGroup" class="form-control-sm" (ngSubmit)="submitSave($event)" *ngIf="record !== undefined">
+    <ng-template #inputName>
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.sdoc.name">Name:</label>
+            <input formControlName="name" class="form-control" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
         </div>
     </ng-template>
-    <ng-template #inputDateShowRow>
-        <div class="row">
-            <div class="col-sm-12 form-inline input-group input-group-sm">
-                <label class="col-xs-3 col-form-label mr-2" i18n="dateshow label|Label for field: dateshow@@label.editform.sdoc.dateshow">Anzeigedatum:</label>
-                <input formControlName="dateshow" type="datetime-local" placeholder="dateshow" i18n-placeholder="dateshow placeholder|Placeholder for dateshow@@placeholder.form.sdoc.dateshow">
-            </div>
+    <ng-template #inputDateShow>
+        <div class="col-sm-4 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="dateshow label|Label for field: dateshow@@label.editform.sdoc.dateshow">Anzeigedatum:</label>
+            <input formControlName="dateshow" type="datetime-local" placeholder="dateshow" i18n-placeholder="dateshow placeholder|Placeholder for dateshow@@placeholder.form.sdoc.dateshow">
         </div>
     </ng-template>
-    <ng-template #inputDescRow>
-        <div class="row">
-            <div class="col-sm-12 form-inline input-group input-group-sm">
-                <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.sdoc.descMd">Beschreibung Markdown:</label>
-                <input formControlName="descTxt" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.sdoc.desc">
-            </div>
+    <ng-template #inputLocation>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectWhere"
+                                     [settings]="settingsSelectWhere"
+                                     [texts]="textsSelectWhere"
+                                     class="fullwidth"
+                                     formControlName="locId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
         </div>
     </ng-template>
+    <ng-template #inputLocationParent>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectWhere"
+                                     [settings]="settingsSelectWhere"
+                                     [texts]="textsSelectWhere"
+                                     class="fullwidth"
+                                     formControlName="locIdParent"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+    <ng-template #inputActiontype>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
+            <ss-multiselect-dropdown [options]="optionsSelectActionType"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     formControlName="subtype"
+                                     ngDefaultControl
+                                     class="fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputDesc>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.sdoc.descMd">Beschreibung Markdown:</label>
+            <textarea formControlName="descTxt" class="form-control" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.sdoc.desc"></textarea>
+        </div>
+    </ng-template>
+
     <ng-template #submitRow>
         <div class="row">
             <div class="col-sm-12 form-inline input-group input-group-sm">
-                <button type="submit" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
+                <button type="submit" class="btn btn-action btn-sm" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
             </div>
         </div>
     </ng-template>
+
     <ng-template #selectPersRate let-key="key" let-formControlName="formControlName">
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
@@ -45,38 +75,74 @@
 
     <ng-container [ngSwitch]="record.type">
         <ng-container *ngSwitchCase="'IMAGE'">
-            <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
-            <ng-container *ngTemplateOutlet="inputDateShowRow"></ng-container>
-            <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
-            <div class="row">
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
-            </div>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                </div>
+            </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
         </ng-container>
         <ng-container *ngSwitchCase="'TRACK'">
-            <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
-            <ng-container *ngTemplateOutlet="inputDateShowRow"></ng-container>
-            <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
-            <div class="row">
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.bildung', formControlName: 'sdocratepers_bildung'}"></ng-container>
-            </div>
-            <div class="row">
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.kraft', formControlName: 'sdocratepers_kraft'}"></ng-container>
-                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.mental', formControlName: 'sdocratepers_mental'}"></ng-container>
-            </div>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.bildung', formControlName: 'sdocratepers_bildung'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.kraft', formControlName: 'sdocratepers_kraft'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.mental', formControlName: 'sdocratepers_mental'}"></ng-container>
+                </div>
+            </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
         </ng-container>
         <ng-container *ngSwitchCase="'LOCATION'">
-            <ng-container *ngTemplateOutlet="inputNameRow"></ng-container>
-            <ng-container *ngTemplateOutlet="inputDescRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
+                </div>
+            </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
         </ng-container>
     </ng-container>
 </form>
