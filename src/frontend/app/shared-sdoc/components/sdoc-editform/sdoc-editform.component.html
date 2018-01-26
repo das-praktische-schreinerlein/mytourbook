@@ -5,16 +5,18 @@
             <input formControlName="name" class="form-control" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
         </div>
     </ng-template>
+
     <ng-template #inputDateShow>
         <div class="col-sm-4 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="dateshow label|Label for field: dateshow@@label.editform.sdoc.dateshow">Anzeigedatum:</label>
             <input formControlName="dateshow" type="datetime-local" placeholder="dateshow" i18n-placeholder="dateshow placeholder|Placeholder for dateshow@@placeholder.form.sdoc.dateshow">
         </div>
     </ng-template>
+
     <ng-template #inputLocation>
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectWhere"
+            <ss-multiselect-dropdown [options]="optionsSelect['locId']"
                                      [settings]="settingsSelectWhere"
                                      [texts]="textsSelectWhere"
                                      class="fullwidth"
@@ -22,10 +24,11 @@
                                      ngDefaultControl></ss-multiselect-dropdown>
         </div>
     </ng-template>
+
     <ng-template #inputLocationParent>
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectWhere"
+            <ss-multiselect-dropdown [options]="optionsSelect['locIdParent']"
                                      [settings]="settingsSelectWhere"
                                      [texts]="textsSelectWhere"
                                      class="fullwidth"
@@ -33,10 +36,23 @@
                                      ngDefaultControl></ss-multiselect-dropdown>
         </div>
     </ng-template>
+
+    <ng-template #inputLoctype>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="loctype label|Label for filter: loctype@@label.searchform.sdoc.loctype">Regiontype:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['subTypeLocType']"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     formControlName="subtype"
+                                     ngDefaultControl
+                                     class="fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
     <ng-template #inputActiontype>
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
-            <ss-multiselect-dropdown [options]="optionsSelectActionType"
+            <ss-multiselect-dropdown [options]="optionsSelect['subTypeActiontype']"
                                      [settings]="settingsSelectActionType"
                                      [texts]="textsSelectActionType"
                                      formControlName="subtype"
@@ -52,18 +68,38 @@
         </div>
     </ng-template>
 
-    <ng-template #submitRow>
-        <div class="row">
-            <div class="col-sm-12 form-inline input-group input-group-sm">
-                <button type="submit" class="btn btn-action btn-sm" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
-            </div>
+    <ng-template #inputNumber let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}" class="form-control" type="number" range="0,00" placeholder="{{key}}">
+        </div>
+    </ng-template>
+
+    <ng-template #inputNumber let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}" class="form-control" type="number" range="0,00" placeholder="{{key}}">
+        </div>
+    </ng-template>
+
+    <ng-template #inputTextTech let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}">
+        </div>
+    </ng-template>
+
+    <ng-template #inputText let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}">
         </div>
     </ng-template>
 
     <ng-template #selectPersRate let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-3 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-            <ss-multiselect-dropdown [options]="optionsSelectPersRate[key]"
+            <ss-multiselect-dropdown [options]="optionsSelect[key]"
                                      [settings]="settingsSelectPersRate"
                                      [texts]="textsSelectPersRate"
                                      formControlName="{{formControlName}}"
@@ -72,34 +108,35 @@
         </div>
     </ng-template>
 
+    <ng-template #submitRow>
+        <div class="row">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <button type="submit" class="btn btn-action btn-sm" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
+            </div>
+        </div>
+    </ng-template>
+
 
     <ng-container [ngSwitch]="record.type">
-        <ng-container *ngSwitchCase="'IMAGE'">
+        <ng-container *ngSwitchCase="'LOCATION'">
             <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputLoctype"></ng-container>
                 </div>
                 <div class="row">
-                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
                 </div>
             </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-                </div>
-            </fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
         </ng-container>
         <ng-container *ngSwitchCase="'TRACK'">
             <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
                     <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
@@ -110,6 +147,19 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">technische Daten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc'}"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altDesc', formControlName: 'sdocdatatech_altDesc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMin', formControlName: 'sdocdatatech_altMin'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">persönliche Bewertung: Charakter</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
@@ -118,6 +168,7 @@
                 </div>
             </fieldset>
             <fieldset>
+                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">persönliche Bewertung: Schwierigkeit</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
@@ -132,17 +183,99 @@
                 </div>
             </fieldset>
         </ng-container>
-        <ng-container *ngSwitchCase="'LOCATION'">
+        <ng-container *ngSwitchCase="'IMAGE'">
             <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">persönliche Bewertung: Charakter</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt_image', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
                 </div>
             </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-            </div>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="'ROUTE'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">technische Daten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dur', formControlName: 'sdocdatatech_dur'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">persönliche Bewertung: Charakter</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.bildung', formControlName: 'sdocratepers_bildung'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">persönliche Bewertung: Schwierigkeit</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.kraft', formControlName: 'sdocratepers_kraft'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.mental', formControlName: 'sdocratepers_mental'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="rateTech label|Label for fieldset: rateTech@@label.editform.sdoc.legend.rateTech">technische Bewertung</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.overall', formControlName: 'sdocratetech_overall'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.klettern', formControlName: 'sdocratetech_klettern'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.ks', formControlName: 'sdocratetech_ks'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.bergtour', formControlName: 'sdocratetech_bergtour'}"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.firn', formControlName: 'sdocratetech_firn'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.gletscher', formControlName: 'sdocratetech_gletscher'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.schneeschuh', formControlName: 'sdocratetech_schneeschuh'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="dataInfo label|Label for fieldset: dataInfo@@label.editform.sdoc.legend.dataInfo">Daten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.baseloc', formControlName: 'sdocdatainfo_baseloc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.destloc', formControlName: 'sdocdatainfo_destloc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.guides', formControlName: 'sdocdatainfo_guides'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.region', formControlName: 'sdocdatainfo_region'}"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
         </ng-container>
     </ng-container>
 </form>

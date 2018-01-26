@@ -4,6 +4,8 @@ import {ComponentFactoryResolver, NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SDocActionsComponent} from './sdoc-actions.component';
 import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-components.service';
+import {Router} from '@angular/router';
+import {RouterStub} from '../../../../../shared/angular-commons/testing/router-stubs';
 
 describe('SDocActionsComponent', () => {
     let component: SDocActionsComponent;
@@ -13,6 +15,7 @@ describe('SDocActionsComponent', () => {
         TestBed.configureTestingModule({
             declarations: [SDocActionsComponent],
             providers: [
+                { provide: Router, useValue: new RouterStub() },
                 SDocDynamicComponentService,
                 ComponentFactoryResolver
             ],

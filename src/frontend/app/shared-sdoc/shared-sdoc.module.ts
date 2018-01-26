@@ -5,7 +5,6 @@ import {SDocListItemComponent} from './components/sdoc-list-item/sdoc-list-item.
 import {SDocListFooterComponent} from './components/sdoc-list-footer/sdoc-list-footer.component';
 import {SDocEditformComponent} from './components/sdoc-editform/sdoc-editform.component';
 import {SDocSearchformComponent} from './components/sdoc-searchform/sdoc-searchform.component';
-import {SDocCreateformComponent} from './components/sdoc-createform/sdoc-createform.component';
 import {SDocListHeaderComponent} from './components/sdoc-list-header/sdoc-list-header.component';
 import {SDocInlineSearchpageComponent} from './components/sdoc-inline-searchpage/sdoc-inline-searchpage.component';
 import {SDocListItemSmallComponent} from './components/sdoc-list-item-small/sdoc-list-item-small.component';
@@ -50,7 +49,6 @@ import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiont
         SDocListHeaderComponent,
         SDocListFooterComponent,
         SDocEditformComponent,
-        SDocCreateformComponent,
         SDocSearchformComponent,
         SDocInlineSearchpageComponent,
         SDocMapComponent,
@@ -97,7 +95,6 @@ import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiont
         SDocListHeaderComponent,
         SDocListFooterComponent,
         SDocEditformComponent,
-        SDocCreateformComponent,
         SDocSearchformComponent,
         SDocInlineSearchpageComponent,
         SDocMapComponent,

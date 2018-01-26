@@ -2,6 +2,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SDocRecordResolver} from '../shared-sdoc/resolver/sdoc-details.resolver';
 import {SDocEditpageComponent} from './components/sdoc-editpage/sdoc-editpage.component';
+import {SDocRecordCreateResolver} from '../shared-sdoc/resolver/sdoc-create.resolver';
+import {SDocCreatepageComponent} from './components/sdoc-createpage/sdoc-createpage.component';
 
 const sdocAdminRoutes: Routes = [
     {
@@ -15,6 +17,16 @@ const sdocAdminRoutes: Routes = [
                 },
                 resolve: {
                     record: SDocRecordResolver
+                }
+            },
+            {
+                path: 'create/:createByType',
+                component: SDocCreatepageComponent,
+                data: {
+                    baseSearchUrl: { data: 'sdoc/' }
+                },
+                resolve: {
+                    record: SDocRecordCreateResolver
                 }
             },
             {

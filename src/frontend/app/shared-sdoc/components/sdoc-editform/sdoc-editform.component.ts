@@ -22,26 +22,49 @@ import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-s
 })
 export class SDocEditformComponent implements OnChanges {
     private numBeanFieldConfig = {
-        'sdocratepers.gesamt': { values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.ausdauer': { values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.bildung': { values: [0, 2, 8, 11]},
-        'sdocratepers.kraft': { values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.mental': { values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.motive': { values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.schwierigkeit': { values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.wichtigkeit': { values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.gesamt': { labelPrefix: 'label.sdocratepers.gesamt.', values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.gesamt_image': { labelPrefix: 'label.image.sdocratepers.gesamt.', values: [0, 2, 5, 6, 8, 9, 10, 11, 14]},
+        'sdocratepers.ausdauer': { labelPrefix: 'label.sdocratepers.ausdauer.', values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.bildung': { labelPrefix: 'label.sdocratepers.bildung.', values: [0, 2, 8, 11]},
+        'sdocratepers.kraft': { labelPrefix: 'label.sdocratepers.kraft.', values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.mental': { labelPrefix: 'label.sdocratepers.mental.', values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.motive': { labelPrefix: 'label.sdocratepers.motive.', values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.schwierigkeit': { labelPrefix: 'label.sdocratepers.schwierigkeit.', values: [0, 2, 5, 8, 11, 14]},
+        'sdocratepers.wichtigkeit': { labelPrefix: 'label.sdocratepers.wichtigkeit.', values: [0, 2, 5, 8, 11, 14]},
         'locId': {},
+        'locIdParent': {},
+        'sdocdatatech.altAsc': {},
+        'sdocdatatech.altDesc': {},
+        'sdocdatatech.altMin': {},
+        'sdocdatatech.altMax': {},
+        'sdocdatatech.dist': {},
+        'sdocdatatech.dur': {}
     };
     private stringBeanFieldConfig = {
-        'locHirarchie': {},
-        'subtype': {}
+        'subtype': {},
+        'subTypeActiontype': {
+            labelPrefix: 'ac_',
+            values: [0, 1, 2, 3, 4, 5, 101, 102, 103, 104, 105, 106, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132]
+        },
+        'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
+        'sdocdatainfo.baseloc': {},
+        'sdocdatainfo.destloc': {},
+        'sdocdatainfo.guides': {},
+        'sdocdatainfo.region': {},
+        'sdocratetech.bergtour': {},
+        'sdocratetech.firn': {},
+        'sdocratetech.gletscher': {},
+        'sdocratetech.klettern': {},
+        'sdocratetech.ks': {},
+        'sdocratetech.overall': {},
+        'sdocratetech.schneeschuh': {},
+    };
+    private stringArrayBeanFieldConfig = {
+        'persons': {},
+        'playlists': {},
     };
 
-    public optionsSelectWhere: IMultiSelectOption[] = [];
-    public optionsSelectPlaylists: IMultiSelectOption[] = [];
-    public optionsSelectPersons: IMultiSelectOption[] = [];
-    public optionsSelectActionType: IMultiSelectOption[] = [];
-    public optionsSelectPersRate: {
+    public optionsSelect: {
         'sdocratepers.gesamt': IMultiSelectOption[];
         'sdocratepers.ausdauer': IMultiSelectOption[];
         'sdocratepers.bildung': IMultiSelectOption[];
@@ -50,6 +73,13 @@ export class SDocEditformComponent implements OnChanges {
         'sdocratepers.motive': IMultiSelectOption[];
         'sdocratepers.schwierigkeit': IMultiSelectOption[];
         'sdocratepers.wichtigkeit': IMultiSelectOption[];
+        'persons': IMultiSelectOption[];
+        'playlists': IMultiSelectOption[];
+        'locId': IMultiSelectOption[];
+        'locIdParent': IMultiSelectOption[];
+        'subType': IMultiSelectOption[];
+        'subTypeActiontype': IMultiSelectOption[];
+        'subTypeLocType': IMultiSelectOption[];
     } = {'sdocratepers.gesamt': [],
         'sdocratepers.ausdauer': [],
         'sdocratepers.bildung': [],
@@ -57,7 +87,15 @@ export class SDocEditformComponent implements OnChanges {
         'sdocratepers.mental': [],
         'sdocratepers.motive': [],
         'sdocratepers.schwierigkeit': [],
-        'sdocratepers.wichtigkeit': []};
+        'sdocratepers.wichtigkeit': [],
+        'persons': [],
+        'playlists': [],
+        'locId': [],
+        'locIdParent': [],
+        'subType': [],
+        'subTypeActiontype': [],
+        'subTypeLocType': []
+    };
 
     public settingsSelectWhere: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
@@ -168,7 +206,8 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         const config = {
-            dateshow: [this.record.dateshow]
+            dateshow: [this.record.dateshow],
+            locIdParent: [this.record.locIdParent]
         };
 
         const fields = this.record.toJSON();
@@ -177,25 +216,16 @@ export class SDocEditformComponent implements OnChanges {
                 config[key] = [fields[key]];
             }
         }
-        for (const key in this.stringBeanFieldConfig) {
-            config[key.replace('.', '_')] = [[BeanUtils.getValue(this.record, key) + '']];
+
+        // static lists
+        this.createSelectOptions(this.stringBeanFieldConfig, config, this.optionsSelect);
+        this.createSelectOptions(this.numBeanFieldConfig, config, this.optionsSelect);
+        this.createSelectOptions(this.stringArrayBeanFieldConfig, config, this.optionsSelect);
+
+        if (config['subtype'] && config['subtype'].length > 0 && config['subtype'][0]) {
+            config['subtype'][0] = (config['subtype'][0]  + '').replace(/ac_/g, '').replace(/loc_/g, '');
         }
 
-        for (const key in this.numBeanFieldConfig) {
-            config[key.replace('.', '_')] = [[BeanUtils.getValue(this.record, key) + '']];
-            const options = [];
-            if (this.record.type === 'IMAGE' && key === 'sdocratepers.gesamt') {
-                for (const optionValue of [0, 2, 5, 6, 8, 9, 10, 11, 14]) {
-                    options.push(['label.image.' + key + '.', '' + optionValue, '', 0]);
-                }
-            } else if (this.numBeanFieldConfig[key]['values']) {
-                for (const optionValue of this.numBeanFieldConfig[key]['values']) {
-                    options.push(['label.' + key + '.', '' + optionValue, '', 0]);
-                }
-            }
-            this.optionsSelectPersRate[key] =
-                this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(options, false, [], true);
-        }
         this.editFormGroup = this.fb.group(config);
 
         const me = this;
@@ -221,33 +251,23 @@ export class SDocEditformComponent implements OnChanges {
                     }
                     whereValues.push(whereValue);
                 }
-                me.optionsSelectWhere = me.searchFormUtils.moveSelectedToTop(
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [/^_+/, /_+$/], false),
-                    rawValues['locId']);
+                me.optionsSelect['locId'] = me.searchFormUtils.moveSelectedToTop(
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
+                        false), rawValues['locId']);
+                me.optionsSelect['locIdParent'] = me.searchFormUtils.moveSelectedToTop(
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
+                        false), rawValues['locIdParent']);
 
-                me.optionsSelectActionType = me.searchFormUtils.moveSelectedToTop(
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                        me.searchFormUtils.getActionTypeValues(sdocSearchResult), true, [], true)
-                        .sort(function (a, b) {
-                            if (a['count'] < b['count']) {
-                                return 1;
-                            }
-                            if (a['count'] > b['count']) {
-                                return -1;
-                            }
-                            return a.name.localeCompare(b.name);
-                        }),
-                    rawValues['subtype']);
-                me.optionsSelectPlaylists = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                     me.searchFormUtils.getPlaylistValues(sdocSearchResult), true, [], true);
-                me.optionsSelectPersons = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                     me.searchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
             } else {
                 console.log('empty searchResult', sdocSearchResult);
-                me.optionsSelectWhere = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [/^_+/, /_+$/], false);
-                me.optionsSelectActionType = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
-                me.optionsSelectPlaylists = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
-                me.optionsSelectPersons = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+                me.optionsSelect['locId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+                me.optionsSelect['locIdParent'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+                me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+                me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
             }
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
@@ -292,6 +312,18 @@ export class SDocEditformComponent implements OnChanges {
             }
         }
 
+        for (const key in this.stringArrayBeanFieldConfig) {
+            const formKey = key.replace('.', '_');
+            if (!values[formKey]) {
+                continue;
+            }
+            if (Array.isArray(values[formKey])) {
+                values[key] = values[formKey].join(',');
+            } else {
+                values[key] = values[formKey] + '';
+            }
+        }
+
         const errors: SchemaValidationError[] = SDocRecordSchema.validate(values);
         if (errors !== undefined && errors.length > 0) {
             let msg = '';
@@ -304,5 +336,26 @@ export class SDocEditformComponent implements OnChanges {
 
         this.save.emit(values);
         return false;
+    }
+
+    private createSelectOptions(definitions: {}, values: {}, optionsSelect: {}): void {
+        for (const key in definitions) {
+            const definition = definitions[key];
+            let value = BeanUtils.getValue(this.record, key);
+            if (value === null || value === 'null' || value === undefined || value === 'undefined') {
+                value = undefined;
+            } else {
+                value = value + '';
+            }
+            values[key.replace('.', '_')] = [[value]];
+            const options = [];
+            if (definition['values']) {
+                for (const optionValue of definition['values']) {
+                    options.push([definition['labelPrefix'], '' + optionValue, '', 0]);
+                }
+            }
+            optionsSelect[key] =
+                this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(options, false, [], true);
+        }
     }
 }

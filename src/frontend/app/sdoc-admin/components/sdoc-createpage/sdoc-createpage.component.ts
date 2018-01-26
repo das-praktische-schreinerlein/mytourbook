@@ -10,24 +10,23 @@ import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pdoc-details.resolver';
 import {IdValidationRule, KeywordValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {SDocRecordCreateResolver} from '../../../shared-sdoc/resolver/sdoc-create.resolver';
 
 @Component({
-    selector: 'app-sdoc-editwpage',
-    templateUrl: './sdoc-editpage.component.html',
-    styleUrls: ['./sdoc-editpage.component.css'],
+    selector: 'app-sdoc-createpage',
+    templateUrl: './sdoc-createpage.component.html',
+    styleUrls: ['./sdoc-createpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocEditpageComponent implements OnInit, OnDestroy {
+export class SDocCreatepageComponent implements OnInit, OnDestroy {
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);
     public contentUtils: SDocContentUtils;
@@ -103,7 +102,6 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                 const sdocName = (flgSDocError ? 'name' : data.record.data.name);
                 switch (errorCode) {
                     case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
-                    case SDocRecordResolver.ERROR_INVALID_SDOC_ID:
                         code = ErrorResolver.ERROR_INVALID_ID;
                         if (sectionId && sectionId !== '') {
                             me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
@@ -125,7 +123,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                             this.idValidationRule.sanitize(sdocId)].join('/');
                         msg = undefined;
                         break;
-                    case SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID:
+                    case SDocRecordCreateResolver.ERROR_UNKNOWN_SDOC_TYPE:
                         code = ErrorResolver.ERROR_UNKNOWN_ID;
                         if (sectionId && sectionId !== '') {
                             me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
@@ -136,7 +134,6 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                         msg = undefined;
                         break;
                     case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
-                    case SDocRecordResolver.ERROR_READING_SDOC_ID:
                         code = ErrorResolver.ERROR_WHILE_READING;
                         me.baseSearchUrl = ['sdoc'].join('/');
                         newUrl = undefined;
@@ -161,34 +158,17 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
         );
     }
 
-    onTracksFound(searchresult: SDocSearchResult) {
-        const realTracks = [];
-        if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
-            for (const record of searchresult.currentRecords) {
-                if (record.gpsTrackBasefile || record.geoLoc !== undefined) {
-                    realTracks.push(record);
-                }
-            }
-        }
-        this.tracks = realTracks;
-    }
-
     ngOnDestroy() {
-    }
-
-    getFiltersForType(record: SDocRecord, type: string): any {
-        return this.contentUtils.getSDocSubItemFiltersForType(record, type,
-            (this.pdoc ? this.pdoc.theme : undefined));
     }
 
     submitSave(values: {}) {
         const me = this;
 
-        this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
+        this.sdocDataService.add(values).then(function donCreated(sdoc: SDocRecord) {
                 me.sdocRoutingService.navigateToShow(sdoc, '');
             },
             function errorCreate(reason: any) {
-                console.error('edit updateById failed:' + reason);
+                console.error('create add failed:', reason);
                 me.toastr.error('Es gibt leider Probleme bei der Speichern - am besten noch einmal probieren :-(', 'Oje!');
             }
         );

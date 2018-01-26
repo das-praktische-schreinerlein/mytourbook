@@ -30,8 +30,15 @@ fieldset {
     border: 1px solid silver;
     border-radius: 5px;
     margin: 2px;
-    padding: .35em .625em .75em;
+    padding: 2px;
 }
+legend {
+    display: block;
+    width: auto;
+    font-size: .875rem;
+    margin-bottom: 0;
+}
+
 
 #markdown table {
     width: 100%;

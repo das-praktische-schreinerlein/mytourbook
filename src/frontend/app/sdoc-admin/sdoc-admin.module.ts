@@ -21,10 +21,13 @@ import {AngularMarkdownService} from '../../shared/angular-commons/services/angu
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
 import {SDocEditpageComponent} from './components/sdoc-editpage/sdoc-editpage.component';
 import {SDocAdminRoutingModule} from './sdoc-admin-routing.module';
+import {SDocCreatepageComponent} from './components/sdoc-createpage/sdoc-createpage.component';
+import {SDocRecordCreateResolver} from '../shared-sdoc/resolver/sdoc-create.resolver';
 
 @NgModule({
     declarations: [
         SDocEditpageComponent,
+        SDocCreatepageComponent
     ],
     imports: [
         TranslateModule,
@@ -46,6 +49,7 @@ import {SDocAdminRoutingModule} from './sdoc-admin-routing.module';
         SDocContentUtils,
         SDocSearchFormResolver,
         SDocRecordResolver,
+        SDocRecordCreateResolver,
         ErrorResolver,
         PageUtils,
         SDocLightBox,
@@ -53,7 +57,8 @@ import {SDocAdminRoutingModule} from './sdoc-admin-routing.module';
         AngularMarkdownService
     ],
     exports: [
-        SDocEditpageComponent
+        SDocEditpageComponent,
+        SDocCreatepageComponent
     ]
 })
 export class SDocAdminModule {}

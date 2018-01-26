@@ -1,0 +1,34 @@
+<ng-container *ngIf="record != undefined">
+    <div class="container content-container">
+        <div class="card-block">
+            <h6><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h6>
+            <div class="picture-small" style="float: left; margin-right: 10px">
+                <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
+                <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
+                    <img class="picture-small" width="300px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
+                </ng-container>
+            </div>
+            <h5><span class="fx-bg-name">{{record.name}}</span></h5>
+        </div>
+    </div>
+    <div class="container content-container">
+        <div class="container">
+            <app-sdoc-editform [record]="record" (save)="submitSave($event)"></app-sdoc-editform>
+        </div>
+    </div>
+
+    <div class="container content-container" *ngIf="tracks !== undefined && tracks.length > 0">
+        <app-sdoc-map [mapId]="'showMap'"
+                      [height]="'400px'"
+                      [mapZoom]="'9'"
+                      [sdocs]="tracks"
+                      [showImageTrackAndGeoPos]="'true'"
+                      [mapCenterPos]="undefined"></app-sdoc-map>
+    </div>
+
+    <div class="container content-container" *ngIf="record.gpsTrackBasefile">
+        <app-sdoc-profilemap [mapId]="'showProfileMap'"
+                             [height]="'400px'"
+                             [sdocs]="[record]"></app-sdoc-profilemap>
+    </div>
+</ng-container>
