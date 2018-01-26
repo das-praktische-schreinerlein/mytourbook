@@ -13,6 +13,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['id'] = props.id;
         values['image_id_i'] = props.imageId;
         values['loc_id_i'] = props.locId;
+        values['loc_id_parent_i'] = props.locIdParent;
         values['route_id_i'] = props.routeId;
         values['track_id_i'] = props.trackId;
         values['trip_id_i'] = props.tripId;
@@ -42,6 +43,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['playlists_txt'] =
             (props.playlists ? props.playlists.split(', ').join(',,') : '');
         values['type_s'] = props.type;
+        values['subtype_s'] = props.subtype;
 
         values['html_txt'] = [
             values['desc_txt'],
@@ -116,6 +118,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['id'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'id', undefined);
         values['imageId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'image_id_i', undefined));
         values['locId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'loc_id_i', undefined));
+        values['locIdParent'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'loc_id_parent_i', undefined));
         values['routeId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'route_id_i', undefined));
         values['trackId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'track_id_i', undefined));
         values['tripId'] = Number(this.mapperUtils.getMappedAdapterValue(mapping, doc, 'trip_id_i', undefined));

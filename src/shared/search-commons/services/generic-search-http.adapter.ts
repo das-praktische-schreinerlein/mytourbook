@@ -131,12 +131,13 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
     }
 
     afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
-        // TODO
-        return this.find(mapper, props['add']['doc']['id'], opts);
+        const record: T = <T>mapper.createRecord(result);
+        opts.realResult = result;
+        return utils.Promise.resolve(record);
     }
 
     afterUpdate<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        // TODO
+        opts.realResult = result;
         return this.find(mapper, id, opts);
     }
 

@@ -10,6 +10,7 @@ export const SDocRecordSchema = new Schema({
     properties: {
         imageId: {type: 'number'},
         locId: {type: 'number'},
+        locIdParent: {type: 'number'},
         routeId: {type: 'number'},
         trackId: {type: 'number'},
         tripId: {type: 'number'},

@@ -2,6 +2,7 @@ import {BaseEntityRecord} from '../../../search-commons/model/records/base-entit
 
 export class SDocRecord extends BaseEntityRecord {
     locId: number;
+    locIdParent: number;
     routeId: number;
     trackId: number;
     tripId: number;

@@ -122,7 +122,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, location.l_id as id' +
                     ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
-                    ' ORDER BY count DESC',
+                    ' ORDER BY label',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -220,7 +220,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'kategorie.k_rate_wichtigkeit': ':rate_pers_wichtigkeit_i:',
                 'kategorie.k_gpstracks_basefile': ':gpstracks_basefile_s:',
                 'kategorie.k_name': ':name_s:',
-                'kategorie.k_type': ':actiontype:'
+                'kategorie.k_type': ':subtype_s:'
             },
             fieldMapping: {
                 id: 'id',
@@ -319,8 +319,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'CAST(i_gps_lat AS CHAR(50)) AS i_gps_lat',
                 'CAST(i_gps_lon AS CHAR(50)) AS i_gps_lon',
                 'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',
-                'location.l_name AS l_lochirarchietxt',
-                'CAST(location.l_id AS CHAR(50)) AS l_lochirarchieids',
+                'CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS l_lochirarchietxt',
+                'CAST(location.l_parent_id as CHAR(50)) || "," || CAST(location.l_id as CHAR(50)) AS l_lochirarchieids',
                 'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
                 'k_altitude_asc',
                 'k_altitude_desc',
@@ -379,11 +379,12 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(image.l_id) AS count, l_name AS value, location.l_id AS id' +
+                    selectSql: 'SELECT COUNT(image.l_id) AS count, l_name AS value, location.l_id AS id,' +
+                    ' CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS label' +
                     ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
                     ' LEFT JOIN image ON kategorie.k_id=image.k_id ' +
                     ' GROUP BY l_name, location.l_id' +
-                    ' ORDER BY count DESC',
+                    ' ORDER BY label ASC',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -642,7 +643,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, location.l_id as id' +
                     ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
-                    ' ORDER BY count DESC',
+                    ' ORDER BY label ASC',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -718,10 +719,10 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             writeMapping: {
                 'tour.l_id': ':loc_id_i:',
                 'tour.k_id': ':track_id_i:',
-                'tour.t_dateshow': ':dateshow_dt:',
+                // 'tour.t_dateshow': ':dateshow_dt:',
                 'tour.t_meta_shortdesc': ':desc_txt:',
-                'tour.t_meta_shortdesc_md': ':desc_md_txt:',
-                'tour.t_meta_shortdesc_html': ':desc_html_txt:',
+//                'tour.t_meta_shortdesc_md': ':desc_md_txt:',
+//                'tour.t_meta_shortdesc_html': ':desc_html_txt:',
                 'tour.t_route_hm': ':data_tech_alt_asc_i:',
                 'tour.t_ele_max': ':data_tech_alt_max_i:',
                 'tour.t_route_m': ':data_tech_dist_f:',
@@ -747,7 +748,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'tour.t_rate_schneeschuh': ':rate_tech_schneeschuh_s:',
                 'tour.t_gpstracks_basefile': ':gpstracks_basefile_s:',
                 'tour.t_name': ':name_s:',
-                'tour.t_typ': ':actiontype_s:'
+                'tour.t_typ': ':subtype_s:'
             },
             fieldMapping: {
                 id: 'id',
@@ -825,6 +826,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'CONCAT("loc_", l_typ) AS subtype',
                 'CONCAT("LOCATION", "_", location.l_id) AS id',
                 'location.l_id',
+                'l_parent_id',
                 'l_name',
                 'CONCAT(l_name, " ", l_meta_shortdesc) AS html',
                 'l_meta_shortdesc',
@@ -869,7 +871,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, l_id as id' +
                     ' FROM location' +
                     ' GROUP BY value, label, id' +
-                    ' ORDER BY count DESC',
+                    ' ORDER BY label ASC',
                     filterField: 'l_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -924,6 +926,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             },
             writeMapping: {
                 'location.l_meta_shortdesc': ':desc_txt:',
+                'location.l_parent_id': ':loc_id_parent_i:',
                 //'location.l_meta_shortdesc_md': ':desc_md_txt:',
                 //'location.l_meta_shortdesc_html': ':desc_html_txt:',
                 'location.l_geo_longdeg': ':geo_lon_s:',
@@ -936,6 +939,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 id: 'id',
                 loc_id_i: 'l_id',
                 loc_id_is: 'l_id',
+                loc_id_parent_i: 'l_parent_id',
                 desc_txt: 'l_meta_shortdesc',
                 desc_md_txt: 'l_meta_shortdesc_md',
                 desc_html_txt: 'l_meta_shortdesc_html',
@@ -1243,8 +1247,11 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
 
     protected transformToSqlDialect(sql: string): string {
         if (this.config.knexOpts.client !== 'mysql') {
-            sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/, 'location.l_name');
-            sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/, 'CAST(location.l_id as CHAR(50))');
+            // dirty workaround because sqlite has no functions as mysql
+            sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/,
+                '"T" || location.l_typ || "L" || location.l_parent_id || " -> " || location.l_name');
+            sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/,
+                'CAST(location.l_parent_id as CHAR(50)) || "," || CAST(location.l_id as CHAR(50))');
         }
 
         return super.transformToSqlDialect(sql);

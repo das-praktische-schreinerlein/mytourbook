@@ -37,11 +37,19 @@ export class SDocDataService extends SDocSearchService {
     }
 
     // Simulate POST /sdocs
-    add(sdoc: SDocRecord, opts?: any): Promise<SDocRecord> {
+    add(values: {}, opts?: any): Promise<SDocRecord> {
         if (!this.isWritable()) {
             throw new Error('SDocDataService configured: not writable');
         }
-        return this.dataStore.create('sdoc', sdoc, opts);
+
+        let record;
+        if (! (values instanceof SDocRecord)) {
+            record = this.responseMapper.mapValuesToRecord(this.dataStore.getMapper('sdoc'), values);
+        } else {
+            record = values;
+        }
+
+        return this.dataStore.create('sdoc', record, opts);
     }
 
     // Simulate POST /sdocs
