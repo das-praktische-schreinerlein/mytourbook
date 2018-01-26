@@ -16,9 +16,42 @@ export class SDocWriterServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, sdocServerModule: SDocServerModule): SDocWriterServerModule {
         console.log('configure route sdoc:', apiPrefix + '/:locale' + '/sdocwrite/:resolveSdocToWriteBySdocId');
         const sdocWriterServerModule = new SDocWriterServerModule(sdocServerModule);
+        app.route(apiPrefix + '/:locale' + '/sdocwrite')
+            .all(function(req, res, next) {
+                if (req.method !== 'POST') {
+                    return next('not allowed');
+                }
+                return next();
+            })
+            .post(function(req, res, next) {
+                const sdocSrc = req['body'];
+                if (sdocSrc === undefined) {
+                    console.error('create failed: no requestbody');
+                    res.status(403);
+                    res.json();
+                    return next('not found');
+                }
+
+                sdocWriterServerModule.addRecord(sdocSrc).then(sdoc => {
+                    if (sdoc === undefined) {
+                        console.error('create not fullfilled: no result');
+                        res.status(403);
+                        res.json();
+                        return next('not found');
+                    }
+
+                    res.json(sdoc.toSerializableJsonObj());
+                    return next();
+                }).catch(reason => {
+                    console.error('createrequest not fullfilled:', reason);
+                    res.status(403);
+                    res.json();
+                    return next('not found');
+                });
+            });
         app.route(apiPrefix + '/:locale' + '/sdocwrite/:resolveSdocToWriteBySdocId')
             .all(function(req, res, next) {
-                if (req.method === 'GET') {
+                if (req.method === 'PUT' && req.method === 'DEL') {
                     return next('not allowed');
                 }
                 return next();
@@ -28,6 +61,7 @@ export class SDocWriterServerModule {
                 if (sdocSrc === undefined) {
                     console.error('update failed: no requestbody');
                     res.status(403);
+                    res.json();
                     return next('not found');
                 }
 
@@ -44,29 +78,7 @@ export class SDocWriterServerModule {
                 }).catch(reason => {
                     console.error('updaterequest not fullfilled:', reason);
                     res.status(403);
-                    return next('not found');
-                });
-            })
-            .post(function(req, res, next) {
-                const sdocSrc = req['data'];
-                if (sdocSrc === undefined) {
-                    console.error('create failed: no requestbody');
-                    res.status(403);
-                    return next('not found');
-                }
-
-                sdocWriterServerModule.addRecord(sdocSrc).then(sdoc => {
-                    if (sdoc === undefined) {
-                        console.error('create not fullfilled: no result');
-                        res.status(403);
-                        return next('not found');
-                    }
-
-                    res.json(sdoc.toSerializableJsonObj());
-                    return next();
-                }).catch(reason => {
-                    console.error('createrequest not fullfilled:', reason);
-                    res.status(403);
+                    res.json();
                     return next('not found');
                 });
             });
