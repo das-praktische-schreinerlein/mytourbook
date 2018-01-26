@@ -320,7 +320,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 'CAST(i_gps_lon AS CHAR(50)) AS i_gps_lon',
                 'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',
                 'CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS l_lochirarchietxt',
-                'CAST(location.l_parent_id as CHAR(50)) || "," || CAST(location.l_id as CHAR(50)) AS l_lochirarchieids',
+                'CONCAT(CAST(location.l_parent_id as CHAR(50)), ",", CAST(location.l_id as CHAR(50))) AS l_lochirarchieids',
                 'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
                 'k_altitude_asc',
                 'k_altitude_desc',
@@ -1251,6 +1251,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/,
                 '"T" || location.l_typ || "L" || location.l_parent_id || " -> " || location.l_name');
             sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/,
+                'CAST(location.l_parent_id as CHAR(50)) || "," || CAST(location.l_id as CHAR(50))');
+            sql = sql.replace('CONCAT(CAST(location.l_parent_id as CHAR(50)), ",", CAST(location.l_id as CHAR(50)))',
                 'CAST(location.l_parent_id as CHAR(50)) || "," || CAST(location.l_id as CHAR(50))');
         }
 
