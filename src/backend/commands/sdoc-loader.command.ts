@@ -12,6 +12,7 @@ import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-ad
 export class SDocLoaderCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const perRun = 1;
+        const defaultLocIdParent = 1;
         const typeMapping = {
             image: 'imageId',
             track: 'trackId',
@@ -66,7 +67,7 @@ export class SDocLoaderCommand implements AbstractCommand {
 
         const recordIdMapping = {};
 
-        const getById = function(record: SDocRecord) {
+        const getByName = function(record: SDocRecord): Promise<SDocRecord> {
             const query = {
                 where: {
                     name_s: {
@@ -85,6 +86,9 @@ export class SDocLoaderCommand implements AbstractCommand {
                         + '->' + recordIdMapping[idFieldName][record[idFieldName]]);
                     record[idFieldName] = recordIdMapping[idFieldName][record[idFieldName]];
                 }
+            }
+            if (record.type.toLowerCase() === 'location' && record.locIdParent === undefined) {
+                record.locIdParent = defaultLocIdParent;
             }
 
             return adapter.findAll(mapper, query, opts).then(searchResult => {
@@ -124,7 +128,7 @@ export class SDocLoaderCommand implements AbstractCommand {
             console.log('RUN - load sdocs for chunk pos:' + (start + 1) + '/' + records.length);
             const chunk = records.slice(start, start + perRun);
             const promises = chunk.map(sdoc => {
-                return getById(sdoc);
+                return getByName(sdoc);
 
             });
             const results = Promise.all(promises);
