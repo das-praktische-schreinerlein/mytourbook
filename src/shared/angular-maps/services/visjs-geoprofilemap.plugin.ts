@@ -1,5 +1,6 @@
 import {DataSet, Graph3d} from 'vis';
 import {GeoLoader} from './geo.loader';
+import {LogUtils} from '../../commons/utils/log.utils';
 
 export class VisJsGeoProfileMapPoint {
     x: string;
@@ -38,7 +39,7 @@ export class VisJsGeoProfileMap {
                 me.graph = new Graph3d(element, layers, options);
             }
         }).catch(function onError(error) {
-            console.error('failed to load gpx for VisJsGeoProfileMap:' + url, error);
+            console.error('failed to load gpx for VisJsGeoProfileMap:' + LogUtils.sanitizeLogMsg(url), error);
         });
     }
 

@@ -21,7 +21,7 @@ export class SimpleAngularBackendHttpClient extends MinimalHttpBackendClient {
         let result, request;
         request = this.http.request(httpConfig.url, requestConfig);
         result = request.map((res) => {
-            console.log('response makeHttpRequest:' + httpConfig.url, res);
+            // console.log('response makeHttpRequest:' + httpConfig.url, res);
             return {
                 headers: res.headers,
                 method: httpConfig.method,

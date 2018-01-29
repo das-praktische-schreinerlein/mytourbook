@@ -74,11 +74,11 @@ export class AppService extends GenericAppService {
         const me = this;
         return new Promise<boolean>((resolve, reject) => {
             const url = me.platformService.getAssetsUrl(`./assets/config.json`);
-            console.log('load config:', url);
+            // console.log('load config:', url);
             me.http.request(url).toPromise()
                 .then(function onConfigLoaded(res: any) {
                     const config: {} = res.json();
-                    console.log('initially loaded config from assets', config);
+                    // console.log('initially loaded config from assets', config);
                     me.appConfig.components = config['components'];
                     me.appConfig.services = config['services'];
                     return resolve(true);
@@ -111,7 +111,7 @@ export class AppService extends GenericAppService {
                     me.pdocDataService.setWritable(true);
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                    console.log('initially loaded pdocs from server', records);
+                    // console.log('initially loaded pdocs from server', records);
                     me.pdocDataService.setWritable(false);
                     me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
                     return resolve(true);
@@ -135,7 +135,7 @@ export class AppService extends GenericAppService {
                     me.pdocDataService.setWritable(true);
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                    console.log('initially loaded pdocs from assets', records);
+                    // console.log('initially loaded pdocs from assets', records);
                     me.pdocDataService.setWritable(false);
 
                     return me.http.request('./assets/sdocs.json').toPromise();
@@ -145,7 +145,7 @@ export class AppService extends GenericAppService {
 
                     return me.sdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                    console.log('initially loaded sdocs from assets', records);
+                    // console.log('initially loaded sdocs from assets', records);
                     me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
                     return resolve(true);
                 }).catch(function onError(reason: any) {

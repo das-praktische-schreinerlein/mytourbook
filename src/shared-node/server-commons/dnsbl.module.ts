@@ -3,6 +3,7 @@ import honeypot from 'honeypot';
 import {DnsBLConfig, FirewallConfig} from './firewall.commons';
 import {DnsBLCacheEntry, DnsBLQuery, GenericDnsBLModule} from './generic-dnsbl.module';
 import {DataCacheModule} from './datacache.module';
+import {ServerLogUtils} from './serverlog.utils';
 
 export class DnsBLModule extends GenericDnsBLModule {
     private pot;
@@ -39,23 +40,25 @@ export class DnsBLModule extends GenericDnsBLModule {
                     return resolve(value);
                 });
             }, me.config.timeout);
-            console.log('DnsBLModule: call DnsBL for IP:' + query.ip + ' URL:' + query.req.url);
+            console.log('DnsBLModule: call DnsBL for IP:' + ServerLogUtils.sanitizeLogMsg(query.ip) +
+                ' URL:' + ServerLogUtils.sanitizeLogMsg(query.req.url));
             this.pot.query(query.ip, function (potErr, potRes) {
                 let blocked = false;
                 if (potRes) {
                     const potResData = potRes.toString().split('.').map(Number);
                     if (potResData.length === 4) {
                         if (potResData[3] !== 0 || potResData[2] > me.maxThreatScore) {
-                            console.error('DnsBLModule: blocked ' + query.ip + ' potResult because of score>' + me.maxThreatScore, potRes);
+                            console.error('DnsBLModule: blocked ' + ServerLogUtils.sanitizeLogMsg(query.ip) +
+                                ' potResult because of score>' + me.maxThreatScore, potRes);
                             blocked = true;
                         } else {
-                            console.log('DnsBLModule: not blocked  ' + query.ip + ' potResult:', potRes);
+                            console.log('DnsBLModule: not blocked  ' + ServerLogUtils.sanitizeLogMsg(query.ip) + ' potResult:', potRes);
                         }
                     } else {
-                        console.error('DnsBLModule: not blocked  ' + query.ip + ' illegal potResult:', potRes);
+                        console.error('DnsBLModule: not blocked  ' + ServerLogUtils.sanitizeLogMsg(query.ip) + ' illegal potResult:', potRes);
                     }
                 } else {
-                    console.log('DnsBLModule: not blocked  ' + query.ip + ' no potResult:', potRes);
+                    console.log('DnsBLModule: not blocked  ' + ServerLogUtils.sanitizeLogMsg(query.ip) + ' no potResult:', potRes);
                 }
                 me.checkResultOfDnsBLClient(query, potErr, blocked, potRes).then(value => {
                     return resolve(value);

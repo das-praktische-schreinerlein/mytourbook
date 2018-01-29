@@ -34,7 +34,7 @@ export class ItemsJsQueryBuilder {
             query.sort = sorts;
         }
 
-        console.log('itemsJsQuery:', query);
+        // console.log('itemsJsQuery:', query);
 
         return query;
     }
@@ -78,7 +78,7 @@ export class ItemsJsQueryBuilder {
             filters: newParams
         };
 
-        console.log('createAdapterSelectQuery result:', query);
+        // console.log('createAdapterSelectQuery result:', query);
         return query;
     }
 

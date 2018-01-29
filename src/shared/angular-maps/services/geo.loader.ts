@@ -1,5 +1,6 @@
 import {GeoElement, GeoParser} from './geo.parser';
 import {MinimalHttpBackendClient} from '../../commons/services/minimal-http-backend-client';
+import {LogUtils} from '../../commons/utils/log.utils';
 
 export class GeoLoader  {
     constructor(private http: MinimalHttpBackendClient, private parser: GeoParser) {}
@@ -11,7 +12,7 @@ export class GeoLoader  {
                 .then(function onLoaded(res: any) {
                     return resolve(me.parser.parse(res.text(), options));
             }).catch(function onError(error: any) {
-                    console.error('loading geofeature failed:' + url, error);
+                    console.error('loading geofeature failed:' + LogUtils.sanitizeLogMsg(url), error);
                     return reject(error);
                 });
         });

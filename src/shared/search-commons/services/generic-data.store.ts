@@ -39,7 +39,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     try {
                         result = this.constructor.prototype.createRecord.call(this, props, opts);
                     } catch (err) {
-                        console.error('validation failed for', props);
+                        // console.error('validation failed for', props);
                         console.error('validation errors', err.errors);
                         throw err;
                     }
@@ -189,7 +189,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     public search(mapperName: string, searchForm: F, opts?: any): Promise<S> {
         const query = this.createQueryFromForm(searchForm);
 
-        console.log('search for form', searchForm);
+        // console.log('search for form', searchForm);
         const searchResult = this.createSearchResult(searchForm, 0, [], new Facets());
 
         const me = this;

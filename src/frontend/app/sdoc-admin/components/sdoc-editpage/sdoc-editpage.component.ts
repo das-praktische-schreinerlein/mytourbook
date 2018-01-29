@@ -20,6 +20,7 @@ import {CommonRoutingService, RoutingState} from '../../../../shared/angular-com
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {AppState} from '../../../../shared/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-editwpage',
@@ -28,6 +29,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocEditpageComponent implements OnInit, OnDestroy {
+    private config;
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);
     public contentUtils: SDocContentUtils;
@@ -50,115 +52,131 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Subscribe to route params
         const me = this;
-        this.route.data.subscribe(
-            (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
-                me.commonRoutingService.setRoutingState(RoutingState.DONE);
+        this.appService.getAppState().subscribe(appState => {
+            if (appState === AppState.Ready) {
+                this.config = this.appService.getAppConfig();
+                if (! (this.config && this.config['permissions'] && this.config['permissions']['sdocWritable'] === true)) {
+                    console.error('sdoc not writable');
+                    this.record = undefined;
+                    this.pdoc = undefined;
+                    this.tracks = [];
 
-                const flgSDocError = ErrorResolver.isResolverError(data.record);
-                const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
-                const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
-                if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
-                    me.record = data.record.data;
-                    me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
-                    me.baseSearchUrl = data.baseSearchUrl.data;
-
-                    if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined) {
-                        me.tracks = [me.record];
-                    } else {
-                        me.tracks = [];
-                    }
-
-                    const recordName = me.keywordsValidationRule.sanitize(me.record.name);
-                    if (me.pdoc) {
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
-                            {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
-                            {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
-                        this.pageUtils.setRobots(false, false);
-                    } else {
-                        me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
-                            {sdoc: recordName}, recordName);
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',
-                            {sdoc: recordName}, recordName);
-                        this.pageUtils.setRobots(false, false);
-                    }
-                    this.pageUtils.setMetaLanguage();
-
+                    this.errorResolver.redirectAfterRouterError(ErrorResolver.ERROR_READONLY, undefined, this.toastr, undefined);
                     me.cd.markForCheck();
-
-                    this.trackingProvider.trackPageView();
                     return;
                 }
 
-                let newUrl, msg, code;
-                let errorCode;
-                if (flgSDocError) {
-                    errorCode = data.record.error.code;
-                } else {
-                    errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
-                }
-                const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
-                const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
-                const sdocName = (flgSDocError ? 'name' : data.record.data.name);
-                switch (errorCode) {
-                    case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
-                    case SDocRecordResolver.ERROR_INVALID_SDOC_ID:
-                        code = ErrorResolver.ERROR_INVALID_ID;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = [me.baseSearchUrl,
-                            'show',
-                            this.idValidationRule.sanitize(sdocName),
-                            this.idValidationRule.sanitize(sdocId)].join('/');
-                        msg = undefined;
-                        break;
-                    case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
-                        code = ErrorResolver.ERROR_UNKNOWN_ID;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = [me.baseSearchUrl,
-                            'show',
-                            this.idValidationRule.sanitize(sdocName),
-                            this.idValidationRule.sanitize(sdocId)].join('/');
-                        msg = undefined;
-                        break;
-                    case SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID:
-                        code = ErrorResolver.ERROR_UNKNOWN_ID;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = [me.baseSearchUrl].join('/');
-                        msg = undefined;
-                        break;
-                    case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
-                    case SDocRecordResolver.ERROR_READING_SDOC_ID:
-                        code = ErrorResolver.ERROR_WHILE_READING;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = undefined;
-                        msg = undefined;
-                        break;
-                    case GenericAppService.ERROR_APP_NOT_INITIALIZED:
-                        code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
-                        newUrl = undefined;
-                        msg = undefined;
-                        break;
-                    default:
-                        code = ErrorResolver.ERROR_OTHER;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = undefined;
-                        msg = undefined;
-                }
+                this.route.data.subscribe(
+                (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>,
+                    baseSearchUrl: ResolvedData<string> }) => {
+                    me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
-                this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
-                me.cd.markForCheck();
-                return;
+                    const flgSDocError = ErrorResolver.isResolverError(data.record);
+                    const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
+                    const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
+                    if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
+                        me.record = data.record.data;
+                        me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
+                        me.baseSearchUrl = data.baseSearchUrl.data;
+
+                        if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined) {
+                            me.tracks = [me.record];
+                        } else {
+                            me.tracks = [];
+                        }
+
+                        const recordName = me.keywordsValidationRule.sanitize(me.record.name);
+                        if (me.pdoc) {
+                            this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
+                                {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
+                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
+                                {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
+                            this.pageUtils.setRobots(false, false);
+                        } else {
+                            me.pageUtils.setGlobalStyle('', 'sectionStyle');
+                            this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
+                                {sdoc: recordName}, recordName);
+                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',
+                                {sdoc: recordName}, recordName);
+                            this.pageUtils.setRobots(false, false);
+                        }
+                        this.pageUtils.setMetaLanguage();
+
+                        me.cd.markForCheck();
+
+                        this.trackingProvider.trackPageView();
+                        return;
+                    }
+
+                    let newUrl, msg, code;
+                    let errorCode;
+                    if (flgSDocError) {
+                        errorCode = data.record.error.code;
+                    } else {
+                        errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
+                    }
+                    const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
+                    const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
+                    const sdocName = (flgSDocError ? 'name' : data.record.data.name);
+                    switch (errorCode) {
+                        case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
+                        case SDocRecordResolver.ERROR_INVALID_SDOC_ID:
+                            code = ErrorResolver.ERROR_INVALID_ID;
+                            if (sectionId && sectionId !== '') {
+                                me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                            } else {
+                                me.baseSearchUrl = ['sdoc'].join('/');
+                            }
+                            newUrl = [me.baseSearchUrl,
+                                'show',
+                                this.idValidationRule.sanitize(sdocName),
+                                this.idValidationRule.sanitize(sdocId)].join('/');
+                            msg = undefined;
+                            break;
+                        case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
+                            code = ErrorResolver.ERROR_UNKNOWN_ID;
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                            newUrl = [me.baseSearchUrl,
+                                'show',
+                                this.idValidationRule.sanitize(sdocName),
+                                this.idValidationRule.sanitize(sdocId)].join('/');
+                            msg = undefined;
+                            break;
+                        case SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID:
+                            code = ErrorResolver.ERROR_UNKNOWN_ID;
+                            if (sectionId && sectionId !== '') {
+                                me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                            } else {
+                                me.baseSearchUrl = ['sdoc'].join('/');
+                            }
+                            newUrl = [me.baseSearchUrl].join('/');
+                            msg = undefined;
+                            break;
+                        case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
+                        case SDocRecordResolver.ERROR_READING_SDOC_ID:
+                            code = ErrorResolver.ERROR_WHILE_READING;
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                            newUrl = undefined;
+                            msg = undefined;
+                            break;
+                        case GenericAppService.ERROR_APP_NOT_INITIALIZED:
+                            code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
+                            newUrl = undefined;
+                            msg = undefined;
+                            break;
+                        default:
+                            code = ErrorResolver.ERROR_OTHER;
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                            newUrl = undefined;
+                            msg = undefined;
+                    }
+
+                    this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                    me.cd.markForCheck();
+                    return;
+                });
             }
-        );
+        });
     }
 
     onTracksFound(searchresult: SDocSearchResult) {

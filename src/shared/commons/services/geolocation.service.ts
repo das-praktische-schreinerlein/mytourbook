@@ -17,7 +17,7 @@ export class GeoLocationService {
                     observer.complete();
                 },
                 (error: PositionError) => {
-                    console.log('Geolocation service: ' + error.message);
+                    // console.log('Geolocation service: ' + error.message);
                     observer.error(error);
                 }
             );

@@ -67,11 +67,11 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 if (!flgSearchFormError && !flgBaseSearchUrlError) {
                     me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
                     if (!data.flgDoSearch) {
-                        console.log('ngOnInit: redirect for ', data);
+                        // console.log('ngOnInit: redirect for ', data);
                         return this.redirectToSearch();
                     }
 
-                    console.log('route: search for ', data);
+                    // console.log('route: search for ', data);
                     this.searchForm = data.searchForm.data;
                     if (this.searchForm.perPage === 1) {
                         this.layout = Layout.PAGE;
@@ -184,7 +184,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.searchForm.pageNum = +page;
-        console.log('onPageChange: redirect to page', page);
+        // console.log('onPageChange: redirect to page', page);
         this.redirectToSearch();
         return false;
     }
@@ -196,7 +196,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.searchForm.perPage = perPage;
-        console.log('onPerPageChange: redirect to perPage', perPage);
+        // console.log('onPerPageChange: redirect to perPage', perPage);
         this.redirectToSearch();
         return false;
     }
@@ -208,7 +208,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.searchForm.sort = sort;
-        console.log('onSortChange: redirect to sort', sort);
+        // console.log('onSortChange: redirect to sort', sort);
         this.redirectToSearch();
         return false;
     }
@@ -235,17 +235,17 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.searchForm = sdocSearchForm;
         this.searchForm.perPage = origSearchForm.perPage;
         this.searchForm.sort = origSearchForm.sort;
-        console.log('onSearchSDoc: redirect to ', sdocSearchForm);
+        // console.log('onSearchSDoc: redirect to ', sdocSearchForm);
         this.redirectToSearch();
         return false;
     }
 
     onMapSDocClicked(sdoc: SDocRecord) {
-        console.error("sdocClicked", sdoc);
+        console.log("sdocClicked", sdoc);
     }
 
     onMapCenterChanged(newCenter: L.LatLng) {
-        console.error("newCenter", newCenter);
+        console.log("newCenter", newCenter);
     }
 
     private redirectToSearch() {
@@ -253,7 +253,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.initialized = false;
 
         const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm);
-        console.log('redirectToSearch: redirect to ', url);
+        // console.log('redirectToSearch: redirect to ', url);
 
         this.commonRoutingService.navigateByUrl(url);
         return false;
@@ -261,13 +261,13 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     private doSearch() {
         if (this.searchForm.sort === 'distance' && (this.searchForm.nearby === undefined || this.searchForm.nearby === '')) {
-            console.log('doSearch: redirect because of sort/nearby form:', this.searchForm);
+            // console.log('doSearch: redirect because of sort/nearby form:', this.searchForm);
             this.searchForm.sort = 'relevance';
             this.sort = 'relvance';
             return this.redirectToSearch();
         }
 
-        console.log('doSearch form:', this.searchForm);
+        // console.log('doSearch form:', this.searchForm);
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
 
@@ -280,9 +280,9 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             showForm: true
         }).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult === undefined) {
-                console.log('empty searchResult', sdocSearchResult);
+                // console.log('empty searchResult', sdocSearchResult);
             } else {
-                console.log('update searchResult', sdocSearchResult);
+                // console.log('update searchResult', sdocSearchResult);
                 me.initialized = true;
                 me.searchResult = sdocSearchResult;
                 me.searchForm = sdocSearchResult.searchForm;

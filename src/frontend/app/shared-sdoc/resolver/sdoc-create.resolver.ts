@@ -4,6 +4,7 @@ import {AppState, GenericAppService} from '../../../shared/commons/services/gene
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
+import {LogUtils} from '../../../shared/commons/utils/log.utils';
 
 @Injectable()
 export class SDocRecordCreateResolver implements Resolve<ResolvedData<SDocRecord>> {
@@ -24,7 +25,7 @@ export class SDocRecordCreateResolver implements Resolve<ResolvedData<SDocRecord
                 if (appState === AppState.Ready) {
                     const type = route.params['createByType'];
                     if (!this.idValidationRule.isValid(type)) {
-                        console.error('error no valid type for sdoc:', type);
+                        console.error('error no valid type for sdoc:', LogUtils.sanitizeLogMsg(type));
                         result.error = new ResolverError(SDocRecordCreateResolver.ERROR_UNKNOWN_SDOC_TYPE, type, undefined);
                         return resolve(result);
                     }

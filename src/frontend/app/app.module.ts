@@ -43,7 +43,7 @@ registerLocaleData(localeDe);
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient, platformService: PlatformService): TranslateHttpLoader {
     const url = platformService.getAssetsUrl('./assets/locales/locale-');
-    console.log('use translate-baseul', url);
+    // console.log('use translate-baseul', url);
     return new TranslateHttpLoader(http, url, '.json');
 }
 

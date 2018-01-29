@@ -218,7 +218,7 @@ export class SectionPageComponent implements OnInit {
 
     submitToSearch() {
         const url = this.getToSearchUrl();
-        console.log('submitToSearch: redirect to ', url);
+        // console.log('submitToSearch: redirect to ', url);
 
         this.commonRoutingService.navigateByUrl(url);
         return false;

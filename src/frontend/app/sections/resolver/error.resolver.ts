@@ -10,6 +10,7 @@ export class ErrorResolver {
     static ERROR_INVALID_DATA = 'ERROR_INVALID_DATA';
     static ERROR_WHILE_READING = 'ERROR_WHILE_READING';
     static ERROR_APP_NOT_INITIALIZED = 'ERROR_APP_NOT_INITIALIZED';
+    static ERROR_READONLY = 'ERROR_READONLY';
     static ERROR_OTHER = 'ERROR_OTHER';
 
     static isResolverError(resolvedData: ResolvedData<any>): boolean {
@@ -49,6 +50,10 @@ export class ErrorResolver {
                         msg = 'Die Anwendung konnte leider nicht richtig gestartet werden. Probieren Sie es später noch einmal.';
                         newUrl = 'errorpage';
                         break;
+                    case ErrorResolver.ERROR_READONLY:
+                        msg = 'Die Daten sind nicht zur Bearbeitung freigegeben..';
+                        newUrl = 'errorpage';
+                        break;
                     default:
                         msg = 'Es gibt leider Probleme beim Lesen - am besten noch einmal probieren :-(';
                 }
@@ -58,6 +63,7 @@ export class ErrorResolver {
         }
 
         if (newUrl) {
+
             console.error('after error ' + errorCode +  ' redirect to', newUrl);
             this.commonRoutingService.navigateByUrl(newUrl);
         }

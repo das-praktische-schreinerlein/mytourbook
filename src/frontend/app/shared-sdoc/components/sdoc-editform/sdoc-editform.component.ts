@@ -238,7 +238,7 @@ export class SDocEditformComponent implements OnChanges {
                 showForm: false
             }).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult !== undefined) {
-                console.log('update searchResult', sdocSearchResult);
+                // console.log('update searchResult', sdocSearchResult);
                 const whereValues = [];
                 for (const whereValue of me.searchFormUtils.getWhereValues(sdocSearchResult)) {
                     // use value as label if not set
@@ -263,7 +263,7 @@ export class SDocEditformComponent implements OnChanges {
                 me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                     me.searchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
             } else {
-                console.log('empty searchResult', sdocSearchResult);
+                // console.log('empty searchResult', sdocSearchResult);
                 me.optionsSelect['locId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
                 me.optionsSelect['locIdParent'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
                 me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);

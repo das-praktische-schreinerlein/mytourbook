@@ -55,7 +55,7 @@ export class GeoParsedFeature extends L.FeatureGroup {
                 me.fire('loaded', { mapElement: geoElement, layers: layers});
             }
         }).catch(function onError(error) {
-            console.error('failed to load gpx for leeafletmap:' + geoElement, error);
+            console.error('failed to load gpx for leafletmap', error);
         });
     }
 

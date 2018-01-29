@@ -2,6 +2,7 @@ import express from 'express';
 import {DnsBLConfig, FirewallCommons, FirewallConfig} from './firewall.commons';
 import isIP from 'validator/lib/isIP';
 import {CacheEntry, DataCacheModule} from './datacache.module';
+import {ServerLogUtils} from './serverlog.utils';
 
 export enum DnsBLCacheEntryState {
     OK, BLOCKED, NORESULT
@@ -98,7 +99,8 @@ export abstract class GenericDnsBLModule {
                 return _next();
             }
             if (!isIP(ip, '4')) {
-                console.error('DnsBLModule: BLOCKED invalid IP:' + ip + ' URL:' + req.url);
+                console.error('DnsBLModule: BLOCKED invalid IP:' + ServerLogUtils.sanitizeLogMsg(ip) +
+                    ' URL:' + ServerLogUtils.sanitizeLogMsg(req.url));
                 return FirewallCommons.resolveBlocked(req, res, me.firewallConfig, me.filePathErrorDocs);
             }
 
@@ -153,7 +155,8 @@ export abstract class GenericDnsBLModule {
             return query._next();
         }
 
-        console.error('DnsBLModule: BLOCKED blacklisted IP:' + query.req['clientIp'] + ' URL:' + query.req.url);
+        console.error('DnsBLModule: BLOCKED blacklisted IP:' + ServerLogUtils.sanitizeLogMsg(query.req['clientIp']) +
+            ' URL:' + ServerLogUtils.sanitizeLogMsg(query.req.url));
         return FirewallCommons.resolveBlocked(query.req, query.res, firewallConfig, filePathErrorDocs);
     }
 

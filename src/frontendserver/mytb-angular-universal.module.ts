@@ -96,7 +96,7 @@ export class MytbAngularUniversalModule {
                         return;
                     } else {
                         // NOT CACHED but use cache
-                        console.error("not cached but cache:" + req.url);
+                        console.error("not cached but cache:", req.url);
                         me.angularRouter(req, res);
                         return;
                     }

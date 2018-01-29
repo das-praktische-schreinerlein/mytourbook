@@ -405,7 +405,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             this.getEndpoint(mapper, null, opts)
         ].join('/').replace(/([^:\/]|^)\/{2,}/g, '$1/');
         path = this.buildUrl(path, opts.params);
-        console.log('solrurl:', path);
+        // console.log('solrurl:', path);
         return path;
     }
 

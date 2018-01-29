@@ -134,7 +134,7 @@ export class SolrQueryBuilder {
             query.q = '(' + newParams.join(' AND ') + ')';
         }
 
-        console.log('createAdapterSelectQuery result:', query);
+        // console.log('createAdapterSelectQuery result:', query);
         return query;
     }
 

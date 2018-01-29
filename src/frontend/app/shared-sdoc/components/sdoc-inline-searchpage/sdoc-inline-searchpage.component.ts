@@ -183,14 +183,14 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
 
     private doSearchWithParams(params: any) {
-        console.log('doSearchWithParams params:', params);
+        // console.log('doSearchWithParams params:', params);
         this.searchFormConverter.paramsToSearchForm(params, {}, this.searchForm);
         this.searchForm = SDocSearchFormFactory.cloneSanitized(this.searchForm);
         this.doSearch();
     }
 
     private doSearch() {
-        console.log('doSearch form:', this.searchForm);
+        // console.log('doSearch form:', this.searchForm);
         const me = this;
         me.showLoadingSpinner = true;
         me.cd.markForCheck();
@@ -202,10 +202,10 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
             }).then(function doneSearch(sdocSearchResult) {
             me.showLoadingSpinner = false;
             if (sdocSearchResult === undefined) {
-                console.log('empty searchResult', sdocSearchResult);
+                // console.log('empty searchResult', sdocSearchResult);
                 me.searchResult = new SDocSearchResult(me.searchForm, 0, [], new Facets());
             } else {
-                console.log('update searchResult', sdocSearchResult);
+                // console.log('update searchResult', sdocSearchResult);
                 me.initialized = true;
                 me.searchResult = sdocSearchResult;
                 me.searchForm = sdocSearchResult.searchForm;

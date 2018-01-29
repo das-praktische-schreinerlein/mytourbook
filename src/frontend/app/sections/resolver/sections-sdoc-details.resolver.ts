@@ -5,6 +5,7 @@ import {SDocDataService} from '../../../shared/sdoc-commons/services/sdoc-data.s
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
+import {LogUtils} from '../../../shared/commons/utils/log.utils';
 
 @Injectable()
 export class SectionsSDocRecordResolver implements Resolve<ResolvedData<SDocRecord>> {
@@ -27,7 +28,7 @@ export class SectionsSDocRecordResolver implements Resolve<ResolvedData<SDocReco
                 if (appState === AppState.Ready) {
                     let id = route.params['id'];
                     if (!this.idValidationRule.isValid(id)) {
-                        console.error('error no id for sdoc:', id);
+                        // console.error('error no id for sdoc:', id);
                         result.error = new ResolverError(SectionsSDocRecordResolver.ERROR_INVALID_SDOC_ID, id, undefined);
                         return resolve(result);
                     }
@@ -36,7 +37,7 @@ export class SectionsSDocRecordResolver implements Resolve<ResolvedData<SDocReco
                     this.dataService.getById(id).then(
                         function doneGetById(sdoc: SDocRecord) {
                             if (sdoc === undefined) {
-                                console.error('error no sdoc for id:' + id);
+                                console.error('error no sdoc for id:' + LogUtils.sanitizeLogMsg(id));
                                 result.error = new ResolverError(SectionsSDocRecordResolver.ERROR_UNKNOWN_SDOC_ID, id, undefined);
                                 return resolve(result);
                             }
@@ -44,7 +45,7 @@ export class SectionsSDocRecordResolver implements Resolve<ResolvedData<SDocReco
                             result.data = sdoc;
                             return resolve(result);
                         }).catch(function errorGetById(reason: any) {
-                            console.error('error sdoc for id:' + id, reason);
+                            console.error('error sdoc for id:' + LogUtils.sanitizeLogMsg(id), reason);
                             result.error = new ResolverError(SectionsSDocRecordResolver.ERROR_READING_SDOC_ID, id, reason);
                             return resolve(result);
                         }
