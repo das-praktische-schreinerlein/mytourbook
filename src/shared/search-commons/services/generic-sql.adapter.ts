@@ -12,6 +12,7 @@ import {isArray} from 'util';
 import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 import {SelectQueryData, SqlQueryBuilder, TableConfig, WriteQueryData} from './sql-query.builder';
+import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 
 export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends Adapter implements GenericFacetAdapter<R, F, S> {
@@ -46,11 +47,44 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         throw new Error('destroyAll not implemented');
     }
 
+    doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+        const adapterQuery: AdapterQuery = {
+            loadTrack: false,
+            where: {
+                id: {
+                    'in_number': [actionTagForm.recordId]
+                }
+            }
+        };
+
+        const me = this;
+        const result = new Promise<R>((resolve, reject) => {
+            me._doActionTag(mapper, actionTagForm, opts).then(value => {
+                return me._findAll(mapper, adapterQuery, opts);
+            }).then(value => {
+
+                    const [records] = value;
+                if (records.length === 1) {
+                    resolve(records[0]);
+                } else {
+                    reject('records not found or not unique:' + records.length + ' for query:' + adapterQuery);
+                }
+            }).catch(reason => {
+                console.error('doActionTag failed:' + reason);
+                return reject(reason);
+            });
+        });
+
+        return result;
+    }
+
     find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
         const adapterQuery: AdapterQuery = {
             loadTrack: false,
             where: {
-                id: id
+                id: {
+                    'in_number': [id]
+                }
             }
         };
 
@@ -127,7 +161,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.resolve(result);
     }
 
-    _create<T extends Record>(mapper, props, opts): Promise<any> {
+    protected _create<T extends Record>(mapper, props, opts): Promise<any> {
         if (opts.realSource) {
             props = opts.realSource;
         }
@@ -180,7 +214,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     }
 
-    _count(mapper, query, opts) {
+    protected _count(mapper, query, opts) {
         query = query || {};
         opts = opts || {};
         opts.query = opts.query || query;
@@ -209,7 +243,12 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     };
 
-    _findAll(mapper, query, opts) {
+    protected _doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+        // TODO
+        return utils.resolve(true);
+    }
+
+    protected _findAll(mapper, query, opts) {
         query = query || {};
         opts = opts || {};
         opts.query = opts.query || query;
@@ -243,7 +282,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     };
 
-    _facets(mapper, query, opts) {
+    protected _facets(mapper, query, opts) {
         query = query || {};
         opts = opts || {};
         opts.query = opts.query || query;
@@ -315,7 +354,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     };
 
-    _update<T extends Record>(mapper, id, props, opts): Promise<any> {
+    protected _update<T extends Record>(mapper, id, props, opts): Promise<any> {
         if (opts.realSource) {
             props = opts.realSource;
         }

@@ -29,6 +29,7 @@
             "actionTags": [
                 {
                     "key": "edit",
+                    "type": "edit",
                     "name": "Edit",
                     "shortName": "Edit",
                     "showFilter": [
@@ -55,6 +56,7 @@
                 },
                 {
                     "key": "playlists_favorites",
+                    "type": "tag",
                     "name": "Favorite",
                     "shortName": "F",
                     "showFilter": [
@@ -81,6 +83,7 @@
                 },
                 {
                     "key": "persRate_milestone",
+                    "type": "tag",
                     "name": "Personal Meilenstein",
                     "shortName": "P*",
                     "showFilter": [
@@ -107,6 +110,7 @@
                 },
                 {
                     "key": "persRate_phantastic",
+                    "type": "tag",
                     "name": "Personal Phantastic",
                     "shortName": "P**",
                     "showFilter": [

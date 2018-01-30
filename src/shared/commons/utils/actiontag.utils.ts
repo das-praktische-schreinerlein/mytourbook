@@ -5,6 +5,7 @@ export interface ActionTagConfig {
     name: string;
     shortName: string;
     showFilter: SimpleFilter[];
+    type: string;
     recordAvailability: SimpleFilter[];
     configAvailability: SimpleFilter[];
 }
@@ -12,6 +13,12 @@ export interface ActionTag {
     config: ActionTagConfig;
     active: boolean;
     available: boolean;
+}
+
+export interface ActionTagForm {
+    key: string;
+    recordId: string;
+    payload: any;
 }
 
 export abstract class ActionTagUtils {

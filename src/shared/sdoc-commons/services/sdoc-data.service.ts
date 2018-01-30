@@ -36,7 +36,6 @@ export class SDocDataService extends SDocSearchService {
         return <SDocRecord>this.dataStore.createRecord(this.searchMapperName, props, opts);
     }
 
-    // Simulate POST /sdocs
     add(values: {}, opts?: any): Promise<SDocRecord> {
         if (!this.isWritable()) {
             throw new Error('SDocDataService configured: not writable');
@@ -52,7 +51,6 @@ export class SDocDataService extends SDocSearchService {
         return this.dataStore.create('sdoc', record, opts);
     }
 
-    // Simulate POST /sdocs
     addMany(sdocs: SDocRecord[], opts?: any): Promise<SDocRecord[]> {
         if (!this.isWritable()) {
             throw new Error('SDocDataService configured: not writable');
@@ -60,7 +58,6 @@ export class SDocDataService extends SDocSearchService {
         return this.dataStore.createMany('sdoc', sdocs, opts);
     }
 
-    // Simulate DELETE /sdocs/:id
     deleteById(id: string, opts?: any): Promise<SDocRecord> {
         if (!this.isWritable()) {
             throw new Error('SDocDataService configured: not writable');
@@ -68,7 +65,6 @@ export class SDocDataService extends SDocSearchService {
         return this.dataStore.destroy('sdoc', id, opts);
     }
 
-    // Simulate PUT /sdocs/:id
     updateById(id: string, values: {}, opts?: any): Promise<SDocRecord> {
         if (!this.isWritable()) {
             throw new Error('SDocDataService configured: not writable');
@@ -81,6 +77,14 @@ export class SDocDataService extends SDocSearchService {
             record = values;
         }
         return this.dataStore.update('sdoc', id, record, opts);
+    }
+
+    doActionTag(sdocRecord: SDocRecord, actionKey: string, payload: any, opts?: any): Promise<SDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('SDocDataService configured: not writable');
+        }
+
+        return this.dataStore.doActionTag('sdoc', sdocRecord, actionKey, payload, opts);
     }
 
     setWritable(writable: boolean) {

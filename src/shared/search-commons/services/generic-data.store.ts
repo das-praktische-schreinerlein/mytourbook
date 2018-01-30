@@ -4,7 +4,8 @@ import {Adapter} from 'js-data-adapter';
 import {Facets} from '../model/container/facets';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
-import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
+import {GenericActionTagAdapter, GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
+import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 
 export abstract class GenericDataStore <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> {
@@ -140,6 +141,34 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
             return this.store.destroy(mapperName, id, opts);
         }
     }
+
+    public doActionTag<T extends Record>(mapperName: string, record: R, actionKey: string, payload: any, opts?: any): Promise<R> {
+        const me = this;
+        const result = new Promise<R>((resolve, reject) => {
+            if (this.getAdapterForMapper(mapperName) === undefined ||
+                (!(typeof me.getAdapterForMapper(mapperName)['doActionTag'] === 'function'))) {
+                return reject('doActionTag not supported');
+            } else {
+                const actionTagForm: ActionTagForm = {
+                    key: actionKey,
+                    recordId: record['id'],
+                    payload: payload
+                };
+                const mapper = this.store.getMapper(mapperName);
+                const adapter: any = me.getAdapterForMapper(mapperName);
+                (<GenericActionTagAdapter<R, F, S>>adapter).doActionTag(mapper, actionTagForm, opts)
+                    .then(function doneActionTag(genericResult: R) {
+                        return resolve(genericResult);
+                    }).catch(function errorHandling(reason) {
+                    console.error('search failed:' + reason);
+                    return reject(reason);
+                });
+            }
+        });
+
+        return result;
+    }
+
 
     public clearLocalStore(mapperName: string): void {
         this.store.removeAll(mapperName);

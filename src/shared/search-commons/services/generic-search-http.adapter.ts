@@ -5,7 +5,8 @@ import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {GenericSearchForm} from '../model/forms/generic-searchform';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
-import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
+import {GenericActionTagAdapter, GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
+import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 
 export function Response (data, meta, op) {
     meta = meta || {};
@@ -15,7 +16,7 @@ export function Response (data, meta, op) {
 }
 
 export abstract class GenericSearchHttpAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
-    extends HttpAdapter implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S> {
+    extends HttpAdapter implements GenericSearchAdapter<R, F, S>, GenericFacetAdapter<R, F, S>, GenericActionTagAdapter<R, F, S> {
 
     constructor(config: any) {
         super(config);
@@ -33,6 +34,24 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         opts.endpoint = this.getHttpEndpoint('update');
 
         return super.update(mapper, id, props, opts);
+    }
+
+    doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+        const me = this;
+        const result = new Promise<R>((resolve, reject) => {
+            me._doActionTag(mapper, actionTagForm, opts).then(record => {
+                if (record === undefined) {
+                    reject('record not found');
+                } else {
+                    resolve(record);
+                }
+            }).catch(reason => {
+                console.error('doActionTag failed:' + reason);
+                return reject(reason);
+            });
+        });
+
+        return result;
     }
 
     facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
@@ -182,6 +201,27 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
             }
         }
         return facets;
+    }
+
+    protected _doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+        const me = this;
+        opts = opts || {};
+        opts.endpoint = this.getHttpEndpoint('doActionTag');
+
+        return super.PUT(this.getPath('doActionTag', mapper, undefined, opts), actionTagForm, undefined)
+            .then(response => {
+                if (response && (typeof response.data === 'string')) {
+                    const json = response.data.substring('JSONP_CALLBACK('.length, response.data.length - 2);
+                    const data = JSON.parse(json);
+                    return utils.resolve(data);
+                } else if (response && response.data) {
+                    return utils.resolve(response.data);
+                } else {
+                    return utils.reject('doActionTag no valid response');
+                }
+            }).catch(reason => {
+                return utils.reject('doActionTag something went wrong' + reason);
+            });
     }
 
     abstract getHttpEndpoint(method: string): string;

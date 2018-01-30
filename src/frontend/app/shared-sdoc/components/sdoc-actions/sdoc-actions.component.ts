@@ -1,10 +1,15 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange, ViewChild} from '@angular/core';
+import {
+    ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange, ViewChild,
+    ViewContainerRef
+} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-components.service';
 import {DynamicComponentHostDirective} from '../../../../shared/angular-commons/components/directives/dynamic-component-host.directive';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {Router} from '@angular/router';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {ToastsManager} from 'ng2-toastr';
 
 @Component({
     selector: 'app-sdoc-action',
@@ -28,10 +33,29 @@ export class SDocActionsComponent implements OnChanges {
 
     private childActionTagEvent: EventEmitter<ActionTagEvent> = new EventEmitter();
 
-    constructor(private dynamicComponentService: SDocDynamicComponentService, private router: Router) {
+    constructor(private dynamicComponentService: SDocDynamicComponentService, private router: Router,
+                private sdocDataService: SDocDataService, private toastr: ToastsManager, vcr: ViewContainerRef) {
+        this.toastr.setRootViewContainerRef(vcr);
+        const me = this;
         this.childActionTagEvent.asObservable().subscribe(actionTagEvent => {
             if (actionTagEvent.config.key === 'edit') {
+                actionTagEvent.processed = true;
+                actionTagEvent.error = undefined;
+                this.actionTagEvent.emit(actionTagEvent);
                 this.router.navigate([ 'sdocadmin', 'edit', 'anonym', actionTagEvent.record.id ] );
+            } else if (actionTagEvent.config.type === 'tag') {
+                sdocDataService.doActionTag(<SDocRecord>actionTagEvent.record, actionTagEvent.config.key, actionTagEvent.set).then(sdoc => {
+                    actionTagEvent.processed = true;
+                    actionTagEvent.error = undefined
+                    actionTagEvent.result = sdoc;
+                    me.actionTagEvent.emit(actionTagEvent);
+                }).catch(reason => {
+                    actionTagEvent.processed = true;
+                    actionTagEvent.error = reason;
+                    me.actionTagEvent.emit(actionTagEvent);
+                    me.toastr.error('Es gibt leider Probleme - am besten noch einmal probieren :-(', 'Oje!');
+                    console.error('sdocactions failed:' + reason);
+                });
             } else {
                 this.actionTagEvent.emit(actionTagEvent);
             }

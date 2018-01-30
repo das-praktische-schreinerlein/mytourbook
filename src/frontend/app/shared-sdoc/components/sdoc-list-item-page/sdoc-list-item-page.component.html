@@ -40,6 +40,7 @@
         <div class="card-footer">
             <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+                <app-sdoc-action [record]="record" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
             </div>
         </div>
@@ -88,6 +89,7 @@
         <div class="card-footer">
             <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+                <app-sdoc-action [record]="record" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
             </div>
         </div>

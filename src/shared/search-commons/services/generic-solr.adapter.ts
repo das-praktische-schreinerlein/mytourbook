@@ -10,6 +10,7 @@ import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapter';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 import {SolrConfig, SolrQueryBuilder} from './solr-query.builder';
+import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 
 export abstract class GenericSolrAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends GenericSearchHttpAdapter<R, F, S>
@@ -257,6 +258,10 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             url,
             opts
         ).then((response) => this._end(mapper, opts, response));
+    }
+
+    _doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+        return utils.resolve(true);
     }
 
     _destroy (mapper: Mapper, id: string | number, opts: any) {

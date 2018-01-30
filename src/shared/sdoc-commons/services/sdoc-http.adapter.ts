@@ -44,6 +44,10 @@ export class SDocHttpAdapter extends GenericSearchHttpAdapter<SDocRecord, SDocSe
         if (updateMethods.indexOf(method.toLowerCase()) >= 0) {
             return 'sdocwrite';
         }
+        if (method.toLowerCase() === 'doactiontag') {
+            return 'sdocaction';
+        }
+
         return 'sdocsearch';
     }
 

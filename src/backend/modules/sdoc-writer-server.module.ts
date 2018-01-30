@@ -6,12 +6,15 @@ import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service
 import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-adapter-response.mapper';
 import {Adapter} from 'js-data-adapter';
 import {Mapper, utils} from 'js-data';
+import {ActionTagForm} from '../shared/commons/utils/actiontag.utils';
+import {IdValidationRule} from '../../shared/search-commons/model/forms/generic-validator.util';
 
 export class SDocWriterServerModule {
     private dataService: SDocDataService;
     private mapper: Mapper;
     private adapter: Adapter;
     private responseMapper = new SDocAdapterResponseMapper();
+    private idValidationRule = new IdValidationRule(true);
 
     public static configureRoutes(app: express.Application, apiPrefix: string, sdocServerModule: SDocServerModule): SDocWriterServerModule {
         console.log('configure route sdoc:', apiPrefix + '/:locale' + '/sdocwrite/:resolveSdocToWriteBySdocId');
@@ -82,6 +85,39 @@ export class SDocWriterServerModule {
                     return next('not found');
                 });
             });
+        app.route(apiPrefix + '/:locale' + '/sdocaction')
+            .all(function(req, res, next) {
+                if (req.method === 'PUT' && req.method === 'DEL') {
+                    return next('not allowed');
+                }
+                return next();
+            })
+            .put(function(req, res, next) {
+                const actionSrc = req['body'];
+                if (actionSrc === undefined) {
+                    console.error('actiontag failed: no requestbody');
+                    res.status(403);
+                    res.json();
+                    return next('not found');
+                }
+
+                sdocWriterServerModule.doActionTag(actionSrc).then(sdoc => {
+                    if (sdoc === undefined) {
+                        console.error('actiontag not fullfilled: action not found');
+                        res.status(403);
+                        res.json();
+                        return next();
+                    }
+
+                    res.json(sdoc.toSerializableJsonObj());
+                    return next();
+                }).catch(reason => {
+                    console.error('actiontagrequest not fullfilled:', reason);
+                    res.status(403);
+                    res.json();
+                    return next('not found');
+                });
+            });
 
         return sdocWriterServerModule;
     }
@@ -105,6 +141,26 @@ export class SDocWriterServerModule {
         return this.dataService.updateById(sdoc.id, sdoc);
     }
 
+    public doActionTag(actionTagFormSrc: {}): Promise<SDocRecord> {
+        const actionTagForm = this.mapActionTagForm(actionTagFormSrc);
+        if (actionTagForm === undefined) {
+            return utils.reject('actionTagForm not mapped');
+        }
+
+        return this.dataService.getById(actionTagForm.recordId).then(sdoc => {
+            if (sdoc === undefined) {
+                return utils.reject('record not mapped: undefined');
+            }
+            if (sdoc.id === undefined || sdoc.id === '') {
+                return utils.reject('record not mapped: no id');
+            }
+
+            return this.dataService.doActionTag(sdoc, actionTagForm.key, actionTagForm.payload);
+        }).catch(reason => {
+            return utils.reject('record not found: ' + reason);
+        });
+    }
+
     public addRecord(sdocSrc: {}): Promise<SDocRecord> {
         const sdoc: SDocRecord = this.mapRecord(sdocSrc);
         if (sdoc === undefined) {
@@ -119,5 +175,17 @@ export class SDocWriterServerModule {
 
     private mapRecord(sdocSrc: {}): SDocRecord {
         return <SDocRecord>this.responseMapper.mapResponseDocument(this.mapper, sdocSrc, {});
+    }
+
+    private mapActionTagForm(actiontTagFormSrc: {}): ActionTagForm {
+        if (actiontTagFormSrc === undefined) {
+            return undefined;
+        }
+
+        return {
+            recordId: this.idValidationRule.sanitize(actiontTagFormSrc['recordId']),
+            key: this.idValidationRule.sanitize(actiontTagFormSrc['key']),
+            payload: actiontTagFormSrc['payload']
+        };
     }
 }

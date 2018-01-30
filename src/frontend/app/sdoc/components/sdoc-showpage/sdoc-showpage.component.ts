@@ -19,6 +19,7 @@ import {AngularHtmlService} from '../../../../shared/angular-commons/services/an
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {ActionTagEvent} from '../../../shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -205,6 +206,15 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             }
         }
         this.tracks = realTracks;
+    }
+
+    public onActionTagEvent(event: ActionTagEvent) {
+        if (event.record !== undefined) {
+            this.record = <SDocRecord>event.result;
+            this.cd.markForCheck();
+        }
+
+        return false;
     }
 
     ngOnDestroy() {

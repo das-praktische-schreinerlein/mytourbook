@@ -7,9 +7,12 @@ import {AppState, GenericAppService} from '../../../../shared/commons/services/g
 import {ActionTag, ActionTagConfig, ActionTagUtils} from '../../../../shared/commons/utils/actiontag.utils';
 
 export interface ActionTagEvent {
-    config: ActionTagConfig;
     record: BaseEntityRecord;
+    result: BaseEntityRecord;
+    config: ActionTagConfig;
     set: boolean;
+    processed: boolean;
+    error: any;
 }
 
 @Component({
@@ -71,12 +74,14 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
     }
 
     public setTag(tag: ActionTag): boolean {
-        this.actionTagEvent.emit({ config: tag.config, set: true, record: this.record });
+        this.actionTagEvent.emit({ config: tag.config, set: true, record: this.record, processed: false, error: undefined,
+            result: undefined });
         return false;
     }
 
     public unsetTag(tag: ActionTag): boolean {
-        this.actionTagEvent.emit({ config: tag.config, set: false, record: this.record });
+        this.actionTagEvent.emit({ config: tag.config, set: false, record: this.record, processed: false, error: undefined,
+            result: undefined });
         return false;
     }
 

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
@@ -37,7 +37,7 @@ export class SDocListItemFlatComponent implements OnChanges {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils) {
+    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
     }
 
@@ -58,12 +58,16 @@ export class SDocListItemFlatComponent implements OnChanges {
     }
 
     public onActionTagEvent(event: ActionTagEvent) {
-        // TODO
-        console.error(event);
+        if (event.record !== undefined) {
+            this.record = <SDocRecord>event.result;
+            this.updateData();
+        }
+
         return false;
     }
 
     private updateData() {
         this.contentUtils.updateItemData(this.listItem, this.record, 'flat');
+        this.cd.markForCheck();
     }
 }

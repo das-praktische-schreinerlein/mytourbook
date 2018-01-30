@@ -118,7 +118,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return utils.Promise.resolve(result);
     }
 
-    _facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+    protected _facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
         opts.adapterQuery = true;
         const me = this;
         const queryData = me.queryTransformToAdapterQuery( mapper, query, opts);
@@ -132,7 +132,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return utils.Promise.resolve(facets);
     }
 
-    _search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+    protected _search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
         opts.adapterQuery = true;
         const me = this;
         const queryData = me.queryTransformToAdapterQuery(mapper, query, opts);
@@ -148,7 +148,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return utils.Promise.resolve(<S>searchResult);
     }
 
-    _count(mapper: Mapper, query: any, opts?: any): Promise<any> {
+    protected _count(mapper: Mapper, query: any, opts?: any): Promise<any> {
         opts.adapterQuery = true;
         const me = this;
         const queryData = me.queryTransformToAdapterQuery(mapper, query, opts);
@@ -161,7 +161,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return Promise.resolve(this.extractCountFromRequestResult(mapper, result));
     }
 
-    _findAll(mapper: any, query: any, opts?: any): Promise<any> {
+    protected _findAll(mapper: any, query: any, opts?: any): Promise<any> {
         opts.adapterQuery = true;
         const me = this;
         const queryData = me.queryTransformToAdapterQuery(mapper, query, opts);
