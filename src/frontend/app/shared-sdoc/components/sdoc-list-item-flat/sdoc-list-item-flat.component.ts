@@ -58,7 +58,7 @@ export class SDocListItemFlatComponent implements OnChanges {
     }
 
     public onActionTagEvent(event: ActionTagEvent) {
-        if (event.record !== undefined) {
+        if (event.result !== undefined) {
             this.record = <SDocRecord>event.result;
             this.updateData();
         }

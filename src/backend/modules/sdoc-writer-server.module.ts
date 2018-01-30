@@ -7,7 +7,7 @@ import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-ad
 import {Adapter} from 'js-data-adapter';
 import {Mapper, utils} from 'js-data';
 import {ActionTagForm} from '../shared/commons/utils/actiontag.utils';
-import {IdValidationRule} from '../../shared/search-commons/model/forms/generic-validator.util';
+import {IdValidationRule} from '../shared/search-commons/model/forms/generic-validator.util';
 
 export class SDocWriterServerModule {
     private dataService: SDocDataService;

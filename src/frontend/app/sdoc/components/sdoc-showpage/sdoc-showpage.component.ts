@@ -209,7 +209,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     public onActionTagEvent(event: ActionTagEvent) {
-        if (event.record !== undefined) {
+        if (event.result !== undefined) {
             this.record = <SDocRecord>event.result;
             this.cd.markForCheck();
         }

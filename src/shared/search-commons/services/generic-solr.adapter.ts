@@ -261,7 +261,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
     }
 
     _doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<any> {
-        return utils.resolve(true);
+        return utils.reject('not supported');
     }
 
     _destroy (mapper: Mapper, id: string | number, opts: any) {
