@@ -155,7 +155,7 @@ export class SDocWriterServerModule {
                 return utils.reject('record not mapped: no id');
             }
 
-            return this.dataService.doActionTag(sdoc, actionTagForm.key, actionTagForm.payload);
+            return this.dataService.doActionTag(sdoc, actionTagForm);
         }).catch(reason => {
             return utils.reject('record not found: ' + reason);
         });
@@ -185,6 +185,7 @@ export class SDocWriterServerModule {
         return {
             recordId: this.idValidationRule.sanitize(actiontTagFormSrc['recordId']),
             key: this.idValidationRule.sanitize(actiontTagFormSrc['key']),
+            type: this.idValidationRule.sanitize(actiontTagFormSrc['type']),
             payload: actiontTagFormSrc['payload']
         };
     }

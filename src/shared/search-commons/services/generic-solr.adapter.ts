@@ -260,7 +260,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         ).then((response) => this._end(mapper, opts, response));
     }
 
-    _doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    _doActionTag<T extends Record>(mapper: Mapper, Record: R, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         return utils.reject('not supported');
     }
 

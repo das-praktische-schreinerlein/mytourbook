@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 
 @Component({
     selector: 'app-sdoc-list-item',
@@ -37,7 +38,7 @@ export class SDocListItemComponent implements OnChanges {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils) {
+    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
     }
 
@@ -57,8 +58,17 @@ export class SDocListItemComponent implements OnChanges {
         return false;
     }
 
+    public onActionTagEvent(event: ActionTagEvent) {
+        if (event.result !== undefined) {
+            this.record = <SDocRecord>event.result;
+            this.updateData();
+        }
+
+        return false;
+    }
 
     private updateData() {
         this.contentUtils.updateItemData(this.listItem, this.record, 'default');
+        this.cd.markForCheck();
     }
 }

@@ -36,17 +36,17 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         return super.update(mapper, id, props, opts);
     }
 
-    doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+    doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
         const me = this;
         const result = new Promise<R>((resolve, reject) => {
-            me._doActionTag(mapper, actionTagForm, opts).then(record => {
-                if (record === undefined) {
+            me._doActionTag(mapper, record, actionTagForm, opts).then(resultRecord => {
+                if (resultRecord === undefined) {
                     reject('record not found');
                 } else {
-                    resolve(record);
+                    resolve(resultRecord);
                 }
             }).catch(reason => {
-                console.error('doActionTag failed:' + reason);
+                console.error('doActionTag failed:', reason);
                 return reject(reason);
             });
         });
@@ -203,7 +203,7 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         return facets;
     }
 
-    protected _doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+    protected _doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
         const me = this;
         opts = opts || {};
         opts.endpoint = this.getHttpEndpoint('doActionTag');

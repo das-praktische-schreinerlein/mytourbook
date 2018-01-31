@@ -41,7 +41,7 @@ export class AppService extends GenericAppService {
             console.log('app ready');
             me.setAppState(AppState.Ready);
         }).catch(function onError(reason: any) {
-            console.error('loading app failed:' + reason);
+            console.error('loading app failed:', reason);
             me.setAppState(AppState.Failed);
         });
     }
@@ -55,7 +55,7 @@ export class AppService extends GenericAppService {
         this.initStaticData().then(function onFullfiled() {
             me.commonRoutingService.navigateByUrl('/');
         }).catch(function onError(reason: any) {
-            console.error('loading app failed:' + reason);
+            console.error('loading app failed:', reason);
             me.setAppState(AppState.Failed);
         });
     }
@@ -65,7 +65,7 @@ export class AppService extends GenericAppService {
         this.initBackendData().then(function onFullfiled() {
             me.commonRoutingService.navigateByUrl('/');
         }).catch(function onError(reason: any) {
-            console.error('loading app failed:' + reason);
+            console.error('loading app failed:', reason);
             me.setAppState(AppState.Failed);
         });
     }
@@ -83,7 +83,7 @@ export class AppService extends GenericAppService {
                     me.appConfig.services = config['services'];
                     return resolve(true);
                 }).catch(function onError(reason: any) {
-                    console.error('loading appdata failed:' + reason);
+                    console.error('loading appdata failed:', reason);
                     return reject(false);
             });
         });
@@ -116,7 +116,7 @@ export class AppService extends GenericAppService {
                     me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
-                    console.error('loading appdata failed:' + reason);
+                    console.error('loading appdata failed:', reason);
                     me.pdocDataService.setWritable(false);
                     return reject(false);
                 });
@@ -149,7 +149,7 @@ export class AppService extends GenericAppService {
                     me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
-                    console.error('loading appdata failed:' + reason);
+                    console.error('loading appdata failed:', reason);
                     me.pdocDataService.setWritable(false);
                     me.sdocDataService.setWritable(false);
                     return reject(false);

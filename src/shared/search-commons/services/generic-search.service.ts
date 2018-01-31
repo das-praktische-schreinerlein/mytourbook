@@ -48,7 +48,7 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
                     return resolve(<R[]>searchResultData.currentRecords);
                 },
                 function errorSearch(reason) {
-                    console.error('findCurList failed:' + reason);
+                    console.error('findCurList failed:', reason);
                     return reject(reason);
                 });
         });
@@ -67,7 +67,7 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
                     return resolve(searchResultData);
                 },
                 function errorSearch(reason) {
-                    console.error('search failed:' + reason);
+                    console.error('search failed:', reason);
                     return reject(reason);
                 });
         });

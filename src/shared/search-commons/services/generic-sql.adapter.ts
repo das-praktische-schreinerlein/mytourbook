@@ -13,6 +13,7 @@ import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
 import {SelectQueryData, SqlQueryBuilder, TableConfig, WriteQueryData} from './sql-query.builder';
 import {ActionTagForm} from '../../commons/utils/actiontag.utils';
+import {LogUtils} from '../../commons/utils/log.utils';
 
 export abstract class GenericSqlAdapter <R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>>
     extends Adapter implements GenericFacetAdapter<R, F, S> {
@@ -47,7 +48,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         throw new Error('destroyAll not implemented');
     }
 
-    doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+    doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
         const adapterQuery: AdapterQuery = {
             loadTrack: false,
             where: {
@@ -59,7 +60,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
         const me = this;
         const result = new Promise<R>((resolve, reject) => {
-            me._doActionTag(mapper, actionTagForm, opts).then(value => {
+            me._doActionTag(mapper, record, actionTagForm, opts).then(value => {
                 return me._findAll(mapper, adapterQuery, opts);
             }).then(value => {
 
@@ -70,7 +71,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     reject('records not found or not unique:' + records.length + ' for query:' + adapterQuery);
                 }
             }).catch(reason => {
-                console.error('doActionTag failed:' + reason);
+                console.error('doActionTag failed:', reason);
                 return reject(reason);
             });
         });
@@ -98,7 +99,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     reject('records not found or not unique:' + records.length + ' for query:' + adapterQuery);
                 }
             }).catch(reason => {
-                console.error('_find failed:' + reason);
+                console.error('_find failed:', reason);
                 return reject(reason);
             });
         });
@@ -203,7 +204,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                         }
                         return allResolve([searchResult[0]]);
                     }).catch(function errorSearch(reason) {
-                        console.error('_create failed:' + reason);
+                        console.error('_create failed:', reason);
                         return allReject(reason);
                     });
             } else {
@@ -235,7 +236,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     const count = me.extractCountFromRequestResult(response);
                     return resolve(count);
                 }).catch(function errorSearch(reason) {
-                    console.error('_count failed:' + reason);
+                    console.error('_count failed:', reason);
                     return reject(reason);
                 });
         });
@@ -243,8 +244,17 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     };
 
-    protected _doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    protected _doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+        const tableConfig = this.getTableConfigForTable((record['type'] + '').toLowerCase());
+        if (tableConfig === undefined) {
+            return utils.reject('no table for actiontag:' + LogUtils.sanitizeLogMsg(actionTagForm.key));
+        }
+        if (tableConfig.actionTags === undefined || tableConfig.actionTags[actionTagForm.key] === undefined) {
+            return utils.reject('no actionConfig for actiontag:' + LogUtils.sanitizeLogMsg(actionTagForm.key));
+        }
+
         // TODO
+
         return utils.resolve(true);
     }
 
@@ -274,7 +284,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             }).then(function doneSearch(records: R[]) {
                 return resolve([records]);
             }).catch(function errorSearch(reason) {
-                console.error('_findAll failed:' + reason);
+                console.error('_findAll failed:', reason);
                 return reject(reason);
             });
         });
@@ -319,7 +329,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                         return resolve([key, facet]);
                     },
                     function errorSearch(reason) {
-                        console.error('_facets failed:' + reason);
+                        console.error('_facets failed:', reason);
 
                         return reject(reason);
                     });
@@ -346,7 +356,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
                     return allResolve(facets);
                 }).catch(function errorSearch(reason) {
-                    console.error('_facets failed:' + reason);
+                    console.error('_facets failed:', reason);
                     return allReject(reason);
                 });
         });
@@ -396,7 +406,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     }
                     return allResolve([searchResult[0]]);
                 }).catch(function errorSearch(reason) {
-                    console.error('_update failed:' + reason);
+                    console.error('_update failed:',  reason);
                     return allReject(reason);
                 });
             } else {
@@ -554,7 +564,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                             return resolve([loadDetailDataConfig.profile, record, response]);
                         },
                         function errorSearch(reason) {
-                            console.error('loadDetailData failed:' + reason);
+                            console.error('loadDetailData failed:', reason);
 
                             return reject(reason);
                         });
@@ -569,7 +579,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                 });
                 return allResolve(records);
             }).catch(function errorSearch(reason) {
-                console.error('loadDetailData failed:' + reason);
+                console.error('loadDetailData failed:', reason);
                 return allReject(reason);
             });
         });

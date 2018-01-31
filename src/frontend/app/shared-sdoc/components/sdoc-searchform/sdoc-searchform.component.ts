@@ -438,7 +438,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
                 me.cd.markForCheck();
             }).catch(function onRejected(reason) {
                 me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
-                console.error('resolve moreFilterIds failed:' + reason);
+                console.error('resolve moreFilterIds failed:', reason);
                 me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
                     me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
                 me.humanReadableSpecialFilter = me.searchFormConverter.searchFormToHumanReadableMarkup(resolveableFilters, true, undefined);

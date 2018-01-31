@@ -10,6 +10,7 @@ import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {Router} from '@angular/router';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ToastsManager} from 'ng2-toastr';
+import {ActionTagForm} from '../../../../shared/commons/utils/actiontag.utils';
 
 @Component({
     selector: 'app-sdoc-action',
@@ -44,9 +45,18 @@ export class SDocActionsComponent implements OnChanges {
                 this.actionTagEvent.emit(actionTagEvent);
                 this.router.navigate([ 'sdocadmin', 'edit', 'anonym', actionTagEvent.record.id ] );
             } else if (actionTagEvent.config.type === 'tag') {
-                sdocDataService.doActionTag(<SDocRecord>actionTagEvent.record, actionTagEvent.config.key, actionTagEvent.set).then(sdoc => {
+                const payload = JSON.parse(JSON.stringify(actionTagEvent.config.payload));
+                payload['set'] = actionTagEvent.set;
+                payload['name'] = actionTagEvent.config.name;
+                const actinTagForm: ActionTagForm = {
+                    key: actionTagEvent.config.key,
+                    payload: payload,
+                    recordId: actionTagEvent.record.id,
+                    type: actionTagEvent.config.type
+                };
+                sdocDataService.doActionTag(<SDocRecord>actionTagEvent.record, actinTagForm).then(sdoc => {
                     actionTagEvent.processed = true;
-                    actionTagEvent.error = undefined
+                    actionTagEvent.error = undefined;
                     actionTagEvent.result = sdoc;
                     me.actionTagEvent.emit(actionTagEvent);
                 }).catch(reason => {
@@ -54,7 +64,7 @@ export class SDocActionsComponent implements OnChanges {
                     actionTagEvent.error = reason;
                     me.actionTagEvent.emit(actionTagEvent);
                     me.toastr.error('Es gibt leider Probleme - am besten noch einmal probieren :-(', 'Oje!');
-                    console.error('sdocactions failed:' + reason);
+                    console.error('sdocactions failed:', reason);
                 });
             } else {
                 this.actionTagEvent.emit(actionTagEvent);

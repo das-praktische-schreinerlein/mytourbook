@@ -206,7 +206,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                 me.sdocRoutingService.navigateToShow(sdoc, '');
             },
             function errorCreate(reason: any) {
-                console.error('edit updateById failed:' + reason);
+                console.error('edit updateById failed:', reason);
                 me.toastr.error('Es gibt leider Probleme bei der Speichern - am besten noch einmal probieren :-(', 'Oje!');
             }
         );

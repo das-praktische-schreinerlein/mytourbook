@@ -13,6 +13,6 @@ export interface GenericFacetAdapter<R extends Record, F extends GenericSearchFo
 }
 
 export interface GenericActionTagAdapter<R extends Record, F extends GenericSearchForm, S extends GenericSearchResult<R, F>> {
-    doActionTag<T extends Record>(mapper: Mapper, actionTagForm: ActionTagForm, opts: any): Promise<R>;
+    doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R>;
 }
 

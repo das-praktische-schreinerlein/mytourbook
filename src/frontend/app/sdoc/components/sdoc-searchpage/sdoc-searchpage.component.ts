@@ -291,7 +291,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
-            console.error('doSearch failed:' + reason);
+            console.error('doSearch failed:', reason);
             me.showLoadingSpinner = false;
             me.cd.markForCheck();
         });

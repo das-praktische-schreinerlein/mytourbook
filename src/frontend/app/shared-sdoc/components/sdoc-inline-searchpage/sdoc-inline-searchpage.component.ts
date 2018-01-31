@@ -214,7 +214,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
-            console.error('doSearch failed:' + reason);
+            console.error('doSearch failed:', reason);
             me.showLoadingSpinner = false;
             me.searchResult = new SDocSearchResult(me.searchForm, 0, [], new Facets());
             me.searchResultFound.emit(me.searchResult);

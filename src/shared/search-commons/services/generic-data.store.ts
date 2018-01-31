@@ -142,25 +142,20 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public doActionTag<T extends Record>(mapperName: string, record: R, actionKey: string, payload: any, opts?: any): Promise<R> {
+    public doActionTag<T extends Record>(mapperName: string, record: R, actionTagForm: ActionTagForm, opts?: any): Promise<R> {
         const me = this;
         const result = new Promise<R>((resolve, reject) => {
             if (this.getAdapterForMapper(mapperName) === undefined ||
                 (!(typeof me.getAdapterForMapper(mapperName)['doActionTag'] === 'function'))) {
                 return reject('doActionTag not supported');
             } else {
-                const actionTagForm: ActionTagForm = {
-                    key: actionKey,
-                    recordId: record['id'],
-                    payload: payload
-                };
                 const mapper = this.store.getMapper(mapperName);
                 const adapter: any = me.getAdapterForMapper(mapperName);
-                (<GenericActionTagAdapter<R, F, S>>adapter).doActionTag(mapper, actionTagForm, opts)
+                (<GenericActionTagAdapter<R, F, S>>adapter).doActionTag(mapper, record, actionTagForm, opts)
                     .then(function doneActionTag(genericResult: R) {
                         return resolve(genericResult);
                     }).catch(function errorHandling(reason) {
-                    console.error('search failed:' + reason);
+                    console.error('search failed:', reason);
                     return reject(reason);
                 });
             }
@@ -248,7 +243,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     searchResult.facets = facets;
                     return resolve(searchResult);
                 }).catch(function errorHandling(reason) {
-                    console.error('search failed:' + reason);
+                    console.error('search failed:', reason);
                     return reject(reason);
                 });
             } else {
@@ -264,7 +259,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     searchResult.recordCount = genericSearchResult.recordCount;
                     return resolve(searchResult);
                 }).catch(function errorHandling(reason) {
-                    console.error('search failed:' + reason);
+                    console.error('search failed:', reason);
                     return reject(reason);
                 });
             }

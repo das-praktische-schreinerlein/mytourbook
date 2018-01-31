@@ -50,6 +50,7 @@ export interface TableConfig {
     fieldMapping: {};
     sortMapping: {};
     writeMapping?: {};
+    actionTags?: {};
     groupbBySelectFieldList?: boolean;
     groupbBySelectFieldListIgnore?: string[];
     optionalGroupBy?: OptionalGroupByConfig[];

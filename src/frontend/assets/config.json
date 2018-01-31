@@ -57,8 +57,11 @@
                 {
                     "key": "playlists_favorites",
                     "type": "tag",
-                    "name": "Favorite",
+                    "name": "Favorites",
                     "shortName": "F",
+                    "payload": {
+                        "playlistkey": "Favorites"
+                    },
                     "showFilter": [
                         {
                             "property": "playlists",
@@ -82,10 +85,73 @@
                     ]
                 },
                 {
+                    "key": "playlists_kat_favorites",
+                    "type": "tag",
+                    "name": "Track Favorites",
+                    "shortName": "K",
+                    "payload": {
+                        "playlistkey": "kategorie_favorites"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "playlists",
+                            "command": "CSVIN",
+                            "expectedValues": ["kategorie_favorites"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "objects_micha",
+                    "type": "tag",
+                    "name": "Micha",
+                    "shortName": "M",
+                    "payload": {
+                        "objectkey": "Playlist_Micha"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "persons",
+                            "command": "CSVIN",
+                            "expectedValues": ["Playlist_Micha"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "persRate_milestone",
                     "type": "tag",
                     "name": "Personal Meilenstein",
                     "shortName": "P*",
+                    "payload": {
+                        "value": "11"
+                    },
                     "showFilter": [
                         {
                             "property": "sdocratepers.gesamt",
@@ -113,6 +179,9 @@
                     "type": "tag",
                     "name": "Personal Phantastic",
                     "shortName": "P**",
+                    "payload": {
+                        "value": "14"
+                    },
                     "showFilter": [
                         {
                             "property": "sdocratepers.gesamt",

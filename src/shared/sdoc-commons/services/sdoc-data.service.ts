@@ -13,6 +13,7 @@ import {SDocRatePersonalRecord, SDocRatePersonalRecordRelation} from '../model/r
 import {SDocDataInfoRecord, SDocDataInfoRecordRelation} from '../model/records/sdocdatainfo-record';
 import {SDocDataInfoRecordSchema} from '../model/schemas/sdocdatainfo-record-schema';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
+import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 
 export class SDocDataService extends SDocSearchService {
     private responseMapper = new SDocAdapterResponseMapper();
@@ -79,12 +80,12 @@ export class SDocDataService extends SDocSearchService {
         return this.dataStore.update('sdoc', id, record, opts);
     }
 
-    doActionTag(sdocRecord: SDocRecord, actionKey: string, payload: any, opts?: any): Promise<SDocRecord> {
+    doActionTag(sdocRecord: SDocRecord, actionTagForm: ActionTagForm, opts?: any): Promise<SDocRecord> {
         if (!this.isWritable()) {
             throw new Error('SDocDataService configured: not writable');
         }
 
-        return this.dataStore.doActionTag('sdoc', sdocRecord, actionKey, payload, opts);
+        return this.dataStore.doActionTag('sdoc', sdocRecord, actionTagForm, opts);
     }
 
     setWritable(writable: boolean) {

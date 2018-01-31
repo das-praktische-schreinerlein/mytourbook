@@ -38,7 +38,7 @@ export class SDocDataCacheService {
                     }
                     return resolve(me.nameCache);
                 }).catch(function errorSearch(reason) {
-                    console.error('resolve resolveNamesForIds failed:' + reason);
+                    console.error('resolve resolveNamesForIds failed:', reason);
                     return reject(reason);
             });
         });

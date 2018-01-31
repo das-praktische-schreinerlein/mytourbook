@@ -46,7 +46,7 @@ export abstract class FilterUtils {
         let values = [];
         switch (filter.command) {
             case SimpleFilterCommands.CSVIN:
-                values = value.split(',');
+                values = value.split(/[ ]*,[ ]*/);
                 break;
             case SimpleFilterCommands.NUMIN:
                 values = [value];

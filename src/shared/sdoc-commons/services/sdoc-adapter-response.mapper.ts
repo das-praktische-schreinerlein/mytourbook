@@ -278,6 +278,24 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
                 });
                 this.mapImageDocsToAdapterDocument(mapper, <SDocRecord>record, imageUrls);
                 break;
+            case 'image_playlist':
+                let imagePlaylist = '';
+                docs.forEach(doc => {
+                    if (doc['i_playlists'] !== undefined && doc['i_playlists'] !== null) {
+                        imagePlaylist = doc['i_playlists'];
+                    }
+                });
+                (<SDocRecord>record).playlists = imagePlaylist;
+                break;
+            case 'image_persons':
+                let imagePersons = '';
+                docs.forEach(doc => {
+                    if (doc['i_persons'] !== undefined && doc['i_persons'] !== null) {
+                        imagePersons = doc['i_persons'];
+                    }
+                });
+                (<SDocRecord>record).persons = imagePersons;
+                break;
         }
     }
 
