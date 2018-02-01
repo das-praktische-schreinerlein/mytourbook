@@ -151,6 +151,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
             } else {
                 const mapper = this.store.getMapper(mapperName);
                 const adapter: any = me.getAdapterForMapper(mapperName);
+                me.store.remove(mapperName, record['id']);
                 (<GenericActionTagAdapter<R, F, S>>adapter).doActionTag(mapper, record, actionTagForm, opts)
                     .then(function doneActionTag(genericResult: R) {
                         return resolve(genericResult);

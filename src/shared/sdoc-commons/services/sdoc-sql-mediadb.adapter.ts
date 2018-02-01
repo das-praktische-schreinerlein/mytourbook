@@ -1316,9 +1316,9 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 ' AND i_id = "' + id + '"';
             const insertSql = 'INSERT INTO image_playlist (p_id, i_id)' +
                 ' SELECT playlist.p_id AS p_id, "' + id + '" as i_id FROM playlist WHERE p_name = ("' + playlistKey + '")';
-            const updateSql = 'UPDATE image SET i_rate=max(coalesce(i_rate, 0), "' + ratePersGesamt + '"),' +
-                ' i_rate_motive=max(coalesce(i_rate_motive, 0), "' + ratePersMotive + '"),' +
-                ' i_rate_wichtigkeit=max(coalesce(i_rate_wichtigkeit, 0), "' + ratePersWichtigkeit + '")' +
+            const updateSql = 'UPDATE image SET i_rate=max(coalesce(i_rate, 0), ' + ratePersGesamt + '),' +
+                ' i_rate_motive=max(coalesce(i_rate_motive, 0), ' + ratePersMotive + '),' +
+                ' i_rate_wichtigkeit=max(coalesce(i_rate_wichtigkeit, 0), ' + ratePersWichtigkeit + ')' +
                 '  WHERE i_id = "' + id + '"';
 
             const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
@@ -1382,8 +1382,45 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
             }
 
-            // TODO
-            if (1 === 1) throw new Error("not implemneted yet");
+            const rateKey = actionTagForm.payload['ratekey'];
+            if (!this.keywordValidationRule.isValid(rateKey)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' ratekey not valid');
+            }
+            let fieldName;
+            switch (rateKey) {
+                case 'gesamt':
+                    fieldName = 'i_rate';
+                    break;
+                case 'motive':
+                    fieldName = 'i_rate_motive';
+                    break;
+                case 'wichtigkeit':
+                    fieldName = 'i_rate_wichtigkeit';
+                    break;
+                default:
+                    return utils.reject('actiontag ' + actionTagForm.key + ' ratekey not valid');
+            }
+            const ratePers = actionTagForm.payload['value'] || 0;
+            if (!this.rateValidationRule.isValid(ratePers)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' ratePers not valid');
+            }
+
+            const updateSql = 'UPDATE image SET ' + fieldName + '=max(coalesce(' + fieldName + ', 0), ' + ratePers + ')' +
+                ', i_rate=max(coalesce(i_rate_motive, 0), coalesce(i_rate_wichtigkeit, 0), ' + ratePers + ')' +
+                '  WHERE i_id = "' + id + '"';
+
+            const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+            const rawUpdate = sqlBuilder.raw(updateSql);
+            const result = new Promise((resolve, reject) => {
+                rawUpdate.then(function doneDelete(dbresults: any) {
+                    return resolve(true);
+                }).catch(function errorPlaylist(reason) {
+                    console.error('_doActionTag update image persRate failed:', reason);
+                    return reject(reason);
+                });
+            });
+
+            return result;
         }
 
         return super._doActionTag(mapper, record, actionTagForm, opts);

@@ -91,7 +91,7 @@
                     "key": "playlists_kat_favorites",
                     "type": "tag",
                     "name": "Track Favorites",
-                    "shortName": "K",
+                    "shortName": "TF",
                     "payload": {
                         "playlistkey": "kategorie_favorites",
                         "sdocratepers.gesamt": "8",
@@ -124,7 +124,7 @@
                     "key": "objects_micha",
                     "type": "tag",
                     "name": "Micha",
-                    "shortName": "M",
+                    "shortName": "Mi",
                     "payload": {
                         "objectkey": "Playlist_Micha"
                     },
@@ -151,16 +151,17 @@
                     ]
                 },
                 {
-                    "key": "persRate_milestone",
+                    "key": "persRate_motive_milestone",
                     "type": "tag",
-                    "name": "Personal Meilenstein",
-                    "shortName": "P*",
+                    "name": "Personal Motive Meilenstein",
+                    "shortName": "M*",
                     "payload": {
-                        "value": "11"
+                        "value": "11",
+                        "ratekey": "motive"
                     },
                     "showFilter": [
                         {
-                            "property": "sdocratepers.gesamt",
+                            "property": "sdocratepers.motive",
                             "command": "GE",
                             "expectedValues": [11]
                         }
@@ -181,16 +182,79 @@
                     ]
                 },
                 {
-                    "key": "persRate_phantastic",
+                    "key": "persRate_motive_phantastic",
                     "type": "tag",
-                    "name": "Personal Phantastic",
-                    "shortName": "P**",
+                    "name": "Personal Motive Phantastic",
+                    "shortName": "M**",
                     "payload": {
-                        "value": "14"
+                        "value": "14",
+                        "ratekey": "motive"
                     },
                     "showFilter": [
                         {
-                            "property": "sdocratepers.gesamt",
+                            "property": "sdocratepers.motive",
+                            "command": "GE",
+                            "expectedValues": [14]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_wichtigkeit_milestone",
+                    "type": "tag",
+                    "name": "Personal Wichtigkeit Meilenstein",
+                    "shortName": "W*",
+                    "payload": {
+                        "value": "11",
+                        "ratekey": "wichtigkeit"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "sdocratepers.wichtigkeit",
+                            "command": "GE",
+                            "expectedValues": [11]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_motive_phantastic",
+                    "type": "tag",
+                    "name": "Personal Wichtigkeit Phantastic",
+                    "shortName": "W**",
+                    "payload": {
+                        "value": "14",
+                        "ratekey": "wichtigkeit"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "sdocratepers.wichtigkeit",
                             "command": "GE",
                             "expectedValues": [14]
                         }
@@ -210,6 +274,7 @@
                         }
                     ]
                 }
+
             ]
         }
     },

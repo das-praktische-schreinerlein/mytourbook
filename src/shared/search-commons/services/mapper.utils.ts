@@ -63,7 +63,7 @@ export class MapperUtils {
 
     public getAdapterNumberValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): number {
         let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
+        if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {
             if (Array.isArray(adapterDocument[adapterFieldName])) {
                 value = adapterDocument[adapterFieldName][0];
             } else {
@@ -78,7 +78,7 @@ export class MapperUtils {
     }
     public getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
-        if (adapterDocument[adapterFieldName] !== undefined) {
+        if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {
             if (Array.isArray(adapterDocument[adapterFieldName])) {
                 value = adapterDocument[adapterFieldName][0];
             } else if (adapterDocument[adapterFieldName] !== '0' && adapterDocument[adapterFieldName] !== '0,0') {
