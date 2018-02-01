@@ -9,7 +9,7 @@ import {Facet, Facets} from '../../search-commons/model/container/facets';
 import {Mapper, Record, utils} from 'js-data';
 import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {ActionTagForm} from '../../commons/utils/actiontag.utils';
-import {KeywordValidationRule} from '../../search-commons/model/forms/generic-validator.util';
+import {KeywordValidationRule, NumberValidationRule} from '../../search-commons/model/forms/generic-validator.util';
 
 export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public static tableConfigs = {
@@ -1200,6 +1200,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
     };
 
     private keywordValidationRule = new KeywordValidationRule(true);
+    private rateValidationRule = new NumberValidationRule(true, 0, 15, 0);
 
     constructor(config: any) {
         super(config, new SDocAdapterResponseMapper());
@@ -1297,17 +1298,40 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 return utils.reject('actiontag ' + actionTagForm.key + ' playlistkey not valid');
             }
 
+            const ratePersGesamt = actionTagForm.payload['sdocratepers.gesamt'] || 0;
+            if (!this.rateValidationRule.isValid(ratePersGesamt)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' ratePersGesamt not valid');
+            }
+            const ratePersMotive = actionTagForm.payload['sdocratepers.motive'] || 0;
+            if (!this.rateValidationRule.isValid(ratePersMotive)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' ratePersMotive not valid');
+            }
+            const ratePersWichtigkeit = actionTagForm.payload['sdocratepers.wichtigkeit'] || 0;
+            if (!this.rateValidationRule.isValid(ratePersWichtigkeit)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' ratePersWichtigkeit not valid');
+            }
+
             const deleteSql = 'DELETE FROM image_playlist ' +
                 'WHERE image_playlist.p_id IN (SELECT playlist.p_id FROM playlist WHERE p_name in ("' + playlistKey + '"))' +
                 ' AND i_id = "' + id + '"';
             const insertSql = 'INSERT INTO image_playlist (p_id, i_id)' +
                 ' SELECT playlist.p_id AS p_id, "' + id + '" as i_id FROM playlist WHERE p_name = ("' + playlistKey + '")';
+            const updateSql = 'UPDATE image SET i_rate=max(coalesce(i_rate, 0), "' + ratePersGesamt + '"),' +
+                ' i_rate_motive=max(coalesce(i_rate_motive, 0), "' + ratePersMotive + '"),' +
+                ' i_rate_wichtigkeit=max(coalesce(i_rate_wichtigkeit, 0), "' + ratePersWichtigkeit + '")' +
+                '  WHERE i_id = "' + id + '"';
+
             const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
             const rawDelete = sqlBuilder.raw(deleteSql);
             const result = new Promise((resolve, reject) => {
                 rawDelete.then(function doneDelete(dbresults: any) {
                     if (actionTagForm.payload.set) {
-                        return sqlBuilder.raw(insertSql);
+                        return sqlBuilder.raw(insertSql).then(function doneInsert() {
+                            return sqlBuilder.raw(updateSql);
+                        }).catch(function errorPlaylist(reason) {
+                            console.error('_doActionTag update image failed:', reason);
+                            return reject(reason);
+                        });
                     }
 
                     return resolve(true);
@@ -1320,7 +1344,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             });
 
             return result;
-        } if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('objects_')) {
+        } else if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('objects_')) {
             if (actionTagForm.payload === undefined) {
                 return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
             }
@@ -1334,6 +1358,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                 ' AND i_id = "' + id + '"';
             const insertSql = 'INSERT INTO image_object (io_obj_type, i_id)' +
                 ' SELECT objects.o_key AS io_obj_type, "' + id + '" as i_id FROM objects WHERE o_name = ("' + objectKey + '")';
+
             const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
             const rawDelete = sqlBuilder.raw(deleteSql);
             const result = new Promise((resolve, reject) => {
@@ -1352,6 +1377,13 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             });
 
             return result;
+        } else if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
+            if (actionTagForm.payload === undefined) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
+            }
+
+            // TODO
+            if (1 === 1) throw new Error("not implemneted yet");
         }
 
         return super._doActionTag(mapper, record, actionTagForm, opts);

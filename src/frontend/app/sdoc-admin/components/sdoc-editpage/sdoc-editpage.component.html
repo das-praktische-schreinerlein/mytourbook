@@ -1,14 +1,17 @@
 <ng-container *ngIf="record != undefined && record.id != undefined">
     <div class="container content-container">
         <div class="card-block">
-            <h6><app-sdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h6>
-            <div class="picture-small" style="float: left; margin-right: 10px">
-                <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
-                <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
-                    <img class="picture-small" width="300px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
-                </ng-container>
+            <app-sdoc-list-item-flat [record]="record" (show)="submitBackToShow()"></app-sdoc-list-item-flat>
+        </div>
+        <br clear="all" />
+        <div class="card-footer text-right" style="width: 100%">
+            <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+                <app-sdoc-action [record]="record" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
+                <a [href]="getBackToShowUrl()" (click)="submitBackToShow()" class="btn btn-action btn-sm"
+                   i18n="link back2show sdoc|Linktext back to show sdoc@@a.edit.sdoc.back2show">Back to Show</a>
+                <a [href]="getBackToSearchUrl()" (click)="submitBackToSearch()" class="btn btn-action btn-sm"
+                   i18n="link back2search sdoc|Linktext back to search sdoc@@a.edit.sdoc.back2search">Back to Search</a>
             </div>
-            <h5><span class="fx-bg-name">{{record.name}}</span></h5>
         </div>
     </div>
     <div class="container content-container">

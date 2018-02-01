@@ -34,13 +34,13 @@
             </div>
             <br clear="all" />
         </div>
-            <div class="card-footer text-right" style="width: 100%">
-                <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
-                    <app-sdoc-action [record]="record" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
-                    <a [href]="getBackToSearchUrl()" (click)="submitBackToSearch()" class="btn btn-action btn-sm"
-                       i18n="link back2search sdoc|Linktext back to search sdoc@@a.show.sdoc.back2search">Back to Search</a>
-                </div>
+        <div class="card-footer text-right" style="width: 100%">
+            <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+                <app-sdoc-action [record]="record" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
+                <a [href]="getBackToSearchUrl()" (click)="submitBackToSearch()" class="btn btn-action btn-sm"
+                   i18n="link back2search sdoc|Linktext back to search sdoc@@a.show.sdoc.back2search">Back to Search</a>
             </div>
+        </div>
     </div>
 
     <div class="container content-container" *ngIf="tracks !== undefined && tracks.length > 0">

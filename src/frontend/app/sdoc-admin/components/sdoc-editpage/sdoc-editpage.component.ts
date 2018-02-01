@@ -213,4 +213,21 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    submitBackToShow() {
+        this.sdocRoutingService.navigateToShow(this.record, '');
+        return false;
+    }
+
+    submitBackToSearch() {
+        this.sdocRoutingService.navigateBackToSearch();
+        return false;
+    }
+
+    getBackToSearchUrl(): string {
+        return this.sdocRoutingService.getLastSearchUrl();
+    }
+
+    getBackToShowUrl(): string {
+        return this.sdocRoutingService.getShowUrl(this.record, '');
+    }
 }

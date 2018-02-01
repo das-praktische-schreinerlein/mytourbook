@@ -60,7 +60,10 @@
                     "name": "Favorites",
                     "shortName": "F",
                     "payload": {
-                        "playlistkey": "Favorites"
+                        "playlistkey": "Favorites",
+                        "sdocratepers.gesamt": "5",
+                        "sdocratepers.motive": "5",
+                        "sdocratepers.wichtigkeit": "5"
                     },
                     "showFilter": [
                         {
@@ -90,7 +93,10 @@
                     "name": "Track Favorites",
                     "shortName": "K",
                     "payload": {
-                        "playlistkey": "kategorie_favorites"
+                        "playlistkey": "kategorie_favorites",
+                        "sdocratepers.gesamt": "8",
+                        "sdocratepers.motive": "8",
+                        "sdocratepers.wichtigkeit": "8"
                     },
                     "showFilter": [
                         {
