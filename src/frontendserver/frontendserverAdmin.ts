@@ -68,7 +68,7 @@ const getsiteUrl = function (nr) {
             console.log('DONE - got url:' + url, response.status);
             getsiteUrl(nr + 1);
         }).catch(error => {
-            console.error('ERROR - got error for url:' + url, error);
+            console.warn('WARNING - got error for url:' + url, error);
             getsiteUrl(nr + 1);
         });
 };

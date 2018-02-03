@@ -56,7 +56,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
                 if (! (this.config && this.config['permissions'] && this.config['permissions']['sdocWritable'] === true)) {
-                    console.error('sdoc not writable');
+                    console.warn('sdoc not writable');
                     this.record = undefined;
                     this.pdoc = undefined;
                     this.tracks = [];

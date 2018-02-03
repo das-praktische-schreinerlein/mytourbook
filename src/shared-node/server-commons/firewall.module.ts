@@ -10,7 +10,7 @@ export class FirewallModule {
     public static configureFirewall(app: express.Application, firewallConfig: FirewallConfig, filePathErrorDocs: string) {
         app.use(IpFilter(firewallConfig.blackListIps));
         app.use(function(err, req, res, _next) {
-            console.error('FirewallModule: BLOCKED blacklisted IP:' + ServerLogUtils.sanitizeLogMsg(req['clientIp']) +
+            console.warn('FirewallModule: BLOCKED blacklisted IP:' + ServerLogUtils.sanitizeLogMsg(req['clientIp']) +
                 ' URL:' + ServerLogUtils.sanitizeLogMsg(req.url));
             if (err instanceof IpDeniedError) {
                 return FirewallCommons.resolveBlocked(req, res, firewallConfig, filePathErrorDocs);

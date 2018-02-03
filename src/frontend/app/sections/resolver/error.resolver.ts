@@ -64,7 +64,7 @@ export class ErrorResolver {
 
         if (newUrl) {
 
-            console.error('after error ' + errorCode +  ' redirect to', newUrl);
+            console.log('after error ' + errorCode +  ' redirect to', newUrl);
             this.commonRoutingService.navigateByUrl(newUrl);
         }
     }

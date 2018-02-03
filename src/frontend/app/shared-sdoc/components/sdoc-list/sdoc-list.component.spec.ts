@@ -32,10 +32,10 @@ describe('SDocListComponent', () => {
                 CommonRoutingService,
                 SDocRoutingService,
                 SDocContentUtils,
-                SDocLightBox,
-                Lightbox,
-                LightboxConfig,
                 LightboxEvent,
+                LightboxConfig,
+                Lightbox,
+                SDocLightBox,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],

@@ -1,4 +1,4 @@
-import {Facets} from '../../search-commons/model/container/facets';
+import {Facets} from '../model/container/facets';
 
 export class SearchParameterUtils {
     constructor() {

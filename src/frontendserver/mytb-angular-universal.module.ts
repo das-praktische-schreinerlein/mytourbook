@@ -42,7 +42,7 @@ export class MytbAngularUniversalModule {
         const domino = require('domino');
         const win = domino.createWindow(template);
         global['window'] = win;
-        Object.defineProperty(win.document, 'referrer', {get : function(){ return "https://www.michas-ausflugstipps.de"; }});
+        Object.defineProperty(win.document, 'referrer', {get : function(){ return 'https://www.michas-ausflugstipps.de'; }});
         global['document'] = win.document;
         global['navigator'] = { userAgent: 'chrome', product: 'ReactNative', platform: 'Win'};
         global['window']['devicePixelRatio'] = 1;
@@ -96,7 +96,7 @@ export class MytbAngularUniversalModule {
                         return;
                     } else {
                         // NOT CACHED but use cache
-                        console.error("not cached but cache:", req.url);
+                        console.log('not cached but cache:', req.url);
                         me.angularRouter(req, res);
                         return;
                     }

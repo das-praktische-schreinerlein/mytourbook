@@ -58,7 +58,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
                     && this.config['components']['sdoc-actions']['actionTags']) {
                     this.tagConfigs = this.config['components']['sdoc-actions']['actionTags'];
                 } else {
-                    console.error('no valid tagConfigs found');
+                    console.warn('no valid tagConfigs found');
                     this.tagConfigs = [];
                 }
 

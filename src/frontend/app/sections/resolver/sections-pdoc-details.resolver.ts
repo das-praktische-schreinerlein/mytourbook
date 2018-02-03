@@ -30,7 +30,7 @@ export class SectionsPDocRecordResolver implements Resolve<ResolvedData<PDocReco
                 if (appState === AppState.Ready) {
                     let id = route.params['section'] || route.parent.params['section'];
                     if (!this.idValidationRule.isValid(id)) {
-                        // console.error('error no id for pdoc:', id);
+                        // console.warn('error no id for pdoc:', LogUtils.sanitizeLogMsg(id));
                         result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID, id, undefined);
                         return resolve(result);
                     }
@@ -39,7 +39,7 @@ export class SectionsPDocRecordResolver implements Resolve<ResolvedData<PDocReco
                     this.dataService.getById(id).then(
                         function doneGetById(pdoc: PDocRecord) {
                             if (pdoc === undefined) {
-                                console.error('error no pdoc for id:' + LogUtils.sanitizeLogMsg(id));
+                                console.log('warning no pdoc for id:' + LogUtils.sanitizeLogMsg(id));
                                 result.error = new ResolverError(SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID, id, undefined);
                                 return resolve(result);
                             }

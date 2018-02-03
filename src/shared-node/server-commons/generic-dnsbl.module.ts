@@ -65,7 +65,8 @@ export abstract class GenericDnsBLModule {
                         potCacheEntry.state = DnsBLCacheEntryState.OK;
                     } else {
                         // ERROR
-                        console.warn('DnsBLModule: error while reading for query:' + [query.ip, query.req.url].join(' '), err);
+                        console.error('DnsBLModule: error while reading for query:'
+                            + ServerLogUtils.sanitizeLogMsg([query.ip, query.req.url].join(' ')), err);
                         if (potCacheEntry.state !== DnsBLCacheEntryState.BLOCKED) {
                             potCacheEntry.state = DnsBLCacheEntryState.NORESULT;
                         }
@@ -99,7 +100,7 @@ export abstract class GenericDnsBLModule {
                 return _next();
             }
             if (!isIP(ip, '4')) {
-                console.error('DnsBLModule: BLOCKED invalid IP:' + ServerLogUtils.sanitizeLogMsg(ip) +
+                console.warn('DnsBLModule: BLOCKED invalid IP:' + ServerLogUtils.sanitizeLogMsg(ip) +
                     ' URL:' + ServerLogUtils.sanitizeLogMsg(req.url));
                 return FirewallCommons.resolveBlocked(req, res, me.firewallConfig, me.filePathErrorDocs);
             }
@@ -155,7 +156,7 @@ export abstract class GenericDnsBLModule {
             return query._next();
         }
 
-        console.error('DnsBLModule: BLOCKED blacklisted IP:' + ServerLogUtils.sanitizeLogMsg(query.req['clientIp']) +
+        console.warn('DnsBLModule: BLOCKED blacklisted IP:' + ServerLogUtils.sanitizeLogMsg(query.req['clientIp']) +
             ' URL:' + ServerLogUtils.sanitizeLogMsg(query.req.url));
         return FirewallCommons.resolveBlocked(query.req, query.res, firewallConfig, filePathErrorDocs);
     }

@@ -41,7 +41,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                         result = this.constructor.prototype.createRecord.call(this, props, opts);
                     } catch (err) {
                         // console.error('validation failed for', props);
-                        console.error('validation errors', err.errors);
+                        console.log('validation errors', err.errors);
                         throw err;
                     }
                     /**                    if (Array.isArray(result)) {

@@ -9,6 +9,7 @@ const argv = minimist(process.argv.slice(2));
 // disable debug-logging
 const debug = argv['debug'] || false;
 if (!debug) {
+    console.trace = function() {};
     console.debug = function() {};
     console.log = function() {};
 }

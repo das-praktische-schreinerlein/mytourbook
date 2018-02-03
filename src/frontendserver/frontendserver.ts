@@ -67,6 +67,7 @@ app.listen(serverConfig.frontendConfig.port, function () {
 
     // disable debug-logging
     if (!debug) {
+        console.trace = function() {};
         console.debug = function() {};
         console.log = function() {};
     }

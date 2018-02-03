@@ -10,3 +10,11 @@ export const environment = {
     sdocActionTagWritable: false,
     trackingProviders: [Angulartics2Piwik]
 };
+
+// unset logger
+console.trace = function() {};
+console.debug = function() {};
+console.log = function() {};
+console.warn = function() {};
+console.error = function() {};
+

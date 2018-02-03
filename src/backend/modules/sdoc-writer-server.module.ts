@@ -29,7 +29,7 @@ export class SDocWriterServerModule {
             .post(function(req, res, next) {
                 const sdocSrc = req['body'];
                 if (sdocSrc === undefined) {
-                    console.error('create failed: no requestbody');
+                    console.log('create failed: no requestbody');
                     res.status(403);
                     res.json();
                     return next('not found');
@@ -37,7 +37,7 @@ export class SDocWriterServerModule {
 
                 sdocWriterServerModule.addRecord(sdocSrc).then(sdoc => {
                     if (sdoc === undefined) {
-                        console.error('create not fullfilled: no result');
+                        console.log('create not fullfilled: no result');
                         res.status(403);
                         res.json();
                         return next('not found');
@@ -62,7 +62,7 @@ export class SDocWriterServerModule {
             .put(function(req, res, next) {
                 const sdocSrc = req['body'];
                 if (sdocSrc === undefined) {
-                    console.error('update failed: no requestbody');
+                    console.log('update failed: no requestbody');
                     res.status(403);
                     res.json();
                     return next('not found');
@@ -70,7 +70,7 @@ export class SDocWriterServerModule {
 
                 sdocWriterServerModule.updateRecord(sdocSrc).then(sdoc => {
                     if (sdoc === undefined) {
-                        console.error('update not fullfilled: sdoc not found');
+                        console.log('update not fullfilled: sdoc not found');
                         res.status(403);
                         res.json();
                         return next();
@@ -95,7 +95,7 @@ export class SDocWriterServerModule {
             .put(function(req, res, next) {
                 const actionSrc = req['body'];
                 if (actionSrc === undefined) {
-                    console.error('actiontag failed: no requestbody');
+                    console.log('actiontag failed: no requestbody');
                     res.status(403);
                     res.json();
                     return next('not found');
@@ -103,7 +103,7 @@ export class SDocWriterServerModule {
 
                 sdocWriterServerModule.doActionTag(actionSrc).then(sdoc => {
                     if (sdoc === undefined) {
-                        console.error('actiontag not fullfilled: action not found');
+                        console.log('actiontag not fullfilled: action not found');
                         res.status(403);
                         res.json();
                         return next();

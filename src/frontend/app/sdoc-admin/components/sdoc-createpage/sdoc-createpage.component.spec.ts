@@ -26,6 +26,7 @@ import {DatePipe} from '@angular/common';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('SDocCreatepageComponent', () => {
     let component: SDocCreatepageComponent;

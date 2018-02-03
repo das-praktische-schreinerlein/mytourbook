@@ -25,7 +25,7 @@ export class SDocRecordCreateResolver implements Resolve<ResolvedData<SDocRecord
                 if (appState === AppState.Ready) {
                     const type = route.params['createByType'];
                     if (!this.idValidationRule.isValid(type)) {
-                        console.error('error no valid type for sdoc:', LogUtils.sanitizeLogMsg(type));
+                        console.warn('warning no valid type for sdoc:', LogUtils.sanitizeLogMsg(type));
                         result.error = new ResolverError(SDocRecordCreateResolver.ERROR_UNKNOWN_SDOC_TYPE, type, undefined);
                         return resolve(result);
                     }

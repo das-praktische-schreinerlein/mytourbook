@@ -23,12 +23,12 @@ export class ConfigureServerModule {
         /**
         app.use(protect.express.sqlInjection({
             body: true,
-            loggerFunction: console.error
+            loggerFunction: console.warn
         }));
          */
         app.use(protect.express.xss({
             body: true,
-            loggerFunction: console.error
+            loggerFunction: console.warn
         }));
 
         // configure response

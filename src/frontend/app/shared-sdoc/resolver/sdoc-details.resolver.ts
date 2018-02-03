@@ -28,7 +28,7 @@ export class SDocRecordResolver implements Resolve<ResolvedData<SDocRecord>> {
                 if (appState === AppState.Ready) {
                     let id = route.params['id'];
                     if (!this.idValidationRule.isValid(id)) {
-                        console.error('error no id for sdoc:', LogUtils.sanitizeLogMsg(id));
+                        console.warn('warning no id for sdoc:', LogUtils.sanitizeLogMsg(id));
                         result.error = new ResolverError(SDocRecordResolver.ERROR_INVALID_SDOC_ID, id, undefined);
                         return resolve(result);
                     }
@@ -37,7 +37,7 @@ export class SDocRecordResolver implements Resolve<ResolvedData<SDocRecord>> {
                     this.dataService.getById(id).then(
                         function doneGetById(sdoc: SDocRecord) {
                             if (sdoc === undefined) {
-                                console.error('error no sdoc for id:' + LogUtils.sanitizeLogMsg(id));
+                                console.log('no sdoc for id:' + LogUtils.sanitizeLogMsg(id));
                                 result.error = new ResolverError(SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID, id, undefined);
                                 return resolve(result);
                             }

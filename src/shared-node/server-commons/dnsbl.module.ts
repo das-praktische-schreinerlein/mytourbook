@@ -48,14 +48,15 @@ export class DnsBLModule extends GenericDnsBLModule {
                     const potResData = potRes.toString().split('.').map(Number);
                     if (potResData.length === 4) {
                         if (potResData[3] !== 0 || potResData[2] > me.maxThreatScore) {
-                            console.error('DnsBLModule: blocked ' + ServerLogUtils.sanitizeLogMsg(query.ip) +
+                            console.warn('DnsBLModule: blocked ' + ServerLogUtils.sanitizeLogMsg(query.ip) +
                                 ' potResult because of score>' + me.maxThreatScore, potRes);
                             blocked = true;
                         } else {
                             console.log('DnsBLModule: not blocked  ' + ServerLogUtils.sanitizeLogMsg(query.ip) + ' potResult:', potRes);
                         }
                     } else {
-                        console.error('DnsBLModule: not blocked  ' + ServerLogUtils.sanitizeLogMsg(query.ip) + ' illegal potResult:', potRes);
+                        console.warn('DnsBLModule: not blocked  ' + ServerLogUtils.sanitizeLogMsg(query.ip) + ' illegal potResult:',
+                            potRes);
                     }
                 } else {
                     console.log('DnsBLModule: not blocked  ' + ServerLogUtils.sanitizeLogMsg(query.ip) + ' no potResult:', potRes);

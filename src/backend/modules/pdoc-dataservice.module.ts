@@ -50,7 +50,7 @@ export class PDocDataServiceModule {
                 console.log('loaded pdocs from assets', records);
             },
             function errorCreate(reason: any) {
-                console.error('loading pdocs failed:', reason);
+                console.warn('loading pdocs failed:', reason);
             }
         );
         dataService.setWritable(false);

@@ -66,7 +66,7 @@ export class SDocServerModule {
             .get(function(req, res, next) {
                 const searchForm = new SDocSearchForm(req.query);
                 if (!SDocSearchFormValidator.isValid(searchForm)) {
-                    console.error('form invalid');
+                    console.warn('form invalid');
                     res.json((new SDocSearchResult(searchForm, 0, [], new Facets())).toSerializableJsonObj());
                     return next();
                 }
