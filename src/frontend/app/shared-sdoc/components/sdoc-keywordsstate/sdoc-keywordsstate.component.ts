@@ -61,7 +61,7 @@ export class SDocKeywordsStateComponent implements OnInit, OnChanges {
 
     private updateData() {
         this.keywordKats = [];
-        if (this.keywords === undefined) {
+        if (this.keywords === undefined || this.keywords === null) {
             return;
         }
         this.keywordKats = this.contentUtils.getStructuredKeywordsState(

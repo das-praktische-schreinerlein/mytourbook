@@ -178,7 +178,8 @@ export class SDocEditformComponent implements OnChanges {
     public editFormGroup = this.fb.group({
         id: '',
         name: '',
-        desc: ''
+        desc: '',
+        keywords: ''
     });
 
 

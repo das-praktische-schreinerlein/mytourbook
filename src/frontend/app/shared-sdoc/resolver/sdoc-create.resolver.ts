@@ -30,7 +30,7 @@ export class SDocRecordCreateResolver implements Resolve<ResolvedData<SDocRecord
                         return resolve(result);
                     }
 
-                    const values = { type: type.toUpperCase()};
+                    const values = { type: type.toUpperCase(), keywords: ''};
                     if (type.toLowerCase() === 'location') {
                         values['locIdParent'] = 1;
                     }
