@@ -108,6 +108,16 @@
         </div>
     </ng-template>
 
+    <ng-template #inputKeywords>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="keywords label|Label for field: keywords@@label.editform.sdoc.keywords">Keywords:</label>
+            <textarea formControlName="keywords" class="form-control" type="text" placeholder="keywords" i18n-placeholder="keywords placeholder|Placeholder for keywords@@placeholder.form.sdoc.keywords"></textarea>
+        </div>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <app-sdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-sdoc-keywordsstate>
+        </div>
+    </ng-template>
+
     <ng-template #submitRow>
         <div class="row">
             <div class="col-sm-12 form-inline input-group input-group-sm">
@@ -130,6 +140,11 @@
                 </div>
             </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
             </div>
@@ -179,6 +194,11 @@
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
             <fieldset>
                 <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
                     <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
                 </div>
             </fieldset>
@@ -203,6 +223,11 @@
                 </div>
             </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
             <fieldset>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
@@ -271,6 +296,11 @@
                 </div>
             </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
             <fieldset>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputDesc"></ng-container>

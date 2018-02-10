@@ -8,9 +8,18 @@ import {SDocRoutingService} from './sdoc-routing.service';
 import * as L from 'leaflet';
 import LatLng = L.LatLng;
 
+export enum KeywordsState {
+    SET, NOTSET, SUGGESTED
+}
+
 export interface StructuredKeyword {
     name: string;
     keywords: string[];
+}
+
+export interface StructuredKeywordState {
+    name: string;
+    keywords: { keyword: string; state: KeywordsState}[];
 }
 
 export interface ItemData {
@@ -46,7 +55,7 @@ export class SDocContentUtils {
         }
 
         for (let i = lastOnly ? lastIndex : 0; i < hierarchyTexts.length; i++) {
-            if (hierarchyIds[i] !== undefined && hierarchyTexts[i] != undefined && hierarchyTexts[i].length > 0) {
+            if (hierarchyIds[i] !== undefined && hierarchyTexts[i] !== undefined && hierarchyTexts[i].length > 0) {
                 hierarchy.push(['LOCATION_' + hierarchyIds[i], hierarchyTexts[i]]);
             }
         }
@@ -118,6 +127,29 @@ export class SDocContentUtils {
             if (keywordFound.length > 0) {
                 keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
             }
+        }
+
+        return keywordKats;
+    }
+
+    getStructuredKeywordsState(config: StructuredKeyword[], keywords: string[], suggested: string[]): StructuredKeywordState[] {
+        const keywordKats: StructuredKeywordState[] = [];
+        if (keywords === undefined || keywords.length < 1) {
+            keywords = [];
+        }
+
+        for (const keywordKat of config) {
+            const keywordFound = [];
+            for (const keyword of keywordKat.keywords) {
+                if (keywords.indexOf(keyword) > -1) {
+                    keywordFound.push({keyword: keyword, state: KeywordsState.SET});
+                } else if (suggested.indexOf(keyword) > -1) {
+                    keywordFound.push({keyword: keyword, state: KeywordsState.SUGGESTED});
+                } else {
+                    keywordFound.push({keyword: keyword, state: KeywordsState.NOTSET});
+                }
+            }
+            keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
         }
 
         return keywordKats;

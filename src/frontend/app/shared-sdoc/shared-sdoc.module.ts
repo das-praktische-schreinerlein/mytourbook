@@ -37,6 +37,7 @@ import {DatePipe} from '@angular/common';
 import {SDocDataMetaComponent} from './components/sdoc-datameta/sdoc-datameta.component';
 import {SDocActionsComponent} from './components/sdoc-actions/sdoc-actions.component';
 import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiontags.component';
+import {SDocKeywordsStateComponent} from './components/sdoc-keywordsstate/sdoc-keywordsstate.component';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiont
         SDocRatePersonalComponent,
         SDocRatePersonalDifficultyComponent,
         SDocKeywordsComponent,
+        SDocKeywordsStateComponent,
         SDocDataInfoComponent,
         SDocDataMetaComponent,
         SDocRateTechComponent,
@@ -105,6 +107,7 @@ import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiont
         SDocRatePersonalComponent,
         SDocRatePersonalDifficultyComponent,
         SDocKeywordsComponent,
+        SDocKeywordsStateComponent,
         SDocDataInfoComponent,
         SDocDataMetaComponent,
         SDocRateTechComponent,

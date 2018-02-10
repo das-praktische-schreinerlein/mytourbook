@@ -1,0 +1,14 @@
+<div *ngIf="keywordKats.length > 0" class="techvaluetable">
+    <ng-container *ngFor="let kat of keywordKats">
+        <div class='entry'>
+            <div class='label'>{{kat.name}}:</div>
+            <div class='value'>
+                <ng-container *ngFor="let keyword of kat.keywords">
+                    <span class="{{keyword.state}}" (click)="doUnsetKeyword(keyword.keyword)" *ngIf="keyword.state === KeywordState.SET" style="color: green; font-weight: bold">{{keyword.keyword}}</span>
+                    <span class="{{keyword.state}}" (click)="doSetKeyword(keyword.keyword)" *ngIf="keyword.state === KeywordState.NOTSET">{{keyword.keyword}}</span>
+                    <span class="{{keyword.state}}" (click)="doSetKeyword(keyword.keyword)" *ngIf="keyword.state === KeywordState.SUGGESTED"  style="color: yellow; font-weight: bold">{{keyword.keyword}}</span>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+</div>

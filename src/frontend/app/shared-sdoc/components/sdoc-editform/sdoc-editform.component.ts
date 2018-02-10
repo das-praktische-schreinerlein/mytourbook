@@ -199,6 +199,29 @@ export class SDocEditformComponent implements OnChanges {
         }
     }
 
+    setKeyword(keyword: string): void {
+        let keywords = this.editFormGroup.getRawValue()['keywords'];
+        if (keywords.length > 0) {
+            keywords = keywords + ', ' + keyword;
+        } else {
+            keywords = keyword;
+        }
+
+        this.editFormGroup.patchValue({ keywords: keywords});
+    }
+
+    unsetKeyword(keyword: string): void {
+        let keywords = this.editFormGroup.getRawValue()['keywords'];
+        if (keywords.length > 0) {
+            keywords = keywords.replace(new RegExp(' ' + keyword + ','), '')
+                .replace(new RegExp('^' + keyword + ', '), '')
+                .replace(new RegExp(', ' + keyword + '$'), '')
+                .replace(new RegExp('^' + keyword + '$'), '');
+        }
+
+        this.editFormGroup.patchValue({ keywords: keywords});
+    }
+
     private updateData() {
         if (this.record === undefined) {
             this.editFormGroup = this.fb.group({});
