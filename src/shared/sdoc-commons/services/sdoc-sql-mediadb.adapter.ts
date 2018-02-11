@@ -1288,14 +1288,18 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         return super.transformToSqlDialect(sql);
     }
 
-    protected saveDetailData(method: string, mapper: Mapper, dbId: string | number, props: any, opts?: any): Promise<boolean> {
+    protected saveDetailData(method: string, mapper: Mapper, id: string | number, props: any, opts?: any): Promise<boolean> {
         if (props.type === undefined) {
             return utils.resolve(false);
+        }
+        const dbId = parseInt(id + '', 10);
+        if (!utils.isInteger(dbId)) {
+            return utils.reject('saveDetailData ' + props.type + ' id not an integer');
         }
 
         const tableName = props.type.toLowerCase();
         if (tableName === 'track') {
-            const result = new Promise<boolean>((allResolve, allReject) => {
+            return  new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setTrackKeywords(dbId, props.keywords, opts));
 
@@ -1306,16 +1310,54 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     return allReject(reason);
                 });
             });
+        } else if (tableName === 'image') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                promises.push(this.keywordsAdapter.setImageKeywords(dbId, props.keywords, opts));
 
-            return result;
+                Promise.all(promises).then(function doneSearch(detailResults: any[]) {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('_facets failed:', reason);
+                    return allReject(reason);
+                });
+            });
+        } else if (tableName === 'route') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                promises.push(this.keywordsAdapter.setRouteKeywords(dbId, props.keywords, opts));
+
+                Promise.all(promises).then(function doneSearch(detailResults: any[]) {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('_facets failed:', reason);
+                    return allReject(reason);
+                });
+            });
+        } else if (tableName === 'location') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                promises.push(this.keywordsAdapter.setLocationKeywords(dbId, props.keywords, opts));
+
+                Promise.all(promises).then(function doneSearch(detailResults: any[]) {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('_facets failed:', reason);
+                    return allReject(reason);
+                });
+            });
         }
+
 
         return utils.resolve(true);
     }
 
     protected _doActionTag<T extends Record>(mapper: Mapper, record: SDocRecord, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
-        const id = record.id.replace(/.*_/g, '');
+        const id = parseInt(record.id.replace(/.*_/g, ''), 10);
+        if (!utils.isInteger(id)) {
+            return utils.reject(false);
+        }
 
         const table = (record['type'] + '').toLowerCase();
         if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('playlists_')) {

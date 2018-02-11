@@ -14,9 +14,12 @@ export class SDocSqlMediadbActionTagAdapter {
         this.knex = knex;
     }
 
-    public executeActionTagImagePlaylist(id: string, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagImagePlaylist(id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
+        if (!utils.isInteger(id)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' id not an integer');
+        }
         if (actionTagForm.payload === undefined) {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
         }
@@ -73,9 +76,12 @@ export class SDocSqlMediadbActionTagAdapter {
         return result;
     }
 
-    public executeActionTagImageObjects(id: string, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagImageObjects(id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
+        if (!utils.isInteger(id)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' id not an integer');
+        }
         if (actionTagForm.payload === undefined) {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
         }
@@ -110,9 +116,12 @@ export class SDocSqlMediadbActionTagAdapter {
         return result;
     }
 
-    public executeActionTagImagePersRate(id: string, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagImagePersRate(id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
+        if (!utils.isInteger(id)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' id not an integer');
+        }
         if (actionTagForm.payload === undefined) {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
         }
