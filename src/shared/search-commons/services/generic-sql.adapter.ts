@@ -63,8 +63,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             me._doActionTag(mapper, record, actionTagForm, opts).then(value => {
                 return me._findAll(mapper, adapterQuery, opts);
             }).then(value => {
-
-                    const [records] = value;
+                const [records] = value;
                 if (records.length === 1) {
                     resolve(records[0]);
                 } else {
@@ -162,6 +161,10 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.resolve(result);
     }
 
+    protected saveDetailData(method: string, mapper: Mapper, id: string | number, props: any, opts?: any): Promise<boolean> {
+        return utils.resolve(true);
+    }
+
     protected _create<T extends Record>(mapper, props, opts): Promise<any> {
         if (opts.realSource) {
             props = opts.realSource;
@@ -182,29 +185,35 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     queryValues.push(writeQuery.fields[field]);
                 }
                 //me.knex.insert(me.knex.raw(' (' + queryFields.join(', ') + ') values (' + queryValues.join(', ') + ')'))
+                let dbId = undefined;
+                const idField = writeQuery.tableConfig.filterMapping['id'];
                 sqlBuilder.insert([writeQuery.fields])
                     .into(writeQuery.from)
-                    .returning(writeQuery.tableConfig.filterMapping['id'])
+                    .returning(idField)
                     .then(values => {
-                        const id = values[0];
+                        dbId = values[0];
+
+                        return me.saveDetailData('create', mapper, dbId, props, opts);
+                    }).then(done => {
                         const query = {
                             where: {
-                                id: {
-                                    'in': [id]
-                                },
                                 type_txt: {
                                     'in': [props.type.toLowerCase()]
                                 }
                             }
                         };
+                        query['where'][idField] = { 'in' : [dbId]};
+
                         return me.findAll(mapper, query, opts);
                     }).then(searchResult => {
                         if (!searchResult || searchResult.length !== 1) {
                             return allResolve(undefined);
                         }
+
                         return allResolve([searchResult[0]]);
                     }).catch(function errorSearch(reason) {
                         console.error('_create failed:', reason);
+
                         return allReject(reason);
                     });
             } else {
@@ -389,6 +398,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
                     .where(idField, dbId)
                     .returning(idField)
                     .then(values => {
+                        return me.saveDetailData('update', mapper, dbId, props, opts);
+                    }).then(done => {
                         const query = {
                             where: {
                                 type_txt: {
@@ -400,15 +411,16 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
                         return me._findAll(mapper, query, opts);
                     }).then(findResult => {
-                    const [searchResult] = findResult;
-                    if (!searchResult || searchResult.length !== 1) {
-                        return allResolve(undefined);
-                    }
-                    return allResolve([searchResult[0]]);
-                }).catch(function errorSearch(reason) {
-                    console.error('_update failed:',  reason);
-                    return allReject(reason);
-                });
+                        const [searchResult] = findResult;
+                        if (!searchResult || searchResult.length !== 1) {
+                            return allResolve(undefined);
+                        }
+
+                        return allResolve([searchResult[0]]);
+                    }).catch(function errorSearch(reason) {
+                        console.error('_update failed:',  reason);
+                        return allReject(reason);
+                    });
             } else {
                 return allReject('no query generated for props:' + props);
             }
