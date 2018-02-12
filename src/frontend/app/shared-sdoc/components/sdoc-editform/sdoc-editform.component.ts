@@ -2,7 +2,7 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange,
     ViewContainerRef
 } from '@angular/core';
-import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
+import {SDocRecord, SDocRecordValidator} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {SDocRecordSchema} from '../../../../shared/sdoc-commons/model/schemas/sdoc-record-schema';
 import {ToastsManager} from 'ng2-toastr';
@@ -348,11 +348,21 @@ export class SDocEditformComponent implements OnChanges {
             }
         }
 
-        const errors: SchemaValidationError[] = SDocRecordSchema.validate(values);
+        const schemaErrors: SchemaValidationError[] = SDocRecordSchema.validate(values);
+        if (schemaErrors !== undefined && schemaErrors.length > 0) {
+            let msg = '';
+            schemaErrors.map((value: SchemaValidationError, index, array) => {
+                msg += '- ' + value.path + ':' + value.expected + '<br>';
+            });
+            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
+            return false;
+        }
+
+        const errors: string[] = SDocRecordValidator.validateValues(values);
         if (errors !== undefined && errors.length > 0) {
             let msg = '';
-            errors.map((value: SchemaValidationError, index, array) => {
-                msg += '- ' + value.path + ':' + value.expected + '<br>';
+            errors.map((value: string, index, array) => {
+                msg += '- ' + value + '<br>';
             });
             this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
             return false;

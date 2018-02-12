@@ -1,6 +1,6 @@
 export enum GenericValidatorDatatypes {
     'FULLTEXT', 'ID', 'PERPAGE', 'PAGENUM', 'SORT',
-    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST'
+    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST', 'NAME'
 }
 
 export abstract class ValidationRule {
@@ -115,60 +115,6 @@ export class RegExValidationReplaceRule extends ValidationRule {
     }
 }
 
-export class IdValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[a-zA-Z_0-9.]*$/gi, /[^a-zA-Z_0-9.]*/gi, '');
-    }
-}
-
-export class IdCsvValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[a-zA-Z_0-9,.]*$/gi, /[^a-zA-Z_0-9,.]*/gi, '');
-    }
-}
-
-export class KeyParamsValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[-a-zA-Z_0-9äöüßÄÖÜ,;: ]*$/gi, /[^-a-zA-Z_0-9äöüßÄÖÜ,;: ]*/gi, '');
-    }
-}
-
-export class KeywordValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[-a-zA-Z_0-9äöüßÄÖÜ,;: ]*$/gi, /[^-a-zA-Z_0-9äöüßÄÖÜ,;: ]*/gi, '');
-    }
-}
-
-export class NearbyParamValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[-0-9._]*$/gi, /[^-0-9._]*/gi, '');
-    }
-}
-
-export class TextValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*/gi, '');
-    }
-}
-
-export class SolrValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*/gi, '');
-    }
-}
-
-export class RouteValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[-A-Za-z0-9äöüßÄÖÜ/+;,:._*]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ/+;,:._*]*/gi, '');
-    }
-}
-
-export class ShowRouteValidationRule extends RegExValidationReplaceRule {
-    constructor(required: boolean) {
-        super(required, /^[-A-Za-z0-9/_]*$/gi, /[^-A-Za-z0-9/_]*/gi, '');
-    }
-}
-
 export class NumberValidationRule extends ValidationWithDefaultRule {
     protected _min: number;
     protected _max: number;
@@ -210,5 +156,77 @@ export class NumberValidationRule extends ValidationWithDefaultRule {
         }
         // console.error("sanitize value:" + value + " to defaultValue: " + this._defaultValue);
         return this._defaultValue;
+    }
+}
+
+export class IdValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[a-zA-Z_0-9.]*$/gi, /[^a-zA-Z_0-9.]*/gi, '');
+    }
+}
+
+export class IdCsvValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[a-zA-Z_0-9,.]*$/gi, /[^a-zA-Z_0-9,.]*/gi, '');
+    }
+}
+
+export class DbIdValidationRule extends NumberValidationRule {
+    constructor(required: boolean) {
+        super(required, 1, 9999999999999999, undefined);
+    }
+}
+
+export class DbIdCsvValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[0-9,]*$/gi, /[^0-9,]*/gi, '');
+    }
+}
+
+export class KeyParamsValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-a-zA-Z_0-9äöüßÄÖÜ,;: ]*$/gi, /[^-a-zA-Z_0-9äöüßÄÖÜ,;: ]*/gi, '');
+    }
+}
+
+export class KeywordValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-a-zA-Z_0-9äöüßÄÖÜ,;: ]*$/gi, /[^-a-zA-Z_0-9äöüßÄÖÜ,;: ]*/gi, '');
+    }
+}
+
+export class NearbyParamValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-0-9._]*$/gi, /[^-0-9._]*/gi, '');
+    }
+}
+
+export class TextValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*/gi, '');
+    }
+}
+
+export class NameValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._*()\[\] ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._*()\[\] ]*/gi, '');
+    }
+}
+
+export class SolrValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*/gi, '');
+    }
+}
+
+export class RouteValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ/+;,:._*]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ/+;,:._*]*/gi, '');
+    }
+}
+
+export class ShowRouteValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9/_]*$/gi, /[^-A-Za-z0-9/_]*/gi, '');
     }
 }
