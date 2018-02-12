@@ -14,6 +14,7 @@ import {SDocDataInfoRecord, SDocDataInfoRecordRelation} from '../model/records/s
 import {SDocDataInfoRecordSchema} from '../model/schemas/sdocdatainfo-record-schema';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 import {ActionTagForm} from '../../commons/utils/actiontag.utils';
+import {utils} from 'js-data';
 
 export class SDocDataService extends SDocSearchService {
     private responseMapper = new SDocAdapterResponseMapper();
@@ -42,11 +43,15 @@ export class SDocDataService extends SDocSearchService {
             throw new Error('SDocDataService configured: not writable');
         }
 
-        let record;
+        let record: SDocRecord;
         if (! (values instanceof SDocRecord)) {
             record = this.responseMapper.mapValuesToRecord(this.dataStore.getMapper('sdoc'), values);
         } else {
             record = values;
+        }
+
+        if (record === undefined || !record.isValid()) {
+            utils.reject('sdo-values not valid');
         }
 
         return this.dataStore.create('sdoc', record, opts);
@@ -71,12 +76,17 @@ export class SDocDataService extends SDocSearchService {
             throw new Error('SDocDataService configured: not writable');
         }
 
-        let record;
+        let record: SDocRecord;
         if (! (values instanceof SDocRecord)) {
             record = this.responseMapper.mapValuesToRecord(this.dataStore.getMapper('sdoc'), values);
         } else {
             record = values;
         }
+
+        if (record === undefined || !record.isValid()) {
+            utils.reject('sdoc-values not valid');
+        }
+
         return this.dataStore.update('sdoc', id, record, opts);
     }
 
