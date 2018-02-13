@@ -25,11 +25,11 @@ export class ConfigureServerModule {
             body: true,
             loggerFunction: console.warn
         }));
-         */
         app.use(protect.express.xss({
             body: true,
             loggerFunction: console.warn
         }));
+         */
 
         // configure response
         app.use(compression());

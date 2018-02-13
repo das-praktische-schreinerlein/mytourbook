@@ -52,7 +52,7 @@
                       [mapCenterPos]="undefined"></app-sdoc-map>
     </div>
 
-    <div class="container content-container" *ngIf="record.gpsTrackBasefile">
+    <div class="container content-container" *ngIf="record.gpsTrackBasefile || record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20">
         <app-sdoc-profilemap [mapId]="'showProfileMap'"
                              [height]="'400px'"
                              [sdocs]="[record]"></app-sdoc-profilemap>

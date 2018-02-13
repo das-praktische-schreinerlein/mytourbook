@@ -1,6 +1,6 @@
 export enum GenericValidatorDatatypes {
     'FULLTEXT', 'ID', 'PERPAGE', 'PAGENUM', 'SORT',
-    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST', 'NAME'
+    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST', 'NAME', 'GPSTRACK'
 }
 
 export abstract class ValidationRule {
@@ -216,6 +216,12 @@ export class NameValidationRule extends RegExValidationReplaceRule {
 export class SolrValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required, /^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*/gi, '');
+    }
+}
+
+export class GpsTrackValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?<> \r\n]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?<> \r\n]*/gi, '');
     }
 }
 

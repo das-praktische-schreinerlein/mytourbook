@@ -254,7 +254,8 @@ export class SDocContentUtils {
         const trackUrl = record.gpsTrackBasefile;
 
         const isImage = record.type === 'IMAGE';
-        const showTrack = trackUrl !== undefined && trackUrl.length > 0 && (!isImage || showImageTrackAndGeoPos);
+        const showTrack = (trackUrl !== undefined && trackUrl.length > 0 && (!isImage || showImageTrackAndGeoPos))
+            || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc !== null && record.gpsTrackSrc.length > 0);
         const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
             record.geoLat !== '0.0' && record.geoLon !== '0.0';
         const mapElements: MapElement[] = [];
@@ -270,7 +271,7 @@ export class SDocContentUtils {
                 id: record.id,
                 name: record.name,
                 trackUrl: storeUrl,
-                trackSrc: record.gpsTrack,
+                trackSrc: record.gpsTrackSrc,
                 popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                 type: record.type
             };

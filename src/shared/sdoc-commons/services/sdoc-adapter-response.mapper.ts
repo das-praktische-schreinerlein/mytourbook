@@ -25,8 +25,9 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['geo_lon_s'] = props.geoLon;
         values['geo_lat_s'] = props.geoLat;
         values['geo_loc_p'] = props.geoLoc;
-        values['gpstrack_s'] = props.gpsTrack;
+        values['gpstrack_src_s'] = props.gpsTrackSrc;
         values['gpstracks_basefile_s'] = props.gpsTrackBasefile;
+        // TODO: do it only
         values['keywords_txt'] =
             (props.keywords ? props.keywords.split(', ').join(',,KW_') : '');
         values['loc_lochirarchie_s'] = (props.locHirarchie ? props.locHirarchie
@@ -102,6 +103,8 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
 
             if (subValues) {
                 record.set(mapperKey, subMapper.createRecord(subValues));
+            } else {
+                record.set(mapperKey, undefined);
             }
         }
 
@@ -140,8 +143,9 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
             this.mapperUtils.mapToAdapterFieldName(mapping, 'geo_lat_s'), undefined);
         values['geoLoc'] = this.mapperUtils.getAdapterCoorValue(doc,
             this.mapperUtils.mapToAdapterFieldName(mapping, 'geo_loc_p'), undefined);
-        values['gpsTrack'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstrack_s', undefined);
+        values['gpsTrackSrc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstrack_src_s', undefined);
         values['gpsTrackBasefile'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstracks_basefile_s', undefined);
+        // TODO
         values['keywords'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '')
             .split(',,').join(', ').replace(/KW_/g, '');
         values['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'name_s', undefined);

@@ -163,6 +163,8 @@ export class SqlQueryBuilder {
 
     public queryTransformToAdapterSelectQuery(tableConfig: TableConfig, method: string, adapterQuery: AdapterQuery,
                                               adapterOpts: AdapterOpts): SelectQueryData {
+        adapterQuery.loadTrack = adapterQuery.loadTrack || adapterOpts['loadTrack'];
+
         const query = this.createAdapterSelectQuery(tableConfig, method, adapterQuery, adapterOpts);
         if (query === undefined) {
             return undefined;
@@ -369,12 +371,12 @@ export class SqlQueryBuilder {
 
     protected generateGroupByForQuery(tableConfig: TableConfig, method: string, query: SelectQueryData, adapterQuery: AdapterQuery): void {
         let addFields = [];
-
         if (tableConfig.optionalGroupBy !== undefined) {
             for (const groupByConfig of tableConfig.optionalGroupBy) {
                 for (const fieldName of groupByConfig.triggerParams) {
-                    if (adapterQuery.where.hasOwnProperty(fieldName) ||
-                        (adapterQuery.additionalWhere && adapterQuery.additionalWhere.hasOwnProperty(fieldName))) {
+                    if (adapterQuery.where.hasOwnProperty(fieldName)
+                        || (adapterQuery.additionalWhere && adapterQuery.additionalWhere.hasOwnProperty(fieldName))
+                        || (adapterQuery.loadTrack && fieldName === 'loadTrack')) {
                         query.from += ' ' + groupByConfig.from;
                         addFields = addFields.concat(groupByConfig.groupByFields);
                         break;

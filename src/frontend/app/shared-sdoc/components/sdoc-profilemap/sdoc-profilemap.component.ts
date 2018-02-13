@@ -4,6 +4,8 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-profilemap',
@@ -11,7 +13,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocProfileMapComponent implements OnChanges {
-    trackUrls: string[] = [];
+    mapElements: MapElement[] = [];
 
     @Input()
     public mapId: string;
@@ -22,7 +24,7 @@ export class SDocProfileMapComponent implements OnChanges {
     @Input()
     public sdocs: SDocRecord[];
 
-    constructor(private appService: GenericAppService, private platformService: PlatformService) {}
+    constructor(private contentUtils: SDocContentUtils, private appService: GenericAppService, private platformService: PlatformService) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (this.platformService.isClient() && ComponentUtils.hasNgChanged(changes)) {
@@ -32,22 +34,17 @@ export class SDocProfileMapComponent implements OnChanges {
 
     renderMap() {
         if (!this.sdocs) {
-            this.trackUrls = [];
+            this.mapElements = [];
             return;
         }
 
-        const tmpList: string[] = [];
+        const tmpList: MapElement[] = [];
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
-            const trackUrl = record.gpsTrackBasefile;
-            if (trackUrl !== undefined && trackUrl.length > 0) {
-                if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
-                    tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + 'json/' + record.id);
-                } else {
-                    tmpList.push(this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json');
-                }
+            for (const mapElement of this.contentUtils.createMapElementForSDoc(record, false)) {
+                tmpList.push(mapElement);
             }
         }
-        this.trackUrls = tmpList;
+        this.mapElements = tmpList;
     }
 }

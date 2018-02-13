@@ -13,6 +13,11 @@ export class SDocSqlMediadbConfig {
                           'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS k_keywords']
+                },
+                {
+                    from: ' ',
+                    triggerParams: ['id', 'loadTrack'],
+                    groupByFields: ['k_gpstracks_gpx_source']
                 }
             ],
             groupbBySelectFieldListIgnore: ['k_keywords'],
@@ -211,6 +216,7 @@ export class SDocSqlMediadbConfig {
                 'kategorie.k_rate_schwierigkeit': ':rate_pers_schwierigkeit_i:',
                 'kategorie.k_rate_wichtigkeit': ':rate_pers_wichtigkeit_i:',
                 'kategorie.k_gpstracks_basefile': ':gpstracks_basefile_s:',
+                'kategorie.k_gpstracks_gpx_source': ':gpstrack_src_s:',
                 'kategorie.k_name': ':name_s:',
                 'kategorie.k_type': ':subtype_s:'
             },
@@ -251,6 +257,7 @@ export class SDocSqlMediadbConfig {
                 rate_pers_schwierigkeit_i: 'k_rate_schwierigkeit',
                 rate_pers_wichtigkeit_i: 'k_rate_wichtigkeit',
                 gpstracks_basefile_s: 'k_gpstracks_basefile',
+                gpstrack_src_s: 'k_gpstracks_gpx_source',
                 keywords_txt: 'k_keywords',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',

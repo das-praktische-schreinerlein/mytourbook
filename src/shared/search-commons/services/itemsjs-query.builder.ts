@@ -124,7 +124,7 @@ export class ItemsJsQueryBuilder {
             fields.push('distance:geodist()');
         }
         if (adapterQuery.loadTrack === true) {
-            fields.push('gpstrack_s');
+            fields.push('gpstrack_src_s');
         }
 
         return fields;

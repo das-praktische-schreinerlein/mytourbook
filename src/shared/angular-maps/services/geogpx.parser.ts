@@ -4,12 +4,14 @@ import {GeoElement, GeoElementType, GeoParser} from './geo.parser';
 export class GeoGpxParser extends GeoParser {
     parse(xml: string, options): GeoElement[] {
         if (!xml || !xml.startsWith('<?xml')) {
+            console.error('cant parse GeoGpxParser: no valid xml');
             return;
         }
 
         const oParser = new DOMParser();
-        const gpxDom = oParser.parseFromString(xml, 'text/xml');
-        if (gpxDom.documentElement.nodeName === 'parsererror') {
+        const gpxDom = oParser.parseFromString(xml, 'application/xml');
+        if (gpxDom.getElementsByTagName('parsererror').length > 0) {
+            console.error('cant parse GeoGpxParser: parsererror', gpxDom.getElementsByTagName('parsererror')[0]);
             return;
         }
 

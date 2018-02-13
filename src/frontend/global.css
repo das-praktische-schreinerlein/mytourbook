@@ -235,3 +235,7 @@ div.humanReadableSearchFilter div.filter {
 /** override Edge-styles**/
 @supports (-ms-ime-align: auto) {
 }
+
+input::placeholder, input::-webkit-input-placeholder, input:-ms-input-placeholder, input:placeholder-shown, input:-moz-placeholder {
+    color: #e8e8e8 !important;
+}

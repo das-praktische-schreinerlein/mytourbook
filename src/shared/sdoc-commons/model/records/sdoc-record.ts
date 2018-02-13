@@ -1,7 +1,7 @@
 import {BaseEntityRecord, BaseEntityRecordFieldConfig} from '../../../search-commons/model/records/base-entity-record';
 import {
     DbIdValidationRule,
-    GenericValidatorDatatypes, IdValidationRule, KeywordValidationRule, NameValidationRule,
+    GenericValidatorDatatypes, GpsTrackValidationRule, IdValidationRule, KeywordValidationRule, NameValidationRule,
     TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
@@ -15,6 +15,7 @@ export class SDocRecord extends BaseEntityRecord {
         newsId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         imageId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
 
+        gpsTrackSrc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.GPSTRACK, new GpsTrackValidationRule(false)),
         keywords: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new KeywordValidationRule(false)),
         name: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
         persons: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
@@ -38,7 +39,7 @@ export class SDocRecord extends BaseEntityRecord {
     geoLon: string;
     geoLat: string;
     geoLoc: string;
-    gpsTrack: string;
+    gpsTrackSrc: string;
     gpsTrackBasefile: string;
     keywords: string;
     locHirarchie: string;
@@ -127,6 +128,7 @@ export class SDocRecordFactory {
         sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(values['newsId']) || '';
         sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(values['imageId']) || '';
 
+        sanitizedValues.gpsTrackSrc = SDocRecord.sdocFields.gpsTrackSrc.validator.sanitize(values['gpsTrackSrc']) || '';
         sanitizedValues.keywords = SDocRecord.sdocFields.keywords.validator.sanitize(values['keywords']) || '';
         sanitizedValues.name = SDocRecord.sdocFields.name.validator.sanitize(values['name']) || '';
         sanitizedValues.persons = SDocRecord.sdocFields.persons.validator.sanitize(values['persons']) || '';
@@ -162,6 +164,7 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.newsId.validator.isValid(values['newsId']) ? errors.push('newsId') &&  false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(values['imageId']) ? errors.push('imageId') &&  false : true;
 
+        state = !SDocRecord.sdocFields.gpsTrackSrc.validator.isValid(values['gpsTrackSrc']) ? errors.push('gpsTrackSrc') &&  false : true;
         state = !SDocRecord.sdocFields.keywords.validator.isValid(values['keywords']) ? errors.push('keywords') &&  false : true;
         state = !SDocRecord.sdocFields.name.validator.isValid(values['name']) ? errors.push('name') &&  false : true;
         state = !SDocRecord.sdocFields.persons.validator.isValid(values['persons']) ? errors.push('persons') &&  false : true;
@@ -187,6 +190,7 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.newsId.validator.isValid(sdoc.newsId) ? errors.push('newsId') && false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(sdoc.imageId) ? errors.push('imageId') && false : true;
 
+        state = !SDocRecord.sdocFields.gpsTrackSrc.validator.isValid(sdoc.gpsTrackSrc) ? errors.push('gpsTrackSrc') && false : true;
         state = !SDocRecord.sdocFields.keywords.validator.isValid(sdoc.keywords) ? errors.push('keywords') && false : true;
         state = !SDocRecord.sdocFields.name.validator.isValid(sdoc.name) ? errors.push('name') && false : true;
         state = !SDocRecord.sdocFields.persons.validator.isValid(sdoc.persons) ? errors.push('persons') && false : true;

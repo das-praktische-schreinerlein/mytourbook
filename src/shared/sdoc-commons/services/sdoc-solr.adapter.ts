@@ -157,7 +157,6 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             geo_lon_s: props.geoLon,
             geo_lat_s: props.geoLat,
             geo_loc_p: props.geoLoc,
-            gpstrack_s: props.gpsTrack,
             gpstracks_basefile_s: props.gpsTrackBasefile,
             keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
             loc_lochirarchie_s: (props.locHirarchie ? props.locHirarchie

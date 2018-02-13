@@ -5,6 +5,7 @@ import {GeoGpxParser} from '../../services/geogpx.parser';
 import {VisJsGeoProfileMap} from '../../services/visjs-geoprofilemap.plugin';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {MinimalHttpBackendClient} from '../../../commons/services/minimal-http-backend-client';
+import {MapElement} from '../../services/leaflet-geo.plugin';
 
 @Component({
     selector: 'app-visjs-profilemap',
@@ -24,7 +25,7 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
     public height: string;
 
     @Input()
-    public trackUrls: string[];
+    public mapElements: MapElement[];
 
     @Input()
     public flgGenerateNameFromGpx?: boolean;
@@ -54,8 +55,9 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
             return;
         }
 
-        for (let i = 0; i < this.trackUrls.length; i++) {
-            const trackUrl = this.trackUrls[i];
+        for (let i = 0; i < this.mapElements.length; i++) {
+            const trackSrc = this.mapElements[i].trackSrc;
+            const trackUrl = this.mapElements[i].trackUrl;
             // specify options
             const options = {
                 generateName: this.flgGenerateNameFromGpx,
@@ -83,12 +85,13 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
             };
             const container = document.getElementById(this.mapId);
             let loader: GeoLoader;
-            if (trackUrl.endsWith('.gpx')) {
+            if (trackUrl.endsWith('.gpx') || (trackSrc !== undefined && trackSrc !== null &&
+                    (trackSrc.indexOf('<trkpt') || trackSrc.indexOf('<rpt')))) {
                 loader = this.gpxLoader;
             } else {
                 loader = this.jsonLoader;
             }
-            const mapProfileObj = new VisJsGeoProfileMap(loader, trackUrl, container, options);
+            const mapProfileObj = new VisJsGeoProfileMap(loader, trackUrl, trackSrc, container, options);
         }
     }
 }

@@ -107,7 +107,6 @@ export class GeoParsedFeature extends L.FeatureGroup {
             }
         }
 
-
         if (!layers.length) {
             return;
         }

@@ -2,14 +2,14 @@
     <ng-template #inputName>
         <div class="col-sm-6 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.sdoc.name">Name:</label>
-            <input formControlName="name" class="form-control" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
+            <input formControlName="name" required="required" class="form-control" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
         </div>
     </ng-template>
 
     <ng-template #inputDateShow>
         <div class="col-sm-4 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="dateshow label|Label for field: dateshow@@label.editform.sdoc.dateshow">Anzeigedatum:</label>
-            <input formControlName="dateshow" type="datetime-local" placeholder="dateshow" i18n-placeholder="dateshow placeholder|Placeholder for dateshow@@placeholder.form.sdoc.dateshow">
+            <input formControlName="dateshow" required="required" type="datetime-local" placeholder="dateshow" i18n-placeholder="dateshow placeholder|Placeholder for dateshow@@placeholder.form.sdoc.dateshow">
         </div>
     </ng-template>
 
@@ -20,6 +20,7 @@
                                      [settings]="settingsSelectWhere"
                                      [texts]="textsSelectWhere"
                                      class="fullwidth"
+                                     required="required"
                                      formControlName="locId"
                                      ngDefaultControl></ss-multiselect-dropdown>
         </div>
@@ -31,6 +32,7 @@
             <ss-multiselect-dropdown [options]="optionsSelect['locIdParent']"
                                      [settings]="settingsSelectWhere"
                                      [texts]="textsSelectWhere"
+                                     required="required"
                                      class="fullwidth"
                                      formControlName="locIdParent"
                                      ngDefaultControl></ss-multiselect-dropdown>
@@ -43,6 +45,7 @@
             <ss-multiselect-dropdown [options]="optionsSelect['subTypeLocType']"
                                      [settings]="settingsSelectActionType"
                                      [texts]="textsSelectActionType"
+                                     required="required"
                                      formControlName="subtype"
                                      ngDefaultControl
                                      class="fullwidth"></ss-multiselect-dropdown>
@@ -55,6 +58,7 @@
             <ss-multiselect-dropdown [options]="optionsSelect['subTypeActiontype']"
                                      [settings]="settingsSelectActionType"
                                      [texts]="textsSelectActionType"
+                                     required="required"
                                      formControlName="subtype"
                                      ngDefaultControl
                                      class="fullwidth"></ss-multiselect-dropdown>
@@ -71,14 +75,7 @@
     <ng-template #inputNumber let-key="key" let-formControlName="formControlName">
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-            <input formControlName="{{formControlName}}" class="form-control" type="number" range="0,00" placeholder="{{key}}">
-        </div>
-    </ng-template>
-
-    <ng-template #inputNumber let-key="key" let-formControlName="formControlName">
-        <div class="col-sm-3 form-inline input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-            <input formControlName="{{formControlName}}" class="form-control" type="number" range="0,00" placeholder="{{key}}">
+            <input formControlName="{{formControlName}}" class="form-control" type="number" step="0.01" placeholder="{{key}}">
         </div>
     </ng-template>
 
@@ -126,6 +123,31 @@
         </div>
     </ng-template>
 
+
+    <ng-template #inputGpsTrack>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="gpsTrackSrc label|Label for field: gpsTrackSrc@@label.editform.sdoc.gpsTrackSrc">Track:</label>
+            <textarea formControlName="gpsTrackSrc" class="form-control" type="text" placeholder="gpsTrackSrc" i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpsTrackSrc@@placeholder.form.sdoc.gpsTrackSrc"></textarea>
+            <button (click)="updateMap()">Update</button>
+        </div>
+        <div class="col-sm-6 form-inline input-group input-group-sm" *ngIf="trackRecords !== undefined && trackRecords.length > 0">
+            <div class="container content-container">
+                <app-sdoc-map [mapId]="'showMap'"
+                              [height]="'400px'"
+                              [mapZoom]="'9'"
+                              [sdocs]="trackRecords"
+                              [showImageTrackAndGeoPos]="'true'"
+                              [mapCenterPos]="undefined"></app-sdoc-map>
+            </div>
+        </div>
+        <div class="col-sm-5 form-inline input-group input-group-sm" *ngIf="trackRecords !== undefined && trackRecords.length > 0">
+            <div class="container content-container">
+                <app-sdoc-profilemap [mapId]="'showProfileMap'"
+                              [height]="'400px'"
+                              [sdocs]="trackRecords"></app-sdoc-profilemap>
+            </div>
+        </div>
+    </ng-template>
 
     <ng-container [ngSwitch]="record.type">
         <ng-container *ngSwitchCase="'LOCATION'">
@@ -200,6 +222,11 @@
             <fieldset>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
                 </div>
             </fieldset>
         </ng-container>

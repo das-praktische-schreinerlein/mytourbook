@@ -77,6 +77,11 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                             const obj = result.get(mapperKey);
                             me.store.add(mapperKey, obj);
                             result.set(mapperKey, obj);
+                        } else {
+                            me.store.removeAll(mapperKey, { where: { 'sdoc_id': { 'contains': result.id }}});
+                            me.store.removeAll(mapperKey, { where: { ['sdoc_id']: { 'contains': [result.id] }}});
+                            me.store.removeAll(mapperKey, { where: { 'sdoc_id': { 'contains': [result.id] }}});
+                            result.set(mapperKey, undefined);
                         }
                     }
 

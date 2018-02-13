@@ -13,6 +13,7 @@ import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service'
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocRecordFactory} from '../../../../../shared/sdoc-commons/model/records/sdoc-record';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -181,7 +182,7 @@ export class SDocEditformComponent implements OnChanges {
         desc: '',
         keywords: ''
     });
-
+    trackRecords: SDocRecord[] = [];
 
     @Input()
     public record: SDocRecord;
@@ -231,7 +232,8 @@ export class SDocEditformComponent implements OnChanges {
 
         const config = {
             dateshow: [this.record.dateshow],
-            locIdParent: [this.record.locIdParent]
+            locIdParent: [this.record.locIdParent],
+            gpsTrackSrc: [this.record.gpsTrackSrc]
         };
 
         const fields = this.record.toJSON();
@@ -251,6 +253,8 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         this.editFormGroup = this.fb.group(config);
+
+        this.updateMap();
 
         const me = this;
         const searchForm = new SDocSearchForm({type: this.record.type});
@@ -301,7 +305,24 @@ export class SDocEditformComponent implements OnChanges {
         });
     }
 
-    submitSave(event: Event) {
+    updateMap(): boolean {
+        if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
+            this.editFormGroup.getRawValue()['gpsTrackSrc'].length > 0) {
+            this.trackRecords = [SDocRecordFactory.createSanitized({
+                id: 'TMP',
+                gpsTrackSrc: this.editFormGroup.getRawValue()['gpsTrackSrc'],
+                gpsTrackBaseFile: 'tmp.gpx',
+                name: this.editFormGroup.getRawValue()['name'],
+                type: this.record.type
+            })];
+        } else {
+            this.trackRecords = [];
+        }
+
+        return false;
+    }
+
+    submitSave(event: Event): boolean {
         const values = this.editFormGroup.getRawValue();
 
         // delete empty key
@@ -369,6 +390,7 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         this.save.emit(values);
+
         return false;
     }
 

@@ -1,6 +1,7 @@
 import {DataSet, Graph3d} from 'vis';
 import {GeoLoader} from './geo.loader';
 import {LogUtils} from '../../commons/utils/log.utils';
+import {GeoElement} from './geo.parser';
 
 export class VisJsGeoProfileMapPoint {
     x: string;
@@ -20,20 +21,26 @@ export class VisJsGeoProfileMapPoint {
 
 export class VisJsGeoProfileMap {
     graph: Graph3d;
-    constructor(private geoLoader: GeoLoader, private src: string, private element: any, private options: {}) {
+    constructor(private geoLoader: GeoLoader, private url: string, private src: string, private element: any, private options: {}) {
         this._initialize();
     }
 
     _initialize() {
-        if (this.src) {
-            this._addData(this.src, this.element, this.options);
+        if (this.url || this.src) {
+            this._addData(this.url, this.src, this.element, this.options);
         }
     }
 
-    _addData(url: string, element, options) {
+    _addData(url: string, src: string, element, options) {
         const me = this;
 
-        this.geoLoader.loadDataFromUrl(url, options).then(function onLoaded(geoElements) {
+        let promise: Promise<GeoElement[]>;
+        if (src !== undefined && src.length > 20) {
+            promise = this.geoLoader.loadData(src, options);
+        } else {
+            promise = this.geoLoader.loadDataFromUrl(url, options);
+        }
+        promise.then(function onLoaded(geoElements) {
             const layers = me._convertGeoElementsToDataSet(geoElements, element, options);
             if (layers !== undefined) {
                 me.graph = new Graph3d(element, layers, options);

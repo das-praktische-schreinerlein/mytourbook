@@ -65,7 +65,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
                     me.baseSearchUrl = data.baseSearchUrl.data;
 
-                    if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined) {
+                    if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
+                        || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
                         me.tracks = [me.record];
                     } else {
                         me.tracks = [];
@@ -200,7 +201,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         const realTracks = [];
         if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
             for (const record of searchresult.currentRecords) {
-                if (record.gpsTrackBasefile || record.geoLoc !== undefined) {
+                if (record.gpsTrackBasefile || record.geoLoc !== undefined
+                    || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20)) {
                     realTracks.push(record);
                 }
             }
