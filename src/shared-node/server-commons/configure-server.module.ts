@@ -9,9 +9,8 @@ const requestIp = require('request-ip');
 export class ConfigureServerModule {
     public static configureServer(app: express.Application, backendConfig: {}) {
         // configure parsing
-        app.use(json()); // for parsing application/json
-        app.use(urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-
+        app.use(json({limit: '1mb'})); // for parsing application/json
+        app.use(urlencoded({ extended: true, limit: '1mb' })); // for parsing application/x-www-form-urlencoded
         // secure server
         const mycors = cors({
             origin: backendConfig['corsOrigin'],
