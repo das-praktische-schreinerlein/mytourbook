@@ -308,13 +308,20 @@ export class SDocEditformComponent implements OnChanges {
     updateMap(): boolean {
         if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
             this.editFormGroup.getRawValue()['gpsTrackSrc'].length > 0) {
+            let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+            track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
             this.trackRecords = [SDocRecordFactory.createSanitized({
                 id: 'TMP',
-                gpsTrackSrc: this.editFormGroup.getRawValue()['gpsTrackSrc'],
+                gpsTrackSrc: track,
                 gpsTrackBaseFile: 'tmp.gpx',
                 name: this.editFormGroup.getRawValue()['name'],
                 type: this.record.type
             })];
+            this.editFormGroup.patchValue({gpsTrackSrc: track.replace(/<trk>/g, '\n  <trk>')
+                    .replace(/<trkseg>/g, '\n  <trkseg>')
+                    .replace(/<trkpt /g, '\n      <trkpt ')
+                    .replace(/<rpt /g, '\n    <rpt >')
+            });
         } else {
             this.trackRecords = [];
         }
@@ -324,6 +331,10 @@ export class SDocEditformComponent implements OnChanges {
 
     submitSave(event: Event): boolean {
         const values = this.editFormGroup.getRawValue();
+
+        if (values['gpsTrackSrc'] !== undefined) {
+            values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
+        }
 
         // delete empty key
         for (const key in values) {
