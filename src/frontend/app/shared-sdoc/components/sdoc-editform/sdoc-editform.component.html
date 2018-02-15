@@ -72,10 +72,11 @@
         </div>
     </ng-template>
 
-    <ng-template #inputNumber let-key="key" let-formControlName="formControlName">
+    <ng-template #inputNumber let-key="key" let-formControlName="formControlName" let-recommend="recommend">
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <input formControlName="{{formControlName}}" class="form-control" type="number" step="0.01" placeholder="{{key}}">
+            <a class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend" (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</a>
         </div>
     </ng-template>
 
@@ -186,13 +187,13 @@
             <fieldset>
                 <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">technische Daten</legend>
                 <div class="row">
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
                 </div>
                 <div class="row">
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altDesc', formControlName: 'sdocdatatech_altDesc'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMin', formControlName: 'sdocdatatech_altMin'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altDesc', formControlName: 'sdocdatatech_altDesc', recommend: trackStatistic.altDesc}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMin', formControlName: 'sdocdatatech_altMin', recommend: trackStatistic.altMin}"></ng-container>
                 </div>
             </fieldset>
             <fieldset>
@@ -275,9 +276,9 @@
             <fieldset>
                 <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">technische Daten</legend>
                 <div class="row">
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dur', formControlName: 'sdocdatatech_dur'}"></ng-container>
                 </div>
             </fieldset>

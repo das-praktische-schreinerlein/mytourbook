@@ -13,7 +13,10 @@ import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service'
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {SDocRecordFactory} from '../../../../../shared/sdoc-commons/model/records/sdoc-record';
+import {SDocRecordFactory} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
+import {TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
+import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
+import {TrackStatistic} from '../../../../shared/angular-maps/services/track-statistic.service';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -22,6 +25,8 @@ import {SDocRecordFactory} from '../../../../../shared/sdoc-commons/model/record
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocEditformComponent implements OnChanges {
+    private trackStatisticService = new TrackStatisticService();
+    private gpxParser = new GeoGpxParser();
     private numBeanFieldConfig = {
         'sdocratepers.gesamt': { labelPrefix: 'label.sdocratepers.gesamt.', values: [0, 2, 5, 8, 11, 14]},
         'sdocratepers.gesamt_image': { labelPrefix: 'label.image.sdocratepers.gesamt.', values: [0, 2, 5, 6, 8, 9, 10, 11, 14]},
@@ -183,6 +188,7 @@ export class SDocEditformComponent implements OnChanges {
         keywords: ''
     });
     trackRecords: SDocRecord[] = [];
+    trackStatistic: TrackStatistic = { dist: undefined, bounds: undefined};
 
     @Input()
     public record: SDocRecord;
@@ -222,6 +228,12 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         this.editFormGroup.patchValue({ keywords: keywords});
+    }
+
+    setValue(field: string, value: any): void {
+        const config = {};
+        config[field] = value;
+        this.editFormGroup.patchValue(config);
     }
 
     private updateData() {
@@ -322,6 +334,14 @@ export class SDocEditformComponent implements OnChanges {
                     .replace(/<trkpt /g, '\n      <trkpt ')
                     .replace(/<rpt /g, '\n    <rpt >')
             });
+
+            const geoElements = this.gpxParser.parse(track.replace(/<\/trkseg>[ ]+<trkseg>/g, ''), {});
+            if (geoElements !== undefined && geoElements.length > 0) {
+                this.trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElements[0]);
+            } else {
+                this.trackStatistic = { dist: undefined, bounds: undefined};
+            }
+
         } else {
             this.trackRecords = [];
         }

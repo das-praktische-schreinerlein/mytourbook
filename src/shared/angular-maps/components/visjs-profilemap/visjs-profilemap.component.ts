@@ -60,7 +60,7 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
             const trackUrl = this.mapElements[i].trackUrl;
             // specify options
             const options = {
-                generateName: this.flgGenerateNameFromGpx,
+                // generateName: this.flgGenerateNameFromGpx,
                 width:  '100%',
                 height: this.height,
                 style: 'bar-size',
