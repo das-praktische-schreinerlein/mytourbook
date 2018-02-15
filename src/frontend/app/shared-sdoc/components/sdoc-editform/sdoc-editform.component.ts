@@ -352,7 +352,7 @@ export class SDocEditformComponent implements OnChanges {
     submitSave(event: Event): boolean {
         const values = this.editFormGroup.getRawValue();
 
-        if (values['gpsTrackSrc'] !== undefined) {
+        if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
             values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
         }
 
