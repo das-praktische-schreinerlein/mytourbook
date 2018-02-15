@@ -335,7 +335,7 @@ export class SDocEditformComponent implements OnChanges {
                     .replace(/<rpt /g, '\n    <rpt >')
             });
 
-            const geoElements = this.gpxParser.parse(track.replace(/<\/trkseg>[ ]+<trkseg>/g, ''), {});
+            const geoElements = this.gpxParser.parse(track.replace(/<\/trkseg>[ ]*<trkseg>/g, ''), {});
             if (geoElements !== undefined && geoElements.length > 0) {
                 this.trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElements[0]);
             } else {

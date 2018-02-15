@@ -118,29 +118,44 @@ export let SDocRecordRelation: any = {
 export class SDocRecordFactory {
     static createSanitized(values: {}): SDocRecord {
         const sanitizedValues: any = {};
-        sanitizedValues.id = BaseEntityRecord.genericFields.id.validator.sanitize(values['id']) || '';
+        sanitizedValues.id = BaseEntityRecord.genericFields.id.validator.sanitize(values['id']) || undefined;
 
-        sanitizedValues.locId = SDocRecord.sdocFields.locId.validator.sanitize(values['locId']) || '';
-        sanitizedValues.locIdParent = SDocRecord.sdocFields.locIdParent.validator.sanitize(values['locIdParent']) || '';
-        sanitizedValues.routeId = SDocRecord.sdocFields.routeId.validator.sanitize(values['routeId']) || '';
-        sanitizedValues.trackId = SDocRecord.sdocFields.trackId.validator.sanitize(values['trackId']) || '';
-        sanitizedValues.tripId = SDocRecord.sdocFields.tripId.validator.sanitize(values['tripId']) || '';
-        sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(values['newsId']) || '';
-        sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(values['imageId']) || '';
+        sanitizedValues.locId = SDocRecord.sdocFields.locId.validator.sanitize(values['locId']) || undefined;
+        sanitizedValues.locIdParent = SDocRecord.sdocFields.locIdParent.validator.sanitize(values['locIdParent']) || undefined;
+        sanitizedValues.routeId = SDocRecord.sdocFields.routeId.validator.sanitize(values['routeId']) || undefined;
+        sanitizedValues.trackId = SDocRecord.sdocFields.trackId.validator.sanitize(values['trackId']) || undefined;
+        sanitizedValues.tripId = SDocRecord.sdocFields.tripId.validator.sanitize(values['tripId']) || undefined;
+        sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(values['newsId']) || undefined;
+        sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(values['imageId']) || undefined;
 
-        sanitizedValues.gpsTrackSrc = SDocRecord.sdocFields.gpsTrackSrc.validator.sanitize(values['gpsTrackSrc']) || '';
-        sanitizedValues.keywords = SDocRecord.sdocFields.keywords.validator.sanitize(values['keywords']) || '';
-        sanitizedValues.name = SDocRecord.sdocFields.name.validator.sanitize(values['name']) || '';
-        sanitizedValues.persons = SDocRecord.sdocFields.persons.validator.sanitize(values['persons']) || '';
-        sanitizedValues.playlists = SDocRecord.sdocFields.playlists.validator.sanitize(values['playlists']) || '';
-        sanitizedValues.type = SDocRecord.sdocFields.type.validator.sanitize(values['type']) || '';
+        sanitizedValues.gpsTrackSrc = SDocRecord.sdocFields.gpsTrackSrc.validator.sanitize(values['gpsTrackSrc']) || undefined;
+        sanitizedValues.keywords = SDocRecord.sdocFields.keywords.validator.sanitize(values['keywords']) || undefined;
+        sanitizedValues.name = SDocRecord.sdocFields.name.validator.sanitize(values['name']) || undefined;
+        sanitizedValues.persons = SDocRecord.sdocFields.persons.validator.sanitize(values['persons']) || undefined;
+        sanitizedValues.playlists = SDocRecord.sdocFields.playlists.validator.sanitize(values['playlists']) || undefined;
+        sanitizedValues.type = SDocRecord.sdocFields.type.validator.sanitize(values['type']) || undefined;
 
         return new SDocRecord(sanitizedValues);
     }
 
     static cloneSanitized(sdoc: SDocRecord): SDocRecord {
         const sanitizedValues: any = {};
-        sanitizedValues.id = BaseEntityRecord.genericFields.id.validator.sanitize(sdoc.id) || '';
+        sanitizedValues.id = BaseEntityRecord.genericFields.id.validator.sanitize(sdoc.id) || undefined;
+
+        sanitizedValues.locId = SDocRecord.sdocFields.locId.validator.sanitize(sdoc.locId) || undefined;
+        sanitizedValues.locIdParent = SDocRecord.sdocFields.locIdParent.validator.sanitize(sdoc.locIdParent) || undefined;
+        sanitizedValues.routeId = SDocRecord.sdocFields.routeId.validator.sanitize(sdoc.routeId) || undefined;
+        sanitizedValues.trackId = SDocRecord.sdocFields.trackId.validator.sanitize(sdoc.trackId) || undefined;
+        sanitizedValues.tripId = SDocRecord.sdocFields.tripId.validator.sanitize(sdoc.tripId) || undefined;
+        sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(sdoc.newsId) || undefined;
+        sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(sdoc.imageId) || undefined;
+
+        sanitizedValues.gpsTrackSrc = SDocRecord.sdocFields.gpsTrackSrc.validator.sanitize(sdoc.gpsTrackSrc) || undefined;
+        sanitizedValues.keywords = SDocRecord.sdocFields.keywords.validator.sanitize(sdoc.keywords) || undefined;
+        sanitizedValues.name = SDocRecord.sdocFields.name.validator.sanitize(sdoc.name) || undefined;
+        sanitizedValues.persons = SDocRecord.sdocFields.persons.validator.sanitize(sdoc.persons) || undefined;
+        sanitizedValues.playlists = SDocRecord.sdocFields.playlists.validator.sanitize(sdoc.playlists) || undefined;
+        sanitizedValues.type = SDocRecord.sdocFields.type.validator.sanitize(sdoc.type) || undefined;
 
         return new SDocRecord(sanitizedValues);
     }
