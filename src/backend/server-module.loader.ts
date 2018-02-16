@@ -25,7 +25,12 @@ export interface ServerConfig {
 
 export class ServerModuleLoader {
     public static loadModules(app, serverConfig: ServerConfig) {
+        const writable = serverConfig.backendConfig['sdocWritable'] === true || serverConfig.backendConfig['sdocWritable'] === 'true';
+
         ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
+        if (!writable) {
+            ConfigureServerModule.configureServerAddHysteric(app, serverConfig.backendConfig);
+        }
         FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
         DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 
@@ -40,7 +45,7 @@ export class ServerModuleLoader {
 
         // add routes
         const sdocServerModule = SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache);
-        if (serverConfig.backendConfig['sdocWritable'] === true || serverConfig.backendConfig['sdocWritable'] === 'true') {
+        if (writable) {
             SDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocServerModule);
         }
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de');

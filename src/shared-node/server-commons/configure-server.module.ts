@@ -19,7 +19,15 @@ export class ConfigureServerModule {
         });
         app.use(mycors);
         app.use(helmet());
-        /**
+
+        // configure response
+        app.use(compression());
+
+        // require request-ip and register it as middleware
+        app.use(requestIp.mw());
+    }
+
+    public static configureServerAddHysteric(app: express.Application, backendConfig: {}) {
         app.use(protect.express.sqlInjection({
             body: true,
             loggerFunction: console.warn
@@ -28,12 +36,5 @@ export class ConfigureServerModule {
             body: true,
             loggerFunction: console.warn
         }));
-         */
-
-        // configure response
-        app.use(compression());
-
-        // require request-ip and register it as middleware
-        app.use(requestIp.mw());
     }
 }
