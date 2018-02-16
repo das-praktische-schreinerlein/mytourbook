@@ -976,7 +976,19 @@ export class SDocSqlMediadbConfig {
         },
         'trip': {
             tableName: 'trip',
-            selectFrom: 'trip',
+            selectFrom: 'trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id',
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
+                    'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt'],
+                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS tr_keywords']
+                }
+            ],
+            groupbBySelectFieldList: true,
+            groupbBySelectFieldListIgnore: ['tr_keywords', 'k_altitude_asc_sum', 'k_altitude_desc_sum', 'k_distance_sum',
+                'k_altitude_min', 'k_altitude_max'
+            ],
             selectFieldList: [
                 '"TRIP" AS type',
                 'CONCAT("TRIP", "_", trip.tr_id) AS id',
@@ -989,6 +1001,11 @@ export class SDocSqlMediadbConfig {
                 'DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(tr_datevon) AS week',
                 'MONTH(tr_datevon) AS month',
+                'SUM(k_altitude_asc) AS k_altitude_asc_sum',
+                'SUM(k_altitude_desc) AS k_altitude_desc_sum',
+                'MIN(k_altitude_min) AS k_altitude_min',
+                'MAX(k_altitude_max) AS k_altitude_max',
+                'SUM(k_distance) AS k_distance_sum',
                 'tr_meta_shortdesc',
                 'tr_meta_shortdesc AS tr_meta_shortdesc_md',
                 'tr_meta_shortdesc AS tr_meta_shortdesc_html'],
@@ -1075,6 +1092,12 @@ export class SDocSqlMediadbConfig {
                 id: 'id',
                 trip_id_i: 'tr_id',
                 trip_id_is: 'tr_id',
+                data_tech_alt_asc_i: 'k_altitude_asc_sum',
+                data_tech_alt_desc_i: 'k_altitude_desc_sum',
+                data_tech_alt_min_i: 'k_altitude_min',
+                data_tech_alt_max_i: 'k_altitude_max',
+                data_tech_dist_f: 'k_distance_sum',
+                data_tech_dur_f: 'dur',
                 dateshow_dt: 'tr_dateshow',
                 desc_txt: 'tr_meta_shortdesc',
                 desc_md_txt: 'tr_meta_shortdesc_md',
