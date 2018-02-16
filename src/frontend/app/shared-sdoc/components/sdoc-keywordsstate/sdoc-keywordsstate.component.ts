@@ -19,6 +19,9 @@ export class SDocKeywordsStateComponent implements OnInit, OnChanges {
     @Input()
     public keywords: string;
 
+    @Input()
+    public suggestions?: string[] = [];
+
     @Output()
     public unsetKeyword: EventEmitter<string> = new EventEmitter();
 
@@ -67,6 +70,6 @@ export class SDocKeywordsStateComponent implements OnInit, OnChanges {
         this.keywordKats = this.contentUtils.getStructuredKeywordsState(
             this.keywordsConfig,
             this.keywords.split(', '),
-            []);
+            this.suggestions ? this.suggestions : []);
     }
 }

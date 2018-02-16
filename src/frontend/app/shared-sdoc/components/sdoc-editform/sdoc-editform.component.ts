@@ -2,7 +2,7 @@ import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange,
     ViewContainerRef
 } from '@angular/core';
-import {SDocRecord, SDocRecordValidator} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
+import {SDocRecord, SDocRecordFactory, SDocRecordValidator} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {SDocRecordSchema} from '../../../../shared/sdoc-commons/model/schemas/sdoc-record-schema';
 import {ToastsManager} from 'ng2-toastr';
@@ -13,10 +13,10 @@ import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service'
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {SDocRecordFactory} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
+import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
-import {TrackStatistic} from '../../../../shared/angular-maps/services/track-statistic.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -189,6 +189,7 @@ export class SDocEditformComponent implements OnChanges {
     });
     trackRecords: SDocRecord[] = [];
     trackStatistic: TrackStatistic = { dist: undefined, bounds: undefined};
+    keywordSuggestions: string[] = [];
 
     @Input()
     public record: SDocRecord;
@@ -197,7 +198,8 @@ export class SDocEditformComponent implements OnChanges {
     public save: EventEmitter<SDocRecord> = new EventEmitter();
 
     constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef,
-                private searchFormUtils: SDocSearchFormUtils, private sdocDataService: SDocDataService) {
+                private appService: GenericAppService, private searchFormUtils: SDocSearchFormUtils,
+                private sdocDataService: SDocDataService, private contentUtils: SDocContentUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -267,6 +269,7 @@ export class SDocEditformComponent implements OnChanges {
         this.editFormGroup = this.fb.group(config);
 
         this.updateMap();
+        this.updateKeywordSuggestions();
 
         const me = this;
         const searchForm = new SDocSearchForm({type: this.record.type});
@@ -309,12 +312,33 @@ export class SDocEditformComponent implements OnChanges {
                 me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
                 me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
             }
+
             me.cd.markForCheck();
+
+            me.editFormGroup.valueChanges.subscribe((data) => {
+               me.updateKeywordSuggestions();
+            });
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:', reason);
             me.cd.markForCheck();
         });
+    }
+
+    updateKeywordSuggestions(): boolean {
+        const config = this.appService.getAppConfig();
+        if (config['components']
+            && config['components']['sdoc-keywords']
+            && config['components']['sdoc-keywords']['keywordSuggestions']) {
+            this.keywordSuggestions = this.contentUtils.getSuggestedKeywords(config['components']['sdoc-keywords']['keywordSuggestions'],
+                this.editFormGroup.getRawValue());
+            this.cd.markForCheck();
+        } else {
+            console.warn('no valid keywordSugestions found');
+            this.keywordSuggestions = [];
+        }
+
+        return true;
     }
 
     updateMap(): boolean {
@@ -341,10 +365,12 @@ export class SDocEditformComponent implements OnChanges {
             } else {
                 this.trackStatistic = { dist: undefined, bounds: undefined};
             }
-
         } else {
             this.trackRecords = [];
+            this.trackStatistic = { dist: undefined, bounds: undefined};
         }
+
+        this.cd.markForCheck();
 
         return false;
     }

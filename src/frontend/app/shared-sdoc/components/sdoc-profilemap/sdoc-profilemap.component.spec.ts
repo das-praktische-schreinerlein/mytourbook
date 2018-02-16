@@ -6,6 +6,11 @@ import {SDocProfileMapComponent} from './sdoc-profilemap.component';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {Router} from '@angular/router';
 
 describe('SDocProfileMapComponent', () => {
     let component: SDocProfileMapComponent;
@@ -17,8 +22,12 @@ describe('SDocProfileMapComponent', () => {
             imports: [ReactiveFormsModule],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
-                { provide: GenericAppService, useValue: new AppServiceStub() },
-                PlatformService
+                { provide: Router, useValue: new RouterStub() },
+                PlatformService,
+                CommonRoutingService,
+                SDocRoutingService,
+                SDocContentUtils,
+                { provide: GenericAppService, useValue: new AppServiceStub() }
             ]
         })
             .compileComponents();

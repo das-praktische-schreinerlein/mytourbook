@@ -6,6 +6,7 @@ import {GenericAppService} from '../../../shared/commons/services/generic-app.se
 import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plugin';
 import {SDocRoutingService} from './sdoc-routing.service';
 import * as L from 'leaflet';
+import {FilterUtils, SimpleFilter} from '../../../shared/commons/utils/filter.utils';
 import LatLng = L.LatLng;
 
 export enum KeywordsState {
@@ -20,6 +21,12 @@ export interface StructuredKeyword {
 export interface StructuredKeywordState {
     name: string;
     keywords: { keyword: string; state: KeywordsState}[];
+}
+
+export interface KeywordSuggestion {
+    name: string;
+    filters: SimpleFilter[];
+    keywords: string[];
 }
 
 export interface ItemData {
@@ -103,6 +110,17 @@ export class SDocContentUtils {
         const value = record['sdocratepers'] || {gesamt: 0};
         const rate = Math.round(((value['gesamt'] || 0) / 3) + 0.5);
         return ['list-item-persrate-' + rate, 'list-item-' + layout + '-persrate-' + rate];
+    }
+
+    getSuggestedKeywords(suggestionConfigs: KeywordSuggestion[], values: any): string[] {
+        let suggestions = [];
+        for (const suggestionConfig of suggestionConfigs) {
+            if (FilterUtils.checkFilters(suggestionConfig.filters, values)) {
+                suggestions = suggestions.concat(suggestionConfig.keywords);
+            }
+        }
+
+        return suggestions;
     }
 
     getStructuredKeywords(config: StructuredKeyword[], keywords: string[], blacklist: string[]): StructuredKeyword[] {

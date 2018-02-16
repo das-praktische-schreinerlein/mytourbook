@@ -5,7 +5,7 @@
                 {"name": "Aktivität", "keywords": ["Alpinklettern", "Baden", "Boofen", "Bootfahren", "Campen",
                     "Fliegen", "Gletscherbegehung", "Kanu", "Klettern", "Klettersteig",
                     "Radfahren", "Schneeschuhwandern", "Skaten", "Wandern", "Museumsbesuch", "Sachsenklettern",
-                    "Sportlettern", "Stadtbesichtigung", "Besichtigung", "Gassi", "Hochtour", "Spaziergang",
+                    "Sportklettern", "Stadtbesichtigung", "Besichtigung", "Gassi", "Hochtour", "Spaziergang",
                     "Wanderung"]},
                 {"name": "Kultur", "keywords": ["Denkmal", "Geschichte", "Kunst", "Museum",
                     "Architektur", "Burg", "Dom", "Kirche", "Park", "Schloss", "Zoo"]},
@@ -21,6 +21,94 @@
                     "Steilküste", "Blumen", "Feld", "Heide", "Steppe", "Wiese",
                     "Bergwald", "Strandwald", "Wald", "Seenlandschaft", "Berge",
                     "Hochgebirge", "Mittelgebirge", "Meer", "Ozean"]}
+            ],
+            "keywordSuggestions": [
+                {   "name": "Action Rad-Tour", "keywords": ["Radfahren"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["1"]}]
+                },
+                {   "name": "Action Skating-Tour", "keywords": ["Skaten"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["2"]}]
+                },
+                {   "name": "Action Kletter-Tour", "keywords": ["Klettern", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Felsen"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["3"]}]
+                },
+                {   "name": "Action Boots-Tour", "keywords": ["Bootfarhen", "See", "Natur", "Naturlandschaft", "Landschaft"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["4"]}]
+                },
+                {   "name": "Action Baden", "keywords": ["Baden", "See", "Natur", "Naturlandschaft", "Landschaft"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["5"]}]
+                },
+                {   "name": "Action Stadtbesichtigung", "keywords": ["Stadtbesichtigung", "Stadt"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["101"]}]
+                },
+                {   "name": "Action Stadtbummel", "keywords": ["Stadtbummel", "Stadt"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["102"]}]
+                },
+                {   "name": "Action Museumsbesichtigung", "keywords": ["Museumsbesichtigung", "Museum", "Stadt"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["103"]}]
+                },
+                {   "name": "Action Zoo-Besuch", "keywords": ["Zoo", "Stadt"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["104"]}]
+                },
+                {   "name": "Action Park-Besuch", "keywords": ["Park", "Stadt"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["105"]}]
+                },
+                {   "name": "Action Autofahrt", "keywords": ["Autofahrt"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["106"]}]
+                },
+                {   "name": "Action Spaziergang", "keywords": ["Spaziergang"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["110"]}]
+                },
+                {   "name": "Action Gassi-Runde", "keywords": ["Gassi"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["111"]}]
+                },
+                {   "name": "Action Wanderung", "keywords": ["Wanderung", "Natur", "Naturlandschaft", "Landschaft"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["120"]}]
+                },
+                {   "name": "Action Berg-Wanderung", "keywords": ["Wandern", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["121"]}]
+                },
+                {   "name": "Action Berg-Tour", "keywords": ["Wandern", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "KLettern"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["122"]}]
+                },
+                {   "name": "Action Klettersteig-Tour", "keywords": ["Klettersteig", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Felsen"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["123"]}]
+                },
+                {   "name": "Action Schneeschuh-Tour", "keywords": ["Schneeschuhwandern", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Winter", "Schnee"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["124"]}]
+                },
+                {   "name": "Action kombinierte Berg-Tour", "keywords": ["Gletscherbegehung", "Gletscherschau", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Felsen"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["125"]}]
+                },
+                {   "name": "Action Hochtour", "keywords": ["Hochtour", "Gletscherbegehung", "Gletscherschau", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["126"]}]
+                },
+                {   "name": "Action Alpinklettern", "keywords": ["Alpinklettern", "Klettern", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Felsen"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["127"]}]
+                },
+                {   "name": "Action Sachsenklettern", "keywords": ["Sachsenklettern", "Klettern", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Felsen"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["128"]}]
+                },
+                {   "name": "Action Sportklettern", "keywords": ["Sportklettern", "Klettern", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Felsen"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["129"]}]
+                },
+                {   "name": "Action Biwak", "keywords": ["Biwak", "Höhle", "Unterkunft", "Boofen", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Felsen"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["130"]}]
+                },
+                {   "name": "Action Unterkunft", "keywords": ["Unterkunft"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["131"]}]
+                },
+                {   "name": "Action Höhlenbegehung", "keywords": ["Höhlenbegehung", "Natur", "Naturlandschaft", "Landschaft", "Gebirge", "Berge", "Höhle"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["132"]}]
+                },
+
+                {   "name": "Daten Hochgebirge", "keywords": ["Hochgebirge", "Berge", "Natur", "Naturlandschaft", "Landschaft"],
+                    "filters": [{ "property": "sdocdatatech_altMax", "command": "GE", "expectedValues": ["1500"]}]
+                },
+                {   "name": "Daten Mittelgebirge", "keywords": ["Mittelgebirge", "Berge", "Natur", "Naturlandschaft", "Landschaft"],
+                    "filters": [{ "property": "sdocdatatech_altMax", "command": "GE", "expectedValues": ["500"]},
+                        { "property": "sdocdatatech_altMax", "command": "LE", "expectedValues": ["1500"]}]
+                }
             ],
             "blacklist": ["OFFEN", "Mom", "Pa", "Dani", "Micha", "Verena",
                 "Booga", "Harry", "Rudi", "Pelle"]
