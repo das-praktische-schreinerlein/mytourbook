@@ -72,7 +72,7 @@ CREATE TABLE rates (
 -----------------
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
-    n_id int PRIMARY KEY,
+    n_id integer PRIMARY KEY,
     w_id int DEFAULT '0',
     n_date datetime DEFAULT NULL,
     n_message text DEFAULT NULL,

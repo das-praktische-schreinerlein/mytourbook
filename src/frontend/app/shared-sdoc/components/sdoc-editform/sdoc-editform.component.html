@@ -13,6 +13,27 @@
         </div>
     </ng-template>
 
+    <ng-template #inputDateStart>
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.sdoc.datestart">Startdatum:</label>
+            <input formControlName="datestart" required="required" type="datetime-local" placeholder="datestart" i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.sdoc.datestart">
+        </div>
+    </ng-template>
+
+    <ng-template #inputDateStartTime>
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.sdoc.datestart">Startdatum:</label>
+            <input formControlName="datestart" required="required" type="text" placeholder="datestart" i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.sdoc.datestart">
+        </div>
+    </ng-template>
+
+    <ng-template #inputDateEnd>
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="dateend label|Label for field: dateend@@label.editform.sdoc.dateend">Enddatum:</label>
+            <input formControlName="dateend" required="required" type="datetime-local" placeholder="dateend" i18n-placeholder="dateend placeholder|Placeholder for dateend@@placeholder.form.sdoc.dateend">
+        </div>
+    </ng-template>
+
     <ng-template #inputLocation>
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
@@ -178,7 +199,8 @@
                 <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
                 </div>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
@@ -237,7 +259,7 @@
                 <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
                 </div>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
@@ -335,6 +357,37 @@
                     <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
                 </div>
             </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="'TRIP'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'NEWS'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
         </ng-container>
     </ng-container>
 </form>

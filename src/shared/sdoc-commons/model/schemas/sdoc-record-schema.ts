@@ -18,6 +18,8 @@ export const SDocRecordSchema = new Schema({
 
 // TODO
 //        dateshow: {type: 'Date'},
+//        datestart: {type: 'Date'},
+//        dateend: {type: 'Date'},
         descTxt: {type: 'string'},
         descMd: {type: 'string'},
         descHtml: {type: 'string'},

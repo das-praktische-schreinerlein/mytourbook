@@ -1,6 +1,6 @@
 export enum GenericValidatorDatatypes {
     'FULLTEXT', 'ID', 'PERPAGE', 'PAGENUM', 'SORT',
-    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST', 'NAME', 'GPSTRACK'
+    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST', 'NAME', 'GPSTRACK', 'DATE'
 }
 
 export abstract class ValidationRule {
@@ -156,6 +156,12 @@ export class NumberValidationRule extends ValidationWithDefaultRule {
         }
         // console.error("sanitize value:" + value + " to defaultValue: " + this._defaultValue);
         return this._defaultValue;
+    }
+}
+
+export class DateValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-0-9.: Tt]*$/gi, /[^-0-9.: Tt]*/gi, '');
     }
 }
 

@@ -17,6 +17,7 @@ import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-
 import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -245,7 +246,9 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         const config = {
-            dateshow: [this.record.dateshow],
+            dateshow: [DateUtils.dateToInputString(this.record.dateshow)],
+            datestart: [DateUtils.dateToInputString(this.record.datestart)],
+            dateend: [DateUtils.dateToInputString(this.record.dateend)],
             locIdParent: [this.record.locIdParent],
             gpsTrackSrc: [this.record.gpsTrackSrc]
         };

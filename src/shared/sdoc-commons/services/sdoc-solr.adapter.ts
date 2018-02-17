@@ -151,6 +151,8 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             trip_id_i: props.tripId,
             news_id_i: props.newsId,
             dateshow_dt: props.dateshow,
+            datestart_dt: props.datestart,
+            dateend_dt: props.dateend,
             desc_txt: props.descTxt,
             desc_md_txt: props.descMd,
             desc_html_txt: props.descHtml,

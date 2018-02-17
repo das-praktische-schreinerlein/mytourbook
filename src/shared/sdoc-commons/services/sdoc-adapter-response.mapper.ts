@@ -19,6 +19,8 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['trip_id_i'] = props.tripId;
         values['news_id_i'] = props.newsId;
         values['dateshow_dt'] = props.dateshow;
+        values['datestart_dt'] = props.datestart;
+        values['dateend_dt'] = props.dateend;
         values['desc_txt'] = props.descTxt;
         values['desc_md_txt'] = props.descMd;
         values['desc_html_txt'] = props.descHtml;
@@ -132,6 +134,8 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
            values['subtypes'] = subtypeField.join(',');
         }
         values['dateshow'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'dateshow_dt', undefined);
+        values['datestart'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'datestart_dt', undefined);
+        values['dateend'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'dateend_dt', undefined);
         values['descTxt'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'desc_txt', undefined);
         values['descHtml'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'desc_html_txt', undefined);
         values['descMd'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'desc_md_txt', undefined);

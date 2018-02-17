@@ -1,8 +1,7 @@
 import {BaseEntityRecord, BaseEntityRecordFieldConfig} from '../../../search-commons/model/records/base-entity-record';
 import {
-    DbIdValidationRule,
-    GenericValidatorDatatypes, GpsTrackValidationRule, IdValidationRule, KeywordValidationRule, NameValidationRule,
-    TextValidationRule
+    DateValidationRule, DbIdValidationRule, GenericValidatorDatatypes, GpsTrackValidationRule, IdValidationRule, KeywordValidationRule,
+    NameValidationRule, TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
 export class SDocRecord extends BaseEntityRecord {
@@ -15,6 +14,9 @@ export class SDocRecord extends BaseEntityRecord {
         newsId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         imageId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
 
+        dateshow: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
+        datestart: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
+        dateend: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
         gpsTrackSrc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.GPSTRACK, new GpsTrackValidationRule(false)),
         keywords: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new KeywordValidationRule(false)),
         name: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
@@ -32,6 +34,8 @@ export class SDocRecord extends BaseEntityRecord {
     imageId: number;
 
     dateshow: Date;
+    datestart: Date;
+    dateend: Date;
     descTxt: string;
     descMd: string;
     descHtml: string;
@@ -128,6 +132,9 @@ export class SDocRecordFactory {
         sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(values['newsId']) || undefined;
         sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(values['imageId']) || undefined;
 
+        sanitizedValues.dateshow = SDocRecord.sdocFields.dateshow.validator.sanitize(values['dateshow']) || undefined;
+        sanitizedValues.datestart = SDocRecord.sdocFields.datestart.validator.sanitize(values['datestart']) || undefined;
+        sanitizedValues.dateend = SDocRecord.sdocFields.dateend.validator.sanitize(values['dateend']) || undefined;
         sanitizedValues.gpsTrackSrc = SDocRecord.sdocFields.gpsTrackSrc.validator.sanitize(values['gpsTrackSrc']) || undefined;
         sanitizedValues.keywords = SDocRecord.sdocFields.keywords.validator.sanitize(values['keywords']) || undefined;
         sanitizedValues.name = SDocRecord.sdocFields.name.validator.sanitize(values['name']) || undefined;
@@ -150,6 +157,9 @@ export class SDocRecordFactory {
         sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(sdoc.newsId) || undefined;
         sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(sdoc.imageId) || undefined;
 
+        sanitizedValues.dateshow = SDocRecord.sdocFields.dateshow.validator.sanitize(sdoc.dateshow) || undefined;
+        sanitizedValues.datestart = SDocRecord.sdocFields.datestart.validator.sanitize(sdoc.datestart) || undefined;
+        sanitizedValues.dateend = SDocRecord.sdocFields.dateend.validator.sanitize(sdoc.dateend) || undefined;
         sanitizedValues.gpsTrackSrc = SDocRecord.sdocFields.gpsTrackSrc.validator.sanitize(sdoc.gpsTrackSrc) || undefined;
         sanitizedValues.keywords = SDocRecord.sdocFields.keywords.validator.sanitize(sdoc.keywords) || undefined;
         sanitizedValues.name = SDocRecord.sdocFields.name.validator.sanitize(sdoc.name) || undefined;
@@ -179,6 +189,9 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.newsId.validator.isValid(values['newsId']) ? errors.push('newsId') &&  false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(values['imageId']) ? errors.push('imageId') &&  false : true;
 
+        state = !SDocRecord.sdocFields.dateshow.validator.isValid(values['dateshow']) ? errors.push('dateshow') &&  false : true;
+        state = !SDocRecord.sdocFields.datestart.validator.isValid(values['datestart']) ? errors.push('datestart') &&  false : true;
+        state = !SDocRecord.sdocFields.dateend.validator.isValid(values['dateend']) ? errors.push('dateend') &&  false : true;
         state = !SDocRecord.sdocFields.gpsTrackSrc.validator.isValid(values['gpsTrackSrc']) ? errors.push('gpsTrackSrc') &&  false : true;
         state = !SDocRecord.sdocFields.keywords.validator.isValid(values['keywords']) ? errors.push('keywords') &&  false : true;
         state = !SDocRecord.sdocFields.name.validator.isValid(values['name']) ? errors.push('name') &&  false : true;
@@ -205,6 +218,9 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.newsId.validator.isValid(sdoc.newsId) ? errors.push('newsId') && false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(sdoc.imageId) ? errors.push('imageId') && false : true;
 
+        state = !SDocRecord.sdocFields.dateshow.validator.isValid(sdoc.dateshow) ? errors.push('dateshow') &&  false : true;
+        state = !SDocRecord.sdocFields.datestart.validator.isValid(sdoc.datestart) ? errors.push('datestart') &&  false : true;
+        state = !SDocRecord.sdocFields.dateend.validator.isValid(sdoc.dateend) ? errors.push('dateend') &&  false : true;
         state = !SDocRecord.sdocFields.gpsTrackSrc.validator.isValid(sdoc.gpsTrackSrc) ? errors.push('gpsTrackSrc') && false : true;
         state = !SDocRecord.sdocFields.keywords.validator.isValid(sdoc.keywords) ? errors.push('keywords') && false : true;
         state = !SDocRecord.sdocFields.name.validator.isValid(sdoc.name) ? errors.push('name') && false : true;

@@ -16,7 +16,7 @@ export class SDocDateFormatPipe implements PipeTransform {
         }
 
         let date = sdoc.dateshow;
-        if (date === undefined || date === null) {
+        if (date === undefined || date === null || date.toString() === '') {
             return '';
         }
         if (!date.hasOwnProperty('year')) {
