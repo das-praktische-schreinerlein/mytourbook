@@ -131,7 +131,7 @@ export class TrackStatisticService  {
 
     public formatMillisToHH24(l: number): number {
         if (l !== undefined) {
-            return parseInt((l / 1000 / 60 / 60).toFixed(1), 10);
+            return parseFloat((l / 1000 / 60 / 60).toFixed(1));
         }
 
         return undefined;
