@@ -1,5 +1,6 @@
 import * as L from 'leaflet';
-import {GeoElement, GeoElementType, GeoParser} from './geo.parser';
+import {GeoElement, GeoElementType, GeoParser, LatLngTime} from './geo.parser';
+import {DateUtils} from '../../commons/utils/date.utils';
 
 export class GeoGpxParser extends GeoParser {
     parse(xml: string, options): GeoElement[] {
@@ -104,13 +105,22 @@ export class GeoGpxParser extends GeoParser {
         for (let i = 0; i < el.length; i++) {
             const ptElement = el[i];
             const eleElement = ptElement.getElementsByTagName('ele');
+            const timeElement = ptElement.getElementsByTagName('time');
             let ele;
+            let time;
             if (eleElement && eleElement.length > 0) {
                 ele = eleElement[0].childNodes[0].nodeValue;
             }
-            const ll = ele !== undefined ?
-                new L.LatLng(ptElement.getAttribute('lat'), ptElement.getAttribute('lon'), ele) :
+            if (timeElement && timeElement.length > 0) {
+                time = DateUtils.parseDate(timeElement[0].childNodes[0].nodeValue);
+            }
+            let ll;
+            if (time !== undefined) {
+                ll = new LatLngTime(ptElement.getAttribute('lat'), ptElement.getAttribute('lon'), ele, time);
+            } else {
+                ll = ele !== undefined ? new L.LatLng(ptElement.getAttribute('lat'), ptElement.getAttribute('lon'), ele) :
                 new L.LatLng(ptElement.getAttribute('lat'), ptElement.getAttribute('lon'));
+            }
             coords.push(ll);
         }
         return new GeoElement(tag === 'trkpt' ? GeoElementType.TRACK : GeoElementType.ROUTE, coords, name);

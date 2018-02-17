@@ -7,6 +7,14 @@ export enum GeoElementType {
     WAYPOINT
 }
 
+export class LatLngTime extends LatLng {
+    time: Date;
+    constructor(latitude: number, longitude: number, altitude: number, time: Date) {
+        super(latitude, longitude, altitude);
+        this.time = time;
+    }
+}
+
 export class GeoElement {
     type: GeoElementType;
     points: LatLng[] = [];

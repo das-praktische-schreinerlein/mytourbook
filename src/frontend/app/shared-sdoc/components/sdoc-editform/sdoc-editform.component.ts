@@ -189,7 +189,7 @@ export class SDocEditformComponent implements OnChanges {
         keywords: ''
     });
     trackRecords: SDocRecord[] = [];
-    trackStatistic: TrackStatistic = { dist: undefined, bounds: undefined};
+    trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
     keywordSuggestions: string[] = [];
 
     @Input()
@@ -237,6 +237,10 @@ export class SDocEditformComponent implements OnChanges {
         const config = {};
         config[field] = value;
         this.editFormGroup.patchValue(config);
+    }
+
+    formatInputDate(value: Date): String {
+        return DateUtils.dateToInputString(value);
     }
 
     private updateData() {
@@ -366,11 +370,11 @@ export class SDocEditformComponent implements OnChanges {
             if (geoElements !== undefined && geoElements.length > 0) {
                 this.trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElements[0]);
             } else {
-                this.trackStatistic = { dist: undefined, bounds: undefined};
+                this.trackStatistic = this.trackStatisticService.emptyStatistic();
             }
         } else {
             this.trackRecords = [];
-            this.trackStatistic = { dist: undefined, bounds: undefined};
+            this.trackStatistic = this.trackStatisticService.emptyStatistic();
         }
 
         this.cd.markForCheck();

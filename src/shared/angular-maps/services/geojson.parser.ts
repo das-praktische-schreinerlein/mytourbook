@@ -1,5 +1,6 @@
 import * as L from 'leaflet';
-import {GeoElement, GeoElementType, GeoParser} from './geo.parser';
+import {GeoElement, GeoElementType, GeoParser, LatLngTime} from './geo.parser';
+import {DateUtils} from '../../commons/utils/date.utils';
 
 export class GeoJsonParser extends GeoParser {
     parse(json: string, options): GeoElement[] {
@@ -19,8 +20,11 @@ export class GeoJsonParser extends GeoParser {
 
         for (j = 0; j < obj['track']['records'].length; j++) {
             const record = obj['track']['records'][j];
-            const ll = new L.LatLng(record[0], record[1], record[2]);
-            coords.push(ll);
+            if (record.length > 2) {
+                coords.push(new LatLngTime(record[0], record[1], record[2], DateUtils.parseDate(record[3])));
+            } else {
+                coords.push(new L.LatLng(record[0], record[1], record[2]));
+            }
         }
 
         return [new GeoElement(GeoElementType.TRACK, coords, obj['track']['tName'])];

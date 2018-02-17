@@ -12,22 +12,36 @@ export interface TrackStatistic {
     altStart?: number;
     altEnd?: number;
     bounds: L.LatLngBounds;
+    posStart: L.LatLng;
+    posEnd: L.LatLng;
+    dateStart: Date;
+    dateEnd: Date;
+    duration: number;
 }
 
 export class TrackStatisticService  {
+    public emptyStatistic(): TrackStatistic {
+        return {
+            altAsc: undefined,
+            altDesc: undefined,
+            dist: undefined,
+            altMin: undefined,
+            altMax: undefined,
+            altAvg: undefined,
+            altStart: undefined,
+            altEnd: undefined,
+            bounds: undefined,
+            posStart: undefined,
+            posEnd: undefined,
+            dateStart: undefined,
+            dateEnd: undefined,
+            duration: undefined
+        };
+    }
+
     public trackStatisticsForGeoElement(geoElement: GeoElement): TrackStatistic {
         if (geoElement === undefined || geoElement.points === undefined) {
-            return {
-                altAsc: undefined,
-                altDesc: undefined,
-                dist: undefined,
-                altMin: undefined,
-                altMax: undefined,
-                altAvg: undefined,
-                altStart: undefined,
-                altEnd: undefined,
-                bounds: undefined
-            };
+            return this.emptyStatistic();
         }
 
         return this.trackStatistics(geoElement.points);
@@ -43,7 +57,12 @@ export class TrackStatisticService  {
             altAvg: undefined,
             altStart: undefined,
             altEnd: undefined,
-            bounds: latLngBounds(ll)
+            bounds: latLngBounds(ll),
+            posStart: (ll.length > 0 ? ll[0] : undefined),
+            posEnd: (ll.length > 0 ? ll[ll.length - 1] : undefined),
+            dateStart: (ll.length > 0 ? ll[0]['time'] : undefined),
+            dateEnd: (ll.length > 0 ? ll[ll.length - 1]['time'] : undefined),
+            duration: undefined
         };
 
         let l = null, altSum, altCount = 0;
@@ -78,6 +97,9 @@ export class TrackStatisticService  {
         if (altSum > 0) {
             t.altAvg = altSum / altCount;
         }
+        if (t.dateEnd !== undefined && t.dateStart !== undefined) {
+            t.duration = this.formatMillisToHH24(t.dateEnd.getTime() - t.dateStart.getTime());
+        }
 
         t.altAsc = this.formatM(t.altAsc);
         t.altDesc = this.formatM(t.altDesc);
@@ -102,6 +124,14 @@ export class TrackStatisticService  {
     public formatM(l: number): number {
         if (l !== undefined) {
             return parseInt(l.toFixed(0), 10);
+        }
+
+        return undefined;
+    }
+
+    public formatMillisToHH24(l: number): number {
+        if (l !== undefined) {
+            return parseInt((l / 1000 / 60 / 60).toFixed(1), 10);
         }
 
         return undefined;

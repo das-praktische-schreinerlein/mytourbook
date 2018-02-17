@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {isNumber, isString} from 'util';
+import {isDate, isNumber, isString} from 'util';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 
 @Pipe({
@@ -16,10 +16,10 @@ export class SDocDateFormatPipe implements PipeTransform {
         }
 
         let date = sdoc.dateshow;
-        if (date === undefined || date === null || date.toString() === '') {
+        if (date === undefined || date === null || (isString(date) && date.toString() === '')) {
             return '';
         }
-        if (!date.hasOwnProperty('year')) {
+        if (!isDate(date)) {
             if (isNumber(date )) {
                 date = new Date(date);
             } else if (isString(date)) {

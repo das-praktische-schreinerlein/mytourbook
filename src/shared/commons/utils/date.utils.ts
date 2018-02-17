@@ -1,11 +1,11 @@
-import {isNumber, isString} from 'util';
+import {isDate, isNumber, isString} from 'util';
 
 export class DateUtils {
     public static parseDate(date: any): Date {
-        if (date === undefined || date === null || date.toString() === '') {
+        if (date === undefined || date === null || (isString(date) && date.toString() === '')) {
             return undefined;
         }
-        if (!date.hasOwnProperty('year')) {
+        if (!isDate(date)) {
             if (isNumber(date )) {
                 date = new Date(date);
             } else if (isString(date)) {
@@ -20,7 +20,7 @@ export class DateUtils {
 
     public static dateToInputString(src: any): String {
         const date = DateUtils.parseDate(src);
-        if (date === undefined || date === null || date.toString() === '') {
+        if (date === undefined || date === null || !isDate(date)) {
             return undefined;
         }
         const ten = function (i) {

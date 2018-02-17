@@ -13,9 +13,10 @@
         </div>
     </ng-template>
 
-    <ng-template #inputDateStart>
+    <ng-template #inputDateStart let-recommend=recommend>
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.sdoc.datestart">Startdatum:</label>
+            <a class="" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</a>
             <input formControlName="datestart" required="required" type="datetime-local" placeholder="datestart" i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.sdoc.datestart">
         </div>
     </ng-template>
@@ -27,9 +28,10 @@
         </div>
     </ng-template>
 
-    <ng-template #inputDateEnd>
+    <ng-template #inputDateEnd let-recommend=recommend>
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="dateend label|Label for field: dateend@@label.editform.sdoc.dateend">Enddatum:</label>
+            <a class="" *ngIf="recommend && editFormGroup.get('dateend').value != recommend" (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</a>
             <input formControlName="dateend" required="required" type="datetime-local" placeholder="dateend" i18n-placeholder="dateend placeholder|Placeholder for dateend@@placeholder.form.sdoc.dateend">
         </div>
     </ng-template>
@@ -199,8 +201,8 @@
                 <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStart;context:{recommend: formatInputDate(trackStatistic.dateStart)}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateEnd;context:{recommend: formatInputDate(trackStatistic.dateEnd)}"></ng-container>
                 </div>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
@@ -302,7 +304,7 @@
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dur', formControlName: 'sdocdatatech_dur'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dur', formControlName: 'sdocdatatech_dur', recommend: trackStatistic.duration}"></ng-container>
                 </div>
             </fieldset>
             <fieldset>
@@ -355,6 +357,11 @@
             <fieldset>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
                 </div>
             </fieldset>
         </ng-container>
