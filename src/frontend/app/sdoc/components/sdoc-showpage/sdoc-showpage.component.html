@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div class="container content-container map-container" *ngIf="tracks !== undefined && tracks.length > 0">
+    <div [class]="('container content-container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
         <app-sdoc-map [mapId]="'showMap'"
                       [height]="'400px'"
                       [mapZoom]="'9'"
@@ -52,7 +52,7 @@
                       [mapCenterPos]="undefined"></app-sdoc-map>
     </div>
 
-    <div class="container content-container map-container" *ngIf="record.gpsTrackBasefile || record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20">
+    <div class="container content-container map-container" *ngIf="flgShowProfileMap">
         <app-sdoc-profilemap [mapId]="'showProfileMap'"
                              [height]="'400px'"
                              [sdocs]="[record]"></app-sdoc-profilemap>

@@ -1,4 +1,5 @@
-<div class="container" style="border: 1px solid gainsboro;">
+<div [class]="('container visjs-profilemap-map-container ' + (flgfullScreen ? 'visjs-profilemap-map-container-fullscreen' : ''))" style="border: 1px solid gainsboro;">
+    <a (click)="toggleFullScreen()">FullScreen &#x2612;</a>
     <div id="{{ mapId }}"></div>
 </div>
 

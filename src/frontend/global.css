@@ -80,6 +80,10 @@ div.inline-content-container {
     background-color: white;
 }
 
+.container-fullline {
+    width: 100%
+}
+
 body {
     background: url(assets/images/background.jpg);
     background-repeat: repeat-x;

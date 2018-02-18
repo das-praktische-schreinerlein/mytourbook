@@ -37,6 +37,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     pdoc: PDocRecord;
     baseSearchUrl: string;
     tracks: SDocRecord[] = [];
+    flgShowMap = false;
+    flgShowProfileMap = false;
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
@@ -68,8 +70,13 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
                         || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
                         me.tracks = [me.record];
+                        me.flgShowMap = true;
+                        me.flgShowProfileMap = (me.record.gpsTrackBasefile !== undefined
+                            || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20));
                     } else {
                         me.tracks = [];
+                        me.flgShowMap = false;
+                        me.flgShowProfileMap = false;
                     }
 
                     const recordName = me.keywordsValidationRule.sanitize(me.record.name);
@@ -204,6 +211,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 if (record.gpsTrackBasefile || record.geoLoc !== undefined
                     || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20)) {
                     realTracks.push(record);
+                    this.flgShowMap = true;
+                    this.flgShowProfileMap = false;
                 }
             }
         }

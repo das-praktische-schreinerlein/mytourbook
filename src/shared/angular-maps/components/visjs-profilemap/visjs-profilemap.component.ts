@@ -10,6 +10,7 @@ import {MapElement} from '../../services/leaflet-geo.plugin';
 @Component({
     selector: 'app-visjs-profilemap',
     templateUrl: './visjs-profilemap.component.html',
+    styleUrls: ['./visjs-profilemap.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
@@ -17,6 +18,8 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
     private jsonLoader: GeoLoader;
 
     initialized: boolean;
+    flgfullScreen = false;
+    mapHeight = '';
 
     @Input()
     public mapId: string;
@@ -50,11 +53,17 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
         }
     }
 
+    toggleFullScreen() {
+        this.flgfullScreen = !this.flgfullScreen;
+        this.renderMap();
+    }
+
     private renderMap() {
         if (!this.initialized || !this.mapId) {
             return;
         }
 
+        this.mapHeight = this.flgfullScreen ? window.innerHeight + 'px' : this.height;
         for (let i = 0; i < this.mapElements.length; i++) {
             const trackSrc = this.mapElements[i].trackSrc;
             const trackUrl = this.mapElements[i].trackUrl;
@@ -62,7 +71,7 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
             const options = {
                 // generateName: this.flgGenerateNameFromGpx,
                 width:  '100%',
-                height: this.height,
+                height: this.mapHeight,
                 style: 'bar-size',
                 showPerspective: true,
                 showGrid: true,

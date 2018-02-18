@@ -21,6 +21,7 @@ export interface LeafletMapOptions {
 @Component({
     selector: 'app-leaflet-map',
     templateUrl: './leaflet-map.component.html',
+    styleUrls: ['./leaflet-map.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeafletMapComponent implements AfterViewChecked, OnChanges {
@@ -36,7 +37,8 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
 
     initialized: boolean;
     map: L.Map;
-    mapStyle = '';
+    mapHeight = '390px';
+    flgfullScreen = false;
     private featureGroup: L.MarkerClusterGroup;
     private loadedMapElements: MapElement[];
     private noCoorElements: MapElement[];
@@ -88,17 +90,24 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
         }
     }
 
+    toggleFullScreen() {
+        this.flgfullScreen = !this.flgfullScreen;
+        this.renderMap();
+        const me = this;
+        setTimeout(function init() {
+            me.map.invalidateSize();
+        }, 500);
+    }
+
     private renderMap() {
         // TODO: move to Service
-        let mapHeight = parseInt(this.height, 10) - 30;
-        if (mapHeight < 30) {
-            mapHeight = 30;
-        }
-        this.mapStyle = 'height: ' + mapHeight + 'px;';
-
         if (!this.initialized || !this.mapId) {
             return;
         }
+
+        const mapHeight = this.flgfullScreen ? window.innerHeight - 10 : parseInt(this.height, 10) - 10;
+        this.mapHeight = mapHeight + 'px';
+
         if (!this.map) {
             // set up the map
             this.map = new L.Map(this.mapId);

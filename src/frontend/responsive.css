@@ -95,6 +95,9 @@
         width: 46%;
         display: inline-block;
     }
+    .container-fullline {
+        width: 95% !important;
+    }
 }
 
 @media(min-width: 800px) {

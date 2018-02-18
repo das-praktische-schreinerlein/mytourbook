@@ -1,0 +1,16 @@
+div.visjs-profilemap-map-container {
+    margin: 0;
+    width: 100%;
+}
+
+div.visjs-profilemap-map-container-fullscreen {
+    z-index: 999;
+    position: fixed;
+    margin: 0 !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
