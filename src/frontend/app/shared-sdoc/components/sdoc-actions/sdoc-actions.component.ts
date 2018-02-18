@@ -44,6 +44,12 @@ export class SDocActionsComponent implements OnChanges {
                 actionTagEvent.error = undefined;
                 this.actionTagEvent.emit(actionTagEvent);
                 this.router.navigate([ 'sdocadmin', 'edit', 'anonym', actionTagEvent.record.id ] );
+            } else if (actionTagEvent.config.key === 'createBy') {
+                const payload = JSON.parse(JSON.stringify(actionTagEvent.config.payload));
+                actionTagEvent.processed = true;
+                actionTagEvent.error = undefined;
+                this.actionTagEvent.emit(actionTagEvent);
+                this.router.navigate([ 'sdocadmin', 'create', payload.type, actionTagEvent.record.id ] );
             } else if (actionTagEvent.config.type === 'tag') {
                 const payload = JSON.parse(JSON.stringify(actionTagEvent.config.payload));
                 payload['set'] = actionTagEvent.set;

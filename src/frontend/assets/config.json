@@ -143,6 +143,36 @@
                     ]
                 },
                 {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "->Route",
+                    "shortName": "->Route",
+                    "payload": {
+                        "type": "ROUTE"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "playlists_favorites",
                     "type": "tag",
                     "name": "Favorites",
