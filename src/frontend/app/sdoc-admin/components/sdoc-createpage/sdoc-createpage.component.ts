@@ -8,9 +8,8 @@ import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
-import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pdoc-details.resolver';
 import {IdValidationRule, KeywordValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
@@ -19,7 +18,6 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecordCreateResolver} from '../../../shared-sdoc/resolver/sdoc-create.resolver';
-import {AppState} from '../../../../shared/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-createpage',
@@ -66,15 +64,13 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
                 }
 
                 this.route.data.subscribe(
-                (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
+                (data: { record: ResolvedData<SDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
                     me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
                     const flgSDocError = ErrorResolver.isResolverError(data.record);
-                    const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                     const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
-                    if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
+                    if (!flgSDocError && !flgBaseSearchUrlError) {
                         me.record = data.record.data;
-                        me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
                         me.baseSearchUrl = data.baseSearchUrl.data;
 
                         if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined) {
@@ -111,48 +107,15 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
                     if (flgSDocError) {
                         errorCode = data.record.error.code;
                     } else {
-                        errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
+                        errorCode = data.baseSearchUrl.error.code;
                     }
-                    const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
                     const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
                     const sdocName = (flgSDocError ? 'name' : data.record.data.name);
                     switch (errorCode) {
-                        case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
-                            code = ErrorResolver.ERROR_INVALID_ID;
-                            if (sectionId && sectionId !== '') {
-                                me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                            } else {
-                                me.baseSearchUrl = ['sdoc'].join('/');
-                            }
-                            newUrl = [me.baseSearchUrl,
-                                'show',
-                                this.idValidationRule.sanitize(sdocName),
-                                this.idValidationRule.sanitize(sdocId)].join('/');
-                            msg = undefined;
-                            break;
-                        case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
-                            code = ErrorResolver.ERROR_UNKNOWN_ID;
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                            newUrl = [me.baseSearchUrl,
-                                'show',
-                                this.idValidationRule.sanitize(sdocName),
-                                this.idValidationRule.sanitize(sdocId)].join('/');
-                            msg = undefined;
-                            break;
                         case SDocRecordCreateResolver.ERROR_UNKNOWN_SDOC_TYPE:
                             code = ErrorResolver.ERROR_UNKNOWN_ID;
-                            if (sectionId && sectionId !== '') {
-                                me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                            } else {
-                                me.baseSearchUrl = ['sdoc'].join('/');
-                            }
-                            newUrl = [me.baseSearchUrl].join('/');
-                            msg = undefined;
-                            break;
-                        case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
-                            code = ErrorResolver.ERROR_WHILE_READING;
                             me.baseSearchUrl = ['sdoc'].join('/');
-                            newUrl = undefined;
+                            newUrl = [me.baseSearchUrl].join('/');
                             msg = undefined;
                             break;
                         case GenericAppService.ERROR_APP_NOT_INITIALIZED:

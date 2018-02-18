@@ -20,6 +20,16 @@ const sdocAdminRoutes: Routes = [
                 }
             },
             {
+                path: 'create/:createByType/:createBaseId',
+                component: SDocCreatepageComponent,
+                data: {
+                    baseSearchUrl: { data: 'sdoc/' }
+                },
+                resolve: {
+                    record: SDocRecordCreateResolver
+                }
+            },
+            {
                 path: 'create/:createByType',
                 component: SDocCreatepageComponent,
                 data: {
