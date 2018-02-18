@@ -73,7 +73,7 @@ export class TrackStatisticService  {
             }
             if (p.alt !== undefined) {
                 if (t.altEnd !== undefined) {
-                    const diff = MathUtils.sub(p.alt, t.altEnd);
+                    const diff = MathUtils.sub(MathUtils.round(p.alt), MathUtils.round(t.altEnd));
                     if (diff > 0) {
                         t.altAsc = (t.altAsc !== undefined ? t.altAsc + diff : diff);
                     } else {

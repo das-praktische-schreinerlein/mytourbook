@@ -1,4 +1,12 @@
 export class MathUtils {
+    public static round(i: number): number {
+        if (i === undefined) {
+            return i;
+        }
+
+        return Math.round(i);
+    }
+
     public static min(i: number, o: number): number {
         if (i === undefined) {
             return o;

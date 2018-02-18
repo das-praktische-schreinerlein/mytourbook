@@ -155,23 +155,23 @@
             <textarea formControlName="gpsTrackSrc" class="form-control" type="text" placeholder="gpsTrackSrc" i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpsTrackSrc@@placeholder.form.sdoc.gpsTrackSrc"></textarea>
             <button (click)="updateMap()">Update</button>
         </div>
-        <div class="col-sm-6 form-inline input-group input-group-sm" *ngIf="trackRecords !== undefined && trackRecords.length > 0">
-            <div class="container content-container">
-                <app-sdoc-map [mapId]="'showMap'"
-                              [height]="'400px'"
-                              [mapZoom]="'9'"
-                              [sdocs]="trackRecords"
-                              [showImageTrackAndGeoPos]="'true'"
-                              [mapCenterPos]="undefined"></app-sdoc-map>
+        <ng-container *ngIf="trackStatistic.posStart !== undefined">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <div class="container content-container edit-map-container">
+                    <app-sdoc-map [mapId]="'showMap'"
+                                  [height]="'400px'"
+                                  [mapZoom]="'9'"
+                                  [sdocs]="trackRecords"
+                                  [showImageTrackAndGeoPos]="'true'"
+                                  [mapCenterPos]="undefined"></app-sdoc-map>
+                </div>
+                <div class="container content-container edit-map-container">
+                    <app-sdoc-profilemap [mapId]="'showProfileMap'"
+                                         [height]="'400px'"
+                                         [sdocs]="trackRecords"></app-sdoc-profilemap>
+                </div>
             </div>
-        </div>
-        <div class="col-sm-5 form-inline input-group input-group-sm" *ngIf="trackRecords !== undefined && trackRecords.length > 0">
-            <div class="container content-container">
-                <app-sdoc-profilemap [mapId]="'showProfileMap'"
-                              [height]="'400px'"
-                              [sdocs]="trackRecords"></app-sdoc-profilemap>
-            </div>
-        </div>
+        </ng-container>
     </ng-template>
 
     <ng-container [ngSwitch]="record.type">

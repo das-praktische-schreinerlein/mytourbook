@@ -36,6 +36,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
 
     initialized: boolean;
     map: L.Map;
+    mapStyle = '';
     private featureGroup: L.MarkerClusterGroup;
     private loadedMapElements: MapElement[];
     private noCoorElements: MapElement[];
@@ -89,6 +90,12 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
 
     private renderMap() {
         // TODO: move to Service
+        let mapHeight = parseInt(this.height, 10) - 30;
+        if (mapHeight < 30) {
+            mapHeight = 30;
+        }
+        this.mapStyle = 'height: ' + mapHeight + 'px;';
+
         if (!this.initialized || !this.mapId) {
             return;
         }
