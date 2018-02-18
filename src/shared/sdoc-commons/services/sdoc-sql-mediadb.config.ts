@@ -573,6 +573,11 @@ export class SDocSqlMediadbConfig {
                           'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS t_keywords']
+                },
+                {
+                    from: ' ',
+                    triggerParams: ['id', 'loadTrack'],
+                    groupByFields: ['t_gpstracks_gpx']
                 }
             ],
             groupbBySelectFieldListIgnore: ['t_keywords'],
@@ -772,6 +777,7 @@ export class SDocSqlMediadbConfig {
                 'tour.t_rate_bergtour': ':rate_tech_bergtour_s:',
                 'tour.t_rate_schneeschuh': ':rate_tech_schneeschuh_s:',
                 'tour.t_gpstracks_basefile': ':gpstracks_basefile_s:',
+                'tour.t_gpstracks_gpx': ':gpstrack_src_s:',
                 'tour.t_name': ':name_s:',
                 'tour.t_typ': ':subtype_s:'
             },
@@ -825,6 +831,7 @@ export class SDocSqlMediadbConfig {
                 rate_tech_bergtour_s: 't_rate_bergtour',
                 rate_tech_schneeschuh_s: 't_rate_schneeschuh',
                 gpstracks_basefile_s: 't_gpstracks_basefile',
+                gpstrack_src_s: 't_gpstracks_gpx',
                 keywords_txt: 't_keywords',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
