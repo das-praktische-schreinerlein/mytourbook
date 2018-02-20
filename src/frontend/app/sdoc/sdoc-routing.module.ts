@@ -4,6 +4,8 @@ import {SDocRecordResolver} from '../shared-sdoc/resolver/sdoc-details.resolver'
 import {SDocShowpageComponent} from './components/sdoc-showpage/sdoc-showpage.component';
 import {SDocSearchFormResolver} from '../shared-sdoc/resolver/sdoc-searchform.resolver';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
+import {SDocAlbumResolver} from '../shared-sdoc/resolver/sdoc-album.resolver';
+import {SDocAlbumpageComponent} from './components/sdoc-albumpage/sdoc-albumpage.component';
 
 const sdocRoutes: Routes = [
     {
@@ -53,6 +55,35 @@ const sdocRoutes: Routes = [
                 resolve: {
                     record: SDocRecordResolver
                 }
+            },
+            {
+                path: 'album',
+                children: [
+                    {
+                        path: 'edit/:album/:ids',
+                        component: SDocAlbumpageComponent,
+                        data: {
+                            id: 'sdocs_album_list',
+                            searchFormDefaults: {},
+                            baseSearchUrl: { data: 'sdoc/album/show/' }
+                        },
+                        resolve: {
+                            searchForm: SDocAlbumResolver
+                        }
+                    },
+                    {
+                        path: 'show/:album/:ids',
+                        component: SDocAlbumpageComponent,
+                        data: {
+                            id: 'sdocs_album_show',
+                            searchFormDefaults: {},
+                            baseSearchUrl: { data: 'sdoc/' }
+                        },
+                        resolve: {
+                            searchForm: SDocAlbumResolver
+                        }
+                    },
+                ]
             },
             {
                 path: '**',

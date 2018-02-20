@@ -18,15 +18,18 @@ import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorResolver} from '../sections/resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
-import {SDocLightBox} from '../shared-sdoc/services/sdoc-lightbox.service';
+import {SDocLightBoxService} from '../shared-sdoc/services/sdoc-lightbox.service';
 import {AngularHtmlService} from '../../shared/angular-commons/services/angular-html.service';
 import {AngularMarkdownService} from '../../shared/angular-commons/services/angular-markdown.service';
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
+import {SDocAlbumResolver} from '../shared-sdoc/resolver/sdoc-album.resolver';
+import {SDocAlbumpageComponent} from './components/sdoc-albumpage/sdoc-albumpage.component';
 
 @NgModule({
     declarations: [
         SDocSearchpageComponent,
         SDocShowpageComponent,
+        SDocAlbumpageComponent
     ],
     imports: [
         TranslateModule,
@@ -50,9 +53,10 @@ import {CommonRoutingService} from '../../shared/angular-commons/services/common
         SDocRecordResolver,
         ErrorResolver,
         PageUtils,
-        SDocLightBox,
+        SDocLightBoxService,
         AngularHtmlService,
-        AngularMarkdownService
+        AngularMarkdownService,
+        SDocAlbumResolver
     ],
     exports: [
         SDocSearchpageComponent
