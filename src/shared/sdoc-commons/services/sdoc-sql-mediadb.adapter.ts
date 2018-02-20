@@ -25,11 +25,11 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
     }
 
     protected getTableConfig(params: AdapterQuery): TableConfig {
-        return this.getTableConfigForTable(this.extractTable(params));
+        return this.getTableConfigForTableKey(this.extractTable(params));
     }
 
-    protected getTableConfigForTable(table: string): TableConfig {
-        return this.tableConfig.getTableConfigForTable(table);
+    protected getTableConfigForTableKey(table: string): TableConfig {
+        return this.tableConfig.getTableConfigForTableKey(table);
     }
 
     protected getDefaultFacets(): Facets {
@@ -52,18 +52,18 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
 
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
-            const tabName = types.in[0].toLowerCase();
-            if (this.tableConfig.getTableConfigForTable(tabName) !== undefined) {
-                return tabName;
+            const tabKey = types.in[0].toLowerCase();
+            if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+                return tabKey;
             }
             return undefined;
         }
 
         const ids = params.where['id'];
         if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
-            const tabName = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
-            if (this.tableConfig.getTableConfigForTable(tabName) !== undefined) {
-                return tabName;
+            const tabKey = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
+            if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+                return tabKey;
             }
 
             return undefined;
@@ -74,7 +74,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
 
     protected queryTransformToAdapterWriteQuery(method: string, mapper: Mapper, props: any, opts: any): WriteQueryData {
         const query = super.queryTransformToAdapterWriteQuery(method, mapper, props, opts);
-        if (query.tableConfig.tableName === 'image') {
+        if (query.tableConfig.key === 'image') {
             let file = null;
             let dir = null;
             if (props.get('sdocimages') && props.get('sdocimages').length > 0) {
@@ -112,8 +112,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             return utils.reject('saveDetailData ' + props.type + ' id not an integer');
         }
 
-        const tableName = props.type.toLowerCase();
-        if (tableName === 'track') {
+        const tabKey = props.type.toLowerCase();
+        if (tabKey === 'track') {
             return  new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setTrackKeywords(dbId, props.keywords, opts));
@@ -125,7 +125,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     return allReject(reason);
                 });
             });
-        } else if (tableName === 'image') {
+        } else if (tabKey === 'image') {
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setImageKeywords(dbId, props.keywords, opts));
@@ -137,7 +137,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     return allReject(reason);
                 });
             });
-        } else if (tableName === 'route') {
+        } else if (tabKey === 'route') {
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setRouteKeywords(dbId, props.keywords, opts));
@@ -149,7 +149,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     return allReject(reason);
                 });
             });
-        } else if (tableName === 'location') {
+        } else if (tabKey === 'location') {
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setLocationKeywords(dbId, props.keywords, opts));

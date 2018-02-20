@@ -42,6 +42,7 @@ export interface LoadDetailDataConfig {
 }
 
 export interface TableConfig {
+    key: string;
     tableName: string;
     selectFrom: string;
     selectFieldList: string[];
@@ -423,7 +424,13 @@ export class SqlQueryBuilder {
     protected mapFilterToAdapterQuery(tableConfig: TableConfig, fieldName: string, action: string, value: any): string {
         let realFieldName = undefined;
         if (fieldName === 'id') {
-            value = [this.mapperUtils.prepareSingleValue(value, '_').replace(/.*_/g, '')];
+            const values = [];
+            for (const singleValue of this.mapperUtils.prepareSingleValue(value, ',').split(',')) {
+                values.push(singleValue.trim()
+                    .replace(tableConfig.key + '_', '')
+                    .replace(tableConfig.key.toUpperCase() + '_', ''));
+            }
+            value = values;
         }
 
         if (tableConfig.facetConfigs.hasOwnProperty(fieldName)) {

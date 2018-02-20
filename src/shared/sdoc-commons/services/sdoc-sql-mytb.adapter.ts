@@ -16,11 +16,11 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
     }
 
     protected getTableConfig(params: AdapterQuery): TableConfig {
-        return this.getTableConfigForTable(this.extractTable(params));
+        return this.getTableConfigForTableKey(this.extractTable(params));
     }
 
-    protected getTableConfigForTable(table: string): TableConfig {
-        return this.tableConfig.getTableConfigForTable(table);
+    protected getTableConfigForTableKey(table: string): TableConfig {
+        return this.tableConfig.getTableConfigForTableKey(table);
     }
 
     protected getDefaultFacets(): Facets {
@@ -43,18 +43,18 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
 
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
-            const tabName = types.in[0];
-            if (this.tableConfig.getTableConfigForTable(tabName) !== undefined) {
-                return tabName;
+            const tabKey = types.in[0];
+            if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+                return tabKey;
             }
 
             return undefined;
         }
         const ids = params.where['id'];
         if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
-            const tabName = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
-            if (this.tableConfig.getTableConfigForTable(tabName) !== undefined) {
-                return tabName;
+            const tabKey = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
+            if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+                return tabKey;
             }
 
             return undefined;

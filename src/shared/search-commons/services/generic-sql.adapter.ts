@@ -254,7 +254,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
     };
 
     protected _doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<any> {
-        const tableConfig = this.getTableConfigForTable((record['type'] + '').toLowerCase());
+        const tableConfig = this.getTableConfigForTableKey((record['type'] + '').toLowerCase());
         if (tableConfig === undefined) {
             return utils.reject('no table for actiontag:' + LogUtils.sanitizeLogMsg(actionTagForm.key));
         }
@@ -603,7 +603,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
 
     protected abstract getTableConfig(params: AdapterQuery): TableConfig;
 
-    protected abstract getTableConfigForTable(table: string): TableConfig;
+    protected abstract getTableConfigForTableKey(table: string): TableConfig;
 
     protected abstract getDefaultFacets(): Facets;
 
@@ -648,8 +648,8 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             return undefined;
         }
 
-        const tableName = props.type.toLowerCase();
-        const tableConfig = this.getTableConfigForTable(tableName);
+        const tableKey = props.type.toLowerCase();
+        const tableConfig = this.getTableConfigForTableKey(tableKey);
         if (tableConfig === undefined) {
             return undefined;
         }

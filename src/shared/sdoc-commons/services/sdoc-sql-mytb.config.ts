@@ -4,6 +4,7 @@ import {AdapterFilterActions} from '../../search-commons/services/mapper.utils';
 export class SDocSqlMytbConfig {
     public static tableConfigs = {
         'track': {
+            key: 'track',
             tableName: 'kategorie_full',
             selectFrom: 'kategorie_full LEFT JOIN location ON location.l_id = kategorie_full.l_id ' +
                         'LEFT JOIN image ON kategorie_full.i_id=image.i_id',
@@ -220,6 +221,7 @@ export class SDocSqlMytbConfig {
             }
         },
         'image': {
+            key: 'image',
             tableName: 'image',
             selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
                         'LEFT JOIN location ON location.l_id = kategorie_full.l_id',
@@ -461,6 +463,7 @@ export class SDocSqlMytbConfig {
             }
         },
         'route': {
+            key: 'route',
             tableName: 'tour',
             selectFrom: 'tour LEFT JOIN location ON tour.l_id = location.l_id',
             selectFieldList: [
@@ -692,6 +695,7 @@ export class SDocSqlMytbConfig {
             }
         },
         'location': {
+            key: 'location',
             tableName: 'location',
             selectFrom: 'location',
             selectFieldList: [
@@ -825,6 +829,7 @@ export class SDocSqlMytbConfig {
             }
         },
         'trip': {
+            key: 'trip',
             tableName: 'trip',
             selectFrom: 'trip LEFT JOIN kategorie_full ON kategorie_full.tr_id = trip.tr_id',
             groupbBySelectFieldList: true,
@@ -955,6 +960,7 @@ export class SDocSqlMytbConfig {
             }
         },
         'news': {
+            key: 'news',
             tableName: 'news',
             selectFrom: 'news LEFT JOIN kategorie_full ON kategorie_full.n_id = news.n_id',
             groupbBySelectFieldList: true,
@@ -1086,7 +1092,7 @@ export class SDocSqlMytbConfig {
         }
     };
 
-    public getTableConfigForTable(table: string): TableConfig {
+    public getTableConfigForTableKey(table: string): TableConfig {
         return SDocSqlMytbConfig.tableConfigs[table];
     }
 }

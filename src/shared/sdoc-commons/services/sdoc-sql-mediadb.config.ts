@@ -4,6 +4,7 @@ import {AdapterFilterActions} from '../../search-commons/services/mapper.utils';
 export class SDocSqlMediadbConfig {
     public static tableConfigs = {
         'track': {
+            key: 'track',
             tableName: 'kategorie',
             selectFrom: 'kategorie LEFT JOIN location ON location.l_id = kategorie.l_id ',
 //                        'LEFT JOIN image ON kategorie.i_id=image.i_id ' +
@@ -272,6 +273,7 @@ export class SDocSqlMediadbConfig {
             }
         },
         'image': {
+            key: 'image',
             tableName: 'image',
             selectFrom: 'image LEFT JOIN kategorie ON kategorie.k_id=image.k_id ' +
                         'LEFT JOIN location ON location.l_id = kategorie.l_id ',
@@ -565,6 +567,7 @@ export class SDocSqlMediadbConfig {
             }
         },
         'route': {
+            key: 'route',
             tableName: 'tour',
             selectFrom: 'tour LEFT JOIN location ON tour.l_id = location.l_id ',
             optionalGroupBy: [
@@ -843,6 +846,7 @@ export class SDocSqlMediadbConfig {
             }
         },
         'location': {
+            key: 'location',
             tableName: 'location',
             selectFrom: 'location ',
             optionalGroupBy: [
@@ -990,6 +994,7 @@ export class SDocSqlMediadbConfig {
             }
         },
         'trip': {
+            key: 'trip',
             tableName: 'trip',
             selectFrom: 'trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id',
             optionalGroupBy: [
@@ -1126,6 +1131,7 @@ export class SDocSqlMediadbConfig {
             }
         },
         'news': {
+            key: 'news',
             tableName: 'news',
             selectFrom: 'news',
             selectFieldList: [
@@ -1241,7 +1247,7 @@ export class SDocSqlMediadbConfig {
         }
     };
 
-    public getTableConfigForTable(table: string): TableConfig {
+    public getTableConfigForTableKey(table: string): TableConfig {
         return SDocSqlMediadbConfig.tableConfigs[table];
     }
 }
