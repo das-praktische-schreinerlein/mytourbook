@@ -9,7 +9,7 @@ export interface SDocLightboxAlbumConfig {
 }
 
 @Injectable()
-export class SDocLightBox {
+export class SDocLightBoxService {
     constructor(private contentUtils: SDocContentUtils, private lightbox: Lightbox) {
     }
 

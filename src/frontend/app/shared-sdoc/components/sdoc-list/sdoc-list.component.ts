@@ -3,7 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {SDocLightBox, SDocLightboxAlbumConfig} from '../../services/sdoc-lightbox.service';
+import {SDocLightBoxService, SDocLightboxAlbumConfig} from '../../services/sdoc-lightbox.service';
 
 export enum Layout {
     THIN,
@@ -40,7 +40,7 @@ export class SDocListComponent implements OnChanges {
     };
 
     constructor(private searchFormConverter: SDocSearchFormConverter,
-                private lightboxService: SDocLightBox) {
+                private lightboxService: SDocLightBoxService) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {

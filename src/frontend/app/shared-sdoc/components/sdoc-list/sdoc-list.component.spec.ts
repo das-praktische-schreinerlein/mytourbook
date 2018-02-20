@@ -10,7 +10,7 @@ import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {Lightbox, LightboxConfig, LightboxEvent} from 'angular2-lightbox';
-import {SDocLightBox} from '../../services/sdoc-lightbox.service';
+import {SDocLightBoxService} from '../../services/sdoc-lightbox.service';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
@@ -35,7 +35,7 @@ describe('SDocListComponent', () => {
                 LightboxEvent,
                 LightboxConfig,
                 Lightbox,
-                SDocLightBox,
+                SDocLightBoxService,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],
