@@ -1,7 +1,3 @@
 .navigation-content-container {
     background-color: #dadada;
 }
-
-.navigation-content-container > .pagination {
-    margin: 0!important;
-}
