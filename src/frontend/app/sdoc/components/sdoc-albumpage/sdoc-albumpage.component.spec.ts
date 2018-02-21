@@ -18,6 +18,7 @@ import {Angulartics2} from 'angulartics2';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {SDocAlbumpageComponent} from './sdoc-albumpage.component';
+import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
 
 describe('SDocAlbumpageComponent', () => {
     let component: SDocAlbumpageComponent;
@@ -43,6 +44,7 @@ describe('SDocAlbumpageComponent', () => {
                 ErrorResolver,
                 PageUtils,
                 GenericTrackingService,
+                SDocAlbumService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
             ],
             schemas: [NO_ERRORS_SCHEMA]

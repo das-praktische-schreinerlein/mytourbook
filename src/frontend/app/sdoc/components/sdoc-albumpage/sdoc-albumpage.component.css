@@ -1,3 +1,11 @@
 .navigation-content-container {
     background-color: #dadada;
 }
+textarea {
+    height: 300px;
+}
+div.edit-link {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+}

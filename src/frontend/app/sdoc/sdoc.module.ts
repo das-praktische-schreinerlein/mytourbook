@@ -24,6 +24,7 @@ import {AngularMarkdownService} from '../../shared/angular-commons/services/angu
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
 import {SDocAlbumResolver} from '../shared-sdoc/resolver/sdoc-album.resolver';
 import {SDocAlbumpageComponent} from './components/sdoc-albumpage/sdoc-albumpage.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -34,6 +35,8 @@ import {SDocAlbumpageComponent} from './components/sdoc-albumpage/sdoc-albumpage
     imports: [
         TranslateModule,
         BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
         NgbModule,
         ToastModule,
         HttpModule,

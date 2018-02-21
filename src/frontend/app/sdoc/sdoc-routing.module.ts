@@ -64,6 +64,7 @@ const sdocRoutes: Routes = [
                         component: SDocAlbumpageComponent,
                         data: {
                             id: 'sdocs_album_list',
+                            flgDoEdit: true,
                             searchFormDefaults: {},
                             baseSearchUrl: { data: 'sdoc/album/show/' }
                         },
@@ -82,19 +83,7 @@ const sdocRoutes: Routes = [
                         resolve: {
                             searchForm: SDocAlbumResolver
                         }
-                    },
-                    {
-                        path: 'show/:album/:ids',
-                        component: SDocAlbumpageComponent,
-                        data: {
-                            id: 'sdocs_album_show',
-                            searchFormDefaults: {},
-                            baseSearchUrl: { data: 'sdoc/' }
-                        },
-                        resolve: {
-                            searchForm: SDocAlbumResolver
-                        }
-                    },
+                    }
                 ]
             },
             {

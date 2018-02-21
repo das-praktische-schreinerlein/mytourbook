@@ -10,12 +10,15 @@ import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
-import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {IdCsvValidationRule, IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {SDocAlbumResolver} from '../../../shared-sdoc/resolver/sdoc-album.resolver';
+import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
+import {FormBuilder} from '@angular/forms';
+import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -25,6 +28,8 @@ import {SDocAlbumResolver} from '../../../shared-sdoc/resolver/sdoc-album.resolv
 })
 export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     private initialized = false;
+    private idCsvValidationRule = new IdCsvValidationRule(true);
+
     showLoadingSpinner = false;
     idValidationRule = new IdValidationRule(true);
 
@@ -33,12 +38,19 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     searchForm: SDocSearchForm;
     baseSearchUrl = '/sdoc/';
     mode = 'show';
+    layout = Layout.FLAT;
     curRecordNr = 0;
+    albumKey = 'Current';
+
+    public editFormGroup = this.fb.group({
+        albumSdocIds: ''
+    });
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
+                private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
+                public fb: FormBuilder, private sdocAlbumService: SDocAlbumService) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -50,13 +62,17 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         const me = this;
 
         this.route.data.subscribe(
-            (data: { searchForm: ResolvedData<SDocSearchForm>, flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
+            (data: { searchForm: ResolvedData<SDocSearchForm>, flgDoEdit: boolean, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
                 const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 if (!flgSearchFormError && !flgBaseSearchUrlError) {
                     me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
+
+                    if (data.flgDoEdit === true) {
+                        me.mode = 'edit';
+                    }
 
                     // console.log('route: search for ', data);
                     this.searchForm = data.searchForm.data;
@@ -133,11 +149,42 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    submitSave(event: Event): boolean {
+        const ids = this.editFormGroup.getRawValue()['albumSdocIds'];
+        if (this.idCsvValidationRule.isValid(ids)) {
+            this.sdocAlbumService.removeSdocIds(this.albumKey);
+            for (const id of ids.split(',')) {
+                this.sdocAlbumService.addIdToAlbum(this.albumKey, id);
+            }
+            this.commonRoutingService.navigateByUrl('sdoc/album/show/' + this.albumKey);
+        }
+
+        return false;
+    }
+
+    doEdit(): boolean {
+        this.commonRoutingService.navigateByUrl('sdoc/album/edit/' + this.albumKey);
+        return false;
+    }
+
     private doSearch() {
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.route.toString());
 
         const ids = this.searchForm.moreFilter.replace(/id:/g, '').split(',');
+        this.editFormGroup = this.fb.group({
+            albumSdocIds: [ids.join(',')]
+        });
+
+        const me = this;
+        me.searchResult = new SDocSearchResult(me.searchForm, 0, [], undefined);
+        me.record = undefined;
+        me.cd.markForCheck();
+        if (ids.length <= 0 || ids[0] === '') {
+            return;
+        }
+
+        me.showLoadingSpinner = true;
         const idTypeMap = {};
         for (const id of ids) {
             let [type] = id.split('_');
@@ -146,12 +193,6 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                 idTypeMap[type] = {};
             }
         }
-
-        const me = this;
-        me.showLoadingSpinner = true;
-        me.searchResult = new SDocSearchResult(me.searchForm, 0, [], undefined);
-        me.record = undefined;
-        me.cd.markForCheck();
 
         const promises: Promise<SDocSearchResult>[] = [];
         for (const type in idTypeMap) {

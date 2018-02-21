@@ -13,7 +13,7 @@ export class SDocAlbumResolver implements Resolve<ResolvedData<SDocSearchForm>> 
     static ERROR_INVALID_SDOC_SEARCHFORM = 'ERROR_INVALID_SDOC_SEARCHFORM';
     static ERROR_INVALID_SDOC_ID = 'ERROR_INVALID_SDOC_ID';
     idValidationRule = new IdValidationRule(true);
-    idCsvValidationRule = new IdCsvValidationRule(true);
+    idCsvValidationRule = new IdCsvValidationRule(false);
 
     constructor(private appService: GenericAppService, private sdocAlbumService: SDocAlbumService) {
     }
@@ -36,7 +36,7 @@ export class SDocAlbumResolver implements Resolve<ResolvedData<SDocSearchForm>> 
 
                     let ids = this.sdocAlbumService.getSdocIds(albumKey).join(',');
                     if (ids === undefined || ids.length === 0) {
-                        ids = route.params['ids'];
+                        ids = route.params['ids'] || '';
                     }
 
                     if (!this.idCsvValidationRule.isValid(ids)) {
