@@ -19,6 +19,7 @@ import {AngularHtmlService} from '../../../../shared/angular-commons/services/an
 import {MarkdownService} from 'angular2-markdown';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {HttpModule} from '@angular/http';
 
 describe('SDocListItemPageComponent', () => {
     let component: SDocListItemPageComponent;
@@ -42,7 +43,8 @@ describe('SDocListItemPageComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot(),
-                AngularCommonsModule]
+                AngularCommonsModule,
+                HttpModule]
         })
             .compileComponents();
     }));

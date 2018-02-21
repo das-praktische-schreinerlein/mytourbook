@@ -19,6 +19,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {SDocAlbumpageComponent} from './sdoc-albumpage.component';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
+import {FormBuilder} from '@angular/forms';
 
 describe('SDocAlbumpageComponent', () => {
     let component: SDocAlbumpageComponent;
@@ -45,6 +46,7 @@ describe('SDocAlbumpageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 SDocAlbumService,
+                FormBuilder,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
             ],
             schemas: [NO_ERRORS_SCHEMA]
