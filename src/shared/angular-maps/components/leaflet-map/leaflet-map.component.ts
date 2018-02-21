@@ -134,7 +134,7 @@ export class LeafletMapComponent implements AfterViewChecked, OnChanges {
             const mapElement = this.mapElements[i];
             if (mapElement.trackUrl || mapElement.trackSrc) {
                 let geoFeature: GeoParsedFeature;
-                if (mapElement.trackUrl.endsWith('.gpx')
+                if ((mapElement.trackUrl !== undefined && mapElement.trackUrl.endsWith('.gpx'))
                     || (mapElement.trackSrc !== undefined && mapElement.trackSrc !== null &&
                         (mapElement.trackSrc.indexOf('<trkpt') || mapElement.trackSrc.indexOf('<rpt')))) {
                     geoFeature = new GeoParsedFeature(this.gpxLoader, mapElement, {

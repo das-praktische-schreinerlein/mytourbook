@@ -16,10 +16,6 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {SDocAlbumResolver} from '../../../shared-sdoc/resolver/sdoc-album.resolver';
-import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
-import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -29,32 +25,23 @@ import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.
 })
 export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     private initialized = false;
-    private flgDescRendered = false;
     showLoadingSpinner = false;
     idValidationRule = new IdValidationRule(true);
 
-    public contentUtils: SDocContentUtils;
     searchResult: SDocSearchResult;
     record: SDocRecord;
     searchForm: SDocSearchForm;
     baseSearchUrl = '/sdoc/';
     mode = 'show';
-    tracks: SDocRecord[] = [];
     curRecordNr = 0;
-    flgShowMap = false;
-    flgShowProfileMap = false;
-    maxImageHeight = '0';
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
-                private platformService: PlatformService, contentUtils: SDocContentUtils) {
+                private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
-        this.contentUtils = contentUtils;
     }
 
     ngOnInit() {
@@ -146,25 +133,6 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    renderDesc(): string {
-        if (this.flgDescRendered || !this.record) {
-            return;
-        }
-
-        if (!this.platformService.isClient()) {
-            return this.record.descTxt || '';
-        }
-
-        if (this.record.descHtml) {
-            this.flgDescRendered = this.angularHtmlService.renderHtml('#desc', this.record.descHtml, true);
-        } else {
-            const desc = this.record.descMd ? this.record.descMd : '';
-            this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
-        }
-
-        return '';
-    }
-
     private doSearch() {
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.route.toString());
@@ -183,10 +151,6 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         me.showLoadingSpinner = true;
         me.searchResult = new SDocSearchResult(me.searchForm, 0, [], undefined);
         me.record = undefined;
-        me.flgDescRendered = false;
-        me.tracks = [];
-        me.flgShowMap = false;
-        me.flgShowProfileMap = false;
         me.cd.markForCheck();
 
         const promises: Promise<SDocSearchResult>[] = [];
@@ -233,24 +197,10 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     private loadRecord(nr: number): void {
-        this.record = undefined;
-        this.flgDescRendered = false;
         if (this.searchResult !== undefined && this.searchResult.currentRecords.length >= nr) {
             this.record = this.searchResult.currentRecords[nr - 1];
-        }
-
-        if (this.record !== undefined && (this.record.gpsTrackBasefile || this.record.geoLoc !== undefined
-            || (this.record.gpsTrackSrc !== undefined && this.record.gpsTrackSrc.length > 20))) {
-            this.tracks = [this.record];
-            this.flgShowMap = true;
-            this.flgShowProfileMap = (this.record.gpsTrackBasefile !== undefined
-                || (this.record.gpsTrackSrc !== undefined && this.record.gpsTrackSrc.length > 20));
         } else {
-            this.tracks = [];
-            this.flgShowMap = false;
-            this.flgShowProfileMap = false;
+            this.record = undefined;
         }
-
-        this.maxImageHeight = (window.innerHeight - 200) + 'px';
     }
 }

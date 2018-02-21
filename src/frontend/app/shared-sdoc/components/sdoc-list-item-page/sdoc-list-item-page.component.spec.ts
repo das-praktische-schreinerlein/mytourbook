@@ -15,6 +15,10 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {SDocDateFormatPipe} from '../../pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
+import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
+import {MarkdownService} from 'angular2-markdown';
+import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 describe('SDocListItemPageComponent', () => {
     let component: SDocListItemPageComponent;
@@ -25,9 +29,13 @@ describe('SDocListItemPageComponent', () => {
             declarations: [SDocListItemPageComponent, SDocDateFormatPipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
+                PlatformService,
                 CommonRoutingService,
                 SDocRoutingService,
                 SDocContentUtils,
+                MarkdownService,
+                AngularMarkdownService,
+                AngularHtmlService,
                 DatePipe,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],

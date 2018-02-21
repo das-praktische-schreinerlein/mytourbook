@@ -4,6 +4,9 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
+import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
+import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 @Component({
     selector: 'app-sdoc-list-item-page',
@@ -12,6 +15,7 @@ import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocListItemPageComponent implements OnChanges {
+    private flgDescRendered = false;
     public contentUtils: SDocContentUtils;
     listItem: ItemData = {
         currentRecord: undefined,
@@ -19,8 +23,12 @@ export class SDocListItemPageComponent implements OnChanges {
         thumbnailUrl: undefined,
         previewUrl: undefined,
         image: undefined,
-        urlShow: undefined
+        urlShow: undefined,
+        tracks: [],
+        flgShowMap: false,
+        flgShowProfileMap: false
     };
+    maxImageHeight = '0';
 
     @Input()
     public record: SDocRecord;
@@ -37,7 +45,8 @@ export class SDocListItemPageComponent implements OnChanges {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {
+    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef, private platformService: PlatformService,
+                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService) {
         this.contentUtils = contentUtils;
     }
 
@@ -52,11 +61,6 @@ export class SDocListItemPageComponent implements OnChanges {
         return false;
     }
 
-    public submitShowImage(sdoc: SDocRecord) {
-        this.showImage.emit(sdoc);
-        return false;
-    }
-
     public onActionTagEvent(event: ActionTagEvent) {
         if (event.result !== undefined) {
             this.record = <SDocRecord>event.result;
@@ -66,8 +70,28 @@ export class SDocListItemPageComponent implements OnChanges {
         return false;
     }
 
+    renderDesc(): string {
+        if (this.flgDescRendered || !this.record) {
+            return;
+        }
+
+        if (!this.platformService.isClient()) {
+            return this.record.descTxt || '';
+        }
+
+        if (this.record.descHtml) {
+            this.flgDescRendered = this.angularHtmlService.renderHtml('#desc', this.record.descHtml, true);
+        } else {
+            const desc = this.record.descMd ? this.record.descMd : '';
+            this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
+        }
+
+        return '';
+    }
+
     private updateData() {
         this.contentUtils.updateItemData(this.listItem, this.record, 'page');
+        this.maxImageHeight = (window.innerHeight - 200) + 'px';
         this.cd.markForCheck();
     }
 }

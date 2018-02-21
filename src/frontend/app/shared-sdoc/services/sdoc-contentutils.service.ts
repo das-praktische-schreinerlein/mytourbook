@@ -36,6 +36,9 @@ export interface ItemData {
     image: SDocImageRecord;
     thumbnailUrl: SafeUrl;
     previewUrl: SafeUrl;
+    tracks?: SDocRecord[];
+    flgShowMap?: boolean;
+    flgShowProfileMap?: boolean;
 }
 
 @Injectable()
@@ -325,6 +328,9 @@ export class SDocContentUtils {
             itemData.image = undefined;
             itemData.thumbnailUrl = undefined;
             itemData.previewUrl = undefined;
+            itemData.flgShowMap = false;
+            itemData.flgShowProfileMap = false;
+            itemData.tracks = [];
             return false;
         }
 
@@ -334,10 +340,23 @@ export class SDocContentUtils {
         itemData.image = undefined;
         itemData.thumbnailUrl = undefined;
         itemData.previewUrl = undefined;
+
         if (itemData.currentRecord['sdocimages'] !== undefined && itemData.currentRecord['sdocimages'].length > 0) {
             itemData.image = itemData.currentRecord['sdocimages'][0];
             itemData.thumbnailUrl = this.getThumbnailUrl(itemData.image);
             itemData.previewUrl = this.getPreviewUrl(itemData.image);
+        }
+
+        if (record !== undefined && (record.gpsTrackBasefile || record.geoLoc !== undefined
+                || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20))) {
+            itemData.tracks = [record];
+            itemData.flgShowMap = true;
+            itemData.flgShowProfileMap = (record.gpsTrackBasefile !== undefined
+                || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20));
+        } else {
+            itemData.tracks = [];
+            itemData.flgShowMap = false;
+            itemData.flgShowProfileMap = false;
         }
     }
 
