@@ -391,6 +391,31 @@
                             "expectedValues": [true]
                         }
                     ]
+                },
+                {
+                    "key": "local_album_current",
+                    "type": "albumtag",
+                    "name": "local Album",
+                    "shortName": "&#x2764",
+                    "payload": {
+                        "albumkey": "Current"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "localalbum",
+                            "command": "CSVIN",
+                            "expectedValues": ["Current"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
                 }
 
             ]

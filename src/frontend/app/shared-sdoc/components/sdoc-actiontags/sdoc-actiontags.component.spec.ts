@@ -10,8 +10,8 @@ import {SDocRoutingService} from '../../services/sdoc-routing.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {Router} from '@angular/router';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {DomSanitizer} from '@angular/platform-browser';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {SDocAlbumService} from '../../services/sdoc-album.service';
 
 describe('SDocActionTagsComponent', () => {
     let component: SDocActionTagsComponent;
@@ -26,6 +26,7 @@ describe('SDocActionTagsComponent', () => {
                 CommonRoutingService,
                 SDocRoutingService,
                 SDocContentUtils,
+                SDocAlbumService,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA]

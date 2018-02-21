@@ -37,6 +37,7 @@ import {SDocDynamicComponentService} from './shared-sdoc/services/sdoc-dynamic-c
 import {DynamicComponentService} from '../shared/angular-commons/services/dynamic-components.service';
 import {SDocAdminModule} from './sdoc-admin/sdoc-admin.module';
 import {SDocActionTagsComponent} from './shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
+import {SDocAlbumService} from './shared-sdoc/services/sdoc-album.service';
 
 registerLocaleData(localeDe);
 
@@ -88,6 +89,7 @@ export function getAngulartics2Providers(): any {
         SDocDataStore,
         SDocDataService,
         PDocDataStore,
+        SDocAlbumService,
         PDocDataService,
         SDocDataCacheService,
         SearchFormUtils,

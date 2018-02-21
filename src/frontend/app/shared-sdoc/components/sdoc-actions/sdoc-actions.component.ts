@@ -11,6 +11,7 @@ import {Router} from '@angular/router';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ToastsManager} from 'ng2-toastr';
 import {ActionTagForm} from '../../../../shared/commons/utils/actiontag.utils';
+import {SDocAlbumService} from '../../services/sdoc-album.service';
 
 @Component({
     selector: 'app-sdoc-action',
@@ -35,7 +36,8 @@ export class SDocActionsComponent implements OnChanges {
     private childActionTagEvent: EventEmitter<ActionTagEvent> = new EventEmitter();
 
     constructor(private dynamicComponentService: SDocDynamicComponentService, private router: Router,
-                private sdocDataService: SDocDataService, private toastr: ToastsManager, vcr: ViewContainerRef) {
+                private sdocDataService: SDocDataService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private sdocAlbumService: SDocAlbumService) {
         this.toastr.setRootViewContainerRef(vcr);
         const me = this;
         this.childActionTagEvent.asObservable().subscribe(actionTagEvent => {
@@ -50,6 +52,19 @@ export class SDocActionsComponent implements OnChanges {
                 actionTagEvent.error = undefined;
                 this.actionTagEvent.emit(actionTagEvent);
                 this.router.navigate([ 'sdocadmin', 'create', payload.type, actionTagEvent.record.id ] );
+            } else if (actionTagEvent.config.type === 'albumtag') {
+                const payload = JSON.parse(JSON.stringify(actionTagEvent.config.payload));
+                const key = payload['albumkey'];
+                if (actionTagEvent.set) {
+                    this.sdocAlbumService.addToAlbum(key, <SDocRecord>actionTagEvent.record);
+                } else {
+                    this.sdocAlbumService.removeFromAlbum(key, <SDocRecord>actionTagEvent.record);
+                }
+                actionTagEvent.processed = true;
+                actionTagEvent.error = undefined;
+                actionTagEvent.result = actionTagEvent.record;
+                this.renderComponents();
+                this.actionTagEvent.emit(actionTagEvent);
             } else if (actionTagEvent.config.type === 'tag') {
                 const payload = JSON.parse(JSON.stringify(actionTagEvent.config.payload));
                 payload['set'] = actionTagEvent.set;

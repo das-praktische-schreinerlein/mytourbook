@@ -4,21 +4,11 @@ import {ComponentFactoryResolver, NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SDocActionsComponent} from './sdoc-actions.component';
 import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-components.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {RouterStub} from '../../../../../shared/angular-commons/testing/router-stubs';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
-import {TranslateModule} from '@ngx-translate/core';
-import {GenericAppService} from '../../../../../shared/commons/services/generic-app.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
-import {DatePipe} from '@angular/common';
-import {PlatformService} from '../../../../../shared/angular-commons/services/platform.service';
-import {AppServiceStub} from '../../../../../shared/angular-commons/testing/appservice-stubs';
-import {ActivatedRouteStub} from '../../../../testing/router-stubs';
-import {CommonRoutingService} from '../../../../../shared/angular-commons/services/common-routing.service';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {MarkdownModule} from 'angular2-markdown';
+import {SDocAlbumService} from '../../services/sdoc-album.service';
 
 describe('SDocActionsComponent', () => {
     let component: SDocActionsComponent;
@@ -35,6 +25,7 @@ describe('SDocActionsComponent', () => {
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 ToastsManager,
                 SDocDynamicComponentService,
+                SDocAlbumService,
                 ComponentFactoryResolver
             ],
             schemas: [NO_ERRORS_SCHEMA]

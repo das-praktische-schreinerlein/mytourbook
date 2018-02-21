@@ -5,6 +5,7 @@ import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.servi
 import {BaseEntityRecord} from '../../../../shared/search-commons/model/records/base-entity-record';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ActionTag, ActionTagConfig, ActionTagUtils} from '../../../../shared/commons/utils/actiontag.utils';
+import {SDocAlbumService} from '../../services/sdoc-album.service';
 
 export interface ActionTagEvent {
     record: BaseEntityRecord;
@@ -46,7 +47,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
     @Input()
     public actionTagEvent: EventEmitter<ActionTagEvent>;
 
-    constructor(private appService: GenericAppService, private contentUtils: SDocContentUtils) {
+    constructor(private appService: GenericAppService, private contentUtils: SDocContentUtils, private sdocAlbumService: SDocAlbumService) {
     }
 
     ngOnInit() {
@@ -90,6 +91,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
         if (this.record === undefined) {
             this.tags = [];
         } else {
+            this.sdocAlbumService.initAlbenForSDocId(this.item.currentRecord);
             this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord, this.config);
         }
         if (this.type === 'actionTagsBig') {

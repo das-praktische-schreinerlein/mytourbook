@@ -60,12 +60,24 @@ const sdocRoutes: Routes = [
                 path: 'album',
                 children: [
                     {
-                        path: 'edit/:album/:ids',
+                        path: 'edit/:album',
                         component: SDocAlbumpageComponent,
                         data: {
                             id: 'sdocs_album_list',
                             searchFormDefaults: {},
                             baseSearchUrl: { data: 'sdoc/album/show/' }
+                        },
+                        resolve: {
+                            searchForm: SDocAlbumResolver
+                        }
+                    },
+                    {
+                        path: 'show/:album',
+                        component: SDocAlbumpageComponent,
+                        data: {
+                            id: 'sdocs_album_show',
+                            searchFormDefaults: {},
+                            baseSearchUrl: { data: 'sdoc/' }
                         },
                         resolve: {
                             searchForm: SDocAlbumResolver
