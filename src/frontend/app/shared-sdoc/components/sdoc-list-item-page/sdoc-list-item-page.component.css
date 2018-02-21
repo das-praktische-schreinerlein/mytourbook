@@ -1,3 +1,7 @@
 .image-content-container {
     background: black;
 }
+div.picture-small {
+    max-height: 250px;
+    overflow-y: hidden;
+}
