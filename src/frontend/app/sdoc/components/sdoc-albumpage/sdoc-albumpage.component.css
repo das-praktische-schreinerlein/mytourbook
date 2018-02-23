@@ -1,5 +1,8 @@
 .navigation-content-container {
-    background-color: #dadada;
+    background-color: #dadada; opacity: 0.1;
+}
+:hover {
+    opacity: 1;
 }
 textarea {
     height: 100px;

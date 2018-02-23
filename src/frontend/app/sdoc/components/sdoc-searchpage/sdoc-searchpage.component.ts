@@ -76,7 +76,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                     if (this.searchForm.perPage === 1) {
                         this.layout = Layout.PAGE;
                         this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
-                            '.show-on-fullpage-block { display: block; }', 'fullPageStyle');
+                            '.show-on-fullpage-block { display: block; } ' +
+                            '.content-container, .list-container, .card-deck, .card { background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ' +
+                            '.list-header-container { background: #dadada; opacity: 0.1; } ' +
+                            'div:hover { opacity: 1 }', 'fullPageStyle');
                     } else {
                         this.pageUtils.setGlobalStyle('.show-on-fullpage-block { display: none; }', 'fullPageStyle');
                     }

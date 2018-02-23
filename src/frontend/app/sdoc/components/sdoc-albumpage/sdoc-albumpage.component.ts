@@ -93,8 +93,9 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                     this.trackingProvider.trackPageView();
 
                     this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
-                        '.show-on-fullpage-block { display: block; }', 'fullPageStyle');
-                    this.pageUtils.setGlobalStyle('body { background: #130b0b; } ', 'albumStyle');
+                        '.show-on-fullpage-block { display: block; } ' +
+                        'body { background: #130b0b; } ' +
+                        '.image-content-container {background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ', 'fullPageStyle');
 
                     return this.doSearch();
                 }

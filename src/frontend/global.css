@@ -108,6 +108,15 @@ div.leaflet-div-icon-end, div.leaflet-div-icon-start, div.leaflet-div-icon-point
     display: none;
 }
 
+.fullpage-background {
+    display: none;
+    background: #130b0b;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
 
 div.relative-container {
     position: relative;

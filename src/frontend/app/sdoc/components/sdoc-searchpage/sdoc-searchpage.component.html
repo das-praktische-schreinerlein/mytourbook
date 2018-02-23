@@ -3,7 +3,7 @@
         <div class="relative-container">
             <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
             <div class="container content-container">
-                <div class="container">
+                <div class="container list-header-container">
                     <app-sdoc-list-header [searchResult]="searchResult"
                                           [perPage]="perPage"
                                           [layout]="layout"
@@ -13,7 +13,7 @@
                                           (layoutChange)="onLayoutChange($event)"
                                           (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
                 </div>
-                <div class="container">
+                <div class="container list-container">
                     <app-sdoc-list [searchResult]="searchResult"
                                    [baseSearchUrl]="baseSearchUrl"
                                    [layout]="layout"
