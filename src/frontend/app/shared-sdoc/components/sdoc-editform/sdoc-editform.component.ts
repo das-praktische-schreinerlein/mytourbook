@@ -439,6 +439,7 @@ export class SDocEditformComponent implements OnChanges {
             schemaErrors.map((value: SchemaValidationError, index, array) => {
                 msg += '- ' + value.path + ':' + value.expected + '<br>';
             });
+            console.warn('warning while schema-validating values' + msg, values);
             this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
             return false;
         }
@@ -449,6 +450,7 @@ export class SDocEditformComponent implements OnChanges {
             errors.map((value: string, index, array) => {
                 msg += '- ' + value + '<br>';
             });
+            console.warn('warning while validation values' + msg, values);
             this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
             return false;
         }

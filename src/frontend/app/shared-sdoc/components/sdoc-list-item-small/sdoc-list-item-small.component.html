@@ -1,6 +1,7 @@
 <ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="listItem.currentRecord.type">
     <ng-container *ngSwitchCase="'IMAGE'">
         <div class="card-block card-block-image" [ngClass]="listItem.styleClassFor">
+            <a [name]="listItem.currentRecord.id"></a>
             <div>
                 <div class="image-container">
                     <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
@@ -21,6 +22,7 @@
     </ng-container>
     <ng-container *ngSwitchDefault="">
         <div class="card-block" [ngClass]="listItem.styleClassFor">
+            <a [name]="listItem.currentRecord.id"></a>
             <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
             <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
             <div>

@@ -232,12 +232,12 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     submitBackToSearch() {
-        this.sdocRoutingService.navigateBackToSearch();
+        this.sdocRoutingService.navigateBackToSearch('#' + this.record.id);
         return false;
     }
 
     getBackToSearchUrl(): string {
-        return this.sdocRoutingService.getLastSearchUrl();
+        return this.sdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
     }
 
     getFiltersForType(record: SDocRecord, type: string): any {

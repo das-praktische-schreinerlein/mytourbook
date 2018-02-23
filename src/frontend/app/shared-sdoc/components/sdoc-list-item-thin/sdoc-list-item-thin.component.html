@@ -1,4 +1,5 @@
 <div *ngIf="listItem.currentRecord !== undefined" class="row sdoc-list-item-thin" [ngClass]="listItem.styleClassFor">
+    <a [name]="listItem.currentRecord.id"></a>
     <!--- BIG -->
     <div class="col-2 layout-big">
         <ng-container [ngSwitch]="listItem.currentRecord.type">

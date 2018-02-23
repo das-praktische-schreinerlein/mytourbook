@@ -33,8 +33,8 @@ export class SDocRoutingService {
         return this.lastBaseUrl + 'show/' + name + '/' + sDoc.id; // + (from ? '?from=' + from : '');
     }
 
-    navigateBackToSearch(): Promise<boolean> {
-        return this.commonRoutingService.navigateByUrl(this.getLastSearchUrl());
+    navigateBackToSearch(suffix?: string): Promise<boolean> {
+        return this.commonRoutingService.navigateByUrl(this.getLastSearchUrl() + (suffix ? suffix : ''));
     }
 
     navigateToShow(sDoc: SDocRecord, from: string): Promise<boolean> {

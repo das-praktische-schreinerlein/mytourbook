@@ -34,8 +34,10 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     idValidationRule = new IdValidationRule(true);
 
     searchResult: SDocSearchResult;
+    listSearchResult: SDocSearchResult;
     record: SDocRecord;
     searchForm: SDocSearchForm;
+    listSearchForm: SDocSearchForm;
     baseSearchUrl = '/sdoc/';
     mode = 'show';
     layout = Layout.FLAT;
@@ -52,7 +54,9 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                 private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
                 public fb: FormBuilder, private sdocAlbumService: SDocAlbumService) {
         this.searchForm = new SDocSearchForm({});
+        this.listSearchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
+        this.listSearchResult = new SDocSearchResult(this.listSearchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -75,7 +79,8 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                     }
 
                     // console.log('route: search for ', data);
-                    this.searchForm = data.searchForm.data;
+                    this.searchForm = SDocSearchFormFactory.cloneSanitized(data.searchForm.data);
+                    this.listSearchForm = SDocSearchFormFactory.cloneSanitized(data.searchForm.data);
 
                     me.pageUtils.setGlobalStyle('', 'sectionStyle');
                     this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSearchPage',
@@ -149,6 +154,69 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onPageChange(page: number) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.listSearchForm.pageNum = +page;
+        // console.log('onPageChange: redirect to page', page);
+        this.loadListResult();
+        this.cd.markForCheck();
+
+        return false;
+    }
+
+    onPerPageChange(perPage: number) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.listSearchForm.perPage = perPage;
+        // console.log('onPerPageChange: redirect to perPage', perPage);
+        if (perPage + '' === '1') {
+            this.doShow();
+        }
+        this.loadListResult();
+        this.cd.markForCheck();
+
+        return false;
+    }
+
+    onSortChange(sort: string) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.listSearchForm.sort = sort;
+        // console.log('onSortChange: redirect to sort', sort);
+        this.doSearch();
+
+        return false;
+    }
+
+    onLayoutChange(layout: Layout) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
+        this.layout = layout;
+        if (layout.toString() === Layout.PAGE.toString()) {
+            this.doShow();
+        } else if (this.listSearchForm.perPage === 1) {
+            this.onPerPageChange(10);
+        }
+
+        this.loadListResult();
+        this.cd.markForCheck();
+
+        return false;
+    }
+
     submitSave(event: Event): boolean {
         const ids = this.editFormGroup.getRawValue()['albumSdocIds'];
         if (this.idCsvValidationRule.isValid(ids)) {
@@ -156,7 +224,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
             for (const id of ids.split(',')) {
                 this.sdocAlbumService.addIdToAlbum(this.albumKey, id);
             }
-            this.commonRoutingService.navigateByUrl('sdoc/album/show/' + this.albumKey);
+            this.doShow();
         }
 
         return false;
@@ -164,6 +232,11 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
     doEdit(): boolean {
         this.commonRoutingService.navigateByUrl('sdoc/album/edit/' + this.albumKey);
+        return false;
+    }
+
+    doShow(): boolean {
+        this.commonRoutingService.navigateByUrl('sdoc/album/show/' + this.albumKey);
         return false;
     }
 
@@ -178,6 +251,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
         const me = this;
         me.searchResult = new SDocSearchResult(me.searchForm, 0, [], undefined);
+        me.listSearchResult = new SDocSearchResult(me.listSearchForm, 0, [], undefined);
         me.record = undefined;
         me.cd.markForCheck();
         if (ids.length <= 0 || ids[0] === '') {
@@ -223,9 +297,10 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                 }
             }
 
-            const sdocSearchResult = new SDocSearchResult(me.searchForm, records.length + 1, records, undefined);
+            const sdocSearchResult = new SDocSearchResult(me.searchForm, records.length, records, undefined);
             me.initialized = true;
             me.searchResult = sdocSearchResult;
+            me.loadListResult();
             me.loadRecord(1);
             me.showLoadingSpinner = false;
             me.cd.markForCheck();
@@ -243,5 +318,17 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         } else {
             this.record = undefined;
         }
+    }
+
+    private loadListResult(): void {
+        const listRecords = [];
+        for (let i = (this.listSearchForm.pageNum - 1) * this.listSearchForm.perPage;
+             (i < this.listSearchForm.pageNum * this.listSearchForm.perPage &&
+            i < this.searchResult.recordCount); i++) {
+            listRecords.push(this.searchResult.currentRecords[i]);
+        }
+        const listSdocSearchResult = new SDocSearchResult(this.listSearchForm, this.searchResult.recordCount, listRecords, undefined);
+
+        this.listSearchResult = listSdocSearchResult;
     }
 }

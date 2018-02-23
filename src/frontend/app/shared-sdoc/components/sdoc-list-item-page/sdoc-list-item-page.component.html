@@ -5,7 +5,7 @@
                 <div style="color: #ccc"><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></div>
                 <div class="image-container">
                     <ng-container *ngIf="listItem.image !== undefined">
-                        <img class="picture-big" [style.height]="maxImageHeight" [src]="listItem.previewUrl" alt="{{listItem.image.name}}">
+                        <img class="picture-big" [style.max-height]="maxImageHeight" [src]="listItem.previewUrl" alt="{{listItem.image.name}}">
                     </ng-container>
                 </div>
                 <div style="color: #ccc"><span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
