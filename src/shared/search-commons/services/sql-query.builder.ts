@@ -1,4 +1,5 @@
 import {AdapterFilterActions, AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
+import {isDate} from 'util';
 
 export interface SelectQueryData {
     where: string[];
@@ -125,13 +126,18 @@ export class SqlQueryBuilder {
                 // extract with :field:
                 value = prop;
 
+                let propValue;
                 if (value !== undefined && value !== null) {
                     const replacers = prop.toString().match(/:.*?:/g);
                     if (replacers.length === 1) {
                         for (const replacer of replacers) {
                             const propKey = replacer.replace(/^:(.*):$/, '$1');
                             if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
-                                value = value.replace(replacer, props[propKey]);
+                                propValue = props[propKey];
+                                if (isDate(propValue)) {
+                                    propValue = propValue.toISOString();
+                                }
+                                value = value.replace(replacer, propValue);
                             } else {
                                 value = undefined;
                                 break;
@@ -142,7 +148,11 @@ export class SqlQueryBuilder {
                             const propKey = replacer.replace(/^:(.*):$/, '$1');
                             value = value.replace(replacer, props[propKey]);
                             if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
-                                value = value.replace(replacer, props[propKey]);
+                                propValue = props[propKey];
+                                if (isDate(propValue)) {
+                                    propValue = propValue.toISOString();
+                                }
+                                value = value.replace(replacer, propValue);
                             } else {
                                 value = null;
                                 break;
