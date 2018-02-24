@@ -272,6 +272,12 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onTimeTableColumnClicked(month: string) {
+        this.searchForm.when = month;
+        this.redirectToSearch();
+        return false;
+    }
+
     private redirectToSearch() {
         // reset initialized
         this.initialized = false;

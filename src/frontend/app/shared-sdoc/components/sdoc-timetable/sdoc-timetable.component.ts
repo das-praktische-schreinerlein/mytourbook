@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
@@ -23,6 +23,9 @@ export class SDocTimetableComponent implements OnChanges {
     @Input()
     public searchResult: SDocSearchResult;
 
+    @Output()
+    public columnClicked: EventEmitter<string> = new EventEmitter();
+
     constructor(private searchParameterUtils: SearchParameterUtils, private searchFormUtils: SearchFormUtils) {
     }
 
@@ -30,6 +33,11 @@ export class SDocTimetableComponent implements OnChanges {
         if (ComponentUtils.hasNgChanged(changes)) {
             this.renderTimetable();
         }
+    }
+
+    onColumnClicked(key: any) {
+        this.columnClicked.emit(key);
+        return false;
     }
 
     private renderTimetable() {

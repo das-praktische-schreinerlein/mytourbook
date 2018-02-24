@@ -49,7 +49,7 @@
                       [mapCenterPos]="mapCenterPos"></app-sdoc-map>
     </div>
     <div class="container" *ngIf="searchResult.recordCount > 0">
-        <app-sdoc-timetable [searchResult]="searchResult"></app-sdoc-timetable>
+        <app-sdoc-timetable [searchResult]="searchResult" (columnClicked)="onTimeTableColumnClicked($event)"></app-sdoc-timetable>
     </div>
 </ng-template>
 
