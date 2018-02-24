@@ -1,3 +1,58 @@
+<ng-template #resultContainer let-small=small>
+    <div class="container">
+        <app-sdoc-list-header [searchResult]="searchResult"
+                              [perPage]="perPage"
+                              [layout]="layout"
+                              [sort]="sort"
+                              (perPageChange)="onPerPageChange($event)"
+                              (sortChange)="onSortChange($event)"
+                              (layoutChange)="onLayoutChange($event)"
+                              (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
+    </div>
+    <div class="container">
+        <app-sdoc-list [searchResult]="searchResult"
+                       [baseSearchUrl]="baseSearchUrl"
+                       [layout]="layout"
+                       (show)="onShowSDoc($event)"></app-sdoc-list>
+    </div>
+    <div class="container">
+        <app-sdoc-list-footer [searchResult]="searchResult"
+                              (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
+    </div>
+</ng-template>
+
+<ng-template #formContainer let-small=small let-showForm=showForm>
+    <div class="container">
+        <app-sdoc-searchform [searchResult]="searchResult"
+                             [small]="small"
+                             [showForm]="showForm"
+                             [showDetails]="showForm"
+                             [showFulltext]="showForm"
+                             [showMeta]="showForm"
+                             [showSpecialFilter]="showForm"
+                             [showWhat]="showForm"
+                             [showWhen]="showForm"
+                             [showWhere]="showForm"
+                             (search)="onSearchSDoc($event)"></app-sdoc-searchform>
+    </div>
+</ng-template>
+
+<ng-template #mapContainer let-small=small>
+    <div class="container" *ngIf="mapCenterPos || searchResult.recordCount > 0">
+        <app-sdoc-map [mapId]="'searchMap' + (small ? 'small' : 'big')"
+                      [height]="'300'"
+                      [mapZoom]="mapZoom"
+                      [sdocs]="searchResult.currentRecords"
+                      (sdocClicked)="onMapSDocClicked($event)"
+                      (centerChanged)="onMapCenterChanged($event)"
+                      [mapCenterPos]="mapCenterPos"></app-sdoc-map>
+    </div>
+    <div class="container" *ngIf="searchResult.recordCount > 0">
+        <app-sdoc-timetable [searchResult]="searchResult"></app-sdoc-timetable>
+    </div>
+</ng-template>
+
+
 <ng-container [ngSwitch]="layout">
     <ng-container *ngSwitchCase="Layout.PAGE">
         <div class="relative-container">
@@ -25,47 +80,31 @@
     <ng-container *ngSwitchDefault="">
         <div class="relative-container">
             <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
-            <div class="container content-container">
-                <div class="container">
-                    <app-sdoc-searchform [searchResult]="searchResult"
-                                         (search)="onSearchSDoc($event)"></app-sdoc-searchform>
-                </div>
+            <ng-container [ngSwitch]="formLayout">
+                <ng-container *ngSwitchCase="'big'">
+                    <div class="container content-container" style="width: 25%; float: left">
+                        <ng-container *ngTemplateOutlet="formContainer;context:{small: true, showForm: true}"></ng-container>
+                    </div>
 
-                <div class="container" *ngIf="mapCenterPos || searchResult.recordCount > 0">
-                    <app-sdoc-map [mapId]="'searchMap'"
-                                  [height]="'300'"
-                                  [mapZoom]="mapZoom"
-                                  [sdocs]="searchResult.currentRecords"
-                                  (sdocClicked)="onMapSDocClicked($event)"
-                                  (centerChanged)="onMapCenterChanged($event)"
-                                  [mapCenterPos]="mapCenterPos"></app-sdoc-map>
-                </div>
-                <div class="container" *ngIf="searchResult.recordCount > 0">
-                    <app-sdoc-timetable [searchResult]="searchResult"></app-sdoc-timetable>
-                </div>
-            </div>
-            <div class="container content-container">
-                <div class="container">
-                    <app-sdoc-list-header [searchResult]="searchResult"
-                                          [perPage]="perPage"
-                                          [layout]="layout"
-                                          [sort]="sort"
-                                          (perPageChange)="onPerPageChange($event)"
-                                          (sortChange)="onSortChange($event)"
-                                          (layoutChange)="onLayoutChange($event)"
-                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
-                </div>
-                <div class="container">
-                    <app-sdoc-list [searchResult]="searchResult"
-                                   [baseSearchUrl]="baseSearchUrl"
-                                   [layout]="layout"
-                                   (show)="onShowSDoc($event)"></app-sdoc-list>
-                </div>
-                <div class="container">
-                    <app-sdoc-list-footer [searchResult]="searchResult"
-                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
-                </div>
-            </div>
+                    <div style="width: 73%; display: inline-block;">
+                        <div class="container content-container">
+                            <ng-container *ngTemplateOutlet="mapContainer;context:{small: true}"></ng-container>
+                        </div>
+                        <div class="container content-container">
+                            <ng-container *ngTemplateOutlet="resultContainer;context:{small: true}"></ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngSwitchDefault="">
+                    <div class="container content-container">
+                        <ng-container *ngTemplateOutlet="formContainer;context:{small: false, showForm: false}"></ng-container>
+                        <ng-container *ngTemplateOutlet="mapContainer;context:{small: false}"></ng-container>
+                    </div>
+                    <div class="container content-container">
+                        <ng-container *ngTemplateOutlet="resultContainer;context:{small: false}"></ng-container>
+                    </div>
+                </ng-container>
+            </ng-container>
         </div>
     </ng-container>
 </ng-container>

@@ -39,7 +39,7 @@ export class SDocTimetableComponent implements OnChanges {
             false, [], true);
         for (const value of values) {
             const column = {
-                width: values.length / 12 + '%',
+                width: values.length / (values.length === 13 ? 13 : 12) + '%',
                 value: value['count'],
                 label: value.name,
                 key: value.id

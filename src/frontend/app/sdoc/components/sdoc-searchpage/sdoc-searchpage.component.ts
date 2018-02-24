@@ -19,6 +19,7 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import * as L from 'leaflet';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {FromEventObservable} from 'rxjs/src/observable/FromEventObservable';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -41,6 +42,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     perPage = 10;
     mapCenterPos: L.LatLng = undefined;
     mapZoom = 9;
+    formLayout = 'stacked';
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -56,10 +58,17 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.initialized = false;
         const me = this;
 
+        const $resizeEvent = FromEventObservable.create(window, 'resize');
+        $resizeEvent.subscribe(data => {
+            me.onResize();
+        });
+
         this.route.data.subscribe(
             (data: { searchForm: ResolvedData<SDocSearchForm>, pdoc: ResolvedData<PDocRecord>,
                 flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
+
+                me.onResize();
 
                 const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
@@ -78,6 +87,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                         this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
                             '.show-on-fullpage-block { display: block; } ' +
                             '.content-container, .list-container, .card-deck, .card { background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ' +
+                            '.other-content-container, .map-container { background: white !IMPORTANT; border: 2px !IMPORTANT;} ' +
                             '.list-header-container { background: #dadada; opacity: 0.1; } ' +
                             'div:hover { opacity: 1 }', 'fullPageStyle');
                     } else {
@@ -260,6 +270,16 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
         this.commonRoutingService.navigateByUrl(url);
         return false;
+    }
+
+    private onResize(): void {
+        if (window.innerWidth > 1300) {
+            this.formLayout = 'big';
+        } else {
+            this.formLayout = 'stacked';
+        }
+
+        this.cd.markForCheck();
     }
 
     private doSearch() {

@@ -215,6 +215,14 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public showDetailsAvailable = true;
     public showMetaAvailable = true;
 
+    public width8 = 'col-sm-8';
+    public width4 = 'col-sm-4';
+    public width3 = 'col-sm-3';
+    public width2 = 'col-sm-2';
+
+    @Input()
+    public small? = false;
+
     @Input()
     public short? = false;
 
@@ -334,6 +342,18 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         const me = this;
         const values: SDocSearchForm = sdocSearchSearchResult.searchForm;
 
+        if (this.small === true) {
+            this.width8 = 'col-sm-12';
+            this.width4 = 'col-sm-12';
+            this.width3 = 'col-sm-12';
+            this.width2 = 'col-sm-6';
+        } else {
+            this.width8 = 'col-sm-8';
+            this.width4 = 'col-sm-4';
+            this.width3 = 'col-sm-3';
+            this.width2 = 'col-sm-2';
+        }
+
         this.searchFormGroup = this.fb.group({
             when: [(values.when ? values.when.split(/,/) : [])],
             what: [(values.what ? values.what.split(/,/) : [])],
@@ -385,9 +405,12 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
                     return a.name.localeCompare(b.name);
                 });
         if (this.searchFormUtils.getTypeLimit(sdocSearchSearchResult) > 0) {
-            this.settingsSelectType.autoUnselect = true;
-            this.settingsSelectType.selectionLimit = 1;
+            this.settingsSelectType.selectionLimit = this.searchFormUtils.getTypeLimit(sdocSearchSearchResult);
+        } else {
+            this.settingsSelectType.selectionLimit = 0;
         }
+        this.settingsSelectType.autoUnselect = this.settingsSelectType.selectionLimit + '' === '1';
+
         this.optionsSelectTechRateOverall = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.searchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true),
