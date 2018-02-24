@@ -39,7 +39,7 @@
 </ng-template>
 
 <ng-template #mapContainer let-searchFormLayout=searchFormLayout>
-    <div class="container" *ngIf="searchResult.recordCount > 0">
+    <div class="container">
         <app-sdoc-timetable [searchResult]="searchResult" (columnClicked)="onTimeTableColumnClicked($event)"></app-sdoc-timetable>
     </div>
     <div class="container" *ngIf="mapCenterPos || searchResult.recordCount > 0">
@@ -51,7 +51,7 @@
                       (centerChanged)="onMapCenterChanged($event)"
                       [mapCenterPos]="mapCenterPos"></app-sdoc-map>
     </div>
-    <div class="container" *ngIf="searchResult.recordCount > 0">
+    <div class="container">
         <app-sdoc-typetable [searchResult]="searchResult" (columnClicked)="onTypeTableColumnClicked($event)"></app-sdoc-typetable>
     </div>
 </ng-template>

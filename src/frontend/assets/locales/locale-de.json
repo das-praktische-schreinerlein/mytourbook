@@ -25,6 +25,8 @@
     "trip": "Trip",
     "news": "News",
     "route": "Route",
+    "Monatnull": "Ohne Datum",
+    "Monat0": "Ohne Datum",
     "Monat1": "Januar",
     "Monat2": "Februar",
     "Monat3": "Maerz",
