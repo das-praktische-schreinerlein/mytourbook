@@ -19,6 +19,7 @@ export class SearchParameterUtils {
             if (facetValue[0] === undefined || facetValue[0].toString().length <= 0) {
                 continue;
             }
+
             const convertedValue = [labelPrefix, facetValue[0], valuePrefix, facetValue[1]];
             if (facetValue.length > 2 && facetValue[2] !== null && facetValue[2] !== 'null') {
                 // label

@@ -48,6 +48,7 @@ export class MapperUtils {
     public getMappedAdapterNumberValue(mapping: {}, adapterDocument: any, adapterFieldName: string, defaultValue: any): number {
         return this.getAdapterNumberValue(adapterDocument, this.mapToAdapterFieldName(mapping, adapterFieldName), defaultValue);
     }
+
     public getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
         if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {

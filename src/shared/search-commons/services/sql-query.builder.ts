@@ -83,11 +83,11 @@ export class SqlQueryBuilder {
             sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'DATETIME($1)');
             sql = sql.replace(/SUBSTRING_INDEX\(/g, 'SUBSTR(');
             sql = sql.replace(/CHAR_LENGTH\(/g, 'LENGTH(');
-            sql = sql.replace(/WEEK\((.*?)\)/g, 'STRFTIME("%W", $1)');
+            sql = sql.replace(/WEEK\((.*?)\)/g, 'CAST(STRFTIME("%W", $1) AS INT)');
             sql = sql.replace(/GROUP_CONCAT\(DISTINCT (.*?) ORDER BY (.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $3)');
             sql = sql.replace(/GROUP_CONCAT\((.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $2)');
-            sql = sql.replace(/MONTH\((.*?)\)/g, 'strftime("%m", $1)');
-            sql = sql.replace(/TIME_TO_SEC\(TIMEDIFF\((.*?), (.*?)\)\)\/3600/g, '(JulianDay($1) - JulianDay($2)) * 24');
+            sql = sql.replace(/MONTH\((.*?)\)/g, 'CAST(STRFTIME("%m", $1) AS INT)');
+            sql = sql.replace(/TIME_TO_SEC\(TIMEDIFF\((.*?), (.*?)\)\)\/3600/g, '(JULIANDAY($1) - JULIANDAY($2)) * 24');
         }
         // console.error("sql", sql);
 
