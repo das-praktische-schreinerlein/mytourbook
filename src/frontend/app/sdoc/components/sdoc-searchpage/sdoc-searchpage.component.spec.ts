@@ -18,6 +18,7 @@ import {RouterStub} from '../../../../shared/angular-commons/testing/router-stub
 import {Angulartics2} from 'angulartics2';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 
 describe('SDocSearchpageComponent', () => {
     let component: SDocSearchpageComponent;
@@ -42,6 +43,7 @@ describe('SDocSearchpageComponent', () => {
                 TranslateService,
                 ErrorResolver,
                 PageUtils,
+                PlatformService,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
             ],

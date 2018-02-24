@@ -22,6 +22,11 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocDataCacheService} from '../../services/sdoc-datacache.service';
 
+export enum SearchFormLayout {
+    STACKED,
+    GRID
+}
+
 @Component({
     selector: 'app-sdoc-searchform',
     templateUrl: './sdoc-searchform.component.html',
@@ -221,7 +226,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public width2 = 'col-sm-2';
 
     @Input()
-    public small? = false;
+    public searchFormLayout: SearchFormLayout = SearchFormLayout.GRID;
 
     @Input()
     public short? = false;
@@ -263,6 +268,9 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
 
     @Output()
     public search: EventEmitter<SDocSearchForm> = new EventEmitter();
+
+    @Output()
+    public changedShowForm: EventEmitter<boolean> = new EventEmitter();
 
     // empty default
     public searchFormGroup = this.fb.group({
@@ -342,7 +350,7 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         const me = this;
         const values: SDocSearchForm = sdocSearchSearchResult.searchForm;
 
-        if (this.small === true) {
+        if (this.searchFormLayout === SearchFormLayout.STACKED) {
             this.width8 = 'col-sm-12';
             this.width4 = 'col-sm-12';
             this.width3 = 'col-sm-12';
@@ -486,6 +494,18 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         const values = this.searchFormGroup.getRawValue();
         this.searchFormGroup.patchValue({'moreFilter': undefined});
         this.search.emit(values);
+    }
+
+    updateFormState(state?: boolean): void {
+        if (state !== undefined) {
+            this.showForm = this.showDetails = this.showFulltext = this.showMeta = this.showSpecialFilter = this.showWhat = this.showWhen
+                = this.showWhere = state;
+        } else {
+            this.showForm = this.showDetails || this.showFulltext || this.showMeta || this.showSpecialFilter || this.showWhat
+                || this.showWhen || this.showWhere;
+        }
+
+        this.changedShowForm.emit(this.showForm);
     }
 
     private initGeoCodeAutoCompleteField(selector: string): void {

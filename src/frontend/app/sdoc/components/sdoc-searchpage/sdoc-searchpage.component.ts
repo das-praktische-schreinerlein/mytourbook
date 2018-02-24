@@ -20,6 +20,8 @@ import {CommonRoutingService, RoutingState} from '../../../../shared/angular-com
 import * as L from 'leaflet';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {FromEventObservable} from 'rxjs/src/observable/FromEventObservable';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/sdoc-searchform.component';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -32,6 +34,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     showLoadingSpinner = false;
     idValidationRule = new IdValidationRule(true);
     Layout = Layout;
+    SearchFormLayout = SearchFormLayout;
 
     pdoc: PDocRecord;
     searchResult: SDocSearchResult;
@@ -42,12 +45,14 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     perPage = 10;
     mapCenterPos: L.LatLng = undefined;
     mapZoom = 9;
-    formLayout = 'stacked';
+    searchFormLayout: SearchFormLayout = SearchFormLayout.GRID;
+    showSearchFormElements = true;
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService) {
+                private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
+                private platformService: PlatformService) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -261,6 +266,12 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         console.log("newCenter", newCenter);
     }
 
+    onShowFormChanged(showForm: boolean) {
+        this.showSearchFormElements = showForm;
+        this.onResize();
+        return false;
+    }
+
     private redirectToSearch() {
         // reset initialized
         this.initialized = false;
@@ -273,10 +284,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     private onResize(): void {
-        if (window.innerWidth > 1300) {
-            this.formLayout = 'big';
+        if (this.platformService.isClient() && window.innerWidth > 1300 && this.showSearchFormElements) {
+            this.searchFormLayout = SearchFormLayout.STACKED;
         } else {
-            this.formLayout = 'stacked';
+            this.searchFormLayout = SearchFormLayout.GRID;
         }
 
         this.cd.markForCheck();

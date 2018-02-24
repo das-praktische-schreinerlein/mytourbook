@@ -11,18 +11,18 @@
     <ng-container>
         <div class="row hidden-print">
             <div class="col-sm-12">
-                Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter" (click)="showForm = true"></div>
+                Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter" (click)="updateFormState(true);"></div>
                 <ng-container *ngIf="!short">
-                    <button *ngIf="!showMeta && showMetaAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showMeta = true" i18n="button show MetaDataform|Buttontext to show Metadataform@@button.searchform.show.Metadataform">"Metadaten" filtern</button>
-                    <button *ngIf="!showDetails && showDetailsAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showDetails = true" i18n="button show Detailsform|Buttontext to show Detailsform@@button.searchform.show.Detailsform">"Details" filtern</button>
-                    <button *ngIf="!showFulltext" class="btn btn-configure btn-sm float-right" (click)="showForm = showFulltext = true" i18n="button show Fulltextform|Buttontext to show Fulltextform@@button.searchform.show.Fulltextform">"Text" filtern</button>
-                    <button *ngIf="!showWhat" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhat = true" i18n="button show Whatform|Buttontext to show Whatform@@button.searchform.show.Whatform">"Was" filtern</button>
-                    <button *ngIf="!showWhen && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhen = true" i18n="button show Whenform|Buttontext to show Whatform@@button.searchform.show.Whenform">"Zeit" ändern</button>
-                    <button *ngIf="!showWhere && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showForm = showWhere = true; initGeoCodeAutoComplete(500);" i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</button>
-                    <button *ngIf="humanReadableSpecialFilter !== '' && !showSpecialFilter" class="btn btn-configure btn-sm float-right" (click)="showForm = showSpecialFilter = true;" i18n="button show Moreform|Buttontext to show Moreform@@button.searchform.show.Moreform">"Spezialfilter"</button>
+                    <button *ngIf="!showMeta && showMetaAvailable" class="btn btn-configure btn-sm float-right" (click)="showMeta = true; updateFormState();" i18n="button show MetaDataform|Buttontext to show Metadataform@@button.searchform.show.Metadataform">"Metadaten" filtern</button>
+                    <button *ngIf="!showDetails && showDetailsAvailable" class="btn btn-configure btn-sm float-right" (click)="showDetails = true; updateFormState();" i18n="button show Detailsform|Buttontext to show Detailsform@@button.searchform.show.Detailsform">"Details" filtern</button>
+                    <button *ngIf="!showFulltext" class="btn btn-configure btn-sm float-right" (click)="showFulltext = true; updateFormState();" i18n="button show Fulltextform|Buttontext to show Fulltextform@@button.searchform.show.Fulltextform">"Text" filtern</button>
+                    <button *ngIf="!showWhat" class="btn btn-configure btn-sm float-right" (click)="showWhat = true; updateFormState();" i18n="button show Whatform|Buttontext to show Whatform@@button.searchform.show.Whatform">"Was" filtern</button>
+                    <button *ngIf="!showWhen && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showWhen = true; updateFormState();" i18n="button show Whenform|Buttontext to show Whatform@@button.searchform.show.Whenform">"Zeit" ändern</button>
+                    <button *ngIf="!showWhere && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showWhere = true; updateFormState(); initGeoCodeAutoComplete(500);" i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</button>
+                    <button *ngIf="humanReadableSpecialFilter !== '' && !showSpecialFilter" class="btn btn-configure btn-sm float-right" (click)="showSpecialFilter = true; updateFormState();" i18n="button show Moreform|Buttontext to show Moreform@@button.searchform.show.Moreform">"Spezialfilter"</button>
                 </ng-container>
-                <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="showForm = showMeta = showDetails = showWhen = showFulltext = showWhat = showWhere = showSpecialFilter = true; initGeoCodeAutoComplete(500);" i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</button>
-                <button *ngIf="!short && showForm" class="btn btn-action btn-sm float-right" (click)="showForm = false" i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</button>
+                <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="updateFormState(true); initGeoCodeAutoComplete(500);" i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</button>
+                <button *ngIf="!short && showForm" class="btn btn-action btn-sm float-right" (click)="updateFormState(false);" i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</button>
             </div>
         </div>
     </ng-container>
@@ -181,7 +181,7 @@
                                              (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
-                    <button class="btn btn-configure btn-sm" (click)="showWhat = false" i18n="button hide Whatform|Buttontext to hide Whatform@@button.searchform.hide.Whatform">ausblenden</button>
+                    <button class="btn btn-configure btn-sm" (click)="showWhat = false; updateFormState();" i18n="button hide Whatform|Buttontext to hide Whatform@@button.searchform.hide.Whatform">ausblenden</button>
                 </div>
             </div>
         </fieldset>
@@ -194,7 +194,7 @@
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
                     <button class="btn btn-action btn-sm" type="submit" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
-                    <button class="btn btn-configure btn-sm" (click)="showFulltext = false" i18n="button hide Fulltextform|Buttontext to hide Fulltextform@@button.searchform.hide.Fulltextform">ausblenden</button>
+                    <button class="btn btn-configure btn-sm" (click)="showFulltext = false; updateFormState();" i18n="button hide Fulltextform|Buttontext to hide Fulltextform@@button.searchform.hide.Fulltextform">ausblenden</button>
                 </div>
             </div>
         </fieldset>
@@ -227,7 +227,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
-                    <button class="btn btn-configure btn-sm" (click)="showDetails = false" i18n="button hide Detailsform|Buttontext to hide Detailsform@@button.searchform.hide.Detailsform">ausblenden</button>
+                    <button class="btn btn-configure btn-sm" (click)="showDetails = false; updateFormState();" i18n="button hide Detailsform|Buttontext to hide Detailsform@@button.searchform.hide.Detailsform">ausblenden</button>
                 </div>
             </div>
             <div class="row">
@@ -309,7 +309,7 @@
                     <button class="btn btn-configure btn-sm" (click)="removeMoreIdFilters()" i18n="button remove MoreIdFilters|Buttontext to remove MoreIdFilters@@button.searchform.remove.MoreIdFilters">entfernen</button>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
-                    <button class="btn btn-configure btn-sm" (click)="showSpecialFilter = false" i18n="button hide Moreform|Buttontext to hide Moreform@@button.searchform.hide.Moreform">ausblenden</button>
+                    <button class="btn btn-configure btn-sm" (click)="showSpecialFilter = false; updateFormState();" i18n="button hide Moreform|Buttontext to hide Moreform@@button.searchform.hide.Moreform">ausblenden</button>
                 </div>
             </div>
         </fieldset>
