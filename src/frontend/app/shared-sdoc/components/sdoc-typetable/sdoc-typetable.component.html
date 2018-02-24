@@ -1,0 +1,9 @@
+<div class="row">
+        <ng-container *ngFor="let column of columns">
+                <div class="typetable-column" [style.width]="column.width">
+                        <div [ngClass]="(column.active || column.value > 0 ? 'typetable-column-active' : '') + ' typetable-column-header '" (click)="onColumnClicked(column.key);">
+                                {{column.label}} <span *ngIf="column.value > 0">({{column.value}})</span>
+                        </div>
+                </div>
+        </ng-container>
+</div>

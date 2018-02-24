@@ -277,6 +277,11 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.redirectToSearch();
         return false;
     }
+    onTypeTableColumnClicked(type: string) {
+        this.searchForm.type = type;
+        this.redirectToSearch();
+        return false;
+    }
 
     private redirectToSearch() {
         // reset initialized

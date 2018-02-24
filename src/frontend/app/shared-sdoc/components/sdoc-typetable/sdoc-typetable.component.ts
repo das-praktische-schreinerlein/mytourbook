@@ -1,25 +1,19 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
-import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {TimetableColumn} from '../sdoc-timetable/sdoc-timetable.component';
+import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 
-export interface TimetableColumn {
-    width: string;
-    label: string;
-    key: string;
-    value: string;
-    class: string;
-    active: boolean;
-}
+export interface TypetableColumn extends TimetableColumn {}
+
 @Component({
-    selector: 'app-sdoc-timetable',
-    templateUrl: './sdoc-timetable.component.html',
-    styleUrls: ['./sdoc-timetable.component.css'],
+    selector: 'app-sdoc-typetable',
+    templateUrl: './sdoc-typetable.component.html',
+    styleUrls: ['./sdoc-typetable.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocTimetableComponent implements OnChanges {
-    columns: TimetableColumn[] = [];
+export class SDocTypetableComponent implements OnChanges {
+    columns: TypetableColumn[] = [];
 
     @Input()
     public searchResult: SDocSearchResult;
@@ -27,12 +21,12 @@ export class SDocTimetableComponent implements OnChanges {
     @Output()
     public columnClicked: EventEmitter<string> = new EventEmitter();
 
-    constructor(private searchParameterUtils: SearchParameterUtils, private searchFormUtils: SearchFormUtils) {
+    constructor(private searchFormUtils: SDocSearchFormUtils) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {
-            this.renderTimetable();
+            this.renderTypetable();
         }
     }
 
@@ -41,18 +35,22 @@ export class SDocTimetableComponent implements OnChanges {
         return false;
     }
 
-    private renderTimetable() {
+    private renderTypetable() {
         const result = [];
         const values = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchParameterUtils.extractFacetValues(this.searchResult.facets, 'month_is', 'month', 'Monat'),
-            false, [], true);
+            this.searchFormUtils.getTypeValues(this.searchResult), false, [], true)
+            .sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
 
+        const formValue = (this.searchResult.searchForm ? this.searchResult.searchForm.type : '');
         for (const value of values) {
             const column = {
-                width: values.length / (values.length === 13 ? 13 : 12) + '%',
+                width: 100 / values.length + '%',
                 value: value['count'],
                 label: value.name,
-                key: value.id
+                key: value.id,
+                active: formValue && formValue.indexOf(value.id) >= 0
             };
             result.push(column);
         }
