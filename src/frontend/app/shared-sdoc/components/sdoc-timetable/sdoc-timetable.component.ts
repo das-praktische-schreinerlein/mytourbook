@@ -58,6 +58,9 @@ export class SDocTimetableComponent implements OnChanges {
             if (facetValue[0] === undefined || facetValue[0].toString().length <= 0) {
                 continue;
             }
+            if (facetValue[0] === null || facetValue[0] === 'null') {
+                facetValue[0] = 0;
+            }
             keys[facetValue[0]] = facetValue;
         }
 
@@ -97,7 +100,7 @@ export class SDocTimetableComponent implements OnChanges {
             false, [], true);
         for (const value of values) {
             const column = {
-                width: values.length / (values.length === 13 ? 13 : 12) + '%',
+                width: 100 / values.length + '%',
                 value: value['count'],
                 label: value.name,
                 key: value.id

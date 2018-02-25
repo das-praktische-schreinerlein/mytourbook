@@ -1,10 +1,10 @@
 <div class="row">
         <ng-container *ngFor="let column of columns">
-                <div class="timetable-column" style="width: {{column.width}}">
-                        <div class="timetable-column-header {{column.class}}" (click)="onColumnClicked(column.key);">
+                <div class="timetable-column" [style.width]="column.width">
+                        <div class="timetable-column-header" (click)="onColumnClicked(column.key);">
                                 {{column.label}}
                         </div>
-                        <div [ngClass]="{'timetable-column-active': column.value > 0 }" class="timetable-column-value" (click)="onColumnClicked(column.key);">
+                        <div [ngClass]="(column.value > 0 || column.active ? 'timetable-column-active ' : '') + 'timetable-column-value'" (click)="onColumnClicked(column.key);">
                                 <span *ngIf="column.value > 0">{{column.value}}</span>
                         </div>
                 </div>
