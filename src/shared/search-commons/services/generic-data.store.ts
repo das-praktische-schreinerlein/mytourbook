@@ -26,6 +26,8 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     constructor(private updateRelations: string[]) {
         const me = this;
         this.store = new DataStore({
+            usePendingFindAll: false,
+            usePendingFind: false,
             mapperDefaults: {
                 // Override the original to make sure the date properties are actually Date
                 // objects
