@@ -3,6 +3,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {Facet, Facets} from '../../../../../shared/search-commons/model/container/facets';
 
 export interface TimetableColumn {
     width: string;
@@ -43,10 +44,57 @@ export class SDocTimetableComponent implements OnChanges {
 
     private renderTimetable() {
         const result = [];
-        const values = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchParameterUtils.extractFacetValues(this.searchResult.facets, 'month_is', 'month', 'Monat'),
-            false, [], true);
+        const facetName = 'month_is';
+        const origFacet = this.searchResult.facets.facets.get(facetName);
+        if (origFacet === undefined || origFacet.facet === undefined) {
+            this.columns = [];
+            return;
+        }
 
+        // copy facets
+        const keys = {};
+        for (const idx in origFacet.facet) {
+            const facetValue = origFacet.facet[idx];
+            if (facetValue[0] === undefined || facetValue[0].toString().length <= 0) {
+                continue;
+            }
+            keys[facetValue[0]] = facetValue;
+        }
+
+        // fill month
+        for (let i = 1; i <= 12; i++) {
+            const key = '' + i;
+            if (keys[key] === undefined) {
+                keys[key] = [key, 0];
+            }
+        }
+
+        // sort
+        const timeValues = [];
+        for (const idx in keys) {
+            timeValues.push(keys[idx]);
+        }
+        timeValues.sort((a, b) => {
+            const nameA = parseInt(a[0], 10);
+            const nameB = parseInt(b[0], 10);
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        });
+
+        // create new timefacet
+        const timeFacets = new Facets();
+        const timeFacet = new Facet();
+        timeFacet.facet = timeValues;
+        timeFacets.facets.set(facetName, timeFacet);
+
+        const values = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchParameterUtils.extractFacetValues(timeFacets, facetName, 'month', 'Monat'),
+            false, [], true);
         for (const value of values) {
             const column = {
                 width: values.length / (values.length === 13 ? 13 : 12) + '%',
