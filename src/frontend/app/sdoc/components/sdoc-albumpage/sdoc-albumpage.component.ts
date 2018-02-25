@@ -19,6 +19,7 @@ import {SDocAlbumResolver} from '../../../shared-sdoc/resolver/sdoc-album.resolv
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
+import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -145,6 +146,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
     onCurRecordChange(page: number) {
         this.curRecordNr = page;
+        this.searchForm.pageNum = this.curRecordNr;
         this.loadRecord(this.curRecordNr);
         this.cd.markForCheck();
         return false;
@@ -232,12 +234,14 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     doEdit(): boolean {
-        this.commonRoutingService.navigateByUrl('sdoc/album/edit/' + this.albumKey);
+        this.commonRoutingService.navigateByUrl(['sdoc/album/edit', this.albumKey, this.listSearchForm.sort, 10,
+            Math.round(this.curRecordNr / 10) || 1].join('/'));
         return false;
     }
 
     doShow(): boolean {
-        this.commonRoutingService.navigateByUrl('sdoc/album/show/' + this.albumKey);
+        this.commonRoutingService.navigateByUrl(['sdoc/album/show', this.albumKey, this.listSearchForm.sort, 1,
+            this.listSearchForm.pageNum * this.listSearchForm.perPage].join('/'));
         return false;
     }
 
@@ -265,20 +269,26 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
             let [type] = id.split('_');
             type = type.toLowerCase();
             if (idTypeMap[type] === undefined) {
-                idTypeMap[type] = {};
+                idTypeMap[type] = { ids: [], records: {}};
             }
+            idTypeMap[type]['ids'].push(id);
         }
 
         const promises: Promise<SDocSearchResult>[] = [];
         for (const type in idTypeMap) {
-            const typeSearchForm = SDocSearchFormFactory.cloneSanitized(this.searchForm);
-            typeSearchForm.type = type;
-            typeSearchForm.perPage = 99;
-            promises.push(this.sdocDataService.search(typeSearchForm, {
-                showFacets: false,
-                loadTrack: true,
-                showForm: false
-            }));
+            for (let page = 1; page <= (idTypeMap[type]['ids'].length / 99) + 1; page ++) {
+                const typeSearchForm = new SDocSearchForm({});
+                typeSearchForm.moreFilter = 'id:' + idTypeMap[type]['ids'].join(',');
+                typeSearchForm.type = type;
+                typeSearchForm.perPage = 99;
+                typeSearchForm.pageNum = page;
+                typeSearchForm.sort = 'dateAsc';
+                promises.push(this.sdocDataService.search(typeSearchForm, {
+                    showFacets: false,
+                    loadTrack: true,
+                    showForm: false
+                }));
+            }
         }
 
         Promise.all(promises).then(function doneSearch(sdocSearchResults: SDocSearchResult[]) {
@@ -287,22 +297,40 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                 for (const sdoc of sdocSearchResult.currentRecords) {
                     let [type] = sdoc.id.split('_');
                     type = type.toLowerCase();
-                    idTypeMap[type][sdoc.id] = sdoc;
+                    idTypeMap[type]['records'][sdoc.id] = sdoc;
                 }
             });
             for (const id of ids) {
                 let [type] = id.split('_');
                 type = type.toLowerCase();
-                if (idTypeMap[type][id] !== undefined) {
-                    records.push(idTypeMap[type][id]);
+                if (idTypeMap[type]['records'][id] !== undefined) {
+                    records.push(idTypeMap[type]['records'][id]);
                 }
+            }
+
+            if (me.listSearchForm.sort === 'dateAsc') {
+                records.sort((a, b) => {
+                    const dateA = DateUtils.parseDate(a['dateshow']);
+                    const dateB = DateUtils.parseDate(b['dateshow']);
+                    const nameA = (dateA !== undefined ? dateA.getTime() : 0);
+                    const nameB = (dateB !== undefined ? dateB.getTime() : 0);
+
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+
+                    return 0;
+                });
             }
 
             const sdocSearchResult = new SDocSearchResult(me.searchForm, records.length, records, undefined);
             me.initialized = true;
             me.searchResult = sdocSearchResult;
             me.loadListResult();
-            me.loadRecord(1);
+            me.loadRecord(me.curRecordNr);
             me.showLoadingSpinner = false;
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
@@ -331,5 +359,6 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         const listSdocSearchResult = new SDocSearchResult(this.listSearchForm, this.searchResult.recordCount, listRecords, undefined);
 
         this.listSearchResult = listSdocSearchResult;
+        this.curRecordNr = this.listSearchForm.pageNum;
     }
 }

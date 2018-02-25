@@ -45,8 +45,16 @@ export class SDocAlbumResolver implements Resolve<ResolvedData<SDocSearchForm>> 
                         return resolve(result);
                     }
 
+                    const perPage = route.params['perPage'];
+                    const pageNum = route.params['pageNum'];
+                    const sort = route.params['sort'];
+
                     ids = this.idCsvValidationRule.sanitize(ids);
-                    const searchForm = SDocSearchFormFactory.createSanitized( {moreFilter: 'id:' + ids});
+                    const searchForm = SDocSearchFormFactory.createSanitized( {
+                        moreFilter: 'id:' + ids,
+                        sort: sort,
+                        perPage: perPage,
+                        pageNum: pageNum});
                     result.data = searchForm;
                     return resolve(result);
                 } else if (appState === AppState.Failed) {

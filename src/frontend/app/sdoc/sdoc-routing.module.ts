@@ -60,7 +60,7 @@ const sdocRoutes: Routes = [
                 path: 'album',
                 children: [
                     {
-                        path: 'edit/:album',
+                        path: 'edit/:album/:sort/:perPage/:pageNum',
                         component: SDocAlbumpageComponent,
                         data: {
                             id: 'sdocs_album_list',
@@ -73,7 +73,7 @@ const sdocRoutes: Routes = [
                         }
                     },
                     {
-                        path: 'show/:album',
+                        path: 'show/:album/:sort/:perPage/:pageNum',
                         component: SDocAlbumpageComponent,
                         data: {
                             id: 'sdocs_album_show',

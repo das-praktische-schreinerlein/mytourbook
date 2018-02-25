@@ -26,7 +26,7 @@
                                           [perPage]="listSearchForm.perPage"
                                           [layout]="layout"
                                           [sort]="listSearchForm.sort"
-                                          [availableSorts]="[]"
+                                          [availableSorts]="['relevance', 'dateAsc']"
                                           (perPageChange)="onPerPageChange($event)"
                                           (sortChange)="onSortChange($event)"
                                           (layoutChange)="onLayoutChange($event)"
