@@ -46,16 +46,29 @@
         </div>
     </ng-container>
     <ng-container *ngSwitchDefault="">
-        <div class="container content-container navigation-content-container">
-            <ngb-pagination (pageChange)="onCurRecordChange($event)"
-                            [pageSize]="1"
-                            [collectionSize]="searchResult.recordCount - 1"
-                            [page]="curRecordNr"
-                            [maxSize]="20"
-                            [rotate]="true"
-                            [ellipses]="false"
-                            [boundaryLinks]="true"
-                            size="sm"></ngb-pagination>
+        <div class="container content-container navigation-content-container" [formGroup]="albumFormGroup">
+            <div class="form-control-sm row">
+                <div class="col-sm-2">
+                    <button class="btn btn-action" (click)="doRunAlbum(true)" *ngIf="!albumRunning" i18n="button autoplay album start|Buttontext to start autoplay album@@button.album.startAutoPlay">Start</button>
+                    <button class="btn btn-action" (click)="doRunAlbum(false)" *ngIf="albumRunning" i18n="button autoplay album stop|Buttontext to stop autoplay album@@button.album.stopAutoPlay">Stop</button>
+                    <select class="" name="albumIntervalTimeout" id="albumIntervalTimeout" formControlName="albumIntervalTimeout" (change)="onAlbumIntervalTimeoutChange($event)">
+                        <ng-container *ngFor="let intervalValue of [2, 3, 5, 10, 15, 20, 30]">
+                            <option [value]="intervalValue">{{ intervalValue }}s</option>
+                        </ng-container>
+                    </select>
+                </div>
+                <div class="col-sm-10">
+                    <ngb-pagination (pageChange)="onCurRecordChange($event)"
+                                    [pageSize]="1"
+                                    [collectionSize]="searchResult.recordCount - 1"
+                                    [page]="curRecordNr"
+                                    [maxSize]="10"
+                                    [rotate]="true"
+                                    [ellipses]="false"
+                                    [boundaryLinks]="true"
+                                    size="sm"></ngb-pagination>
+                </div>
+            </div>
         </div>
         <ng-container *ngIf="record !== undefined">
             <app-sdoc-list-item-page [record]="record"

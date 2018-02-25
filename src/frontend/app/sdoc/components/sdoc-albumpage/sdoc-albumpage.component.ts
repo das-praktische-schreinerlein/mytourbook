@@ -44,9 +44,15 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     layout = Layout.FLAT;
     curRecordNr = 0;
     albumKey = 'Current';
+    albumRunning = false;
+    albumInterval = undefined;
+    albumIntervalTimeout = 5;
 
     public editFormGroup = this.fb.group({
         albumSdocIds: ''
+    });
+    public albumFormGroup = this.fb.group({
+        albumIntervalTimeout: [5]
     });
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
@@ -98,6 +104,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                         'body { background: #130b0b; } ' +
                         '.image-content-container {background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ', 'fullPageStyle');
 
+                    me.curRecordNr = this.listSearchForm.pageNum;
                     return this.doSearch();
                 }
 
@@ -145,8 +152,13 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     onCurRecordChange(page: number) {
+        if (page < 1) {
+            page = 1;
+        }
+        if (page >= this.listSearchResult.recordCount) {
+            page = 1;
+        }
         this.curRecordNr = page;
-        this.searchForm.pageNum = this.curRecordNr;
         this.loadRecord(this.curRecordNr);
         this.cd.markForCheck();
         return false;
@@ -242,6 +254,40 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     doShow(): boolean {
         this.commonRoutingService.navigateByUrl(['sdoc/album/show', this.albumKey, this.listSearchForm.sort, 1,
             this.listSearchForm.pageNum * this.listSearchForm.perPage].join('/'));
+        return false;
+    }
+
+    onAlbumIntervalTimeoutChange(event: Event): boolean {
+        const timeout = event.target['value'];
+        if (timeout > 1) {
+            this.albumIntervalTimeout = timeout;
+            this.doRunAlbum(false);
+            this.doRunAlbum(true);
+        } else {
+            console.warn('illegal Interval:' + timeout, event);
+        }
+
+        return false;
+    }
+
+    doRunAlbum(run: boolean): boolean {
+        const me = this;
+        if (run && !this.albumRunning && this.albumInterval === undefined) {
+            this.albumInterval = setInterval(() => {
+                me.onCurRecordChange(me.curRecordNr + 1);
+                this.searchForm.pageNum = this.curRecordNr;
+                this.listSearchForm.pageNum = this.curRecordNr;
+            }, (me.albumIntervalTimeout ? me.albumIntervalTimeout : 999999) * 1000);
+            me.listSearchForm.pageNum = me.curRecordNr;
+            this.albumRunning = true;
+        } else {
+            if (this.albumInterval) {
+                clearInterval(this.albumInterval);
+            }
+            this.albumInterval = undefined;
+            this.albumRunning = false;
+        }
+
         return false;
     }
 
@@ -342,6 +388,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     private loadRecord(nr: number): void {
+        this.curRecordNr = nr;
         if (this.searchResult !== undefined && this.searchResult.currentRecords.length >= nr) {
             this.record = this.searchResult.currentRecords[nr - 1];
         } else {
