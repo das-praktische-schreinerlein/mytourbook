@@ -91,7 +91,7 @@ export class SDocListItemPageComponent implements OnChanges {
 
     private updateData() {
         this.contentUtils.updateItemData(this.listItem, this.record, 'page');
-        this.maxImageHeight = (window.innerHeight - 200) + 'px';
+        this.maxImageHeight = (window.innerHeight - 150) + 'px';
         this.cd.markForCheck();
     }
 }

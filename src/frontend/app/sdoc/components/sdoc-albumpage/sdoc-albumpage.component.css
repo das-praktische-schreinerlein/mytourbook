@@ -1,6 +1,8 @@
 .navigation-content-container {
-    background-color: #dadada; opacity: 0.1;
+    background-color: #dadada;
+    opacity: 0.1;
 }
+
 :hover {
     opacity: 1;
 }

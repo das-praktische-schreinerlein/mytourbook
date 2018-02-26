@@ -252,3 +252,10 @@ div.humanReadableSearchFilter div.filter {
 input::placeholder, input::-webkit-input-placeholder, input:-ms-input-placeholder, input:placeholder-shown, input:-moz-placeholder {
     color: #e8e8e8 !important;
 }
+
+.list-header-container ul.pagination-sm, .footer ul.pagination-sm {
+    margin-bottom: 5px;
+}
+.navigation-content-container ul.pagination-sm {
+    margin: 0;
+}

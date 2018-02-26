@@ -49,8 +49,8 @@
         <div class="container content-container navigation-content-container" [formGroup]="albumFormGroup">
             <div class="form-control-sm row">
                 <div class="col-sm-2">
-                    <button class="btn btn-action" (click)="doRunAlbum(true)" *ngIf="!albumRunning" i18n="button autoplay album start|Buttontext to start autoplay album@@button.album.startAutoPlay">Start</button>
-                    <button class="btn btn-action" (click)="doRunAlbum(false)" *ngIf="albumRunning" i18n="button autoplay album stop|Buttontext to stop autoplay album@@button.album.stopAutoPlay">Stop</button>
+                    <button class="btn btn-sm btn-action" (click)="doRunAlbum(true)" *ngIf="!albumRunning" i18n="button autoplay album start|Buttontext to start autoplay album@@button.album.startAutoPlay">Start</button>
+                    <button class="btn btn-sm btn-action" (click)="doRunAlbum(false)" *ngIf="albumRunning" i18n="button autoplay album stop|Buttontext to stop autoplay album@@button.album.stopAutoPlay">Stop</button>
                     <select class="" name="albumIntervalTimeout" id="albumIntervalTimeout" formControlName="albumIntervalTimeout" (change)="onAlbumIntervalTimeoutChange($event)">
                         <ng-container *ngFor="let intervalValue of [2, 3, 5, 10, 15, 20, 30]">
                             <option [value]="intervalValue">{{ intervalValue }}s</option>
@@ -66,7 +66,7 @@
                                     [rotate]="true"
                                     [ellipses]="false"
                                     [boundaryLinks]="true"
-                                    size="sm"></ngb-pagination>
+                                    size="sm" class="pagination-sm"></ngb-pagination>
                 </div>
             </div>
         </div>
