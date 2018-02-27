@@ -42,7 +42,7 @@ export class AssetsServerModule {
                                                errorFile: string, filePathErrorDocs: string) {
         if (backendConfig['apiRouteStoredTracks'] && backendConfig['apiRouteTracksStaticDir']) {
             console.log('configure route trackstore:',
-                apiPrefix + backendConfig['apiRouteStoredTracks'] + ':resolution/:resolveSdocBySdocId'
+                apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveSdocBySdocId'
                 + ' to ' + backendConfig['apiRouteTracksStaticDir']);
             app.param('trackFormat', function(req, res, next, trackFormat) {
                 req['trackFormat'] = undefined;
