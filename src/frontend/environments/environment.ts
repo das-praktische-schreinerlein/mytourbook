@@ -15,5 +15,6 @@ export const environment = {
     useAssetStoreUrls: true,
     sdocWritable: true,
     sdocActionTagWritable: true,
+    sdocMaxItemsPerAlbum: 20000,
     trackingProviders: [Angulartics2Piwik]
 };
