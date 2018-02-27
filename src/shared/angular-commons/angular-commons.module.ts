@@ -5,13 +5,15 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {ShowBrowserOnOfflineComponent} from './components/show-browseronoffline/show-browseronoffline.component';
 import {DynamicComponentHostDirective} from './components/directives/dynamic-component-host.directive';
+import {IntervalControlComponent} from './components/interval-control/interval-control.component';
 
 @NgModule({
     declarations: [
         TruncatePipe,
         DynamicComponentHostDirective,
         SwitchOnOfflineComponent,
-        ShowBrowserOnOfflineComponent
+        ShowBrowserOnOfflineComponent,
+        IntervalControlComponent
     ],
     imports: [
         BrowserModule,
@@ -22,7 +24,8 @@ import {DynamicComponentHostDirective} from './components/directives/dynamic-com
         TruncatePipe,
         DynamicComponentHostDirective,
         SwitchOnOfflineComponent,
-        ShowBrowserOnOfflineComponent
+        ShowBrowserOnOfflineComponent,
+        IntervalControlComponent
     ]
 })
 export class AngularCommonsModule {
