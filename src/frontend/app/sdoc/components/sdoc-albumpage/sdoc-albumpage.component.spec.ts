@@ -20,6 +20,8 @@ import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angul
 import {SDocAlbumpageComponent} from './sdoc-albumpage.component';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
 import {FormBuilder} from '@angular/forms';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 describe('SDocAlbumpageComponent', () => {
     let component: SDocAlbumpageComponent;
@@ -38,6 +40,7 @@ describe('SDocAlbumpageComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 SDocSearchFormConverter,
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 SDocRoutingService,
                 ToastsManager,
