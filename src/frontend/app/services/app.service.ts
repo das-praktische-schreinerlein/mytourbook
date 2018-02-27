@@ -22,6 +22,7 @@ export class AppService extends GenericAppService {
             sdocWritable: environment.sdocWritable,
             sdocActionTagWritable: environment.sdocActionTagWritable
         },
+        sdocMaxItemsPerAlbum: environment.sdocMaxItemsPerAlbum,
         components: {},
         services: {}
     };
