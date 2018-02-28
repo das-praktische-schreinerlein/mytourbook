@@ -19,9 +19,10 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import * as L from 'leaflet';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
-import {FromEventObservable} from 'rxjs/src/observable/FromEventObservable';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/sdoc-searchform.component';
+import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -31,10 +32,13 @@ import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/
 })
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
+    private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
+
     showLoadingSpinner = false;
     idValidationRule = new IdValidationRule(true);
     Layout = Layout;
     SearchFormLayout = SearchFormLayout;
+    LayoutSize = LayoutSize;
 
     pdoc: PDocRecord;
     searchResult: SDocSearchResult;
@@ -52,7 +56,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
-                private platformService: PlatformService) {
+                private platformService: PlatformService, private layoutService: LayoutService) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -63,9 +67,9 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.initialized = false;
         const me = this;
 
-        const $resizeEvent = FromEventObservable.create(window, 'resize');
-        $resizeEvent.subscribe(data => {
-            me.onResize();
+        this.layoutSizeObservable = this.layoutService.getLayoutSizeData();
+        this.layoutSizeObservable.subscribe(layoutSizeData => {
+            me.onResize(layoutSizeData);
         });
 
         this.route.data.subscribe(
@@ -73,7 +77,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
                 flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
-                me.onResize();
+                me.onResize(this.layoutSizeObservable.getValue());
 
                 const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
@@ -188,6 +192,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.layoutSizeObservable.unsubscribe();
     }
 
     onShowSDoc(sdoc: SDocRecord) {
@@ -268,7 +273,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     onShowFormChanged(showForm: boolean) {
         this.showSearchFormElements = showForm;
-        this.onResize();
+        this.onResize(this.layoutSizeObservable.getValue());
         return false;
     }
 
@@ -294,8 +299,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private onResize(): void {
-        if (this.platformService.isClient() && window.innerWidth > 1300 && this.showSearchFormElements) {
+    private onResize(layoutSizeData: LayoutSizeData): void {
+        if (this.platformService.isClient() && layoutSizeData.layoutSize >= LayoutSize.VERYBIG && this.showSearchFormElements) {
             this.searchFormLayout = SearchFormLayout.STACKED;
         } else {
             this.searchFormLayout = SearchFormLayout.GRID;

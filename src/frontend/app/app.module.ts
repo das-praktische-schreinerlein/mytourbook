@@ -38,6 +38,7 @@ import {DynamicComponentService} from '../shared/angular-commons/services/dynami
 import {SDocAdminModule} from './sdoc-admin/sdoc-admin.module';
 import {SDocActionTagsComponent} from './shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
 import {SDocAlbumService} from './shared-sdoc/services/sdoc-album.service';
+import {LayoutService} from '../shared/angular-commons/services/layout.service';
 
 registerLocaleData(localeDe);
 
@@ -97,7 +98,8 @@ export function getAngulartics2Providers(): any {
         AngularHtmlService,
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },
         PageUtils,
-        { provide: PlatformService, useClass: PlatformService}
+        { provide: PlatformService, useClass: PlatformService},
+        LayoutService
     ],
     bootstrap: [AppComponent]
 })

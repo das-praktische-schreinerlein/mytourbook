@@ -25,6 +25,7 @@ import {CommonRoutingService} from '../../shared/angular-commons/services/common
 import {SDocAlbumResolver} from '../shared-sdoc/resolver/sdoc-album.resolver';
 import {SDocAlbumpageComponent} from './components/sdoc-albumpage/sdoc-albumpage.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {LayoutService} from '../../shared/angular-commons/services/layout.service';
 
 @NgModule({
     declarations: [
@@ -59,7 +60,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         SDocLightBoxService,
         AngularHtmlService,
         AngularMarkdownService,
-        SDocAlbumResolver
+        SDocAlbumResolver,
+        LayoutService
     ],
     exports: [
         SDocSearchpageComponent

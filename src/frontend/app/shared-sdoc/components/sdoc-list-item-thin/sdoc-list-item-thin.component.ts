@@ -1,8 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, Output,
+    SimpleChange
+} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
     selector: 'app-sdoc-list-item-thin',
@@ -10,7 +15,8 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
     styleUrls: ['./sdoc-list-item-thin.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListItemThinComponent implements OnChanges {
+export class SDocListItemThinComponent implements OnChanges, OnDestroy {
+    private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
     public contentUtils: SDocContentUtils;
     listItem: ItemData = {
         currentRecord: undefined,
@@ -20,6 +26,8 @@ export class SDocListItemThinComponent implements OnChanges {
         image: undefined,
         urlShow: undefined
     };
+    LayoutSize = LayoutSize;
+    layoutSize = LayoutSize.BIG;
 
     @Input()
     public record: SDocRecord;
@@ -36,8 +44,17 @@ export class SDocListItemThinComponent implements OnChanges {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils) {
+    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef, private layoutService: LayoutService) {
         this.contentUtils = contentUtils;
+        this.layoutSizeObservable = this.layoutService.getLayoutSizeData();
+        this.layoutSizeObservable.subscribe(layoutSizeData => {
+            this.layoutSize = layoutSizeData.layoutSize;
+            this.cd.markForCheck();
+        });
+    }
+
+    ngOnDestroy() {
+        // this.layoutSizeObservable.unsubscribe();
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -58,5 +75,6 @@ export class SDocListItemThinComponent implements OnChanges {
 
     private updateData() {
         this.contentUtils.updateItemData(this.listItem, this.record, 'thin');
+        this.cd.markForCheck();
     }
 }

@@ -2,121 +2,127 @@
     <a [name]="listItem.currentRecord.id"></a>
     <ng-container [ngSwitch]="listItem.currentRecord.type">
         <ng-container *ngSwitchDefault="">
-            <!--- BIG -->
-            <div class="col-1 image layout-big">
-                <ng-container *ngIf="listItem.image">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="listItem.thumbnailUrl"
-                         (click)="submitShowImage(listItem.currentRecord)"
-                         alt="{{listItem.image.name}}">
-                </ng-container>
-            </div>
-            <div class="col-2 type layout-big">
-                <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
-                <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
-                <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
-                <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
-            </div>
-            <div class="col-4 layout-big">
-                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
-                <app-sdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
-                <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta >
-            </div>
-            <div class="col-2 ratetech layout-big">
-                <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
-            </div>
-            <div class="col-3 location layout-big">
-                <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
-                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
-            </div>
+            <ng-container *ngIf="layoutSize >= LayoutSize.BIG">
+                <!--- BIG -->
+                <div class="col-1 image layout-big">
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                </div>
+                <div class="col-2 type layout-big">
+                    <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
+                    <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+                    <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
+                    <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                    <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
+                </div>
+                <div class="col-4 layout-big">
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
+                    <app-sdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
+                    <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta >
+                </div>
+                <div class="col-2 ratetech layout-big">
+                    <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
+                </div>
+                <div class="col-3 location layout-big">
+                    <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
+                </div>
+            </ng-container>
 
-            <!--- SMALL -->
-            <div class="col-3 image layout-small">
-                <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
-                <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
-                <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                <ng-container *ngIf="listItem.image">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="listItem.thumbnailUrl"
-                         (click)="submitShowImage(listItem.currentRecord)"
-                         alt="{{listItem.image.name}}">
-                </ng-container>
-            </div>
-            <ng-container [ngSwitch]="listItem.currentRecord.type">
-                <ng-container *ngSwitchCase="'LOCATION'">
-                    <div class="col-9 location layout-small">
-                        <div class="">
-                            <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
+            <ng-container *ngIf="layoutSize === LayoutSize.SMALL">
+                <!--- SMALL -->
+                <div class="col-3 image layout-small">
+                    <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
+                    <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                </div>
+                <ng-container [ngSwitch]="listItem.currentRecord.type">
+                    <ng-container *ngSwitchCase="'LOCATION'">
+                        <div class="col-9 location layout-small">
+                            <div class="">
+                                <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
                             </div>
-                            <div class="col-8">
-                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
-                                <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
-                                <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                                <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngSwitchDefault="">
-                    <div class="col-9 location layout-small">
-                        <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
-                        <div class="row">
-                            <div class="col-4 location">
-                                <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
-                            </div>
-                            <div class="col-8 location">
-                                <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
-                                <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                                <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
-                                <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
-                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
+                            <div class="row">
+                                <div class="col-4">
+                                    <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
+                                </div>
+                                <div class="col-8">
+                                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
+                                    <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
+                                    <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                                    <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault="">
+                        <div class="col-9 location layout-small">
+                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
+                            <div class="row">
+                                <div class="col-4 location">
+                                    <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
+                                </div>
+                                <div class="col-8 location">
+                                    <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
+                                    <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                                    <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
+                                    <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
+                                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
                 </ng-container>
             </ng-container>
 
-            <!--- VERYSMALL -->
-            <div class="col-3 image layout-verysmall">
-                <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
-                <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
-                <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                <ng-container *ngIf="listItem.image">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="listItem.thumbnailUrl"
-                         (click)="submitShowImage(listItem.currentRecord)"
-                         alt="{{listItem.image.name}}">
-                </ng-container>
-            </div>
-            <ng-container [ngSwitch]="listItem.currentRecord.type">
-                <ng-container *ngSwitchCase="'LOCATION'">
-                    <div class="col-9 location layout-verysmall">
-                        <div class="">
-                            <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+            <ng-container *ngIf="layoutSize <= LayoutSize.VERYSMALL">
+                <!--- VERYSMALL -->
+                <div class="col-3 image layout-verysmall">
+                    <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
+                    <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                </div>
+                <ng-container [ngSwitch]="listItem.currentRecord.type">
+                    <ng-container *ngSwitchCase="'LOCATION'">
+                        <div class="col-9 location layout-verysmall">
+                            <div class="">
+                                <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
+                                <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
+                                <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
+                                <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
+                                <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
+                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault="">
+                        <div class="col-9 location layout-verysmall">
+                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
                             <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
                             <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
                             <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
+                            <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
                             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
                         </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngSwitchDefault="">
-                    <div class="col-9 location layout-verysmall">
-                        <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
-                        <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
-                        <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
-                        <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
-                        <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
-                        <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy></h5>
-                        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
-                    </div>
+                    </ng-container>
                 </ng-container>
             </ng-container>
         </ng-container>

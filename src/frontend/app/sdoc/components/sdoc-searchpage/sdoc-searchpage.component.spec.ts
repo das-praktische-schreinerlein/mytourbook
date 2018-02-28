@@ -20,6 +20,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {FromEventObservable} from 'rxjs/src/observable/FromEventObservable';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocSearchpageComponent', () => {
     let component: SDocSearchpageComponent;
@@ -48,6 +49,7 @@ describe('SDocSearchpageComponent', () => {
                 PlatformService,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
+                LayoutService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

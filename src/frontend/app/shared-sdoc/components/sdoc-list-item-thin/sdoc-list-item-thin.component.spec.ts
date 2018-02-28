@@ -12,6 +12,7 @@ import {AppServiceStub} from '../../../../shared/angular-commons/testing/appserv
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocListItemThinComponent', () => {
     let component: SDocListItemThinComponent;
@@ -25,7 +26,8 @@ describe('SDocListItemThinComponent', () => {
                 CommonRoutingService,
                 SDocRoutingService,
                 SDocContentUtils,
-                { provide: GenericAppService, useValue: new AppServiceStub() }
+                { provide: GenericAppService, useValue: new AppServiceStub() },
+                LayoutService
             ],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
