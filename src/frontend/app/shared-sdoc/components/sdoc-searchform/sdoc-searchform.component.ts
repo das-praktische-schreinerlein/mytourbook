@@ -48,6 +48,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
     public optionsSelectTechDataAscent: IMultiSelectOption[] = [];
     public optionsSelectTechDataAltitudeMax: IMultiSelectOption[] = [];
     public optionsSelectTechDataDuration: IMultiSelectOption[] = [];
+    public optionsSelectPersonalRateOverall: IMultiSelectOption[] = [];
+    public optionsSelectPersonalRateDifficulty: IMultiSelectOption[] = [];
     public optionsSelectPlaylists: IMultiSelectOption[] = [];
     public optionsSelectPersons: IMultiSelectOption[] = [];
 
@@ -113,6 +115,18 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             enableSearch: true,
             showUncheckAll: true};
 
+    public settingsSelectPersonalRateOverall: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true};
+    public settingsSelectPersonalRateDifficulty: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true};
     public settingsSelectPlaylists: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
@@ -197,6 +211,20 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         defaultTitle: 'Dauer',
         allSelected: 'Alle'};
 
+    public textsSelectPersonalRateOverall: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Bewertung ausgewählt',
+        checkedPlural: 'Bewertung ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Bewertung',
+        allSelected: 'Alle'};
+    public textsSelectPersonalRateDifficulty: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Bewertung ausgewählt',
+        checkedPlural: 'Bewertung ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Bewertung',
+        allSelected: 'Alle'};
     public textsSelectPlaylists: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Playlist ausgewählt',
@@ -287,6 +315,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         techDataDistance: [],
         techDataDuration: [],
         techRateOverall: [],
+        personalRateOverall: [],
+        personalRateDifficulty: [],
         playlists: [],
         persons: [],
         actionType: [],
@@ -377,6 +407,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             techDataDistance: [(values.techDataDistance ? values.techDataDistance.split(/,/) : [])],
             techDataDuration: [(values.techDataDuration ? values.techDataDuration.split(/,/) : [])],
             techRateOverall: [(values.techRateOverall ? values.techRateOverall.split(/,/) : [])],
+            personalRateOverall: [(values.personalRateOverall ? values.personalRateOverall.split(/,/) : [])],
+            personalRateDifficulty: [(values.personalRateDifficulty ? values.personalRateDifficulty.split(/,/) : [])],
             persons: [(values.persons ? values.persons.split(/,/) : [])],
             playlists: [(values.playlists ? values.playlists.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]
@@ -431,6 +463,10 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
             this.searchFormUtils.getTechDataAltitudeMaxValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataDuration = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectPersonalRateOverall = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getPersonalRateOverallValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectPersonalRateDifficulty = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.searchFormUtils.getPersonalRateDifficultyValues(sdocSearchSearchResult), true, [], true);
 
         this.optionsSelectPlaylists = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getPlaylistValues(sdocSearchSearchResult), true, [], true);
@@ -453,7 +489,8 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         this.showDetailsAvailable = (this.optionsSelectWhat.length > 0 || this.optionsSelectTechRateOverall.length > 0 ||
             this.optionsSelectTechDataDistance.length > 0 || this.optionsSelectTechDataAltitudeMax.length > 0 ||
             this.optionsSelectTechDataAscent.length > 0);
-        this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0 || this.optionsSelectPersons.length > 0);
+        this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0 || this.optionsSelectPersons.length > 0 ||
+            this.optionsSelectPersonalRateDifficulty.length > 0 || this.optionsSelectPersonalRateOverall.length > 0);
 
         me.humanReadableSpecialFilter = '';
         this.humanReadableSearchForm = '';

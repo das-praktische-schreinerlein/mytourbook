@@ -185,6 +185,67 @@
                 </div>
             </div>
         </fieldset>
+        <fieldset class="hidden-print" *ngIf="showMeta && showMetaAvailable">
+            <div class="row">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersonalRateOverall.length > 0">
+                    <label class="col-xs-2 col-form-label mr-2" i18n="playlists label|Label for filter: personalRateOverall@@label.searchform.sdoc.personalRateOverall">Bewertung:</label>
+                    <ng-container *ngIf="optionsSelectPersonalRateOverall.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectPersonalRateOverall"
+                                                 [settings]="settingsSelectPersonalRateOverall"
+                                                 [texts]="textsSelectPersonalRateOverall"
+                                                 formControlName="personalRateOverall"
+                                                 ngDefaultControl
+                                                 class="fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersonalRateDifficulty.length > 0">
+                    <label class="col-xs-2 col-form-label mr-2" i18n="playlists label|Label for filter: personalRateDifficulty@@label.searchform.sdoc.personalRateDifficulty">Schwierigkeit:</label>
+                    <ng-container *ngIf="optionsSelectPersonalRateDifficulty.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectPersonalRateDifficulty"
+                                                 [settings]="settingsSelectPersonalRateDifficulty"
+                                                 [texts]="textsSelectPersonalRateDifficulty"
+                                                 formControlName="personalRateDifficulty"
+                                                 ngDefaultControl
+                                                 class="fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
+                    <button class="btn btn-configure btn-sm" (click)="showMeta = false; updateFormState();" i18n="button hide Metasform|Buttontext to hide Netaform@@button.searchform.hide.Metaform">ausblenden</button>
+                </div>
+            </div>
+            <div class="row">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPlaylists.length > 0">
+                    <label class="col-xs-2 col-form-label mr-2" i18n="playlists label|Label for filter: playlists@@label.searchform.sdoc.playlists">Playlist:</label>
+                    <ng-container *ngIf="optionsSelectPlaylists.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectPlaylists"
+                                                 [settings]="settingsSelectPlaylists"
+                                                 [texts]="textsSelectPlaylists"
+                                                 formControlName="playlists"
+                                                 ngDefaultControl
+                                                 class="fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersons.length > 0">
+                    <label class="col-xs-2 col-form-label mr-2" i18n="persons label|Label for filter: persons@@label.searchform.sdoc.persons">Personen:</label>
+                    <ng-container *ngIf="optionsSelectPersons.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectPersons"
+                                                 [settings]="settingsSelectPersons"
+                                                 [texts]="textsSelectPersons"
+                                                 formControlName="persons"
+                                                 ngDefaultControl
+                                                 class="fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+            </div>
+        </fieldset>
         <fieldset class="hidden-print" *ngIf="showFulltext">
             <div class="row">
                 <div [class]="(width8 + ' form-inline input-group input-group-sm')">
@@ -264,36 +325,6 @@
                                                  [settings]="settingsSelectTechDataAscent"
                                                  [texts]="textsSelectTechDataAscent"
                                                  formControlName="techDataAscent"
-                                                 ngDefaultControl
-                                                 class="fullwidth"
-                                                 (onAdded)="onChangeSelect()"
-                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-                    </ng-container>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset class="hidden-print" *ngIf="showMeta && showMetaAvailable">
-            <div class="row">
-                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPlaylists.length > 0">
-                    <label class="col-xs-2 col-form-label mr-2" i18n="playlists label|Label for filter: playlists@@label.searchform.sdoc.playlists">Playlist:</label>
-                    <ng-container *ngIf="optionsSelectPlaylists.length > 0; else noFilterValues">
-                        <ss-multiselect-dropdown [options]="optionsSelectPlaylists"
-                                                 [settings]="settingsSelectPlaylists"
-                                                 [texts]="textsSelectPlaylists"
-                                                 formControlName="playlists"
-                                                 ngDefaultControl
-                                                 class="fullwidth"
-                                                 (onAdded)="onChangeSelect()"
-                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-                    </ng-container>
-                </div>
-                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersons.length > 0">
-                    <label class="col-xs-2 col-form-label mr-2" i18n="persons label|Label for filter: persons@@label.searchform.sdoc.persons">Personen:</label>
-                    <ng-container *ngIf="optionsSelectPersons.length > 0; else noFilterValues">
-                        <ss-multiselect-dropdown [options]="optionsSelectPersons"
-                                                 [settings]="settingsSelectPersons"
-                                                 [texts]="textsSelectPersons"
-                                                 formControlName="persons"
                                                  ngDefaultControl
                                                  class="fullwidth"
                                                  (onAdded)="onChangeSelect()"

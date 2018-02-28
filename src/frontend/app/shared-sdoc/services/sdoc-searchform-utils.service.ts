@@ -70,7 +70,7 @@ export class SDocSearchFormUtils {
         }
 
         return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'rate_pers_gesamt_is', '', ''));
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'rate_pers_gesamt_is', '', 'filter.sdocratepers.gesamt.'));
     }
 
     getPersonalRateDifficultyValues(searchResult: SDocSearchResult): any[] {
@@ -79,7 +79,8 @@ export class SDocSearchFormUtils {
         }
 
         return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'rate_pers_schwierigkeit_is', '', ''));
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'rate_pers_schwierigkeit_is', '',
+                'label.sdocratepers.schwierigkeit.'));
     }
 
     getTechRateOverallValues(searchResult: SDocSearchResult): any[] {

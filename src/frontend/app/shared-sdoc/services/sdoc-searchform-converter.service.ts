@@ -49,6 +49,8 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         moreFilterMap.set('techDataDistance', searchForm.techDataDistance);
         moreFilterMap.set('techDataDuration', searchForm.techDataDuration);
         moreFilterMap.set('techRateOverall', searchForm.techRateOverall);
+        moreFilterMap.set('personalRateDifficulty', searchForm.personalRateDifficulty);
+        moreFilterMap.set('personalRateOverall', searchForm.personalRateOverall);
         let moreFilter = this.searchParameterUtils.joinParamsToOneRouteParameter(moreFilterMap, this.splitter);
         if (moreFilter !== undefined && moreFilter.length > 0) {
             if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
@@ -115,7 +117,8 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             this.searchParameterUtils.joinValuesAndReplacePrefix(whereValues.get('locId:'), 'locId:', ',') : '');
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
-            ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:']);
+            ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:',
+            'personalRateOverall:', 'personalRateDifficulty:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
             moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
@@ -132,6 +135,12 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techDataDuration:'), 'techDataDuration:', ',') : '');
         const techRateOverall: string = (moreFilterValues.has('techRateOverall:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('techRateOverall:'), 'techRateOverall:', ',') : '');
+        const personalRateOverall: string = (moreFilterValues.has('personalRateOverall:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('personalRateOverall:'), 'personalRateOverall:',
+                ',') : '');
+        const personalRateDifficulty: string = (moreFilterValues.has('personalRateDifficulty:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('personalRateDifficulty:'), 'personalRateDifficulty:',
+                ',') : '');
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
             ['action:', 'keyword:', 'playlists:', 'persons:']);
@@ -189,6 +198,12 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         searchForm.techRateOverall = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techRateOverall, /^ungefiltert$/, ''),
             defaults['techRateOverall'], '');
+        searchForm.personalRateOverall = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(personalRateOverall, /^ungefiltert$/, ''),
+            defaults['personalRateOverall'], '');
+        searchForm.personalRateDifficulty = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(personalRateDifficulty, /^ungefiltert$/, ''),
+            defaults['personalRateDifficulty'], '');
         searchForm.techDataAscent = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataAscent, /^ungefiltert$/, ''),
             defaults['techDataAscent'], '');
@@ -298,6 +313,8 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDistance, 'hrt_techDataDistance', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.personalRateOverall, 'hrt_personalRateOverall', undefined, true));
+        res.push(this.valueToHumanReadableText(sdocSearchForm.personalRateDifficulty, 'hrt_personalRateDifficulty', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.persons, 'hrt_persons', undefined, true));
         res.push(this.valueToHumanReadableText(sdocSearchForm.playlists, 'hrt_playlists', undefined, true));
 

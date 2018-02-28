@@ -19,6 +19,8 @@ export class SDocSearchForm extends GenericSearchForm {
         techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataDuration: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
+        personalRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
+        personalRateDifficulty: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         actiontype: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         persons: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         playlists: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
@@ -38,6 +40,8 @@ export class SDocSearchForm extends GenericSearchForm {
     techDataDistance: string;
     techDataDuration: string;
     techRateOverall: string;
+    personalRateOverall: string;
+    personalRateDifficulty: string;
     actiontype: string;
     persons: string;
     playlists: string;
@@ -58,6 +62,8 @@ export class SDocSearchForm extends GenericSearchForm {
         this.techDataDistance = values['techDataDistance'] || '';
         this.techDataDuration = values['techDataDuration'] || '';
         this.techRateOverall = values['techRateOverall'] || '';
+        this.personalRateOverall = values['personalRateOverall'] || '';
+        this.personalRateDifficulty = values['personalRateDifficulty'] || '';
         this.actiontype = values['actiontype'] || '';
         this.persons = values['persons'] || '';
         this.playlists = values['playlists'] || '';
@@ -103,6 +109,10 @@ export class SDocSearchFormFactory {
         sanitizedValues.techDataDistance = SDocSearchForm.sdocFields.techDataDistance.validator.sanitize(values['techDataDistance']) || '';
         sanitizedValues.techDataDuration = SDocSearchForm.sdocFields.techDataDuration.validator.sanitize(values['techDataDuration']) || '';
         sanitizedValues.techRateOverall = SDocSearchForm.sdocFields.techRateOverall.validator.sanitize(values['techRateOverall']) || '';
+        sanitizedValues.personalRateOverall = SDocSearchForm.sdocFields.personalRateOverall.validator.sanitize(
+            values['personalRateOverall']) || '';
+        sanitizedValues.personalRateDifficulty = SDocSearchForm.sdocFields.personalRateDifficulty.validator.sanitize(
+            values['personalRateDifficulty']) || '';
         sanitizedValues.actiontype = SDocSearchForm.sdocFields.actiontype.validator.sanitize(values['actiontype']) || '';
         sanitizedValues.persons = SDocSearchForm.sdocFields.persons.validator.sanitize(values['persons']) || '';
         sanitizedValues.playlists = SDocSearchForm.sdocFields.playlists.validator.sanitize(values['playlists']) || '';
@@ -131,6 +141,10 @@ export class SDocSearchFormFactory {
         sanitizedValues.techDataDistance = SDocSearchForm.sdocFields.techDataDistance.validator.sanitize(searchForm.techDataDistance) || '';
         sanitizedValues.techDataDuration = SDocSearchForm.sdocFields.techDataDuration.validator.sanitize(searchForm.techDataDuration) || '';
         sanitizedValues.techRateOverall = SDocSearchForm.sdocFields.techRateOverall.validator.sanitize(searchForm.techRateOverall) || '';
+        sanitizedValues.personalRateOverall = SDocSearchForm.sdocFields.personalRateOverall.validator.sanitize(
+            searchForm.personalRateOverall) || '';
+        sanitizedValues.personalRateDifficulty = SDocSearchForm.sdocFields.personalRateDifficulty.validator.sanitize(
+            searchForm.personalRateDifficulty) || '';
         sanitizedValues.actiontype = SDocSearchForm.sdocFields.actiontype.validator.sanitize(searchForm.actiontype) || '';
         sanitizedValues.persons = SDocSearchForm.sdocFields.persons.validator.sanitize(searchForm.persons) || '';
         sanitizedValues.playlists = SDocSearchForm.sdocFields.playlists.validator.sanitize(searchForm.playlists) || '';
@@ -160,6 +174,8 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(values['techDataDistance']);
         state = state && SDocSearchForm.sdocFields.techDataDuration.validator.isValid(values['techDataDuration']);
         state = state && SDocSearchForm.sdocFields.techRateOverall.validator.isValid(values['techRateOverall']);
+        state = state && SDocSearchForm.sdocFields.personalRateOverall.validator.isValid(values['personalRateOverall']);
+        state = state && SDocSearchForm.sdocFields.personalRateDifficulty.validator.isValid(values['personalRateDifficulty']);
         state = state && SDocSearchForm.sdocFields.actiontype.validator.isValid(values['actiontype']);
         state = state && SDocSearchForm.sdocFields.persons.validator.isValid(values['persons']);
         state = state && SDocSearchForm.sdocFields.playlists.validator.isValid(values['playlists']);
@@ -189,6 +205,8 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(searchForm.techDataDistance);
         state = state && SDocSearchForm.sdocFields.techDataDuration.validator.isValid(searchForm.techDataDuration);
         state = state && SDocSearchForm.sdocFields.techRateOverall.validator.isValid(searchForm.techRateOverall);
+        state = state && SDocSearchForm.sdocFields.personalRateOverall.validator.isValid(searchForm.personalRateOverall);
+        state = state && SDocSearchForm.sdocFields.personalRateDifficulty.validator.isValid(searchForm.personalRateDifficulty);
         state = state && SDocSearchForm.sdocFields.actiontype.validator.isValid(searchForm.actiontype);
         state = state && SDocSearchForm.sdocFields.type.validator.isValid(searchForm.type);
 

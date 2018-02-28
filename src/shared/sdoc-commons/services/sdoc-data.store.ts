@@ -189,6 +189,18 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
                 'in': searchForm.techRateOverall.split(/,/)
             };
         }
+        if (searchForm.personalRateOverall !== undefined && searchForm.personalRateOverall.length > 0) {
+            filter = filter || {};
+            filter['rate_pers_gesamt_is'] = {
+                'in': searchForm.personalRateOverall.split(/,/)
+            };
+        }
+        if (searchForm.personalRateDifficulty !== undefined && searchForm.personalRateDifficulty.length > 0) {
+            filter = filter || {};
+            filter['rate_pers_schwierigkeit_is'] = {
+                'in': searchForm.personalRateDifficulty.split(/,/)
+            };
+        }
 
         if (filter !== undefined) {
             query['where'] = filter;
