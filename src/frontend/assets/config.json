@@ -419,6 +419,12 @@
                 }
 
             ]
+        },
+        "sdoc-albumpage": {
+            "allowAutoplay": false
+        },
+        "sdoc-listheader": {
+            "allowAutoplay": false
         }
     },
     "services": {

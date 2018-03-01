@@ -3,6 +3,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-list-header',
@@ -11,7 +12,7 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocListHeaderComponent implements OnInit, OnChanges {
-
+    autoPlayAllowed = false;
     public Layout = Layout;
 
     @Input()
@@ -37,6 +38,9 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
     @Input()
     public layout: Layout;
 
+    @Input()
+    public showAutoplay? = false;
+
     @Output()
     public pageChange: EventEmitter<number> = new EventEmitter();
 
@@ -55,10 +59,20 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
         layout: Layout.FLAT
     });
 
-    constructor(public fb: FormBuilder) {
+    constructor(public fb: FormBuilder, private appService: GenericAppService) {
     }
 
     ngOnInit() {
+        this.appService.getAppState().subscribe(appState => {
+            if (appState === AppState.Ready) {
+                const config = this.appService.getAppConfig();
+                if (config['components']
+                    && config['components']['sdoc-listheader']
+                    && config['components']['sdoc-listheader']['allowAutoplay'] + '' === 'true') {
+                    this.autoPlayAllowed = this.showAutoplay;
+                }
+            }
+        });
         this.headerFormGroup = this.fb.group({
             sort: this.sort,
             perPage: this.perPage,
@@ -75,6 +89,19 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
                 });
             }
         }
+    }
+
+    onShowIntervalNext(): boolean {
+        let page = this.searchResult.searchForm.pageNum + 1;
+        if (page < 1) {
+            page = 1;
+        }
+        if (page >= this.searchResult.recordCount) {
+            page = 1;
+        }
+        this.onPageChange(page);
+
+        return false;
     }
 
     onPageChange(page: number) {

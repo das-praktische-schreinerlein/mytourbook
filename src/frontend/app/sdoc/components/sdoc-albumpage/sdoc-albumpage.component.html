@@ -48,10 +48,10 @@
     <ng-container *ngSwitchDefault="">
         <div class="container content-container navigation-content-container">
             <div class="form-control-sm row">
-                <div class="col-sm-2">
+                <div class="col-sm-2" *ngIf="autoPlayAllowed">
                     <app-interval-control (intervalNext)="onAlbumIntervalNext()" (intervalStarted)="onAlbumIntervalStarted()"></app-interval-control>
                 </div>
-                <div class="col-sm-10">
+                <div [class]="(autoPlayAllowed ? 'col-sm-10' : 'col-sm-12')">
                     <ngb-pagination (pageChange)="onCurRecordChange($event)"
                                     [pageSize]="1"
                                     [collectionSize]="searchResult.recordCount - 1"

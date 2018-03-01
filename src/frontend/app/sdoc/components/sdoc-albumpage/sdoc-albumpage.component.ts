@@ -11,7 +11,7 @@ import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.ser
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {IdCsvValidationRule, IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
@@ -19,7 +19,6 @@ import {SDocAlbumResolver} from '../../../shared-sdoc/resolver/sdoc-album.resolv
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
-import {AppState} from '../../../../../shared/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -45,6 +44,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     layout = Layout.FLAT;
     curRecordNr = 0;
     albumKey = 'Current';
+    autoPlayAllowed = false;
 
     public editFormGroup = this.fb.group({
         albumSdocIds: ''
@@ -81,80 +81,85 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                     return;
                 }
 
+                if (this.config['components']
+                    && this.config['components']['sdoc-albumpage']
+                    && this.config['components']['sdoc-albumpage']['allowAutoplay'] + '' === 'true') {
+                    this.autoPlayAllowed = true;
+                }
+
                 this.route.data.subscribe(
-                    (data: { searchForm: ResolvedData<SDocSearchForm>, flgDoEdit: boolean, baseSearchUrl: ResolvedData<string> }) => {
-                        me.commonRoutingService.setRoutingState(RoutingState.DONE);
+                (data: { searchForm: ResolvedData<SDocSearchForm>, flgDoEdit: boolean, baseSearchUrl: ResolvedData<string> }) => {
+                    me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
-                        const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
-                        const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
-                        if (!flgSearchFormError && !flgBaseSearchUrlError) {
-                            me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
+                    const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
+                    const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
+                    if (!flgSearchFormError && !flgBaseSearchUrlError) {
+                        me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
 
-                            if (data.flgDoEdit === true) {
-                                me.mode = 'edit';
-                            }
-
-                            // console.log('route: search for ', data);
-                            this.searchForm = SDocSearchFormFactory.cloneSanitized(data.searchForm.data);
-                            this.listSearchForm = SDocSearchFormFactory.cloneSanitized(data.searchForm.data);
-
-                            me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                            this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSearchPage',
-                                {}, 'Search');
-                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSearchPage',
-                                {}, 'Search');
-                            this.pageUtils.setRobots(false, false);
-                            this.pageUtils.setMetaLanguage();
-
-                            this.trackingProvider.trackPageView();
-
-                            this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
-                                '.show-on-fullpage-block { display: block; } ' +
-                                'body { background: #130b0b; } ' +
-                                '.image-content-container {background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ', 'fullPageStyle');
-
-                            me.curRecordNr = this.listSearchForm.pageNum;
-                            return this.doSearch();
+                        if (data.flgDoEdit === true) {
+                            me.mode = 'edit';
                         }
 
-                        let newUrl, msg, code;
-                        const errorCode = (flgSearchFormError ? data.searchForm.error.code : data.baseSearchUrl.error.code);
-                        let searchForm = undefined;
-                        if (flgSearchFormError) {
-                            if (data.searchForm.error.data) {
-                                searchForm = SDocSearchFormFactory.createSanitized(data.searchForm.error.data);
-                            } else {
-                                searchForm = new SDocSearchForm({});
-                            }
-                        } else if (data.searchForm.data) {
-                            searchForm = data.searchForm.data;
-                        }
+                        // console.log('route: search for ', data);
+                        this.searchForm = SDocSearchFormFactory.cloneSanitized(data.searchForm.data);
+                        this.listSearchForm = SDocSearchFormFactory.cloneSanitized(data.searchForm.data);
 
-                        switch (errorCode) {
-                            case SDocAlbumResolver.ERROR_INVALID_SDOC_SEARCHFORM:
-                                code = ErrorResolver.ERROR_INVALID_DATA;
-                                me.baseSearchUrl = ['sdoc'].join('/');
-                                newUrl = this.searchFormConverter.searchFormToUrl(
-                                    this.baseSearchUrl + '/', SDocSearchFormFactory.cloneSanitized(searchForm));
-                                msg = undefined;
-                                break;
-                            case GenericAppService.ERROR_APP_NOT_INITIALIZED:
-                                code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
-                                newUrl = undefined;
-                                msg = undefined;
-                                break;
-                            default:
-                                code = ErrorResolver.ERROR_OTHER;
-                                me.baseSearchUrl = ['sdoc'].join('/') + '/';
-                                newUrl = undefined;
-                                msg = undefined;
-                        }
+                        me.pageUtils.setGlobalStyle('', 'sectionStyle');
+                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSearchPage',
+                            {}, 'Search');
+                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSearchPage',
+                            {}, 'Search');
+                        this.pageUtils.setRobots(false, false);
+                        this.pageUtils.setMetaLanguage();
 
-                        this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
-                        me.cd.markForCheck();
-                        return;
+                        this.trackingProvider.trackPageView();
+
+                        this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
+                            '.show-on-fullpage-block { display: block; } ' +
+                            'body { background: #130b0b; } ' +
+                            '.image-content-container {background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ', 'fullPageStyle');
+
+                        me.curRecordNr = this.listSearchForm.pageNum;
+                        return this.doSearch();
                     }
-                );
+
+                    let newUrl, msg, code;
+                    const errorCode = (flgSearchFormError ? data.searchForm.error.code : data.baseSearchUrl.error.code);
+                    let searchForm = undefined;
+                    if (flgSearchFormError) {
+                        if (data.searchForm.error.data) {
+                            searchForm = SDocSearchFormFactory.createSanitized(data.searchForm.error.data);
+                        } else {
+                            searchForm = new SDocSearchForm({});
+                        }
+                    } else if (data.searchForm.data) {
+                        searchForm = data.searchForm.data;
+                    }
+
+                    switch (errorCode) {
+                        case SDocAlbumResolver.ERROR_INVALID_SDOC_SEARCHFORM:
+                            code = ErrorResolver.ERROR_INVALID_DATA;
+                            me.baseSearchUrl = ['sdoc'].join('/');
+                            newUrl = this.searchFormConverter.searchFormToUrl(
+                                this.baseSearchUrl + '/', SDocSearchFormFactory.cloneSanitized(searchForm));
+                            msg = undefined;
+                            break;
+                        case GenericAppService.ERROR_APP_NOT_INITIALIZED:
+                            code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
+                            newUrl = undefined;
+                            msg = undefined;
+                            break;
+                        default:
+                            code = ErrorResolver.ERROR_OTHER;
+                            me.baseSearchUrl = ['sdoc'].join('/') + '/';
+                            newUrl = undefined;
+                            msg = undefined;
+                    }
+
+                    this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                    me.cd.markForCheck();
+                    return;
+                });
             }
         });
     }

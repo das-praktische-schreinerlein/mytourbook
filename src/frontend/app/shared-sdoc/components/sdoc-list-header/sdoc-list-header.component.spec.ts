@@ -5,6 +5,8 @@ import {SDocListHeaderComponent} from './sdoc-list-header.component';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {TranslateModule} from '@ngx-translate/core';
 import {ReactiveFormsModule} from '@angular/forms';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 describe('SDocListHeaderComponent', () => {
     let component: SDocListHeaderComponent;
@@ -16,7 +18,10 @@ describe('SDocListHeaderComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             imports: [
                 ReactiveFormsModule,
-                TranslateModule.forRoot()]
+                TranslateModule.forRoot()],
+            providers: [
+                { provide: GenericAppService, useValue: new AppServiceStub() }
+            ]
         })
             .compileComponents();
     }));
