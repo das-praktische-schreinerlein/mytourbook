@@ -19,7 +19,6 @@ import {Angulartics2} from 'angulartics2';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {FromEventObservable} from 'rxjs/src/observable/FromEventObservable';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocSearchpageComponent', () => {
@@ -37,7 +36,6 @@ describe('SDocSearchpageComponent', () => {
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
-                FromEventObservable,
                 CommonRoutingService,
                 SDocSearchFormConverter,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },

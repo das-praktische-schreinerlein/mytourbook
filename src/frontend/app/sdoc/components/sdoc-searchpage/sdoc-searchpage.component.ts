@@ -192,7 +192,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.layoutSizeObservable.unsubscribe();
+        // this.layoutSizeObservable.unsubscribe();
     }
 
     onShowSDoc(sdoc: SDocRecord) {
