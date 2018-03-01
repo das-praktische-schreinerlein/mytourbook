@@ -20,7 +20,8 @@ export class AppService extends GenericAppService {
         useAssetStoreUrls: environment.useAssetStoreUrls,
         permissions: {
             sdocWritable: environment.sdocWritable,
-            sdocActionTagWritable: environment.sdocActionTagWritable
+            sdocActionTagWritable: environment.sdocActionTagWritable,
+            allowAutoPlay: environment.allowAutoPlay
         },
         sdocMaxItemsPerAlbum: environment.sdocMaxItemsPerAlbum,
         components: {},

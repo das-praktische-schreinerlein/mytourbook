@@ -421,10 +421,10 @@
             ]
         },
         "sdoc-albumpage": {
-            "allowAutoplay": false
+            "allowAutoplay": true
         },
         "sdoc-listheader": {
-            "allowAutoplay": false
+            "allowAutoplay": true
         }
     },
     "services": {

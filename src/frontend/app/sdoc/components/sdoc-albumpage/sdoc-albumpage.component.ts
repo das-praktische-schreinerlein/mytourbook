@@ -81,7 +81,8 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                if (this.config['components']
+                if (this.config['permissions'] && this.config['permissions']['allowAutoPlay']
+                    && this.config['components']
                     && this.config['components']['sdoc-albumpage']
                     && this.config['components']['sdoc-albumpage']['allowAutoplay'] + '' === 'true') {
                     this.autoPlayAllowed = true;

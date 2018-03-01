@@ -66,7 +66,8 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (config['components']
+                if (config['permissions'] && config['permissions']['allowAutoPlay']
+                    && config['components']
                     && config['components']['sdoc-listheader']
                     && config['components']['sdoc-listheader']['allowAutoplay'] + '' === 'true') {
                     this.autoPlayAllowed = this.showAutoplay;
