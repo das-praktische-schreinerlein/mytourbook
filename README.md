@@ -20,7 +20,7 @@ export class Graph3d {
   setCameraPosition(pos);
 }
 ```
-- fix js-data.js defineMapper 
+- fix mytourbook/node_modules/js-data/dist/js-data.js defineMapper 
 ```
     descriptor.configurable = true;
     Object.defineProperty(mapper.recordClass.prototype, localField, descriptor);
