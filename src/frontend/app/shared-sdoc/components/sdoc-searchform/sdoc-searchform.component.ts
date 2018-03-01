@@ -33,7 +33,7 @@ export enum SearchFormLayout {
     styleUrls: ['./sdoc-searchform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocSearchformComponent implements OnInit, AfterViewInit {
+export class SDocSearchformComponent implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
     private geoLocationService = new GeoLocationService();
@@ -340,10 +340,6 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         );
     }
 
-    ngAfterViewInit() {
-        this.initGeoCodeAutoComplete();
-    }
-
     public onSubmitSearch(event?: any) {
         this.doSearch();
         return false;
@@ -519,14 +515,6 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         }
     }
 
-    initGeoCodeAutoComplete(timeout?: number): void {
-        const me = this;
-        setTimeout(function init() {
-            me.initGeoCodeAutoCompleteField('.nearbyAddressAutocomplete');
-            me.initGeoCodeAutoCompleteField('.nearbyAddressAutocompleteShort');
-        }, timeout || 0);
-    }
-
     removeMoreIdFilters(): void {
         const values = this.searchFormGroup.getRawValue();
         this.searchFormGroup.patchValue({'moreFilter': undefined});
@@ -545,16 +533,19 @@ export class SDocSearchformComponent implements OnInit, AfterViewInit {
         this.changedShowForm.emit(this.showForm);
     }
 
-    private initGeoCodeAutoCompleteField(selector: string): void {
+    doLocationSearch(selector) {
         const me = this;
-        this.geoLocationService.initGeoCodeAutoCompleteField(selector).subscribe((event: any) => {
+        this.geoLocationService.doLocationSearch(selector, this.searchFormGroup.getRawValue()['nearbyAddress']).then((event: any) => {
             const distance = me.searchFormGroup.getRawValue()['nearbyDistance'] || 10;
             me.searchFormGroup.patchValue({'nearby': event.detail.lat + '_' + event.detail.lon + '_' + distance});
             me.searchFormGroup.patchValue({'nearbyAddress':
-                SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(event.detail.formatted)});
+                    SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(event.detail.formatted)});
             me.doSearch();
-            return false;
+        }).catch(reason => {
+            console.warn('locationsearch failed', reason);
         });
+
+        return false;
     }
 
     private doSearch() {

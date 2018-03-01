@@ -1,7 +1,7 @@
 import {GeoCoder} from 'geo-coder';
 import {Observer} from 'rxjs/Observer';
 import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
+import {utils} from 'js-data';
 
 export class GeoLocationService {
     private geoCoder = new GeoCoder({ provider: 'osm', lang: 'de-DE' });
@@ -34,20 +34,56 @@ export class GeoLocationService {
         });
     }
 
-    public initGeoCodeAutoCompleteField(selector: string): Observable<any> {
-        const result = new Subject<any>();
+    public doLocationSearch(selector: string, value: string): Promise<any> {
         const inputEl = document.querySelector(selector);
         if (!inputEl || inputEl === undefined || inputEl === null) {
-            return result;
+            return utils.reject('element not found');
+        }
+        const listEl = this.prepareResultList(inputEl);
+
+        return this.doSearch(inputEl, listEl, value);
+    }
+
+    private prepareResultList(inputEl): any {
+        let listEl: any;
+        if (inputEl.nextSibling && inputEl.nextSibling.className === 'geocode-autocomplete') {
+            listEl = inputEl.nextSibling;
+        } else {
+            listEl = document.createElement('ul');
+            listEl.className = 'geocode-autocomplete';
+            inputEl.parentNode.insertBefore(listEl, inputEl.nextSibling);
         }
 
-        this.geoCoder.autocomplete(inputEl);
-        // TODO inputEl.removeEventListener('place_changed');
-        inputEl.addEventListener('place_changed', (event: any) => {
-            event.preventDefault();
-            result.next(event);
-        });
+        return listEl;
+    }
 
-        return result;
+    private doSearch(inputEl, listEl, value): Promise<any> {
+        listEl.style.display = '';
+        while (listEl.firstChild) {
+            listEl.removeChild(listEl.firstChild);
+        }
+
+        const me = this;
+        return new Promise<any>((resolve, reject) => {
+            me.geoCoder.geocode(value).then((result: any) => {
+                result.forEach(el => {
+                    const liEl = document.createElement('li');
+                    liEl.addEventListener('click', clickEvent => {
+                        const customEvent = new CustomEvent('place_changed', {
+                            detail: el,
+                            bubbles: true,
+                            cancelable: true
+                        });
+
+                        inputEl.value = el.formatted;
+                        listEl.style.display = 'none';
+                        resolve(customEvent);
+                    });
+
+                    liEl.innerHTML = el.formatted;
+                    listEl.appendChild(liEl);
+                });
+            });
+        });
     }
 }
