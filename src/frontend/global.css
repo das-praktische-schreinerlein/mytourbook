@@ -84,6 +84,10 @@ div.inline-content-container {
     width: 100%
 }
 
+.container-browser-not-compatible {
+    background-color: #F89406 !important;
+}
+
 body {
     background: url(assets/images/background.jpg);
     background-repeat: repeat-x;

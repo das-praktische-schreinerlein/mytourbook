@@ -15,6 +15,7 @@ import {MockBackend} from '@angular/http/testing';
 import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../shared/angular-commons/testing/router-stubs';
 import {PlatformService} from '../../../shared/angular-commons/services/platform.service';
+import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 
 describe('AppComponent', () => {
     beforeEach(() => {
@@ -36,7 +37,8 @@ describe('AppComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 {provide: ToastsManager, useValue: new ToastsManagerStub() },
                 { provide: XHRBackend, useClass: MockBackend },
-                PlatformService
+                PlatformService,
+                PageUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         });
