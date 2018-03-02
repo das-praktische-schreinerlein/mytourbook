@@ -39,6 +39,7 @@ import {SDocAdminModule} from './sdoc-admin/sdoc-admin.module';
 import {SDocActionTagsComponent} from './shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
 import {SDocAlbumService} from './shared-sdoc/services/sdoc-album.service';
 import {LayoutService} from '../shared/angular-commons/services/layout.service';
+import {CookieLawModule} from 'angular2-cookie-law';
 
 registerLocaleData(localeDe);
 
@@ -78,7 +79,8 @@ export function getAngulartics2Providers(): any {
         SDocModule,
         SDocAdminModule,
         SectionsModule,
-        AppRoutingModule
+        AppRoutingModule,
+        CookieLawModule
     ],
     providers: [
         { provide: MinimalHttpBackendClient, useClass: BackendHttpClient },
