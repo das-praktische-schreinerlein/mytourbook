@@ -212,7 +212,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20)) {
                     realTracks.push(record);
                     this.flgShowMap = true;
-                    this.flgShowProfileMap = false;
+                    this.flgShowProfileMap = true;
                 }
             }
         }
