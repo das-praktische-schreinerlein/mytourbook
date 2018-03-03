@@ -294,6 +294,7 @@
             <field column="i_date" name="i_fav_i_date_dts" />
             <field column="i_url" name="i_fav_url_txt" />
             <field column="altMax" name="data_tech_alt_max_i" />
+            <field column="altMaxFacet" name="data_tech_alt_max_facet_is" />
             <field column="gesamt" name="rate_pers_gesamt_i" />
             <field column="motive" name="rate_pers_motive_i" />
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
