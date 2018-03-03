@@ -60,6 +60,7 @@ ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
 FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 MytbAngularUniversalModule.configureDefaultServer(app, frontendConfig);
+ConfigureServerModule.configureDefaultErrorHandler(app);
 
 // Start up the Node server
 app.listen(serverConfig.frontendConfig.port, function () {

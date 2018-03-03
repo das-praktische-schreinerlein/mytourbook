@@ -56,5 +56,6 @@ export class ServerModuleLoader {
             serverConfig.firewallConfig.routerErrorsConfigs['tracks'].file, serverConfig.filePathErrorDocs);
         AssetsServerModule.configureStoredPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
             serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
+        ConfigureServerModule.configureDefaultErrorHandler(app);
     }
 }

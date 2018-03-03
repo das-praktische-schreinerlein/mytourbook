@@ -6,8 +6,10 @@ export class SDocAlbumService {
     private static CACHE_KEY = 'albumCache';
     private albumCache = {};
     private idCache = {};
+    private store;
 
     constructor() {
+        this.initStorage();
         this.initCache();
     }
 
@@ -89,8 +91,27 @@ export class SDocAlbumService {
         this.initAlbenForSDocId(sdoc);
     }
 
+    private initStorage() {
+        try {
+            if (typeof window === 'undefined') {
+                return;
+            }
+            if (typeof window.localStorage === 'undefined') {
+                return;
+            }
+            if (typeof localStorage === 'undefined') {
+                return;
+            }
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
+            this.store = localStorage;
+        } catch (e) {
+            return;
+        }
+    }
+
     private initCache(): void {
-        const item = localStorage.getItem(SDocAlbumService.CACHE_KEY);
+        const item = this.store ? this.store.getItem(SDocAlbumService.CACHE_KEY) : undefined;
         if (item !== undefined && item !== null && item !== '') {
             this.albumCache = JSON.parse(item);
             for (const albumKey in this.albumCache) {
@@ -107,6 +128,10 @@ export class SDocAlbumService {
     }
 
     private saveCache(): void {
-        localStorage.setItem(SDocAlbumService.CACHE_KEY, JSON.stringify(this.albumCache));
+        if (!this.store) {
+            return;
+        }
+
+        this.store.setItem(SDocAlbumService.CACHE_KEY, JSON.stringify(this.albumCache));
     }
 }

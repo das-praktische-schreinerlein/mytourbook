@@ -20,6 +20,7 @@ import {detect} from 'detect-browser';
 export class AppComponent {
     showLoadingSpinner = true;
     title = 'MyTourBook';
+    showLaw = false;
 
     constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,
@@ -33,7 +34,11 @@ export class AppComponent {
 
         this.toastr.setRootViewContainerRef(vcr);
 
-        this.showInitSate();
+        this.showInitState();
+
+        if (this.platformService.isClient()) {
+            this.showLaw = true;
+        }
 
         // load overrides
         const url = this.platformService.getAssetsUrl(`./assets/locales/locale-${locale}-overrides.json`);
@@ -51,7 +56,7 @@ export class AppComponent {
         this.doBrowserCheck();
     }
 
-    private showInitSate() {
+    private showInitState() {
         this.appService.getAppState().subscribe(
             appState => {
                 if (appState === AppState.Ready && this.platformService.isClient()) {

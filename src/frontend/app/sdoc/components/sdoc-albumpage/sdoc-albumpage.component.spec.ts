@@ -22,6 +22,8 @@ import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service
 import {FormBuilder} from '@angular/forms';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('SDocAlbumpageComponent', () => {
     let component: SDocAlbumpageComponent;
@@ -31,8 +33,10 @@ describe('SDocAlbumpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [SDocAlbumpageComponent],
             imports: [
+                NgbModule.forRoot(),
                 ToastModule.forRoot(),
-                TranslateModule.forRoot()
+                TranslateModule.forRoot(),
+                NoopAnimationsModule
             ],
             providers: [
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },

@@ -37,4 +37,12 @@ export class ConfigureServerModule {
             loggerFunction: console.warn
         }));
     }
+
+    public static configureDefaultErrorHandler(app: express.Application) {
+        app.use(function(err, req, res, next){
+            console.error(err);
+            res.status(500);
+            res.render('UiUiUi an error :-(');
+        });
+    }
 }

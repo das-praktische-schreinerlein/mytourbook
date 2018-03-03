@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FromEventObservable} from 'rxjs/src/observable/FromEventObservable';
+import {FromEventObservable} from 'rxjs/observable/FromEventObservable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 export enum LayoutSize {
