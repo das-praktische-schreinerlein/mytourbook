@@ -23,6 +23,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/sdoc-searchform.component';
 import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -33,6 +34,8 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 export class SDocSearchpageComponent implements OnInit, OnDestroy {
     private initialized = false;
     private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
+    mapElements: MapElement[] = [];
+    profileMapElements: MapElement[] = [];
 
     showLoadingSpinner = false;
     idValidationRule = new IdValidationRule(true);
@@ -51,6 +54,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     mapZoom = 9;
     searchFormLayout: SearchFormLayout = SearchFormLayout.GRID;
     showSearchFormElements = true;
+    flgShowMap = false;
+    flgShowProfileMap = false;
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -271,6 +276,19 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         console.log("newCenter", newCenter);
     }
 
+    onMapElementsFound(mapElements: MapElement[]) {
+        this.mapElements = [];
+        this.mapElements = mapElements;
+        this.cd.markForCheck();
+        return false;
+    }
+
+    onProfileMapElementsFound(mapElements: MapElement[]) {
+        this.profileMapElements = mapElements;
+        this.cd.markForCheck();
+        return false;
+    }
+
     onShowFormChanged(showForm: boolean) {
         this.showSearchFormElements = showForm;
         this.onResize(this.layoutSizeObservable.getValue());
@@ -331,11 +349,14 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult === undefined) {
                 // console.log('empty searchResult', sdocSearchResult);
+                me.flgShowMap = false;
+                me.flgShowProfileMap = false;
             } else {
                 // console.log('update searchResult', sdocSearchResult);
                 me.initialized = true;
                 me.searchResult = sdocSearchResult;
                 me.searchForm = sdocSearchResult.searchForm;
+                me.flgShowMap = me.mapCenterPos !== undefined || me.searchResult.recordCount > 0;
             }
             me.showLoadingSpinner = false;
             me.cd.markForCheck();

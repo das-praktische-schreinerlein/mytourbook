@@ -32,6 +32,7 @@
     <div class="container content-container" *ngIf="record.gpsTrackBasefile">
         <app-sdoc-profilemap [mapId]="'showProfileMap'"
                              [height]="'400px'"
+                             [showImageTrackAndGeoPos]="'true'"
                              [sdocs]="[record]"></app-sdoc-profilemap>
     </div>
 

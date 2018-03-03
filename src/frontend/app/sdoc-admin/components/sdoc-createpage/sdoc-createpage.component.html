@@ -16,19 +16,4 @@
             <app-sdoc-editform [record]="record" (save)="submitSave($event)"></app-sdoc-editform>
         </div>
     </div>
-
-    <div class="container content-container" *ngIf="tracks !== undefined && tracks.length > 0">
-        <app-sdoc-map [mapId]="'showMap'"
-                      [height]="'400px'"
-                      [mapZoom]="'9'"
-                      [sdocs]="tracks"
-                      [showImageTrackAndGeoPos]="'true'"
-                      [mapCenterPos]="undefined"></app-sdoc-map>
-    </div>
-
-    <div class="container content-container" *ngIf="record.gpsTrackBasefile">
-        <app-sdoc-profilemap [mapId]="'showProfileMap'"
-                             [height]="'400px'"
-                             [sdocs]="[record]"></app-sdoc-profilemap>
-    </div>
 </ng-container>

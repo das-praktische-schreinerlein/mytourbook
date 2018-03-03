@@ -49,6 +49,7 @@
         <div class="container content-container map-container" *ngIf="listItem.flgShowProfileMap">
             <app-sdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'400px'"
+                                 [showImageTrackAndGeoPos]="'true'"
                                  [sdocs]="[listItem.currentRecord]"></app-sdoc-profilemap>
         </div>
     </div>

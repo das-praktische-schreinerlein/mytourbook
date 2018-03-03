@@ -41,6 +41,9 @@ export class SDocMapComponent implements OnChanges {
     @Output()
     public sdocClicked: EventEmitter<SDocRecord> = new EventEmitter();
 
+    @Output()
+    public mapElementsFound: EventEmitter<MapElement[]> = new EventEmitter();
+
     constructor(private contentUtils: SDocContentUtils, private cd: ChangeDetectorRef,
                 private platformService: PlatformService) {}
 
@@ -76,5 +79,6 @@ export class SDocMapComponent implements OnChanges {
             }
         }
         this.mapElements = Array.from(this.mapElementsReverseMap.keys());
+        this.mapElementsFound.emit(this.mapElements);
     }
 }

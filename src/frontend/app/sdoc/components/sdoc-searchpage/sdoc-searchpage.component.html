@@ -42,14 +42,25 @@
     <div class="container">
         <app-sdoc-timetable [searchResult]="searchResult" (columnClicked)="onTimeTableColumnClicked($event)"></app-sdoc-timetable>
     </div>
-    <div class="container" *ngIf="mapCenterPos || searchResult.recordCount > 0">
+    <div [class]="('container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
         <app-sdoc-map [mapId]="'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
                       [height]="'300'"
                       [mapZoom]="mapZoom"
                       [sdocs]="searchResult.currentRecords"
                       (sdocClicked)="onMapSDocClicked($event)"
                       (centerChanged)="onMapCenterChanged($event)"
+                      (mapElementsFound)="onMapElementsFound($event)"
                       [mapCenterPos]="mapCenterPos"></app-sdoc-map>
+    </div>
+    <div class="container map-container" *ngIf="flgShowProfileMap">
+        <app-sdoc-profilemap [mapId]="'showProfileMap'"
+                             [height]="'300px'"
+                             (mapElementsFound)="onProfileMapElementsFound($event)"
+                             [sdocs]="searchResult.currentRecords"></app-sdoc-profilemap>
+    </div>
+    <div class="container containter profile-toggler-container" *ngIf="flgShowMap">
+        <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && profileMapElements.length > 0">Profil ausblenden</button>
+        <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = true" *ngIf="mapElements.length > 0 && !flgShowProfileMap">Profil einblenden</button>
     </div>
     <div class="container">
         <app-sdoc-typetable [searchResult]="searchResult" (columnClicked)="onTypeTableColumnClicked($event)"></app-sdoc-typetable>

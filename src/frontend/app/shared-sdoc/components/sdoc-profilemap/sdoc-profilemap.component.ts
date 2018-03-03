@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
@@ -24,6 +24,12 @@ export class SDocProfileMapComponent implements OnChanges {
     @Input()
     public sdocs: SDocRecord[];
 
+    @Input()
+    public showImageTrackAndGeoPos? = false;
+
+    @Output()
+    public mapElementsFound: EventEmitter<MapElement[]> = new EventEmitter();
+
     constructor(private contentUtils: SDocContentUtils, private appService: GenericAppService, private platformService: PlatformService) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -41,10 +47,11 @@ export class SDocProfileMapComponent implements OnChanges {
         const tmpList: MapElement[] = [];
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
-            for (const mapElement of this.contentUtils.createMapElementForSDoc(record, true)) {
+            for (const mapElement of this.contentUtils.createMapElementForSDoc(record, this.showImageTrackAndGeoPos)) {
                 tmpList.push(mapElement);
             }
         }
         this.mapElements = tmpList;
+        this.mapElementsFound.emit(this.mapElements);
     }
 }
