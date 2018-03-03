@@ -52,7 +52,7 @@
             </div>
             <div [class]="(width4 + ' form-inline input-group input-group-sm')">
                 <label class="col-xs-1 col-form-label mr-2" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.sdoc.nearbyDistance">Umkreis:</label>
-                <input formControlName="nearbyDistance" type="number" placeholder="Umkreis in km" class="form-control" (input)="onChangeSelect($event)"
+                <input formControlName="nearbyDistance" type="number" (keydown.enter)="onSubmitSearch($event);" placeholder="Umkreis in km" class="form-control" (input)="onChangeSelect($event)"
                        i18n-placeholder="nearbyDistance placeholder|Placeholder for nearbyDistance@@placeholder.searchform.sdoc.nearbyDistance">
             </div>
         </div>
@@ -116,7 +116,7 @@
                 </div>
                 <div [class]="(width2 + ' form-inline input-group input-group-sm')">
                     <label class="col-xs-1 col-form-label mr-2" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.sdoc.nearbyDistance">Umkreis:</label>
-                    <input formControlName="nearbyDistance" type="number" placeholder="Umkreis in km" class="form-control"
+                    <input formControlName="nearbyDistance" type="number" (keydown.enter)="onSubmitSearch($event);" placeholder="Umkreis in km" class="form-control"
                            i18n-placeholder="nearbyDistance placeholder|Placeholder for nearbyDistance@@placeholder.searchform.sdoc.nearbyDistance">
                 </div>
                 <div [class]="(width2 + ' input-group input-group-sm justify-content-end')">
