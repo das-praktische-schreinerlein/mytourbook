@@ -8,6 +8,7 @@ import {SDocRoutingService} from './sdoc-routing.service';
 import * as L from 'leaflet';
 import {FilterUtils, SimpleFilter} from '../../../shared/commons/utils/filter.utils';
 import LatLng = L.LatLng;
+import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
 
 export enum KeywordsState {
     SET, NOTSET, SUGGESTED
@@ -299,10 +300,12 @@ export class SDocContentUtils {
             mapElements.push(mapElement);
         }
         if (showGeoPos) {
+            const ele = BeanUtils.getValue(record, 'sdocdatatech.altMax');
+            const point = ele !== undefined ? new LatLng(+record.geoLat, +record.geoLon, +ele) : new LatLng(+record.geoLat, +record.geoLon);
             const mapElement: MapElement = {
                 id: record.id,
                 name: record.type + ': ' + record.name,
-                point: new LatLng(+record.geoLat, +record.geoLon),
+                point: point,
                 popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
                 type: record.type
             };

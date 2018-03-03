@@ -41,7 +41,7 @@ export class SDocProfileMapComponent implements OnChanges {
         const tmpList: MapElement[] = [];
         for (let i = 0; i < this.sdocs.length; i++) {
             const record =  this.sdocs[i];
-            for (const mapElement of this.contentUtils.createMapElementForSDoc(record, false)) {
+            for (const mapElement of this.contentUtils.createMapElementForSDoc(record, true)) {
                 tmpList.push(mapElement);
             }
         }

@@ -2,7 +2,7 @@ import {AfterViewChecked, ChangeDetectionStrategy, Component, Input, OnChanges, 
 import {GeoLoader} from '../../services/geo.loader';
 import {GeoJsonParser} from '../../services/geojson.parser';
 import {GeoGpxParser} from '../../services/geogpx.parser';
-import {VisJsGeoProfileMap} from '../../services/visjs-geoprofilemap.plugin';
+import {VisJsGeoProfileMap, VisJsGeoProfileMapDataSource} from '../../services/visjs-geoprofilemap.plugin';
 import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {MinimalHttpBackendClient} from '../../../commons/services/minimal-http-backend-client';
 import {MapElement} from '../../services/leaflet-geo.plugin';
@@ -64,10 +64,33 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
         }
 
         this.mapHeight = this.flgfullScreen ? window.innerHeight + 'px' : this.height;
+        const dataSources: VisJsGeoProfileMapDataSource[] = [];
         for (let i = 0; i < this.mapElements.length; i++) {
-            const trackSrc = this.mapElements[i].trackSrc;
+            let trackSrc = this.mapElements[i].trackSrc;
             const trackUrl = this.mapElements[i].trackUrl;
+            const point = this.mapElements[i].point;
             // specify options
+            let loader: GeoLoader;
+            if ((trackSrc === undefined || trackSrc === null) && (trackUrl === undefined || trackUrl === null) && point !== undefined) {
+                trackSrc = '{ "track": {' +
+                    '"tId":"dummy",' +
+                    '"tName":"' + this.mapElements[i].name + '",' +
+                    '"color":"Red",' +
+                    '"colorIdx":"0",' +
+                    '"type":"' + this.mapElements[i].type + '",' +
+                    '"header":["lat","lon","ele"],' +
+                    '"records":[[' + point.lat + ', ' + point.lng + ', ' + (point.alt ? point.alt : 0) + ']]}}';
+                loader = this.jsonLoader;
+            } else if ((trackUrl !== undefined && trackUrl.endsWith('.gpx'))
+                || (trackSrc !== undefined && trackSrc !== null && (trackSrc.indexOf('<trkpt') || trackSrc.indexOf('<rpt')))) {
+                loader = this.gpxLoader;
+            } else {
+                loader = this.jsonLoader;
+            }
+            dataSources.push({ geoLoader: loader, url: trackUrl, src: trackSrc});
+        }
+
+        if (dataSources.length > 0) {
             const options = {
                 // generateName: this.flgGenerateNameFromGpx,
                 width:  '100%',
@@ -93,14 +116,7 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
                 }
             };
             const container = document.getElementById(this.mapId);
-            let loader: GeoLoader;
-            if ((trackUrl !== undefined && trackUrl.endsWith('.gpx'))
-                || (trackSrc !== undefined && trackSrc !== null && (trackSrc.indexOf('<trkpt') || trackSrc.indexOf('<rpt')))) {
-                loader = this.gpxLoader;
-            } else {
-                loader = this.jsonLoader;
-            }
-            const mapProfileObj = new VisJsGeoProfileMap(loader, trackUrl, trackSrc, container, options);
+            const mapProfileObj = new VisJsGeoProfileMap(dataSources, container, options);
         }
     }
 }
