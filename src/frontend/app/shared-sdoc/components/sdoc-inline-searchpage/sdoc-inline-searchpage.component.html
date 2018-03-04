@@ -8,8 +8,12 @@
                     <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined  && searchResult && searchResult.recordCount > 0" class="btn btn-action btn-sm float">{{searchLinkLabel}}</a>
                 </div>
                 <div class="col-6">
-                    <button *ngIf="!showResultList" class="btn btn-configure btn-sm float-right" (click)="showResultList = true" i18n="button show resultlist|Buttontext to show resultlist@@button.inlineSearchPage.show.resultlist">Ergebnisse zeigen</button>
-                    <button *ngIf="showResultList && searchResult && searchResult.recordCount > 0" class="btn btn-configure btn-sm float-right" (click)="showResultList = false" i18n="button hide resultlist|Buttontext to hide resultlist@@button.inlineSearchPage.hide.resultlist">Ergebnisse ausblenden</button>
+                    <button *ngIf="!showResultList" class="btn btn-configure btn-sm float-right" (click)="showResultList = true">
+                        <span i18n="button show resultlist|Buttontext to show resultlist@@button.inlineSearchPage.show.resultlist">Ergebnisse zeigen</span>
+                        <span class="btn-action-icon">&#x21D3;</span></button>
+                    <button *ngIf="showResultList && searchResult && searchResult.recordCount > 0" class="btn btn-configure btn-sm float-right" (click)="showResultList = false">
+                        <span i18n="button hide resultlist|Buttontext to hide resultlist@@button.inlineSearchPage.hide.resultlist">Ergebnisse ausblenden</span>
+                        <span class="btn-action-icon">&#x21D1;</span></button>
                 </div>
             </div>
         </div>

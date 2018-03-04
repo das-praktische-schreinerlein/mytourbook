@@ -9,6 +9,9 @@
                          (click)="submitShowImage(listItem.currentRecord)"
                          alt="{{listItem.image.name}}">
                 </div>
+                <small class="text-muted"><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy>
+                    {{listItem.currentRecord | sdocdate}}
+                </small>
             </ng-container>
             <ng-container *ngIf="!short">
                 <h5><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance>
