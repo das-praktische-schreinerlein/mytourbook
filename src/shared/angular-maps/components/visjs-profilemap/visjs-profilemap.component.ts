@@ -74,7 +74,7 @@ export class VisJsProfileMapComponent implements AfterViewChecked, OnChanges {
             if ((trackSrc === undefined || trackSrc === null) && (trackUrl === undefined || trackUrl === null) && point !== undefined) {
                 trackSrc = '{ "track": {' +
                     '"tId":"dummy",' +
-                    '"tName":"' + this.mapElements[i].name + '",' +
+                    '"tName":"' + this.mapElements[i].name.replace(/[^-a-zA-Z0-9+ .;,:]+/g, '') + '",' +
                     '"color":"Red",' +
                     '"colorIdx":"0",' +
                     '"type":"' + this.mapElements[i].type + '",' +
