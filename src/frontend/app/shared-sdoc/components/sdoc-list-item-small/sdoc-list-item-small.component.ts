@@ -31,6 +31,9 @@ export class SDocListItemSmallComponent implements OnChanges {
     @Input()
     public layout: Layout;
 
+    @Input()
+    public short? = false;
+
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 

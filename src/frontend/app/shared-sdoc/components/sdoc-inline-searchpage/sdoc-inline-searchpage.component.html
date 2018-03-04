@@ -35,6 +35,7 @@
         <div class="container" *ngIf="showResultList">
             <app-sdoc-list [searchResult]="searchResult"
                            [layout]="layout"
+                           [short]="short"
                            (show)="onShowSDoc($event)"></app-sdoc-list>
         </div>
         <div class="container" *ngIf="showResultList">

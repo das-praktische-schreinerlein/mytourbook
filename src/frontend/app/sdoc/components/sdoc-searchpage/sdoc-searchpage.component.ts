@@ -56,6 +56,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     showSearchFormElements = true;
     flgShowMap = false;
     flgShowProfileMap = false;
+    flgMapAvailable = false;
+    flgProfileMapAvailable = false;
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -279,13 +281,20 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     onMapElementsFound(mapElements: MapElement[]) {
         this.mapElements = [];
         this.mapElements = mapElements;
+        this.flgMapAvailable = this.mapElements.length > 0;
+        this.flgProfileMapAvailable = this.flgProfileMapAvailable && this.flgMapAvailable;
+        this.flgShowMap = this.flgMapAvailable && this.flgShowMap;
         this.cd.markForCheck();
+
         return false;
     }
 
     onProfileMapElementsFound(mapElements: MapElement[]) {
         this.profileMapElements = mapElements;
+        this.flgProfileMapAvailable = this.profileMapElements.length > 0;
+        this.flgShowProfileMap = this.flgProfileMapAvailable && this.flgShowProfileMap;
         this.cd.markForCheck();
+
         return false;
     }
 
@@ -349,15 +358,20 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult === undefined) {
                 // console.log('empty searchResult', sdocSearchResult);
-                me.flgShowMap = false;
-                me.flgShowProfileMap = false;
+                me.flgMapAvailable = false;
+                me.flgProfileMapAvailable = false;
+                me.flgShowProfileMap = me.flgProfileMapAvailable;
             } else {
                 // console.log('update searchResult', sdocSearchResult);
                 me.initialized = true;
                 me.searchResult = sdocSearchResult;
                 me.searchForm = sdocSearchResult.searchForm;
-                me.flgShowMap = me.mapCenterPos !== undefined || me.searchResult.recordCount > 0;
+                me.flgMapAvailable = me.mapCenterPos !== undefined || me.searchResult.recordCount > 0;
+                me.flgProfileMapAvailable = me.flgMapAvailable;
             }
+            me.flgShowMap = me.flgMapAvailable;
+            me.flgShowProfileMap = me.flgShowProfileMap && me.flgProfileMapAvailable;
+
             me.showLoadingSpinner = false;
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {

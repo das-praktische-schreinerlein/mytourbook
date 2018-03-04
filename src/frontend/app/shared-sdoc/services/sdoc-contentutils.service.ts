@@ -40,6 +40,8 @@ export interface ItemData {
     tracks?: SDocRecord[];
     flgShowMap?: boolean;
     flgShowProfileMap?: boolean;
+    flgMapAvailable?: boolean;
+    flgProfileMapAvailable?: boolean;
 }
 
 @Injectable()
@@ -189,7 +191,7 @@ export class SDocContentUtils {
         filters['sort'] = 'ratePers';
 
         if (record.type === 'TRACK') {
-            if (type === 'IMAGE' && record.trackId) {
+            if ((type === 'IMAGE' || type === 'TOPIMAGE') && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
@@ -207,7 +209,7 @@ export class SDocContentUtils {
         } else if (record.type === 'ROUTE') {
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
-            } else if (type === 'IMAGE') {
+            } else if (type === 'IMAGE' || type === 'TOPIMAGE') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
@@ -228,8 +230,10 @@ export class SDocContentUtils {
                 }
             }
         } else if (record.type === 'IMAGE') {
-            if (type === 'TRACK' && record.trackId) {
+            if (type === 'IMAGE' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
+            } else if (type === 'TOPIMAGE') {
+                filters['moreFilter'] = 'track_id_i:' + 99999999999;
             } else if (type === 'ROUTE' && record.trackId) {
                 filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'LOCATION' && record.locId) {
@@ -244,7 +248,7 @@ export class SDocContentUtils {
         } else if (record.type === 'TRIP') {
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
-            } else if (type === 'IMAGE') {
+            } else if (type === 'IMAGE' || type === 'TOPIMAGE') {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
@@ -258,7 +262,7 @@ export class SDocContentUtils {
             }
         } else if (record.type === 'NEWS') {
             filters['moreFilter'] = 'news_id_is:' + record.newsId;
-            if (type === 'IMAGE') {
+            if (type === 'IMAGE' || type === 'TOPIMAGE') {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
                 filters['perPage'] = 20;
@@ -267,6 +271,16 @@ export class SDocContentUtils {
                 filters['perPage'] = 20;
                 filters['sort'] = 'dateAsc';
             }
+        }
+
+        if (type === 'TOPIMAGE') {
+            if (!filters['moreFilter']) {
+                filters['moreFilter'] = '';
+            }
+            filters['moreFilter'] += '_,_personalRateOverall:8,9,10,11,12,13,14,15';
+            filters['type'] = 'IMAGE';
+            filters['sort'] = 'ratePers';
+            filters['perPage'] = 4;
         }
 
         return filters;
@@ -353,14 +367,17 @@ export class SDocContentUtils {
         if (record !== undefined && (record.gpsTrackBasefile || record.geoLoc !== undefined
                 || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20))) {
             itemData.tracks = [record];
-            itemData.flgShowMap = true;
-            itemData.flgShowProfileMap = (record.gpsTrackBasefile !== undefined
+            itemData.flgMapAvailable = true;
+            itemData.flgProfileMapAvailable = (record.gpsTrackBasefile !== undefined
                 || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20));
         } else {
             itemData.tracks = [];
-            itemData.flgShowMap = false;
-            itemData.flgShowProfileMap = false;
+            itemData.flgMapAvailable = false;
+            itemData.flgProfileMapAvailable = false;
         }
+
+        itemData.flgShowMap = itemData.flgMapAvailable;
+        itemData.flgShowProfileMap = itemData.flgProfileMapAvailable;
     }
 
 }

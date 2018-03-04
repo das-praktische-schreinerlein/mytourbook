@@ -39,6 +39,10 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     tracks: SDocRecord[] = [];
     flgShowMap = false;
     flgShowProfileMap = false;
+    flgShowTopImages = true;
+    flgMapAvailable = false;
+    flgProfileMapAvailable = false;
+    flgTopImagesAvailable = false;
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
@@ -70,14 +74,19 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
                         || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
                         me.tracks = [me.record];
-                        me.flgShowMap = true;
-                        me.flgShowProfileMap = (me.record.gpsTrackBasefile !== undefined
+                        me.flgMapAvailable = true;
+                        me.flgProfileMapAvailable = (me.record.gpsTrackBasefile !== undefined
                             || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20));
                     } else {
                         me.tracks = [];
-                        me.flgShowMap = false;
-                        me.flgShowProfileMap = false;
+                        me.flgMapAvailable = false;
+                        me.flgProfileMapAvailable = false;
                     }
+
+                    me.flgShowMap = this.flgMapAvailable;
+                    me.flgShowProfileMap = this.flgProfileMapAvailable;
+                    me.flgTopImagesAvailable = true;
+                    me.flgShowTopImages = true;
 
                     const recordName = me.keywordsValidationRule.sanitize(me.record.name);
                     if (me.pdoc) {
@@ -211,12 +220,29 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 if (record.gpsTrackBasefile || record.geoLoc !== undefined
                     || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20)) {
                     realTracks.push(record);
-                    this.flgShowMap = true;
-                    this.flgShowProfileMap = true;
+                    this.flgMapAvailable = true;
+                    this.flgProfileMapAvailable = true;
+
+                    this.flgShowMap = this.flgMapAvailable;
+                    this.flgShowProfileMap = this.flgProfileMapAvailable;
                 }
             }
         }
         this.tracks = realTracks;
+
+        this.cd.markForCheck();
+    }
+
+    onTopImagesFound(searchResult: SDocSearchResult) {
+        if (searchResult === undefined || searchResult.recordCount <= 3) {
+            this.flgTopImagesAvailable = false;
+        } else {
+            this.flgTopImagesAvailable = true;
+        }
+        this.flgShowTopImages = this.flgTopImagesAvailable;
+        this.cd.markForCheck();
+
+        return false;
     }
 
     public onActionTagEvent(event: ActionTagEvent) {

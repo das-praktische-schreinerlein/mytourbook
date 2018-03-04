@@ -26,7 +26,9 @@ export class SDocListItemPageComponent implements OnChanges {
         urlShow: undefined,
         tracks: [],
         flgShowMap: false,
-        flgShowProfileMap: false
+        flgShowProfileMap: false,
+        flgMapAvailable: false,
+        flgProfileMapAvailable: false
     };
     maxImageHeight = '0';
 
@@ -38,6 +40,9 @@ export class SDocListItemPageComponent implements OnChanges {
 
     @Input()
     public layout: Layout;
+
+    @Input()
+    public short? = false;
 
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();

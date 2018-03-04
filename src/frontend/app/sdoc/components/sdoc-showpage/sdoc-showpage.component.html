@@ -43,6 +43,21 @@
         </div>
     </div>
 
+    <div class="container content-container" *ngIf="flgShowTopImages && flgTopImagesAvailable">
+        <app-sdoc-inline-searchpage [label]="'TOP-Bilder'"
+                                    i18n-label="label inline-searchpage TOPIMAGE|Label inline-searchpage TOPIMAGE@@linline-search.label.sdoc.TOPIMAGE"
+                                    [params]="getFiltersForType(record, 'TOPIMAGE')"
+                                    [htmlId]="'TOPIMAGE'"
+                                    [showForm]="false"
+                                    [showLayout]="false"
+                                    [showResultList]="true"
+                                    [layout]="Layout.BIG"
+                                    [short]="true"
+                                    [searchLinkLabel]="'Durchsuchen'"
+                                    (searchResultFound)="onTopImagesFound($event);"
+                                    [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+    </div>
+
     <div [class]="('container content-container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
         <app-sdoc-map [mapId]="'showMap'"
                       [height]="'400px'"
@@ -78,7 +93,7 @@
                                             [loadTrack]="'true'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -88,7 +103,7 @@
                                             [showLayout]="true"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.SMALL"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
@@ -97,7 +112,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
@@ -106,7 +121,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'ROUTE'">
@@ -126,7 +141,7 @@
                                             [showLayout]="true"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.SMALL"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
@@ -143,7 +158,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRACK'">
@@ -178,7 +193,7 @@
                                             [showForm]="false"
                                             [showLayout]="true"
                                             [layout]="Layout.SMALL"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
@@ -239,7 +254,7 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
@@ -249,7 +264,7 @@
                                             [showResultList]="true"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [loadTrack]="'true'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
@@ -259,7 +274,7 @@
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -268,7 +283,7 @@
                                             [showForm]="false"
                                             [showLayout]="true"
                                             [layout]="Layout.SMALL"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
@@ -295,8 +310,8 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
-                                            [searchLinkLabel]="'Alle'"
-                                            [loadTrack]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [loadTrack]="'Durchsuchen'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
@@ -306,7 +321,7 @@
                                             [showForm]="false"
                                             [showLayout]="true"
                                             [layout]="Layout.SMALL"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
@@ -314,7 +329,7 @@
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
                                             [layout]="Layout.THIN"
-                                            [searchLinkLabel]="'Alle'"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
         </ng-container>

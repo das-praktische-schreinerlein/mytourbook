@@ -39,6 +39,9 @@ export class SDocListItemFlatComponent implements OnChanges, OnDestroy {
     @Input()
     public layout: Layout;
 
+    @Input()
+    public short? = false;
+
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 
