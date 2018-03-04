@@ -24,6 +24,7 @@ import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angul
 import {SDocDateFormatPipe} from '../../../shared-sdoc/pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -55,6 +56,7 @@ describe('SDocShowpageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
+                LayoutService
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

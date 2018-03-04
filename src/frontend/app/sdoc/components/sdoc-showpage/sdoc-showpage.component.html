@@ -58,20 +58,32 @@
                                     [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
     </div>
 
-    <div [class]="('container content-container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
-        <app-sdoc-map [mapId]="'showMap'"
-                      [height]="'400px'"
-                      [mapZoom]="'9'"
-                      [sdocs]="tracks"
-                      [showImageTrackAndGeoPos]="'true'"
-                      [mapCenterPos]="undefined"></app-sdoc-map>
-    </div>
+    <div>
+        <div [class]="('container content-container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
+            <app-sdoc-map [mapId]="'showMap'"
+                          [height]="'400px'"
+                          [mapZoom]="'9'"
+                          [sdocs]="tracks"
+                          [showImageTrackAndGeoPos]="'true'"
+                          [mapCenterPos]="undefined"></app-sdoc-map>
+            <div class="container profile-toggler-container">
+                <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = true" *ngIf="flgMapAvailable && !flgShowProfileMap">
+                    <span i18n="button show profilemap|Buttontext to show profilemap@@button.searchform.show.profilemap">Profil einblenden</span>
+                    <span class="btn-action-icon">&#x21D3;</span></button>
+            </div>
+        </div>
 
-    <div class="container content-container map-container" *ngIf="flgShowProfileMap">
-        <app-sdoc-profilemap [mapId]="'showProfileMap'"
-                             [height]="'400px'"
-                             [showImageTrackAndGeoPos]="'true'"
-                             [sdocs]="tracks"></app-sdoc-profilemap>
+        <div class="container content-container map-container" *ngIf="flgShowProfileMap">
+            <app-sdoc-profilemap [mapId]="'showProfileMap'"
+                                 [height]="'370px'"
+                                 [showImageTrackAndGeoPos]="'true'"
+                                 [sdocs]="tracks"></app-sdoc-profilemap>
+            <div class="container profile-toggler-container">
+                <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && flgProfileMapAvailable">
+                    <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>
+                    <span class="btn-action-icon">&#x21D1;</span></button>
+            </div>
+        </div>
     </div>
 
     <div class="container content-container">

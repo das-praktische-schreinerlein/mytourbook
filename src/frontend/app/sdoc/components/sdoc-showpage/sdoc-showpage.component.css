@@ -1,6 +1,9 @@
 .image-container {
     width: 100%;
 }
+.profile-toggler-container {
+    text-align: right;
+}
 .image-container img {
     margin: auto;
     display: block;

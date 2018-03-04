@@ -8,7 +8,7 @@ import {CommonRoutingService, RoutingState} from '../../../shared/angular-common
 import {PlatformService} from '../../../shared/angular-commons/services/platform.service';
 import {LogUtils} from '../../../shared/commons/utils/log.utils';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
-import {detect} from 'detect-browser';
+import {LayoutService} from '../../../shared/angular-commons/services/layout.service';
 
 @Component({
     selector: 'app-root',
@@ -25,7 +25,7 @@ export class AppComponent {
     constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,
                 private http: Http, private commonRoutingService: CommonRoutingService, private cd: ChangeDetectorRef,
-                private platformService: PlatformService, private pageUtils: PageUtils) {
+                private platformService: PlatformService, private pageUtils: PageUtils, private layoutService: LayoutService) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(locale);
 
@@ -81,8 +81,8 @@ export class AppComponent {
 
     private doBrowserCheck() {
         // check ie
-        const browser = detect();
-        switch (browser && browser.name) {
+        const browser = this.layoutService.getBrowser();
+        switch (browser && browser['name']) {
             case 'ie':
                 this.toastr.warning('<h4>Auweia</h4>\n' +
                     'Dieser Browser ist leider etwas "..." und wird die Seite wahrscheinlich nicht richtig darstellen können :-(<br />\n' +

@@ -16,6 +16,7 @@ import {CommonRoutingService} from '../../../shared/angular-commons/services/com
 import {RouterStub} from '../../../shared/angular-commons/testing/router-stubs';
 import {PlatformService} from '../../../shared/angular-commons/services/platform.service';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
+import {LayoutService} from '../../../shared/angular-commons/services/layout.service';
 
 describe('AppComponent', () => {
     beforeEach(() => {
@@ -38,7 +39,8 @@ describe('AppComponent', () => {
                 {provide: ToastsManager, useValue: new ToastsManagerStub() },
                 { provide: XHRBackend, useClass: MockBackend },
                 PlatformService,
-                PageUtils
+                PageUtils,
+                LayoutService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         });

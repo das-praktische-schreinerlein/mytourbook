@@ -20,6 +20,7 @@ import {CommonRoutingService, RoutingState} from '../../../../shared/angular-com
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {ActionTagEvent} from '../../../shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -49,7 +50,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,
-                private platformService: PlatformService) {
+                private platformService: PlatformService, private layoutService: LayoutService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -84,7 +85,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     }
 
                     me.flgShowMap = this.flgMapAvailable;
-                    me.flgShowProfileMap = this.flgProfileMapAvailable;
+                    me.calcShowProfileMap();
                     me.flgTopImagesAvailable = true;
                     me.flgShowTopImages = true;
 
@@ -224,7 +225,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     this.flgProfileMapAvailable = true;
 
                     this.flgShowMap = this.flgMapAvailable;
-                    this.flgShowProfileMap = this.flgProfileMapAvailable;
+                    this.calcShowProfileMap();
                 }
             }
         }
@@ -269,5 +270,20 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     getFiltersForType(record: SDocRecord, type: string): any {
         return this.contentUtils.getSDocSubItemFiltersForType(record, type,
             (this.pdoc ? this.pdoc.theme : undefined));
+    }
+
+    private calcShowProfileMap() {
+        if (!this.flgProfileMapAvailable) {
+            this.flgShowProfileMap = false;
+            return;
+        }
+
+        if (this.layoutService.isMobile() &&
+            (this.record.type === 'LOCATION' || this.record.type === 'TRIP' || this.record.type === 'NEWS')) {
+            this.flgShowProfileMap = false;
+            return;
+        }
+
+        this.flgShowProfileMap = true;
     }
 }
