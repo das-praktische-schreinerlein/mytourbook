@@ -284,6 +284,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.flgMapAvailable = this.mapElements.length > 0;
         this.flgProfileMapAvailable = this.flgProfileMapAvailable && this.flgMapAvailable;
         this.flgShowMap = this.flgMapAvailable && this.flgShowMap;
+        this.calcShowMaps();
         this.cd.markForCheck();
 
         return false;
@@ -293,6 +294,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.profileMapElements = mapElements;
         this.flgProfileMapAvailable = this.profileMapElements.length > 0;
         this.flgShowProfileMap = this.flgProfileMapAvailable && this.flgShowProfileMap;
+        this.calcShowMaps();
         this.cd.markForCheck();
 
         return false;
@@ -371,6 +373,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             }
             me.flgShowMap = me.flgMapAvailable;
             me.flgShowProfileMap = me.flgShowProfileMap && me.flgProfileMapAvailable;
+            me.calcShowMaps();
 
             me.showLoadingSpinner = false;
             me.cd.markForCheck();
@@ -380,5 +383,21 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             me.showLoadingSpinner = false;
             me.cd.markForCheck();
         });
+    }
+
+    private calcShowMaps() {
+        if (this.layoutService.isSpider() || this.layoutService.isServer()) {
+            this.flgShowProfileMap = false;
+            this.flgShowMap = false;
+            return;
+        }
+        if (!this.flgProfileMapAvailable) {
+            this.flgShowProfileMap = false;
+            return;
+        }
+        if (!this.layoutService.isDesktop() && this.profileMapElements && this.profileMapElements.length > 10) {
+            this.flgShowProfileMap = false;
+            return;
+        }
     }
 }

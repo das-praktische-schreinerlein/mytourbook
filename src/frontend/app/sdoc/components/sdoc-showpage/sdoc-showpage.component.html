@@ -43,14 +43,14 @@
         </div>
     </div>
 
-    <div class="container content-container" *ngIf="flgShowTopImages && flgTopImagesAvailable">
+    <div class="container content-container" *ngIf="flgTopImagesAvailable">
         <app-sdoc-inline-searchpage [label]="'TOP-Bilder'"
                                     i18n-label="label inline-searchpage TOPIMAGE|Label inline-searchpage TOPIMAGE@@linline-search.label.sdoc.TOPIMAGE"
                                     [params]="getFiltersForType(record, 'TOPIMAGE')"
                                     [htmlId]="'TOPIMAGE'"
                                     [showForm]="false"
                                     [showLayout]="true"
-                                    [showResultList]="true"
+                                    [showResultList]="flgShowTopImages"
                                     [layout]="Layout.BIG"
                                     [short]="true"
                                     [searchLinkLabel]="'Durchsuchen'"

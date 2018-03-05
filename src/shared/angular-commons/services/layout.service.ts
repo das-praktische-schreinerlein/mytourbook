@@ -50,8 +50,30 @@ export class LayoutService {
         return false;
     }
 
+    public isSpider(): boolean {
+        const browser = this.getBrowser();
+        switch (browser && browser['os']) {
+            case 'Search Bot':
+                return true;
+            default:
+        }
+
+        return false;
+    }
+
+    public isServer(): boolean {
+        const browser = this.getBrowser();
+        switch (browser && browser['name']) {
+            case 'node':
+                return true;
+            default:
+        }
+
+        return false;
+    }
+
     public isDesktop(): boolean {
-        return !this.isMobile();
+        return !this.isMobile() && !this.isSpider() && !this.isServer();
     }
 
     protected calcLayoutSizeForWindow(): LayoutSizeData {

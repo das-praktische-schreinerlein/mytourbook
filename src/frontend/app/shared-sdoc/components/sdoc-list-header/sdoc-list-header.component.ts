@@ -19,7 +19,7 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
     public availableLayouts?: Layout[] = [Layout.THIN, Layout.FLAT, Layout.SMALL, Layout.BIG, Layout.PAGE];
 
     @Input()
-    public availableSorts?: string[] = ['relevance', 'location', 'date', 'ratePers', 'distance',
+    public availableSorts?: string[] = ['relevance', 'location', 'date', 'dateAsc', 'ratePers', 'distance',
         'dataTechDurDesc', 'dataTechAltDesc', 'dataTechMaxDesc', 'dataTechDistDesc',
         'dataTechDurAsc', 'dataTechAltAsc', 'dataTechMaxAsc', 'dataTechDistAsc'];
 
@@ -88,6 +88,7 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
                 this.availableSorts = facets.facets.get('sorts').facet.map(facet => {
                     return facet[0];
                 });
+                this.availableSorts.sort();
             }
         }
     }

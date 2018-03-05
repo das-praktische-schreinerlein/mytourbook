@@ -88,10 +88,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         },
         sortMapping: {
             'date': {
-                'sort': 'dateonly_s desc'
+                'sort': 'datesort_dt desc'
             },
             'dateAsc': {
-                'sort': 'date_dt asc'
+                'sort': 'datesort_dt asc'
             },
             'distance': {
                 'sort': 'geodist() asc'
@@ -121,7 +121,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 'sort': 'data_tech_dist_f asc'
             },
             'ratePers': {
-                'sort': 'sub(15, rate_pers_gesamt_i) asc, dateonly_s desc',
+                'sort': 'sub(15, rate_pers_gesamt_i) asc, datesort_s desc',
                 'bq':  'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:IMAGE^1',
                 'boost': 'product( recip( rord(date_dts), 1, 1000, 1000), 1)'
             },

@@ -85,7 +85,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     }
 
                     me.flgShowMap = this.flgMapAvailable;
-                    me.calcShowProfileMap();
+                    me.calcShowMaps();
                     me.flgTopImagesAvailable = true;
                     me.flgShowTopImages = true;
 
@@ -225,7 +225,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     this.flgProfileMapAvailable = true;
 
                     this.flgShowMap = this.flgMapAvailable;
-                    this.calcShowProfileMap();
+                    this.calcShowMaps();
                 }
             }
         }
@@ -241,6 +241,9 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             this.flgTopImagesAvailable = true;
         }
         this.flgShowTopImages = this.flgTopImagesAvailable;
+        if (!this.layoutService.isDesktop()) {
+            this.flgShowTopImages = false;
+        }
         this.cd.markForCheck();
 
         return false;
@@ -272,13 +275,17 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
             (this.pdoc ? this.pdoc.theme : undefined));
     }
 
-    private calcShowProfileMap() {
+    private calcShowMaps() {
+        if (this.layoutService.isSpider() || this.layoutService.isServer()) {
+            this.flgShowProfileMap = false;
+            this.flgShowMap = false;
+            return;
+        }
         if (!this.flgProfileMapAvailable) {
             this.flgShowProfileMap = false;
             return;
         }
-
-        if (this.layoutService.isMobile() &&
+        if (!this.layoutService.isDesktop() &&
             (this.record.type === 'LOCATION' || this.record.type === 'TRIP' || this.record.type === 'NEWS')) {
             this.flgShowProfileMap = false;
             return;
