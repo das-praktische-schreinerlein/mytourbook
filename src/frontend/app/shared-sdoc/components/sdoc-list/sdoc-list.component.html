@@ -1,7 +1,7 @@
 <div class="row card-deck" *ngIf="searchResult.currentRecords != undefined && searchResult.currentRecords.length > 0">
     <ng-container [ngSwitch]="layout">
         <ng-container *ngSwitchCase="Layout.PAGE">
-            <app-sdoc-list-item-page style="min-width: 300px; margin-bottom: 10px" class="card app-sdoc-list-item"
+            <app-sdoc-list-item-page style="min-width: 300px; margin-bottom: 10px" class="card app-sdoc-list-item app-sdoc-list-item-page"
                                       [record]="record"
                                       [layout]="layout"
                                       [short]="short"
@@ -11,7 +11,7 @@
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-page>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.SMALL">
-            <app-sdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-sdoc-list-item"
+            <app-sdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-sdoc-list-item app-sdoc-list-item-small"
                                 [record]="record"
                                 [layout]="layout"
                                 [short]="short"
@@ -21,7 +21,7 @@
                                 *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-small>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.FLAT">
-            <app-sdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-sdoc-list-item"
+            <app-sdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-sdoc-list-item app-sdoc-list-item-flat"
                                       [record]="record"
                                       [layout]="layout"
                                       [short]="short"
@@ -31,7 +31,7 @@
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-flat>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.THIN">
-            <app-sdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-sdoc-list-item"
+            <app-sdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-sdoc-list-item app-sdoc-list-item-thin"
                                      [record]="record"
                                      [layout]="layout"
                                      [short]="short"
@@ -41,7 +41,7 @@
                                      *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-thin>
         </ng-container>
         <ng-container *ngSwitchDefault>
-            <app-sdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-sdoc-list-item"
+            <app-sdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-sdoc-list-item app-sdoc-list-item-big"
                                 [record]="record"
                                 [layout]="layout"
                                 [short]="short"

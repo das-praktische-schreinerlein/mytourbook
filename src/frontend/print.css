@@ -2,8 +2,13 @@
     body {
         background: white;
     }
+
+    .container {
+        width: 100%;
+    }
+
     .btn, .btn-primary {
-        display: none;
+        display: none !IMPORTANT;
     }
 
     div.navbar-collapse, #navbarContent {
@@ -11,25 +16,52 @@
     }
 
     ul.pagination {
-        display: none;
+        display: none !IMPORTANT;
+    }
+
+    div.tagContainer {
+        display: none !IMPORTANT;
     }
 
     .card-header {
-        display: none;
+        display: none !IMPORTANT;
     }
 
     .hidden-print {
-        display: none;
+        display: none !IMPORTANT;
     }
 
     div.layout-big {
-        display: none;
+        display: block;
     }
     div.layout-small {
         display: block;
     }
     div.layout-verysmall {
-        display: none;
+        display: block;
+    }
+
+    .leaflet-map-container, .map-container {
+        page-break-before: auto;
+        page-break-after: auto;
+        page-break-inside: avoid;
+    }
+
+    app-sdoc-list-item, .app-sdoc-list-item, .sdoc-list-item-flat, .sdoc-list-item-thin {
+        page-break-before: auto;
+        page-break-after: auto;
+        page-break-inside: avoid;
+    }
+    img {
+        page-break-before: auto;
+        page-break-after: auto;
+        page-break-inside: avoid;
+    }
+
+    .app-sdoc-list-item-big {
+        width: 275px !important;
+        min-width: 260px !important;
+        max-width: 290px !important;
     }
 }
 @media screen {

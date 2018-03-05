@@ -1,4 +1,4 @@
-<div *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0 || showLoadingSpinner">
+<div [class]="(!showResultList ? 'hidden-print': '')" *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0 || showLoadingSpinner">
     <div class="container inline-content-container relative-container" id="{{htmlId ? htmlId : ''}}">
         <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
         <div class="container">
@@ -9,10 +9,10 @@
                 </div>
                 <div class="col-6">
                     <button *ngIf="!showResultList" class="btn btn-configure btn-sm float-right" (click)="showResultList = true">
-                        <span i18n="button show resultlist|Buttontext to show resultlist@@button.inlineSearchPage.show.resultlist">Ergebnisse zeigen</span>
+                        <span i18n="button show resultlist|Buttontext to show resultlist@@button.inlineSearchPage.show.resultlist">anzeigen</span>
                         <span class="btn-action-icon">&#x21D3;</span></button>
                     <button *ngIf="showResultList && searchResult && searchResult.recordCount > 0" class="btn btn-configure btn-sm float-right" (click)="showResultList = false">
-                        <span i18n="button hide resultlist|Buttontext to hide resultlist@@button.inlineSearchPage.hide.resultlist">Ergebnisse ausblenden</span>
+                        <span i18n="button hide resultlist|Buttontext to hide resultlist@@button.inlineSearchPage.hide.resultlist">ausblenden</span>
                         <span class="btn-action-icon">&#x21D1;</span></button>
                 </div>
             </div>

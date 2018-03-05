@@ -49,13 +49,10 @@
 
 @media(max-width: 399px) {
     div.layout-big {
-        display: none;
     }
     div.layout-small {
-        display: none;
     }
     div.layout-verysmall {
-        display: block;
         padding: 3px;
     }
     .container {
@@ -65,25 +62,19 @@
 }
 @media(min-width: 400px) and (max-width: 767px) {
     div.layout-big {
-        display: none;
     }
     div.layout-small {
-        display: block;
         padding: 5px;
     }
     div.layout-verysmall {
-        display: none;
     }
 }
 @media(min-width: 768px) {
     div.layout-big {
-        display: block;
     }
     div.layout-small {
-        display: none;
     }
     div.layout-verysmall {
-        display: none;
     }
 }
 

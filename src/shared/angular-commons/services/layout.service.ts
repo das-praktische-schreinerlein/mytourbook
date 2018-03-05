@@ -19,16 +19,33 @@ export interface LayoutSizeData {
 @Injectable()
 export class LayoutService {
     private layoutSizeObservable = new BehaviorSubject<LayoutSizeData>(this.calcLayoutSizeForWindow());
+    private flgPrintmode = false;
 
     constructor() {
         const $resizeEvent = FromEventObservable.create(window, 'resize');
         $resizeEvent.subscribe(data => {
             this.layoutSizeObservable.next(this.calcLayoutSizeForWindow());
         });
+
+        const me = this;
+        if (this.isDesktop() && typeof window !== 'undefined' && window.matchMedia) {
+            const mediaQueryList = window.matchMedia('print');
+            mediaQueryList.addListener(function(mql) {
+                if (mql.matches) {
+                    me.flgPrintmode = true;
+                } else {
+                    me.flgPrintmode = false;
+                }
+            });
+        }
     }
 
     public getLayoutSizeData(): BehaviorSubject<LayoutSizeData> {
         return this.layoutSizeObservable;
+    }
+
+    public isPrintMode(): boolean {
+        return this.flgPrintmode;
     }
 
     public getBrowser(): string {
@@ -93,6 +110,9 @@ export class LayoutService {
     }
 
     protected calcLayoutSizeForWidth(width: number): LayoutSize {
+        if (this.isPrintMode() === true) {
+            return LayoutSize.BIG;
+        }
         if (width === undefined) {
             return LayoutSize.BIG;
         }
