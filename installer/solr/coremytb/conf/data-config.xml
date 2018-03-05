@@ -391,7 +391,7 @@
             <field column="html" name="html_txt" />
             <field column="n_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="n_date" name="dateshow_dt" />
-            <field column="datesort" name="datesort_dt" />
+            <field column="dateshow" name="datesort_dt" />
             <field column="n_date" name="date_dt" />
             <field column="dateonly" name="dateonly_s" />
             <field column="type" name="type_s" />
