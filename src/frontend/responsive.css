@@ -49,8 +49,12 @@
 
 @media(max-width: 399px) {
     div.layout-big {
+        padding-left: 3px;
+        padding-right: 3px;
     }
     div.layout-small {
+        padding-left: 3px;
+        padding-right: 3px;
     }
     div.layout-verysmall {
         padding: 3px;
@@ -62,17 +66,25 @@
 }
 @media(min-width: 400px) and (max-width: 767px) {
     div.layout-big {
+        padding-left: 3px;
+        padding-right: 3px;
     }
     div.layout-small {
         padding: 5px;
+        padding-left: 3px;
+        padding-right: 3px;
     }
     div.layout-verysmall {
     }
 }
 @media(min-width: 768px) {
     div.layout-big {
+        padding-left: 3px;
+        padding-right: 3px;
     }
     div.layout-small {
+        padding-left: 3px;
+        padding-right: 3px;
     }
     div.layout-verysmall {
     }

@@ -54,10 +54,10 @@
                                 <h5><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h5>
                             </div>
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-4 layout-small">
                                     <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
                                 </div>
-                                <div class="col-8">
+                                <div class="col-8 layout-small">
                                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | sdocdate}}</h5></a>
                                     <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
                                     <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
@@ -70,10 +70,10 @@
                         <div class="col-9 location layout-small">
                             <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <div class="row">
-                                <div class="col-4 location">
+                                <div class="col-4 location layout-small">
                                     <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
                                 </div>
-                                <div class="col-8 location">
+                                <div class="col-8 location layout-small">
                                     <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers>
                                     <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers-difficulty >
                                     <app-sdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratetech>
