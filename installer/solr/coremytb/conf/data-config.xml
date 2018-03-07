@@ -163,7 +163,7 @@
 
             <!-- child='true' -->
             <entity name='image'
-                    query="select image.i_id, i_date, concat(i_dir, '/', i_file) as i_url from image, kategorie_full where image.k_id=kategorie_full.k_id and (image.k_id in (${route.t_k_ids} 0) or image.k_id in (${route.k_id}) or find_in_set(${route.t_id}, k_t_ids) > 0) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
+                    query="select image.i_id, i_date, concat(i_dir, '/', i_file) as i_url from image, kategorie_full where image.k_id=kategorie_full.k_id and (image.k_id in (${route.t_k_ids} 0) or image.k_id in (${route.k_id}) or find_in_set(${route.t_id}, k_t_ids) > 0) and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
@@ -217,7 +217,7 @@
 
             <!-- child='true' -->
             <entity name='image'
-                    query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (${location.l_katids} 0) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                    query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (${location.l_katids} 0) and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
@@ -333,7 +333,7 @@
 
             <!-- child='true' -->
             <entity name='image'
-                    query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (select k_id from kategorie_full where tr_id in (${trip.tr_id})) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                    query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (select k_id from kategorie_full where tr_id in (${trip.tr_id})) and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
@@ -391,7 +391,7 @@
             <field column="html" name="html_txt" />
             <field column="n_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="n_date" name="dateshow_dt" />
-            <field column="dateshow" name="datesort_dt" />
+            <field column="n_date" name="datesort_dt" />
             <field column="n_date" name="date_dt" />
             <field column="dateonly" name="dateonly_s" />
             <field column="type" name="type_s" />
