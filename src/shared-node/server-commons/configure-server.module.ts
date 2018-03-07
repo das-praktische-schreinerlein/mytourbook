@@ -42,7 +42,7 @@ export class ConfigureServerModule {
         app.use(function(err, req, res, next){
             console.error(err);
             res.status(500);
-            res.render('UiUiUi an error :-(');
+            res.send('UiUiUi an error :-(');
         });
     }
 }
