@@ -29,6 +29,18 @@
                 <app-sdoc-ratetech [record]="record"></app-sdoc-ratetech>
                 <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                 <app-sdoc-datainfo [record]="record"></app-sdoc-datainfo >
+                <div class="tagcloud-container" *ngIf="record.type === 'LOCATION'">
+                    <app-sdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
+                                       [label]="'Was kann man hier tun?'"
+                                       (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-sdoc-tagcloud>
+                </div>
+                <!--
+                <div class="tagcloud-container" *ngIf="record.type === 'TRIP' || record.type === 'NEWS'">
+                    <app-sdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
+                                       [label]="'Was wurde alles gemacht?'"
+                                       (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-sdoc-tagcloud>
+                </div>
+                -->
                 <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
                 <app-sdoc-datameta [record]="record"></app-sdoc-datameta>
             </div>
@@ -101,9 +113,10 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
+                                            [loadFacets]="'actiontype_ss'"
                                             [showTimetable]="'true'"
                                             [loadTrack]="'true'"
-                                            (searchResultFound)="onTracksFound($event)"
+                                            (searchResultFound)="onRouteTracksFound($event)"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
@@ -286,7 +299,9 @@
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
                                             [layout]="Layout.FLAT"
+                                            [loadFacets]="'actiontype_ss'"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            (searchResultFound)="onTackCloudRoutesFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -340,7 +355,9 @@
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
+                                            [loadFacets]="'actiontype_ss'"
                                             [layout]="Layout.THIN"
+                                            (searchResultFound)="onTackCloudRoutesFound($event)"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>

@@ -1,6 +1,10 @@
 .image-container {
     width: 100%;
 }
+.tagcloud-container {
+    max-width: 578px;
+    display: inline-block
+}
 .profile-toggler-container {
     text-align: right;
 }

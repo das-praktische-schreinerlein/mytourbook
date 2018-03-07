@@ -25,6 +25,8 @@ import {SDocDateFormatPipe} from '../../../shared-sdoc/pipes/sdoc-dateformat.pip
 import {DatePipe} from '@angular/common';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
+import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -56,7 +58,9 @@ describe('SDocShowpageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
-                LayoutService
+                LayoutService,
+                SDocSearchFormConverter,
+                SearchParameterUtils
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

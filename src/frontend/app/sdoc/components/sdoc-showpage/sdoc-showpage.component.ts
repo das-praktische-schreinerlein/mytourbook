@@ -21,6 +21,9 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {ActionTagEvent} from '../../../shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {Facets} from '../../../../../shared/search-commons/model/container/facets';
+import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -38,6 +41,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     pdoc: PDocRecord;
     baseSearchUrl: string;
     tracks: SDocRecord[] = [];
+    tagcloudSearchResult = new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets());
     flgShowMap = false;
     flgShowProfileMap = false;
     flgShowTopImages = true;
@@ -50,7 +54,8 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,
-                private platformService: PlatformService, private layoutService: LayoutService) {
+                private platformService: PlatformService, private layoutService: LayoutService,
+                private searchFormConverter: SDocSearchFormConverter) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -71,6 +76,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     me.record = data.record.data;
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
                     me.baseSearchUrl = data.baseSearchUrl.data;
+                    me.tagcloudSearchResult = new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets());
 
                     if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
                         || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
@@ -214,6 +220,15 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         return '';
     }
 
+    onRouteTracksFound(searchresult: SDocSearchResult) {
+        this.onTackCloudRoutesFound(searchresult);
+        this.onTracksFound(searchresult);
+    }
+
+    onTackCloudRoutesFound(searchresult: SDocSearchResult) {
+        this.tagcloudSearchResult = searchresult;
+    }
+
     onTracksFound(searchresult: SDocSearchResult) {
         const realTracks = [];
         if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
@@ -248,6 +263,17 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
 
         return false;
     }
+
+    onTagcloudClicked(filterValue: any, filter: string) {
+        const filters = this.getFiltersForType(this.record, 'ROUTE');
+        filters[filter] = filterValue;
+        const searchForm = new SDocSearchForm(filters);
+        const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, searchForm);
+        this.commonRoutingService.navigateByUrl(url);
+
+        return false;
+    }
+
 
     public onActionTagEvent(event: ActionTagEvent) {
         if (event.result !== undefined) {
