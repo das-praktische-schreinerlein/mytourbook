@@ -19,6 +19,7 @@ import {MarkdownModule} from 'angular2-markdown';
 import {AngularMarkdownService} from '../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import {CommonRoutingService} from '../../shared/angular-commons/services/common
         SectionBarComponent
     ],
     imports: [
+        TranslateModule,
         NgbModule.forRoot(),
         MarkdownModule.forRoot(),
         BrowserModule,

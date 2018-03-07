@@ -317,6 +317,13 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onTagcloudClicked(filterValue: any, filter: string) {
+        this.searchForm[filter] = filterValue;
+        this.redirectToSearch();
+
+        return false;
+    }
+
     private redirectToSearch() {
         // reset initialized
         this.initialized = false;

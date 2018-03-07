@@ -1,0 +1,19 @@
+<ng-template #tagcloud>
+    <div>
+        <ng-container *ngFor="let column of columns">
+            <div [ngClass]="'tagcloud-column tagcloud-column-' + calcSizeClass(column.count)" (click)="onColumnClicked(column.key);">
+                <span *ngIf="column.count > 0">{{ column.label }} ({{column.count}})</span>
+            </div>
+        </ng-container>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="label !== undefined">
+    <fieldset>
+        <legend>{{label}}</legend>
+        <ng-container *ngTemplateOutlet="tagcloud"></ng-container>
+    </fieldset>
+</ng-container>
+<ng-container *ngIf="label === undefined">
+    <ng-container *ngTemplateOutlet="tagcloud"></ng-container>
+</ng-container>

@@ -37,6 +37,12 @@ export class SDocSearchformComponent implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private _searchResult = new BehaviorSubject<SDocSearchResult>(new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets()));
     private geoLocationService = new GeoLocationService();
+    private defaultSeLectSettings: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true};
 
     public optionsSelectWhen: IMultiSelectOption[] = [];
     public optionsSelectWhere: IMultiSelectOption[] = [];
@@ -53,12 +59,7 @@ export class SDocSearchformComponent implements OnInit {
     public optionsSelectPlaylists: IMultiSelectOption[] = [];
     public optionsSelectPersons: IMultiSelectOption[] = [];
 
-    public settingsSelectWhen: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
+    public settingsSelectWhen = this.defaultSeLectSettings;
     public settingsSelectWhere: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
@@ -67,78 +68,23 @@ export class SDocSearchformComponent implements OnInit {
             showUncheckAll: true,
             autoUnselect: true,
             selectionLimit: 1};
-    public settingsSelectWhat: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectActionType: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
+    public settingsSelectWhat = this.defaultSeLectSettings;
+    public settingsSelectActionType = this.defaultSeLectSettings;
     public settingsSelectType: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
             enableSearch: false};
-    public settingsSelectTechRateOverall: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectTechDataDistance: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectTechDataAscent: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectTechDataAltitudeMax: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectTechDataDuration: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
+    public settingsSelectTechRateOverall = this.defaultSeLectSettings;
+    public settingsSelectTechDataDistance = this.defaultSeLectSettings;
+    public settingsSelectTechDataAscent = this.defaultSeLectSettings;
+    public settingsSelectTechDataAltitudeMax = this.defaultSeLectSettings;
+    public settingsSelectTechDataDuration = this.defaultSeLectSettings;
 
-    public settingsSelectPersonalRateOverall: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectPersonalRateDifficulty: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectPlaylists: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
-    public settingsSelectPersons: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true};
+    public settingsSelectPersonalRateOverall = this.defaultSeLectSettings;
+    public settingsSelectPersonalRateDifficulty = this.defaultSeLectSettings;
+    public settingsSelectPlaylists = this.defaultSeLectSettings;
+    public settingsSelectPersons = this.defaultSeLectSettings;
 
     public textsSelectWhen: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',

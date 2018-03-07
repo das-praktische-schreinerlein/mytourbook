@@ -49,6 +49,9 @@ legend {
     margin-bottom: 0;
 }
 
+.text-bold {
+    font-weight: bold;
+}
 
 #markdown table {
     width: 100%;

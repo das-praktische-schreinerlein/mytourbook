@@ -230,10 +230,10 @@ export class SDocContentUtils {
                 }
             }
         } else if (record.type === 'IMAGE') {
-            if (type === 'IMAGE' && record.trackId) {
+            if (type === 'TRACK' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
             } else if (type === 'TOPIMAGE') {
-                filters['moreFilter'] = 'track_id_i:' + 99999999999;
+                filters['moreFilter'] = 'track_id_i:' + -1;
             } else if (type === 'ROUTE' && record.trackId) {
                 filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'LOCATION' && record.locId) {

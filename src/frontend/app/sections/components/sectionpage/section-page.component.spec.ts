@@ -22,6 +22,7 @@ import {Angulartics2} from 'angulartics2';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SectionPageComponent', () => {
     let component: SectionPageComponent;
@@ -53,6 +54,7 @@ describe('SectionPageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
+                LayoutService
             ]
         })
             .compileComponents();

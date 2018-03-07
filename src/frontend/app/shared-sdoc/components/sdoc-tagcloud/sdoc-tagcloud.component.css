@@ -1,0 +1,22 @@
+div.tagcloud-column {
+    display: inline-block;
+}
+
+div.tagcloud-column-0 {
+    font-size: 10px;
+}
+div.tagcloud-column-1 {
+    font-size: 12px;
+}
+div.tagcloud-column-2 {
+    font-size: 14px;
+}
+div.tagcloud-column-3 {
+    font-size: 16px;
+}
+div.tagcloud-column-4 {
+    font-size: 18px;
+}
+div.tagcloud-column-5 {
+    font-size: 20px;
+}

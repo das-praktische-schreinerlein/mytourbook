@@ -8,8 +8,20 @@
                         <img class="picture-big" [style.max-height]="maxImageHeight" [src]="listItem.previewUrl" alt="{{listItem.image.name}}">
                     </ng-container>
                 </div>
-                <div style="color: #ccc"><span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
-                    <span>{{listItem.currentRecord | sdocdate}} {{listItem.currentRecord.name}}</span></div>
+                <div style="color: #ccc">
+                    <span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
+                    <span>{{listItem.currentRecord | sdocdate}} {{listItem.currentRecord.name}}</span>
+                    <button class="btn btn-configure btn-sm right"
+                            (click)="imageShowMap = true; listItem.flgShowMap = listItem.flgMapAvailable && imageShowMap; listItem.flgShowProfileMap = listItem.flgProfileMapAvailable && true;"
+                            *ngIf="(listItem.flgMapAvailable || listItem.flgProfileMapAvailable) && (!listItem.flgShowMap)">
+                        <span i18n="button show map|Buttontext to show map@@button.searchform.show.map">Karte einblenden</span>
+                        <span class="btn-action-icon">&#x21D3;</span></button>
+                    <button class="btn btn-configure btn-sm right"
+                            (click)="listItem.flgShowMap = listItem.flgShowProfileMap = imageShowMap = false;"
+                            *ngIf="listItem.flgShowMap || listItem.flgShowProfileMap">
+                        <span i18n="button hide emap|Buttontext to hide map@@button.searchform.hide.map">Karte ausblenden</span>
+                        <span class="btn-action-icon">&#x21D3;</span></button>
+                </div>
             </div>
         </ng-container>
         <ng-container *ngSwitchDefault="">

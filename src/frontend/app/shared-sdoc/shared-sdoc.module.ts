@@ -39,6 +39,7 @@ import {SDocActionsComponent} from './components/sdoc-actions/sdoc-actions.compo
 import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiontags.component';
 import {SDocKeywordsStateComponent} from './components/sdoc-keywordsstate/sdoc-keywordsstate.component';
 import {SDocTypetableComponent} from './components/sdoc-typetable/sdoc-typetable.component';
+import {SDocTagcloudComponent} from './components/sdoc-tagcloud/sdoc-tagcloud.component';
 
 @NgModule({
     declarations: [
@@ -70,7 +71,8 @@ import {SDocTypetableComponent} from './components/sdoc-typetable/sdoc-typetable
         SDocDateFormatPipe,
         SDocActionsComponent,
         SDocActionTagsComponent,
-        SDocTypetableComponent
+        SDocTypetableComponent,
+        SDocTagcloudComponent
     ],
     imports: [
         ToastModule,
@@ -118,7 +120,8 @@ import {SDocTypetableComponent} from './components/sdoc-typetable/sdoc-typetable
         SDocDateFormatPipe,
         SDocActionsComponent,
         SDocActionTagsComponent,
-        SDocTypetableComponent
+        SDocTypetableComponent,
+        SDocTagcloudComponent
     ]
 })
 export class SharedSDocModule {}

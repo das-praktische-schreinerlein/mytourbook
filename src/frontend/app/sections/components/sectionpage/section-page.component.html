@@ -1,15 +1,19 @@
-<ng-container *ngIf="pdoc !== undefined">
+<ng-template #contentContainer>
     <div class="container content-container" *ngIf="(pdoc.descHtml !== undefined && pdoc.descHtml.length > 0) || (pdoc.descMd !== undefined && pdoc.descMd.length > 0)">
         <img src="{{pdoc.image}}" width="170px" class="picture" style="float: left; margin: 0 15px 15px 0;" alt="{{pdoc.name}}" *ngIf="pdoc.image !== undefined && pdoc.image.length > 0">
         <div id="desc"></div>
         {{ renderDesc() }}
         <br clear="both">
     </div>
+</ng-template>
 
+<ng-template #searchHintContainer>
     <ng-container *ngIf="pdoc.flgShowSearch || pdoc.flgShowTopTen">
         <div class="container content-container">
             <ng-container *ngIf="pdoc.flgShowSearch">
-                <div class="hint_tosearch"><a class="btn btn-action btn-sm" href="{{getToSearchUrl()}}" (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
+                <div class="hint_tosearch">
+                    <a class="btn btn-action btn-sm" href="{{getToSearchUrl()}}"
+                       (click)="submitToSearch()" i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">[Also direkt Los]</a></div>
             </ng-container>
 
             <ng-container *ngIf="pdoc.flgShowSearch && pdoc.flgShowTopTen">
@@ -21,7 +25,9 @@
             </ng-container>
         </div>
     </ng-container>
+</ng-template>
 
+<ng-template #sectionsContainer>
     <ng-container *ngIf="sections.length > 0">
         <ng-container *ngFor="let section of sections">
             <div class="container content-container">
@@ -38,7 +44,9 @@
             </div>
         </ng-container>
     </ng-container>
+</ng-template>
 
+<ng-template #newsContainer>
     <ng-container *ngIf="pdoc.flgShowNews">
         <div class="container content-container">
             <app-sdoc-inline-searchpage [label]="'News'"
@@ -54,13 +62,48 @@
                                         [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
         </div>
     </ng-container>
+</ng-template>
 
+<ng-template #tagcloudContainer>
+    <ng-container *ngIf="sdocSearchResult.recordCount > 0">
+        <span class="text-bold" i18n="text shortlinks|Hint for shortlinks@@text.searchform.hints.shortLinks">Oder auf einen Klick...</span>
+        <app-sdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
+                           (columnClicked)="onTagcloudClicked($event, 'actiontype')"
+                           [searchResult]="routeSearchResult"></app-sdoc-tagcloud>
+        <app-sdoc-tagcloud [label]="'Wann'" [facetName]="'month_is'" [valuePrefix]="'month'"
+                           [labelPrefix]="'Monat'" [sortKey]="'key'" (columnClicked)="onTagcloudClicked($event, 'when')"
+                           [searchResult]="routeSearchResult"></app-sdoc-tagcloud>
+        <app-sdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
+                           (columnClicked)="onTagcloudClicked($event, 'where')" [searchResult]="routeSearchResult">
+        </app-sdoc-tagcloud>
+    </ng-container>
+</ng-template>
+
+<ng-template #sidebarContainer>
+    <div>
+        <div class="text-center">
+            <a routerLink="/pages/start">
+                <img src="assets/images/banner-big.png" width="200" class="picture-thumbnail align-top">
+            </a>
+        </div>
+        <div  class="text-center">
+            <a class="btn btn-action btn-sm" routerLink="/pages/start/search"
+               i18n="link 2search sectionPage|Linktext to search sectionPage@@a.sectionPage.2search">Zur Suche</a>
+        </div>
+    </div>
+    <ng-container *ngIf="pdoc.flgShowTopTen && sdocSearchResult.recordCount > 0">
+        <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #topTenContainer>
     <ng-container *ngIf="pdoc.flgShowTopTen">
         <div class="container content-container">
             <h5><span class="fx-bg-name" i18n="heading shortSearch sectionPage|Heading to shortSearch sectionPage@@heading.sectionPage.shortSearch">Schnellsuche</span></h5>
             <div class="shortsearchform">
                 <app-sdoc-searchform [searchResult]="sdocSearchResult"
                                      [short]="'true'"
+                                     [showForm]="true"
                                      (search)="onSearchSDoc($event)"></app-sdoc-searchform>
 
             </div>
@@ -78,7 +121,7 @@
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    (searchResultFound)="onTopTenRouteResultFound($event)"
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
@@ -193,7 +236,7 @@
                                                     [showResultList]="true"
                                                     [loadFacets]="true"
                                                     [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    (searchResultFound)="onTopTenRouteResultFound($event)"
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
@@ -232,5 +275,35 @@
             </ngb-tabset>
         </div>
     </ng-container>
+</ng-template>
 
+
+<ng-container *ngIf="pdoc !== undefined">
+    <ng-container [ngSwitch]="searchFormLayout">
+        <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
+            <div class="container content-container" style="width: 25%; float: right">
+                <ng-container *ngTemplateOutlet="sidebarContainer"></ng-container>
+            </div>
+
+            <div style="width: 73%; display: inline-block;">
+                <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault="">
+            <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+            <ng-container *ngIf="pdoc.flgShowTopTen">
+                <div class="container content-container">
+                    <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
+                </div>
+            </ng-container>
+        </ng-container>
+    </ng-container>
 </ng-container>

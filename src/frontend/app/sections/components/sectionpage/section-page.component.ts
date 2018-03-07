@@ -20,6 +20,10 @@ import {AngularHtmlService} from '../../../../shared/angular-commons/services/an
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/sdoc-searchform.component';
+import {LayoutService, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {LayoutSize} from '../../../../../shared/angular-commons/services/layout.service';
 
 @Component({
     selector: 'app-sectionpage',
@@ -29,6 +33,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 })
 export class SectionPageComponent implements OnInit {
     private flgDescRendered = false;
+    private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
     idValidationRule = new IdValidationRule(true);
     pdoc: PDocRecord = new PDocRecord();
     baseSearchUrl = '';
@@ -36,19 +41,28 @@ export class SectionPageComponent implements OnInit {
     public Layout = Layout;
     sdocSearchForm: SDocSearchForm = new SDocSearchForm({});
     sdocSearchResult: SDocSearchResult = new SDocSearchResult(this.sdocSearchForm, 0, undefined, new Facets());
+    routeSearchResult: SDocSearchResult = new SDocSearchResult(this.sdocSearchForm, 0, undefined, new Facets());
+    SearchFormLayout = SearchFormLayout;
+    searchFormLayout: SearchFormLayout = SearchFormLayout.GRID;
 
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private commonRoutingService: CommonRoutingService, private searchFormConverter: SDocSearchFormConverter,
                 private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private platformService: PlatformService) {
+                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private platformService: PlatformService,
+                private layoutService: LayoutService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
     ngOnInit() {
         // Subscribe to route params
         const me = this;
+        this.layoutSizeObservable = this.layoutService.getLayoutSizeData();
+        this.layoutSizeObservable.subscribe(layoutSizeData => {
+            me.onResize(layoutSizeData);
+        });
+
         this.route.data.subscribe(
             (data: { pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
@@ -198,8 +212,31 @@ export class SectionPageComponent implements OnInit {
         return false;
     }
 
+    onTopTenRouteResultFound(sdocSearchResult: SDocSearchResult) {
+        this.routeSearchResult = sdocSearchResult;
+        this.onTopTenResultFound(sdocSearchResult);
+    }
+
     onShow(record: PDocRecord) {
         this.commonRoutingService.navigateByUrl('sections/' + record.id);
+        return false;
+    }
+
+    onTagcloudClicked(filterValue: any, filter: string) {
+        this.sdocSearchForm.type = 'route';
+        this.sdocSearchForm[filter] = filterValue;
+        const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
+            theme: this.pdoc.theme,
+            type: 'route',
+            actiontype: this.sdocSearchForm.actiontype.toString(),
+            when: this.sdocSearchForm.when.toString(),
+            what: this.sdocSearchForm.what.toString(),
+            where: this.sdocSearchForm.where.toString(),
+            nearBy: this.sdocSearchForm.nearby,
+            nearbyAddress: this.sdocSearchForm.nearbyAddress
+        }));
+        this.commonRoutingService.navigateByUrl(url);
+
         return false;
     }
 
@@ -226,5 +263,15 @@ export class SectionPageComponent implements OnInit {
 
     getSubSections(pdoc: PDocRecord): PDocRecord[] {
         return this.pdocDataService.getSubDocuments(pdoc);
+    }
+
+    private onResize(layoutSizeData: LayoutSizeData): void {
+        if (this.platformService.isClient() && layoutSizeData.layoutSize >= LayoutSize.VERYBIG) {
+            this.searchFormLayout = SearchFormLayout.STACKED;
+        } else {
+            this.searchFormLayout = SearchFormLayout.GRID;
+        }
+
+        this.cd.markForCheck();
     }
 }

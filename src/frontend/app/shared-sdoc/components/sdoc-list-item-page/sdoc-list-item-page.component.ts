@@ -31,6 +31,7 @@ export class SDocListItemPageComponent implements OnChanges {
         flgProfileMapAvailable: false
     };
     maxImageHeight = '0';
+    imageShowMap = false;
 
     @Input()
     public record: SDocRecord;
@@ -97,6 +98,10 @@ export class SDocListItemPageComponent implements OnChanges {
     private updateData() {
         this.contentUtils.updateItemData(this.listItem, this.record, 'page');
         this.maxImageHeight = (window.innerHeight - 150) + 'px';
+        if (this.record.type === 'IMAGE') {
+            this.listItem.flgShowMap = this.listItem.flgShowMap &&  this.imageShowMap;
+            this.listItem.flgShowProfileMap = this.listItem.flgShowProfileMap &&  this.imageShowMap;
+        }
         this.cd.markForCheck();
     }
 }
