@@ -146,6 +146,33 @@ export class SDocSearchFormUtils {
             this.searchParameterUtils.extractFacetValues(searchResult.facets, 'persons_txt', '', ''));
     }
 
+    getRouteValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        return [].concat(
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'route_id_is', '', ''));
+    }
+
+    getTrackValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        return [].concat(
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'track_id_is', '', ''));
+    }
+
+    getTripValues(searchResult: SDocSearchResult): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        return [].concat(
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'trip_id_is', '', ''));
+    }
+
     getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,
                                                        removements: RegExp[], translate: boolean): IMultiSelectOption[] {
         return this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
@@ -168,6 +195,23 @@ export class SDocSearchFormUtils {
         }
 
         return [].concat(selectedOptions, otherOptions);
+    }
+
+    prepareExtendedSelectValues(src: any[]): any[] {
+        const values = [];
+        for (const value of src) {
+            // use value as label if not set
+            if (!value[4]) {
+                value[4] = value[1];
+            }
+            // use id as value instead of name
+            if (value[5]) {
+                value[1] = value[5];
+            }
+            values.push(value);
+        }
+
+        return values;
     }
 
     public extractNearbyPos(nearby: string): any[] {

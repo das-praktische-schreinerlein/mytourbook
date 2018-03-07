@@ -28,6 +28,14 @@ import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 export class SDocEditformComponent implements OnChanges {
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
+    private defaultSelectSetting: IMultiSelectSettings =
+        {dynamicTitleMaxItems: 5,
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            containerClasses: 'dropdown-inline fullwidth',
+            enableSearch: true,
+            showUncheckAll: true,
+            autoUnselect: true,
+            selectionLimit: 1};
     private numBeanFieldConfig = {
         'sdocratepers.gesamt': { labelPrefix: 'label.sdocratepers.gesamt.', values: [0, 2, 5, 8, 11, 14]},
         'sdocratepers.gesamt_image': { labelPrefix: 'label.image.sdocratepers.gesamt.', values: [0, 2, 5, 6, 8, 9, 10, 11, 14]},
@@ -40,18 +48,22 @@ export class SDocEditformComponent implements OnChanges {
         'sdocratepers.wichtigkeit': { labelPrefix: 'label.sdocratepers.wichtigkeit.', values: [0, 2, 5, 8, 11, 14]},
         'locId': {},
         'locIdParent': {},
+        'routeId': {},
         'sdocdatatech.altAsc': {},
         'sdocdatatech.altDesc': {},
         'sdocdatatech.altMin': {},
         'sdocdatatech.altMax': {},
         'sdocdatatech.dist': {},
-        'sdocdatatech.dur': {}
+        'sdocdatatech.dur': {},
+        'trackId': {},
+        'tripId': {}
     };
     private stringBeanFieldConfig = {
         'subtype': {},
         'subTypeActiontype': {
             labelPrefix: 'ac_',
-            values: [0, 1, 2, 3, 4, 5, 101, 102, 103, 104, 105, 106, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132]
+            values: [0, 1, 2, 3, 4, 5, 101, 102, 103, 104, 105, 106, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131,
+                132]
         },
         'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
         'sdocdatainfo.baseloc': {},
@@ -84,9 +96,12 @@ export class SDocEditformComponent implements OnChanges {
         'playlists': IMultiSelectOption[];
         'locId': IMultiSelectOption[];
         'locIdParent': IMultiSelectOption[];
+        'routeId': IMultiSelectOption[];
         'subType': IMultiSelectOption[];
         'subTypeActiontype': IMultiSelectOption[];
         'subTypeLocType': IMultiSelectOption[];
+        'trackId': IMultiSelectOption[];
+        'tripId': IMultiSelectOption[];
     } = {'sdocratepers.gesamt': [],
         'sdocratepers.ausdauer': [],
         'sdocratepers.bildung': [],
@@ -99,51 +114,20 @@ export class SDocEditformComponent implements OnChanges {
         'playlists': [],
         'locId': [],
         'locIdParent': [],
+        'routeId': [],
         'subType': [],
         'subTypeActiontype': [],
-        'subTypeLocType': []
+        'subTypeLocType': [],
+        'trackId': [],
+        'tripId': []
     };
 
-    public settingsSelectWhere: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true,
-            autoUnselect: true,
-            selectionLimit: 1};
-    public settingsSelectActionType: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true,
-            autoUnselect: true,
-            selectionLimit: 1};
-    public settingsSelectPersons: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true,
-            autoUnselect: true,
-            selectionLimit: 1};
-    public settingsSelectPlaylists: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true,
-            autoUnselect: true,
-            selectionLimit: 1};
-    public settingsSelectPersRate: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: true,
-            autoUnselect: true,
-            selectionLimit: 1};
+    public settingsSelectWhere = this.defaultSelectSetting;
+    public settingsSelectActionType = this.defaultSelectSetting;
+    public settingsSelectPersRate = this.defaultSelectSetting;
+    public settingsSelectRoute = this.defaultSelectSetting;
+    public settingsSelectTrack = this.defaultSelectSetting;
+    public settingsSelectTrip = this.defaultSelectSetting;
 
     public textsSelectWhere: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
@@ -180,6 +164,27 @@ export class SDocEditformComponent implements OnChanges {
         searchPlaceholder: 'Find',
         defaultTitle: 'Bewertung',
         allSelected: 'Alle'};
+    public textsSelectRoute: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Route ausgewählt',
+        checkedPlural: 'Route ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Route',
+        allSelected: 'alles'};
+    public textsSelectTrack: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Track ausgewählt',
+        checkedPlural: 'Track ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Track',
+        allSelected: 'alles'};
+    public textsSelectTrip: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Trip ausgewählt',
+        checkedPlural: 'Trip ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: 'Trip',
+        allSelected: 'alles'};
 
     // empty default
     public editFormGroup = this.fb.group({
@@ -289,18 +294,7 @@ export class SDocEditformComponent implements OnChanges {
             }).then(function doneSearch(sdocSearchResult) {
             if (sdocSearchResult !== undefined) {
                 // console.log('update searchResult', sdocSearchResult);
-                const whereValues = [];
-                for (const whereValue of me.searchFormUtils.getWhereValues(sdocSearchResult)) {
-                    // use value as label if not set
-                    if (!whereValue[4]) {
-                        whereValue[4] = whereValue[1];
-                    }
-                    // use id as value instead of name
-                    if (whereValue[5]) {
-                        whereValue[1] = whereValue[5];
-                    }
-                    whereValues.push(whereValue);
-                }
+                const whereValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getWhereValues(sdocSearchResult));
                 me.optionsSelect['locId'] = me.searchFormUtils.moveSelectedToTop(
                     me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
                         false), rawValues['locId']);
@@ -312,12 +306,30 @@ export class SDocEditformComponent implements OnChanges {
                     me.searchFormUtils.getPlaylistValues(sdocSearchResult), true, [], true);
                 me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                     me.searchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
+
+                const routeValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getRouteValues(sdocSearchResult));
+                me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(routeValues, true, [],
+                        false), rawValues['routeId']);
+
+                const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTrackValues(sdocSearchResult));
+                me.optionsSelect['trackId'] = me.searchFormUtils.moveSelectedToTop(
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(trackValues, true, [],
+                        false), rawValues['trackId']);
+                const tripValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTripValues(sdocSearchResult));
+                me.optionsSelect['tripId'] = me.searchFormUtils.moveSelectedToTop(
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(tripValues, true, [],
+                        false), rawValues['tripId']);
             } else {
                 // console.log('empty searchResult', sdocSearchResult);
                 me.optionsSelect['locId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
-                me.optionsSelect['locIdParent'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+                me.optionsSelect['locIdParent'] =
+                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
                 me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
                 me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+                me.optionsSelect['routeId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+                me.optionsSelect['trackId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+                me.optionsSelect['tripId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
             }
 
             me.cd.markForCheck();

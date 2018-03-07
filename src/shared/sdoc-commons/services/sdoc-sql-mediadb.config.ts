@@ -148,6 +148,24 @@ export class SDocSqlMediadbConfig {
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)'
                 },
+                'route_id_is': {
+                    selectSql: 'SELECT COUNT(kategorie.t_id) AS count, tour.t_id AS value,' +
+                    ' tour.t_name as label, tour.t_id as id' +
+                    ' FROM tour LEFT JOIN kategorie ON kategorie.t_id = tour.t_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                    filterField: 't_id',
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'trip_id_is': {
+                    selectSql: 'SELECT COUNT(kategorie.tr_id) AS count, trip.tr_id AS value,' +
+                    ' trip.tr_name as label, trip.tr_id as id' +
+                    ' FROM trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                    filterField: 'tr_id',
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'type_txt': {
                     constValues: ['track', 'route', 'image', 'location', 'trip', 'news'],
                     filterField: '"track"',
@@ -703,6 +721,14 @@ export class SDocSqlMediadbConfig {
                 },
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
+                },
+                'track_id_is': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, kategorie.k_id AS value,' +
+                    ' kategorie.k_name as label, kategorie.k_id as id' +
+                    ' FROM kategorie INNER JOIN tour ON kategorie.t_id = tour.t_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label'
+                    // TODO: filterSql: t_id in (select t_id from kategorie where k_id in (:track_id_is:))
                 },
                 'type_txt': {
                     constValues: ['route', 'track', 'image', 'location', 'trip', 'news'],

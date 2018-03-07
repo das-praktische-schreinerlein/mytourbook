@@ -88,6 +88,45 @@
         </div>
     </ng-template>
 
+    <ng-template #inputRoute>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="route label|Label for filter: route@@label.searchform.sdoc.routeId">Route:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
+                                     [settings]="settingsSelectRoute"
+                                     [texts]="textsSelectRoute"
+                                     class="fullwidth"
+                                     required="required"
+                                     formControlName="routeId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputTrack>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="track label|Label for filter: track@@label.searchform.sdoc.trackId">Track:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['trackId']"
+                                     [settings]="settingsSelectTrack"
+                                     [texts]="textsSelectTrack"
+                                     class="fullwidth"
+                                     required="required"
+                                     formControlName="trackId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputTrip>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="trip label|Label for filter: trip@@label.searchform.sdoc.tripId">Trip:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['tripId']"
+                                     [settings]="settingsSelectTrip"
+                                     [texts]="textsSelectTrip"
+                                     class="fullwidth"
+                                     required="required"
+                                     formControlName="tripId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
     <ng-template #inputDesc>
         <div class="col-sm-12 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.sdoc.descMd">Beschreibung Markdown:</label>
@@ -207,7 +246,11 @@
                 </div>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTrip"></ng-container>
+                </div>
+                <div class="row">
                     <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputRoute"></ng-container>
                 </div>
             </fieldset>
             <fieldset>
@@ -297,6 +340,7 @@
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
                     <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTrack"></ng-container>
                 </div>
             </fieldset>
             <fieldset>
