@@ -216,6 +216,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.searchForm.pageNum = +page;
         // console.log('onPageChange: redirect to page', page);
         this.redirectToSearch();
+
         return false;
     }
 
@@ -226,8 +227,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.searchForm.perPage = perPage;
+        this.searchForm.pageNum = 1;
         // console.log('onPerPageChange: redirect to perPage', perPage);
         this.redirectToSearch();
+
         return false;
     }
 
@@ -238,8 +241,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         this.searchForm.sort = sort;
+        this.searchForm.pageNum = 1;
         // console.log('onSortChange: redirect to sort', sort);
         this.redirectToSearch();
+
         return false;
     }
 

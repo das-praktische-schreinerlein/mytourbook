@@ -133,6 +133,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
         this.searchForm.pageNum = +page;
         this.doSearch();
+
         return false;
     }
 
@@ -143,7 +144,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         }
 
         this.searchForm.perPage = perPage;
+        this.searchForm.pageNum = 1;
         this.doSearch();
+
         return false;
     }
 
@@ -154,7 +157,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
         }
 
         this.searchForm.sort = sort;
+        this.searchForm.pageNum = 1;
         this.doSearch();
+
         return false;
     }
 
@@ -166,6 +171,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
         this.layout = layout;
         this.cd.markForCheck();
+
         return false;
     }
 

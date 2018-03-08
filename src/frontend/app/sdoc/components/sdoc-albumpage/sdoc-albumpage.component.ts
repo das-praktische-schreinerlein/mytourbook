@@ -206,6 +206,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         }
 
         this.listSearchForm.perPage = perPage;
+        this.listSearchForm.pageNum = 1;
         if (perPage + '' === '1') {
             this.doShow();
         }
@@ -222,6 +223,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         }
 
         this.listSearchForm.sort = sort;
+        this.listSearchForm.pageNum = 1;
         this.searchForm.sort = sort;
         this.doSearch();
 
