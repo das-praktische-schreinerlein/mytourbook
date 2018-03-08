@@ -113,8 +113,8 @@ export class VisJsGeoProfileMap {
                 if (point.lat && point.lng && point.alt !== undefined) {
                     data.add(new VisJsGeoProfileMapPoint({
                         id: counter++,
-                        x: point.lat,
-                        y: point.lng,
+                        x: point.lng,
+                        y: point.lat,
                         z: point.alt,
                         style: style
                     }));
