@@ -1,11 +1,16 @@
 <ng-container *ngIf="item.currentRecord !== undefined && tags.length > 0">
-    <div class="tagContainer tagContainer{{type}} {{styleClass}}">
+    <div class="tagContainer tagContainer{{type}} {{styleClass}} {{toggleClass}}"
+         (mouseover)="toggleClass = 'showInactive'"
+         (mouseout)="toggleClass = 'hideInactive'">
+        <a class="tagToggler">Actions</a>
         <ng-container *ngFor="let tag of tags">
             <ng-container *ngIf="tag.active && tag.available">
-                <a (click)="unsetTag(tag)" class="tag{{tag.config.key}} tagActive tag{{tag.config.key}}Active" [title]="tag.config.name" [innerHtml]="tag.config.shortName"></a>
+                <a (click)="unsetTag(tag)" class="tag{{tag.config.key}} tagActive tag{{tag.config.key}}Active"
+                   [title]="tag.config.name" [innerHtml]="tag.config.shortName"></a>
             </ng-container>
             <ng-container *ngIf="!tag.active && tag.available">
-                <a (click)="setTag(tag)" class="tag{{tag.config.key}} tagInActive tag{{tag.config.key}}InActive" [title]="tag.config.name" [innerHtml]="tag.config.shortName"></a>
+                <a (click)="setTag(tag)" class="tag{{tag.config.key}} tagInActive tag{{tag.config.key}}InActive"
+                   [title]="tag.config.name" [innerHtml]="tag.config.shortName"></a>
             </ng-container>
         </ng-container>
     </div>

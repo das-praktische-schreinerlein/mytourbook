@@ -36,6 +36,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
     tagConfigs: ActionTagConfig[] = [];
     tags: ActionTag[] = [];
     styleClass = '';
+    toggleClass = 'hideInactive';
 
     private config;
 

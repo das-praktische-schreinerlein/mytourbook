@@ -19,5 +19,19 @@ a {
 }
 
 .tagContaineractionTagsBig {
+    display: inline-block;
+}
 
+.tagToggler {
+    color: gray !important;
+    background-color: beige;
+    border: 2px lightgray solid;
+    padding: 2px;
+}
+
+div.showInactive > a.tagInActive {
+    display: inline;
+}
+div.hideInactive > a.tagInActive {
+    display: none;
 }
