@@ -4,7 +4,12 @@ import {DateUtils} from '../../commons/utils/date.utils';
 
 export class GeoGpxParser extends GeoParser {
     parse(xml: string, options): GeoElement[] {
-        if (!xml || !xml.startsWith('<?xml')) {
+        if (!xml) {
+            console.error('cant parse GeoGpxParser: empty');
+            return;
+        }
+        xml = this.fixXml(xml);
+        if (!(xml.startsWith('<?xml'))) {
             console.error('cant parse GeoGpxParser: no valid xml');
             return;
         }
@@ -22,6 +27,21 @@ export class GeoGpxParser extends GeoParser {
         }
 
         return elements;
+    }
+
+    fixXml(xml: string): string {
+        if (!xml) {
+            return xml;
+        }
+
+        xml = xml.replace('<--?xml version="1.0" encoding="UTF-8" standalone="no" ?-->',
+            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>');
+        xml = xml.replace('<!--?xml version="1.0" encoding="UTF-8" standalone="no" ?-->',
+            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>');
+        xml = xml.replace('</text><time>',
+            '</text></link><time>');
+
+        return xml;
     }
 
     _parseGpxDom(gpxDom, options): GeoElement[] {
