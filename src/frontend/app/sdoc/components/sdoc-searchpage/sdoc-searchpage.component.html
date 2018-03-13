@@ -104,7 +104,7 @@
                 <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
                     <div class="container content-container" style="width: 25%; float: left">
                         <ng-container *ngTemplateOutlet="formContainer;context:{searchFormLayout: searchFormLayout, showForm: true}"></ng-container>
-                        <div class="container" *ngIf="searchResult.recordCount > 0">
+                        <div class="container hidden-print" *ngIf="searchResult.recordCount > 0">
                             <span class="text-bold" i18n="text shortlinks|Hint for shortlinks@@text.searchform.hints.shortLinks">Oder auf einen Klick...</span>
                             <app-sdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
                                                (columnClicked)="onTagcloudClicked($event, 'actiontype')"

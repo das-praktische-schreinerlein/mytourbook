@@ -341,7 +341,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     private onResize(layoutSizeData: LayoutSizeData): void {
-        if (this.platformService.isClient() && layoutSizeData.layoutSize >= LayoutSize.VERYBIG && this.showSearchFormElements) {
+        if (this.platformService.isClient() && layoutSizeData.layoutSize >= LayoutSize.VERYBIG && this.showSearchFormElements &&
+            !this.layoutService.isPrintMode()) {
             this.searchFormLayout = SearchFormLayout.STACKED;
         } else {
             this.searchFormLayout = SearchFormLayout.GRID;

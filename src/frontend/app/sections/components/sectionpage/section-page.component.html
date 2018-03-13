@@ -92,7 +92,9 @@
         </div>
     </div>
     <ng-container *ngIf="pdoc.flgShowTopTen && sdocSearchResult.recordCount > 0">
-        <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
+        <div class="hidden-print">
+            <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
+        </div>
     </ng-container>
 </ng-template>
 
@@ -300,7 +302,7 @@
             <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
             <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
             <ng-container *ngIf="pdoc.flgShowTopTen">
-                <div class="container content-container">
+                <div class="container content-container hidden-print">
                     <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
                 </div>
             </ng-container>

@@ -266,7 +266,7 @@ export class SectionPageComponent implements OnInit {
     }
 
     private onResize(layoutSizeData: LayoutSizeData): void {
-        if (this.platformService.isClient() && layoutSizeData.layoutSize >= LayoutSize.VERYBIG) {
+        if (this.platformService.isClient() && layoutSizeData.layoutSize >= LayoutSize.VERYBIG && !this.layoutService.isPrintMode()) {
             this.searchFormLayout = SearchFormLayout.STACKED;
         } else {
             this.searchFormLayout = SearchFormLayout.GRID;
