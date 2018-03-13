@@ -36,6 +36,7 @@ export class LayoutService {
                 } else {
                     me.flgPrintmode = false;
                 }
+                me.layoutSizeObservable.next(me.calcLayoutSizeForWindow());
             });
         }
     }
