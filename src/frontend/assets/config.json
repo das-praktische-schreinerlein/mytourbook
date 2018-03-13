@@ -1,6 +1,8 @@
 {
     "components": {
         "sdoc-keywords": {
+            "editPrefix": "KW_",
+            "possiblePrefixes": ["KW_", "", "kw_"],
             "structuredKeywords": [
                 {"name": "Aktivität", "keywords": ["Alpinklettern", "Baden", "Boofen", "Bootfahren", "Campen",
                     "Fliegen", "Gletscherbegehung", "Kanu", "Klettern", "Klettersteig",
@@ -110,8 +112,7 @@
                         { "property": "sdocdatatech_altMax", "command": "LE", "expectedValues": ["1500"]}]
                 }
             ],
-            "blacklist": ["OFFEN", "Mom", "Pa", "Dani", "Micha", "Verena",
-                "Booga", "Harry", "Rudi", "Pelle"]
+            "blacklist": ["OFFEN", "Mom", "Pa", "Dani", "Micha", "Verena", "Booga", "Harry", "Rudi", "Pelle"]
         },
         "sdoc-actions": {
             "actionTags": [

@@ -13,7 +13,7 @@ export class SDocWriterServerModule {
     private dataService: SDocDataService;
     private mapper: Mapper;
     private adapter: Adapter;
-    private responseMapper = new SDocAdapterResponseMapper();
+    private responseMapper = new SDocAdapterResponseMapper({});
     private idValidationRule = new IdValidationRule(true);
 
     public static configureRoutes(app: express.Application, apiPrefix: string, sdocServerModule: SDocServerModule): SDocWriterServerModule {

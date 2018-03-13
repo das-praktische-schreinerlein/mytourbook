@@ -12,7 +12,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
     private tableConfig: SDocSqlMytbConfig = new SDocSqlMytbConfig();
 
     constructor(config: any) {
-        super(config, new SDocAdapterResponseMapper());
+        super(config, new SDocAdapterResponseMapper(config));
     }
 
     protected getTableConfig(params: AdapterQuery): TableConfig {

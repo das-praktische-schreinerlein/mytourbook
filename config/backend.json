@@ -12,21 +12,26 @@
     "apiRouteStoredPicturesResolutionPrefix": "pics_",
     "proxyTrackRouteToUrl": "http://localhost/michas/",
     "proxyPicturesRouteToUrl": "http://localhost/michas/",
+    "imageMagicAppPath": "D:\\ProgrammeShared\\ImageMagick-7.0.7-Q16\\",
     "sdocDataStoreAdapter": "SDocSolrAdapter",
     "sdocWritable": false,
+    "mapperConfig": {
+        "allowedKeywordPatterns": ["KW_.*", "Harry", "Booga", "Buddy", "Micha"],
+        "replaceKeywordPatterns": []
+    },
     "SDocSqlMediadbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
             "user": "root",
             "password": "",
-            "database": "mediadb",
+            "database": "testmediadb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/mediadb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
         }
     },
     "SDocItemsJsAdapter": {
-        "dataFile": "D:/Bilder/mytbbase/mytb.json"
+        "dataFile": "D:/Bilder/mytbbase/test/mytb.json"
     },
     "SDocSqlMytbAdapter": {
         "client": "mysql",
@@ -36,7 +41,7 @@
             "password": "",
             "database": "mytb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/mytb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mytb.sqlite"
         }
     },
     "SDocSolrAdapter": {

@@ -366,7 +366,7 @@ export class SDocSearchformComponent implements OnInit {
             rawValues['where']);
         this.optionsSelectWhat = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, [/^kw_/], true),
+                this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, [/^kw_/gi], true),
             rawValues['what']);
         this.optionsSelectActionType = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(

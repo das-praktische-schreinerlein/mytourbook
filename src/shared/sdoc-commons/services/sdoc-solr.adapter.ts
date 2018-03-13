@@ -138,7 +138,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
     };
 
     constructor(config: any) {
-        super(config, new SDocAdapterResponseMapper());
+        super(config, new SDocAdapterResponseMapper(config));
     }
 
     mapToAdapterDocument(props: any): any {
@@ -160,7 +160,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             geo_lat_s: props.geoLat,
             geo_loc_p: props.geoLoc,
             gpstracks_basefile_s: props.gpsTrackBasefile,
-            keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,KW_') : ''),
+            keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,') : ''),
             loc_lochirarchie_s: (props.locHirarchie ? props.locHirarchie
                 .toLowerCase()
                 .replace(/[ ]*->[ ]*/g, ',,')

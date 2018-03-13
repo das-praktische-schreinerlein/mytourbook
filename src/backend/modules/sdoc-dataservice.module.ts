@@ -63,7 +63,8 @@ export class SDocDataServiceModule {
 
                 // Now do the default behavior
                 return HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
-            }
+            },
+            mapperConfig: backendConfig['mapperConfig']
         };
         const adapter = new SDocSolrAdapter(options);
         dataStore.setAdapter('http', adapter, '', {});
@@ -90,7 +91,8 @@ export class SDocDataServiceModule {
             knexOpts: {
                 client: sqlConfig['client'],
                 connection: sqlConfig['connection']
-            }
+            },
+            mapperConfig: backendConfig['mapperConfig']
         };
         const adapter = new SDocSqlMediadbAdapter(options);
         dataStore.setAdapter('http', adapter, '', {});
@@ -117,7 +119,8 @@ export class SDocDataServiceModule {
             knexOpts: {
                 client: sqlConfig['client'],
                 connection: sqlConfig['connection']
-            }
+            },
+            mapperConfig: backendConfig['mapperConfig']
         };
         const adapter = new SDocSqlMytbAdapter(options);
         dataStore.setAdapter('http', adapter, '', {});
@@ -142,7 +145,7 @@ export class SDocDataServiceModule {
         }
         const records = SDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(itemsJsConfig['dataFile'], { encoding: 'utf8' }));
 
-        const adapter = new SDocItemsJsAdapter({}, records);
+        const adapter = new SDocItemsJsAdapter({mapperConfig: backendConfig['mapperConfig']}, records);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;

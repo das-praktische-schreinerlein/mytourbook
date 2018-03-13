@@ -17,11 +17,12 @@ import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 import {utils} from 'js-data';
 
 export class SDocDataService extends SDocSearchService {
-    private responseMapper = new SDocAdapterResponseMapper();
+    private responseMapper: SDocAdapterResponseMapper;
     private writable = false;
 
     constructor(dataStore: SDocDataStore) {
         super(dataStore);
+        this.responseMapper = new SDocAdapterResponseMapper({});
         this.dataStore.defineMapper('sdoc', SDocRecord, SDocRecordSchema, SDocRecordRelation);
         this.dataStore.defineMapper('sdocdatatech', SDocDataTechRecord, SDocDataTechRecordSchema, SDocDataTechRecordRelation);
         this.dataStore.defineMapper('sdocdatainfo', SDocDataInfoRecord, SDocDataInfoRecordSchema, SDocDataInfoRecordRelation);

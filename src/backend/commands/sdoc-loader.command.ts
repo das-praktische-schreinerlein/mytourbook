@@ -41,7 +41,7 @@ export class SDocLoaderCommand implements AbstractCommand {
         dataService.setWritable(true);
         const mapper: Mapper = dataService.getMapper('sdoc');
         const adapter: Adapter = dataService.getAdapterForMapper('sdoc');
-        const responseMapper = new SDocAdapterResponseMapper();
+        const responseMapper = new SDocAdapterResponseMapper(serverConfig.backendConfig);
 
         let records = [];
         const recordsPerType = {};

@@ -296,8 +296,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             .replace(new RegExp('month', 'g'), 'Monat')
             .replace(new RegExp('week', 'g'), 'Woche');
         res.push(this.valueToHumanReadableText(when, 'hrt_when', undefined, true));
-        const what = (sdocSearchForm.what ? sdocSearchForm.what : '')
-            .replace(new RegExp('kw_', 'g'), '');
+        const what = (sdocSearchForm.what ? sdocSearchForm.what : '').replace(new RegExp('kw_', 'gi'), '');
         res.push(this.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(sdocSearchForm.moreFilter, this.splitter,

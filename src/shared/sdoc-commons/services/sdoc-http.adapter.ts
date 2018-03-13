@@ -6,10 +6,11 @@ import {Mapper, Record} from 'js-data';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 
 export class SDocHttpAdapter extends GenericSearchHttpAdapter<SDocRecord, SDocSearchForm, SDocSearchResult> {
-    private responseMapper = new SDocAdapterResponseMapper();
+    private responseMapper: SDocAdapterResponseMapper;
 
     constructor(config: any) {
         super(config);
+        this.responseMapper = new SDocAdapterResponseMapper(config);
     }
 
     create<T extends Record>(mapper: Mapper, record: any, opts?: any): Promise<T> {

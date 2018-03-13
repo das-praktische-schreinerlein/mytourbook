@@ -7,8 +7,8 @@ import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plug
 import {SDocRoutingService} from './sdoc-routing.service';
 import * as L from 'leaflet';
 import {FilterUtils, SimpleFilter} from '../../../shared/commons/utils/filter.utils';
-import LatLng = L.LatLng;
 import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
+import LatLng = L.LatLng;
 
 export enum KeywordsState {
     SET, NOTSET, SUGGESTED
@@ -118,7 +118,7 @@ export class SDocContentUtils {
         return ['list-item-persrate-' + rate, 'list-item-' + layout + '-persrate-' + rate];
     }
 
-    getSuggestedKeywords(suggestionConfigs: KeywordSuggestion[], values: any): string[] {
+    getSuggestedKeywords(suggestionConfigs: KeywordSuggestion[], prefix: string, values: any): string[] {
         let suggestions = [];
         for (const suggestionConfig of suggestionConfigs) {
             if (FilterUtils.checkFilters(suggestionConfig.filters, values)) {
@@ -126,10 +126,17 @@ export class SDocContentUtils {
             }
         }
 
+        if (prefix !== undefined && prefix.length > 0) {
+            for (let i = 0; i < suggestions.length; i++) {
+                suggestions[i] = prefix + suggestions[i];
+            }
+        }
+
         return suggestions;
     }
 
-    getStructuredKeywords(config: StructuredKeyword[], keywords: string[], blacklist: string[]): StructuredKeyword[] {
+    getStructuredKeywords(config: StructuredKeyword[], keywords: string[], blacklist: string[], possiblePrefixes: string[]):
+        StructuredKeyword[] {
         const keywordKats: StructuredKeyword[] = [];
         if (keywords === undefined || keywords.length < 1) {
             return keywordKats;
@@ -143,9 +150,12 @@ export class SDocContentUtils {
         for (const keywordKat of config) {
             const keywordFound = [];
             for (const keyword of keywordKat.keywords) {
-                if (keywords.indexOf(keyword) > -1) {
-                    // TODO remove
-                    keywordFound.push(keyword);
+                for (const prefix of (possiblePrefixes || [])) {
+                    const searchPrefix = prefix + keyword;
+                    if (keywords.indexOf(searchPrefix) > -1) {
+                        keywordFound.push(keyword);
+                        break;
+                    }
                 }
             }
             if (keywordFound.length > 0) {
@@ -156,7 +166,8 @@ export class SDocContentUtils {
         return keywordKats;
     }
 
-    getStructuredKeywordsState(config: StructuredKeyword[], keywords: string[], suggested: string[]): StructuredKeywordState[] {
+    getStructuredKeywordsState(config: StructuredKeyword[], keywords: string[], suggested: string[], possiblePrefixes: string[]):
+        StructuredKeywordState[] {
         const keywordKats: StructuredKeywordState[] = [];
         if (keywords === undefined || keywords.length < 1) {
             keywords = [];
@@ -165,13 +176,24 @@ export class SDocContentUtils {
         for (const keywordKat of config) {
             const keywordFound = [];
             for (const keyword of keywordKat.keywords) {
-                if (keywords.indexOf(keyword) > -1) {
-                    keywordFound.push({keyword: keyword, state: KeywordsState.SET});
-                } else if (suggested.indexOf(keyword) > -1) {
-                    keywordFound.push({keyword: keyword, state: KeywordsState.SUGGESTED});
-                } else {
+                let found = false;
+                for (const prefix of (possiblePrefixes || [])) {
+                    const searchPrefix = prefix + keyword;
+                    if (keywords.indexOf(searchPrefix) > -1) {
+                        keywordFound.push({keyword: keyword, state: KeywordsState.SET});
+                        found = true;
+                        break;
+                    } else if (suggested.indexOf(searchPrefix) > -1) {
+                        found = true;
+                        keywordFound.push({keyword: keyword, state: KeywordsState.SUGGESTED});
+                        break;
+                    }
+                }
+
+                if (!found) {
                     keywordFound.push({keyword: keyword, state: KeywordsState.NOTSET});
                 }
+
             }
             keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
         }

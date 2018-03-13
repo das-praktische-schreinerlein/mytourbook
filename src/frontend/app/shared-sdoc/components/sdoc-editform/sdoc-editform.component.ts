@@ -346,11 +346,10 @@ export class SDocEditformComponent implements OnChanges {
 
     updateKeywordSuggestions(): boolean {
         const config = this.appService.getAppConfig();
-        if (config['components']
-            && config['components']['sdoc-keywords']
-            && config['components']['sdoc-keywords']['keywordSuggestions']) {
-            this.keywordSuggestions = this.contentUtils.getSuggestedKeywords(config['components']['sdoc-keywords']['keywordSuggestions'],
-                this.editFormGroup.getRawValue());
+        if (BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions')) {
+            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions');
+            const prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix');
+            this.keywordSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
             this.cd.markForCheck();
         } else {
             console.warn('no valid keywordSugestions found');

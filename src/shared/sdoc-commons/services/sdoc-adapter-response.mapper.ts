@@ -1,5 +1,5 @@
 import {Mapper, Record} from 'js-data';
-import {SDocRecord} from '../model/records/sdoc-record';
+import {SDocRecord, SDocRecordFactory} from '../model/records/sdoc-record';
 import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {MapperUtils} from '../../search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
@@ -7,6 +7,11 @@ import {BeanUtils} from '../../commons/utils/bean.utils';
 
 export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
+    protected config: {} = {};
+
+    constructor(config: any) {
+        this.config = config;
+    }
 
     mapToAdapterDocument(mapping: {}, props: SDocRecord): any {
         const values = {};
@@ -29,9 +34,8 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['geo_loc_p'] = props.geoLoc;
         values['gpstrack_src_s'] = props.gpsTrackSrc;
         values['gpstracks_basefile_s'] = props.gpsTrackBasefile;
-        // TODO: do it only
-        values['keywords_txt'] =
-            (props.keywords ? props.keywords.split(', ').join(',,KW_') : '');
+       values['keywords_txt'] =
+            (props.keywords ? props.keywords.split(', ').join(',') : '');
         values['loc_lochirarchie_s'] = (props.locHirarchie ? props.locHirarchie
             .toLowerCase()
             .replace(/[ ]*->[ ]*/g, ',,')
@@ -90,7 +94,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     }
 
     mapValuesToRecord(mapper: Mapper, values: {}): SDocRecord {
-        const record = new SDocRecord(values);
+        const record = SDocRecordFactory.createSanitized(values);
 
         for (const mapperKey of ['sdocdatatech', 'sdocdatainfo', 'sdocratepers', 'sdocratetech']) {
             const subMapper = mapper['datastore']._mappers[mapperKey];
@@ -149,9 +153,39 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
             this.mapperUtils.mapToAdapterFieldName(mapping, 'geo_loc_p'), undefined);
         values['gpsTrackSrc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstrack_src_s', undefined);
         values['gpsTrackBasefile'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'gpstracks_basefile_s', undefined);
-        // TODO
-        values['keywords'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '')
-            .split(',,').join(', ').replace(/KW_/g, '');
+
+        const origKeywordsArr = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'keywords_txt', '').split(',');
+        const newKeywordsArr = [];
+        const allowedKeywordPatterns = BeanUtils.getValue(this.config, 'mapperConfig.allowedKeywordPatterns');
+        for (let keyword of origKeywordsArr) {
+            keyword = keyword.trim();
+            if (keyword === '') {
+                continue;
+            }
+
+            if (allowedKeywordPatterns && allowedKeywordPatterns.length > 0) {
+                for (const pattern of allowedKeywordPatterns) {
+                    if (keyword.match(new RegExp(pattern))) {
+                        newKeywordsArr.push(keyword);
+                        break;
+                    }
+                }
+            } else {
+                newKeywordsArr.push(keyword);
+            }
+        }
+        const replaceKeywordPatterns = BeanUtils.getValue(this.config, 'mapperConfig.replaceKeywordPatterns');
+        if (replaceKeywordPatterns && replaceKeywordPatterns.length > 0) {
+            for (let i = 0; i < newKeywordsArr.length; i++) {
+                let keyword = newKeywordsArr[i];
+                for (const pattern of replaceKeywordPatterns) {
+                    keyword = keyword.replace(new RegExp(pattern[0]), pattern[1]);
+                }
+                newKeywordsArr[i] = keyword;
+            }
+        }
+        values['keywords'] = newKeywordsArr.join(', ');
+
         values['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'name_s', undefined);
         values['persons'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'persons_txt', '')
             .split(',,').join(', ');

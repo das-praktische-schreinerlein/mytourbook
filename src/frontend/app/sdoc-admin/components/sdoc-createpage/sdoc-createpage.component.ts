@@ -18,6 +18,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecordCreateResolver} from '../../../shared-sdoc/resolver/sdoc-create.resolver';
+import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-sdoc-createpage',
@@ -52,7 +53,7 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
-                if (!(this.config && this.config['permissions'] && this.config['permissions']['sdocWritable'] === true)) {
+                if (!(BeanUtils.getValue(this.config, 'permissions.sdocWritable') === true)) {
                     console.warn('sdoc not writable');
                     this.record = undefined;
                     this.pdoc = undefined;

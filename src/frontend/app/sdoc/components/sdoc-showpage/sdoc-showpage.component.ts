@@ -24,6 +24,7 @@ import {LayoutService} from '../../../../shared/angular-commons/services/layout.
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {Facets} from '../../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
+import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -104,9 +105,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                         this.pageUtils.setRobots(false, false);
 
                         let indexableTypes = [];
-                        if (config['services']
-                            && config['services']['seo']
-                            && config['services']['seo']['sdocIndexableTypes']) {
+                        if (BeanUtils.getValue(config, 'services.seo.sdocIndexableTypes')) {
                             indexableTypes = config['services']['seo']['sdocIndexableTypes'];
                         }
 

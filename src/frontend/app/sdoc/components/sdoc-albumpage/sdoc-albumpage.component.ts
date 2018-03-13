@@ -19,6 +19,7 @@ import {SDocAlbumResolver} from '../../../shared-sdoc/resolver/sdoc-album.resolv
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
+import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -81,10 +82,8 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                     return;
                 }
 
-                if (this.config['permissions'] && this.config['permissions']['allowAutoPlay']
-                    && this.config['components']
-                    && this.config['components']['sdoc-albumpage']
-                    && this.config['components']['sdoc-albumpage']['allowAutoplay'] + '' === 'true') {
+                if (BeanUtils.getValue(this.config, 'permissions.allowAutoPlay') &&
+                    BeanUtils.getValue(this.config, 'components.sdoc-albumpage.allowAutoplay') + '' === 'true') {
                     this.autoPlayAllowed = true;
                 }
 

@@ -19,7 +19,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
     private tableConfig: SDocSqlMediadbConfig = new SDocSqlMediadbConfig();
 
     constructor(config: any) {
-        super(config, new SDocAdapterResponseMapper());
+        super(config, new SDocAdapterResponseMapper(config));
         this.actionTagAdapter = new SDocSqlMediadbActionTagAdapter(config, this.knex);
         this.keywordsAdapter = new SDocSqlMediadbKeywordAdapter(config, this.knex);
     }

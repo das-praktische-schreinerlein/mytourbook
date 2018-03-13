@@ -121,7 +121,7 @@ export class SDocItemsJsAdapter extends GenericItemsJsAdapter<SDocRecord, SDocSe
     };
 
     constructor(config: any, data: any) {
-        super(config, new SDocAdapterResponseMapper(), data, SDocItemsJsAdapter.itemsJsConfig);
+        super(config, new SDocAdapterResponseMapper(config), data, SDocItemsJsAdapter.itemsJsConfig);
     }
 
     mapToAdapterDocument(props: any): any {

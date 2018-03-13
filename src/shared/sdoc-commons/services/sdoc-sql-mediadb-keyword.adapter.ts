@@ -39,11 +39,11 @@ export class SDocSqlMediadbKeywordAdapter {
         }
 
         const deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable + ' WHERE ' + idField + ' IN (' + dbId + ')';
-        const insertNewKeywordsSql = 'INSERT INTO keyword (kw_name) ' +
-            'SELECT kw_name ' +
-            'FROM ( ' +
-            '   WITH split(word, str, hascomma) AS ( ' +
-            '    VALUES("", "' + keywords.replace(/ \\"'/g, '') + '", 1) ' +
+        let insertNewKeywordsSql;
+        let insertNewKeywordJoinSql;
+        if (this.config.knexOpts.client !== 'mysql') {
+            const keywordSplit = ' WITH split(word, str, hascomma) AS ( ' +
+            '    VALUES("", "' + keywords.replace(/[ \\"']/g, '') + '", 1) ' +
             '    UNION ALL SELECT ' +
             '    substr(str, 0, ' +
             '        case when instr(str, ",") ' +
@@ -54,29 +54,41 @@ export class SDocSqlMediadbKeywordAdapter {
             '    FROM split ' +
             '    WHERE hascomma ' +
             '  ) ' +
-            '  SELECT trim(word) AS kw_name FROM split WHERE word!="" ' +
-            ') AS kw1 ' +
-            'WHERE NOT EXISTS (SELECT 1 ' +
-            '                  FROM keyword kw2 ' +
-            '                  WHERE kw2.kw_name = kw1.kw_name); ';
-        const insertNewKeywordJoinSql = 'INSERT INTO ' + joinTable + ' (' + idField + ', kw_id) ' +
-            'SELECT ' + dbId + ' AS ' + idField + ', kw_id AS kw_id FROM keyword kkw1 WHERE kw_name IN ( ' +
-            '   WITH split(word, str, hascomma) AS ( ' +
-            '    values("", "' + keywords.replace(/ \\"'/g, '') + '", 1) ' +
-            '    UNION ALL SELECT ' +
-            '    substr(str, 0, ' +
-            '        case when instr(str, ",") ' +
-            '        then instr(str, ",") ' +
-            '        else length(str)+1 end), ' +
-            '    ltrim(substr(str, instr(str, ",")), ","), ' +
-            '    instr(str, ",") ' +
-            '    FROM split ' +
-            '    WHERE hascomma ' +
-            '  ) ' +
-            '  SELECT trim(word) as kw_name FROM split WHERE word!="" ' +
-            ') and NOT EXISTS (SELECT 1 ' +
-            '                  FROM ' + joinTable + ' kkw2 ' +
-            '                  WHERE kkw2.kw_id = kkw1.kw_id AND ' + idField + ' = ' + dbId + '); ';
+            '  SELECT trim(word) AS kw_name FROM split WHERE word!="" ';
+
+            insertNewKeywordsSql = 'INSERT INTO keyword (kw_name) ' +
+                'SELECT kw_name ' +
+                'FROM ( ' +
+                keywordSplit +
+                ') AS kw1 ' +
+                'WHERE NOT EXISTS (SELECT 1 ' +
+                '                  FROM keyword kw2 ' +
+                '                  WHERE kw2.kw_name = kw1.kw_name); ';
+            insertNewKeywordJoinSql = 'INSERT INTO ' + joinTable + ' (' + idField + ', kw_id) ' +
+                'SELECT ' + dbId + ' AS ' + idField + ', kw_id AS kw_id FROM keyword kkw1 WHERE kw_name IN ( ' +
+                keywordSplit +
+                ') and NOT EXISTS (SELECT 1 ' +
+                '                  FROM ' + joinTable + ' kkw2 ' +
+                '                  WHERE kkw2.kw_id = kkw1.kw_id AND ' + idField + ' = ' + dbId + '); ';
+        } else {
+            const keywordSplit = ' SELECT ' +
+                '"' + keywords.replace(/[ \\"']/g, '').split(',').join('" AS kw_name UNION ALL SELECT "') + '" AS kw_name ';
+
+            insertNewKeywordsSql = 'INSERT INTO keyword (kw_name) ' +
+                'SELECT kw_name ' +
+                'FROM ( ' +
+                keywordSplit +
+                ') AS kw1 ' +
+                'WHERE NOT EXISTS (SELECT 1 ' +
+                '                  FROM keyword kw2 ' +
+                '                  WHERE BINARY kw2.kw_name = BINARY kw1.kw_name); ';
+            insertNewKeywordJoinSql = 'INSERT INTO ' + joinTable + ' (' + idField + ', kw_id) ' +
+                'SELECT ' + dbId + ' AS ' + idField + ', kw_id AS kw_id FROM keyword kkw1 WHERE kw_name IN ( ' +
+                keywordSplit +
+                ') and NOT EXISTS (SELECT 1 ' +
+                '                  FROM ' + joinTable + ' kkw2 ' +
+                '                  WHERE kkw2.kw_id = kkw1.kw_id AND ' + idField + ' = ' + dbId + '); ';
+        }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {

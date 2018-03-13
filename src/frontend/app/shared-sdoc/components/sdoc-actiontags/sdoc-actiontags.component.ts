@@ -6,6 +6,7 @@ import {BaseEntityRecord} from '../../../../shared/search-commons/model/records/
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ActionTag, ActionTagConfig, ActionTagUtils} from '../../../../shared/commons/utils/actiontag.utils';
 import {SDocAlbumService} from '../../services/sdoc-album.service';
+import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 export interface ActionTagEvent {
     record: BaseEntityRecord;
@@ -54,9 +55,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
-                if (this.config['components']
-                    && this.config['components']['sdoc-actions']
-                    && this.config['components']['sdoc-actions']['actionTags']) {
+                if (BeanUtils.getValue(this.config, 'components.sdoc-actions.actionTags')) {
                     this.tagConfigs = this.config['components']['sdoc-actions']['actionTags'];
                 } else {
                     console.warn('no valid tagConfigs found');

@@ -4,6 +4,7 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-sdoc-list-header',
@@ -66,10 +67,8 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (config['permissions'] && config['permissions']['allowAutoPlay']
-                    && config['components']
-                    && config['components']['sdoc-listheader']
-                    && config['components']['sdoc-listheader']['allowAutoplay'] + '' === 'true') {
+                if (BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
+                    BeanUtils.getValue(config, 'components.sdoc-listheader.allowAutoplay') + '' === 'true') {
                     this.autoPlayAllowed = this.showAutoplay;
                 }
             }

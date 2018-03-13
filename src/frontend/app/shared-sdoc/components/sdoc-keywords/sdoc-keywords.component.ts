@@ -3,6 +3,7 @@ import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-rec
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocContentUtils, StructuredKeyword} from '../../services/sdoc-contentutils.service';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-sdoc-keywords',
@@ -14,6 +15,7 @@ export class SDocKeywordsComponent implements OnInit, OnChanges {
     keywordKats: StructuredKeyword[] = [];
     blacklist = [];
     keywordsConfig: StructuredKeyword[] = [];
+    possiblePrefixes = [];
 
     @Input()
     public record: SDocRecord;
@@ -25,14 +27,14 @@ export class SDocKeywordsComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (config['components']
-                    && config['components']['sdoc-keywords']
-                    && config['components']['sdoc-keywords']['structuredKeywords']) {
-                    this.keywordsConfig = config['components']['sdoc-keywords']['structuredKeywords'];
+                if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
+                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords');
+                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes');
                     this.updateData();
                 } else {
                     console.warn('no valid keywordsConfig found');
                     this.keywordsConfig = [];
+                    this.possiblePrefixes = [];
                 }
             }
         });
@@ -50,8 +52,6 @@ export class SDocKeywordsComponent implements OnInit, OnChanges {
             return;
         }
         this.keywordKats = this.contentUtils.getStructuredKeywords(
-            this.keywordsConfig,
-            this.record.keywords.split(', '),
-            this.blacklist);
+            this.keywordsConfig, this.record.keywords.split(', '), this.blacklist, this.possiblePrefixes);
     }
 }
