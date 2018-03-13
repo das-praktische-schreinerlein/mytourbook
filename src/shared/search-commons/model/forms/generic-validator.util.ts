@@ -1,6 +1,7 @@
 export enum GenericValidatorDatatypes {
     'FULLTEXT', 'ID', 'PERPAGE', 'PAGENUM', 'SORT',
-    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST', 'NAME', 'GPSTRACK', 'DATE'
+    'WHEN_KEY_CSV', 'LOCATION_KEY_CSV', 'ID_CSV', 'NEARBY', 'ADDRESS', 'WHAT_KEY_CSV', 'FILTER_LIST', 'NAME', 'GPSTRACK', 'DATE',
+    'TEXT', 'HTML', 'MARKDOWN', 'NUMBER', 'FILENAME', 'GEOLOC'
 }
 
 export abstract class ValidationRule {
@@ -159,6 +160,20 @@ export class NumberValidationRule extends ValidationWithDefaultRule {
     }
 }
 
+export class StringNumberValidationRule extends NumberValidationRule {
+    constructor(required: boolean, min: number, max: number, defaultValue: number) {
+        super(required, min, max, defaultValue);
+    }
+
+    sanitize(value: any): any {
+        if (this.isValid(value)) {
+            return value ? value  + '' : value;
+        }
+        // console.error("sanitize value:" + value + " to defaultValue: " + this._defaultValue);
+        return this._defaultValue;
+    }
+}
+
 export class DateValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required, /^[-0-9.: Tt]*$/gi, /[^-0-9.: Tt]*/gi, '');
@@ -225,9 +240,21 @@ export class SolrValidationRule extends RegExValidationReplaceRule {
     }
 }
 
+export class GeoLocValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-0-9,.]*$/gi, /[^-0-9,.]*/gi, '');
+    }
+}
+
+export class HierarchyValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9,. >_]*$/gi, /[^-A-Za-z0-9,. >_]*/gi, '');
+    }
+}
+
 export class GpsTrackValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
-        super(required, /^[-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?<> \r\n]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?<> \r\n]*/gi, '');
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<> \r\n]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<> \r\n]*/gi, '');
     }
 }
 
@@ -240,5 +267,29 @@ export class RouteValidationRule extends RegExValidationReplaceRule {
 export class ShowRouteValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required, /^[-A-Za-z0-9/_]*$/gi, /[^-A-Za-z0-9/_]*/gi, '');
+    }
+}
+
+export class DescValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<>\[\]() \r\n#]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<>\[\]() \r\n#]*/gi, '');
+    }
+}
+
+export class MarkdownValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<>\[\]() \r\n#]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<>\[\]() \r\n#]*/gi, '');
+    }
+}
+
+export class HtmlValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<>\[\]() \r\n#]*$/gi, /[^-A-Za-z0-9äöüßÄÖÜ\/"+=;,:._*?!<>\[\]() \r\n#]*/gi, '');
+    }
+}
+
+export class FilenameValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required, /^[-A-Za-z0-9_]*$/gi, /[^-A-Za-z0-9_]*/gi, '');
     }
 }
