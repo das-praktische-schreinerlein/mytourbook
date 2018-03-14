@@ -4,6 +4,7 @@ import {SiteMapGeneratorCommand} from './commands/sitemap-generator.command';
 import {SDocLoaderCommand} from './commands/sdoc-loader.command';
 import {utils} from 'js-data';
 import {ImageManagerCommand} from './commands/image-manager.command';
+import {SDocExporterCommand} from './commands/sdoc-exporter.command';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -18,6 +19,7 @@ if (!debug) {
 const cacheInitializer = new CacheInitializerCommand();
 const siteMapGenerator = new SiteMapGeneratorCommand();
 const sdocLoader = new SDocLoaderCommand();
+const sdocExporter = new SDocExporterCommand();
 const imageManager = new ImageManagerCommand();
 
 let promise: Promise<any>;
@@ -30,6 +32,9 @@ switch (argv['command']) {
         break;
     case 'loadSdoc':
         promise = sdocLoader.process(argv);
+        break;
+    case 'exportSdoc':
+        promise = sdocExporter.process(argv);
         break;
     case 'imageManager':
         promise = imageManager.process(argv);
