@@ -33,7 +33,7 @@ export class SDocEditformComponent implements OnChanges {
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
             containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
-            showUncheckAll: true,
+            showUncheckAll: false,
             autoUnselect: true,
             selectionLimit: 1};
     private numBeanFieldConfig = {
@@ -196,6 +196,7 @@ export class SDocEditformComponent implements OnChanges {
     trackRecords: SDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
     keywordSuggestions: string[] = [];
+    personTagSuggestions: string[] = [];
 
     @Input()
     public record: SDocRecord;
@@ -354,6 +355,15 @@ export class SDocEditformComponent implements OnChanges {
         } else {
             console.warn('no valid keywordSugestions found');
             this.keywordSuggestions = [];
+        }
+        if (BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions')) {
+            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions');
+            const prefix = BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix');
+            this.personTagSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
+            this.cd.markForCheck();
+        } else {
+            console.warn('no valid personTagSuggestions found');
+            this.personTagSuggestions = [];
         }
 
         return true;

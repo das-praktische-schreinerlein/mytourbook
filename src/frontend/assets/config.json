@@ -22,7 +22,7 @@
                     "Höhle", "Schlucht", "Tal", "Sandstrand", "Steinstrand",
                     "Steilküste", "Blumen", "Feld", "Heide", "Steppe", "Wiese",
                     "Bergwald", "Strandwald", "Wald", "Seenlandschaft", "Berge",
-                    "Hochgebirge", "Mittelgebirge", "Meer", "Ozean"]}
+                    "Hochgebirge", "Mittelgebirge", "Meer", "Ozean", "Firn", "Schneefelder"]}
             ],
             "keywordSuggestions": [
                 {   "name": "Action Rad-Tour", "keywords": ["Radfahren"],
@@ -112,7 +112,25 @@
                         { "property": "sdocdatatech_altMax", "command": "LE", "expectedValues": ["1500"]}]
                 }
             ],
-            "blacklist": ["OFFEN", "Mom", "Pa", "Dani", "Micha", "Verena", "Booga", "Harry", "Rudi", "Pelle"]
+            "blacklist": ["OFFEN", "Mom", "Pa", "Micha"]
+        },
+        "sdoc-persontags": {
+            "editPrefix": "",
+            "possiblePrefixes": ["KW_", "", "kw_", "Pers_"],
+            "structuredKeywords": [
+                {"name": "mit Freunden", "keywords": ["Freund1", "Freund2"]},
+                {"name": "mit Familie", "keywords": ["Micha", "Ich", "Frau", "Mann"]},
+                {"name": "mit Hundis", "keywords": ["Harry", "Buddy"]}
+            ],
+            "keywordSuggestions": [
+                {   "name": "Personen Klettern", "keywords": ["Freund1"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["128"]}]
+                },
+                {   "name": "Hunde Gassi", "keywords": ["Buddy"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["111"]}]
+                }
+            ],
+            "blacklist": []
         },
         "sdoc-actions": {
             "actionTags": [

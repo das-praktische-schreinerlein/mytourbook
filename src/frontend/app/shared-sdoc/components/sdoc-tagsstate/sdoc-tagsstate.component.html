@@ -1,0 +1,14 @@
+<div *ngIf="tagsKats.length > 0" class="techvaluetable">
+    <ng-container *ngFor="let tag of tagsKats">
+        <div class='entry'>
+            <div class='label'>{{tag.name}}:</div>
+            <div class='value'>
+                <ng-container *ngFor="let keyword of tag.keywords">
+                    <span class="{{keyword.state}}" (click)="doUnsetTag(keyword.keyword)" *ngIf="keyword.state === KeywordState.SET" style="color: green; font-weight: bold; font-size: 120%">{{keyword.keyword}}</span>
+                    <span class="{{keyword.state}}" (click)="doSetTag(keyword.keyword)" *ngIf="keyword.state === KeywordState.NOTSET">{{keyword.keyword}}</span>
+                    <span class="{{keyword.state}}" (click)="doSetTag(keyword.keyword)" *ngIf="keyword.state === KeywordState.SUGGESTED"  style="color: #bb260d; font-weight: bold; font-size: 150%">{{keyword.keyword}}</span>
+                </ng-container>
+            </div>
+        </div>
+    </ng-container>
+</div>

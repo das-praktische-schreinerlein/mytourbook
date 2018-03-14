@@ -37,7 +37,7 @@
     </ng-template>
 
     <ng-template #inputLocation>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['locId']"
                                      [settings]="settingsSelectWhere"
@@ -50,7 +50,7 @@
     </ng-template>
 
     <ng-template #inputLocationParent>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['locIdParent']"
                                      [settings]="settingsSelectWhere"
@@ -89,7 +89,7 @@
     </ng-template>
 
     <ng-template #inputRoute>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="route label|Label for filter: route@@label.searchform.sdoc.routeId">Route:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
                                      [settings]="settingsSelectRoute"
@@ -102,7 +102,7 @@
     </ng-template>
 
     <ng-template #inputTrack>
-        <div class="col-sm-4 input-group input-group-sm">
+        <div class="col-sm-6 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="track label|Label for filter: track@@label.searchform.sdoc.trackId">Track:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['trackId']"
                                      [settings]="settingsSelectTrack"
@@ -174,8 +174,12 @@
             <textarea formControlName="keywords" class="form-control" type="text" placeholder="keywords" i18n-placeholder="keywords placeholder|Placeholder for keywords@@placeholder.form.sdoc.keywords"></textarea>
         </div>
         <div class="col-sm-12 form-inline input-group input-group-sm">
+            <app-sdoc-persontagsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="personTagSuggestions"
+                                      (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-sdoc-persontagsstate>
+        </div>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
             <app-sdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="keywordSuggestions"
-                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-sdoc-keywordsstate>
+                                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-sdoc-keywordsstate>
         </div>
     </ng-template>
 
@@ -217,7 +221,7 @@
     <ng-container [ngSwitch]="record.type">
         <ng-container *ngSwitchCase="'LOCATION'">
             <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
                     <ng-container *ngTemplateOutlet="inputLoctype"></ng-container>
@@ -238,7 +242,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'TRACK'">
             <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
                     <ng-container *ngTemplateOutlet="inputDateStart;context:{recommend: formatInputDate(trackStatistic.dateStart)}"></ng-container>
@@ -254,7 +258,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">technische Daten</legend>
+                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">&#x231a; technische Daten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
@@ -266,7 +270,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">persönliche Bewertung: Charakter</legend>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
@@ -275,7 +279,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">persönliche Bewertung: Schwierigkeit</legend>
+                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
@@ -302,7 +306,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'IMAGE'">
             <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
                     <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
@@ -312,7 +316,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">persönliche Bewertung: Charakter</legend>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt_image', formControlName: 'sdocratepers_gesamt'}"></ng-container>
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
@@ -333,18 +337,18 @@
         </ng-container>
         <ng-container *ngSwitchCase="'ROUTE'">
             <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
                 </div>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
                     <ng-container *ngTemplateOutlet="inputTrack"></ng-container>
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">technische Daten</legend>
+                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">&#x231a; technische Daten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
                     <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
@@ -353,7 +357,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">persönliche Bewertung: Charakter</legend>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
@@ -362,7 +366,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">persönliche Bewertung: Schwierigkeit</legend>
+                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
                     <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
@@ -371,7 +375,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="rateTech label|Label for fieldset: rateTech@@label.editform.sdoc.legend.rateTech">technische Bewertung</legend>
+                <legend i18n="rateTech label|Label for fieldset: rateTech@@label.editform.sdoc.legend.rateTech">&#x2757; technische Bewertung</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.overall', formControlName: 'sdocratetech_overall'}"></ng-container>
                     <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.klettern', formControlName: 'sdocratetech_klettern'}"></ng-container>
@@ -385,7 +389,7 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend i18n="dataInfo label|Label for fieldset: dataInfo@@label.editform.sdoc.legend.dataInfo">Daten</legend>
+                <legend i18n="dataInfo label|Label for fieldset: dataInfo@@label.editform.sdoc.legend.dataInfo">&#x26f3; Daten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.baseloc', formControlName: 'sdocdatainfo_baseloc'}"></ng-container>
                     <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.destloc', formControlName: 'sdocdatainfo_destloc'}"></ng-container>
@@ -412,7 +416,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'TRIP'">
             <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
                     <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
@@ -426,7 +430,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'NEWS'">
             <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">Stammdaten</legend>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputName"></ng-container>
                     <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>

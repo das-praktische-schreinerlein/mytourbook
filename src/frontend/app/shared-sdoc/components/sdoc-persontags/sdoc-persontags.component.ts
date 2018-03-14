@@ -6,12 +6,12 @@ import {AppState, GenericAppService} from '../../../../shared/commons/services/g
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
-    selector: 'app-sdoc-keywords',
-    templateUrl: './sdoc-keywords.component.html',
-    styleUrls: ['./sdoc-keywords.component.css'],
+    selector: 'app-sdoc-persontags',
+    templateUrl: './sdoc-persontags.component.html',
+    styleUrls: ['./sdoc-persontags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocKeywordsComponent implements OnInit, OnChanges {
+export class SDocPersonTagsComponent implements OnInit, OnChanges {
     blacklist = [];
     keywordsConfig: StructuredKeyword[] = [];
     possiblePrefixes = [];
@@ -26,12 +26,12 @@ export class SDocKeywordsComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
-                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords');
-                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes');
+                if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
+                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords');
+                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes');
                     this.updateData();
                 } else {
-                    console.warn('no valid keywordsConfig found');
+                    console.warn('no valid persontagsConfig found');
                     this.keywordsConfig = [];
                     this.possiblePrefixes = [];
                     this.updateData();

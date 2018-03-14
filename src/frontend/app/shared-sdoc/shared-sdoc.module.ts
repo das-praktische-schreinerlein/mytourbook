@@ -40,6 +40,10 @@ import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiont
 import {SDocKeywordsStateComponent} from './components/sdoc-keywordsstate/sdoc-keywordsstate.component';
 import {SDocTypetableComponent} from './components/sdoc-typetable/sdoc-typetable.component';
 import {SDocTagcloudComponent} from './components/sdoc-tagcloud/sdoc-tagcloud.component';
+import {SDocTagsComponent} from './components/sdoc-tags/sdoc-tags.component';
+import {SDocTagsStateComponent} from './components/sdoc-tagsstate/sdoc-tagsstate.component';
+import {SDocPersonTagsStateComponent} from './components/sdoc-persontagsstate/sdoc-persontagsstate.component';
+import {SDocPersonTagsComponent} from './components/sdoc-persontags/sdoc-persontags.component';
 
 @NgModule({
     declarations: [
@@ -72,7 +76,11 @@ import {SDocTagcloudComponent} from './components/sdoc-tagcloud/sdoc-tagcloud.co
         SDocActionsComponent,
         SDocActionTagsComponent,
         SDocTypetableComponent,
-        SDocTagcloudComponent
+        SDocTagcloudComponent,
+        SDocTagsComponent,
+        SDocTagsStateComponent,
+        SDocPersonTagsComponent,
+        SDocPersonTagsStateComponent
     ],
     imports: [
         ToastModule,
@@ -121,7 +129,11 @@ import {SDocTagcloudComponent} from './components/sdoc-tagcloud/sdoc-tagcloud.co
         SDocActionsComponent,
         SDocActionTagsComponent,
         SDocTypetableComponent,
-        SDocTagcloudComponent
+        SDocTagcloudComponent,
+        SDocTagsComponent,
+        SDocTagsStateComponent,
+        SDocPersonTagsComponent,
+        SDocPersonTagsStateComponent
     ]
 })
 export class SharedSDocModule {}

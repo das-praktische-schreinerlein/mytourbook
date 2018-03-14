@@ -8,12 +8,12 @@ import {AppState, GenericAppService} from '../../../../shared/commons/services/g
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
-    selector: 'app-sdoc-keywordsstate',
-    templateUrl: './sdoc-keywordsstate.component.html',
-    styleUrls: ['./sdoc-keywordsstate.component.css'],
+    selector: 'app-sdoc-persontagsstate',
+    templateUrl: './sdoc-persontagsstate.component.html',
+    styleUrls: ['./sdoc-persontagsstate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocKeywordsStateComponent implements OnInit, OnChanges {
+export class SDocPersonTagsStateComponent implements OnInit, OnChanges {
     possiblePrefixes = [];
     keywordsConfig: StructuredKeyword[] = [];
     prefix = '';
@@ -37,10 +37,10 @@ export class SDocKeywordsStateComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
-                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords');
-                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes');
-                    this.prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix') || '';
+                if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
+                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords');
+                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes');
+                    this.prefix = BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix') || '';
                     this.updateData();
                 } else {
                     console.warn('no valid keywordsConfig found');
