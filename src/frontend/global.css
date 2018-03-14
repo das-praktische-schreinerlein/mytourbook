@@ -266,7 +266,19 @@ div.humanReadableSearchFilter div.filter {
 @supports (-ms-ime-align: auto) {
 }
 
-input::placeholder, input::-webkit-input-placeholder, input:-ms-input-placeholder, input:placeholder-shown, input:-moz-placeholder {
+::placeholder {
+    color: #e8e8e8 !important;
+}
+::-webkit-input-placeholder {
+    color: #e8e8e8 !important;
+}
+:-ms-input-placeholder {
+    color: #e8e8e8 !important;
+}
+:placeholder-shown {
+    color: #e8e8e8 !important;
+}
+::-moz-placeholder {
     color: #e8e8e8 !important;
 }
 
