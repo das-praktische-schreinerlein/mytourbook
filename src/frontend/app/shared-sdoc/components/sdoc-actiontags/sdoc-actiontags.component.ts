@@ -86,6 +86,18 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
         return false;
     }
 
+    public hideInactive(): void {
+        if (this.tags.length > 4) {
+            this.toggleClass = 'hideInactive';
+        } else {
+            this.toggleClass = 'showInactive';
+        }
+    }
+
+    public showInactive(): void {
+        this.toggleClass = 'showInactive';
+    }
+
     private updateData() {
         this.contentUtils.updateItemData(this.item, this.record, 'default');
         if (this.record === undefined) {
@@ -94,6 +106,9 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
             this.sdocAlbumService.initAlbenForSDocId(this.item.currentRecord);
             this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord, this.config);
         }
+
+        this.hideInactive();
+
         if (this.type === 'actionTagsBig') {
             this.styleClass = 'btn-navigation';
         } else {

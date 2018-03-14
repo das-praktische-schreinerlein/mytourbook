@@ -116,6 +116,12 @@
                             <app-sdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
                                                (columnClicked)="onTagcloudClicked($event, 'where')"
                                                [searchResult]="searchResult"></app-sdoc-tagcloud>
+                            <app-sdoc-tagcloud [label]="'Schwierig?'" [facetName]="'rate_pers_schwierigkeit_is'" [max]="50"
+                                               (columnClicked)="onTagcloudClicked($event, 'personalRateDifficulty')"
+                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
+                            <app-sdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
+                                               (columnClicked)="onTagcloudClicked($event, 'techRateOverall')"
+                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
                         </div>
                     </div>
 

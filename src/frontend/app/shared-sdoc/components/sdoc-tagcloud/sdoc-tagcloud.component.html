@@ -8,12 +8,12 @@
     </div>
 </ng-template>
 
-<ng-container *ngIf="label !== undefined">
+<ng-container *ngIf="label !== undefined && columns.length > 0">
     <fieldset>
         <legend>{{label}}</legend>
         <ng-container *ngTemplateOutlet="tagcloud"></ng-container>
     </fieldset>
 </ng-container>
-<ng-container *ngIf="label === undefined">
+<ng-container *ngIf="label === undefined && columns.length > 0">
     <ng-container *ngTemplateOutlet="tagcloud"></ng-container>
 </ng-container>

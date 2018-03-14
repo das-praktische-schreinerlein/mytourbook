@@ -1,8 +1,8 @@
 <ng-container *ngIf="item.currentRecord !== undefined && tags.length > 0">
     <div class="tagContainer tagContainer{{type}} {{styleClass}} {{toggleClass}}"
-         (mouseover)="toggleClass = 'showInactive'"
-         (mouseout)="toggleClass = 'hideInactive'">
-        <a class="tagToggler">Actions</a>
+         (mouseover)="showInactive()"
+         (mouseout)="hideInactive()">
+        <a class="tagToggler" *ngIf="toggleClass === 'hideInactive'">&#x270d;</a>
         <ng-container *ngFor="let tag of tags">
             <ng-container *ngIf="tag.active && tag.available">
                 <a (click)="unsetTag(tag)" class="tag{{tag.config.key}} tagActive tag{{tag.config.key}}Active"

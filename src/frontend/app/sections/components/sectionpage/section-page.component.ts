@@ -181,6 +181,9 @@ export class SectionPageComponent implements OnInit {
 
         if (sort) {
             filters['sort'] = sort;
+            if (sort === 'ratePers') {
+                filters['moreFilter'] = 'personalRateOverall:8,9,10,11,12,13,14,15';
+            }
         }
 
         if (type === 'NEWS') {
