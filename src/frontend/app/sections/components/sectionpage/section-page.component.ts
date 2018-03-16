@@ -236,6 +236,8 @@ export class SectionPageComponent implements OnInit {
             what: this.sdocSearchForm.what.toString(),
             where: this.sdocSearchForm.where.toString(),
             nearBy: this.sdocSearchForm.nearby,
+            personalRateDifficulty: this.sdocSearchForm.personalRateDifficulty,
+            techRateOverall: this.sdocSearchForm.techRateOverall,
             nearbyAddress: this.sdocSearchForm.nearbyAddress
         }));
         this.commonRoutingService.navigateByUrl(url);
