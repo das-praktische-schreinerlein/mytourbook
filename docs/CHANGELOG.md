@@ -1,5 +1,4 @@
-# Changelog
-changelog for MyTourBook
+# Changelog of MyTourBook
  
 # Versions
  

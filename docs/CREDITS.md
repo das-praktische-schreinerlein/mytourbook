@@ -1,4 +1,4 @@
-# credits for used libraries
+# credits for used libraries of MyTourBook
 
 MyTourBook is programmed in typescript and bases on angular5 on frontend-side and and express on server-site.
 As datastore it supports Solr, MySql and Sqlite.
