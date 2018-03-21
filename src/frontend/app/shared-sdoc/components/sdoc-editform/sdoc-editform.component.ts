@@ -389,7 +389,8 @@ export class SDocEditformComponent implements OnChanges {
             })];
             this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
 
-            const geoElements = this.gpxParser.parse(track.replace(/<\/trkseg>[ ]*<trkseg>/g, ''), {});
+            const statTrack = track.replace(/<\/trkseg>[ ]*<trkseg>/g, '').replace(/<\/rte>.*?<rtept /g, '<rtept ');
+            const geoElements = this.gpxParser.parse(statTrack, {});
             if (geoElements !== undefined && geoElements.length > 0) {
                 this.trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElements[0]);
             } else {
