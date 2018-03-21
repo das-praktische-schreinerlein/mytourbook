@@ -7,7 +7,7 @@
                               (perPageChange)="onPerPageChange($event)"
                               (sortChange)="onSortChange($event)"
                               (layoutChange)="onLayoutChange($event)"
-                              (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
+                              (pageChange)="onPageChange($event, false)" ></app-sdoc-list-header>
     </div>
     <div class="container">
         <app-sdoc-list [searchResult]="searchResult"
@@ -17,7 +17,7 @@
     </div>
     <div class="container">
         <app-sdoc-list-footer [searchResult]="searchResult"
-                              (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
+                              (pageChange)="onPageChange($event, true)" ></app-sdoc-list-footer>
     </div>
 </ng-template>
 
@@ -86,7 +86,7 @@
                                           (perPageChange)="onPerPageChange($event)"
                                           (sortChange)="onSortChange($event)"
                                           (layoutChange)="onLayoutChange($event)"
-                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
+                                          (pageChange)="onPageChange($event, true)" ></app-sdoc-list-header>
                 </div>
                 <div class="container list-container">
                     <app-sdoc-list [searchResult]="searchResult"

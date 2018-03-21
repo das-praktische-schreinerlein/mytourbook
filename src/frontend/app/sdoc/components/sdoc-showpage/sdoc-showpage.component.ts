@@ -125,6 +125,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                     this.pageUtils.setMetaLanguage();
 
                     me.cd.markForCheck();
+                    me.pageUtils.scrollToTop();
 
                     this.trackingProvider.trackPageView();
                     return;

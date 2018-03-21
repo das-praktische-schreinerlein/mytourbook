@@ -201,8 +201,14 @@ export class SDocEditformComponent implements OnChanges {
     @Input()
     public record: SDocRecord;
 
+    @Input()
+    public backToSearch? = false;
+
     @Output()
     public save: EventEmitter<SDocRecord> = new EventEmitter();
+
+    @Output()
+    public saveAndSearch: EventEmitter<SDocRecord> = new EventEmitter();
 
     constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef,
                 private appService: GenericAppService, private searchFormUtils: SDocSearchFormUtils,
@@ -381,11 +387,7 @@ export class SDocEditformComponent implements OnChanges {
                 name: this.editFormGroup.getRawValue()['name'],
                 type: this.record.type
             })];
-            this.editFormGroup.patchValue({gpsTrackSrc: track.replace(/<trk>/g, '\n  <trk>')
-                    .replace(/<trkseg>/g, '\n  <trkseg>')
-                    .replace(/<trkpt /g, '\n      <trkpt ')
-                    .replace(/<rpt /g, '\n    <rpt >')
-            });
+            this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
 
             const geoElements = this.gpxParser.parse(track.replace(/<\/trkseg>[ ]*<trkseg>/g, ''), {});
             if (geoElements !== undefined && geoElements.length > 0) {
@@ -403,7 +405,20 @@ export class SDocEditformComponent implements OnChanges {
         return false;
     }
 
-    submitSave(event: Event): boolean {
+    fixMap(): boolean {
+        if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
+            this.editFormGroup.getRawValue()['gpsTrackSrc'].length > 0) {
+            let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+            track = GeoGpxParser.fixXml(track);
+            track = GeoGpxParser.fixXmlExtended(track);
+            track = GeoGpxParser.reformatXml(track);
+            this.editFormGroup.patchValue({gpsTrackSrc: track });
+        }
+
+        return this.updateMap();
+    }
+
+    submitSave(event: Event, backToSearch: boolean): boolean {
         const values = this.editFormGroup.getRawValue();
 
         if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
@@ -476,7 +491,11 @@ export class SDocEditformComponent implements OnChanges {
             return false;
         }
 
-        this.save.emit(values);
+        if (backToSearch) {
+            this.saveAndSearch.emit(values);
+        } else {
+            this.save.emit(values);
+        }
 
         return false;
     }

@@ -160,10 +160,10 @@ export class SqlQueryBuilder {
                         }
                     }
                 }
+            }
 
-                if (value === undefined) {
-                    value = null;
-                }
+            if (value === undefined || value === 'undefined') {
+                value = null;
             }
             query.fields[fieldName] = value;
         }

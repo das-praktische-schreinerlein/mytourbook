@@ -177,6 +177,8 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         this.curRecordNr = page;
         this.loadRecord(this.curRecordNr);
         this.cd.markForCheck();
+        this.pageUtils.scrollToTop();
+
         return false;
     }
 
@@ -194,6 +196,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         this.listSearchForm.pageNum = +page;
         this.loadListResult();
         this.cd.markForCheck();
+        this.pageUtils.scrollToTop();
 
         return false;
     }
@@ -211,6 +214,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         }
         this.loadListResult();
         this.cd.markForCheck();
+        this.pageUtils.scrollToTop();
 
         return false;
     }
@@ -244,6 +248,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
         this.loadListResult();
         this.cd.markForCheck();
+        this.pageUtils.scrollToTop();
 
         return false;
     }
@@ -315,6 +320,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
             me.loadRecord(me.curRecordNr);
             me.showLoadingSpinner = false;
             me.cd.markForCheck();
+            me.pageUtils.scrollToTop();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
             console.error('doSearch failed:', reason);

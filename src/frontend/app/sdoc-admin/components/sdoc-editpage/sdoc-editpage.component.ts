@@ -99,6 +99,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                         this.pageUtils.setMetaLanguage();
 
                         me.cd.markForCheck();
+                        me.pageUtils.scrollToTop();
 
                         this.trackingProvider.trackPageView();
                         return;
@@ -175,11 +176,15 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
             (this.pdoc ? this.pdoc.theme : undefined));
     }
 
-    submitSave(values: {}) {
+    submitSave(values: {}, backToSearch: boolean) {
         const me = this;
 
         this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
-                me.sdocRoutingService.navigateToShow(sdoc, '');
+                if (backToSearch) {
+                    me.sdocRoutingService.navigateBackToSearch();
+                } else {
+                    me.sdocRoutingService.navigateToShow(sdoc, '');
+                }
             },
             function errorCreate(reason: any) {
                 console.error('edit updateById failed:', reason);

@@ -1,5 +1,5 @@
 import {DOCUMENT, Meta, Title} from '@angular/platform-browser';
-import {Inject, Injectable, LOCALE_ID} from '@angular/core';
+import {ElementRef, Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
@@ -75,6 +75,18 @@ export class PageUtils {
         if (element.parentNode !== null) {
             // IE
             return element.parentNode.removeChild(element);
+        }
+    }
+
+    public scrollToTop() {
+        if (window !== undefined && (typeof window.scrollTo === 'function')) {
+            window.scrollTo(0, 0);
+        }
+    }
+
+    public scrollToTopOfElement(el: ElementRef) {
+        if (el.nativeElement !== undefined && (typeof el.nativeElement.scrollIntoView === 'function')) {
+            el.nativeElement.scrollIntoView(true);
         }
     }
 }

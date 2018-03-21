@@ -16,6 +16,7 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 describe('SDocInlineSearchpageComponent', () => {
     let component: SDocInlineSearchpageComponent;
@@ -37,7 +38,8 @@ describe('SDocInlineSearchpageComponent', () => {
                 SDocSearchFormConverter,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 SDocRoutingService,
-                ToastsManager
+                ToastsManager,
+                PageUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

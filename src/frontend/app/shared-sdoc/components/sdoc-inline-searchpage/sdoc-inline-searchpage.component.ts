@@ -1,7 +1,7 @@
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component,
+    Component, ElementRef,
     EventEmitter,
     Input,
     OnChanges,
@@ -24,6 +24,7 @@ import {Layout} from '../sdoc-list/sdoc-list.component';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 
 @Component({
     selector: 'app-sdoc-inline-searchpage',
@@ -92,7 +93,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     constructor(private appService: GenericAppService, private commonRoutingService: CommonRoutingService,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
                 private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private cd: ChangeDetectorRef) {
+                private cd: ChangeDetectorRef, private elRef: ElementRef, private pageUtils: PageUtils) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -133,6 +134,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
         this.searchForm.pageNum = +page;
         this.doSearch();
+        this.pageUtils.scrollToTopOfElement(this.elRef);
 
         return false;
     }
@@ -220,6 +222,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
                 me.searchForm = sdocSearchResult.searchForm;
             }
             me.searchResultFound.emit(me.searchResult);
+
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');

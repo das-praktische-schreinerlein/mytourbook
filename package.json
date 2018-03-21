@@ -114,6 +114,7 @@
     "ts-loader": "3.1.1",
     "validator": "9.1.1",
     "vis": "4.21.0",
+    "xregexp": "4.1.1",
     "zone.js": "0.8.18"
   },
   "devDependencies": {

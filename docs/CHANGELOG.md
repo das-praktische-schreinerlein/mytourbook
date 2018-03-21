@@ -2,6 +2,27 @@
  
 # Versions
  
+## 1.3.0-alpha
+- many improvements on layout
+ 
+### new features
+- frontend: added function to fix nonstandard gpx in edit-form
+ 
+### improvements
+- common: use xregexp for validation with unicode-classes
+- frontend: added "save and back to search"-button on edit-form
+ 
+### bug fixes
+- common: fixed validation -> was to restrictive
+- frontend: scroll to top of page on routechange, of element when pagenumchange
+ 
+### breaking changes
+- none
+ 
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+ 
+ 
 ## 1.2.0
 - added admin-ui to manage data, data-exporter, image-manager
 - added many new features like tagclouds, topimages, persontags, more responsive layouts

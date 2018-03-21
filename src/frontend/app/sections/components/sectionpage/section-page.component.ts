@@ -84,6 +84,7 @@ export class SectionPageComponent implements OnInit {
                     this.pageUtils.setMetaLanguage();
 
                     me.cd.markForCheck();
+                    me.pageUtils.scrollToTop();
 
                     this.trackingProvider.trackPageView();
                     return;

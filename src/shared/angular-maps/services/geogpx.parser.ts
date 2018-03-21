@@ -3,12 +3,84 @@ import {GeoElement, GeoElementType, GeoParser, LatLngTime} from './geo.parser';
 import {DateUtils} from '../../commons/utils/date.utils';
 
 export class GeoGpxParser extends GeoParser {
+    public static fixXml(xml: string): string {
+        if (!xml) {
+            return xml;
+        }
+
+        xml = xml.replace('<--?xml version="1.0" encoding="UTF-8" standalone="no" ?-->',
+            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>');
+        xml = xml.replace('<!--?xml version="1.0" encoding="UTF-8" standalone="no" ?-->',
+            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>');
+        xml = xml.replace('</text><time>',
+            '</text></link><time>');
+        xml = xml.trim();
+
+        return xml;
+    }
+
+    public static fixXmlExtended(xml: string): string {
+        if (!xml) {
+            return xml;
+        }
+
+        xml = xml.replace(/^[ \r\n]+/, '');
+        xml = xml.replace(/[ \r\n]+$/, '');
+        xml = xml.replace(/'/g, '"');
+
+        if (!(xml.indexOf('<gpx') > 0)) {
+            xml = '<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1"' +
+                ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' +
+                ' xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">' + xml;
+        }
+        if (!(xml.startsWith('<?xml'))) {
+            xml = '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>' + xml;
+        }
+
+        if (!(xml.endsWith('</gpx>'))) {
+            xml = xml + '</gpx>';
+        }
+
+        return xml;
+    }
+
+    public static reformatXml(xml: string): string {
+        if (!xml) {
+            return xml;
+        }
+
+        xml = xml.replace(/[\r\n]/g, ' ')
+            .replace(/[ ]+/g, ' ')
+
+            .replace(/<gpx /g, '\n<gpx ')
+            .replace(/<gpx>/g, '\n<gpx>')
+            .replace(/<\/gpx>/g, '\n</gpx>')
+
+            .replace(/<trk /g, '\n  <trk ')
+            .replace(/<trk>/g, '\n  <trk>')
+            .replace(/<\/trk>/g, '\n  </trk>')
+
+            .replace(/<trkseg /g, '\n  <trkseg ')
+            .replace(/<trkseg>/g, '\n  <trkseg>')
+            .replace(/<\/trkseg>/g, '\n  </trkseg>')
+
+            .replace(/<rte /g, '\n  <rte ')
+            .replace(/<rte>/g, '\n  <rte>')
+            .replace(/<\/rte>/g, '\n  </rte>')
+
+            .replace(/<trkpt /g, '\n      <trkpt ')
+            .replace(/<rtept /g, '\n    <rtept ')
+        ;
+
+        return xml;
+    }
+
     parse(xml: string, options): GeoElement[] {
         if (!xml) {
             console.error('cant parse GeoGpxParser: empty');
             return;
         }
-        xml = this.fixXml(xml);
+        xml = GeoGpxParser.fixXml(xml);
         if (!(xml.startsWith('<?xml'))) {
             console.error('cant parse GeoGpxParser: no valid xml');
             return;
@@ -27,21 +99,6 @@ export class GeoGpxParser extends GeoParser {
         }
 
         return elements;
-    }
-
-    fixXml(xml: string): string {
-        if (!xml) {
-            return xml;
-        }
-
-        xml = xml.replace('<--?xml version="1.0" encoding="UTF-8" standalone="no" ?-->',
-            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>');
-        xml = xml.replace('<!--?xml version="1.0" encoding="UTF-8" standalone="no" ?-->',
-            '<?xml version="1.0" encoding="UTF-8" standalone="no" ?>');
-        xml = xml.replace('</text><time>',
-            '</text></link><time>');
-
-        return xml;
     }
 
     _parseGpxDom(gpxDom, options): GeoElement[] {

@@ -186,7 +186,8 @@
     <ng-template #submitRow>
         <div class="row">
             <div class="col-sm-12 form-inline input-group input-group-sm">
-                <button type="submit" class="btn btn-action btn-sm" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
+                <button type="submit" (click)="submitSave($event, false)" class="btn btn-action btn-sm" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
+                <button type="submit" (click)="submitSave($event, true)" *ngIf="backToSearch" class="btn btn-action btn-sm" i18n="button editAndSearch sdoc|Buttontext to editAndSearch sdoc@@button.form.sdoc.editAndSearch">Save and Search</button>
             </div>
         </div>
     </ng-template>
@@ -196,7 +197,8 @@
         <div class="col-sm-12 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="gpsTrackSrc label|Label for field: gpsTrackSrc@@label.editform.sdoc.gpsTrackSrc">Track:</label>
             <textarea formControlName="gpsTrackSrc" class="form-control" type="text" placeholder="gpsTrackSrc" i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpsTrackSrc@@placeholder.form.sdoc.gpsTrackSrc"></textarea>
-            <button (click)="updateMap()">Update</button>
+            <button (click)="updateMap()" i18n="updateGpsTrackMap label|Label for button: updateGpsTrackMap@@label.editform.sdoc.updateGpsTrackMap">Update</button>
+            <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editform.sdoc.fixGpsTrackSrc">Fix errors</button>
         </div>
         <ng-container *ngIf="trackStatistic.posStart !== undefined">
             <div class="col-sm-12 form-inline input-group input-group-sm">

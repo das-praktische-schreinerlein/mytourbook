@@ -207,7 +207,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    onPageChange(page: number) {
+    onPageChange(page: number, scroll: boolean) {
         if (!this.initialized) {
             // ignore changes if not initialized
             return;
@@ -216,6 +216,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.searchForm.pageNum = +page;
         // console.log('onPageChange: redirect to page', page);
         this.redirectToSearch();
+
+        if (scroll) {
+            this.pageUtils.scrollToTop();
+        }
 
         return false;
     }
