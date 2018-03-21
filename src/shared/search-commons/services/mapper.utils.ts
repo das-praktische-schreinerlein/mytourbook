@@ -70,9 +70,13 @@ export class MapperUtils {
             } else {
                 value = adapterDocument[adapterFieldName];
             }
+            if (value === undefined) {
+                return undefined;
+            }
             if (typeof value === 'string') {
                 value = Number.parseFloat(value);
             }
+            value = Number(value);
         }
 
         return value;
