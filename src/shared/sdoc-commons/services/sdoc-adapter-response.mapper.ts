@@ -126,12 +126,12 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         const values = {};
         values['id'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'id', undefined);
         values['imageId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'image_id_i', undefined);
-        values['locId'] =  this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_i', undefined);
-        values['locIdParent'] =  this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_parent_i', undefined);
-        values['routeId'] =  this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'route_id_i', undefined);
-        values['trackId'] =  this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'track_id_i', undefined);
-        values['tripId'] =  this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'trip_id_i', undefined);
-        values['newsId'] =  this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'news_id_i', undefined);
+        values['locId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_i', undefined);
+        values['locIdParent'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_parent_i', undefined);
+        values['routeId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'route_id_i', undefined);
+        values['trackId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'track_id_i', undefined);
+        values['tripId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'trip_id_i', undefined);
+        values['newsId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'news_id_i', undefined);
 
         const subtypeField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'subtypes_ss')];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
