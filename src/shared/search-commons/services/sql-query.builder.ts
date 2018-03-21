@@ -28,6 +28,8 @@ export interface TableFacetConfig {
     selectSql?: string;
     constValues?: string [];
     action: string;
+    filterField?: string;
+    filterFields?: string[];
 }
 
 export interface OptionalGroupByConfig {
@@ -448,8 +450,17 @@ export class SqlQueryBuilder {
                 return undefined;
             }
 
-            realFieldName = tableConfig.facetConfigs[fieldName].selectField || tableConfig.facetConfigs[fieldName].filterField;
             action = tableConfig.facetConfigs[fieldName].action || action;
+            realFieldName = tableConfig.facetConfigs[fieldName].selectField || tableConfig.facetConfigs[fieldName].filterField;
+
+            if (realFieldName === undefined && tableConfig.facetConfigs[fieldName].filterFields) {
+                const filters = [];
+                for (realFieldName of tableConfig.facetConfigs[fieldName].filterFields) {
+                    filters.push(this.generateFilter(realFieldName, action, value));
+                }
+
+                return '(' + filters.join(' or ') + ')';
+            }
         }
         if (realFieldName === undefined && tableConfig.filterMapping.hasOwnProperty(fieldName)) {
             realFieldName = tableConfig.filterMapping[fieldName];

@@ -16,6 +16,12 @@ export class SDocSqlMediadbConfig {
                     groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS k_keywords']
                 },
                 {
+                    from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
+                    'LEFT JOIN tour kt ON kategorie_tour.t_id=kt.t_id',
+                    triggerParams: ['route_id_i', 'route_id_is'],
+                    groupByFields: ['GROUP_CONCAT(kt.t_id SEPARATOR ", ") AS k_kt_ids']
+                },
+                {
                     from: ' ',
                     triggerParams: ['id', 'loadTrack'],
                     groupByFields: ['k_gpstracks_gpx_source']
@@ -148,13 +154,17 @@ export class SDocSqlMediadbConfig {
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)'
                 },
+                'route_id_i': {
+                    filterFields: ['kategorie.t_id', 'kt.t_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'route_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.t_id) AS count, tour.t_id AS value,' +
                     ' tour.t_name as label, tour.t_id as id' +
                     ' FROM tour LEFT JOIN kategorie ON kategorie.t_id = tour.t_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
-                    filterField: 't_id',
+                    filterFields: ['kategorie.t_id', 'kt.t_id'],
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'trip_id_is': {
@@ -596,6 +606,14 @@ export class SDocSqlMediadbConfig {
                     groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS t_keywords']
                 },
                 {
+                    from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ' +
+                    'LEFT JOIN kategorie kt ON kategorie_tour.k_id=kt.k_id ' +
+                    'LEFT JOIN kategorie ON tour.t_id=kategorie.t_id',
+                    triggerParams: ['id', 'track_id_i', 'track_id_is'],
+                    groupByFields: ['GROUP_CONCAT(kategorie.k_id SEPARATOR ", ") AS t_k_ids',
+                        'GROUP_CONCAT(kt.k_id SEPARATOR ", ") AS t_kt_ids']
+                },
+                {
                     from: ' ',
                     triggerParams: ['id', 'loadTrack'],
                     groupByFields: ['t_gpstracks_gpx']
@@ -722,13 +740,18 @@ export class SDocSqlMediadbConfig {
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
                 },
+                'track_id_i': {
+                    filterFields: ['kategorie.k_id', 'kt.k_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'track_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.k_id) AS count, kategorie.k_id AS value,' +
                     ' kategorie.k_name as label, kategorie.k_id as id' +
                     ' FROM kategorie INNER JOIN tour ON kategorie.t_id = tour.t_id ' +
                     ' GROUP BY value, label, id' +
-                    ' ORDER BY label'
-                    // TODO: filterSql: t_id in (select t_id from kategorie where k_id in (:track_id_is:))
+                    ' ORDER BY label',
+                    filterFields: ['kategorie.k_id', 'kt.k_id'],
+                    action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
                     constValues: ['route', 'track', 'image', 'location', 'trip', 'news'],
