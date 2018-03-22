@@ -145,14 +145,20 @@
     <ng-template #inputTextTech let-key="key" let-formControlName="formControlName">
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}">
+            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}" [attr.list]="formControlName">
+            <datalist [attr.id]="formControlName" *ngIf="inputSuggestionValues[formControlName]">
+                <option *ngFor="let suggestion of inputSuggestionValues[formControlName]">{{suggestion}}</option>
+            </datalist>
         </div>
     </ng-template>
 
     <ng-template #inputText let-key="key" let-formControlName="formControlName">
         <div class="col-sm-6 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}">
+            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}" [attr.list]="formControlName">
+            <datalist [attr.id]="formControlName" *ngIf="inputSuggestionValues[formControlName]">
+                <option *ngFor="let suggestion of inputSuggestionValues[formControlName]">{{suggestion}}</option>
+            </datalist>
         </div>
     </ng-template>
 

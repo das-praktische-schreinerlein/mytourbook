@@ -18,6 +18,7 @@ import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.pars
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {DateUtils} from '../../../../shared/commons/utils/date.utils';
+import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -82,6 +83,41 @@ export class SDocEditformComponent implements OnChanges {
         'persons': {},
         'playlists': {},
     };
+    private inputSuggestionValueConfig = {
+        'sdocdatainfo.baseloc': {
+            'facetName': 'data_info_baseloc_s'
+        },
+        'sdocdatainfo.destloc': {
+            'facetName': 'data_info_destloc_s'
+        },
+        'sdocdatainfo.guides': {
+            'facetName': 'data_info_guides_s'
+        },
+        'sdocdatainfo.region': {
+            'facetName': 'data_info_region_s'
+        },
+        'sdocratetech.bergtour': {
+            'facetName': 'rate_tech_bergtour_ss'
+        },
+        'sdocratetech.firn': {
+            'facetName': 'rate_tech_firn_ss'
+        },
+        'sdocratetech.gletscher': {
+            'facetName': 'rate_tech_gletscher_ss'
+        },
+        'sdocratetech.klettern': {
+            'facetName': 'rate_tech_klettern_ss'
+        },
+        'sdocratetech.ks': {
+            'facetName': 'rate_tech_ks_ss'
+        },
+        'sdocratetech.overall': {
+            'facetName': 'rate_tech_overall_ss'
+        },
+        'sdocratetech.schneeschuh': {
+            'facetName': 'rate_tech_schneeschuh_ss'
+        },
+    };
 
     public optionsSelect: {
         'sdocratepers.gesamt': IMultiSelectOption[];
@@ -121,6 +157,8 @@ export class SDocEditformComponent implements OnChanges {
         'trackId': [],
         'tripId': []
     };
+
+    public inputSuggestionValues = {};
 
     public settingsSelectWhere = this.defaultSelectSetting;
     public settingsSelectActionType = this.defaultSelectSetting;
@@ -255,126 +293,6 @@ export class SDocEditformComponent implements OnChanges {
         return DateUtils.dateToInputString(value);
     }
 
-    private updateData() {
-        if (this.record === undefined) {
-            this.editFormGroup = this.fb.group({});
-            return;
-        }
-
-        const config = {
-            dateshow: [DateUtils.dateToInputString(this.record.dateshow)],
-            datestart: [DateUtils.dateToInputString(this.record.datestart)],
-            dateend: [DateUtils.dateToInputString(this.record.dateend)],
-            locIdParent: [this.record.locIdParent],
-            gpsTrackSrc: [this.record.gpsTrackSrc]
-        };
-
-        const fields = this.record.toJSON();
-        for (const key in fields) {
-            if (fields.hasOwnProperty(key) && !config.hasOwnProperty(key)) {
-                config[key] = [fields[key]];
-            }
-        }
-
-        // static lists
-        this.createSelectOptions(this.stringBeanFieldConfig, config, this.optionsSelect);
-        this.createSelectOptions(this.numBeanFieldConfig, config, this.optionsSelect);
-        this.createSelectOptions(this.stringArrayBeanFieldConfig, config, this.optionsSelect);
-
-        if (config['subtype'] && config['subtype'].length > 0 && config['subtype'][0]) {
-            config['subtype'][0] = (config['subtype'][0]  + '').replace(/ac_/g, '').replace(/loc_/g, '');
-        }
-
-        this.editFormGroup = this.fb.group(config);
-
-        this.updateMap();
-        this.updateKeywordSuggestions();
-
-        const me = this;
-        const searchForm = new SDocSearchForm({type: this.record.type});
-        const rawValues = this.editFormGroup.getRawValue();
-        this.sdocDataService.search(searchForm,
-            {
-                showFacets: true, // []
-                loadTrack: false,
-                showForm: false
-            }).then(function doneSearch(sdocSearchResult) {
-            if (sdocSearchResult !== undefined) {
-                // console.log('update searchResult', sdocSearchResult);
-                const whereValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getWhereValues(sdocSearchResult));
-                me.optionsSelect['locId'] = me.searchFormUtils.moveSelectedToTop(
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
-                        false), rawValues['locId']);
-                me.optionsSelect['locIdParent'] = me.searchFormUtils.moveSelectedToTop(
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
-                        false), rawValues['locIdParent']);
-
-                me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    me.searchFormUtils.getPlaylistValues(sdocSearchResult), true, [], true);
-                me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                    me.searchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
-
-                const routeValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getRouteValues(sdocSearchResult));
-                me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(routeValues, true, [],
-                        false), rawValues['routeId']);
-
-                const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTrackValues(sdocSearchResult));
-                me.optionsSelect['trackId'] = me.searchFormUtils.moveSelectedToTop(
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(trackValues, true, [],
-                        false), rawValues['trackId']);
-                const tripValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTripValues(sdocSearchResult));
-                me.optionsSelect['tripId'] = me.searchFormUtils.moveSelectedToTop(
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(tripValues, true, [],
-                        false), rawValues['tripId']);
-            } else {
-                // console.log('empty searchResult', sdocSearchResult);
-                me.optionsSelect['locId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
-                me.optionsSelect['locIdParent'] =
-                    me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
-                me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
-                me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
-                me.optionsSelect['routeId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
-                me.optionsSelect['trackId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
-                me.optionsSelect['tripId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
-            }
-
-            me.cd.markForCheck();
-
-            me.editFormGroup.valueChanges.subscribe((data) => {
-               me.updateKeywordSuggestions();
-            });
-        }).catch(function errorSearch(reason) {
-            me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
-            console.error('doSearch failed:', reason);
-            me.cd.markForCheck();
-        });
-    }
-
-    updateKeywordSuggestions(): boolean {
-        const config = this.appService.getAppConfig();
-        if (BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions')) {
-            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions');
-            const prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix');
-            this.keywordSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
-            this.cd.markForCheck();
-        } else {
-            console.warn('no valid keywordSugestions found');
-            this.keywordSuggestions = [];
-        }
-        if (BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions')) {
-            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions');
-            const prefix = BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix');
-            this.personTagSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
-            this.cd.markForCheck();
-        } else {
-            console.warn('no valid personTagSuggestions found');
-            this.personTagSuggestions = [];
-        }
-
-        return true;
-    }
-
     updateMap(): boolean {
         if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
             this.editFormGroup.getRawValue()['gpsTrackSrc'].length > 0) {
@@ -499,6 +417,153 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         return false;
+    }
+
+    private updateData() {
+        if (this.record === undefined) {
+            this.editFormGroup = this.fb.group({});
+            return;
+        }
+
+        const config = {
+            dateshow: [DateUtils.dateToInputString(this.record.dateshow)],
+            datestart: [DateUtils.dateToInputString(this.record.datestart)],
+            dateend: [DateUtils.dateToInputString(this.record.dateend)],
+            locIdParent: [this.record.locIdParent],
+            gpsTrackSrc: [this.record.gpsTrackSrc]
+        };
+
+        const fields = this.record.toJSON();
+        for (const key in fields) {
+            if (fields.hasOwnProperty(key) && !config.hasOwnProperty(key)) {
+                config[key] = [fields[key]];
+            }
+        }
+
+        // static lists
+        this.createSelectOptions(this.stringBeanFieldConfig, config, this.optionsSelect);
+        this.createSelectOptions(this.numBeanFieldConfig, config, this.optionsSelect);
+        this.createSelectOptions(this.stringArrayBeanFieldConfig, config, this.optionsSelect);
+
+        if (config['subtype'] && config['subtype'].length > 0 && config['subtype'][0]) {
+            config['subtype'][0] = (config['subtype'][0]  + '').replace(/ac_/g, '').replace(/loc_/g, '');
+        }
+
+        this.editFormGroup = this.fb.group(config);
+
+        this.updateMap();
+        this.updateKeywordSuggestions();
+
+        const me = this;
+        const searchForm = new SDocSearchForm({type: this.record.type});
+        this.sdocDataService.search(searchForm,
+            {
+                showFacets: true, // []
+                loadTrack: false,
+                showForm: false
+            }).then(function doneSearch(sdocSearchResult: SDocSearchResult) {
+                me.updateOptionValues(sdocSearchResult);
+                me.updateSuggestionValues(sdocSearchResult);
+                me.cd.markForCheck();
+
+                me.editFormGroup.valueChanges.subscribe((data) => {
+                    me.updateKeywordSuggestions();
+                });
+            }).catch(function errorSearch(reason) {
+                me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
+                console.error('doSearch failed:', reason);
+                me.cd.markForCheck();
+            });
+    }
+
+    private updateOptionValues(sdocSearchResult: SDocSearchResult): boolean {
+        const me = this;
+
+        if (sdocSearchResult !== undefined) {
+            const rawValues = this.editFormGroup.getRawValue();
+            // console.log('update searchResult', sdocSearchResult);
+            const whereValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getWhereValues(sdocSearchResult));
+            me.optionsSelect['locId'] = me.searchFormUtils.moveSelectedToTop(
+                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
+                    false), rawValues['locId']);
+            me.optionsSelect['locIdParent'] = me.searchFormUtils.moveSelectedToTop(
+                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
+                    false), rawValues['locIdParent']);
+
+            me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.searchFormUtils.getPlaylistValues(sdocSearchResult), true, [], true);
+            me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.searchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
+
+            const routeValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getRouteValues(sdocSearchResult));
+            me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(
+                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(routeValues, true, [],
+                    false), rawValues['routeId']);
+
+            const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTrackValues(sdocSearchResult));
+            me.optionsSelect['trackId'] = me.searchFormUtils.moveSelectedToTop(
+                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(trackValues, true, [],
+                    false), rawValues['trackId']);
+            const tripValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTripValues(sdocSearchResult));
+            me.optionsSelect['tripId'] = me.searchFormUtils.moveSelectedToTop(
+                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(tripValues, true, [],
+                    false), rawValues['tripId']);
+        } else {
+            // console.log('empty searchResult', sdocSearchResult);
+            me.optionsSelect['locId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+            me.optionsSelect['locIdParent'] =
+                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+            me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+            me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
+            me.optionsSelect['routeId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+            me.optionsSelect['trackId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+            me.optionsSelect['tripId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+        }
+
+        return true;
+    }
+
+    private updateSuggestionValues(sdocSearchResult: SDocSearchResult): boolean {
+        for (const suggestionName in this.inputSuggestionValueConfig) {
+            const suggestionConfig = this.inputSuggestionValueConfig[suggestionName];
+            const values = [];
+            if (suggestionConfig.facetName) {
+                if (sdocSearchResult !== undefined && sdocSearchResult.facets !== undefined && sdocSearchResult.facets.facets.size > 0) {
+                    const facets = this.searchFormUtils.getFacetValues(sdocSearchResult, suggestionConfig.facetName, '', '');
+                    for (const value of facets) {
+                        values.push(value[1]);
+                    }
+                }
+            }
+
+            this.inputSuggestionValues[suggestionName.replace('.', '_')] = values;
+        }
+
+        return true;
+    }
+
+    private updateKeywordSuggestions(): boolean {
+        const config = this.appService.getAppConfig();
+        if (BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions')) {
+            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions');
+            const prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix');
+            this.keywordSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
+            this.cd.markForCheck();
+        } else {
+            console.warn('no valid keywordSugestions found');
+            this.keywordSuggestions = [];
+        }
+        if (BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions')) {
+            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions');
+            const prefix = BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix');
+            this.personTagSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
+            this.cd.markForCheck();
+        } else {
+            console.warn('no valid personTagSuggestions found');
+            this.personTagSuggestions = [];
+        }
+
+        return true;
     }
 
     private createSelectOptions(definitions: {}, values: {}, optionsSelect: {}): void {

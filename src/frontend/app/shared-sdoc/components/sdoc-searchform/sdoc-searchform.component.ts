@@ -39,7 +39,7 @@ export class SDocSearchformComponent implements OnInit {
     private geoLocationService = new GeoLocationService();
     private defaultSeLectSettings: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
             containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
             showUncheckAll: true};
@@ -62,7 +62,7 @@ export class SDocSearchformComponent implements OnInit {
     public settingsSelectWhen = this.defaultSeLectSettings;
     public settingsSelectWhere: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
             containerClasses: 'dropdown-inline fullwidth',
             enableSearch: true,
             showUncheckAll: true,
@@ -72,7 +72,7 @@ export class SDocSearchformComponent implements OnInit {
     public settingsSelectActionType = this.defaultSeLectSettings;
     public settingsSelectType: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
+            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
             containerClasses: 'dropdown-inline fullwidth',
             enableSearch: false};
     public settingsSelectTechRateOverall = this.defaultSeLectSettings;
@@ -91,70 +91,70 @@ export class SDocSearchformComponent implements OnInit {
         checked: 'Zeit ausgewählt',
         checkedPlural: 'Zeiten ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Jederzeit'};
     public textsSelectWhere: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Region ausgewählt',
         checkedPlural: 'Regionen ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Überall'};
     public textsSelectWhat: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Eigenschaft ausgewählt',
         checkedPlural: 'Eigenschaften ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'alles'};
     public textsSelectActionType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Action ausgewählt',
         checkedPlural: 'Aktion ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'alles'};
     public textsSelectType: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Typ ausgewählt',
         checkedPlural: 'Typen ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectTechRateOverall: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Bewertung ausgewählt',
         checkedPlural: 'Bewertung ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectTechDataDistance: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Strecke ausgewählt',
         checkedPlural: 'Strecke ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectTechDataAscent: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Aufstieg ausgewählt',
         checkedPlural: 'Aufstieg ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectTechDataAltitudeMax: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Hähe ausgewählt',
         checkedPlural: 'Höhen ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectTechDataDuration: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Dauer ausgewählt',
         checkedPlural: 'Dauer ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
 
     public textsSelectPersonalRateOverall: IMultiSelectTexts = { checkAll: 'Alle auswählen',
@@ -162,28 +162,28 @@ export class SDocSearchformComponent implements OnInit {
         checked: 'Bewertung ausgewählt',
         checkedPlural: 'Bewertung ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectPersonalRateDifficulty: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Bewertung ausgewählt',
         checkedPlural: 'Bewertung ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectPlaylists: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Playlist ausgewählt',
         checkedPlural: 'Playlist ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
     public textsSelectPersons: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Person ausgewählt',
         checkedPlural: 'Person ausgewählt',
         searchPlaceholder: 'Find',
-        defaultTitle: '--',
+        defaultTitle: '',
         allSelected: 'Alle'};
 
     public humanReadableSearchForm: SafeHtml = '';
@@ -458,6 +458,7 @@ export class SDocSearchformComponent implements OnInit {
         } else {
             this.humanReadableSearchForm = this.sanitizer.bypassSecurityTrustHtml(
                 this.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
+            me.cd.markForCheck();
         }
     }
 

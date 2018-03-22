@@ -11,49 +11,25 @@ export class SDocSearchFormUtils {
     }
 
     getWhenValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
         return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'month_is', 'month', 'Monat'),
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'week_is', 'week', 'Woche'));
+            this.getFacetValues(searchResult, 'month_is', 'month', 'Monat'),
+            this.getFacetValues(searchResult, 'week_is', 'week', 'Woche'));
     }
 
     getWhereValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'loc_lochirarchie_txt', '', ''));
+         return this.getFacetValues(searchResult, 'loc_lochirarchie_txt', '', '');
     }
 
     getWhatValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'keywords_txt', '', ''));
+         return this.getFacetValues(searchResult, 'keywords_txt', '', '');
     }
 
     getActionTypeValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'actiontype_ss', '', ''));
+         return this.getFacetValues(searchResult, 'actiontype_ss', '', '');
     }
 
     getTypeValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'type_txt', '', ''));
+         return this.getFacetValues(searchResult, 'type_txt', '', '');
     }
 
     getTypeLimit(searchResult: SDocSearchResult): number {
@@ -65,112 +41,61 @@ export class SDocSearchFormUtils {
     }
 
     getPersonalRateOverallValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'rate_pers_gesamt_is', '', 'filter.sdocratepers.gesamt.'));
+         return this.getFacetValues(searchResult, 'rate_pers_gesamt_is', '', 'filter.sdocratepers.gesamt.');
     }
 
     getPersonalRateDifficultyValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'rate_pers_schwierigkeit_is', '',
-                'label.sdocratepers.schwierigkeit.'));
+         return this.getFacetValues(searchResult, 'rate_pers_schwierigkeit_is', '',
+                'label.sdocratepers.schwierigkeit.');
     }
 
     getTechRateOverallValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'rate_tech_overall_ss', '', ''));
+         return this.getFacetValues(searchResult, 'rate_tech_overall_ss', '', '');
     }
 
     getTechDataAscentValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'data_tech_alt_asc_facet_is', '', ''));
+         return this.getFacetValues(searchResult, 'data_tech_alt_asc_facet_is', '', '');
     }
 
     getTechDataAltitudeMaxValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'data_tech_alt_max_facet_is', '', ''));
+         return this.getFacetValues(searchResult, 'data_tech_alt_max_facet_is', '', '');
     }
 
     getTechDataDistanceValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'data_tech_dist_facets_fs', '', ''));
+         return this.getFacetValues(searchResult, 'data_tech_dist_facets_fs', '', '');
     }
 
     getTechDataDurationValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'data_tech_dur_facet_fs', '', ''));
+         return this.getFacetValues(searchResult, 'data_tech_dur_facet_fs', '', '');
     }
 
     getPlaylistValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'playlists_txt', '', ''));
+         return this.getFacetValues(searchResult, 'playlists_txt', '', '');
     }
 
     getPersonValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'persons_txt', '', ''));
+         return this.getFacetValues(searchResult, 'persons_txt', '', '');
     }
 
     getRouteValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'route_id_is', '', ''));
+         return this.getFacetValues(searchResult, 'route_id_is', '', '');
     }
 
     getTrackValues(searchResult: SDocSearchResult): any[] {
-        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
-            return [];
-        }
-
-        return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'track_id_is', '', ''));
+        return this.getFacetValues(searchResult, 'track_id_is', '', '');
     }
 
     getTripValues(searchResult: SDocSearchResult): any[] {
+        return this.getFacetValues(searchResult, 'trip_id_is', '', '');
+    }
+
+    getFacetValues(searchResult: SDocSearchResult, facetName: string, valuePrefix: string, labelPrefix: string): any[] {
         if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
             return [];
         }
 
         return [].concat(
-            this.searchParameterUtils.extractFacetValues(searchResult.facets, 'trip_id_is', '', ''));
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, facetName, valuePrefix, labelPrefix));
     }
 
     getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,

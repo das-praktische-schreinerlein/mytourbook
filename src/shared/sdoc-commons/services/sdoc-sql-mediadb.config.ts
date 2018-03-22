@@ -692,6 +692,18 @@ export class SDocSqlMediadbConfig {
                     selectField: 'ROUND(ROUND(t_route_dauer * 2) / 2, 1)',
                     orderBy: 'value asc'
                 },
+                'data_info_guides_s': {
+                    selectField: 'tour.t_desc_fuehrer',
+                    orderBy: 'value asc'
+                },
+                'data_info_baseloc_s': {
+                    selectField: 'tour.t_desc_talort',
+                    orderBy: 'value asc'
+                },
+                'data_info_region_s': {
+                    selectField: 'tour.t_desc_gebiet',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                     '  kw_name AS value ' +
@@ -731,6 +743,18 @@ export class SDocSqlMediadbConfig {
                 },
                 'rate_pers_schwierigkeit_is': {
                     selectField: 't_rate_schwierigkeit',
+                    orderBy: 'value asc'
+                },
+                'rate_tech_klettern_ss': {
+                    selectField: 't_rate_klettern',
+                    orderBy: 'value asc'
+                },
+                'rate_tech_ks_ss': {
+                    selectField: 't_rate_ks',
+                    orderBy: 'value asc'
+                },
+                'rate_tech_schneeschuh_ss': {
+                    selectField: 't_rate_schneeschuh',
                     orderBy: 'value asc'
                 },
                 'rate_tech_overall_ss': {

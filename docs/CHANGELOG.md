@@ -6,15 +6,22 @@
 - many improvements on layout
  
 ### new features
-- frontend: added function to fix nonstandard gpx in edit-form
+- none
  
 ### improvements
 - common: use xregexp for validation with unicode-classes
+- frontend: improved list-layout
+- frontend: highlight labels of form-inputs which are set
 - frontend: added "save and back to search"-button on edit-form
+- frontend: added function to fix nonstandard gpx in edit-form
+- frontend: added datalist for text-input-fields with suggestions from facets
+- frontend: improved code
+- backend: added more facets/filters/fields to mediadb-adapter
  
 ### bug fixes
 - common: fixed validation -> was to restrictive
 - frontend: scroll to top of page on routechange, of element when pagenumchange
+- frontend: fixed encodeUri for angular-http-client 
  
 ### breaking changes
 - none
