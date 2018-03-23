@@ -3,13 +3,14 @@
 # Versions
  
 ## 1.3.0-alpha
-- many improvements on layout
+- many improvements on layout, usability, code
  
 ### new features
-- none
+- installer: added sql-script to copy data from mediadb to mytb and prepare for import to solr
  
 ### improvements
 - common: use xregexp for validation with unicode-classes
+- common: added ability to facet by year (for mytb, mediadb)
 - frontend: improved list-layout
 - frontend: highlight labels of form-inputs which are set
 - frontend: added "save and back to search"-button on edit-form
@@ -17,11 +18,13 @@
 - frontend: added datalist for text-input-fields with suggestions from facets
 - frontend: improved code
 - backend: added more facets/filters/fields to mediadb-adapter
+- backend: improved sdoc-loader
  
 ### bug fixes
 - common: fixed validation -> was to restrictive
 - frontend: scroll to top of page on routechange, of element when pagenumchange
-- frontend: fixed encodeUri for angular-http-client 
+- frontend: fixed encodeUri for angular-http-client
+- backend: fixed sql-adataper (max, greatest, IN_CSV)  
  
 ### breaking changes
 - none
