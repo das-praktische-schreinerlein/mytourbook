@@ -27,6 +27,7 @@ export class SDocFileUtils {
                 record[fieldName] = record[mapping[fieldName]];
             }
             record['id'] = idValidator.sanitize(record['id'] + '');
+            record['subtype_s'] = record['subtype_s'] ? record['subtype_s'].replace(/[-a-zA-Z_]+/g, '') : '';
 
             // clean keywords
             record['keywords_txt'] = (record['keywords_txt'] !== undefined ?

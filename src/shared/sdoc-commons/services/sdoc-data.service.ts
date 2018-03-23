@@ -14,11 +14,26 @@ import {SDocDataInfoRecord, SDocDataInfoRecordRelation} from '../model/records/s
 import {SDocDataInfoRecordSchema} from '../model/schemas/sdocdatainfo-record-schema';
 import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 import {ActionTagForm} from '../../commons/utils/actiontag.utils';
-import {utils} from 'js-data';
+import {Mapper, utils} from 'js-data';
+import {Adapter} from 'js-data-adapter';
 
 export class SDocDataService extends SDocSearchService {
     private responseMapper: SDocAdapterResponseMapper;
     private writable = false;
+
+    public defaultLocIdParent = 1;
+    public typeMapping = {
+        image: 'imageId',
+        track: 'trackId',
+        location: 'locId',
+        route: 'routeId',
+        trip: 'tripId',
+        news: 'newsId'
+    };
+    public idMappings = ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId'];
+    public idMappingAliases = {
+        'locIdParent': 'locId'
+    };
 
     constructor(dataStore: SDocDataStore) {
         super(dataStore);
@@ -52,7 +67,7 @@ export class SDocDataService extends SDocSearchService {
         }
 
         if (record === undefined || !record.isValid()) {
-            utils.reject('sdo-values not valid');
+            return utils.reject('sdo-values not valid');
         }
 
         return this.dataStore.create('sdoc', record, opts);
@@ -85,7 +100,7 @@ export class SDocDataService extends SDocSearchService {
         }
 
         if (record === undefined || !record.isValid()) {
-            utils.reject('sdoc-values not valid');
+            return utils.reject('sdoc-values not valid');
         }
 
         return this.dataStore.update('sdoc', id, record, opts);
@@ -97,6 +112,119 @@ export class SDocDataService extends SDocSearchService {
         }
 
         return this.dataStore.doActionTag('sdoc', sdocRecord, actionTagForm, opts);
+    }
+
+    importRecord(record: SDocRecord, recordIdMapping: {}, recordRecoverIdMapping: {}, opts?: any): Promise<SDocRecord> {
+        opts = opts || {};
+
+        const mapper: Mapper = this.getMapper('sdoc');
+        const adapter: Adapter = this.getAdapterForMapper('sdoc');
+        if (!this.isWritable()) {
+            throw new Error('SDocDataService configured: not writable');
+        }
+
+        const query = {
+            where: {
+                name_s: {
+                    'in': [record.name]
+                },
+                type_txt: {
+                    'in': [record.type.toLowerCase()]
+                }
+            }
+        };
+
+        const myMappings = {};
+        const me = this;
+        return adapter.findAll(mapper, query, opts)
+            .then(searchResult => {
+                if (!searchResult || searchResult.length <= 0) {
+                    return utils.resolve(undefined);
+                }
+                return utils.resolve(searchResult[0]);
+            }).then(function recordsDone(sdocRecord: SDocRecord) {
+                if (sdocRecord !== undefined) {
+                    console.log('EXISTING - record', record.type + ' ' + record.name);
+                    return utils.resolve(sdocRecord);
+                    // console.log('UPDATE - record', record.name);
+                    // return dataService.updateById(sdocRecord.id, record);
+                }
+
+                // new record: map refIds
+                record.subtype = record.subtype ? record.subtype.replace(/[-a-zA-Z_]+/g, '') : '';
+                if (record.type.toLowerCase() === 'location' && record.locIdParent === undefined
+                    && record.locId !== me.defaultLocIdParent) {
+                    record.locIdParent = me.defaultLocIdParent;
+                }
+                for (const refIdFieldName of me.idMappings) {
+                    if (recordIdMapping[refIdFieldName] && recordIdMapping[refIdFieldName][record[refIdFieldName]]) {
+                        console.log('orig: ' + record.id + ' map ref ' + refIdFieldName + ' ' + record[refIdFieldName]
+                            + '->' + recordIdMapping[refIdFieldName][record[refIdFieldName]]);
+                        record[refIdFieldName] = recordIdMapping[refIdFieldName][record[refIdFieldName]];
+                    } else if (record[refIdFieldName] && !(record[refIdFieldName] === null || record[refIdFieldName] === undefined)) {
+                        console.log('orig: ' + record.id + ' save ref ' + refIdFieldName + ' ' + record[refIdFieldName]);
+                        myMappings[refIdFieldName] = record[refIdFieldName];
+                        record[refIdFieldName] = undefined;
+                    }
+                }
+
+                console.log('ADD - record', record.type + ' ' + record.name);
+                return me.add(record).then(function onFullfilled(newSdocRecord: SDocRecord) {
+                    sdocRecord = newSdocRecord;
+
+                    // TODO save playlists, objects...
+                    return utils.resolve(sdocRecord);
+                });
+            }).then(function recordsDone(newSdocRecord: SDocRecord) {
+                const idFieldName = me.typeMapping[record.type.toLowerCase()];
+
+                if (!recordIdMapping.hasOwnProperty(idFieldName)) {
+                    recordIdMapping[idFieldName] = {};
+                }
+                console.log('new: ' + newSdocRecord.id + ' save recordIdMapping ' + idFieldName + ' ' + myMappings[idFieldName]
+                    + '->' + newSdocRecord[idFieldName]);
+                console.log('new: ' + newSdocRecord.id + ' save recordRecoverIdMapping for ' + ':', myMappings);
+                recordIdMapping[idFieldName][myMappings[idFieldName]] = newSdocRecord[idFieldName];
+                recordRecoverIdMapping[newSdocRecord.id] = myMappings;
+
+                return utils.resolve(newSdocRecord);
+            }).catch(function onError(error) {
+                return utils.reject(error);
+            });
+    }
+
+    postProcessImportRecord(record: SDocRecord, recordIdMapping: {}, recordRecoverIdMapping: {}, opts?: any): Promise<SDocRecord> {
+        opts = opts || {};
+
+        if (!recordRecoverIdMapping[record.id]) {
+            console.log('new: ' + record.id + ' no ids to recover');
+            return utils.resolve(record);
+        }
+
+        // recover refIds
+        let updateNeeded = false;
+        for (const refIdFieldName of this.idMappings) {
+            const mappingName = this.idMappingAliases[refIdFieldName] || refIdFieldName;
+            const fieldId = recordRecoverIdMapping[record.id][refIdFieldName];
+            if (fieldId && recordIdMapping[mappingName] && recordIdMapping[mappingName][fieldId]
+                && record[refIdFieldName] !== recordIdMapping[mappingName][fieldId]) {
+                console.log('new: ' + record.id + ' recover ref ' + refIdFieldName + ' ' + fieldId
+                    + '->' + mappingName + ':' + recordIdMapping[mappingName][fieldId]);
+                record[refIdFieldName] = recordIdMapping[mappingName][fieldId];
+                updateNeeded = true;
+            }
+        }
+        if (!updateNeeded) {
+            console.log('new: ' + record.id + ' no ids to recover');
+            return utils.resolve(record);
+        }
+
+        record.subtype = record.subtype ? record.subtype.replace(/[-a-zA-Z_]+/g, '') : '';
+        return this.updateById(record.id, record, opts).then(function recordsDone(newSdocRecord: SDocRecord) {
+            return utils.resolve(newSdocRecord);
+        }).catch(function onError(error) {
+            return utils.reject(error);
+        });
     }
 
     setWritable(writable: boolean) {
