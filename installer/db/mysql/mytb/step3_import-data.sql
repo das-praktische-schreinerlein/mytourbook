@@ -1,6 +1,64 @@
------------------
---- configuration-tables
------------------
+--
+-- functions
+--
+DELIMITER $$
+DROP FUNCTION IF EXISTS `GetLocationIdAncestry` $$
+CREATE FUNCTION `GetLocationIdAncestry` (GivenID INT, pJoiner CHAR(20)) RETURNS VARCHAR(2000)
+DETERMINISTIC
+BEGIN
+    DECLARE path VARCHAR(2000);
+    DECLARE joiner CHAR(20);
+    DECLARE id INT;
+
+    SET id = GivenID;
+    SET path = concat('', id);
+    SET joiner = '';
+
+    WHILE id > 0 DO
+        SELECT IFNULL(l_parent_id,-1) INTO id FROM
+        (SELECT l_parent_id FROM location WHERE l_id = id) A;
+        IF id > 0 THEN
+            SET joiner = pJoiner;
+            SET path = CONCAT(id, joiner, path);
+        END IF;
+    END WHILE;
+    RETURN path;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS `GetLocationNameAncestry` $$
+CREATE FUNCTION `GetLocationNameAncestry` (GivenID INT, defaultName CHAR(200), pJoiner CHAR(20)) RETURNS VARCHAR(2000)
+DETERMINISTIC
+BEGIN
+    DECLARE path VARCHAR(2000);
+    DECLARE name VARCHAR(100);
+    DECLARE joiner CHAR(20);
+    DECLARE id INT;
+
+    SET id = GivenID;
+    SET path = '';
+    SET joiner = '';
+    SET name = '';
+
+    WHILE id > 0 DO
+        SELECT l_name INTO name FROM
+        (SELECT l_name FROM location WHERE l_id = id) A;
+        IF id > 0 THEN
+            SET path = CONCAT(name, joiner, ' ', path);
+            SET joiner = pJoiner;
+        END IF;
+        SELECT IFNULL(l_parent_id,-1) INTO id FROM
+        (SELECT l_parent_id FROM location WHERE l_id = id) A;
+    END WHILE;
+    RETURN path;
+END $$
+DELIMITER ;
+
+--
+-- configuration-tables
+--
+DROP TABLE IF EXISTS rates;
 CREATE TABLE rates (
   r_id int(11) NOT NULL,
   r_fieldname varchar(80) COLLATE latin1_general_ci DEFAULT NULL,
@@ -9,9 +67,9 @@ CREATE TABLE rates (
   r_grade_desc varchar(80) COLLATE latin1_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- news-data
------------------
+--
+-- news-data
+--
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
   n_id int(11) NOT NULL AUTO_INCREMENT,
@@ -29,9 +87,9 @@ CREATE TABLE news (
   KEY idx_n__w_id (w_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=176 DEFAULT CHARSET=latin1
 
------------------
---- trip-data
------------------
+--
+-- trip-data
+--
 DROP TABLE IF EXISTS trip;
 CREATE TABLE trip (
   tr_id int(11) NOT NULL AUTO_INCREMENT,
@@ -55,9 +113,9 @@ CREATE TABLE trip (
   KEY idx_tr__i_id (i_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=477 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- location-data
------------------
+--
+-- location-data
+--
 DROP TABLE IF EXISTS location;
 CREATE TABLE location (
   l_id int(11) DEFAULT NULL,
@@ -83,9 +141,9 @@ CREATE TABLE location (
   KEY l_gps_lon (l_gps_lon)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- tour-data
------------------
+--
+-- tour-data
+--
 DROP TABLE IF EXISTS tour;
 CREATE TABLE tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
@@ -153,9 +211,9 @@ CREATE TABLE tour (
   KEY t_gps_lon (t_gps_lon)
 ) ENGINE=MyISAM AUTO_INCREMENT=2885 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- track-data
------------------
+--
+-- track-data
+--
 DROP TABLE IF EXISTS kategorie_full;
 CREATE TABLE kategorie (
   k_id int(11) NOT NULL AUTO_INCREMENT,
@@ -212,9 +270,9 @@ CREATE TABLE kategorie (
   KEY k_datebis (k_datebis)
 ) ENGINE=MyISAM AUTO_INCREMENT=2268 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- image-data
------------------
+--
+-- image-data
+--
 DROP TABLE IF EXISTS image;
 CREATE TABLE image (
   i_id int(11) NOT NULL AUTO_INCREMENT,

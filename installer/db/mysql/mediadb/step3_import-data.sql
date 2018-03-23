@@ -1,6 +1,6 @@
------------------
---- system-tables
------------------
+--
+-- system-tables
+--
 DROP TABLE IF EXISTS appids;
 CREATE TABLE appids (
   ai_table char(255) COLLATE latin1_general_ci NOT NULL DEFAULT '',
@@ -10,9 +10,9 @@ CREATE TABLE appids (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 
------------------
---- functions
------------------
+--
+-- functions
+--
 DELIMITER $$
 DROP FUNCTION IF EXISTS `GetLocationIdAncestry` $$
 CREATE FUNCTION `GetLocationIdAncestry` (GivenID INT, pJoiner CHAR(20)) RETURNS VARCHAR(2000)
@@ -67,9 +67,9 @@ BEGIN
 END $$
 DELIMITER ;
 
------------------
---- configuration-tables
------------------
+--
+-- configuration-tables
+--
 DROP TABLE IF EXISTS keyword;
 CREATE TABLE keyword (
   kw_id int(11) NOT NULL AUTO_INCREMENT,
@@ -138,9 +138,9 @@ CREATE TABLE rates (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 
------------------
---- news-data
------------------
+--
+-- news-data
+--
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
   n_id int(11) NOT NULL AUTO_INCREMENT,
@@ -158,9 +158,9 @@ CREATE TABLE news (
   KEY idx_n__w_id (w_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=176 DEFAULT CHARSET=latin1
 
------------------
---- trip-data
------------------
+--
+-- trip-data
+--
 DROP TABLE IF EXISTS trip;
 CREATE TABLE trip (
   tr_id int(11) NOT NULL AUTO_INCREMENT,
@@ -182,9 +182,9 @@ CREATE TABLE trip (
 ) ENGINE=InnoDB AUTO_INCREMENT=477 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 
------------------
---- location-data
------------------
+--
+-- location-data
+--
 DROP TABLE IF EXISTS location;
 CREATE TABLE location (
   l_id int(11) NOT NULL AUTO_INCREMENT,
@@ -227,9 +227,9 @@ CREATE TABLE location_keyword (
 ) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 
------------------
---- tour-data
------------------
+--
+-- tour-data
+--
 DROP TABLE IF EXISTS tour;
 CREATE TABLE tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
@@ -340,9 +340,9 @@ CREATE TABLE tourpoint (
   CONSTRAINT tourpoint_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4465227 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- track-data
------------------
+--
+-- track-data
+--
 DROP TABLE IF EXISTS kategorie;
 CREATE TABLE kategorie (
   k_id int(11) NOT NULL AUTO_INCREMENT,
@@ -462,9 +462,9 @@ CREATE TABLE kategorie_tourpoint (
   CONSTRAINT kategorie_tourpoint_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4261739 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- image-data
------------------
+--
+-- image-data
+--
 DROP TABLE IF EXISTS image;
 CREATE TABLE image (
   i_id int(11) NOT NULL AUTO_INCREMENT,
@@ -549,9 +549,9 @@ CREATE TABLE image_playlist (
   CONSTRAINT image_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=74925 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
------------------
---- info-data
------------------
+--
+-- info-data
+--
 DROP TABLE IF EXISTS info;
 CREATE TABLE info (
   if_id int(11) NOT NULL AUTO_INCREMENT,
