@@ -220,7 +220,7 @@
             <legend i18n="meta label|Label for fieldset: meta@@label.searchform.sdoc.legend.meta">&#x2764; Bewertung</legend>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersonalRateOverall.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('playlists').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="playlists label|Label for filter: personalRateOverall@@label.searchform.sdoc.personalRateOverall">Bewertung:</label>
+                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('personalRateOverall').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="personalRateOverall label|Label for filter: personalRateOverall@@label.searchform.sdoc.personalRateOverall">Bewertung:</label>
                     <ng-container *ngIf="optionsSelectPersonalRateOverall.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPersonalRateOverall"
                                                  [settings]="settingsSelectPersonalRateOverall"
@@ -233,7 +233,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersonalRateDifficulty.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('playlists').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="playlists label|Label for filter: personalRateDifficulty@@label.searchform.sdoc.personalRateDifficulty">Schwierigkeit:</label>
+                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('personalRateDifficulty').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="personalRateDifficulty label|Label for filter: personalRateDifficulty@@label.searchform.sdoc.personalRateDifficulty">Schwierigkeit:</label>
                     <ng-container *ngIf="optionsSelectPersonalRateDifficulty.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPersonalRateDifficulty"
                                                  [settings]="settingsSelectPersonalRateDifficulty"
