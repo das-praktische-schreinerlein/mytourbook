@@ -28,6 +28,7 @@ export class AdapterFilterActions {
     static LE = '<=';
     static IN = 'in';
     static IN_NUMBER = 'in_number';
+    static IN_CSV = 'in_csv';
     static LIKEIN = 'likein';
     static NOTIN = 'notin';
 }

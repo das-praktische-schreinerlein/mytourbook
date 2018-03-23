@@ -1,14 +1,4 @@
-import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnInit,
-    Output,
-    ViewContainerRef
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -358,8 +348,10 @@ export class SDocSearchformComponent implements OnInit {
 
         const rawValues = this.searchFormGroup.getRawValue();
 
-        this.optionsSelectWhen = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectWhen = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true),
+            rawValues['when']);
         this.optionsSelectWhere = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [/^_+/, /_+$/], false),
@@ -403,8 +395,10 @@ export class SDocSearchformComponent implements OnInit {
             this.searchFormUtils.getTechDataAscentValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataAltitudeMax = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getTechDataAltitudeMaxValues(sdocSearchSearchResult), true, [], true);
-        this.optionsSelectTechDataDuration = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true);
+        this.optionsSelectTechDataDuration = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.searchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true),
+            rawValues['techDataDuration']);
         this.optionsSelectPersonalRateOverall = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.searchFormUtils.getPersonalRateOverallValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectPersonalRateDifficulty = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(

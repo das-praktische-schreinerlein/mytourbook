@@ -12,6 +12,7 @@ export class SDocSearchFormUtils {
 
     getWhenValues(searchResult: SDocSearchResult): any[] {
         return [].concat(
+            this.getFacetValues(searchResult, 'year_is', 'year', ''),
             this.getFacetValues(searchResult, 'month_is', 'month', 'Monat'),
             this.getFacetValues(searchResult, 'week_is', 'week', 'Woche'));
     }

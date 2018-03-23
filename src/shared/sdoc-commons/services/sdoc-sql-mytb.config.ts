@@ -29,6 +29,7 @@ export class SDocSqlMytbConfig {
                 'DATE_FORMAT(k_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(k_datevon) AS week',
                 'MONTH(k_datevon) AS month',
+                'YEAR(k_datevon) AS year',
                 'k_gpstracks_basefile',
                 'k_keywords',
                 'k_meta_shortdesc',
@@ -39,7 +40,7 @@ export class SDocSqlMytbConfig {
                 'CONCAT(k_gps_lat, ",", k_gps_lon) AS k_gps_loc',
                 'l_lochirarchietxt',
                 'l_lochirarchieids',
-                'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
+                'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
                 'k_altitude_asc',
                 'k_altitude_desc',
                 'k_altitude_min',
@@ -98,7 +99,7 @@ export class SDocSqlMytbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt as label' +
+                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
                     ' FROM kategorie_full INNER JOIN location ON kategorie_full.l_id = location.l_id ' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
@@ -129,6 +130,28 @@ export class SDocSqlMytbConfig {
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
+                'route_id_i': {
+                    filterFields: ['kategorie_full.k_t_ids'],
+                    action: AdapterFilterActions.IN_CSV
+                },
+                'route_id_is': {
+                    selectSql: 'SELECT COUNT(kategorie_full.t_id) AS count, tour.t_id AS value,' +
+                    ' tour.t_name AS label, tour.t_id AS id' +
+                    ' FROM tour LEFT JOIN kategorie_full ON kategorie_full.t_id = tour.t_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                    filterFields: ['kategorie_full.k_t_ids'],
+                    action: AdapterFilterActions.IN_CSV
+                },
+                'trip_id_is': {
+                    selectSql: 'SELECT COUNT(kategorie_full.tr_id) AS count, trip.tr_id AS value,' +
+                    ' trip.tr_name AS label, trip.tr_id AS id' +
+                    ' FROM trip LEFT JOIN kategorie_full ON kategorie_full.tr_id = trip.tr_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                    filterField: 'tr_id',
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'type_txt': {
                     constValues: ['track', 'route', 'image', 'location', 'trip', 'news'],
                     filterField: '"track"',
@@ -136,6 +159,10 @@ export class SDocSqlMytbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(k_datevon)',
+                    orderBy: 'value asc'
+                },
+                'year_is': {
+                    selectField: 'YEAR(k_datevon)',
                     orderBy: 'value asc'
                 }
             },
@@ -245,6 +272,7 @@ export class SDocSqlMytbConfig {
                 'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(i_date) AS week',
                 'MONTH(i_date) AS month',
+                'YEAR(i_date) AS year',
                 'k_gpstracks_basefile',
                 'i_keywords',
                 'k_meta_shortdesc',
@@ -256,7 +284,7 @@ export class SDocSqlMytbConfig {
                 'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',
                 'l_lochirarchietxt',
                 'l_lochirarchieids',
-                'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
+                'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
                 'k_altitude_asc',
                 'k_altitude_desc',
                 'i_gps_ele',
@@ -336,7 +364,7 @@ export class SDocSqlMytbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt as label' +
+                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
                     ' FROM image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
                     '   INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
                     ' GROUP BY value, label' +
@@ -378,6 +406,10 @@ export class SDocSqlMytbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(i_date)',
+                    orderBy: 'value asc'
+                },
+                'year_is': {
+                    selectField: 'YEAR(i_date)',
                     orderBy: 'value asc'
                 }
             },
@@ -477,11 +509,12 @@ export class SDocSqlMytbConfig {
                 't_name',
                 't_html_list',
                 'CONCAT(t_name, " ", t_keywords, " ", t_meta_shortdesc_md, " ", l_lochirarchietxt) AS html',
-                't_datevon as t_date_show',
+                't_datevon AS t_date_show',
                 't_datevon',
                 'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(t_datevon) AS week',
                 'MONTH(t_datevon) AS month',
+                'YEAR(t_datevon) AS year',
                 't_gpstracks_basefile',
                 't_keywords',
                 't_meta_shortdesc',
@@ -540,6 +573,18 @@ export class SDocSqlMytbConfig {
                     selectField: 'ROUND(ROUND(t_route_dauer * 2) / 2, 1)',
                     orderBy: 'value asc'
                 },
+                'data_info_guides_s': {
+                    selectField: 'tour.t_desc_fuehrer',
+                    orderBy: 'value asc'
+                },
+                'data_info_baseloc_s': {
+                    selectField: 'tour.t_desc_talort',
+                    orderBy: 'value asc'
+                },
+                'data_info_region_s': {
+                    selectField: 'tour.t_desc_gebiet',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                     '  SUBSTRING_INDEX(SUBSTRING_INDEX(tour.t_keywords, ",", numbers.n), ",", -1) AS value ' +
@@ -560,7 +605,7 @@ export class SDocSqlMytbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt as label' +
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
                     ' FROM tour INNER JOIN location ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
@@ -585,12 +630,37 @@ export class SDocSqlMytbConfig {
                     selectField: 't_rate_schwierigkeit',
                     orderBy: 'value asc'
                 },
+                'rate_tech_klettern_ss': {
+                    selectField: 't_rate_klettern',
+                    orderBy: 'value asc'
+                },
+                'rate_tech_ks_ss': {
+                    selectField: 't_rate_ks',
+                    orderBy: 'value asc'
+                },
+                'rate_tech_schneeschuh_ss': {
+                    selectField: 't_rate_schneeschuh',
+                    orderBy: 'value asc'
+                },
                 'rate_tech_overall_ss': {
                     selectField: 't_rate',
                     orderBy: 'value asc'
                 },
                 'subtype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
+                },
+                'track_id_i': {
+                    filterFields: ['tour.t_k_ids'],
+                    action: AdapterFilterActions.IN_CSV
+                },
+                'track_id_is': {
+                    selectSql: 'SELECT COUNT(kategorie_full.k_id) AS count, kategorie_full.k_id AS value,' +
+                    ' kategorie_full.k_name AS label, kategorie_full.k_id AS id' +
+                    ' FROM kategorie_full INNER JOIN tour ON kategorie_full.t_id = tour.t_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                    filterFields: ['tour.t_k_ids'],
+                    action: AdapterFilterActions.IN_CSV
                 },
                 'type_txt': {
                     constValues: ['route', 'track', 'image', 'location', 'trip', 'news'],
@@ -599,6 +669,10 @@ export class SDocSqlMytbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(t_datevon)',
+                    orderBy: 'value asc'
+                },
+                'year_is': {
+                    selectField: 'YEAR(t_datevon)',
                     orderBy: 'value asc'
                 }
             },
@@ -650,7 +724,8 @@ export class SDocSqlMytbConfig {
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
                 dateshow_dt: 't_dateshow',
-                html_txt: 't_html_list',
+                datestart_dt: 't_datevon',
+                dateend_dt: 't_datebis',
                 desc_txt: 't_meta_shortdesc',
                 desc_md_txt: 't_meta_shortdesc_md',
                 desc_html_txt: 't_meta_shortdesc_html',
@@ -751,7 +826,7 @@ export class SDocSqlMytbConfig {
                 'loc_id_i': {
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt as label' +
+                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
                     ' FROM location' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
@@ -785,6 +860,9 @@ export class SDocSqlMytbConfig {
                     selectLimit: 1
                 },
                 'week_is': {
+                    noFacet: true
+                },
+                'year_is': {
                     noFacet: true
                 }
             },
@@ -848,6 +926,7 @@ export class SDocSqlMytbConfig {
                 'DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(tr_datevon) AS week',
                 'MONTH(tr_datevon) AS month',
+                'YEAR(tr_datevon) AS year',
                 'SUM(k_altitude_asc) AS k_altitude_asc_sum',
                 'SUM(k_altitude_desc) AS k_altitude_desc_sum',
                 'MIN(k_altitude_min) AS k_altitude_min',
@@ -923,6 +1002,9 @@ export class SDocSqlMytbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(tr_datevon)'
+                },
+                'year_is': {
+                    selectField: 'YEAR(tr_datevon)'
                 }
             },
             sortMapping: {
@@ -951,6 +1033,8 @@ export class SDocSqlMytbConfig {
                 data_tech_dist_f: 'k_distance_sum',
                 data_tech_dur_f: 'dur',
                 dateshow_dt: 'tr_dateshow',
+                datestart_dt: 'tr_datevon',
+                dateend_dt: 'tr_datebis',
                 desc_txt: 'tr_meta_shortdesc',
                 desc_md_txt: 'tr_meta_shortdesc_md',
                 desc_html_txt: 'tr_meta_shortdesc_html',
@@ -979,6 +1063,7 @@ export class SDocSqlMytbConfig {
                 'DATE_FORMAT(n_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(n_date) AS week',
                 'MONTH(n_date) AS month',
+                'YEAR(n_date) AS year',
                 'SUM(k_altitude_asc) AS k_altitude_asc_sum',
                 'SUM(k_altitude_desc) AS k_altitude_desc_sum',
                 'MIN(k_altitude_min) AS k_altitude_min',
@@ -1054,6 +1139,9 @@ export class SDocSqlMytbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(n_date)'
+                },
+                'year_is': {
+                    selectField: 'YEAR(n_date)'
                 }
             },
             sortMapping: {
@@ -1065,6 +1153,8 @@ export class SDocSqlMytbConfig {
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
+                image_id_i: '"dummy"',
+                track_id_i: '"dummy"',
                 trip_id_is: '"dummy"',
                 location_id_is: '"dummy"',
                 route_id_is: '"dummy"',
@@ -1082,6 +1172,8 @@ export class SDocSqlMytbConfig {
                 data_tech_dist_f: 'k_distance_sum',
                 data_tech_dur_f: 'dur',
                 dateshow_dt: 'n_date',
+                datestart_dt: 'n_datevon',
+                dateend_dt: 'n_datebis',
                 desc_txt: 'n_message',
                 desc_md_txt: 'n_message_md',
                 desc_html_txt: 'n_message_html',

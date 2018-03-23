@@ -43,7 +43,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
 
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
-            const tabKey = types.in[0];
+            const tabKey = types.in[0].toLowerCase();
             if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {
                 return tabKey;
             }

@@ -1,6 +1,7 @@
 import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 import {KeywordValidationRule, NumberValidationRule} from '../../search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
+import {SqlQueryBuilder} from '../../search-commons/services/sql-query.builder';
 
 export class SDocSqlMediadbActionTagAdapter {
 
@@ -8,10 +9,12 @@ export class SDocSqlMediadbActionTagAdapter {
     private rateValidationRule = new NumberValidationRule(true, 0, 15, 0);
     private config: any;
     private knex: any;
+    private sqlQueryBuilder: SqlQueryBuilder;
 
-    constructor(config: any, knex: any) {
+    constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder) {
         this.config = config;
         this.knex = knex;
+        this.sqlQueryBuilder = sqlQueryBuilder;
     }
 
     public executeActionTagImagePlaylist(id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
@@ -42,14 +45,15 @@ export class SDocSqlMediadbActionTagAdapter {
         }
 
         const deleteSql = 'DELETE FROM image_playlist ' +
-            'WHERE image_playlist.p_id IN (SELECT playlist.p_id FROM playlist WHERE p_name in ("' + playlistKey + '"))' +
+            'WHERE image_playlist.p_id IN (SELECT playlist.p_id FROM playlist WHERE p_name IN ("' + playlistKey + '"))' +
             ' AND i_id = "' + id + '"';
         const insertSql = 'INSERT INTO image_playlist (p_id, i_id)' +
-            ' SELECT playlist.p_id AS p_id, "' + id + '" as i_id FROM playlist WHERE p_name = ("' + playlistKey + '")';
-        const updateSql = 'UPDATE image SET i_rate=max(coalesce(i_rate, 0), ' + ratePersGesamt + '),' +
-            ' i_rate_motive=max(coalesce(i_rate_motive, 0), ' + ratePersMotive + '),' +
-            ' i_rate_wichtigkeit=max(coalesce(i_rate_wichtigkeit, 0), ' + ratePersWichtigkeit + ')' +
+            ' SELECT playlist.p_id AS p_id, "' + id + '" AS i_id FROM playlist WHERE p_name = ("' + playlistKey + '")';
+        let updateSql = 'UPDATE image SET i_rate=GREATEST(COALESCE(i_rate, 0), ' + ratePersGesamt + '),' +
+            ' i_rate_motive=GREATEST(COALESCE(i_rate_motive, 0), ' + ratePersMotive + '),' +
+            ' i_rate_wichtigkeit=GREATEST(COALESCE(i_rate_wichtigkeit, 0), ' + ratePersWichtigkeit + ')' +
             '  WHERE i_id = "' + id + '"';
+        updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
@@ -91,10 +95,10 @@ export class SDocSqlMediadbActionTagAdapter {
         }
 
         const deleteSql = 'DELETE FROM image_object ' +
-            'WHERE image_object.io_obj_type IN (SELECT objects.o_key FROM objects WHERE o_name in ("' + objectKey + '"))' +
+            'WHERE image_object.io_obj_type IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKey + '"))' +
             ' AND i_id = "' + id + '"';
         const insertSql = 'INSERT INTO image_object (io_obj_type, i_id)' +
-            ' SELECT objects.o_key AS io_obj_type, "' + id + '" as i_id FROM objects WHERE o_name = ("' + objectKey + '")';
+            ' SELECT objects.o_key AS io_obj_type, "' + id + '" AS i_id FROM objects WHERE o_name = ("' + objectKey + '")';
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
@@ -149,9 +153,10 @@ export class SDocSqlMediadbActionTagAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' ratePers not valid');
         }
 
-        const updateSql = 'UPDATE image SET ' + fieldName + '=max(coalesce(' + fieldName + ', 0), ' + ratePers + ')' +
-            ', i_rate=max(coalesce(i_rate_motive, 0), coalesce(i_rate_wichtigkeit, 0), ' + ratePers + ')' +
+        let updateSql = 'UPDATE image SET ' + fieldName + '=GREATEST(COALESCE(' + fieldName + ', 0), ' + ratePers + ')' +
+            ', i_rate=GREATEST(COALESCE(i_rate_motive, 0), COALESCE(i_rate_wichtigkeit, 0), ' + ratePers + ')' +
             '  WHERE i_id = "' + id + '"';
+        updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawUpdate = sqlBuilder.raw(updateSql);

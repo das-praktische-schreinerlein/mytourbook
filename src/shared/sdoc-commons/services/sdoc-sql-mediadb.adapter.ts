@@ -20,8 +20,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
 
     constructor(config: any) {
         super(config, new SDocAdapterResponseMapper(config));
-        this.actionTagAdapter = new SDocSqlMediadbActionTagAdapter(config, this.knex);
-        this.keywordsAdapter = new SDocSqlMediadbKeywordAdapter(config, this.knex);
+        this.actionTagAdapter = new SDocSqlMediadbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
+        this.keywordsAdapter = new SDocSqlMediadbKeywordAdapter(config, this.knex, this.sqlQueryBuilder);
     }
 
     protected getTableConfig(params: AdapterQuery): TableConfig {
@@ -95,9 +95,9 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/,
                 '"T" || location.l_typ || "L" || location.l_parent_id || " -> " || location.l_name');
             sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/,
-                'CAST(location.l_parent_id as CHAR(50)) || "," || CAST(location.l_id as CHAR(50))');
-            sql = sql.replace('CONCAT(CAST(location.l_parent_id as CHAR(50)), ",", CAST(location.l_id as CHAR(50)))',
-                'CAST(location.l_parent_id as CHAR(50)) || "," || CAST(location.l_id as CHAR(50))');
+                'CAST(location.l_parent_id AS CHAR(50)) || "," || CAST(location.l_id AS CHAR(50))');
+            sql = sql.replace('CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50)))',
+                'CAST(location.l_parent_id AS CHAR(50)) || "," || CAST(location.l_id AS CHAR(50))');
         }
 
         return super.transformToSqlDialect(sql);

@@ -82,13 +82,15 @@ export class SqlQueryBuilder {
 // TODO: check security
                 sql = sqlPre + toBeConverted.replace(/, /g, ' || ') + sqlAfter;
             }
-            sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'DATETIME($1)');
+            sql = sql.replace(/GREATEST\(/g, 'MAX(');
             sql = sql.replace(/SUBSTRING_INDEX\(/g, 'SUBSTR(');
             sql = sql.replace(/CHAR_LENGTH\(/g, 'LENGTH(');
-            sql = sql.replace(/WEEK\((.*?)\)/g, 'CAST(STRFTIME("%W", $1) AS INT)');
             sql = sql.replace(/GROUP_CONCAT\(DISTINCT (.*?) ORDER BY (.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $3)');
             sql = sql.replace(/GROUP_CONCAT\((.*?) SEPARATOR (.*?)\)/g, 'GROUP_CONCAT($1, $2)');
             sql = sql.replace(/MONTH\((.*?)\)/g, 'CAST(STRFTIME("%m", $1) AS INT)');
+            sql = sql.replace(/WEEK\((.*?)\)/g, 'CAST(STRFTIME("%W", $1) AS INT)');
+            sql = sql.replace(/YEAR\((.*?)\)/g, 'CAST(STRFTIME("%Y", $1) AS INT)');
+            sql = sql.replace(/DATE_FORMAT\((.+?), GET_FORMAT\(DATE, "ISO"\)\)/g, 'DATETIME($1)');
             sql = sql.replace(/TIME_TO_SEC\(TIMEDIFF\((.*?), (.*?)\)\)\/3600/g, '(JULIANDAY($1) - JULIANDAY($2)) * 24');
         }
         // console.error("sql", sql);
@@ -459,7 +461,7 @@ export class SqlQueryBuilder {
                     filters.push(this.generateFilter(realFieldName, action, value));
                 }
 
-                return '(' + filters.join(' or ') + ')';
+                return '(' + filters.join(' OR ') + ')';
             }
         }
         if (realFieldName === undefined && tableConfig.filterMapping.hasOwnProperty(fieldName)) {
@@ -477,23 +479,23 @@ export class SqlQueryBuilder {
         let query = '';
 
         if (action === AdapterFilterActions.LIKEI || action === AdapterFilterActions.LIKE) {
-            query = fieldName + ' like "%'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%" and ' + fieldName + ' like "%') + '%" ';
+            query = fieldName + ' LIKE "%'
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '%" AND ' + fieldName + ' LIKE "%') + '%" ';
         } else if (action === AdapterFilterActions.EQ1 || action === AdapterFilterActions.EQ2) {
             query = fieldName + ' = "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '" and ' + fieldName + ' =  "') + '" ';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', '" AND ' + fieldName + ' =  "') + '" ';
         } else if (action === AdapterFilterActions.GT) {
             query = fieldName + ' > "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' > ') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' AND ' + fieldName + ' > ') + '"';
         } else if (action === AdapterFilterActions.GE) {
             query = fieldName + ' >= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' >= ') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' AND ' + fieldName + ' >= ') + '"';
         } else if (action === AdapterFilterActions.LT) {
             query = fieldName + ' < "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' < ') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' AND ' + fieldName + ' < ') + '"';
         } else if (action === AdapterFilterActions.LE) {
             query = fieldName + ' <= "'
-                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' and ' + fieldName + ' <= ') + '"';
+                + this.mapperUtils.prepareEscapedSingleValue(value, ' ', ' AND ' + fieldName + ' <= ') + '"';
         } else if (action === AdapterFilterActions.IN) {
             query = fieldName + ' in ("' + value.map(
                     inValue => this.mapperUtils.escapeAdapterValue(inValue.toString())
@@ -509,10 +511,19 @@ export class SqlQueryBuilder {
         } else if (action === AdapterFilterActions.LIKEIN) {
             query = '(' + value.map(
                 inValue => {
-                    return fieldName + ' like "%'
+                    return fieldName + ' LIKE "%'
                         + this.mapperUtils.escapeAdapterValue(inValue.toString()) + '%" ';
                 }
-            ).join(' or ') + ')';
+            ).join(' OR ') + ')';
+        } else if (action === AdapterFilterActions.IN_CSV) {
+            query = '(' + value.map(
+                inValue => {
+                    return fieldName + ' LIKE "%,' + this.mapperUtils.escapeAdapterValue(inValue.toString()) + ',%" OR '
+                        + fieldName + ' LIKE "%,' + this.mapperUtils.escapeAdapterValue(inValue.toString()) + '" OR '
+                        + fieldName + ' LIKE "' + this.mapperUtils.escapeAdapterValue(inValue.toString()) + ',%" OR '
+                        + fieldName + ' LIKE "' + this.mapperUtils.escapeAdapterValue(inValue.toString()) + '" ';
+                }
+            ).join(' OR ') + ')';
         }
         return query;
     }

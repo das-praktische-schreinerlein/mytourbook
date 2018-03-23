@@ -293,6 +293,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         res.push(this.valueToHumanReadableText(sdocSearchForm.actiontype, 'hrt_actiontype', undefined, true));
 
         const when = (sdocSearchForm.when ? sdocSearchForm.when : '')
+            .replace(new RegExp('year', 'g'), '')
             .replace(new RegExp('month', 'g'), 'Monat')
             .replace(new RegExp('week', 'g'), 'Woche');
         res.push(this.valueToHumanReadableText(when, 'hrt_when', undefined, true));

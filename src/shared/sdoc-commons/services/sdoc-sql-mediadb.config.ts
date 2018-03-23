@@ -59,6 +59,7 @@ export class SDocSqlMediadbConfig {
                 'DATE_FORMAT(k_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(k_datevon) AS week',
                 'MONTH(k_datevon) AS month',
+                'YEAR(k_datevon) AS year',
                 'k_gpstracks_basefile',
                 'k_meta_shortdesc',
                 'k_meta_shortdesc AS k_meta_shortdesc_md',
@@ -68,7 +69,7 @@ export class SDocSqlMediadbConfig {
                 'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS k_gps_loc',
                 'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
                 'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
-//                'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
+//                'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
                 'k_altitude_asc',
                 'k_altitude_desc',
                 'k_altitude_min',
@@ -123,7 +124,7 @@ export class SDocSqlMediadbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNT(kategorie.l_id) AS count, l_name AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, location.l_id as id' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
                     ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
@@ -160,7 +161,7 @@ export class SDocSqlMediadbConfig {
                 },
                 'route_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.t_id) AS count, tour.t_id AS value,' +
-                    ' tour.t_name as label, tour.t_id as id' +
+                    ' tour.t_name AS label, tour.t_id AS id' +
                     ' FROM tour LEFT JOIN kategorie ON kategorie.t_id = tour.t_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
@@ -169,7 +170,7 @@ export class SDocSqlMediadbConfig {
                 },
                 'trip_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.tr_id) AS count, trip.tr_id AS value,' +
-                    ' trip.tr_name as label, trip.tr_id as id' +
+                    ' trip.tr_name AS label, trip.tr_id AS id' +
                     ' FROM trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
@@ -183,6 +184,10 @@ export class SDocSqlMediadbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(k_datevon)',
+                    orderBy: 'value asc'
+                },
+                'year_is': {
+                    selectField: 'YEAR(k_datevon)',
                     orderBy: 'value asc'
                 }
             },
@@ -358,12 +363,13 @@ export class SDocSqlMediadbConfig {
                 'kategorie.t_id',
                 'kategorie.tr_id',
                 'kategorie.l_id',
-                'COALESCE(i_meta_name, k_name) as i_meta_name',
+                'COALESCE(i_meta_name, k_name) AS i_meta_name',
                 'CONCAT(COALESCE(i_meta_name, ""), " ", COALESCE(l_name, "")) AS html',
                 'i_date',
                 'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(i_date) AS week',
                 'MONTH(i_date) AS month',
+                'YEAR(i_date) AS year',
                 'k_gpstracks_basefile',
                 'i_meta_shortdesc',
                 'i_meta_shortdesc AS i_meta_shortdesc_md',
@@ -372,8 +378,8 @@ export class SDocSqlMediadbConfig {
                 'CAST(i_gps_lon AS CHAR(50)) AS i_gps_lon',
                 'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',
                 'CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS l_lochirarchietxt',
-                'CONCAT(CAST(location.l_parent_id as CHAR(50)), ",", CAST(location.l_id as CHAR(50))) AS l_lochirarchieids',
-                'CONCAT(image.i_dir, "/", image.i_file) as i_fav_url_txt',
+                'CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50))) AS l_lochirarchieids',
+                'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
                 'k_altitude_asc',
                 'k_altitude_desc',
                 'i_gps_ele',
@@ -488,6 +494,10 @@ export class SDocSqlMediadbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(i_date)',
+                    orderBy: 'value asc'
+                },
+                'year_is': {
+                    selectField: 'YEAR(i_date)',
                     orderBy: 'value asc'
                 }
             },
@@ -630,11 +640,12 @@ export class SDocSqlMediadbConfig {
                 'tour.l_id',
                 't_name',
                 'CONCAT(COALESCE(t_name, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", COALESCE(l_name, "")) AS html',
-                't_datevon as t_date_show',
+                't_datevon AS t_date_show',
                 't_datevon',
                 'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(t_datevon) AS week',
                 'MONTH(t_datevon) AS month',
+                'YEAR(t_datevon) AS year',
                 't_gpstracks_basefile',
                 't_meta_shortdesc',
                 't_meta_shortdesc AS t_meta_shortdesc_md',
@@ -720,7 +731,7 @@ export class SDocSqlMediadbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNt(tour.l_id) AS count, l_name AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, location.l_id as id' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
                     ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
@@ -770,7 +781,7 @@ export class SDocSqlMediadbConfig {
                 },
                 'track_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.k_id) AS count, kategorie.k_id AS value,' +
-                    ' kategorie.k_name as label, kategorie.k_id as id' +
+                    ' kategorie.k_name AS label, kategorie.k_id AS id' +
                     ' FROM kategorie INNER JOIN tour ON kategorie.t_id = tour.t_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
@@ -784,6 +795,10 @@ export class SDocSqlMediadbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(t_datevon)',
+                    orderBy: 'value asc'
+                },
+                'year_is': {
+                    selectField: 'YEAR(t_datevon)',
                     orderBy: 'value asc'
                 }
             },
@@ -979,7 +994,7 @@ export class SDocSqlMediadbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNt(*) AS count, l_name AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") as label, l_id as id' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, l_id AS id' +
                     ' FROM location' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
@@ -1013,6 +1028,9 @@ export class SDocSqlMediadbConfig {
                     selectLimit: 1
                 },
                 'week_is': {
+                    noFacet: true
+                },
+                'year_is': {
                     noFacet: true
                 }
             },
@@ -1094,6 +1112,7 @@ export class SDocSqlMediadbConfig {
                 'DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(tr_datevon) AS week',
                 'MONTH(tr_datevon) AS month',
+                'YEAR(tr_datevon) AS year',
                 'SUM(k_altitude_asc) AS k_altitude_asc_sum',
                 'SUM(k_altitude_desc) AS k_altitude_desc_sum',
                 'MIN(k_altitude_min) AS k_altitude_min',
@@ -1155,6 +1174,9 @@ export class SDocSqlMediadbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(tr_datevon)'
+                },
+                'year_is': {
+                    selectField: 'YEAR(tr_datevon)'
                 }
             },
             sortMapping: {
@@ -1219,6 +1241,7 @@ export class SDocSqlMediadbConfig {
                 'DATE_FORMAT(n_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(n_date) AS week',
                 'MONTH(n_date) AS month',
+                'YEAR(n_date) AS year',
                 'n_message',
                 'n_message AS n_message_md',
                 'n_message AS n_message_html'],
@@ -1275,6 +1298,9 @@ export class SDocSqlMediadbConfig {
                 },
                 'week_is': {
                     selectField: 'WEEK(n_date)'
+                },
+                'year_is': {
+                    selectField: 'YEAR(n_date)'
                 }
             },
             sortMapping: {

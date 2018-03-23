@@ -1,15 +1,18 @@
 import {utils} from 'js-data';
 import {KeywordValidationRule} from '../../search-commons/model/forms/generic-validator.util';
+import {SqlQueryBuilder} from '../../search-commons/services/sql-query.builder';
 
 export class SDocSqlMediadbKeywordAdapter {
 
     private config: any;
     private knex: any;
     private keywordValidationRule = new KeywordValidationRule(false);
+    private sqlQueryBuilder: SqlQueryBuilder;
 
-    constructor(config: any, knex: any) {
+    constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder) {
         this.config = config;
         this.knex = knex;
+        this.sqlQueryBuilder = sqlQueryBuilder;
     }
 
     public setTrackKeywords(dbId: number, keywords: string, opts: any): Promise<any> {
