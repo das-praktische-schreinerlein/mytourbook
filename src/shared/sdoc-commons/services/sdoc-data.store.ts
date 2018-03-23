@@ -19,7 +19,7 @@ export class SDocTeamFilterConfig {
 
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {
 
-    static UPDATE_RELATION = ['sdocdatatech', 'sdocdatainfo', 'sdocratepers', 'sdocratetech'];
+    static UPDATE_RELATION = ['sdocimage', 'sdocdatatech', 'sdocdatainfo', 'sdocratepers', 'sdocratetech'];
     private validMoreNumberFilterNames = {
         id: true,
         track_id_i: true,
@@ -60,18 +60,15 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
             };
         }
         if (searchForm.when !== undefined && searchForm.when.length > 0) {
-            const whenValues = this.searchParameterUtils.splitValuesByPrefixes(searchForm.when, ',', ['week', 'month']);
-            if (whenValues.has('week')) {
-                filter = filter || {};
-                filter['week_is'] = {
-                    'in_number': this.searchParameterUtils.joinValuesAndReplacePrefix(whenValues.get('week'), 'week', ',').split(/,/)
-                };
-            }
-            if (whenValues.has('month')) {
-                filter = filter || {};
-                filter['month_is'] = {
-                    'in_number': this.searchParameterUtils.joinValuesAndReplacePrefix(whenValues.get('month'), 'month', ',').split(/,/)
-                };
+            const keys = ['week', 'month', 'year'];
+            const whenValues = this.searchParameterUtils.splitValuesByPrefixes(searchForm.when, ',', keys);
+            for (const key of keys) {
+                if (whenValues.has(key)) {
+                    filter = filter || {};
+                    filter[key + '_is'] = {
+                        'in_number': this.searchParameterUtils.joinValuesAndReplacePrefix(whenValues.get(key), key, ',').split(/,/)
+                    };
+                }
             }
         }
 
