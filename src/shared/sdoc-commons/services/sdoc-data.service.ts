@@ -114,6 +114,31 @@ export class SDocDataService extends SDocSearchService {
         return this.dataStore.doActionTag('sdoc', sdocRecord, actionTagForm, opts);
     }
 
+    doActionTags(sdocRecord: SDocRecord, actionTagForms: ActionTagForm[], opts?: any): Promise<SDocRecord> {
+        if (!this.isWritable()) {
+            throw new Error('SDocDataService configured: not writable');
+        }
+
+        let curSdocRecord = sdocRecord;
+        const me = this;
+        const promises = actionTagForms.map(actionTagForm => {
+            return me.doActionTag(curSdocRecord, actionTagForm, opts)
+                .then(function onDone(newSdocRecord: SDocRecord) {
+                    curSdocRecord = newSdocRecord;
+                    return utils.resolve(newSdocRecord);
+                }).catch(function onError(error) {
+                    return utils.reject(error);
+                });
+        });
+        const results = Promise.all(promises);
+
+        return results.then(data => {
+            return utils.resolve(curSdocRecord);
+        }).catch(errors => {
+            return utils.reject(errors);
+        });
+    }
+
     importRecord(record: SDocRecord, recordIdMapping: {}, recordRecoverIdMapping: {}, opts?: any): Promise<SDocRecord> {
         opts = opts || {};
 
@@ -171,9 +196,8 @@ export class SDocDataService extends SDocSearchService {
                 console.log('ADD - record', record.type + ' ' + record.name);
                 return me.add(record).then(function onFullfilled(newSdocRecord: SDocRecord) {
                     sdocRecord = newSdocRecord;
+                    return me.doImportActionTags(record, sdocRecord, opts);
 
-                    // TODO save playlists, objects...
-                    return utils.resolve(sdocRecord);
                 });
             }).then(function recordsDone(newSdocRecord: SDocRecord) {
                 const idFieldName = me.typeMapping[record.type.toLowerCase()];
@@ -233,5 +257,47 @@ export class SDocDataService extends SDocSearchService {
 
     isWritable(): boolean {
         return this.writable;
+    }
+
+    private doImportActionTags(origSdocRecord: SDocRecord, newSdocRecord: SDocRecord, opts?: {}): Promise<SDocRecord> {
+        if (newSdocRecord.type.toLowerCase() !== 'image') {
+            return utils.resolve(newSdocRecord);
+        }
+
+        // map data of orig-record to new record
+        const actionTagForms = [];
+        for (let playlist of (origSdocRecord.playlists ? origSdocRecord.playlists.split(',') : [])) {
+            playlist = playlist.trim();
+            const actionTagForm: ActionTagForm =  {
+                type: 'tag',
+                recordId: newSdocRecord.id,
+                key: 'playlists_' + playlist,
+                payload: {
+                    playlistkey: playlist,
+                    set: true
+                }
+            };
+            actionTagForms.push(actionTagForm);
+        }
+        for (let person of (origSdocRecord.persons ? origSdocRecord.persons.split(',') : [])) {
+            person = person.trim();
+            const actionTagForm: ActionTagForm =  {
+                type: 'tag',
+                recordId: newSdocRecord.id,
+                key: 'objects_' + person,
+                payload: {
+                    objectkey: person,
+                    set: true
+                }
+            };
+            actionTagForms.push(actionTagForm);
+        }
+
+        if (actionTagForms.length <= 0) {
+            return utils.resolve(newSdocRecord);
+        }
+
+        console.log('ACTIONTAGS - record', origSdocRecord.type + ' ' + origSdocRecord.name, actionTagForms);
+        return this.doActionTags(newSdocRecord, actionTagForms, opts);
     }
 }
