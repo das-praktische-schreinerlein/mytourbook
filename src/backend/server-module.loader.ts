@@ -11,6 +11,7 @@ import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service'
 import {AssetsServerModule} from './modules/assets-server.module';
 import {CacheConfig, DataCacheModule} from './shared-node/server-commons/datacache.module';
 import {SDocWriterServerModule} from './modules/sdoc-writer-server.module';
+import {VideoServerModule} from './modules/video-server.module';
 
 export interface ServerConfig {
     apiDataPrefix: string;
@@ -26,6 +27,8 @@ export interface ServerConfig {
 export class ServerModuleLoader {
     public static loadModules(app, serverConfig: ServerConfig) {
         const writable = serverConfig.backendConfig['sdocWritable'] === true || serverConfig.backendConfig['sdocWritable'] === 'true';
+        const apiVideoServerEnabled = serverConfig.backendConfig['apiVideoServerEnabled'] === true
+            || serverConfig.backendConfig['apiVideoServerEnabled'] === 'true';
 
         ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
         if (!writable) {
@@ -56,6 +59,13 @@ export class ServerModuleLoader {
             serverConfig.firewallConfig.routerErrorsConfigs['tracks'].file, serverConfig.filePathErrorDocs);
         AssetsServerModule.configureStoredPictureRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
             serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
+
+        if (apiVideoServerEnabled) {
+            VideoServerModule.configureStaticVideoRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig);
+            VideoServerModule.configureStoredVideoRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
+                serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
+        }
+
         ConfigureServerModule.configureDefaultErrorHandler(app);
     }
 }
