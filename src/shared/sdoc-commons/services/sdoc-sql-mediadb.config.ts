@@ -31,11 +31,19 @@ export class SDocSqlMediadbConfig {
             loadDetailData: [
                 {
                     profile: 'image',
-                    // TODO: check security
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
                          'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                          'WHERE image.k_id in (:id) and p_id in (18)',
                     parameterNames: ['id']
+                },
+                {
+                    profile: 'keywords',
+                    sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
+                    'FROM kategorie INNER JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id' +
+                    ' INNER JOIN keyword on kategorie_keyword.kw_id=keyword.kw_id ' +
+                    'WHERE kategorie.k_id in (:id)',
+                    parameterNames: ['id'],
+                    modes: ['full']
                 }
             ],
             selectFieldList: [
@@ -333,7 +341,6 @@ export class SDocSqlMediadbConfig {
             loadDetailData: [
                 {
                     profile: 'image_playlist',
-                    // TODO: check security
                     sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists ' +
                     'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
                     ' INNER JOIN playlist on image_playlist.p_id=playlist.p_id ' +
@@ -342,12 +349,20 @@ export class SDocSqlMediadbConfig {
                 },
                 {
                     profile: 'image_persons',
-                    // TODO: check security
                     sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons ' +
                     'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
                     ' INNER JOIN objects ON image_object.io_obj_type=objects.o_key ' +
                     'WHERE image.i_id in (:id)',
                     parameterNames: ['id']
+                },
+                {
+                    profile: 'keywords',
+                    sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
+                    'FROM image INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
+                    ' INNER JOIN keyword on image_keyword.kw_id=keyword.kw_id ' +
+                    'WHERE image.i_id in (:id)',
+                    parameterNames: ['id'],
+                    modes: ['full']
                 }
             ],
             groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons'],
@@ -630,6 +645,26 @@ export class SDocSqlMediadbConfig {
                 }
             ],
             groupbBySelectFieldListIgnore: ['t_keywords'],
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM tour INNER JOIN kategorie on tour.k_id=kategorie.k_id' +
+                    ' INNER JOIN image on kategorie.k_id=image.k_id ' +
+                    ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
+                    'WHERE tour.t_id in (:id) and p_id in (18)',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'keywords',
+                    sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
+                    'FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
+                    ' INNER JOIN keyword on tour_keyword.kw_id=keyword.kw_id ' +
+                    'WHERE tour.t_id in (:id)',
+                    parameterNames: ['id'],
+                    modes: ['full']
+                }
+            ],
             selectFieldList: [
                 '"ROUTE" AS type',
                 'CONCAT("ac_", tour.t_typ) AS actiontype',
@@ -946,6 +981,25 @@ export class SDocSqlMediadbConfig {
                 }
             ],
             groupbBySelectFieldListIgnore: ['l_keywords'],
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                        'FROM location INNER JOIN kategorie on location.l_id=kategorie.l_id' +
+                        ' INNER JOIN image on kategorie.k_id=image.k_id ' +
+                        'WHERE location.l_id in (:id) order by i_rate desc limit 0, 1',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'keywords',
+                    sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
+                    'FROM location INNER JOIN location_keyword ON location.l_id=location_keyword.l_id' +
+                    ' INNER JOIN keyword on location_keyword.kw_id=keyword.kw_id ' +
+                    'WHERE location.l_id in (:id)',
+                    parameterNames: ['id'],
+                    modes: ['full']
+                }
+            ],
             selectFieldList: [
                 '"LOCATION" AS type',
                 'location.l_typ',
@@ -1100,6 +1154,16 @@ export class SDocSqlMediadbConfig {
             groupbBySelectFieldListIgnore: ['tr_keywords', 'k_altitude_asc_sum', 'k_altitude_desc_sum', 'k_distance_sum',
                 'k_altitude_min', 'k_altitude_max'
             ],
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM trip INNER JOIN kategorie on trip.tr_id=kategorie.tr_id' +
+                    ' INNER JOIN image on kategorie.k_id=image.k_id ' +
+                    'WHERE trip.tr_id in (:id) order by i_rate desc limit 0, 1',
+                    parameterNames: ['id']
+                }
+            ],
             selectFieldList: [
                 '"TRIP" AS type',
                 'CONCAT("TRIP", "_", trip.tr_id) AS id',
@@ -1182,7 +1246,7 @@ export class SDocSqlMediadbConfig {
             sortMapping: {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
-                'relevance': 'tr_datevon ASC'
+                'relevance': 'tr_datevon DESC'
             },
             filterMapping: {
                 id: 'trip.tr_id',
@@ -1229,6 +1293,17 @@ export class SDocSqlMediadbConfig {
             key: 'news',
             tableName: 'news',
             selectFrom: 'news',
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM news' +
+                    ' INNER JOIN kategorie on (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    ' INNER JOIN image on kategorie.k_id=image.k_id ' +
+                    'WHERE news.n_id in (:id) order by i_rate desc limit 0, 1',
+                    parameterNames: ['id']
+                }
+            ],
             selectFieldList: [
                 '"NEWS" AS type',
                 'CONCAT("NEWS", "_", news.n_id) AS id',
@@ -1306,7 +1381,7 @@ export class SDocSqlMediadbConfig {
             sortMapping: {
                 'date': 'n_date DESC',
                 'dateAsc': 'n_date ASC',
-                'relevance': 'n_date ASC'
+                'relevance': 'n_date DESC'
             },
             filterMapping: {
                 id: 'news.n_id',

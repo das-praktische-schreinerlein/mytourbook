@@ -42,6 +42,7 @@ export interface LoadDetailDataConfig {
     profile: string[];
     sql: string;
     parameterNames: string[];
+    modes?: string[];
 }
 
 export interface TableConfig {

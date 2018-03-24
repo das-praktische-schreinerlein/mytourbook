@@ -262,8 +262,6 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             return utils.reject('no actionConfig for actiontag:' + LogUtils.sanitizeLogMsg(actionTagForm.key));
         }
 
-        // TODO
-
         return utils.resolve(true);
     }
 
@@ -561,6 +559,17 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
             const promises = [];
             records.forEach(record => {
                 loadDetailDataConfigs.forEach((loadDetailDataConfig) => {
+                    if (loadDetailDataConfig.modes) {
+                        if (!opts || !opts.loadDetailsMode) {
+                            // mode required but no mode set on options
+                            return;
+                        }
+                        if (loadDetailDataConfig.modes.indexOf(opts.loadDetailsMode) < 0) {
+                            // mode not set on options
+                            return;
+                        }
+                    }
+
                     let sql = this.transformToSqlDialect(loadDetailDataConfig.sql);
                     loadDetailDataConfig.parameterNames.forEach(parameterName => {
                         let value = this.mapperUtils.prepareSingleValue(record[parameterName], '_');

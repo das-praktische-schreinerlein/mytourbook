@@ -41,7 +41,11 @@ export class SDocExporterCommand implements AbstractCommand {
 
 
         const exportSearchResultToJson = function(searchForm: SDocSearchForm): Promise<any> {
-            return dataService.search(searchForm).then(
+            return dataService.search(searchForm, {
+                showFacets: false,
+                showForm: false,
+                loadDetailsMode: 'full',
+                loadTrack: true}).then(
                 function searchDone(searchResult: GenericSearchResult<SDocRecord, SDocSearchForm>) {
                     let output = '';
                     for (const doc of searchResult.currentRecords) {

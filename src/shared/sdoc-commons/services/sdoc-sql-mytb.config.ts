@@ -8,6 +8,15 @@ export class SDocSqlMytbConfig {
             tableName: 'kategorie_full',
             selectFrom: 'kategorie_full LEFT JOIN location ON location.l_id = kategorie_full.l_id ' +
                         'LEFT JOIN image ON kategorie_full.i_id=image.i_id',
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM image INNER JOIN kategorie_full ON kategorie_full.i_id=image.i_id ' +
+                    'WHERE image.k_id in (:id)',
+                    parameterNames: ['id']
+                }
+            ],
             selectFieldList: [
                 '"TRACK" AS type',
                 'CONCAT("ac_", kategorie_full.k_type) AS actiontype',
@@ -498,6 +507,16 @@ export class SDocSqlMytbConfig {
             key: 'route',
             tableName: 'tour',
             selectFrom: 'tour LEFT JOIN location ON tour.l_id = location.l_id',
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM image INNER JOIN kategorie_full ON kategorie_full.i_id=image.i_id ' +
+                    ' INNER JOIN tour ON kategorie_full.k_id=tour.k_id ' +
+                    'WHERE tour.t_id in (:id)',
+                    parameterNames: ['id']
+                }
+            ],
             selectFieldList: [
                 '"ROUTE" AS type',
                 'CONCAT("ac_", tour.t_typ) AS actiontype',
@@ -773,6 +792,15 @@ export class SDocSqlMytbConfig {
             key: 'location',
             tableName: 'location',
             selectFrom: 'location',
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM image INNER JOIN kategorie_full ON kategorie_full.i_id=image.i_id ' +
+                    'WHERE kategorie_full.k_id in (:id) order by i_rate desc limit 0, 1',
+                    parameterNames: ['id']
+                }
+            ],
             selectFieldList: [
                 '"LOCATION" AS type',
                 'location.l_typ',
@@ -914,6 +942,16 @@ export class SDocSqlMytbConfig {
             groupbBySelectFieldListIgnore: ['k_altitude_asc_sum', 'k_altitude_desc_sum', 'k_distance_sum',
                 'k_altitude_min', 'k_altitude_max'
             ],
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM trip INNER JOIN kategorie_full on trip.tr_id=kategorie_full.tr_id' +
+                    ' INNER JOIN image on kategorie_full.i_id=image.i_id ' +
+                    'WHERE trip.tr_id in (:id) order by i_rate desc limit 0, 1',
+                    parameterNames: ['id']
+                }
+            ],
             selectFieldList: [
                 '"TRIP" AS type',
                 'CONCAT("TRIP", "_", trip.tr_id) AS id',
@@ -1010,7 +1048,7 @@ export class SDocSqlMytbConfig {
             sortMapping: {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
-                'relevance': 'tr_datevon ASC'
+                'relevance': 'tr_datevon DESC'
             },
             filterMapping: {
                 id: 'trip.tr_id',
@@ -1050,6 +1088,17 @@ export class SDocSqlMytbConfig {
             groupbBySelectFieldList: true,
             groupbBySelectFieldListIgnore: ['k_altitude_asc_sum', 'k_altitude_desc_sum', 'k_distance_sum',
                 'k_altitude_min', 'k_altitude_max'
+            ],
+            loadDetailData: [
+                {
+                    profile: 'image',
+                    sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
+                    'FROM news' +
+                    ' INNER JOIN kategorie_full on kategorie_full.n_id=news.n_id' +
+                    ' INNER JOIN image on kategorie_full.i_id=image.i_id ' +
+                    'WHERE news.n_id in (:id) order by i_rate desc limit 0, 1',
+                    parameterNames: ['id']
+                }
             ],
             selectFieldList: [
                 '"NEWS" AS type',
@@ -1147,7 +1196,7 @@ export class SDocSqlMytbConfig {
             sortMapping: {
                 'date': 'n_date DESC',
                 'dateAsc': 'n_date ASC',
-                'relevance': 'n_date ASC'
+                'relevance': 'n_date DESC'
             },
             filterMapping: {
                 id: 'news.n_id',

@@ -338,6 +338,15 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
                 });
                 (<SDocRecord>record).persons = imagePersons;
                 break;
+            case 'keywords':
+                let keywords = '';
+                docs.forEach(doc => {
+                    if (doc['keywords'] !== undefined && doc['keywords'] !== null) {
+                        keywords = doc['keywords'];
+                    }
+                });
+                (<SDocRecord>record).keywords = keywords;
+                break;
         }
     }
 

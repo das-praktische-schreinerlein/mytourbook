@@ -18,7 +18,8 @@
 - frontend: added datalist for text-input-fields with suggestions from facets
 - frontend: improved code
 - backend: added more facets/filters/fields to mediadb-adapter
-- backend: improved sdoc-loader
+- backend: improved sdoc-loader/exporter
+- backend: improved search-adapter to load details depending on mode
  
 ### bug fixes
 - common: fixed validation -> was to restrictive

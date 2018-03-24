@@ -231,6 +231,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                 showFacets: opts && opts['showFacets'] !== undefined ? opts['showFacets'] : true,
                 loadTrack: opts && opts['loadTrack'] !== undefined ? opts['loadTrack'] : false,
                 showForm: opts && opts['showForm'] !== undefined ? opts['showForm'] : true,
+                loadDetailsMode: (opts && opts['loadDetailsMode'] !== undefined) ? opts['loadDetailsMode'] : undefined,
                 force: false,
                 limit: searchForm.perPage,
                 offset: searchForm.pageNum - 1,
