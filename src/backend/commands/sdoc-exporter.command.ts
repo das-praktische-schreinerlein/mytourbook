@@ -45,7 +45,7 @@ export class SDocExporterCommand implements AbstractCommand {
                 function searchDone(searchResult: GenericSearchResult<SDocRecord, SDocSearchForm>) {
                     let output = '';
                     for (const doc of searchResult.currentRecords) {
-                        output += first ? '\n  ' : ',\n  ' + JSON.stringify(responseMapper.mapToAdapterDocument({}, doc), replacer);
+                        output += (first ? '\n  ' : ',\n  ') + JSON.stringify(responseMapper.mapToAdapterDocument({}, doc), replacer);
                         first = false;
                     }
                     fs.appendFileSync(dataFileName, output);

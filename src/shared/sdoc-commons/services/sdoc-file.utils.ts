@@ -1,8 +1,9 @@
 import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
+import {isArray} from 'util';
 
 export class SDocFileUtils {
     public static parseRecordSourceFromJson(json: string): any[] {
-        const data = JSON.parse(json);
+        let data = JSON.parse(json);
         const records = [];
         const idValidator = new IdValidationRule(true);
         const mapping = {
@@ -22,6 +23,13 @@ export class SDocFileUtils {
             trip_id_is: 'trip_id_i',
             news_id_is: 'news_id_i'
         };
+
+        if (data.sdocs) {
+            data = data.sdocs;
+        }
+        if (!isArray(data)) {
+            throw new Error('no valid data to import: no array of sdocs');
+        }
         data.forEach(record => {
             for (const fieldName in mapping) {
                 record[fieldName] = record[mapping[fieldName]];
