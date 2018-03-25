@@ -23,6 +23,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['track_id_i'] = props.trackId;
         values['trip_id_i'] = props.tripId;
         values['news_id_i'] = props.newsId;
+        values['blocked_i'] = props.blocked;
         values['dateshow_dt'] = props.dateshow;
         values['datestart_dt'] = props.datestart;
         values['dateend_dt'] = props.dateend;
@@ -137,6 +138,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
            values['subtypes'] = subtypeField.join(',');
         }
+        values['blocked'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'blocked_i', undefined);
         values['dateshow'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'dateshow_dt', undefined);
         values['datestart'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'datestart_dt', undefined);
         values['dateend'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'dateend_dt', undefined);

@@ -61,6 +61,7 @@ export class SDocSqlMediadbConfig {
                 'k_name',
 //                'k_html',
                 'CONCAT(COALESCE(k_name, ""), " ", COALESCE(k_meta_shortdesc, ""), " ", COALESCE(l_name, "")) AS html',
+                'k_gesperrt',
                 'k_datevon AS k_dateshow',
                 'k_datevon',
                 'k_datebis',
@@ -99,6 +100,9 @@ export class SDocSqlMediadbConfig {
             facetConfigs: {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)'
+                },
+                'blocked_is': {
+                    selectField: 'k_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((k_altitude_asc / 500))*500',
@@ -240,6 +244,7 @@ export class SDocSqlMediadbConfig {
                 'kategorie.l_id': ':loc_id_i:',
                 'kategorie.tr_id': ':trip_id_i:',
                 //'kategorie.n_id': ':news_id_i:',
+                'kategorie.k_gesperrt': ':blocked_i:',
                 'kategorie.k_datevon': ':datestart_dt:',
                 'kategorie.k_datebis': ':dateend_dt:',
                 'kategorie.k_meta_shortdesc': ':desc_txt:',
@@ -277,6 +282,7 @@ export class SDocSqlMediadbConfig {
                 trip_id_is: 'tr_id',
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
+                blocked_i: 'k_gesperrt',
                 dateshow_dt: 'k_dateshow',
                 datestart_dt: 'k_datevon',
                 dateend_dt: 'k_datebis',
@@ -380,6 +386,7 @@ export class SDocSqlMediadbConfig {
                 'kategorie.l_id',
                 'COALESCE(i_meta_name, k_name) AS i_meta_name',
                 'CONCAT(COALESCE(i_meta_name, ""), " ", COALESCE(l_name, "")) AS html',
+                'i_gesperrt',
                 'i_date',
                 'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(i_date) AS week',
@@ -417,6 +424,9 @@ export class SDocSqlMediadbConfig {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)',
                     selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id'
+                },
+                'blocked_is': {
+                    selectField: 'i_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((k_altitude_asc / 500))*500',
@@ -554,6 +564,7 @@ export class SDocSqlMediadbConfig {
             writeMapping: {
                 'image.l_id': ':loc_id_i:',
                 'image.k_id': ':track_id_i:',
+                'image.i_gesperrt': ':blocked_i:',
                 'image.i_date': ':datestart_dt:',
                 'image.i_meta_shortdesc': ':desc_txt:',
                 //'image.i_meta_shortdesc_md': ':desc_md_txt:',
@@ -583,6 +594,7 @@ export class SDocSqlMediadbConfig {
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
                 actiontype_s: 'actionType',
+                blocked_i: 'i_gesperrt',
                 data_tech_alt_asc_i: 'k_altitude_asc',
                 data_tech_alt_desc_i: 'k_altitude_desc',
                 data_tech_alt_min_i: 'i_gps_ele',

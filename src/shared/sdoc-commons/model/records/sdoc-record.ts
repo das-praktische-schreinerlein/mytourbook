@@ -15,6 +15,8 @@ export class SDocRecord extends BaseEntityRecord {
         newsId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         imageId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
 
+        blocked: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER, new NumberValidationRule(false, -5, 5, undefined)),
+
         dateshow: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
         datestart: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
         dateend: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
@@ -50,6 +52,7 @@ export class SDocRecord extends BaseEntityRecord {
     newsId: number;
     imageId: number;
 
+    blocked: number;
     dateshow: Date;
     datestart: Date;
     dateend: Date;
@@ -149,6 +152,7 @@ export class SDocRecordFactory {
         sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(values['newsId']) || undefined;
         sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(values['imageId']) || undefined;
 
+        sanitizedValues.blocked = SDocRecord.sdocFields.blocked.validator.sanitize(values['blocked']) || undefined;
         sanitizedValues.dateshow = SDocRecord.sdocFields.dateshow.validator.sanitize(values['dateshow']) || undefined;
         sanitizedValues.datestart = SDocRecord.sdocFields.datestart.validator.sanitize(values['datestart']) || undefined;
         sanitizedValues.dateend = SDocRecord.sdocFields.dateend.validator.sanitize(values['dateend']) || undefined;
@@ -186,6 +190,7 @@ export class SDocRecordFactory {
         sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(sdoc.newsId) || undefined;
         sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(sdoc.imageId) || undefined;
 
+        sanitizedValues.blocked = SDocRecord.sdocFields.blocked.validator.sanitize(sdoc.blocked) || undefined;
         sanitizedValues.dateshow = SDocRecord.sdocFields.dateshow.validator.sanitize(sdoc.dateshow) || undefined;
         sanitizedValues.datestart = SDocRecord.sdocFields.datestart.validator.sanitize(sdoc.datestart) || undefined;
         sanitizedValues.dateend = SDocRecord.sdocFields.dateend.validator.sanitize(sdoc.dateend) || undefined;
@@ -229,6 +234,7 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.newsId.validator.isValid(values['newsId']) ? errors.push('newsId') &&  false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(values['imageId']) ? errors.push('imageId') &&  false : true;
 
+        state = !SDocRecord.sdocFields.blocked.validator.isValid(values['blocked']) ? errors.push('blocked') &&  false : true;
         state = !SDocRecord.sdocFields.dateshow.validator.isValid(values['dateshow']) ? errors.push('dateshow') &&  false : true;
         state = !SDocRecord.sdocFields.datestart.validator.isValid(values['datestart']) ? errors.push('datestart') &&  false : true;
         state = !SDocRecord.sdocFields.dateend.validator.isValid(values['dateend']) ? errors.push('dateend') &&  false : true;
@@ -272,6 +278,7 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.newsId.validator.isValid(sdoc.newsId) ? errors.push('newsId') &&  false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(sdoc.imageId) ? errors.push('imageId') &&  false : true;
 
+        state = !SDocRecord.sdocFields.blocked.validator.isValid(sdoc.blocked) ? errors.push('blocked') &&  false : true;
         state = !SDocRecord.sdocFields.dateshow.validator.isValid(sdoc.dateshow) ? errors.push('dateshow') &&  false : true;
         state = !SDocRecord.sdocFields.datestart.validator.isValid(sdoc.datestart) ? errors.push('datestart') &&  false : true;
         state = !SDocRecord.sdocFields.dateend.validator.isValid(sdoc.dateend) ? errors.push('dateend') &&  false : true;

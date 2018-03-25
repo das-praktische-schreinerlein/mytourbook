@@ -37,6 +37,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     pdoc: PDocRecord;
     baseSearchUrl: string;
     tracks: SDocRecord[] = [];
+    trackRouten: SDocRecord[] = [];
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
@@ -59,6 +60,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                     this.record = undefined;
                     this.pdoc = undefined;
                     this.tracks = [];
+                    this.trackRouten = [];
 
                     this.errorResolver.redirectAfterRouterError(ErrorResolver.ERROR_READONLY, undefined, this.toastr, undefined);
                     me.cd.markForCheck();
@@ -68,6 +70,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                 this.route.data.subscribe(
                 (data: { record: ResolvedData<SDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
                     me.commonRoutingService.setRoutingState(RoutingState.DONE);
+                    me.trackRouten = [];
 
                     const flgSDocError = ErrorResolver.isResolverError(data.record);
                     const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
@@ -166,6 +169,16 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
             }
         }
         this.tracks = realTracks;
+    }
+
+    onTrackRoutenFound(searchresult: SDocSearchResult) {
+        const trackRouten = [];
+        if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
+            for (const record of searchresult.currentRecords) {
+                trackRouten.push(record);
+            }
+        }
+        this.trackRouten = trackRouten;
     }
 
     ngOnDestroy() {

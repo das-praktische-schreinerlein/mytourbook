@@ -14,6 +14,7 @@
             </div>
         </div>
     </div>
+
     <div class="container content-container">
         <div class="container">
             <app-sdoc-editform [record]="record" [backToSearch]="'true'" (save)="submitSave($event, false)" (saveAndSearch)="submitSave($event, true)"></app-sdoc-editform>
@@ -146,6 +147,7 @@
                                             [htmlId]="'ROUTE'"
                                             [showForm]="false"
                                             [showResultList]="true"
+                                            (searchResultFound)="onTrackRoutenFound($event)"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
