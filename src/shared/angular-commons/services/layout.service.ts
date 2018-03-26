@@ -117,7 +117,7 @@ export class LayoutService {
         if (width === undefined) {
             return LayoutSize.BIG;
         }
-        if (width < 400) {
+        if (width < 430) {
             return LayoutSize.VERYSMALL;
         }
         if (width < 767) {

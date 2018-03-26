@@ -1,3 +1,6 @@
+div.datatechvaluetable .entry {
+    min-width: 81px;
+}
 div.datatechvaluetable .entry .label {
     min-width: 30px;
 }

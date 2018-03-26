@@ -1,4 +1,4 @@
-<div [class]="(!showResultList ? 'hidden-print': '')" *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0 || showLoadingSpinner">
+<div [class]="(!showResultList ? 'hidden-print sdoc-inline-searchpage': 'sdoc-inline-searchpage')" *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0 || showLoadingSpinner">
     <div class="container inline-content-container relative-container" id="{{htmlId ? htmlId : ''}}">
         <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
         <div class="container">

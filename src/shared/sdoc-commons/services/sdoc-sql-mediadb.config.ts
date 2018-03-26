@@ -215,7 +215,7 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'k_altitude_max ASC',
                 'dataTechDistAsc': 'k_distance ASC',
-                'ratePers': 'k_rate_gesamt DESC',
+                'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
                 'location': 'l_name ASC',
                 'relevance': 'k_datevon DESC'
             },
@@ -538,7 +538,7 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'i_gps_ele ASC',
                 'dataTechDistAsc': 'k_distance ASC',
-                'ratePers': 'i_rate DESC',
+                'ratePers': 'i_rate DESC, i_date DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'
             },
@@ -861,7 +861,7 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 't_route_hm ASC',
                 'dataTechMaxAsc': 't_ele_max ASC',
                 'dataTechDistAsc': 't_route_m ASC',
-                'ratePers': 't_rate_gesamt DESC',
+                'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 't_datevon DESC'
             },

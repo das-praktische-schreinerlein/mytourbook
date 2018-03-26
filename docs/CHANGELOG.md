@@ -11,7 +11,8 @@
 ### improvements
 - common: use xregexp for validation with unicode-classes
 - common: added ability to facet by year (for mytb, mediadb)
-- frontend: improved list-layout
+- common: added actiontag to block items for public
+- frontend: improved list/mobile-layout
 - frontend: highlight labels of form-inputs which are set
 - frontend: added "save and back to search"-button on edit-form
 - frontend: added function to fix nonstandard gpx in edit-form
