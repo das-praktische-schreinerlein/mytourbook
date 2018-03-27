@@ -17,6 +17,7 @@
 - frontend: added "save and back to search"-button on edit-form
 - frontend: added function to fix nonstandard gpx in edit-form
 - frontend: added datalist for text-input-fields with suggestions from facets
+- frontend: added name-recommendation to edit-form
 - frontend: improved code
 - backend: added more facets/filters/fields to mediadb-adapter
 - backend: improved sdoc-loader/exporter

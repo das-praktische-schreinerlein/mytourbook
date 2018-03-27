@@ -3,7 +3,7 @@ import {
     SimpleChange
 } from '@angular/core';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {StructuredKeyword} from '../../services/sdoc-contentutils.service';
+import {StructuredKeyword, StructuredKeywordState} from '../../services/sdoc-contentutils.service';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
@@ -29,6 +29,9 @@ export class SDocKeywordsStateComponent implements OnInit, OnChanges {
 
     @Output()
     public setKeyword: EventEmitter<string> = new EventEmitter();
+
+    @Output()
+    public tagsFound: EventEmitter<StructuredKeywordState[]> = new EventEmitter();
 
     constructor(private appService: GenericAppService, private cd: ChangeDetectorRef) {
     }

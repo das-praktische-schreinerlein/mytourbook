@@ -37,4 +37,17 @@ export class DateUtils {
         return YYYY + '-' + MM + '-' + DD + 'T' +
             HH + ':' + II + ':' + SS;
     }
+
+    public static formatDateRange(start: Date, end: Date): string {
+        const formatOptionsShort = { day: 'numeric' };
+        const formatOptionsLong = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        const datestart = start.toLocaleString('de-DE', formatOptionsLong);
+        const dateend = end.toLocaleString('de-DE', formatOptionsLong);
+        if (datestart !== dateend) {
+            return start.toLocaleString('de-DE', formatOptionsShort)
+                + '-' + dateend;
+        } else {
+            return dateend;
+        }
+    }
 }

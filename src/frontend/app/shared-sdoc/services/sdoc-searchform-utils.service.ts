@@ -123,6 +123,21 @@ export class SDocSearchFormUtils {
         return [].concat(selectedOptions, otherOptions);
     }
 
+    extractSelected(options: IMultiSelectOption[], selected: any[]): IMultiSelectOption[] {
+        if (selected === undefined || selected.length < 1) {
+            return [];
+        }
+
+        const selectedOptions: IMultiSelectOption[] = [];
+        for (const option of options) {
+            if (selected.indexOf(option.id) >= 0) {
+                selectedOptions.push(option);
+            }
+        }
+
+        return selectedOptions;
+    }
+
     prepareExtendedSelectValues(src: any[]): any[] {
         const values = [];
         for (const value of src) {

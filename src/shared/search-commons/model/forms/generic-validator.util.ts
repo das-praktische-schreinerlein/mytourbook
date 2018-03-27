@@ -146,6 +146,7 @@ export class RegExValidationReplaceRule extends ValidationRule {
     ;
     public static nameRule = ''
         + XRegExp.escape('-')
+        + '@'
         + '\\p{LC}' // LC 	Letter, Cased
         + '\\p{Ll}' // Ll 	Letter, Lowercase
         + '\\p{Lm}' // Lm 	Letter, Modifier

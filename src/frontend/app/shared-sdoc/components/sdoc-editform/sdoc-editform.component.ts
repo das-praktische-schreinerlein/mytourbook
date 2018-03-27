@@ -15,10 +15,11 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {KeywordsState, SDocContentUtils, StructuredKeywordState} from '../../services/sdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
+import {isArray} from 'util';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -37,6 +38,7 @@ export class SDocEditformComponent implements OnChanges {
             showUncheckAll: false,
             autoUnselect: true,
             selectionLimit: 1};
+    private personsFound: StructuredKeywordState[] = [];
     private numBeanFieldConfig = {
         'sdocratepers.gesamt': { labelPrefix: 'label.sdocratepers.gesamt.', values: [0, 2, 5, 8, 11, 14]},
         'sdocratepers.gesamt_image': { labelPrefix: 'label.image.sdocratepers.gesamt.', values: [0, 2, 5, 6, 8, 9, 10, 11, 14]},
@@ -291,6 +293,54 @@ export class SDocEditformComponent implements OnChanges {
 
     formatInputDate(value: Date): String {
         return DateUtils.dateToInputString(value);
+    }
+
+    setPersonsFound(persons: StructuredKeywordState[]) {
+        this.personsFound = persons;
+    }
+
+    recommendName(): void {
+        let name = '';
+
+        let actiontype = this.editFormGroup.getRawValue()['subtype'];
+        if (this.editFormGroup.getRawValue()['subtype'] !== undefined) {
+            if (!isArray(actiontype)) {
+                actiontype = [actiontype];
+            }
+            const selectedActionTypes = this.searchFormUtils.extractSelected(this.optionsSelect.subTypeActiontype, actiontype);
+            if (selectedActionTypes.length > 0) {
+                name += selectedActionTypes[0].name;
+            }
+        }
+        if (this.personsFound.length > 0) {
+            const persons = [];
+            this.personsFound.forEach(personGroup => {
+                personGroup.keywords.forEach(person => {
+                    if (person.state === KeywordsState.SET) {
+                        persons.push(person.keyword);
+                    }
+                });
+            });
+
+            name += ' mit ' + persons.join(', ');
+        }
+
+        let locId = this.editFormGroup.getRawValue()['locId'];
+        if (this.editFormGroup.getRawValue()['locId'] !== undefined) {
+            if (!isArray(locId)) {
+                locId = [locId];
+            }
+            const selectedLocIds = this.searchFormUtils.extractSelected(this.optionsSelect.locId, locId);
+            if (selectedLocIds.length > 0) {
+                name += ' bei ' + selectedLocIds[0].name.replace(/.* -> /g, '').replace(/ \(\d+\)/, '');
+            }
+        }
+
+        if (this.editFormGroup.getRawValue()['datestart'] !== undefined && this.editFormGroup.getRawValue()['dateend'] !== undefined) {
+            name += ' ' + DateUtils.formatDateRange((new Date(this.editFormGroup.getRawValue()['datestart'])),
+                (new Date(this.editFormGroup.getRawValue()['dateend'])));
+        }
+        this.setValue('name', name);
     }
 
     updateMap(): boolean {
