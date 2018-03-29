@@ -33,6 +33,8 @@ export class Graph3d {
 - add mysql-downloader
     - solr-6.6.0/contrib/dataimporthandler/libmysql-connector-java-5.1.40-bin.jar
 - add core from mytb
+- download [hunspell-language-files](https://github.com/elastic/hunspell/tree/master/dicts/de_DE) and put them as *lang/hunspell_de_DE.dic* and *lang/hunspell_de_DE.aff* into core-config
+- download [grman dictionary](https://netix.dl.sourceforge.net/project/germandict/german.7z) and put as *lang/dictionary_de.txt* into core-config
 
 #### secure solr
 - create an seen on [Enable Authentification](https://cwiki.apache.org/confluence/display/solr/Authentication+and+Authorization+Plugins#AuthenticationandAuthorizationPlugins-EnabledPluginswithsecurity.json)

@@ -458,6 +458,7 @@ CREATE TABLE kategorie_tourpoint (
   KEY idx_ktp__ktp_id (ktp_id),
   KEY idx_ktp__k_id (k_id),
   KEY idx_ktp__l_id (l_id),
+  KEY idx_ktp__ktp_date (ktp_date),
   CONSTRAINT kategorie_tourpoint_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
   CONSTRAINT kategorie_tourpoint_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4261739 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
@@ -493,6 +494,7 @@ CREATE TABLE image (
   KEY idx_i__k_id (k_id),
   KEY idx_i__l_id (l_id),
   KEY idx_i__i_date (i_date),
+  KEY idx_i__i_gps_ele (i_gps_ele),
   KEY idx_i__i_gps_lon (i_gps_lon),
   KEY idx_i__i_gps_lat (i_gps_lat),
   CONSTRAINT image_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id),
