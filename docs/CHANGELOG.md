@@ -22,6 +22,7 @@
 - backend: added more facets/filters/fields to mediadb-adapter
 - backend: improved sdoc-loader/exporter
 - backend: improved search-adapter to load details depending on mode
+- solr: imporved fulltext-search
  
 ### bug fixes
 - common: fixed validation -> was to restrictive
