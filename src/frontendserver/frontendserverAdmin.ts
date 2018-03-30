@@ -66,7 +66,7 @@ const getsiteUrl = function (nr) {
     if (url.indexOf(siteBaseUrl) < 0) {
         console.warn('SKIP - illegal url:' + url);
     }
-    Axios(url).then(response => {
+    return Axios(url).then(response => {
             if (response.status === 200) {
                 console.log('DONE - ' + (nr + 1) + '/' + siteUrls.length + ' got cached url:' + url, response.status);
             } else {
@@ -74,13 +74,14 @@ const getsiteUrl = function (nr) {
                 notCached = notCached + 1;
                 if (notCached >= maxNotCached) {
                     console.warn('WARNING - stopped after ' + (nr + 1) + '/' + siteUrls.length + ' with not cached:' + notCached, siteUrls);
+                    process.exit(2);
                     return;
                 }
             }
-            getsiteUrl(nr + 1);
+            return getsiteUrl(nr + 1);
         }).catch(error => {
             console.warn('WARNING - got error for url:' + url, error);
-            getsiteUrl(nr + 1);
+            return getsiteUrl(nr + 1);
         });
 };
 
@@ -112,6 +113,6 @@ sitemaps.sitemapsInRobots(siteMapBaseUrl + 'robots.txt', function(err, siteMaps)
             console.log = function() {};
         }
 
-        getsiteUrl(0);
+        return getsiteUrl(0);
     });
 });
