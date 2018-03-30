@@ -17,6 +17,7 @@ const argv = minimist(process.argv.slice(2));
 enableProdMode();
 
 const debug = argv['debug'] || false;
+const maxNotCached = argv['maxNotCached'] || 999999;
 const distFolder = join(process.cwd(), 'dist');
 const distProfile = 'DIST_PROFILE';
 const distServerProfile = 'DIST_SERVER_PROFILE';
@@ -53,6 +54,7 @@ app.listen(port, function () {
 const siteBaseUrl = 'http://localhost:' + port + '/' + distProfile;
 const defaultSiteMaps = [siteMapBaseUrl + 'sitemap-sdoc-de.xml', siteMapBaseUrl + 'sitemap-pdoc-de.xml'];
 const siteUrls = [];
+let notCached = 0;
 
 const getsiteUrl = function (nr) {
     if (nr >= siteUrls.length) {
@@ -65,7 +67,16 @@ const getsiteUrl = function (nr) {
         console.warn('SKIP - illegal url:' + url);
     }
     Axios(url).then(response => {
-            console.log('DONE - got url:' + url, response.status);
+            if (response.status === 200) {
+                console.log('DONE - ' + (nr + 1) + '/' + siteUrls.length + ' got cached url:' + url, response.status);
+            } else {
+                console.log('DONE - ' + (nr + 1) + '/' + siteUrls.length + ' got not cached url:' + url, response.status);
+                notCached = notCached + 1;
+                if (notCached >= maxNotCached) {
+                    console.warn('WARNING - stopped after ' + (nr + 1) + '/' + siteUrls.length + ' with not cached:' + notCached, siteUrls);
+                    return;
+                }
+            }
             getsiteUrl(nr + 1);
         }).catch(error => {
             console.warn('WARNING - got error for url:' + url, error);

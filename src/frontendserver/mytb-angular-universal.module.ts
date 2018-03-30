@@ -112,15 +112,22 @@ export class MytbAngularUniversalModule {
         res.render(this.indexFile,
             { req, res, providers: [{ provide: 'baseUrl', useValue: `${req.protocol}://${req.get('host')}/${this.config.distProfile}`}]
             }, (err, html) => {
+                if (me.config.cacheMode !== CacheModeType.NO_CACHE) {
+                    res.status(201).send(html);
+                    if (err) {
+                        console.error('error while getting url:' + res.url, err);
+                        return;
+                    }
+
+                    const filename = me.getCacheFilename(req.url);
+                    fs.writeFileSync(filename, html);
+                    return;
+                }
+
                 res.status(200).send(html);
                 if (err) {
                     console.error('error while getting url:' + res.url, err);
                     return;
-                }
-
-                if (me.config.cacheMode !== CacheModeType.NO_CACHE) {
-                    const filename = me.getCacheFilename(req.url);
-                    fs.writeFileSync(filename, html);
                 }
             }
         );
