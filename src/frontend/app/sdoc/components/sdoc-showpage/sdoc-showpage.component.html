@@ -13,7 +13,7 @@
                             </div>
                     </ng-container>
                     <ng-container *ngSwitchDefault="">
-                        <div class="picture-small" style="float: left; margin-right: 10px">
+                        <div class="picture-small" style="float: left; margin-right: 10px; padding-right: 20px">
                             <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
                             <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                 <img class="picture-small" width="300px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
