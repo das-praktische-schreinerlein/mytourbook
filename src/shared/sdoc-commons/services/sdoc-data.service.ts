@@ -170,6 +170,8 @@ export class SDocDataService extends SDocSearchService {
             }).then(function recordsDone(sdocRecord: SDocRecord) {
                 if (sdocRecord !== undefined) {
                     console.log('EXISTING - record', record.type + ' ' + record.name);
+                    const idFieldName = me.typeMapping[record.type.toLowerCase()];
+                    myMappings[idFieldName] = record[idFieldName];
                     return utils.resolve(sdocRecord);
                     // console.log('UPDATE - record', record.name);
                     // return dataService.updateById(sdocRecord.id, record);

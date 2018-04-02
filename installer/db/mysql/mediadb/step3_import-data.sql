@@ -233,7 +233,7 @@ CREATE TABLE location_keyword (
 DROP TABLE IF EXISTS tour;
 CREATE TABLE tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
-  l_id int(11) NOT NULL DEFAULT '1',
+  l_id int(11),
   t_meta_desc text COLLATE latin1_general_ci,
   t_meta_shortdesc text COLLATE latin1_general_ci,
   t_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -353,8 +353,8 @@ CREATE TABLE kategorie (
   k_meta_desc text COLLATE latin1_general_ci,
   k_meta_shortdesc text COLLATE latin1_general_ci,
   k_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-  t_id int(11) NOT NULL DEFAULT '1',
-  l_id int(11) NOT NULL DEFAULT '1',
+  t_id int(11),
+  l_id int(11),
   k_distance float DEFAULT '0',
   k_altitude_min float DEFAULT '0',
   k_altitude_max float DEFAULT '0',
@@ -469,7 +469,7 @@ CREATE TABLE kategorie_tourpoint (
 DROP TABLE IF EXISTS image;
 CREATE TABLE image (
   i_id int(11) NOT NULL AUTO_INCREMENT,
-  k_id int(11) NOT NULL DEFAULT '0',
+  k_id int(11),
   i_date datetime DEFAULT NULL,
   i_origpath varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   i_file varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -477,7 +477,7 @@ CREATE TABLE image (
   i_meta_desc text COLLATE latin1_general_ci,
   i_meta_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   i_meta_shortdesc varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-  l_id int(11) NOT NULL DEFAULT '1',
+  l_id int(11),
   i_gps_lat float DEFAULT NULL,
   i_gps_lon float DEFAULT NULL,
   i_gps_ele float DEFAULT NULL,
