@@ -79,6 +79,7 @@ export class SDocExporterCommand implements AbstractCommand {
             globSearchForm.perPage = perRun;
             globSearchForm.pageNum = 1;
             globSearchForm.type = types[nr];
+            globSearchForm.sort = 'forExport';
 
             console.log('DO export ' + nr, globSearchForm);
             return exportSearchResultToJson(globSearchForm).then(value => {

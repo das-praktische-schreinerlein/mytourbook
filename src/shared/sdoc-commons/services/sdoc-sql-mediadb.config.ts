@@ -215,6 +215,7 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'k_altitude_max ASC',
                 'dataTechDistAsc': 'k_distance ASC',
+                'forExport': 'k_datevon ASC',
                 'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
                 'location': 'l_name ASC',
                 'relevance': 'k_datevon DESC'
@@ -527,8 +528,8 @@ export class SDocSqlMediadbConfig {
                 }
             },
             sortMapping: {
-                'date': 'i_date DESC',
-                'dateAsc': 'i_date ASC',
+                'date': 'i_date DESC, i_id DESC',
+                'dateAsc': 'i_date ASC, i_id ASC',
                 'distance': 'geodist ASC',
                 'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
                 'dataTechAltDesc': 'k_altitude_asc DESC',
@@ -538,6 +539,7 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'i_gps_ele ASC',
                 'dataTechDistAsc': 'k_distance ASC',
+                'forExport': 'i_date ASC, i_id ASC',
                 'ratePers': 'i_rate DESC, i_date DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'
@@ -861,6 +863,7 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 't_route_hm ASC',
                 'dataTechMaxAsc': 't_ele_max ASC',
                 'dataTechDistAsc': 't_route_m ASC',
+                'forExport': 't_id ASC',
                 'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 't_datevon DESC'
@@ -1102,6 +1105,7 @@ export class SDocSqlMediadbConfig {
             },
             sortMapping: {
                 'distance': 'geodist ASC',
+                'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC',
                 'location': 'l_name ASC',
                 'relevance': 'l_name ASC'
             },
@@ -1258,6 +1262,7 @@ export class SDocSqlMediadbConfig {
             sortMapping: {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
+                'forExport': 'tr_datevon ASC',
                 'relevance': 'tr_datevon DESC'
             },
             filterMapping: {
@@ -1393,6 +1398,7 @@ export class SDocSqlMediadbConfig {
             sortMapping: {
                 'date': 'n_date DESC',
                 'dateAsc': 'n_date ASC',
+                'forExport': 'n_date ASC',
                 'relevance': 'n_date DESC'
             },
             filterMapping: {
