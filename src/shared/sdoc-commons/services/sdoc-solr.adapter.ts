@@ -78,7 +78,10 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
                 'f.week_is.facet.limit': '-1',
                 'f.week_is.facet.sort': 'index'
             },
-            'year_is': {}
+            'year_is': {
+                'f.year_is.facet.limit': '-1',
+                'f.year_is.facet.sort': 'index'
+            }
         },
         commonSortOptions: {
             'bq': 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:IMAGE^1' +

@@ -10,7 +10,7 @@
  
 ### improvements
 - common: use xregexp for validation with unicode-classes
-- common: added ability to facet by year (for mytb, mediadb)
+- common: added ability to facet by year (for mytb, mediadb, solr)
 - common: added actiontag to block items for public
 - frontend: improved list/mobile-layout
 - frontend: highlight labels of form-inputs which are set
