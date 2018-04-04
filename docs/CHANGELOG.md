@@ -28,6 +28,7 @@
 - common: fixed validation -> was to restrictive
 - frontend: scroll to top of page on routechange, of element when pagenumchange
 - frontend: fixed encodeUri for angular-http-client
+- frontend: fixed some issues - added distance to list-layouts, set pageNum=1 if filter changes on searchpage, show no location for news)
 - backend: fixed sql-adataper (max, greatest, IN_CSV)  
  
 ### breaking changes

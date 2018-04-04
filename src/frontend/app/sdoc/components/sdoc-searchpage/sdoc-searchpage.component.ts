@@ -274,6 +274,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.searchForm = sdocSearchForm;
         this.searchForm.perPage = origSearchForm.perPage;
         this.searchForm.sort = origSearchForm.sort;
+        this.searchForm.pageNum = 1;
         // console.log('onSearchSDoc: redirect to ', sdocSearchForm);
         this.redirectToSearch();
         return false;
@@ -317,17 +318,20 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     onTimeTableColumnClicked(month: string) {
         this.searchForm.when = month;
+        this.searchForm.pageNum = 1;
         this.redirectToSearch();
         return false;
     }
     onTypeTableColumnClicked(type: string) {
         this.searchForm.type = type;
+        this.searchForm.pageNum = 1;
         this.redirectToSearch();
         return false;
     }
 
     onTagcloudClicked(filterValue: any, filter: string) {
         this.searchForm[filter] = filterValue;
+        this.searchForm.pageNum = 1;
         this.redirectToSearch();
 
         return false;

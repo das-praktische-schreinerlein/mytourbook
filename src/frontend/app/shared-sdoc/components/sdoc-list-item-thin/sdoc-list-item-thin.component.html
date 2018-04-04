@@ -3,6 +3,7 @@
     <ng-container *ngIf="layoutSize >= LayoutSize.BIG">
         <!--- BIG -->
         <div class="col-2 layout-big">
+            <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance><br /></ng-container>
             <ng-container [ngSwitch]="listItem.currentRecord.type">
                 <ng-container *ngSwitchCase="'IMAGE'">
                     <ng-container *ngIf="listItem.image">
@@ -33,6 +34,7 @@
     <ng-container *ngIf="layoutSize === LayoutSize.SMALL">
         <!--- SMALL -->
         <div class="col-4 layout-small">
+            <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance><br /></ng-container>
             <ng-container [ngSwitch]="listItem.currentRecord.type">
                 <ng-container *ngSwitchCase="'IMAGE'">
                     <ng-container *ngIf="listItem.image">
@@ -61,6 +63,7 @@
     <ng-container *ngIf="layoutSize <= LayoutSize.VERYSMALL">
         <!--- VERYSMALL -->
         <div class="col-4 layout-verysmall">
+            <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance><br /></ng-container>
             <ng-container [ngSwitch]="listItem.currentRecord.type">
                 <ng-container *ngSwitchCase="'IMAGE'">
                     <ng-container *ngIf="listItem.image">
