@@ -1,5 +1,6 @@
 import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
 import {isArray} from 'util';
+import {DateUtils} from '../../commons/utils/date.utils';
 
 export class SDocFileUtils {
     public static parseRecordSourceFromJson(json: string): any[] {
@@ -46,6 +47,13 @@ export class SDocFileUtils {
             record['data_tech_alt_max_facet_is'] = Math.ceil(Number.parseFloat(record['data_tech_alt_max_i']) / 500) * 500 + '';
             record['data_tech_dist_facets_fs'] = Math.ceil(Number.parseFloat(record['data_tech_dist_f']) / 5) * 5 + '';
             record['data_tech_dur_facet_fs'] = Math.ceil(Number.parseFloat(record['data_tech_dur_f']) / 2) * 2 + '';
+
+            for (const dateField of ['datestart_dt', 'dateend_dt', 'dateshow_dt']) {
+                if (record[dateField] !== undefined && record[dateField] !== '') {
+                    record[dateField] = DateUtils.parseDateStringWithLocaltime(record[dateField]);
+                }
+            }
+
             records.push(record);
         });
 

@@ -292,7 +292,7 @@ export class SDocEditformComponent implements OnChanges {
     }
 
     formatInputDate(value: Date): String {
-        return DateUtils.dateToInputString(value);
+        return DateUtils.dateToLocalISOString(value);
     }
 
     setPersonsFound(persons: StructuredKeywordState[]) {
@@ -476,9 +476,9 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         const config = {
-            dateshow: [DateUtils.dateToInputString(this.record.dateshow)],
-            datestart: [DateUtils.dateToInputString(this.record.datestart)],
-            dateend: [DateUtils.dateToInputString(this.record.dateend)],
+            dateshow: [DateUtils.dateToLocalISOString(this.record.dateshow)],
+            datestart: [DateUtils.dateToLocalISOString(this.record.datestart)],
+            dateend: [DateUtils.dateToLocalISOString(this.record.dateend)],
             locIdParent: [this.record.locIdParent],
             gpsTrackSrc: [this.record.gpsTrackSrc]
         };

@@ -1,4 +1,5 @@
 import {GenericSearchForm} from '../model/forms/generic-searchform';
+import {DateUtils} from '../../commons/utils/date.utils';
 
 export interface AdapterQuery {
     where?: {};
@@ -50,6 +51,10 @@ export class MapperUtils {
         return this.getAdapterNumberValue(adapterDocument, this.mapToAdapterFieldName(mapping, adapterFieldName), defaultValue);
     }
 
+    public getMappedAdapterDateTimeValue(mapping: {}, adapterDocument: any, adapterFieldName: string, defaultValue: any): number {
+        return this.getAdapterDateTimeValue(adapterDocument, this.mapToAdapterFieldName(mapping, adapterFieldName), defaultValue);
+    }
+
     public getAdapterValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
         if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {
@@ -82,6 +87,25 @@ export class MapperUtils {
 
         return value;
     }
+
+    public getAdapterDateTimeValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): number {
+        let value = defaultValue;
+        if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {
+            if (Array.isArray(adapterDocument[adapterFieldName])) {
+                value = adapterDocument[adapterFieldName][0];
+            } else {
+                value = adapterDocument[adapterFieldName];
+            }
+            if (value === undefined) {
+                return undefined;
+            }
+
+            value =  DateUtils.dateToLocalISOString(value);
+        }
+
+        return value;
+    }
+
     public getAdapterCoorValue(adapterDocument: any, adapterFieldName: string, defaultValue: any): string {
         let value = defaultValue;
         if (adapterDocument[adapterFieldName] !== undefined && adapterDocument[adapterFieldName] !== null) {

@@ -26,6 +26,7 @@
  
 ### bug fixes
 - common: fixed validation -> was to restrictive
+- common: fixed date-handling - convert all to ISO-Date (not perfect but ....)
 - frontend: scroll to top of page on routechange, of element when pagenumchange
 - frontend: fixed encodeUri for angular-http-client
 - frontend: fixed some issues - added distance to list-layouts, set pageNum=1 if filter changes on searchpage, show no location for news)
