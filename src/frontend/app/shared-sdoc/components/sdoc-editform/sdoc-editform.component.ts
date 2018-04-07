@@ -20,6 +20,8 @@ import {GenericAppService} from '../../../../shared/commons/services/generic-app
 import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {isArray} from 'util';
+import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
+import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -343,17 +345,56 @@ export class SDocEditformComponent implements OnChanges {
         this.setValue('name', name);
     }
 
+    gpxDropped(event: UploadEvent) {
+        const me = this;
+        for (const droppedFile of event.files) {
+            if (droppedFile.fileEntry.isFile) {
+                const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+                fileEntry.file((file: File) => {
+                    const reader = new FileReader();
+                    const maxLength = (<GpsTrackValidationRule>SDocRecord.sdocFields.gpsTrackSrc.validator).getMaxLength();
+                    if (file.size > maxLength) {
+                        me.toastr.warning('Die GPX-Datei darf höchstes ' + maxLength / 1000000 + 'MB sein.', 'Oje!');
+                        return;
+                    }
+                    if (!file.name.toLowerCase().endsWith('.gpx')) {
+                        me.toastr.warning('Es dürfen nur .gpx Dateien geladen werden.', 'Oje!');
+                        return;
+                    }
+
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            // Render thumbnail.
+                            const track = e.target.result;
+                            me.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
+                            return me.updateMap();
+                        };
+                    })(file);
+
+                    // Read in the image file as a data URL.
+                    reader.readAsText(file);
+                });
+
+                return;
+            }
+        }
+    }
+
+
     updateMap(): boolean {
         if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
             this.editFormGroup.getRawValue()['gpsTrackSrc'].length > 0) {
             let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
             track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
             this.trackRecords = [SDocRecordFactory.createSanitized({
-                id: 'TMP',
+                id: 'TMP' + (new Date()).getTime(),
                 gpsTrackSrc: track,
                 gpsTrackBaseFile: 'tmp.gpx',
                 name: this.editFormGroup.getRawValue()['name'],
-                type: this.record.type
+                type: this.record.type,
+                datestart: new Date().toISOString(),
+                dateend: new Date().toISOString(),
+                dateshow: this.editFormGroup.getRawValue()['dateshow']
             })];
             this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
 

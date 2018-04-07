@@ -207,6 +207,7 @@
             <textarea formControlName="gpsTrackSrc" class="form-control" type="text" placeholder="gpsTrackSrc" i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpsTrackSrc@@placeholder.form.sdoc.gpsTrackSrc"></textarea>
             <button (click)="updateMap()" i18n="updateGpsTrackMap label|Label for button: updateGpsTrackMap@@label.editform.sdoc.updateGpsTrackMap">Update</button>
             <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editform.sdoc.fixGpsTrackSrc">Fix errors</button>
+            <file-drop (onFileDrop)="gpxDropped($event)" i18n-headertext="gpsFileDropZone label|Label for button: gpsFileDropZone@@label.editform.sdoc.gpsFileDropZone">GPX-File dropzone</file-drop>
         </div>
         <ng-container *ngIf="trackStatistic.posStart !== undefined">
             <div class="col-sm-12 form-inline input-group input-group-sm">

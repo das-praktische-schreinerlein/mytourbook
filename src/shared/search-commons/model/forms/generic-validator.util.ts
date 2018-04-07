@@ -218,6 +218,10 @@ export class RegExValidationReplaceRule extends ValidationRule {
         // console.error("sanitize value:" + value + " to replaceValue: " + result);
         return result;
     }
+
+    getMaxLength(): number {
+        return this.maxLength;
+    }
 }
 
 export class NumberValidationRule extends ValidationWithDefaultRule {
