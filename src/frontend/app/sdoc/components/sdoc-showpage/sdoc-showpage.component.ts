@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
@@ -25,6 +25,7 @@ import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-s
 import {Facets} from '../../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {isArray, isNumber} from 'util';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -49,6 +50,26 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     flgMapAvailable = false;
     flgProfileMapAvailable = false;
     flgTopImagesAvailable = false;
+    defaultSubImageLayout = Layout.SMALL;
+    queryParamMap: ParamMap = undefined;
+    showResultListTrigger: {
+        IMAGE: boolean|number;
+        LOCATION: boolean|number;
+        NEWS: boolean|number;
+        ROUTE: boolean|number;
+        TOPIMAGE: boolean|number;
+        TRACK: boolean|number;
+        TRIP: boolean|number;
+    } = {
+        IMAGE: false,
+        LOCATION: false,
+        NEWS: false,
+        ROUTE: false,
+        TOPIMAGE: false,
+        TRACK: false,
+        TRIP: false
+    };
+
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
@@ -64,6 +85,9 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     ngOnInit() {
         // Subscribe to route params
         const me = this;
+        this.route.queryParamMap.subscribe(value => {
+            me.queryParamMap = value;
+        });
         this.route.data.subscribe(
             (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
@@ -73,6 +97,21 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 me.flgDescRendered = false;
+
+                if (BeanUtils.getValue(config, 'components.sdoc-showpage.showBigImages') === true) {
+                    this.defaultSubImageLayout = Layout.BIG;
+                }
+                if (isArray(BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams'))) {
+                    const allowedParams = BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams');
+                    for (const type in me.showResultListTrigger) {
+                        const paramName = 'show' + type;
+                        if (allowedParams.indexOf(paramName) >= 0 && me.queryParamMap && me.queryParamMap.get(paramName)) {
+                            me.showResultListTrigger[type] =
+                                SDocSearchForm.genericFields.perPage.validator.sanitize(me.queryParamMap.get(paramName));
+                        }
+                    }
+                }
+
                 if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
                     me.record = data.record.data;
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
@@ -301,8 +340,10 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     getFiltersForType(record: SDocRecord, type: string): any {
+        const minPerPage = isNumber(this.showResultListTrigger[type]) ? this.showResultListTrigger[type] : 0;
+
         return this.contentUtils.getSDocSubItemFiltersForType(record, type,
-            (this.pdoc ? this.pdoc.theme : undefined));
+            (this.pdoc ? this.pdoc.theme : undefined), minPerPage);
     }
 
     private calcShowMaps() {

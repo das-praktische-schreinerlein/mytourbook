@@ -468,6 +468,10 @@
 
             ]
         },
+        "sdoc-showpage": {
+            "showBigImages": false,
+            "allowedQueryParams": []
+        },
         "sdoc-albumpage": {
             "allowAutoplay": false
         },
