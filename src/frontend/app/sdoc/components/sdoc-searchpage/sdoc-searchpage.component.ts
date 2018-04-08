@@ -58,6 +58,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     flgShowProfileMap = false;
     flgMapAvailable = false;
     flgProfileMapAvailable = false;
+    anchor = '';
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -79,6 +80,9 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             me.onResize(layoutSizeData);
         });
 
+        this.route.fragment.subscribe(value => {
+            this.anchor = this.idValidationRule.sanitize(value);
+        });
         this.route.data.subscribe(
             (data: { searchForm: ResolvedData<SDocSearchForm>, pdoc: ResolvedData<PDocRecord>,
                 flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
@@ -397,6 +401,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             me.calcShowMaps();
 
             me.showLoadingSpinner = false;
+            me.pageUtils.goToLinkAnchor(me.anchor);
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
