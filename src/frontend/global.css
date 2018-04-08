@@ -338,3 +338,21 @@ div.inline-content-container {
 div.relative-container {
     position: relative;
 }
+
+div.scroll-to-top-container  {
+    width: 100%;
+    text-align: right;
+}
+
+div.scroll-to-top-container span {
+    font-size: 12px;
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    background: lightgray;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+div.scroll-to-top-container span::after {
+    content: 'Top \290A';
+}

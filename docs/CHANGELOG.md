@@ -21,6 +21,7 @@
 - frontend: added gpx-file-dropzone to edit-form
 - frontend: jump to last shown element when back to list 
 - frontend: set perPage=10 elements on search-link in inlinesearch
+- frontend: added backToTop-link
 - frontend: improved code
 - backend: added more facets/filters/fields to mediadb-adapter
 - backend: improved sdoc-loader/exporter

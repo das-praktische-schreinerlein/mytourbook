@@ -249,6 +249,10 @@ export class SectionPageComponent implements OnInit {
         return false;
     }
 
+    onScrollToTop() {
+        this.pageUtils.scrollToTop();
+    }
+
     getToSearchUrl() {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
             theme: this.pdoc.theme,

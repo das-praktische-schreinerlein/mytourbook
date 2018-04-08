@@ -341,6 +341,10 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onScrollToTop() {
+        this.pageUtils.scrollToTop();
+    }
+
     private redirectToSearch() {
         // reset initialized
         this.initialized = false;

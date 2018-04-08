@@ -18,7 +18,9 @@
     <div class="container">
         <app-sdoc-list-footer [searchResult]="searchResult"
                               (pageChange)="onPageChange($event, true)" ></app-sdoc-list-footer>
+        <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
     </div>
+
 </ng-template>
 
 <ng-template #formContainer let-searchFormLayout=searchFormLayout let-showForm=showForm>

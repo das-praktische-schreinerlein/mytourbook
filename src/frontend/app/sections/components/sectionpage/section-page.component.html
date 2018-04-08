@@ -281,6 +281,7 @@
                     </ng-template>
                 </ngb-tab>
             </ngb-tabset>
+            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
         </div>
     </ng-container>
 </ng-template>
@@ -310,6 +311,7 @@
             <ng-container *ngIf="pdoc.flgShowTopTen">
                 <div class="container content-container hidden-print">
                     <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
+                    <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
                 </div>
             </ng-container>
         </ng-container>

@@ -284,6 +284,10 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onScrollToTop() {
+        this.pageUtils.scrollToTop();
+    }
+
     ngOnDestroy() {
     }
 
