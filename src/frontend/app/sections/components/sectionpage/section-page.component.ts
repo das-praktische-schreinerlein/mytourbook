@@ -232,6 +232,7 @@ export class SectionPageComponent implements OnInit {
         this.sdocSearchForm[filter] = filterValue;
         const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
             theme: this.pdoc.theme,
+            perPage: 10,
             type: 'route',
             actiontype: this.sdocSearchForm.actiontype.toString(),
             when: this.sdocSearchForm.when.toString(),
@@ -251,6 +252,7 @@ export class SectionPageComponent implements OnInit {
     getToSearchUrl() {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
             theme: this.pdoc.theme,
+            perPage: 10,
             type: 'route,location,track,trip,news',
             actiontype: this.sdocSearchForm.actiontype.toString(),
             when: this.sdocSearchForm.when.toString(),
