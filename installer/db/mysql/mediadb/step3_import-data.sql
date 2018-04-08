@@ -67,6 +67,31 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+DROP FUNCTION IF EXISTS `GetLocationChildIds` $$
+  CREATE FUNCTION GetLocationChildIds(GivenID INT) RETURNS VARCHAR(2000)
+  DETERMINISTIC
+  BEGIN
+    DECLARE subIds VARCHAR(2000);
+    DECLARE Ids  VARCHAR(2000);
+    SET subIds = '';
+    SET SESSION group_concat_max_len = 20000000;
+
+      SELECT GROUP_CONCAT(Level SEPARATOR ',,') into subIds FROM (
+         SELECT @Ids := (
+             SELECT GROUP_CONCAT(l_id SEPARATOR ',,')
+             FROM location
+             WHERE FIND_IN_SET(l_parent_id, @Ids)
+         ) Level
+         FROM location
+         JOIN (SELECT @Ids := GivenID) temp1
+      ) temp2;
+
+
+    RETURN subIds;
+END $$
+DELIMITER ;
+
 --
 -- configuration-tables
 --
