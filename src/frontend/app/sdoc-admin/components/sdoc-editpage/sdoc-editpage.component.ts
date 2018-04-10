@@ -194,7 +194,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
 
         this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
                 if (backToSearch) {
-                    me.sdocRoutingService.navigateBackToSearch();
+                    me.sdocRoutingService.navigateBackToSearch('#' + me.record.id);
                 } else {
                     me.sdocRoutingService.navigateToShow(sdoc, '');
                 }
@@ -213,7 +213,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     }
 
     submitBackToSearch() {
-        this.sdocRoutingService.navigateBackToSearch();
+        this.sdocRoutingService.navigateBackToSearch('#' + this.record.id);
         return false;
     }
 

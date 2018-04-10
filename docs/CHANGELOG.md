@@ -6,13 +6,9 @@
 - many improvements on layout, usability, code
  
 ### new features
-- installer: added sql-script to copy data from mediadb to mytb and prepare for import to solr
- 
-### improvements
-- common: use xregexp for validation with unicode-classes
+- backend: added more facets/filters/fields to mediadb-adapter
 - common: added ability to facet by year (for mytb, mediadb, solr)
 - common: added actiontag to block items for public
-- frontend: improved list/mobile-layout
 - frontend: highlight labels of form-inputs which are set
 - frontend: added "save and back to search"-button on edit-form
 - frontend: added function to fix nonstandard gpx in edit-form
@@ -23,19 +19,23 @@
 - frontend: set perPage=10 elements on search-link in inlinesearch
 - frontend: added backToTop-link
 - frontend: added parameters for configuring show-layout via url-parameter 
-- frontend: improved code
-- backend: added more facets/filters/fields to mediadb-adapter
+- installer: added sql-script to copy data from mediadb to mytb and prepare for import to solr
+ 
+### improvements
 - backend: improved sdoc-loader/exporter
 - backend: improved search-adapter to load details depending on mode
-- solr: imporved fulltext-search
+- common: use xregexp for validation with unicode-classes
+- common: improved code
+- frontend: improved list/mobile-layout
+- solr: improved fulltext-search
  
 ### bug fixes
+- backend: fixed sql-adataper (max, greatest, IN_CSV)  
 - common: fixed validation -> was to restrictive
 - common: fixed date-handling - convert all to ISO-Date (not perfect but ....)
 - frontend: scroll to top of page on routechange, of element when pagenumchange
 - frontend: fixed encodeUri for angular-http-client
 - frontend: fixed some issues - added distance to list-layouts, set pageNum=1 if filter changes on searchpage, show no location for news)
-- backend: fixed sql-adataper (max, greatest, IN_CSV)  
  
 ### breaking changes
 - none

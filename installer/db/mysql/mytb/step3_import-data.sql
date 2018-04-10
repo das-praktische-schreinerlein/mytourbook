@@ -240,7 +240,7 @@ CREATE TABLE tour (
 -- track-data
 --
 DROP TABLE IF EXISTS kategorie_full;
-CREATE TABLE kategorie (
+CREATE TABLE kategorie_full (
   k_id int(11) NOT NULL AUTO_INCREMENT,
   t_id int(11) NOT NULL,
   k_t_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
