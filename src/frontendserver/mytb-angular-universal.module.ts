@@ -93,7 +93,7 @@ export class MytbAngularUniversalModule {
                 return;
             } else {
                 const filename = me.getCacheFilename(req.url);
-                const notCachedAndNoRedirect = function () {
+                let notCachedAndNoRedirect = function () {
                     if (me.config.cacheMode === CacheModeType.CACHED_ONLY) {
                         // NOT CACHED but use CACHED_ONLY
                         res.status(200);
@@ -112,15 +112,17 @@ export class MytbAngularUniversalModule {
                         // CACHED: use cached file
                         res.status(200);
                         res.sendFile(filename, {root: '.'});
+                        notCachedAndNoRedirect = null;
                         return;
                     }
 
                     const fullUrl = `${req.protocol}://${req.get('host')}` + req.url;
-                    const redirectUrl = me.redirects[fullUrl];
+                    const redirectUrl = me.redirects[fullUrl] || me.redirects[req.url];
                     if (redirectUrl) {
                         if (!me.config.redirectOnlyCached) {
                             console.log('redirect:' + req.url, redirectUrl);
                             res.redirect(redirectUrl);
+                            notCachedAndNoRedirect = null;
                             return;
                         }
 
@@ -130,13 +132,18 @@ export class MytbAngularUniversalModule {
                                 // CACHED: use cached file
                                 console.log('redirect cache exists:' + req.url, redirectUrl);
                                 res.redirect(redirectUrl);
+                                notCachedAndNoRedirect = null;
                                 return;
                             }
 
-                            return notCachedAndNoRedirect();
+                            notCachedAndNoRedirect();
+                            notCachedAndNoRedirect = null;
+                            return null;
                         });
                     } else {
-                        return notCachedAndNoRedirect();
+                        notCachedAndNoRedirect();
+                        notCachedAndNoRedirect = null;
+                        return null;
                     }
                 });
             }
