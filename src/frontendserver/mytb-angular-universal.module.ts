@@ -18,10 +18,13 @@ export interface UniversalModuleConfig {
     distProfile: string;
     cacheFolder: string;
     cacheMode: CacheModeType;
+    redirectFileJson?: string;
+    redirectOnlyCached?: boolean;
 }
 
 export class MytbAngularUniversalModule {
     private indexFile: string;
+    private redirects = {};
 
     public static configureDefaultServer(app: express.Application, config: UniversalModuleConfig) {
         const mytbAngularModule = new MytbAngularUniversalModule(app, config);
@@ -75,6 +78,13 @@ export class MytbAngularUniversalModule {
     public configureAllAsAngularUniversalRoutes(): void {
         const me = this;
 
+        if (me.config.redirectFileJson) {
+            console.log('configure redirects from file', me.config.redirectFileJson);
+            me.redirects = JSON.parse(fs.readFileSync(me.config.redirectFileJson, {encoding: 'utf8'}));
+            console.log('configure redirects', this.redirects);
+        }
+        me.redirects = me.redirects || {};
+
         // All regular routes use the Universal engine
         this.app.get('/' + this.config.distProfile + '*', (req, res) => {
             if (me.config.cacheMode === CacheModeType.NO_CACHE) {
@@ -83,13 +93,8 @@ export class MytbAngularUniversalModule {
                 return;
             } else {
                 const filename = me.getCacheFilename(req.url);
-                fs.exists(filename, function (exists: boolean) {
-                    if (exists) {
-                        // CACHED: use cached file
-                        res.status(200);
-                        res.sendFile(filename, {root: '.'});
-                        return;
-                    } else if (me.config.cacheMode === CacheModeType.CACHED_ONLY) {
+                const notCachedAndNoRedirect = function () {
+                    if (me.config.cacheMode === CacheModeType.CACHED_ONLY) {
                         // NOT CACHED but use CACHED_ONLY
                         res.status(200);
                         res.sendFile(me.indexFile);
@@ -99,6 +104,39 @@ export class MytbAngularUniversalModule {
                         console.log('not cached but cache:', req.url);
                         me.angularRouter(req, res);
                         return;
+                    }
+                };
+
+                fs.exists(filename, function (exists: boolean) {
+                    if (exists) {
+                        // CACHED: use cached file
+                        res.status(200);
+                        res.sendFile(filename, {root: '.'});
+                        return;
+                    }
+
+                    const fullUrl = `${req.protocol}://${req.get('host')}` + req.url;
+                    const redirectUrl = me.redirects[fullUrl];
+                    if (redirectUrl) {
+                        if (!me.config.redirectOnlyCached) {
+                            console.log('redirect:' + req.url, redirectUrl);
+                            res.redirect(redirectUrl);
+                            return;
+                        }
+
+                        const redirectFile = redirectUrl.replace(`${req.protocol}://${req.get('host')}`, '');
+                        fs.exists(me.getCacheFilename(redirectFile), function (redirectExists: boolean) {
+                            if (redirectExists) {
+                                // CACHED: use cached file
+                                console.log('redirect cache exists:' + req.url, redirectUrl);
+                                res.redirect(redirectUrl);
+                                return;
+                            }
+
+                            return notCachedAndNoRedirect();
+                        });
+                    } else {
+                        return notCachedAndNoRedirect();
                     }
                 });
             }

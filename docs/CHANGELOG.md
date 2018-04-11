@@ -7,6 +7,7 @@
  
 ### new features
 - backend: added more facets/filters/fields to mediadb-adapter
+- backend: generate redirect-list for frontendserver
 - common: added ability to facet by year (for mytb, mediadb, solr)
 - common: added actiontag to block items for public
 - frontend: highlight labels of form-inputs which are set
@@ -19,6 +20,7 @@
 - frontend: set perPage=10 elements on search-link in inlinesearch
 - frontend: added backToTop-link
 - frontend: added parameters for configuring show-layout via url-parameter 
+- frontendserver: check static redirect-list if url not cached
 - installer: added sql-script to copy data from mediadb to mytb and prepare for import to solr
  
 ### improvements

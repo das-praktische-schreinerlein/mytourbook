@@ -5,6 +5,7 @@ import {SDocLoaderCommand} from './commands/sdoc-loader.command';
 import {utils} from 'js-data';
 import {ImageManagerCommand} from './commands/image-manager.command';
 import {SDocExporterCommand} from './commands/sdoc-exporter.command';
+import {RedirectGeneratorCommand} from './commands/redirect-generator.command';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -21,6 +22,7 @@ const siteMapGenerator = new SiteMapGeneratorCommand();
 const sdocLoader = new SDocLoaderCommand();
 const sdocExporter = new SDocExporterCommand();
 const imageManager = new ImageManagerCommand();
+const redirectGenerator = new RedirectGeneratorCommand();
 
 let promise: Promise<any>;
 switch (argv['command']) {
@@ -29,6 +31,9 @@ switch (argv['command']) {
         break;
     case 'generateSitemap':
         promise = siteMapGenerator.process(argv);
+        break;
+    case 'generateRedirects':
+        promise = redirectGenerator.process(argv);
         break;
     case 'loadSdoc':
         promise = sdocLoader.process(argv);

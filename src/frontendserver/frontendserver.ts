@@ -34,7 +34,9 @@ export interface ServerConfig {
     firewallConfig: FirewallConfig;
     frontendConfig: {
         port: number,
-        cacheFolder: string
+        cacheFolder: string,
+        redirectFileJson?: string,
+        redirectOnlyCached?: boolean
     };
 }
 
@@ -50,7 +52,9 @@ const frontendConfig: UniversalModuleConfig = {
     distFolder: distFolder,
     distProfile: distProfile,
     cacheFolder: serverConfig.frontendConfig.cacheFolder,
-    cacheMode: CacheModeType.CACHED_ONLY
+    cacheMode: CacheModeType.CACHED_ONLY,
+    redirectFileJson: serverConfig.frontendConfig.redirectFileJson || undefined,
+    redirectOnlyCached: serverConfig.frontendConfig.redirectOnlyCached || false
 };
 
 // Express server
