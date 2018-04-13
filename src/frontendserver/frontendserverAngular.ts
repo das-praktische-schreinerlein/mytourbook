@@ -1,19 +1,24 @@
 // These are important and needed before anything else
+import 'zone.js/dist/zone-node';
+import 'reflect-metadata';
+import {enableProdMode} from '@angular/core';
 import * as express from 'express';
 import {join} from 'path';
 import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
 import {CacheConfig} from './shared-node/server-commons/datacache.module';
 import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
 import {FirewallModule} from './shared-node/server-commons/firewall.module';
+import {MytbAngularUniversalModule} from './mytb-angular-universal.module';
 import * as fs from 'fs';
 import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
-import {CacheModeType, MytbSimpleServerModule, ServerModuleConfig} from './mytb-simple-server.module';
+import {CacheModeType, ServerModuleConfig} from './mytb-simple-server.module';
 
 const minimist = require ('minimist');
 
 const argv = minimist(process.argv.slice(2));
 
 // Faster server renders w/ Prod mode (dev mode never needed)
+enableProdMode();
 const debug = argv['debug'] || false;
 const distFolder = join(process.cwd(), 'dist');
 const distProfile = 'DIST_PROFILE';
@@ -48,7 +53,7 @@ const frontendConfig: ServerModuleConfig = {
     distFolder: distFolder,
     distProfile: distProfile,
     cacheFolder: serverConfig.frontendConfig.cacheFolder,
-    cacheMode: CacheModeType.CACHED_ONLY,
+    cacheMode: CacheModeType.USE_CACHE,
     redirectFileJson: serverConfig.frontendConfig.redirectFileJson || undefined,
     redirectOnlyCached: serverConfig.frontendConfig.redirectOnlyCached || false
 };
@@ -59,7 +64,7 @@ const app = express();
 ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
 FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
-MytbSimpleServerModule.configureDefaultServer(app, frontendConfig);
+MytbAngularUniversalModule.configureDefaultServer(app, frontendConfig);
 ConfigureServerModule.configureDefaultErrorHandler(app);
 
 // Start up the Node server

@@ -21,6 +21,7 @@
 - frontend: added backToTop-link
 - frontend: added parameters for configuring show-layout via url-parameter 
 - frontendserver: check static redirect-list if url not cached
+- frontendserver: added static-server for usage without without angular 
 - installer: added sql-script to copy data from mediadb to mytb and prepare for import to solr
  
 ### improvements

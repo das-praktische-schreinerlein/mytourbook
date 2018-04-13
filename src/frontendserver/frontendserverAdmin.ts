@@ -7,7 +7,8 @@ import {join} from 'path';
 import {default as Axios} from 'axios';
 import {default as sitemaps} from 'sitemap-stream-parser';
 import * as fs from 'fs';
-import {CacheModeType, MytbAngularUniversalModule, UniversalModuleConfig} from './mytb-angular-universal.module';
+import {MytbAngularUniversalModule} from './mytb-angular-universal.module';
+import {CacheModeType, ServerModuleConfig} from './mytb-simple-server.module';
 
 const minimist = require ('minimist');
 
@@ -35,7 +36,7 @@ const serverConfig: ServerConfig = {
     frontendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' }))
 };
 
-const frontendConfig: UniversalModuleConfig = {
+const frontendConfig: ServerModuleConfig = {
     distServerProfile: distServerProfile,
     distFolder: distFolder,
     distProfile: distProfile,

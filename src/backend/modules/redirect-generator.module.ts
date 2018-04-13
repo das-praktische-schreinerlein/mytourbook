@@ -6,7 +6,6 @@ import {GenericSearchService} from '../shared/search-commons/services/generic-se
 import {utils} from 'js-data';
 
 export interface RedirectConfig {
-    baseUrl: string;
     perPage: number;
     srcUrlPathGenerator: any;
     redirectGenerator: any;
@@ -34,7 +33,7 @@ export class RedirectGeneratorModule {
                     if (searchForm.pageNum < (searchResult.recordCount / searchForm.perPage + 1)) {
                         return createNextRedirects();
                     } else {
-                        console.log(JSON.stringify(redirects));
+                        console.log(JSON.stringify(redirects, null, ' '));
                         return utils.resolve('Well done :-)');
                     }
                 }
