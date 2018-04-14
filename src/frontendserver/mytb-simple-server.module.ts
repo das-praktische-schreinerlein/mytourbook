@@ -7,7 +7,7 @@ export enum CacheModeType {
 }
 
 export interface ServerModuleConfig {
-    distFolder: string;
+    staticFolder: string;
     distServerProfile: string;
     distProfile: string;
     cacheFolder: string;
@@ -27,12 +27,12 @@ export class MytbSimpleServerModule {
     }
 
     public constructor(protected app: express.Application, protected config: ServerModuleConfig) {
-        this.indexFile = join(this.config.distFolder, this.config.distProfile, 'index.html');
+        this.indexFile = join(this.config.staticFolder, this.config.distProfile, 'index.html');
     }
 
     public configureStaticFileRoutes(): void {
         // Serve static files from /browser
-        this.app.get('/' + this.config.distProfile + '*.*', express.static(join(this.config.distFolder, '')));
+        this.app.get('/' + this.config.distProfile + '*.*', express.static(join(this.config.staticFolder, '')));
     }
 
     public configureServerRoutes(): void {

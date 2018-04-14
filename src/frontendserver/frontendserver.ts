@@ -15,7 +15,7 @@ const argv = minimist(process.argv.slice(2));
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 const debug = argv['debug'] || false;
-const distFolder = join(process.cwd(), 'dist');
+const staticFolder = join(process.cwd(), 'dist/static');
 const distProfile = 'DIST_PROFILE';
 const distServerProfile = 'DIST_SERVER_PROFILE';
 const filePathConfigJson = argv['frontend'] || 'config/frontend.json';
@@ -45,7 +45,7 @@ const serverConfig: ServerConfig = {
 
 const frontendConfig: ServerModuleConfig = {
     distServerProfile: distServerProfile,
-    distFolder: distFolder,
+    staticFolder: staticFolder,
     distProfile: distProfile,
     cacheFolder: serverConfig.frontendConfig.cacheFolder,
     cacheMode: CacheModeType.CACHED_ONLY,

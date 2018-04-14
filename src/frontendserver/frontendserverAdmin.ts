@@ -19,7 +19,7 @@ enableProdMode();
 
 const debug = argv['debug'] || false;
 const maxNotCached = argv['maxNotCached'] || 999999;
-const distFolder = join(process.cwd(), 'dist');
+const staticFolder = join(process.cwd(), 'dist/static');
 const distProfile = 'DIST_PROFILE';
 const distServerProfile = 'DIST_SERVER_PROFILE';
 
@@ -38,7 +38,7 @@ const serverConfig: ServerConfig = {
 
 const frontendConfig: ServerModuleConfig = {
     distServerProfile: distServerProfile,
-    distFolder: distFolder,
+    staticFolder: staticFolder,
     distProfile: distProfile,
     cacheFolder: serverConfig.frontendConfig.cacheFolder,
     cacheMode: CacheModeType.USE_CACHE

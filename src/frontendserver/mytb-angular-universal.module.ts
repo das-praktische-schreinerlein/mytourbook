@@ -53,7 +53,7 @@ export class MytbAngularUniversalModule extends MytbSimpleServerModule {
         }));
 
         this.app.set('view engine', 'html');
-        this.app.set('views', join(this.config.distFolder, ''));
+        this.app.set('views', join(this.config.staticFolder, ''));
     }
 
     protected handleNotCachedRoute(req, res): any {
