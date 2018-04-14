@@ -2,7 +2,7 @@
  
 # Versions
  
-## 1.3.0-alpha
+## 1.3.0
 - many improvements on layout, usability, code
  
 ### new features
