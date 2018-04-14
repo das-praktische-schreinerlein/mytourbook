@@ -59,8 +59,8 @@ export class DateUtils {
     }
 
     public static formatDateRange(start: Date, end: Date): string {
-        const formatOptionsShort = { day: 'numeric' };
-        const formatOptionsLong = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        const formatOptionsShort = { day: '2-digit' };
+        const formatOptionsLong = { year: 'numeric', month: '2-digit', day: '2-digit' };
         const datestart = start.toLocaleString('de-DE', formatOptionsLong);
         const dateend = end.toLocaleString('de-DE', formatOptionsLong);
         if (datestart !== dateend) {
