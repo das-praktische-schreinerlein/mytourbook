@@ -208,3 +208,29 @@ CREATE TABLE image (
   i_dateshow date DEFAULT NULL
 );
 
+-----------------
+--- video-data
+-----------------
+DROP TABLE IF EXISTS video;
+CREATE TABLE video (
+  v_id int(11) NOT NULL PRIMARY KEY,
+  k_id int(11) NOT NULL,
+  t_id int(11) DEFAULT NULL,
+  v_katname text,
+  v_katdesc text,
+  v_gesperrt int(11) DEFAULT NULL,
+  v_lochirarchie text,
+  v_date datetime DEFAULT NULL,
+  v_dir char(255) DEFAULT NULL,
+  v_file char(255) DEFAULT NULL,
+  v_keywords text,
+  v_gps_lat float DEFAULT NULL,
+  v_gps_lon float DEFAULT NULL,
+  v_gps_ele float DEFAULT NULL,
+  v_rate int(11) DEFAULT NULL,
+  v_rate_motive int(11) DEFAULT NULL,
+  v_rate_wichtigkeit int(11) DEFAULT NULL,
+  v_video_objects text,
+  v_dateshow date DEFAULT NULL
+);
+

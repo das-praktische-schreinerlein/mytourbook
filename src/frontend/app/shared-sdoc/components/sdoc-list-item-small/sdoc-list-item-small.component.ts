@@ -19,6 +19,7 @@ export class SDocListItemSmallComponent implements OnChanges {
         thumbnailUrl: undefined,
         previewUrl: undefined,
         image: undefined,
+        video: undefined,
         urlShow: undefined
     };
 

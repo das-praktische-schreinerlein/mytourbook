@@ -30,6 +30,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
         thumbnailUrl: undefined,
         previewUrl: undefined,
         image: undefined,
+        video: undefined,
         urlShow: undefined
     };
 

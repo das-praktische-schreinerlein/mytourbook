@@ -14,6 +14,7 @@ export class SDocRecord extends BaseEntityRecord {
         tripId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         newsId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         imageId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
+        videoId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
 
         blocked: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER, new NumberValidationRule(false, -5, 5, undefined)),
 
@@ -51,6 +52,7 @@ export class SDocRecord extends BaseEntityRecord {
     tripId: number;
     newsId: number;
     imageId: number;
+    videoId: number;
 
     blocked: number;
     dateshow: Date;
@@ -91,6 +93,7 @@ export class SDocRecord extends BaseEntityRecord {
         record['sdocdatatech'] = this.get('sdocdatatech');
         record['sdocdatainfo'] = this.get('sdocdatainfo');
         record['sdocimages'] = this.get('sdocimages');
+        record['sdocvideos'] = this.get('sdocvideos');
         record['sdocratepers'] = this.get('sdocratepers');
         record['sdocratetech'] = this.get('sdocratetech');
 
@@ -135,6 +138,12 @@ export let SDocRecordRelation: any = {
             foreignKey: 'sdoc_id',
             // reference to related objects in memory
             localField: 'sdocimages'
+        },
+        sdocvideo: {
+            // database column
+            foreignKey: 'sdoc_id',
+            // reference to related objects in memory
+            localField: 'sdocvideos'
         }
     }
 };
@@ -151,6 +160,7 @@ export class SDocRecordFactory {
         sanitizedValues.tripId = SDocRecord.sdocFields.tripId.validator.sanitize(values['tripId']) || undefined;
         sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(values['newsId']) || undefined;
         sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(values['imageId']) || undefined;
+        sanitizedValues.videoId = SDocRecord.sdocFields.imageId.validator.sanitize(values['videoId']) || undefined;
 
         sanitizedValues.blocked = SDocRecord.sdocFields.blocked.validator.sanitize(values['blocked']) || undefined;
         sanitizedValues.dateshow = SDocRecord.sdocFields.dateshow.validator.sanitize(values['dateshow']) || undefined;
@@ -189,6 +199,7 @@ export class SDocRecordFactory {
         sanitizedValues.tripId = SDocRecord.sdocFields.tripId.validator.sanitize(sdoc.tripId) || undefined;
         sanitizedValues.newsId = SDocRecord.sdocFields.newsId.validator.sanitize(sdoc.newsId) || undefined;
         sanitizedValues.imageId = SDocRecord.sdocFields.imageId.validator.sanitize(sdoc.imageId) || undefined;
+        sanitizedValues.videoId = SDocRecord.sdocFields.imageId.validator.sanitize(sdoc.videoId) || undefined;
 
         sanitizedValues.blocked = SDocRecord.sdocFields.blocked.validator.sanitize(sdoc.blocked) || undefined;
         sanitizedValues.dateshow = SDocRecord.sdocFields.dateshow.validator.sanitize(sdoc.dateshow) || undefined;
@@ -233,6 +244,7 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.tripId.validator.isValid(values['tripId']) ? errors.push('tripId') &&  false : true;
         state = !SDocRecord.sdocFields.newsId.validator.isValid(values['newsId']) ? errors.push('newsId') &&  false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(values['imageId']) ? errors.push('imageId') &&  false : true;
+        state = !SDocRecord.sdocFields.videoId.validator.isValid(values['videoId']) ? errors.push('videoId') &&  false : true;
 
         state = !SDocRecord.sdocFields.blocked.validator.isValid(values['blocked']) ? errors.push('blocked') &&  false : true;
         state = !SDocRecord.sdocFields.dateshow.validator.isValid(values['dateshow']) ? errors.push('dateshow') &&  false : true;
@@ -277,6 +289,7 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.tripId.validator.isValid(sdoc.tripId) ? errors.push('tripId') &&  false : true;
         state = !SDocRecord.sdocFields.newsId.validator.isValid(sdoc.newsId) ? errors.push('newsId') &&  false : true;
         state = !SDocRecord.sdocFields.imageId.validator.isValid(sdoc.imageId) ? errors.push('imageId') &&  false : true;
+        state = !SDocRecord.sdocFields.videoId.validator.isValid(sdoc.videoId) ? errors.push('videoId') &&  false : true;
 
         state = !SDocRecord.sdocFields.blocked.validator.isValid(sdoc.blocked) ? errors.push('blocked') &&  false : true;
         state = !SDocRecord.sdocFields.dateshow.validator.isValid(sdoc.dateshow) ? errors.push('dateshow') &&  false : true;

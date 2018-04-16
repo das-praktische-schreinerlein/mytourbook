@@ -23,6 +23,7 @@ export class SDocListItemPageComponent implements OnChanges {
         thumbnailUrl: undefined,
         previewUrl: undefined,
         image: undefined,
+        video: undefined,
         urlShow: undefined,
         tracks: [],
         flgShowMap: false,
@@ -98,7 +99,7 @@ export class SDocListItemPageComponent implements OnChanges {
     private updateData() {
         this.contentUtils.updateItemData(this.listItem, this.record, 'page');
         this.maxImageHeight = (window.innerHeight - 150) + 'px';
-        if (this.record.type === 'IMAGE') {
+        if (this.record.type === 'IMAGE' || this.record.type === 'VIDEO') {
             this.listItem.flgShowMap = this.listItem.flgShowMap &&  this.imageShowMap;
             this.listItem.flgShowProfileMap = this.listItem.flgShowProfileMap &&  this.imageShowMap;
         }

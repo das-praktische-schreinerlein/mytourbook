@@ -16,6 +16,8 @@ import {SDocAdapterResponseMapper} from './sdoc-adapter-response.mapper';
 import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 import {Mapper, utils} from 'js-data';
 import {Adapter} from 'js-data-adapter';
+import {SDocVideoRecord, SDocVideoRecordRelation} from '../model/records/sdocvideo-record';
+import {SDocVideoRecordSchema} from '../model/schemas/sdocvideo-record-schema';
 
 export class SDocDataService extends SDocSearchService {
     private responseMapper: SDocAdapterResponseMapper;
@@ -24,13 +26,14 @@ export class SDocDataService extends SDocSearchService {
     public defaultLocIdParent = 1;
     public typeMapping = {
         image: 'imageId',
+        video: 'videoId',
         track: 'trackId',
         location: 'locId',
         route: 'routeId',
         trip: 'tripId',
         news: 'newsId'
     };
-    public idMappings = ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId'];
+    public idMappings = ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId', 'videoId'];
     public idMappingAliases = {
         'locIdParent': 'locId'
     };
@@ -42,6 +45,7 @@ export class SDocDataService extends SDocSearchService {
         this.dataStore.defineMapper('sdocdatatech', SDocDataTechRecord, SDocDataTechRecordSchema, SDocDataTechRecordRelation);
         this.dataStore.defineMapper('sdocdatainfo', SDocDataInfoRecord, SDocDataInfoRecordSchema, SDocDataInfoRecordRelation);
         this.dataStore.defineMapper('sdocimage', SDocImageRecord, SDocImageRecordSchema, SDocImageRecordRelation);
+        this.dataStore.defineMapper('sdocvideo', SDocVideoRecord, SDocVideoRecordSchema, SDocVideoRecordRelation);
         this.dataStore.defineMapper('sdocratepers', SDocRatePersonalRecord, SDocRatePersonalRecordSchema, SDocRatePersonalRecordRelation);
         this.dataStore.defineMapper('sdocratetech', SDocRateTechRecord, SDocRateTechRecordSchema, SDocRateTechRecordRelation);
     }
@@ -262,7 +266,7 @@ export class SDocDataService extends SDocSearchService {
     }
 
     private doImportActionTags(origSdocRecord: SDocRecord, newSdocRecord: SDocRecord, opts?: {}): Promise<SDocRecord> {
-        if (newSdocRecord.type.toLowerCase() !== 'image') {
+        if (newSdocRecord.type.toLowerCase() !== 'image' && newSdocRecord.type.toLowerCase() !== 'video') {
             return utils.resolve(newSdocRecord);
         }
 

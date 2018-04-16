@@ -36,6 +36,7 @@ export class SDocSearchResult extends GenericSearchResult <SDocRecord, SDocSearc
                 record['sdocdatatech'] = this.currentRecords[i].get('sdocdatatech');
                 record['sdocdatainfo'] = this.currentRecords[i].get('sdocdatainfo');
                 record['sdocimages'] = this.currentRecords[i].get('sdocimages');
+                record['sdocvideos'] = this.currentRecords[i].get('sdocvideos');
                 record['sdocratetech'] = this.currentRecords[i].get('sdocratetech');
                 record['sdocratepers'] = this.currentRecords[i].get('sdocratepers');
                 result.currentRecords.push(record);

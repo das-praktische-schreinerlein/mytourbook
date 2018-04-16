@@ -45,6 +45,7 @@ export class SDocDateFormatPipe implements PipeTransform {
         } else {
             switch (sdoc.type) {
                 case 'IMAGE':
+                case 'VIDEO':
                 case 'TRACK':
                 case 'TRIP':
                 case 'LOCATION':

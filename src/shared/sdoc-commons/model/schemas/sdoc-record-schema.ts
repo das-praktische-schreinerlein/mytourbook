@@ -15,6 +15,7 @@ export const SDocRecordSchema = new Schema({
         trackId: {type: 'number'},
         tripId: {type: 'number'},
         newsId: {type: 'number'},
+        videoId: {type: 'number'},
 
         blocked: {type: 'number'},
 

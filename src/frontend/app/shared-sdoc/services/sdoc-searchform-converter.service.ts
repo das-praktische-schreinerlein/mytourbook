@@ -22,6 +22,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         loc_id_i: 'LOCATION',
         loc_lochirarchie_ids_txt: 'LOCATION',
         image_id_i: 'IMAGE',
+        video_id_i: 'VIDEO',
         route_id_i: 'ROUTE',
         route_id_is: 'ROUTE',
         loc_parent_id_i: 'LOCATION'};

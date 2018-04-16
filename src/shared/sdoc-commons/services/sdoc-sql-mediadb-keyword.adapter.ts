@@ -23,6 +23,10 @@ export class SDocSqlMediadbKeywordAdapter {
         return this.setGenericKeywords('image_keyword', 'i_id', dbId, keywords, opts);
     }
 
+    public setVideoKeywords(dbId: number, keywords: string, opts: any): Promise<any> {
+        return this.setGenericKeywords('video_keyword', 'v_id', dbId, keywords, opts);
+    }
+
     public setLocationKeywords(dbId: number, keywords: string, opts: any): Promise<any> {
         return this.setGenericKeywords('location_keyword', 'l_id', dbId, keywords, opts);
     }

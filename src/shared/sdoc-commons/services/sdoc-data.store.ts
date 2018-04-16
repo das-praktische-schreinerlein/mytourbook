@@ -19,7 +19,7 @@ export class SDocTeamFilterConfig {
 
 export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, SDocSearchResult> {
 
-    static UPDATE_RELATION = ['sdocimage', 'sdocdatatech', 'sdocdatainfo', 'sdocratepers', 'sdocratetech'];
+    static UPDATE_RELATION = ['sdocimage', 'sdocvideo', 'sdocdatatech', 'sdocdatainfo', 'sdocratepers', 'sdocratetech'];
     private validMoreNumberFilterNames = {
         id: true,
         track_id_i: true,
@@ -31,6 +31,7 @@ export class SDocDataStore extends GenericDataStore<SDocRecord, SDocSearchForm, 
         loc_id_i: true,
         loc_lochirarchie_ids_txt: true,
         image_id_i: true,
+        video_id_i: true,
         route_id_i: true,
         route_id_is: true,
         loc_parent_id_i: true

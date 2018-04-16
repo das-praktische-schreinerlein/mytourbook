@@ -54,6 +54,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     queryParamMap: ParamMap = undefined;
     showResultListTrigger: {
         IMAGE: boolean|number;
+        VIDEO: boolean|number;
         LOCATION: boolean|number;
         NEWS: boolean|number;
         ROUTE: boolean|number;
@@ -62,6 +63,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         TRIP: boolean|number;
     } = {
         IMAGE: false,
+        VIDEO: false,
         LOCATION: false,
         NEWS: false,
         ROUTE: false,

@@ -24,6 +24,35 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngSwitchCase="'VIDEO'">
+            <div class="container content-container image-content-container" *ngIf="listItem.currentRecord !== undefined">
+                <div style="color: #ccc"><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></div>
+                <div class="image-container">
+                    <ng-container *ngIf="listItem.video !== undefined">
+                        <video [style.max-height]="maxImageHeight" controls="controls" class="picture-big" title="{{listItem.video.name}}" preload="metadata">
+                            <source [src]="contentUtils.getFullVideoUrl(listItem.video)" />
+                            <object [data]="contentUtils.getFullVideoUrl(listItem.video)" width="600">
+                                <embed [src]="contentUtils.getFullVideoUrl(listItem.video)" width="600">
+                            </object>
+                        </video>
+                    </ng-container>
+                </div>
+                <div style="color: #ccc">
+                    <span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
+                    <span>{{listItem.currentRecord | sdocdate}} {{listItem.currentRecord.name}}</span>
+                    <button class="btn btn-configure btn-sm right"
+                            (click)="imageShowMap = true; listItem.flgShowMap = listItem.flgMapAvailable && imageShowMap; listItem.flgShowProfileMap = listItem.flgProfileMapAvailable && true;"
+                            *ngIf="(listItem.flgMapAvailable || listItem.flgProfileMapAvailable) && (!listItem.flgShowMap)">
+                        <span i18n="button show map|Buttontext to show map@@button.searchform.show.map">Karte einblenden</span>
+                        <span class="btn-action-icon">&#x21D3;</span></button>
+                    <button class="btn btn-configure btn-sm right"
+                            (click)="listItem.flgShowMap = listItem.flgShowProfileMap = imageShowMap = false;"
+                            *ngIf="listItem.flgShowMap || listItem.flgShowProfileMap">
+                        <span i18n="button hide emap|Buttontext to hide map@@button.searchform.hide.map">Karte ausblenden</span>
+                        <span class="btn-action-icon">&#x21D3;</span></button>
+                </div>
+            </div>
+        </ng-container>
         <ng-container *ngSwitchDefault="">
             <div class="container content-container other-content-container" *ngIf="listItem.currentRecord !== undefined">
                 <h6><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-sdoc-linked-loc-hierarchy></h6>

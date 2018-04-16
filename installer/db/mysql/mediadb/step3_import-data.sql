@@ -577,6 +577,94 @@ CREATE TABLE image_playlist (
 ) ENGINE=InnoDB AUTO_INCREMENT=74925 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 --
+-- video-data
+--
+DROP TABLE IF EXISTS video;
+CREATE TABLE video (
+  v_id int(11) NOT NULL AUTO_INCREMENT,
+  k_id int(11),
+  v_date datetime DEFAULT NULL,
+  v_origpath varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  v_file varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  v_dir varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  v_meta_desc text COLLATE latin1_general_ci,
+  v_meta_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  v_meta_shortdesc varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  l_id int(11),
+  v_gps_lat float DEFAULT NULL,
+  v_gps_lon float DEFAULT NULL,
+  v_gps_ele float DEFAULT NULL,
+  v_rate int(11) DEFAULT '0',
+  v_rate_motive int(11) DEFAULT '0',
+  v_rate_wichtigkeit int(11) DEFAULT '0',
+  v_indexed_date datetime DEFAULT NULL,
+  v_history mediumtext COLLATE latin1_general_ci,
+  v_historie mediumtext COLLATE latin1_general_ci,
+  v_similar_v_ids longtext COLLATE latin1_general_ci,
+  v_gesperrt tinyint(4) DEFAULT '0',
+  PRIMARY KEY (v_id),
+  KEY idx_v__v_id (v_id),
+  KEY idx_v__k_id (k_id),
+  KEY idx_v__l_id (l_id),
+  KEY idx_v__v_date (v_date),
+  KEY idx_v__v_gps_ele (v_gps_ele),
+  KEY idx_v__v_gps_lon (v_gps_lon),
+  KEY idx_v__v_gps_lat (v_gps_lat),
+  CONSTRAINT video_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id),
+  CONSTRAINT video_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id)
+) ENGINE=InnoDB AUTO_INCREMENT=143361 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+
+DROP TABLE IF EXISTS video_keyword;
+CREATE TABLE video_keyword (
+  vk_id int(11) NOT NULL AUTO_INCREMENT,
+  v_id int(11) NOT NULL DEFAULT '0',
+  kw_id int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (vk_id),
+  KEY idx_vk__vk_id (vk_id),
+  KEY idx_vk__v_id (v_id),
+  KEY idx_vk__kw_id (kw_id),
+  CONSTRAINT video_keyword_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
+  CONSTRAINT video_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2995274 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+
+DROP TABLE IF EXISTS video_object;
+CREATE TABLE video_object (
+  vo_id int(11) NOT NULL AUTO_INCREMENT,
+  v_id int(11) NOT NULL,
+  vo_img_width int(11) DEFAULT NULL,
+  vo_img_height int(11) DEFAULT NULL,
+  vo_obj_type char(255) COLLATE latin1_general_ci DEFAULT NULL,
+  vo_obj_x1 int(11) DEFAULT NULL,
+  vo_obj_y1 int(11) DEFAULT NULL,
+  vo_obj_x2 int(11) DEFAULT NULL,
+  vo_obj_y2 int(11) DEFAULT NULL,
+  vo_obj_centerx int(11) DEFAULT NULL,
+  vo_obj_centery int(11) DEFAULT NULL,
+  vo_obj_width int(11) DEFAULT NULL,
+  vo_obj_height int(11) DEFAULT NULL,
+  vo_status int(11) DEFAULT '0',
+  PRIMARY KEY (vo_id),
+  KEY idx_vo__vo_id (vo_id),
+  KEY idx_vo__v_id (v_id),
+  KEY vo_obj_type (vo_obj_type),
+  CONSTRAINT video_object_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=201777 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+
+DROP TABLE IF EXISTS video_playlist;
+CREATE TABLE video_playlist (
+  vp_id int(11) NOT NULL AUTO_INCREMENT,
+  v_id int(11) NOT NULL DEFAULT '0',
+  p_id int(11) NOT NULL DEFAULT '0',
+  vp_pos int(11) DEFAULT NULL,
+  PRIMARY KEY (vp_id),
+  KEY idx_vp__vp_id (vp_id),
+  KEY idx_vp__v_id (v_id),
+  KEY idx_vk__p_id (p_id),
+  CONSTRAINT video_playlist_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
+  CONSTRAINT video_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=74925 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+
+--
 -- info-data
 --
 DROP TABLE IF EXISTS info;

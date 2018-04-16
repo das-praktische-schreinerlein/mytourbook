@@ -3,10 +3,10 @@
 # Versions
  
 ## 1.4.0-alpha
-- none
+- added video-support
  
 ### new features
-- none
+- common: added support for new type: video
  
 ### improvements
 - solr: improved data-import

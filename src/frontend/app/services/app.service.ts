@@ -17,7 +17,9 @@ export class AppService extends GenericAppService {
         backendApiBaseUrl: environment.backendApiBaseUrl,
         tracksBaseUrl: environment.tracksBaseUrl,
         picsBaseUrl: environment.picsBaseUrl,
+        videoBaseUrl: environment.videoBaseUrl,
         useAssetStoreUrls: environment.useAssetStoreUrls,
+        useVideoAssetStoreUrls: environment.useVideoAssetStoreUrls,
         permissions: {
             sdocWritable: environment.sdocWritable,
             sdocActionTagWritable: environment.sdocActionTagWritable,

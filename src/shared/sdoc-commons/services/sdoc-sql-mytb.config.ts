@@ -162,7 +162,7 @@ export class SDocSqlMytbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image', 'location', 'trip', 'news'],
+                    constValues: ['track', 'route', 'image', 'video', 'location', 'trip', 'news'],
                     filterField: '"track"',
                     selectLimit: 1
                 },
@@ -409,7 +409,7 @@ export class SDocSqlMytbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['image', 'track', 'route', 'location', 'trip', 'news'],
+                    constValues: ['image', 'video', 'track', 'route', 'location', 'trip', 'news'],
                     filterField: '"image"',
                     selectLimit: 1
                 },
@@ -682,7 +682,7 @@ export class SDocSqlMytbConfig {
                     action: AdapterFilterActions.IN_CSV
                 },
                 'type_txt': {
-                    constValues: ['route', 'track', 'image', 'location', 'trip', 'news'],
+                    constValues: ['route', 'track', 'image', 'video', 'location', 'trip', 'news'],
                     filterField: '"route"',
                     selectLimit: 1
                 },
@@ -883,7 +883,7 @@ export class SDocSqlMytbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['location', 'track', 'route', 'trip', 'image', 'news'],
+                    constValues: ['location', 'track', 'route', 'trip', 'image', 'video', 'news'],
                     filterField: '"location"',
                     selectLimit: 1
                 },
@@ -1034,7 +1034,7 @@ export class SDocSqlMytbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news'],
                     filterField: '"trip"',
                     selectLimit: 1
                 },
@@ -1182,7 +1182,7 @@ export class SDocSqlMytbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news'],
                     filterField: '"news"',
                     selectLimit: 1
                 },

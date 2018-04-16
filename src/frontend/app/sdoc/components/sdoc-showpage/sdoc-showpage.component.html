@@ -12,6 +12,19 @@
                                 </ng-container>
                             </div>
                     </ng-container>
+                    <ng-container *ngSwitchCase="'VIDEO'">
+                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | sdocdate}} {{record.name}}</span></h5>
+                        <div class="image-container">
+                            <ng-container *ngIf="record.sdocvideos !== undefined && record.sdocvideos.length > 0">
+                                <video width="600px" controls="controls" class="picture-big" title="{{record.sdocvideos[0].name}}" preload="metadata">
+                                    <source [src]="contentUtils.getFullVideoUrl(record.sdocvideos[0])" />
+                                    <object [data]="contentUtils.getFullVideoUrl(record.sdocvideos[0])" width="600">
+                                        <embed [src]="contentUtils.getFullVideoUrl(record.sdocvideos[0])" width="600">
+                                    </object>
+                                </video>
+                            </ng-container>
+                        </div>
+                    </ng-container>
                     <ng-container *ngSwitchDefault="">
                         <div class="picture-small" style="float: left; margin-right: 10px; padding-right: 20px">
                             <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
@@ -134,6 +147,17 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Videos'"
+                                            i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
+                                            [params]="getFiltersForType(record, 'VIDEO')"
+                                            [htmlId]="'LOCATIONVIDEO'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [showTimetable]="'true'"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.VIDEO"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
@@ -175,6 +199,17 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Videos'"
+                                            i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
+                                            [params]="getFiltersForType(record, 'VIDEO')"
+                                            [htmlId]="'ROUTEVIDEO'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [showTimetable]="'true'"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.VIDEO"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
@@ -230,6 +265,58 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Videos'"
+                                            i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
+                                            [params]="getFiltersForType(record, 'VIDEO')"
+                                            [htmlId]="'TRACKVIDEO'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.VIDEO"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'News'"
+                                            i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
+                                            [params]="getFiltersForType(record, 'NEWS')"
+                                            [htmlId]="'NEWS'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.THIN"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+            </ng-container>
+            <ng-container *ngSwitchCase="'VIDEO'">
+                <app-sdoc-inline-searchpage [label]="'Trip'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
+                                            [params]="getFiltersForType(record, 'TRIP')"
+                                            [htmlId]="'TRIP'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Region'"
+                                            i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
+                                            [params]="getFiltersForType(record, 'LOCATION')"
+                                            [htmlId]="'LOCATION'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Route'"
+                                            i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
+                                            [params]="getFiltersForType(record, 'ROUTE')"
+                                            [htmlId]="'ROUTE'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Track'"
+                                            i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
+                                            [params]="getFiltersForType(record, 'TRACK')"
+                                            [htmlId]="'TRACK'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
@@ -325,6 +412,16 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Videos'"
+                                            i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
+                                            [params]="getFiltersForType(record, 'VIDEO')"
+                                            [htmlId]="'TRIPVIDEOE'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.VIDEO"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
                                             [params]="getFiltersForType(record, 'NEWS')"
@@ -364,6 +461,16 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
+                                            [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
+                <app-sdoc-inline-searchpage [label]="'Videos'"
+                                            i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
+                                            [params]="getFiltersForType(record, 'VIDEO')"
+                                            [htmlId]="'NEWSVIDEO'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.VIDEO"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"

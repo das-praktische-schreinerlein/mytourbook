@@ -26,7 +26,7 @@ export class SDocSqlMytbAdapter extends GenericSqlAdapter<SDocRecord, SDocSearch
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'news'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'video', 'news'].map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
         facet = new Facet();

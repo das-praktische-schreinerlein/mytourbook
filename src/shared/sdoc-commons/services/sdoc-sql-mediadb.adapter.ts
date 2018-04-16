@@ -35,7 +35,7 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'news'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'video', 'news'].map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
         facet = new Facet();
@@ -84,7 +84,18 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             }
             query.fields['i_dir'] = dir;
             query.fields['i_file'] = file;
+        } else if (query.tableConfig.key === 'video') {
+            let file = null;
+            let dir = null;
+            if (props.get('sdocvideos') && props.get('sdocvideos').length > 0) {
+                const video: SDocImageRecord = props.get('sdocvideos')[0];
+                file = video.fileName.replace(/^.*\/(.*?)$/, '$1');
+                dir = video.fileName.replace(/^(.*)\/(.*?)$/, '$1').replace(/\\/g, '/');
+            }
+            query.fields['v_dir'] = dir;
+            query.fields['v_file'] = file;
         }
+
 
         return query;
     }
@@ -137,6 +148,18 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
                     return allReject(reason);
                 });
             });
+        } else if (tabKey === 'video') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                promises.push(this.keywordsAdapter.setVideoKeywords(dbId, props.keywords, opts));
+
+                Promise.all(promises).then(function doneSearch() {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('_facets failed:', reason);
+                    return allReject(reason);
+                });
+            });
         } else if (tabKey === 'route') {
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
@@ -175,12 +198,12 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
         }
 
         const table = (record['type'] + '').toLowerCase();
-        if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('playlists_')) {
-            return this.actionTagAdapter.executeActionTagImagePlaylist(id, actionTagForm, opts);
-        } else if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('objects_')) {
-            return this.actionTagAdapter.executeActionTagImageObjects(id, actionTagForm, opts);
-        } else if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
-            return this.actionTagAdapter.executeActionTagImagePersRate(id, actionTagForm, opts);
+        if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('playlists_')) {
+            return this.actionTagAdapter.executeActionTagPlaylist(table, id, actionTagForm, opts);
+        } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('objects_')) {
+            return this.actionTagAdapter.executeActionTagObjects(table, id, actionTagForm, opts);
+        } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
+            return this.actionTagAdapter.executeActionTagPersRate(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {
             return this.actionTagAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
         }

@@ -17,7 +17,7 @@ export class SDocSqlMediadbActionTagAdapter {
         this.sqlQueryBuilder = sqlQueryBuilder;
     }
 
-    public executeActionTagImagePlaylist(id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagPlaylist(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
         if (!utils.isInteger(id)) {
@@ -44,15 +44,42 @@ export class SDocSqlMediadbActionTagAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' ratePersWichtigkeit not valid');
         }
 
-        const deleteSql = 'DELETE FROM image_playlist ' +
-            'WHERE image_playlist.p_id IN (SELECT playlist.p_id FROM playlist WHERE p_name IN ("' + playlistKey + '"))' +
-            ' AND i_id = "' + id + '"';
-        const insertSql = 'INSERT INTO image_playlist (p_id, i_id)' +
-            ' SELECT playlist.p_id AS p_id, "' + id + '" AS i_id FROM playlist WHERE p_name = ("' + playlistKey + '")';
-        let updateSql = 'UPDATE image SET i_rate=GREATEST(COALESCE(i_rate, 0), ' + ratePersGesamt + '),' +
-            ' i_rate_motive=GREATEST(COALESCE(i_rate_motive, 0), ' + ratePersMotive + '),' +
-            ' i_rate_wichtigkeit=GREATEST(COALESCE(i_rate_wichtigkeit, 0), ' + ratePersWichtigkeit + ')' +
-            '  WHERE i_id = "' + id + '"';
+        let baseTableName;
+        let joinTableName;
+        let idName;
+        let rateName;
+        let rateNameMotive;
+        let rateNameWichtigkeit;
+        switch (table) {
+            case 'image':
+                baseTableName = 'image';
+                joinTableName = 'image_playlist';
+                idName = 'i_id';
+                rateName = 'i_rate';
+                rateNameMotive = 'i_rate_motive';
+                rateNameWichtigkeit = 'i_rate_wichtigkeit';
+                break;
+            case 'video':
+                baseTableName = 'video';
+                joinTableName = 'video_playlist';
+                idName = 'v_id';
+                rateName = 'v_rate';
+                rateNameMotive = 'v_rate_motive';
+                rateNameWichtigkeit = 'v_rate_wichtigkeit';
+                break;
+            default:
+                return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
+        }
+
+        const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
+            'WHERE ' + joinTableName + '.p_id IN (SELECT playlist.p_id FROM playlist WHERE p_name IN ("' + playlistKey + '"))' +
+            ' AND ' + idName + ' = "' + id + '"';
+        const insertSql = 'INSERT INTO ' + joinTableName + ' (p_id, ' + idName + ')' +
+            ' SELECT playlist.p_id AS p_id, "' + id + '" AS ' + idName + ' FROM playlist WHERE p_name = ("' + playlistKey + '")';
+        let updateSql = 'UPDATE ' + baseTableName + ' SET ' + rateName + '=GREATEST(COALESCE(' + rateName + ', 0), ' + ratePersGesamt + '),' +
+            ' ' + rateNameMotive + '=GREATEST(COALESCE(' + rateNameMotive + ', 0), ' + ratePersMotive + '),' +
+            ' ' + rateNameWichtigkeit + '=GREATEST(COALESCE(' + rateNameWichtigkeit + ', 0), ' + ratePersWichtigkeit + ')' +
+            '  WHERE ' + idName + ' = "' + id + '"';
         updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
@@ -63,7 +90,7 @@ export class SDocSqlMediadbActionTagAdapter {
                     return sqlBuilder.raw(insertSql).then(function doneInsert() {
                         return sqlBuilder.raw(updateSql);
                     }).catch(function errorPlaylist(reason) {
-                        console.error('_doActionTag update image failed:', reason);
+                        console.error('_doActionTag update ' + baseTableName + ' failed:', reason);
                         return reject(reason);
                     });
                 }
@@ -72,7 +99,7 @@ export class SDocSqlMediadbActionTagAdapter {
             }).then(function doneInsert(dbresults: any) {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
-                console.error('_doActionTag delete/insert image_playlist failed:', reason);
+                console.error('_doActionTag delete/insert ' + joinTableName + ' failed:', reason);
                 return reject(reason);
             });
         });
@@ -80,7 +107,7 @@ export class SDocSqlMediadbActionTagAdapter {
         return result;
     }
 
-    public executeActionTagImageObjects(id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagObjects(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
         if (!utils.isInteger(id)) {
@@ -93,12 +120,32 @@ export class SDocSqlMediadbActionTagAdapter {
         if (!this.keywordValidationRule.isValid(objectKey)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' objectkey not valid');
         }
+        let baseTableName;
+        let joinTableName;
+        let idName;
+        let typeName;
+        switch (table) {
+            case 'image':
+                baseTableName = 'image';
+                joinTableName = 'image_object';
+                idName = 'i_id';
+                typeName = 'io_obj_type';
+                break;
+            case 'video':
+                baseTableName = 'video';
+                joinTableName = 'video_object';
+                idName = 'v_id';
+                typeName = 'vo_obj_type';
+                break;
+            default:
+                return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
+        }
 
-        const deleteSql = 'DELETE FROM image_object ' +
-            'WHERE image_object.io_obj_type IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKey + '"))' +
-            ' AND i_id = "' + id + '"';
-        const insertSql = 'INSERT INTO image_object (io_obj_type, i_id)' +
-            ' SELECT objects.o_key AS io_obj_type, "' + id + '" AS i_id FROM objects WHERE o_name = ("' + objectKey + '")';
+        const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
+            'WHERE ' + joinTableName + '.' + typeName + ' IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKey + '"))' +
+            ' AND ' + idName + ' = "' + id + '"';
+        const insertSql = 'INSERT INTO ' + joinTableName + ' (' + typeName + ', ' + idName + ')' +
+            ' SELECT objects.o_key AS ' + typeName + ', "' + id + '" AS ' + idName + ' FROM objects WHERE o_name = ("' + objectKey + '")';
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
@@ -112,7 +159,7 @@ export class SDocSqlMediadbActionTagAdapter {
             }).then(function doneInsert(dbresults: any) {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
-                console.error('_doActionTag delete/insert image_object failed:', reason);
+                console.error('_doActionTag delete/insert ' + joinTableName + ' failed:', reason);
                 return reject(reason);
             });
         });
@@ -120,7 +167,7 @@ export class SDocSqlMediadbActionTagAdapter {
         return result;
     }
 
-    public executeActionTagImagePersRate(id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagPersRate(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
         if (!utils.isInteger(id)) {
@@ -134,16 +181,41 @@ export class SDocSqlMediadbActionTagAdapter {
         if (!this.keywordValidationRule.isValid(rateKey)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' ratekey not valid');
         }
+
+        let baseTableName;
+        let idName;
+        let rateName;
+        let rateNameMotive;
+        let rateNameWichtigkeit;
+        switch (table) {
+            case 'image':
+                baseTableName = 'image';
+                idName = 'i_id';
+                rateName = 'i_rate';
+                rateNameMotive = 'i_rate_motive';
+                rateNameWichtigkeit = 'i_rate_wichtigkeit';
+                break;
+            case 'video':
+                baseTableName = 'video';
+                idName = 'v_id';
+                rateName = 'v_rate';
+                rateNameMotive = 'v_rate_motive';
+                rateNameWichtigkeit = 'v_rate_wichtigkeit';
+                break;
+            default:
+                return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
+        }
+
         let fieldName;
         switch (rateKey) {
             case 'gesamt':
-                fieldName = 'i_rate';
+                fieldName = rateName;
                 break;
             case 'motive':
-                fieldName = 'i_rate_motive';
+                fieldName = rateNameMotive;
                 break;
             case 'wichtigkeit':
-                fieldName = 'i_rate_wichtigkeit';
+                fieldName = rateNameWichtigkeit;
                 break;
             default:
                 return utils.reject('actiontag ' + actionTagForm.key + ' ratekey not valid');
@@ -153,9 +225,9 @@ export class SDocSqlMediadbActionTagAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' ratePers not valid');
         }
 
-        let updateSql = 'UPDATE image SET ' + fieldName + '=GREATEST(COALESCE(' + fieldName + ', 0), ' + ratePers + ')' +
-            ', i_rate=GREATEST(COALESCE(i_rate_motive, 0), COALESCE(i_rate_wichtigkeit, 0), ' + ratePers + ')' +
-            '  WHERE i_id = "' + id + '"';
+        let updateSql = 'UPDATE ' + baseTableName + ' SET ' + fieldName + '=GREATEST(COALESCE(' + fieldName + ', 0), ' + ratePers + ')' +
+            ', ' + rateName + '=GREATEST(COALESCE(' + rateNameMotive + ', 0), COALESCE(' + rateNameWichtigkeit + ', 0), ' + ratePers + ')' +
+            '  WHERE ' + idName + ' = "' + id + '"';
         updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
@@ -164,7 +236,7 @@ export class SDocSqlMediadbActionTagAdapter {
             rawUpdate.then(function doneDelete(dbresults: any) {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
-                console.error('_doActionTag update image persRate failed:', reason);
+                console.error('_doActionTag update ' + baseTableName + ' persRate failed:', reason);
                 return reject(reason);
             });
         });
@@ -191,6 +263,11 @@ export class SDocSqlMediadbActionTagAdapter {
                 tableName = 'image';
                 idName = 'i_id';
                 break;
+            case 'video':
+                fieldName = 'v_gesperrt';
+                tableName = 'video';
+                idName = 'v_id';
+                break;
             case 'track':
                 fieldName = 'k_gesperrt';
                 tableName = 'kategorie';
@@ -211,7 +288,7 @@ export class SDocSqlMediadbActionTagAdapter {
             rawUpdate.then(function doneDelete(dbresults: any) {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
-                console.error('_doActionTag update image persRate failed:', reason);
+                console.error('_doActionTag update ' + tableName + ' blocked failed:', reason);
                 return reject(reason);
             });
         });

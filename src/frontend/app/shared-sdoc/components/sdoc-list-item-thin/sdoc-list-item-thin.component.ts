@@ -24,6 +24,7 @@ export class SDocListItemThinComponent implements OnChanges, OnDestroy {
         thumbnailUrl: undefined,
         previewUrl: undefined,
         image: undefined,
+        video: undefined,
         urlShow: undefined
     };
     LayoutSize = LayoutSize;

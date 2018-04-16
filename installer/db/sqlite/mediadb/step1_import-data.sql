@@ -403,6 +403,72 @@ CREATE TABLE image_playlist (
 );
 
 
+-----------------
+--- video-data
+-----------------
+DROP TABLE IF EXISTS video;
+CREATE TABLE video (
+  v_id integer PRIMARY KEY,
+  k_id int(11) DEFAULT NULL,
+  v_date datetime DEFAULT NULL,
+  v_origpath varchar(255)  DEFAULT NULL,
+  v_file varchar(255)  DEFAULT NULL,
+  v_dir varchar(255)  DEFAULT NULL,
+  v_meta_desc text,
+  v_meta_name varchar(255)  DEFAULT NULL,
+  v_meta_shortdesc varchar(255)  DEFAULT NULL,
+  l_id int(11) DEFAULT NULL,
+  v_gps_lat float DEFAULT NULL,
+  v_gps_lon float DEFAULT NULL,
+  v_gps_ele float DEFAULT NULL,
+  v_rate int(11) DEFAULT '0',
+  v_rate_motive int(11) DEFAULT '0',
+  v_rate_wichtigkeit int(11) DEFAULT '0',
+  v_indexed_date datetime DEFAULT NULL,
+  v_history mediumtext,
+  v_historie mediumtext,
+  v_similar_v_ids longtext,
+  v_gesperrt tinyint(4) DEFAULT '0',
+  CONSTRAINT video_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id)
+);
+
+DROP TABLE IF EXISTS video_keyword;
+CREATE TABLE video_keyword (
+  vk_id integer PRIMARY KEY,
+  v_id int(11) NOT NULL DEFAULT '0',
+  kw_id int(11) NOT NULL DEFAULT '0',
+  CONSTRAINT video_keyword_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
+  CONSTRAINT video_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS video_object;
+CREATE TABLE video_object (
+  vo_id integer PRIMARY KEY,
+  v_id int(11) NOT NULL,
+  vo_img_width int(11) DEFAULT NULL,
+  vo_img_height int(11) DEFAULT NULL,
+  vo_obj_type char(255)  DEFAULT NULL,
+  vo_obj_x1 int(11) DEFAULT NULL,
+  vo_obj_y1 int(11) DEFAULT NULL,
+  vo_obj_x2 int(11) DEFAULT NULL,
+  vo_obj_y2 int(11) DEFAULT NULL,
+  vo_obj_centerx int(11) DEFAULT NULL,
+  vo_obj_centery int(11) DEFAULT NULL,
+  vo_obj_width int(11) DEFAULT NULL,
+  vo_obj_height int(11) DEFAULT NULL,
+  vo_status int(11) DEFAULT '0',
+  CONSTRAINT video_object_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS video_playlist;
+CREATE TABLE video_playlist (
+  vp_id integer PRIMARY KEY,
+  v_id int(11) NOT NULL DEFAULT '0',
+  p_id int(11) NOT NULL DEFAULT '0',
+  vp_pos int(11) DEFAULT NULL,
+  CONSTRAINT video_playlist_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
+  CONSTRAINT video_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+);
 
 -----------------
 --- info-data

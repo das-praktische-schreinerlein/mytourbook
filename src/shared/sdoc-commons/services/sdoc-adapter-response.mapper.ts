@@ -4,6 +4,7 @@ import {SDocImageRecord} from '../model/records/sdocimage-record';
 import {MapperUtils} from '../../search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
 import {BeanUtils} from '../../commons/utils/bean.utils';
+import {SDocVideoRecord} from '../model/records/sdocvideo-record';
 
 export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -17,6 +18,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         const values = {};
         values['id'] = props.id;
         values['image_id_i'] = props.imageId;
+        values['video_id_i'] = props.videoId;
         values['loc_id_i'] = props.locId;
         values['loc_id_parent_i'] = props.locIdParent;
         values['route_id_i'] = props.routeId;
@@ -62,6 +64,10 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         if (props.get('sdocimages') && props.get('sdocimages').length > 0) {
             const image: SDocImageRecord = props.get('sdocimages')[0];
             values['i_fav_url_txt'] = image.fileName;
+        }
+        if (props.get('sdocvideos') && props.get('sdocvideos').length > 0) {
+            const video: SDocVideoRecord = props.get('sdocvideos')[0];
+            values['v_fav_url_txt'] = video.fileName;
         }
 
         values['data_tech_alt_asc_i'] = BeanUtils.getValue(props, 'sdocdatatech.altAsc');
@@ -127,6 +133,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         const values = {};
         values['id'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'id', undefined);
         values['imageId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'image_id_i', undefined);
+        values['videoId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'video_id_i', undefined);
         values['locId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_i', undefined);
         values['locIdParent'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'loc_id_parent_i', undefined);
         values['routeId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'route_id_i', undefined);
@@ -218,6 +225,18 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
             this.mapImageDocsToAdapterDocument(mapper, record, imageDocs);
         } else {
             record.set('sdocimages', []);
+        }
+        const videoField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'v_fav_url_txt')];
+        let videoDocs = [];
+        if (videoField !== undefined) {
+            if (Array.isArray(videoField)) {
+                videoDocs = videoField;
+            } else {
+                videoDocs.push(videoField);
+            }
+            this.mapVideoDocsToAdapterDocument(mapper, record, videoDocs);
+        } else {
+            record.set('sdocvideos', []);
         }
         // console.log('mapResponseDocument record full:', record);
 
@@ -340,6 +359,31 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
                 });
                 (<SDocRecord>record).persons = imagePersons;
                 break;
+            case 'video':
+                const videoUrls = [];
+                docs.forEach(doc => {
+                    videoUrls.push(doc['v_fav_url_txt']);
+                });
+                this.mapVideoDocsToAdapterDocument(mapper, <SDocRecord>record, videoUrls);
+                break;
+            case 'video_playlist':
+                let videoPlaylist = '';
+                docs.forEach(doc => {
+                    if (doc['v_playlists'] !== undefined && doc['v_playlists'] !== null) {
+                        videoPlaylist = doc['v_playlists'];
+                    }
+                });
+                (<SDocRecord>record).playlists = videoPlaylist;
+                break;
+            case 'video_persons':
+                let videoPersons = '';
+                docs.forEach(doc => {
+                    if (doc['v_persons'] !== undefined && doc['v_persons'] !== null) {
+                        videoPersons = doc['v_persons'];
+                    }
+                });
+                (<SDocRecord>record).persons = videoPersons;
+                break;
             case 'keywords':
                 let keywords = '';
                 docs.forEach(doc => {
@@ -387,5 +431,39 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         record.set('sdocimages', images);
     }
 
+    private mapVideoDocsToAdapterDocument(mapper: Mapper, record: SDocRecord, videoDocs: any[]) {
+        const videoMapper = mapper['datastore']._mappers['sdocvideo'];
+        const videos: SDocImageRecord[] = [];
+        if (videoDocs !== undefined) {
+            let id = 1;
+            if (record.type === 'TRACK') {
+                id = Number(record.trackId);
+            } else if (record.type === 'ROUTE') {
+                id = Number(record.routeId);
+            } else if (record.type === 'LOCATION') {
+                id = Number(record.locId);
+            } else if (record.type === 'IMAGE') {
+                id = Number(record.videoId);
+            } else if (record.type === 'TRIP') {
+                id = Number(record.tripId);
+            } else if (record.type === 'NEWS') {
+                id = Number(record.newsId);
+            }
+            id = id * 1000000;
+
+            for (const videoDoc of videoDocs) {
+                if (videoDoc === undefined || videoDoc === null) {
+                    continue;
+                }
+                const videoValues = {};
+                videoValues['name'] = record.name;
+                videoValues['id'] = (id++).toString();
+                videoValues['fileName'] = videoDoc;
+                const videoRecord = videoMapper.createRecord(videoValues);
+                videos.push(videoRecord);
+            }
+        }
+        record.set('sdocvideos', videos);
+    }
 }
 

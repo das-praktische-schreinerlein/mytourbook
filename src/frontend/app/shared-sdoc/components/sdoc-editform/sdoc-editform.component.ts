@@ -371,7 +371,7 @@ export class SDocEditformComponent implements OnChanges {
                         };
                     })(file);
 
-                    // Read in the image file as a data URL.
+                    // Read in the file as a data URL.
                     reader.readAsText(file);
                 });
 

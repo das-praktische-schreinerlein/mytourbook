@@ -172,6 +172,38 @@ SET
     toupdate.i_lochirarchie=grouped.l_lochirarchietxt
 WHERE toupdate.i_id=grouped.i_id;
 
+--
+-- import videos
+--
+INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit)
+    SELECT distinct mediadb.video.v_id, mediadb.kategorie.k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit
+    FROM mediadb.video INNER JOIN mediadb.kategorie ON mediadb.kategorie.k_id=mediadb.video.k_id
+                       INNER JOIN mediadb.video_playlist ON mediadb.video_playlist.v_id=mediadb.video.v_id
+    WHERE (mediadb.kategorie.k_gesperrt=0 OR mediadb.kategorie.k_gesperrt IS NULL)
+          && (mediadb.video.v_gesperrt=0 OR mediadb.video.v_gesperrt IS NULL)
+          && mediadb.video_playlist.p_id=17;
+
+-- calc keywords
+UPDATE video toupdate,
+    (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ",") AS v_keywords, video.v_id AS v_id
+     FROM video LEFT JOIN mediadb.video_keyword mjoin ON video.v_id=mjoin.v_id LEFT JOIN mediadb.keyword mk ON mjoin.kw_id=mk.kw_id
+     GROUP BY video.v_id) grouped
+SET toupdate.v_keywords=grouped.v_keywords
+WHERE toupdate.v_id=grouped.v_id;
+
+-- calc desc+dates+coords
+UPDATE video toupdate,
+ (SELECT video.v_id, kategorie_full.k_id, kategorie_full.t_id, k_name, kategorie_full.k_meta_shortdesc, location.l_lochirarchietxt
+  FROM video INNER JOIN kategorie_full ON video.k_Id=kategorie_full.k_id INNER JOIN location ON kategorie_full.l_id=location.l_id
+  GROUP BY video.v_id) grouped
+SET
+    toupdate.t_id=grouped.t_id,
+    toupdate.v_dateshow=v_date,
+    toupdate.v_katname=grouped.k_name,
+    toupdate.v_katdesc=grouped.k_meta_shortdesc,
+    toupdate.v_lochirarchie=grouped.l_lochirarchietxt
+WHERE toupdate.v_id=grouped.v_id;
+
 -- -----------
 -- update id-summary-fields
 -- -----------

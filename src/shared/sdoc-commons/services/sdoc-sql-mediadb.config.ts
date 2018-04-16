@@ -190,7 +190,7 @@ export class SDocSqlMediadbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image', 'location', 'trip', 'news'],
+                    constValues: ['track', 'route', 'image', 'video', 'location', 'trip', 'news'],
                     filterField: '"track"',
                     selectLimit: 1
                 },
@@ -228,6 +228,8 @@ export class SDocSqlMediadbConfig {
                 route_id_is: 'kategorie.t_id',
                 track_id_i: 'kategorie.k_id',
                 track_id_is: 'kategorie.k_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
@@ -514,7 +516,7 @@ export class SDocSqlMediadbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['image', 'track', 'route', 'location', 'trip', 'news'],
+                    constValues: ['image', 'video', 'track', 'route', 'location', 'trip', 'news'],
                     filterField: '"image"',
                     selectLimit: 1
                 },
@@ -554,6 +556,8 @@ export class SDocSqlMediadbConfig {
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 route_id_i: 'kategorie.t_id',
                 route_id_is: 'kategorie.t_id',
                 track_id_i: 'image.k_id',
@@ -629,6 +633,321 @@ export class SDocSqlMediadbConfig {
                 name_s: 'i_meta_name',
                 persons_txt: 'i_persons',
                 playlists_txt: 'i_playlists',
+                subtype_s: 'subtype',
+                type_s: 'type'
+            }
+        },
+        'video': {
+            key: 'video',
+            tableName: 'video',
+            selectFrom: 'video LEFT JOIN kategorie ON kategorie.k_id=video.k_id ' +
+            'LEFT JOIN location ON location.l_id = kategorie.l_id ',
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN video_keyword ON video.v_id=video_keyword.v_id ' +
+                    'LEFT JOIN keyword ON video_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
+                },
+                {
+                    from: 'LEFT JOIN video_playlist ON video.v_id=video_playlist.v_id ' +
+                    'LEFT JOIN playlist ON video_playlist.p_id=playlist.p_id',
+                    triggerParams: ['id', 'playlists_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists']
+                },
+                {
+                    from: 'LEFT JOIN video_object ON video.v_id=video_object.v_id ' +
+                    'LEFT JOIN objects ON video_object.vo_obj_type=objects.o_key',
+                    triggerParams: ['id', 'persons_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_persons']
+                }
+            ],
+            loadDetailData: [
+                {
+                    profile: 'video_playlist',
+                    sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists ' +
+                    'FROM video INNER JOIN video_playlist ON video.v_id=video_playlist.v_id' +
+                    ' INNER JOIN playlist on video_playlist.p_id=playlist.p_id ' +
+                    'WHERE video.v_id in (:id)',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'video_persons',
+                    sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_persons ' +
+                    'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
+                    ' INNER JOIN objects ON video_object.vo_obj_type=objects.o_key ' +
+                    'WHERE video.v_id in (:id)',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'keywords',
+                    sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
+                    'FROM video INNER JOIN video_keyword ON video.v_id=video_keyword.v_id' +
+                    ' INNER JOIN keyword on video_keyword.kw_id=keyword.kw_id ' +
+                    'WHERE video.v_id in (:id)',
+                    parameterNames: ['id'],
+                    modes: ['full']
+                }
+            ],
+            groupbBySelectFieldListIgnore: ['v_keywords', 'v_playlists', 'v_persons'],
+            selectFieldList: [
+                '"VIDEO" AS type',
+                'k_type',
+                'CONCAT("ac_", kategorie.k_type) AS actiontype',
+                'CONCAT("ac_", kategorie.k_type) AS subtype',
+                'CONCAT("VIDEO", "_", video.v_id) AS id',
+                // 'n_id',
+                'video.v_id',
+                'video.k_id',
+                'kategorie.t_id',
+                'kategorie.tr_id',
+                'kategorie.l_id',
+                'COALESCE(v_meta_name, k_name) AS v_meta_name',
+                'CONCAT(COALESCE(v_meta_name, ""), " ", COALESCE(l_name, "")) AS html',
+                'v_gesperrt',
+                'v_date',
+                'DATE_FORMAT(v_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
+                'WEEK(v_date) AS week',
+                'MONTH(v_date) AS month',
+                'YEAR(v_date) AS year',
+                'k_gpstracks_basefile',
+                'v_meta_shortdesc',
+                'v_meta_shortdesc AS v_meta_shortdesc_md',
+                'v_meta_shortdesc AS v_meta_shortdesc_html',
+                'CAST(v_gps_lat AS CHAR(50)) AS v_gps_lat',
+                'CAST(v_gps_lon AS CHAR(50)) AS v_gps_lon',
+                'CONCAT(v_gps_lat, ",", v_gps_lon) AS v_gps_loc',
+                'CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS l_lochirarchietxt',
+                'CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50))) AS l_lochirarchieids',
+                'CONCAT(video.v_dir, "/", video.v_file) AS v_fav_url_txt',
+                'k_altitude_asc',
+                'k_altitude_desc',
+                'v_gps_ele',
+                'v_gps_ele',
+                'k_distance',
+                'k_rate_ausdauer',
+                'k_rate_bildung',
+                'v_rate',
+                'k_rate_kraft',
+                'k_rate_mental',
+                'v_rate_motive',
+                'k_rate_schwierigkeit',
+                'v_rate_wichtigkeit',
+                'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
+                'ROUND((v_gps_ele / 500))*500 AS altMaxFacet',
+                'ROUND((k_distance / 5))*5 AS distFacet',
+                'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
+                'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
+            facetConfigs: {
+                'actiontype_ss': {
+                    selectField: 'CONCAT("ac_", kategorie.k_type)',
+                    selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id'
+                },
+                'blocked_is': {
+                    selectField: 'v_gesperrt'
+                },
+                'data_tech_alt_asc_facet_is': {
+                    selectField: 'ROUND((k_altitude_asc / 500))*500',
+                    selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
+                    orderBy: 'value asc'
+                },
+                'data_tech_alt_max_facet_is': {
+                    selectField: 'ROUND((v_gps_ele / 500))*500',
+                    orderBy: 'value asc'
+                },
+                'data_tech_dist_facets_fs': {
+                    selectField: 'ROUND((k_distance / 5))*5',
+                    selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
+                    orderBy: 'value asc'
+                },
+                'data_tech_dur_facet_fs': {
+                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
+                    selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
+                    orderBy: 'value asc'
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  kw_name AS value ' +
+                    'FROM' +
+                    ' keyword' +
+                    ' WHERE kw_name like "KW_%"' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                    filterField: 'kw_name',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                    noFacet: true
+                },
+                'loc_lochirarchie_txt': {
+                    selectSql: 'SELECT COUNT(video.l_id) AS count, l_name AS value, location.l_id AS id,' +
+                    ' CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS label' +
+                    ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                    ' LEFT JOIN video ON kategorie.k_id=video.k_id ' +
+                    ' GROUP BY l_name, location.l_id' +
+                    ' ORDER BY label ASC',
+                    filterField: 'l_name',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'month_is': {
+                    selectField: 'MONTH(v_date)',
+                    orderBy: 'value asc'
+                },
+                'persons_txt': {
+                    selectSql: 'SELECT COUNT(vo_obj_type) AS count, ' +
+                    ' o_name AS value ' +
+                    'FROM' +
+                    ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                    filterField: 'o_name',
+                    action: AdapterFilterActions.IN
+                },
+                'playlists_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                    filterField: 'p_name',
+                    action: AdapterFilterActions.IN
+                },
+                'rate_pers_gesamt_is': {
+                    selectField: 'v_rate',
+                    orderBy: 'value asc'
+                },
+                'rate_pers_schwierigkeit_is': {
+                    selectField: 'k_rate_schwierigkeit',
+                    selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
+                    orderBy: 'value asc'
+                },
+                'rate_tech_overall_ss': {
+                    noFacet: true
+                },
+                'subtype_ss': {
+                    selectField: 'CONCAT("ac_", kategorie.k_type)',
+                    selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
+                    orderBy: 'value asc'
+                },
+                'type_txt': {
+                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news'],
+                    filterField: '"video"',
+                    selectLimit: 1
+                },
+                'week_is': {
+                    selectField: 'WEEK(v_date)',
+                    orderBy: 'value asc'
+                },
+                'year_is': {
+                    selectField: 'YEAR(v_date)',
+                    orderBy: 'value asc'
+                }
+            },
+            sortMapping: {
+                'date': 'v_date DESC, v_id DESC',
+                'dateAsc': 'v_date ASC, v_id ASC',
+                'distance': 'geodist ASC',
+                'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
+                'dataTechAltDesc': 'k_altitude_asc DESC',
+                'dataTechMaxDesc': 'v_gps_ele DESC',
+                'dataTechDistDesc': 'k_distance DESC',
+                'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC',
+                'dataTechAltAsc': 'k_altitude_asc ASC',
+                'dataTechMaxAsc': 'v_gps_ele ASC',
+                'dataTechDistAsc': 'k_distance ASC',
+                'forExport': 'v_date ASC, v_id ASC',
+                'ratePers': 'v_rate DESC, v_date DESC',
+                'location': 'l_lochirarchietxt ASC',
+                'relevance': 'v_date DESC'
+            },
+            spartialConfig: {
+                lat: 'v_gps_lat',
+                lon: 'v_gps_lon',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
+            },
+            filterMapping: {
+                id: 'video.v_id',
+                image_id_is: '"dummy"',
+                image_id_i: '"dummy"',
+                video_id_i: 'video.v_id',
+                video_id_is: 'video.v_id',
+                route_id_i: 'kategorie.t_id',
+                route_id_is: 'kategorie.t_id',
+                track_id_i: 'video.k_id',
+                track_id_is: 'video.k_id',
+                news_id_is: '"dummy"',
+                loc_lochirarchie_ids_txt: 'location.l_id',
+                l_lochirarchietxt: 'location.l_name',
+                html: 'CONCAT(COALESCE(v_meta_name, ""), " ", COALESCE(l_name, ""))'
+            },
+            writeMapping: {
+                'video.l_id': ':loc_id_i:',
+                'video.k_id': ':track_id_i:',
+                'video.v_gesperrt': ':blocked_i:',
+                'video.v_date': ':datestart_dt:',
+                'video.v_meta_shortdesc': ':desc_txt:',
+                //'video.v_meta_shortdesc_md': ':desc_md_txt:',
+                //'video.v_meta_shortdesc_html': ':desc_html_txt:',
+                'video.v_gps_lon': ':geo_lon_s:',
+                'video.v_gps_lat': ':geo_lat_s:',
+                'video.v_gps_ele': ':data_tech_alt_max_i:',
+                'video.v_rate': ':rate_pers_gesamt_i:',
+                'video.v_rate_motive': ':rate_pers_motive_i:',
+                'video.v_rate_wichtigkeit': ':rate_pers_wichtigkeit_i:',
+                'video.v_meta_name': ':name_s:',
+                'video.v_dir': 'SUBSTRING(":v_fav_url_txt:", 1, CHARINDEX("/", ":v_fav_url_txt:") - 1)',
+                'video.v_file': 'SUBSTRING(":v_fav_url_txt:", CHARINDEX("/", ":v_fav_url_txt:"))'
+            },
+            fieldMapping: {
+                id: 'id',
+                video_id_i: 'v_id',
+                video_id_is: 'v_id',
+                loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
+                route_id_i: 't_id',
+                route_id_is: 't_id',
+                track_id_i: 'k_id',
+                track_id_is: 'k_id',
+                trip_id_i: 'tr_id',
+                trip_id_is: 'tr_id',
+                news_id_i: 'n_id',
+                news_id_is: 'n_id',
+                actiontype_s: 'actionType',
+                blocked_i: 'v_gesperrt',
+                data_tech_alt_asc_i: 'k_altitude_asc',
+                data_tech_alt_desc_i: 'k_altitude_desc',
+                data_tech_alt_min_i: 'v_gps_ele',
+                data_tech_alt_max_i: 'v_gps_ele',
+                data_tech_dist_f: 'k_distance',
+                data_tech_dur_f: 'dur',
+                dateshow_dt: 'v_date',
+                datestart_dt: 'v_date',
+                dateend_dt: 'v_date',
+                desc_txt: 'v_meta_shortdesc',
+                desc_md_txt: 'v_meta_shortdesc_md',
+                desc_html_txt: 'v_meta_shortdesc_html',
+                distance: 'geodist',
+                geo_lon_s: 'v_gps_lon',
+                geo_lat_s: 'v_gps_lat',
+                geo_loc_p: 'v_gps_loc',
+                v_fav_url_txt: 'v_fav_url_txt',
+                rate_pers_ausdauer_i: 'k_rate_ausdauer',
+                rate_pers_bildung_i: 'k_rate_bildung',
+                rate_pers_gesamt_i: 'v_rate',
+                rate_pers_kraft_i: 'k_rate_kraft',
+                rate_pers_mental_i: 'k_rate_mental',
+                rate_pers_motive_i: 'v_rate_motive',
+                rate_pers_schwierigkeit_i: 'k_rate_schwierigkeit',
+                rate_pers_wichtigkeit_i: 'v_rate_wichtigkeit',
+                gpstracks_basefile_s: 'k_gpstracks_basefile',
+                keywords_txt: 'v_keywords',
+                loc_lochirarchie_s: 'l_lochirarchietxt',
+                loc_lochirarchie_ids_s: 'l_lochirarchieids',
+                name_s: 'v_meta_name',
+                persons_txt: 'v_persons',
+                playlists_txt: 'v_playlists',
                 subtype_s: 'subtype',
                 type_s: 'type'
             }
@@ -838,7 +1157,7 @@ export class SDocSqlMediadbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['route', 'track', 'image', 'location', 'trip', 'news'],
+                    constValues: ['route', 'track', 'image', 'video', 'location', 'trip', 'news'],
                     filterField: '"route"',
                     selectLimit: 1
                 },
@@ -878,6 +1197,8 @@ export class SDocSqlMediadbConfig {
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 news_id_is: '"dummy"',
                 trip_id_is: '"dummy"',
                 loc_id_i: 'tour.l_id',
@@ -1092,7 +1413,7 @@ export class SDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['location', 'track', 'route', 'trip', 'image', 'news'],
+                    constValues: ['location', 'track', 'route', 'trip', 'image', 'video', 'news'],
                     filterField: '"location"',
                     selectLimit: 1
                 },
@@ -1248,7 +1569,7 @@ export class SDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news'],
                     filterField: '"trip"',
                     selectLimit: 1
                 },
@@ -1269,6 +1590,8 @@ export class SDocSqlMediadbConfig {
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 image_id_i: '"dummy"',
                 track_id_i: '"dummy"',
                 route_id_is: '"dummy"',
@@ -1384,7 +1707,7 @@ export class SDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'news'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news'],
                     filterField: '"news"',
                     selectLimit: 1
                 },
@@ -1406,6 +1729,8 @@ export class SDocSqlMediadbConfig {
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
                 image_id_i: '"dummy"',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 track_id_i: '"dummy"',
                 trip_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',

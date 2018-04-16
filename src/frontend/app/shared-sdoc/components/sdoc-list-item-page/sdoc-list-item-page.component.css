@@ -3,6 +3,6 @@ div.picture-small {
     overflow-y: hidden;
 }
 
-img.picture-big {
+img.picture-big, video.picture-big {
     max-width: 95%;
 }

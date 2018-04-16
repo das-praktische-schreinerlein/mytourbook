@@ -331,3 +331,39 @@ CREATE TABLE image (
   KEY i_rate_wichtigkeit (i_rate_wichtigkeit)
 ) ENGINE=MyISAM AUTO_INCREMENT=141161 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
+--
+-- video-data
+--
+DROP TABLE IF EXISTS video;
+CREATE TABLE video (
+  v_id int(11) NOT NULL AUTO_INCREMENT,
+  k_id int(11) NOT NULL,
+  t_id int(11) DEFAULT NULL,
+  v_katname text COLLATE latin1_general_ci,
+  v_katdesc text COLLATE latin1_general_ci,
+  v_gesperrt int(11) DEFAULT NULL,
+  v_lochirarchie text COLLATE latin1_general_ci,
+  v_date datetime DEFAULT NULL,
+  v_dir char(255) COLLATE latin1_general_ci DEFAULT NULL,
+  v_file char(255) COLLATE latin1_general_ci DEFAULT NULL,
+  v_keywords text COLLATE latin1_general_ci,
+  v_gps_lat float DEFAULT NULL,
+  v_gps_lon float DEFAULT NULL,
+  v_gps_ele float DEFAULT NULL,
+  v_rate int(11) DEFAULT NULL,
+  v_rate_motive int(11) DEFAULT NULL,
+  v_rate_wichtigkeit int(11) DEFAULT NULL,
+  v_video_objects text COLLATE latin1_general_ci,
+  v_dateshow date DEFAULT NULL,
+  PRIMARY KEY (v_id),
+  KEY idx_v__v_id (v_id),
+  KEY idx_v__k_id (k_id),
+  KEY idx_v__t_id (t_id),
+  KEY v_gps_lat (v_gps_lat),
+  KEY v_gps_lon (v_gps_lon),
+  KEY v_date (v_date),
+  KEY v_rate (v_rate),
+  KEY v_rate_motive (v_rate_motive),
+  KEY v_rate_wichtigkeit (v_rate_wichtigkeit)
+) ENGINE=MyISAM AUTO_INCREMENT=141161 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+

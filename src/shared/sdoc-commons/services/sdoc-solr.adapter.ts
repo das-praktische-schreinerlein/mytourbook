@@ -84,7 +84,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             }
         },
         commonSortOptions: {
-            'bq': 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:IMAGE^1' +
+            'bq': 'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:VIDEO^1.1 type_s:IMAGE^1' +
             ' _val_:"div(rate_pers_gesamt_i, 10)"',
             'qf': 'html_txt^12.0 name_txt^10.0 desc_txt^8.0 keywords_txt^6.0 loc_lochirarchie_txt^4.0',
             'defType': 'edismax',
@@ -126,7 +126,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
             },
             'ratePers': {
                 'sort': 'sub(15, rate_pers_gesamt_i) asc, datesort_dt desc',
-                'bq':  'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:IMAGE^1',
+                'bq':  'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:VIDEO^1.1 type_s:IMAGE^1',
                 'boost': 'product( recip( rord(date_dts), 1, 1000, 1000), 1)'
             },
             'location': {
@@ -149,6 +149,7 @@ export class SDocSolrAdapter extends GenericSolrAdapter<SDocRecord, SDocSearchFo
         const values = {
             id: props.id,
             image_id_i: props.imageId,
+            video_id_i: props.videoId,
             loc_id_i: props.locId,
             route_id_i: props.routeId,
             track_id_i: props.trackId,

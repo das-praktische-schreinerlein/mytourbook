@@ -209,7 +209,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "TRACK", "track"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track"]
                         }
                     ],
                     "configAvailability": [
@@ -242,7 +242,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -275,7 +275,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -305,7 +305,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -336,7 +336,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -367,7 +367,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -398,7 +398,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -429,7 +429,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -459,7 +459,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
                         }
                     ],
                     "configAvailability": [

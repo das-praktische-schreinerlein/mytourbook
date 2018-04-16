@@ -8,6 +8,7 @@ import {SDocRoutingService} from './sdoc-routing.service';
 import * as L from 'leaflet';
 import {FilterUtils, SimpleFilter} from '../../../shared/commons/utils/filter.utils';
 import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
+import {SDocVideoRecord} from '../../../shared/sdoc-commons/model/records/sdocvideo-record';
 import LatLng = L.LatLng;
 
 export enum KeywordsState {
@@ -35,6 +36,7 @@ export interface ItemData {
     styleClassFor: string[];
     urlShow: SafeUrl;
     image: SDocImageRecord;
+    video: SDocVideoRecord;
     thumbnailUrl: SafeUrl;
     previewUrl: SafeUrl;
     tracks?: SDocRecord[];
@@ -100,6 +102,10 @@ export class SDocContentUtils {
         return this.sanitizer.bypassSecurityTrustResourceUrl(this.getImageUrl(image, 'x600'));
     }
 
+    getFullVideoUrl(video: SDocVideoRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoUrl(video, 'x600'));
+    }
+
     getImageUrl(image: SDocImageRecord, resolution: string): string {
         if (image === undefined) {
             return 'not found';
@@ -109,6 +115,17 @@ export class SDocContentUtils {
             return this.appService.getAppConfig()['picsBaseUrl'] + resolution + '/' + image.sdoc_id;
         } else {
             return this.appService.getAppConfig()['picsBaseUrl'] + 'pics_' + resolution + '/' + image.fileName;
+        }
+    }
+    getVideoUrl(video: SDocVideoRecord, resolution: string): string {
+        if (video === undefined) {
+            return 'not found';
+        }
+
+        if (this.appService.getAppConfig()['useVideoAssetStoreUrls'] === true) {
+            return this.appService.getAppConfig()['videoBaseUrl'] + resolution + '/' + video.sdoc_id;
+        } else {
+            return this.appService.getAppConfig()['videoBaseUrl'] + 'video_' + resolution + '/' + video.fileName;
         }
     }
 
@@ -217,7 +234,11 @@ export class SDocContentUtils {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
-            } else if (type === 'ROUTE') {
+            } else if ((type === 'VIDEO' || type === 'TOPVIDEO') && record.trackId) {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
+                filters['sort'] = 'dateAsc';
+                filters['perPage'] = 100;
+            }else if (type === 'ROUTE') {
                 filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'TRIP' && record.tripId) {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
@@ -232,6 +253,9 @@ export class SDocContentUtils {
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'IMAGE' || type === 'TOPIMAGE') {
+                filters['moreFilter'] = 'route_id_i:' + record.routeId;
+                filters['perPage'] = 12;
+            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
@@ -267,10 +291,29 @@ export class SDocContentUtils {
             } else {
                 filters['moreFilter'] = 'image_id_i:' + record.imageId;
             }
+        } else if (record.type === 'VIDEO') {
+            if (type === 'TRACK' && record.trackId) {
+                filters['moreFilter'] = 'track_id_i:' + record.trackId;
+            } else if (type === 'TOPVIDEO') {
+                filters['moreFilter'] = 'track_id_i:' + -1;
+            } else if (type === 'ROUTE' && record.trackId) {
+                filters['moreFilter'] = 'track_id_is:' + record.trackId;
+            } else if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'TRIP' && record.tripId) {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+            } else if (type === 'NEWS' && record.newsId) {
+                filters['moreFilter'] = 'news_id_i:' + record.newsId;
+            } else {
+                filters['moreFilter'] = 'video_id_i:' + record.videoId;
+            }
         } else if (record.type === 'TRIP') {
             if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'IMAGE' || type === 'TOPIMAGE') {
+                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['perPage'] = 12;
+            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
@@ -285,6 +328,8 @@ export class SDocContentUtils {
         } else if (record.type === 'NEWS') {
             filters['moreFilter'] = 'news_id_is:' + record.newsId;
             if (type === 'IMAGE' || type === 'TOPIMAGE') {
+                filters['perPage'] = 12;
+            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
                 filters['perPage'] = 20;
@@ -303,6 +348,14 @@ export class SDocContentUtils {
             filters['type'] = 'IMAGE';
             filters['sort'] = 'ratePers';
             filters['perPage'] = 4;
+        } else if (type === 'TOPVIDEO') {
+            if (!filters['moreFilter']) {
+                filters['moreFilter'] = '';
+            }
+            filters['moreFilter'] += '_,_personalRateOverall:8,9,10,11,12,13,14,15';
+            filters['type'] = 'VIDEO';
+            filters['sort'] = 'ratePers';
+            filters['perPage'] = 4;
         }
 
         if (minPerPage && minPerPage > 0 && minPerPage > filters['perPage']) {
@@ -315,7 +368,7 @@ export class SDocContentUtils {
     createMapElementForSDoc(record: SDocRecord, showImageTrackAndGeoPos: boolean): MapElement[] {
         const trackUrl = record.gpsTrackBasefile;
 
-        const isImage = record.type === 'IMAGE';
+        const isImage = (record.type === 'IMAGE' || record.type === 'VIDEO');
         const showTrack = (trackUrl !== undefined && trackUrl.length > 0 && (!isImage || showImageTrackAndGeoPos))
             || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc !== null && record.gpsTrackSrc.length > 0);
         const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
@@ -369,6 +422,7 @@ export class SDocContentUtils {
             itemData.styleClassFor = undefined;
             itemData.urlShow = undefined;
             itemData.image = undefined;
+            itemData.video = undefined;
             itemData.thumbnailUrl = undefined;
             itemData.previewUrl = undefined;
             itemData.flgShowMap = false;
@@ -381,6 +435,7 @@ export class SDocContentUtils {
         itemData.styleClassFor = this.getStyleClassForRecord(itemData.currentRecord, layout);
         itemData.urlShow = this.getShowUrl(itemData.currentRecord);
         itemData.image = undefined;
+        itemData.video = undefined;
         itemData.thumbnailUrl = undefined;
         itemData.previewUrl = undefined;
 
@@ -388,6 +443,10 @@ export class SDocContentUtils {
             itemData.image = itemData.currentRecord['sdocimages'][0];
             itemData.thumbnailUrl = this.getThumbnailUrl(itemData.image);
             itemData.previewUrl = this.getPreviewUrl(itemData.image);
+        } else if (itemData.currentRecord['sdocvideos'] !== undefined && itemData.currentRecord['sdocvideos'].length > 0) {
+            itemData.video = itemData.currentRecord['sdocvideos'][0];
+            itemData.thumbnailUrl = this.getThumbnailUrl(itemData.video);
+            itemData.previewUrl = this.getPreviewUrl(itemData.video);
         }
 
         if (record !== undefined && (record.gpsTrackBasefile || record.geoLoc !== undefined

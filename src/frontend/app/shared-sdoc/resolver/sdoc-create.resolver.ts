@@ -71,6 +71,12 @@ export class SDocRecordCreateResolver implements Resolve<ResolvedData<SDocRecord
                                             'sdocratepers.motive',
                                             'sdocratepers.wichtigkeit');
                                         break;
+                                    case 'video':
+                                        fields.push('datestart', 'locId');
+                                        fields.push('sdocratepers.gesamt',
+                                            'sdocratepers.motive',
+                                            'sdocratepers.wichtigkeit');
+                                        break;
                                     case 'location':
                                         fields.push('locIdParent');
                                         break;
