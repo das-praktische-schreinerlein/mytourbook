@@ -9,7 +9,7 @@
 - none
  
 ### improvements
-- none
+- solr: improved data-import
  
 ### bug fixes
 - none
