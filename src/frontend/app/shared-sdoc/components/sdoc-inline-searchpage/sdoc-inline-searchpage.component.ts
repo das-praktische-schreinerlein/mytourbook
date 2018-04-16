@@ -84,6 +84,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     @Input()
     public short? = false;
 
+    @Input()
+    public perPageOnToSearchPage? = 10;
+
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 
@@ -184,7 +187,9 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     }
 
     getToSearchUrl() {
-        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm);
+        const lSearchForm = SDocSearchFormFactory.cloneSanitized(this.searchForm);
+        lSearchForm.perPage = this.perPageOnToSearchPage;
+        return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, lSearchForm);
     }
 
     onToSearchPage(event: any) {

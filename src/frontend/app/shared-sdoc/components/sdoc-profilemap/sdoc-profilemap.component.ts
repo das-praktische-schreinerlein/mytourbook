@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
@@ -30,7 +30,8 @@ export class SDocProfileMapComponent implements OnChanges {
     @Output()
     public mapElementsFound: EventEmitter<MapElement[]> = new EventEmitter();
 
-    constructor(private contentUtils: SDocContentUtils, private appService: GenericAppService, private platformService: PlatformService) {}
+    constructor(private cd: ChangeDetectorRef, private contentUtils: SDocContentUtils, private appService: GenericAppService,
+                private platformService: PlatformService) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (this.platformService.isClient() && ComponentUtils.hasNgChanged(changes)) {
@@ -53,5 +54,7 @@ export class SDocProfileMapComponent implements OnChanges {
         }
         this.mapElements = tmpList;
         this.mapElementsFound.emit(this.mapElements);
+
+        this.cd.markForCheck();
     }
 }

@@ -1,3 +1,4 @@
 <app-sdoc-tagsstate [tags]="keywords" [tagsConfig]="keywordsConfig"
                     [possiblePrefixes]="possiblePrefixes" [suggestions]="suggestions" [prefix]="prefix"
-                    (setTag)="doSetKeyword($event)" (unsetTag)="doUnsetKeyword($event)"></app-sdoc-tagsstate>
+                    (setTag)="doSetKeyword($event)" (unsetTag)="doUnsetKeyword($event)"
+                    (tagsFound)="tagsFound.emit($event)"></app-sdoc-tagsstate>

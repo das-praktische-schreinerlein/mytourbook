@@ -9,7 +9,7 @@ export class ImageManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
-        const searchForm = new SDocSearchForm({ type: 'image', sort: 'date'});
+        const searchForm = new SDocSearchForm({ type: 'image', sort: 'dateAsc'});
         const writable = backendConfig['sdocWritable'] === true || backendConfig['sdocWritable'] === 'true';
         const dataService = SDocDataServiceModule.getDataService('sdocSolrReadOnly', backendConfig);
         if (writable) {

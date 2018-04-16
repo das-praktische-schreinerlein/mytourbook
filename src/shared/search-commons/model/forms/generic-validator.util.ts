@@ -146,6 +146,7 @@ export class RegExValidationReplaceRule extends ValidationRule {
     ;
     public static nameRule = ''
         + XRegExp.escape('-')
+        + '@'
         + '\\p{LC}' // LC 	Letter, Cased
         + '\\p{Ll}' // Ll 	Letter, Lowercase
         + '\\p{Lm}' // Lm 	Letter, Modifier
@@ -216,6 +217,10 @@ export class RegExValidationReplaceRule extends ValidationRule {
         const result = XRegExp.replace(value, this._replaceRegEx, this._replaceMent);
         // console.error("sanitize value:" + value + " to replaceValue: " + result);
         return result;
+    }
+
+    getMaxLength(): number {
+        return this.maxLength;
     }
 }
 

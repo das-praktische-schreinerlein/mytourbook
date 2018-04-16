@@ -335,7 +335,9 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
             const values = valueString.toString().split(',');
             for (const value of values) {
                 const safeValue = this.searchParameterUtils.escapeHtml(value);
-                res.values.push((translate ? this.translateService.instant(safeValue) || safeValue : safeValue));
+                if (safeValue) {
+                    res.values.push((translate ? this.translateService.instant(safeValue) || safeValue : safeValue));
+                }
             }
         } else if (defaultValue) {
             res = {

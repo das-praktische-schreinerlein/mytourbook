@@ -197,6 +197,7 @@ export class SectionPageComponent implements OnInit {
         filters['what'] = this.searchFormConverter.joinWhatParams(this.sdocSearchForm);
         filters['nearBy'] = this.sdocSearchForm.nearby;
         filters['nearbyAddress'] = this.sdocSearchForm.nearbyAddress;
+        filters['fulltext'] = this.sdocSearchForm.fulltext;
 
         return filters;
     }
@@ -231,6 +232,7 @@ export class SectionPageComponent implements OnInit {
         this.sdocSearchForm[filter] = filterValue;
         const url = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
             theme: this.pdoc.theme,
+            perPage: 10,
             type: 'route',
             actiontype: this.sdocSearchForm.actiontype.toString(),
             when: this.sdocSearchForm.when.toString(),
@@ -239,16 +241,22 @@ export class SectionPageComponent implements OnInit {
             nearBy: this.sdocSearchForm.nearby,
             personalRateDifficulty: this.sdocSearchForm.personalRateDifficulty,
             techRateOverall: this.sdocSearchForm.techRateOverall,
-            nearbyAddress: this.sdocSearchForm.nearbyAddress
+            nearbyAddress: this.sdocSearchForm.nearbyAddress,
+            fulltext: this.sdocSearchForm.fulltext
         }));
         this.commonRoutingService.navigateByUrl(url);
 
         return false;
     }
 
+    onScrollToTop() {
+        this.pageUtils.scrollToTop();
+    }
+
     getToSearchUrl() {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
             theme: this.pdoc.theme,
+            perPage: 10,
             type: 'route,location,track,trip,news',
             actiontype: this.sdocSearchForm.actiontype.toString(),
             when: this.sdocSearchForm.when.toString(),

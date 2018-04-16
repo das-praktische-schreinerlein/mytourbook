@@ -181,6 +181,8 @@ export class SDocSqlMediadbAdapter extends GenericSqlAdapter<SDocRecord, SDocSea
             return this.actionTagAdapter.executeActionTagImageObjects(id, actionTagForm, opts);
         } else if (table === 'image' && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
             return this.actionTagAdapter.executeActionTagImagePersRate(id, actionTagForm, opts);
+        } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {
+            return this.actionTagAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
         }
 
         return super._doActionTag(mapper, record, actionTagForm, opts);

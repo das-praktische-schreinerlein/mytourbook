@@ -61,6 +61,7 @@ export class SDocSqlMediadbConfig {
                 'k_name',
 //                'k_html',
                 'CONCAT(COALESCE(k_name, ""), " ", COALESCE(k_meta_shortdesc, ""), " ", COALESCE(l_name, "")) AS html',
+                'k_gesperrt',
                 'k_datevon AS k_dateshow',
                 'k_datevon',
                 'k_datebis',
@@ -99,6 +100,9 @@ export class SDocSqlMediadbConfig {
             facetConfigs: {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)'
+                },
+                'blocked_is': {
+                    selectField: 'k_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((k_altitude_asc / 500))*500',
@@ -211,7 +215,8 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'k_altitude_max ASC',
                 'dataTechDistAsc': 'k_distance ASC',
-                'ratePers': 'k_rate_gesamt DESC',
+                'forExport': 'k_datevon ASC',
+                'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
                 'location': 'l_name ASC',
                 'relevance': 'k_datevon DESC'
             },
@@ -240,6 +245,7 @@ export class SDocSqlMediadbConfig {
                 'kategorie.l_id': ':loc_id_i:',
                 'kategorie.tr_id': ':trip_id_i:',
                 //'kategorie.n_id': ':news_id_i:',
+                'kategorie.k_gesperrt': ':blocked_i:',
                 'kategorie.k_datevon': ':datestart_dt:',
                 'kategorie.k_datebis': ':dateend_dt:',
                 'kategorie.k_meta_shortdesc': ':desc_txt:',
@@ -277,6 +283,7 @@ export class SDocSqlMediadbConfig {
                 trip_id_is: 'tr_id',
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
+                blocked_i: 'k_gesperrt',
                 dateshow_dt: 'k_dateshow',
                 datestart_dt: 'k_datevon',
                 dateend_dt: 'k_datebis',
@@ -380,6 +387,7 @@ export class SDocSqlMediadbConfig {
                 'kategorie.l_id',
                 'COALESCE(i_meta_name, k_name) AS i_meta_name',
                 'CONCAT(COALESCE(i_meta_name, ""), " ", COALESCE(l_name, "")) AS html',
+                'i_gesperrt',
                 'i_date',
                 'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
                 'WEEK(i_date) AS week',
@@ -417,6 +425,9 @@ export class SDocSqlMediadbConfig {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)',
                     selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id'
+                },
+                'blocked_is': {
+                    selectField: 'i_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((k_altitude_asc / 500))*500',
@@ -517,8 +528,8 @@ export class SDocSqlMediadbConfig {
                 }
             },
             sortMapping: {
-                'date': 'i_date DESC',
-                'dateAsc': 'i_date ASC',
+                'date': 'i_date DESC, i_id DESC',
+                'dateAsc': 'i_date ASC, i_id ASC',
                 'distance': 'geodist ASC',
                 'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
                 'dataTechAltDesc': 'k_altitude_asc DESC',
@@ -528,7 +539,8 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'i_gps_ele ASC',
                 'dataTechDistAsc': 'k_distance ASC',
-                'ratePers': 'i_rate DESC',
+                'forExport': 'i_date ASC, i_id ASC',
+                'ratePers': 'i_rate DESC, i_date DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'
             },
@@ -554,6 +566,7 @@ export class SDocSqlMediadbConfig {
             writeMapping: {
                 'image.l_id': ':loc_id_i:',
                 'image.k_id': ':track_id_i:',
+                'image.i_gesperrt': ':blocked_i:',
                 'image.i_date': ':datestart_dt:',
                 'image.i_meta_shortdesc': ':desc_txt:',
                 //'image.i_meta_shortdesc_md': ':desc_md_txt:',
@@ -583,6 +596,7 @@ export class SDocSqlMediadbConfig {
                 news_id_i: 'n_id',
                 news_id_is: 'n_id',
                 actiontype_s: 'actionType',
+                blocked_i: 'i_gesperrt',
                 data_tech_alt_asc_i: 'k_altitude_asc',
                 data_tech_alt_desc_i: 'k_altitude_desc',
                 data_tech_alt_min_i: 'i_gps_ele',
@@ -849,7 +863,8 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 't_route_hm ASC',
                 'dataTechMaxAsc': 't_ele_max ASC',
                 'dataTechDistAsc': 't_route_m ASC',
-                'ratePers': 't_rate_gesamt DESC',
+                'forExport': 't_id ASC',
+                'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 't_datevon DESC'
             },
@@ -1090,6 +1105,7 @@ export class SDocSqlMediadbConfig {
             },
             sortMapping: {
                 'distance': 'geodist ASC',
+                'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC',
                 'location': 'l_name ASC',
                 'relevance': 'l_name ASC'
             },
@@ -1246,6 +1262,7 @@ export class SDocSqlMediadbConfig {
             sortMapping: {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
+                'forExport': 'tr_datevon ASC',
                 'relevance': 'tr_datevon DESC'
             },
             filterMapping: {
@@ -1381,6 +1398,7 @@ export class SDocSqlMediadbConfig {
             sortMapping: {
                 'date': 'n_date DESC',
                 'dateAsc': 'n_date ASC',
+                'forExport': 'n_date ASC',
                 'relevance': 'n_date DESC'
             },
             filterMapping: {

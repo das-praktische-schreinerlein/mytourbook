@@ -201,7 +201,7 @@ export class SDocContentUtils {
         return keywordKats;
     }
 
-    getSDocSubItemFiltersForType(record: SDocRecord, type: string, theme: string): any {
+    getSDocSubItemFiltersForType(record: SDocRecord, type: string, theme: string, minPerPage?: number): any {
         const filters = {
             type: type
         };
@@ -303,6 +303,10 @@ export class SDocContentUtils {
             filters['type'] = 'IMAGE';
             filters['sort'] = 'ratePers';
             filters['perPage'] = 4;
+        }
+
+        if (minPerPage && minPerPage > 0 && minPerPage > filters['perPage']) {
+            filters['perPage'] = minPerPage;
         }
 
         return filters;

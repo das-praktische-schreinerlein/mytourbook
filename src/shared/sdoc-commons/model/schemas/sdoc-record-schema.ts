@@ -16,6 +16,8 @@ export const SDocRecordSchema = new Schema({
         tripId: {type: 'number'},
         newsId: {type: 'number'},
 
+        blocked: {type: 'number'},
+
 // TODO
 //        dateshow: {type: 'Date'},
 //        datestart: {type: 'Date'},

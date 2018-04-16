@@ -33,6 +33,9 @@ export class SDocTagsStateComponent implements OnChanges {
     @Output()
     public setTag: EventEmitter<string> = new EventEmitter();
 
+    @Output()
+    public tagsFound: EventEmitter<StructuredKeywordState[]> = new EventEmitter();
+
     constructor(private contentUtils: SDocContentUtils) {
     }
 
@@ -53,6 +56,7 @@ export class SDocTagsStateComponent implements OnChanges {
     private updateData() {
         this.tagsKats = [];
         if (this.tags === undefined || this.tags === null) {
+            this.tagsFound.emit([]);
             return;
         }
 
@@ -61,5 +65,6 @@ export class SDocTagsStateComponent implements OnChanges {
             this.tags.split(', '),
             this.suggestions ? this.suggestions : [],
             this.possiblePrefixes);
+        this.tagsFound.emit(this.tagsKats);
     }
 }

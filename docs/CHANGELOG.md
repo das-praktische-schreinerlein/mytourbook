@@ -2,30 +2,62 @@
  
 # Versions
  
-## 1.3.0-alpha
+## 1.4.0-alpha
+- none
+ 
+### new features
+- none
+ 
+### improvements
+- solr: improved data-import
+ 
+### bug fixes
+- none
+ 
+### breaking changes
+- none
+ 
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+ 
+ 
+## 1.3.0
 - many improvements on layout, usability, code
  
 ### new features
-- installer: added sql-script to copy data from mediadb to mytb and prepare for import to solr
- 
-### improvements
-- common: use xregexp for validation with unicode-classes
-- common: added ability to facet by year (for mytb, mediadb)
-- frontend: improved list-layout
+- backend: added more facets/filters/fields to mediadb-adapter
+- backend: generate redirect-list for frontendserver
+- common: added ability to facet by year (for mytb, mediadb, solr)
+- common: added actiontag to block items for public
 - frontend: highlight labels of form-inputs which are set
 - frontend: added "save and back to search"-button on edit-form
 - frontend: added function to fix nonstandard gpx in edit-form
 - frontend: added datalist for text-input-fields with suggestions from facets
-- frontend: improved code
-- backend: added more facets/filters/fields to mediadb-adapter
+- frontend: added name-recommendation to edit-form
+- frontend: added gpx-file-dropzone to edit-form
+- frontend: jump to last shown element when back to list 
+- frontend: set perPage=10 elements on search-link in inlinesearch
+- frontend: added backToTop-link
+- frontend: added parameters for configuring show-layout via url-parameter 
+- frontendserver: check static redirect-list if url not cached
+- frontendserver: added static-server for usage without without angular 
+- installer: added sql-script to copy data from mediadb to mytb and prepare for import to solr
+ 
+### improvements
 - backend: improved sdoc-loader/exporter
 - backend: improved search-adapter to load details depending on mode
+- common: use xregexp for validation with unicode-classes
+- common: improved code
+- frontend: improved list/mobile-layout
+- solr: improved fulltext-search
  
 ### bug fixes
+- backend: fixed sql-adataper (max, greatest, IN_CSV)  
 - common: fixed validation -> was to restrictive
+- common: fixed date-handling - convert all to ISO-Date (not perfect but ....)
 - frontend: scroll to top of page on routechange, of element when pagenumchange
 - frontend: fixed encodeUri for angular-http-client
-- backend: fixed sql-adataper (max, greatest, IN_CSV)  
+- frontend: fixed some issues - added distance to list-layouts, set pageNum=1 if filter changes on searchpage, show no location for news)
  
 ### breaking changes
 - none

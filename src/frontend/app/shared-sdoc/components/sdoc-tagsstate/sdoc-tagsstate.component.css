@@ -9,7 +9,7 @@ div.techvaluetable {
         max-width: 180px;
     }
 }
-@media(min-width: 400px) and (max-width: 767px) {
+@media(min-width: 430px) and (max-width: 767px) {
     div.techvaluetable .entry .value {
         max-width: 300px;
     }

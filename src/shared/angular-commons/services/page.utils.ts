@@ -1,6 +1,7 @@
-import {DOCUMENT, Meta, Title} from '@angular/platform-browser';
+import {Meta, Title} from '@angular/platform-browser';
 import {ElementRef, Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
+import {DOCUMENT} from '@angular/common';
 
 @Injectable()
 export class PageUtils {
@@ -89,4 +90,20 @@ export class PageUtils {
             el.nativeElement.scrollIntoView(true);
         }
     }
+
+    public goToLinkAnchor(anchor: string): void {
+        if (anchor !== undefined && anchor !== null && anchor.length > 1) {
+            const me = this;
+            setTimeout(function init() {
+                const element: HTMLElement = me.document.querySelector('[name=' + anchor + ']');
+                if (element) {
+                    element.scrollIntoView(true);
+                    element.style.width = '100%';
+                    element.style.display = 'block';
+                    element.innerHTML =  '&#128279;';
+                }
+            }, 500);
+        }
+    }
+
 }

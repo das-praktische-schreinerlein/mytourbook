@@ -7,32 +7,21 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as fs from 'fs';
+import {CacheModeType, MytbSimpleServerModule, ServerModuleConfig} from './mytb-simple-server.module';
 
-export enum CacheModeType {
-    NO_CACHE, USE_CACHE, CACHED_ONLY
-}
-
-export interface UniversalModuleConfig {
-    distFolder: string;
-    distServerProfile: string;
-    distProfile: string;
-    cacheFolder: string;
-    cacheMode: CacheModeType;
-}
-
-export class MytbAngularUniversalModule {
-    private indexFile: string;
-
-    public static configureDefaultServer(app: express.Application, config: UniversalModuleConfig) {
+export class MytbAngularUniversalModule extends MytbSimpleServerModule {
+    public static configureDefaultServer(app: express.Application, config: ServerModuleConfig) {
         const mytbAngularModule = new MytbAngularUniversalModule(app, config);
-        mytbAngularModule.configureGlobals();
-        mytbAngularModule.configureViewEngine();
+        if (config.cacheMode === CacheModeType.USE_CACHE) {
+            mytbAngularModule.configureGlobals();
+            mytbAngularModule.configureViewEngine();
+        }
         mytbAngularModule.configureStaticFileRoutes();
-        mytbAngularModule.configureAllAsAngularUniversalRoutes();
+        mytbAngularModule.configureServerRoutes();
     }
 
-    public constructor(private app: express.Application, private config: UniversalModuleConfig) {
-        this.indexFile = join(this.config.distFolder, this.config.distProfile, 'index.html');
+    public constructor(protected app: express.Application, protected config: ServerModuleConfig) {
+        super(app, config);
     }
 
     public configureGlobals(): void {
@@ -64,75 +53,45 @@ export class MytbAngularUniversalModule {
         }));
 
         this.app.set('view engine', 'html');
-        this.app.set('views', join(this.config.distFolder, ''));
+        this.app.set('views', join(this.config.staticFolder, ''));
     }
 
-    public configureStaticFileRoutes(): void {
-        // Serve static files from /browser
-        this.app.get('/' + this.config.distProfile + '*.*', express.static(join(this.config.distFolder, '')));
+    protected handleNotCachedRoute(req, res): any {
+        if (this.config.cacheMode === CacheModeType.USE_CACHE) {
+            // NOT CACHED but use cache
+            console.log('not cached but cache:', req.url);
+            return this.renderAngularRoute(req, res);
+        } else {
+            // NOT CACHED but use CACHED_ONLY
+            return this.sendIndex(req, res);
+        }
     }
 
-    public configureAllAsAngularUniversalRoutes(): void {
-        const me = this;
-
-        // All regular routes use the Universal engine
-        this.app.get('/' + this.config.distProfile + '*', (req, res) => {
-            if (me.config.cacheMode === CacheModeType.NO_CACHE) {
-                res.status(200);
-                res.sendFile(me.indexFile);
-                return;
-            } else {
-                const filename = me.getCacheFilename(req.url);
-                fs.exists(filename, function (exists: boolean) {
-                    if (exists) {
-                        // CACHED: use cached file
-                        res.status(200);
-                        res.sendFile(filename, {root: '.'});
-                        return;
-                    } else if (me.config.cacheMode === CacheModeType.CACHED_ONLY) {
-                        // NOT CACHED but use CACHED_ONLY
-                        res.status(200);
-                        res.sendFile(me.indexFile);
-                        return;
-                    } else {
-                        // NOT CACHED but use cache
-                        console.log('not cached but cache:', req.url);
-                        me.angularRouter(req, res);
-                        return;
-                    }
-                });
-            }
-        });
-    }
-
-    private angularRouter(req, res): any {
+    private renderAngularRoute(req, res): any {
         /* Server-side rendering */
         const me = this;
         //global['navigator'] = req['headers']['user-agent'];
-        res.render(this.indexFile,
+        return res.render(this.indexFile,
             { req, res, providers: [{ provide: 'baseUrl', useValue: `${req.protocol}://${req.get('host')}/${this.config.distProfile}`}]
             }, (err, html) => {
+                if (me.config.cacheMode !== CacheModeType.NO_CACHE) {
+                    res.status(201).send(html);
+                    if (err) {
+                        console.error('error while getting url:' + res.url, err);
+                        return;
+                    }
+
+                    const filename = me.getCacheFilename(req.url);
+                    fs.writeFileSync(filename, html);
+                    return;
+                }
+
                 res.status(200).send(html);
                 if (err) {
                     console.error('error while getting url:' + res.url, err);
                     return;
                 }
-
-                if (me.config.cacheMode !== CacheModeType.NO_CACHE) {
-                    const filename = me.getCacheFilename(req.url);
-                    fs.writeFileSync(filename, html);
-                }
             }
         );
-    }
-
-    private getCacheFilename(url: string): string {
-        return this.config.cacheFolder + this.createCacheFilename(url);
-    }
-
-    private createCacheFilename(url: string): string {
-        return url.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '-'
-            + require('crypto').createHash('md5').update(url).digest('hex')
-            + '.html';
     }
 }

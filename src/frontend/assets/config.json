@@ -192,6 +192,35 @@
                     ]
                 },
                 {
+                    "key": "blocked",
+                    "type": "tag",
+                    "name": "Block from public",
+                    "shortName": "&#x1F6AB",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "blocked",
+                            "command": "CSVIN",
+                            "expectedValues": ["1", "2", "3", "4", "5", "true", "TRUE"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.sdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "playlists_favorites",
                     "type": "tag",
                     "name": "Favorites",
@@ -438,6 +467,10 @@
                 }
 
             ]
+        },
+        "sdoc-showpage": {
+            "showBigImages": false,
+            "allowedQueryParams": []
         },
         "sdoc-albumpage": {
             "allowAutoplay": false

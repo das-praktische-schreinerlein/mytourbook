@@ -48,6 +48,14 @@
 
     <!-- short searchform-->
     <ng-container *ngIf="short && showForm">
+        <div class="row hidden-print">
+            <div [class]="('col-sm-12 form-inline input-group input-group-sm')">
+                <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('fulltext').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
+                <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control"
+                       (keydown.enter)="onSubmitSearch($event)"
+                       i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
+            </div>
+        </div>
         <div class="row hidden-print" *ngIf="showWhereAvailable">
             <div [class]="(width4 + ' input-group input-group-sm')">
                 <label [class]="'col-xs-3 col-form-label mr-2' + (searchFormGroup.get('where').value.length > 0 ? ' label-active' : ' lael-inactive')" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
@@ -146,6 +154,57 @@
                 </div>
             </div>
         </fieldset>
+        <fieldset class="hidden-print" *ngIf="showWhat">
+            <legend i18n="what label|Label for fieldset: what@@label.searchform.sdoc.legend.what">&#x26bd; Was</legend>
+            <div class="row">
+                <div [class]="(width4 + ' input-group input-group-sm')">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
+                    <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectActionType"
+                                                 [settings]="settingsSelectActionType"
+                                                 [texts]="textsSelectActionType"
+                                                 formControlName="actiontype"
+                                                 ngDefaultControl
+                                                 class="fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('type').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="type label|Label for filter: type@@label.searchform.sdoc.type">Types:</label>
+                    <ss-multiselect-dropdown [options]="optionsSelectType"
+                                             [settings]="settingsSelectType"
+                                             [texts]="textsSelectType"
+                                             formControlName="type"
+                                             ngDefaultControl
+                                             class="fullwidth"
+                                             (onAdded)="onChangeSelect()"
+                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
+                    <button class="btn btn-configure btn-sm" (click)="showWhat = false; updateFormState();">
+                        <span i18n="button hide Whatform|Buttontext to hide Whatform@@button.searchform.hide.Whatform">ausblenden</span>
+                        <span>&#x21D1;</span></button>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="hidden-print" *ngIf="showFulltext">
+            <legend i18n="fulltext label|Label for fieldset: fulltext@@label.searchform.sdoc.legend.fulltext">&#x2328; Volltextsuche</legend>
+            <div class="row">
+                <div [class]="(width8 + ' form-inline input-group input-group-sm')">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('fulltext').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
+                    <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control"
+                           (keydown.enter)="onSubmitSearch($event)"
+                           i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
+                    <button class="btn btn-action btn-sm" type="submit" (click)="onSubmitSearch($event)" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
+                    <button class="btn btn-configure btn-sm" (click)="showFulltext = false; updateFormState();">
+                        <span i18n="button hide Fulltextform|Buttontext to hide Fulltextform@@button.searchform.hide.Fulltextform">ausblenden</span>
+                        <span>&#x21D1;</span></button>
+                </div>
+            </div>
+        </fieldset>
         <fieldset class="hidden-print" *ngIf="showWhen && showWhenAvailable">
             <legend i18n="when label|Label for fieldset: when@@label.searchform.sdoc.legend.when">&#x231a; Zeit</legend>
             <div class="row">
@@ -178,40 +237,6 @@
                 <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
                     <button class="btn btn-configure btn-sm" (click)="showWhen = false">
                         <span i18n="button hide Whenform|Buttontext to hide Whenform@@button.searchform.hide.Whenform">ausblenden</span>
-                        <span>&#x21D1;</span></button>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset class="hidden-print" *ngIf="showWhat">
-            <legend i18n="what label|Label for fieldset: what@@label.searchform.sdoc.legend.what">&#x26bd; Was</legend>
-            <div class="row">
-                <div [class]="(width4 + ' input-group input-group-sm')">
-                   <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
-                    <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
-                        <ss-multiselect-dropdown [options]="optionsSelectActionType"
-                                                 [settings]="settingsSelectActionType"
-                                                 [texts]="textsSelectActionType"
-                                                 formControlName="actiontype"
-                                                 ngDefaultControl
-                                                 class="fullwidth"
-                                                 (onAdded)="onChangeSelect()"
-                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-                    </ng-container>
-                </div>
-                <div [class]="(width4 + ' input-group input-group-sm')">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('type').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="type label|Label for filter: type@@label.searchform.sdoc.type">Types:</label>
-                    <ss-multiselect-dropdown [options]="optionsSelectType"
-                                             [settings]="settingsSelectType"
-                                             [texts]="textsSelectType"
-                                             formControlName="type"
-                                             ngDefaultControl
-                                             class="fullwidth"
-                                             (onAdded)="onChangeSelect()"
-                                             (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
-                </div>
-                <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
-                    <button class="btn btn-configure btn-sm" (click)="showWhat = false; updateFormState();">
-                        <span i18n="button hide Whatform|Buttontext to hide Whatform@@button.searchform.hide.Whatform">ausblenden</span>
                         <span>&#x21D1;</span></button>
                 </div>
             </div>
@@ -277,23 +302,6 @@
                                                  (onAdded)="onChangeSelect()"
                                                  (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                     </ng-container>
-                </div>
-            </div>
-        </fieldset>
-        <fieldset class="hidden-print" *ngIf="showFulltext">
-            <legend i18n="fulltext label|Label for fieldset: fulltext@@label.searchform.sdoc.legend.fulltext">&#x2328; Volltextsuche</legend>
-            <div class="row">
-                <div [class]="(width8 + ' form-inline input-group input-group-sm')">
-                   <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('fulltext').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="fulltext label|Label for filter: fulltext@@label.searchform.sdoc.fulltext">Fulltext:</label>
-                    <input formControlName="fulltext" type="text" placeholder="Suchtext" class="form-control"
-                           (keydown.enter)="onSubmitSearch($event)"
-                           i18n-placeholder="fulltext placeholder|Placeholder for fulltext@@placeholder.searchform.sdoc.fulltext">
-                </div>
-                <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
-                    <button class="btn btn-action btn-sm" type="submit" (click)="onSubmitSearch($event)" i18n="button search sdoc|Buttontext to search sdoc@@button.searchform.sdoc.search">Search</button>
-                    <button class="btn btn-configure btn-sm" (click)="showFulltext = false; updateFormState();">
-                        <span i18n="button hide Fulltextform|Buttontext to hide Fulltextform@@button.searchform.hide.Fulltextform">ausblenden</span>
-                        <span>&#x21D1;</span></button>
                 </div>
             </div>
         </fieldset>

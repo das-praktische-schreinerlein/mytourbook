@@ -3,7 +3,7 @@
         width: 500px;
     }
 }
-@media(max-width: 400px) {
+@media(max-width: 430px) {
     img.picture-big {
         width: 350px;
     }
@@ -12,12 +12,18 @@
         margin-left: 1px!important;
     }
     .card-deck .card:not(:last-child) {
-        margin-right: 0px!important;;
+        margin-right: 0!important;;
     }
     .card-deck .card {
         margin-left: 1px!important;;
-        margin-right: 0px!important;;
+        margin-right: 0!important;;
     }
+
+    .app-sdoc-list-item-big {
+        min-width: 200px !important;
+        max-width: 270px !important;
+    }
+
 }
 @media(max-width: 450px) {
     img.picture-big {
@@ -64,7 +70,7 @@
         padding-right: 10px;
     }
 }
-@media(min-width: 400px) and (max-width: 767px) {
+@media(min-width: 430px) and (max-width: 767px) {
     div.layout-big {
         padding-left: 3px;
         padding-right: 3px;

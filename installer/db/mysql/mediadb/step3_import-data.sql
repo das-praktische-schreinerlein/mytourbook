@@ -67,6 +67,31 @@ BEGIN
 END $$
 DELIMITER ;
 
+DELIMITER $$
+DROP FUNCTION IF EXISTS `GetLocationChildIds` $$
+  CREATE FUNCTION GetLocationChildIds(GivenID INT) RETURNS VARCHAR(2000)
+  DETERMINISTIC
+  BEGIN
+    DECLARE subIds VARCHAR(2000);
+    DECLARE Ids  VARCHAR(2000);
+    SET subIds = '';
+    SET SESSION group_concat_max_len = 20000000;
+
+      SELECT GROUP_CONCAT(Level SEPARATOR ',,') into subIds FROM (
+         SELECT @Ids := (
+             SELECT GROUP_CONCAT(l_id SEPARATOR ',,')
+             FROM location
+             WHERE FIND_IN_SET(l_parent_id, @Ids)
+         ) Level
+         FROM location
+         JOIN (SELECT @Ids := GivenID) temp1
+      ) temp2;
+
+
+    RETURN subIds;
+END $$
+DELIMITER ;
+
 --
 -- configuration-tables
 --
@@ -233,7 +258,7 @@ CREATE TABLE location_keyword (
 DROP TABLE IF EXISTS tour;
 CREATE TABLE tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
-  l_id int(11) NOT NULL DEFAULT '1',
+  l_id int(11),
   t_meta_desc text COLLATE latin1_general_ci,
   t_meta_shortdesc text COLLATE latin1_general_ci,
   t_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -353,8 +378,8 @@ CREATE TABLE kategorie (
   k_meta_desc text COLLATE latin1_general_ci,
   k_meta_shortdesc text COLLATE latin1_general_ci,
   k_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-  t_id int(11) NOT NULL DEFAULT '1',
-  l_id int(11) NOT NULL DEFAULT '1',
+  t_id int(11),
+  l_id int(11),
   k_distance float DEFAULT '0',
   k_altitude_min float DEFAULT '0',
   k_altitude_max float DEFAULT '0',
@@ -458,6 +483,7 @@ CREATE TABLE kategorie_tourpoint (
   KEY idx_ktp__ktp_id (ktp_id),
   KEY idx_ktp__k_id (k_id),
   KEY idx_ktp__l_id (l_id),
+  KEY idx_ktp__ktp_date (ktp_date),
   CONSTRAINT kategorie_tourpoint_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
   CONSTRAINT kategorie_tourpoint_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4261739 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
@@ -468,7 +494,7 @@ CREATE TABLE kategorie_tourpoint (
 DROP TABLE IF EXISTS image;
 CREATE TABLE image (
   i_id int(11) NOT NULL AUTO_INCREMENT,
-  k_id int(11) NOT NULL DEFAULT '0',
+  k_id int(11),
   i_date datetime DEFAULT NULL,
   i_origpath varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   i_file varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -476,7 +502,7 @@ CREATE TABLE image (
   i_meta_desc text COLLATE latin1_general_ci,
   i_meta_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   i_meta_shortdesc varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
-  l_id int(11) NOT NULL DEFAULT '1',
+  l_id int(11),
   i_gps_lat float DEFAULT NULL,
   i_gps_lon float DEFAULT NULL,
   i_gps_ele float DEFAULT NULL,
@@ -493,6 +519,7 @@ CREATE TABLE image (
   KEY idx_i__k_id (k_id),
   KEY idx_i__l_id (l_id),
   KEY idx_i__i_date (i_date),
+  KEY idx_i__i_gps_ele (i_gps_ele),
   KEY idx_i__i_gps_lon (i_gps_lon),
   KEY idx_i__i_gps_lat (i_gps_lat),
   CONSTRAINT image_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id),

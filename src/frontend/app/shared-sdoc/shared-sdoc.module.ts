@@ -44,6 +44,7 @@ import {SDocTagsComponent} from './components/sdoc-tags/sdoc-tags.component';
 import {SDocTagsStateComponent} from './components/sdoc-tagsstate/sdoc-tagsstate.component';
 import {SDocPersonTagsStateComponent} from './components/sdoc-persontagsstate/sdoc-persontagsstate.component';
 import {SDocPersonTagsComponent} from './components/sdoc-persontags/sdoc-persontags.component';
+import {FileDropModule} from 'ngx-file-drop';
 
 @NgModule({
     declarations: [
@@ -94,7 +95,8 @@ import {SDocPersonTagsComponent} from './components/sdoc-persontags/sdoc-persont
         HttpModule,
         AngularCommonsModule,
         AngularMapsModule,
-        LightboxModule
+        LightboxModule,
+        FileDropModule
     ],
     providers: [
         DatePipe

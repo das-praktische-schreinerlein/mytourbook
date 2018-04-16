@@ -80,5 +80,7 @@ export class SDocMapComponent implements OnChanges {
         }
         this.mapElements = Array.from(this.mapElementsReverseMap.keys());
         this.mapElementsFound.emit(this.mapElements);
+
+        this.cd.markForCheck();
     }
 }

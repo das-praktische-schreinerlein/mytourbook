@@ -32,7 +32,7 @@ export class SDocLinkedLocHierarchyComponent implements OnChanges {
     }
 
     private updateLocation() {
-        if (this.record === undefined) {
+        if (this.record === undefined || this.record.type === 'NEWS') {
             this.locations = [];
             return;
         }

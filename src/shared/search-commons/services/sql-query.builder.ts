@@ -1,5 +1,6 @@
 import {AdapterFilterActions, AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
 import {isDate} from 'util';
+import {DateUtils} from '../../commons/utils/date.utils';
 
 export interface SelectQueryData {
     where: string[];
@@ -140,7 +141,7 @@ export class SqlQueryBuilder {
                             if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
                                 propValue = props[propKey];
                                 if (isDate(propValue)) {
-                                    propValue = propValue.toISOString();
+                                    propValue = DateUtils.dateToLocalISOString(propValue);
                                 }
                                 value = value.replace(replacer, propValue);
                             } else {
@@ -155,7 +156,7 @@ export class SqlQueryBuilder {
                             if (props.hasOwnProperty(propKey) && props[propKey] !== undefined) {
                                 propValue = props[propKey];
                                 if (isDate(propValue)) {
-                                    propValue = propValue.toISOString();
+                                    propValue = DateUtils.dateToLocalISOString(propValue);
                                 }
                                 value = value.replace(replacer, propValue);
                             } else {

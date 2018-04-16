@@ -13,7 +13,7 @@
                             </div>
                     </ng-container>
                     <ng-container *ngSwitchDefault="">
-                        <div class="picture-small" style="float: left; margin-right: 10px">
+                        <div class="picture-small" style="float: left; margin-right: 10px; padding-right: 20px">
                             <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
                             <ng-container *ngIf="record.sdocimages !== undefined && record.sdocimages.length > 0">
                                 <img class="picture-small" width="300px" [src]="contentUtils.getPreviewUrl(record.sdocimages[0])" alt="{{record.sdocimages[0].name}}">
@@ -108,6 +108,7 @@
                                             [htmlId]="'LOCATION'"
                                             [showForm]="false"
                                             [layout]="Layout.FLAT"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
@@ -120,6 +121,7 @@
                                             (searchResultFound)="onRouteTracksFound($event)"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -128,8 +130,9 @@
                                             [showForm]="false"
                                             [showLayout]="true"
                                             [showTimetable]="'true'"
-                                            [layout]="Layout.SMALL"
+                                            [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
@@ -139,6 +142,7 @@
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.TRIP"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
@@ -148,6 +152,7 @@
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.TRACK"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'ROUTE'">
@@ -158,6 +163,7 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
+                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -166,8 +172,9 @@
                                             [showForm]="false"
                                             [showLayout]="true"
                                             [showTimetable]="'true'"
-                                            [layout]="Layout.SMALL"
+                                            [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
@@ -176,6 +183,7 @@
                                             [showForm]="false"
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
+                                            [showResultList]="showResultListTrigger.TRIP"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
@@ -185,6 +193,7 @@
                                             [showTimetable]="'true'"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.TRACK"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRACK'">
@@ -218,8 +227,9 @@
                                             [htmlId]="'TRACKIMAGE'"
                                             [showForm]="false"
                                             [showLayout]="true"
-                                            [layout]="Layout.SMALL"
+                                            [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
@@ -302,6 +312,7 @@
                                             [layout]="Layout.FLAT"
                                             [loadFacets]="'actiontype_ss'"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             (searchResultFound)="onTackCloudRoutesFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
@@ -310,8 +321,9 @@
                                             [htmlId]="'TRIPIMAGE'"
                                             [showForm]="false"
                                             [showLayout]="true"
-                                            [layout]="Layout.SMALL"
+                                            [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
@@ -340,6 +352,7 @@
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [loadTrack]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.TRACK"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Bilder'"
@@ -348,8 +361,9 @@
                                             [htmlId]="'NEWSIMAGE'"
                                             [showForm]="false"
                                             [showLayout]="true"
-                                            [layout]="Layout.SMALL"
+                                            [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
                 <app-sdoc-inline-searchpage [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
@@ -360,8 +374,10 @@
                                             [layout]="Layout.THIN"
                                             (searchResultFound)="onTackCloudRoutesFound($event)"
                                             [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
         </ng-container>
+        <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
     </div>
 </ng-container>

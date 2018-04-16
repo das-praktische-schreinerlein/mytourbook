@@ -1,0 +1,5 @@
+& => ALPHA
+- => ALPHA
+_ => SUBWORD_DELIM
+: => SUBWORD_DELIM
+. => SUBWORD_DELIM

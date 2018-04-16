@@ -15,10 +15,13 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {KeywordsState, SDocContentUtils, StructuredKeywordState} from '../../services/sdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
+import {isArray} from 'util';
+import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
+import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -37,6 +40,7 @@ export class SDocEditformComponent implements OnChanges {
             showUncheckAll: false,
             autoUnselect: true,
             selectionLimit: 1};
+    private personsFound: StructuredKeywordState[] = [];
     private numBeanFieldConfig = {
         'sdocratepers.gesamt': { labelPrefix: 'label.sdocratepers.gesamt.', values: [0, 2, 5, 8, 11, 14]},
         'sdocratepers.gesamt_image': { labelPrefix: 'label.image.sdocratepers.gesamt.', values: [0, 2, 5, 6, 8, 9, 10, 11, 14]},
@@ -290,8 +294,92 @@ export class SDocEditformComponent implements OnChanges {
     }
 
     formatInputDate(value: Date): String {
-        return DateUtils.dateToInputString(value);
+        return DateUtils.dateToLocalISOString(value);
     }
+
+    setPersonsFound(persons: StructuredKeywordState[]) {
+        this.personsFound = persons;
+    }
+
+    recommendName(): void {
+        let name = '';
+
+        let actiontype = this.editFormGroup.getRawValue()['subtype'];
+        if (this.editFormGroup.getRawValue()['subtype'] !== undefined) {
+            if (!isArray(actiontype)) {
+                actiontype = [actiontype];
+            }
+            const selectedActionTypes = this.searchFormUtils.extractSelected(this.optionsSelect.subTypeActiontype, actiontype);
+            if (selectedActionTypes.length > 0) {
+                name += selectedActionTypes[0].name;
+            }
+        }
+        if (this.personsFound.length > 0) {
+            const persons = [];
+            this.personsFound.forEach(personGroup => {
+                personGroup.keywords.forEach(person => {
+                    if (person.state === KeywordsState.SET) {
+                        persons.push(person.keyword);
+                    }
+                });
+            });
+
+            name += ' mit ' + persons.join(', ');
+        }
+
+        let locId = this.editFormGroup.getRawValue()['locId'];
+        if (this.editFormGroup.getRawValue()['locId'] !== undefined) {
+            if (!isArray(locId)) {
+                locId = [locId];
+            }
+            const selectedLocIds = this.searchFormUtils.extractSelected(this.optionsSelect.locId, locId);
+            if (selectedLocIds.length > 0) {
+                name += ' bei ' + selectedLocIds[0].name.replace(/.* -> /g, '').replace(/ \(\d+\)/, '');
+            }
+        }
+
+        if (this.editFormGroup.getRawValue()['datestart'] !== undefined && this.editFormGroup.getRawValue()['dateend'] !== undefined) {
+            name += ' ' + DateUtils.formatDateRange((new Date(this.editFormGroup.getRawValue()['datestart'])),
+                (new Date(this.editFormGroup.getRawValue()['dateend'])));
+        }
+        this.setValue('name', name);
+    }
+
+    gpxDropped(event: UploadEvent) {
+        const me = this;
+        for (const droppedFile of event.files) {
+            if (droppedFile.fileEntry.isFile) {
+                const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+                fileEntry.file((file: File) => {
+                    const reader = new FileReader();
+                    const maxLength = (<GpsTrackValidationRule>SDocRecord.sdocFields.gpsTrackSrc.validator).getMaxLength();
+                    if (file.size > maxLength) {
+                        me.toastr.warning('Die GPX-Datei darf höchstes ' + maxLength / 1000000 + 'MB sein.', 'Oje!');
+                        return;
+                    }
+                    if (!file.name.toLowerCase().endsWith('.gpx')) {
+                        me.toastr.warning('Es dürfen nur .gpx Dateien geladen werden.', 'Oje!');
+                        return;
+                    }
+
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            // Render thumbnail.
+                            const track = e.target.result;
+                            me.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
+                            return me.updateMap();
+                        };
+                    })(file);
+
+                    // Read in the image file as a data URL.
+                    reader.readAsText(file);
+                });
+
+                return;
+            }
+        }
+    }
+
 
     updateMap(): boolean {
         if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
@@ -299,11 +387,14 @@ export class SDocEditformComponent implements OnChanges {
             let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
             track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
             this.trackRecords = [SDocRecordFactory.createSanitized({
-                id: 'TMP',
+                id: 'TMP' + (new Date()).getTime(),
                 gpsTrackSrc: track,
                 gpsTrackBaseFile: 'tmp.gpx',
                 name: this.editFormGroup.getRawValue()['name'],
-                type: this.record.type
+                type: this.record.type,
+                datestart: new Date().toISOString(),
+                dateend: new Date().toISOString(),
+                dateshow: this.editFormGroup.getRawValue()['dateshow']
             })];
             this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
 
@@ -426,9 +517,9 @@ export class SDocEditformComponent implements OnChanges {
         }
 
         const config = {
-            dateshow: [DateUtils.dateToInputString(this.record.dateshow)],
-            datestart: [DateUtils.dateToInputString(this.record.datestart)],
-            dateend: [DateUtils.dateToInputString(this.record.dateend)],
+            dateshow: [DateUtils.dateToLocalISOString(this.record.dateshow)],
+            datestart: [DateUtils.dateToLocalISOString(this.record.datestart)],
+            dateend: [DateUtils.dateToLocalISOString(this.record.dateend)],
             locIdParent: [this.record.locIdParent],
             gpsTrackSrc: [this.record.gpsTrackSrc]
         };

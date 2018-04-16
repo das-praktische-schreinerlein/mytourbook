@@ -23,6 +23,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['track_id_i'] = props.trackId;
         values['trip_id_i'] = props.tripId;
         values['news_id_i'] = props.newsId;
+        values['blocked_i'] = props.blocked;
         values['dateshow_dt'] = props.dateshow;
         values['datestart_dt'] = props.datestart;
         values['dateend_dt'] = props.dateend;
@@ -34,7 +35,7 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         values['geo_loc_p'] = props.geoLoc;
         values['gpstrack_src_s'] = props.gpsTrackSrc;
         values['gpstracks_basefile_s'] = props.gpsTrackBasefile;
-       values['keywords_txt'] =
+        values['keywords_txt'] =
             (props.keywords ? props.keywords.split(', ').join(',') : '');
         values['loc_lochirarchie_s'] = (props.locHirarchie ? props.locHirarchie
             .toLowerCase()
@@ -137,9 +138,10 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
            values['subtypes'] = subtypeField.join(',');
         }
-        values['dateshow'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'dateshow_dt', undefined);
-        values['datestart'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'datestart_dt', undefined);
-        values['dateend'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'dateend_dt', undefined);
+        values['blocked'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'blocked_i', undefined);
+        values['dateshow'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'dateshow_dt', undefined);
+        values['datestart'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'datestart_dt', undefined);
+        values['dateend'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'dateend_dt', undefined);
         values['descTxt'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'desc_txt', undefined);
         values['descHtml'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'desc_html_txt', undefined);
         values['descMd'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'desc_md_txt', undefined);

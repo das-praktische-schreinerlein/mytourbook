@@ -58,6 +58,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     flgShowProfileMap = false;
     flgMapAvailable = false;
     flgProfileMapAvailable = false;
+    anchor = '';
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
@@ -79,6 +80,9 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             me.onResize(layoutSizeData);
         });
 
+        this.route.fragment.subscribe(value => {
+            this.anchor = this.idValidationRule.sanitize(value);
+        });
         this.route.data.subscribe(
             (data: { searchForm: ResolvedData<SDocSearchForm>, pdoc: ResolvedData<PDocRecord>,
                 flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
@@ -274,6 +278,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.searchForm = sdocSearchForm;
         this.searchForm.perPage = origSearchForm.perPage;
         this.searchForm.sort = origSearchForm.sort;
+        this.searchForm.pageNum = 1;
         // console.log('onSearchSDoc: redirect to ', sdocSearchForm);
         this.redirectToSearch();
         return false;
@@ -317,20 +322,27 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     onTimeTableColumnClicked(month: string) {
         this.searchForm.when = month;
+        this.searchForm.pageNum = 1;
         this.redirectToSearch();
         return false;
     }
     onTypeTableColumnClicked(type: string) {
         this.searchForm.type = type;
+        this.searchForm.pageNum = 1;
         this.redirectToSearch();
         return false;
     }
 
     onTagcloudClicked(filterValue: any, filter: string) {
         this.searchForm[filter] = filterValue;
+        this.searchForm.pageNum = 1;
         this.redirectToSearch();
 
         return false;
+    }
+
+    onScrollToTop() {
+        this.pageUtils.scrollToTop();
     }
 
     private redirectToSearch() {
@@ -393,6 +405,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             me.calcShowMaps();
 
             me.showLoadingSpinner = false;
+            me.pageUtils.goToLinkAnchor(me.anchor);
             me.cd.markForCheck();
         }).catch(function errorSearch(reason) {
             me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
