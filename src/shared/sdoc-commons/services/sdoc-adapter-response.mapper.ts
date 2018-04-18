@@ -409,6 +409,8 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
                 id = Number(record.locId);
             } else if (record.type === 'IMAGE') {
                 id = Number(record.imageId);
+            } else if (record.type === 'VIDEO') {
+                id = Number(record.videoId);
             } else if (record.type === 'TRIP') {
                 id = Number(record.tripId);
             } else if (record.type === 'NEWS') {
@@ -443,6 +445,8 @@ export class SDocAdapterResponseMapper implements GenericAdapterResponseMapper {
             } else if (record.type === 'LOCATION') {
                 id = Number(record.locId);
             } else if (record.type === 'IMAGE') {
+                id = Number(record.imageId);
+            } else if (record.type === 'VIDEO') {
                 id = Number(record.videoId);
             } else if (record.type === 'TRIP') {
                 id = Number(record.tripId);

@@ -13,7 +13,16 @@
                              alt="{{listItem.image.name}}">
                     </ng-container>
                 </ng-container>
+                <ng-container *ngSwitchCase="'VIDEO'">
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </ng-container>
                 <ng-container *ngSwitchDefault="">
+                    kein video
                     {{listItem.currentRecord.type | translate }}<br />
                     {{listItem.currentRecord.subtype | translate }}
                 </ng-container>
@@ -44,6 +53,15 @@
                              alt="{{listItem.image.name}}">
                     </ng-container>
                 </ng-container>
+                <ng-container *ngSwitchCase="'VIDEO'">
+                    video
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </ng-container>
                 <ng-container *ngSwitchDefault="">
                     {{listItem.currentRecord.type | translate }}<br />
                     {{listItem.currentRecord.subtype | translate }}
@@ -71,6 +89,15 @@
                              [src]="listItem.thumbnailUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'VIDEO'">
+                    video
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
                     </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchDefault="">

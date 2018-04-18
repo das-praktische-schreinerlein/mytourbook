@@ -1,6 +1,13 @@
-import {SDocImageRecord} from './sdocimage-record';
+import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
 
-export class SDocVideoRecord extends SDocImageRecord {
+export class SDocVideoRecord extends BaseEntityRecord {
+    descTxt: string;
+    descMd: string;
+    descHtml: string;
+    fileName: string;
+    name: string;
+    sdoc_id: string;
+
     toString() {
         return 'SDocVideoRecord Record {\n' +
             '  id: ' + this.id + ',\n' +

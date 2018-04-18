@@ -6,7 +6,7 @@
 - added video-support
  
 ### new features
-- common: added support for new type: video
+- common: added support for new type: video in frontend, video-server, backend, media-manager
  
 ### improvements
 - solr: improved data-import

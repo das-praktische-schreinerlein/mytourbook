@@ -3,7 +3,7 @@ import {CacheInitializerCommand} from './commands/cache-initializer.command';
 import {SiteMapGeneratorCommand} from './commands/sitemap-generator.command';
 import {SDocLoaderCommand} from './commands/sdoc-loader.command';
 import {utils} from 'js-data';
-import {ImageManagerCommand} from './commands/image-manager.command';
+import {MediaManagerCommand} from './commands/media-manager.command';
 import {SDocExporterCommand} from './commands/sdoc-exporter.command';
 import {RedirectGeneratorCommand} from './commands/redirect-generator.command';
 
@@ -21,7 +21,7 @@ const cacheInitializer = new CacheInitializerCommand();
 const siteMapGenerator = new SiteMapGeneratorCommand();
 const sdocLoader = new SDocLoaderCommand();
 const sdocExporter = new SDocExporterCommand();
-const imageManager = new ImageManagerCommand();
+const imageManager = new MediaManagerCommand();
 const redirectGenerator = new RedirectGeneratorCommand();
 
 let promise: Promise<any>;
@@ -42,6 +42,9 @@ switch (argv['command']) {
         promise = sdocExporter.process(argv);
         break;
     case 'imageManager':
+        promise = imageManager.process(argv);
+        break;
+    case 'mediaManager':
         promise = imageManager.process(argv);
         break;
     default:

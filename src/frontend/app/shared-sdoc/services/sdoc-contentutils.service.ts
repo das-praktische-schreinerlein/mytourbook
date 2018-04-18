@@ -86,16 +86,32 @@ export class SDocContentUtils {
         return this.getImageUrl(image, 'x100');
     }
 
+    getVideoThumbnail(image: SDocVideoRecord): string {
+        return this.getVideoUrl(image, 'screenshot', '.jpg');
+    }
+
     getThumbnailUrl(image: SDocImageRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(this.getThumbnail(image));
+    }
+
+    getVideoThumbnailUrl(image: SDocVideoRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoThumbnail(image));
     }
 
     getPreview(image: SDocImageRecord): string {
         return this.getImageUrl(image, 'x600');
     }
 
+    getVideoPreview(image: SDocVideoRecord): string {
+        return this.getVideoUrl(image, 'thumbnail', '.gif.mp4');
+    }
+
     getPreviewUrl(image: SDocImageRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(this.getPreview(image));
+    }
+
+    getVideoPreviewUrl(image: SDocVideoRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoPreview(image));
     }
 
     getFullUrl(image: SDocImageRecord): SafeUrl {
@@ -117,7 +133,7 @@ export class SDocContentUtils {
             return this.appService.getAppConfig()['picsBaseUrl'] + 'pics_' + resolution + '/' + image.fileName;
         }
     }
-    getVideoUrl(video: SDocVideoRecord, resolution: string): string {
+    getVideoUrl(video: SDocVideoRecord, resolution: string, suffix?: string): string {
         if (video === undefined) {
             return 'not found';
         }
@@ -125,7 +141,7 @@ export class SDocContentUtils {
         if (this.appService.getAppConfig()['useVideoAssetStoreUrls'] === true) {
             return this.appService.getAppConfig()['videoBaseUrl'] + resolution + '/' + video.sdoc_id;
         } else {
-            return this.appService.getAppConfig()['videoBaseUrl'] + 'video_' + resolution + '/' + video.fileName;
+            return this.appService.getAppConfig()['videoBaseUrl'] + 'video_' + resolution + '/' + video.fileName + (suffix ? suffix : '');
         }
     }
 
@@ -445,8 +461,8 @@ export class SDocContentUtils {
             itemData.previewUrl = this.getPreviewUrl(itemData.image);
         } else if (itemData.currentRecord['sdocvideos'] !== undefined && itemData.currentRecord['sdocvideos'].length > 0) {
             itemData.video = itemData.currentRecord['sdocvideos'][0];
-            itemData.thumbnailUrl = this.getThumbnailUrl(itemData.video);
-            itemData.previewUrl = this.getPreviewUrl(itemData.video);
+            itemData.thumbnailUrl = this.getVideoThumbnailUrl(itemData.video);
+            itemData.previewUrl = this.getVideoPreviewUrl(itemData.video);
         }
 
         if (record !== undefined && (record.gpsTrackBasefile || record.geoLoc !== undefined

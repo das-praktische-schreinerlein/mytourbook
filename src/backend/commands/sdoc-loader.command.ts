@@ -10,7 +10,7 @@ import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-ad
 export class SDocLoaderCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const perRun = 1;
-        const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image'];
+        const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];
 
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const serverConfig = {

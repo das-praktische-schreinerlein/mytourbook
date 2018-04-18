@@ -1,5 +1,5 @@
-<ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="listItem.currentRecord.type">
-    <ng-container *ngSwitchCase="'IMAGE'">
+<ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="true">
+    <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
         <div class="card-block card-block-image" [ngClass]="listItem.styleClassFor">
             <a [name]="listItem.currentRecord.id"></a>
             <div>
@@ -11,6 +11,12 @@
                              [src]="listItem.thumbnailUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="100px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
                     </ng-container>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord | sdocdate}}</h5></a>
                     <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers >
@@ -36,6 +42,12 @@
                              [src]="listItem.thumbnailUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="100px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
                     </ng-container>
                 </div>
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>

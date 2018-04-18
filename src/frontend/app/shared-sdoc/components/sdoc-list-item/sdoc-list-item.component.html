@@ -1,5 +1,5 @@
-<ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="listItem.currentRecord.type">
-    <ng-container *ngSwitchCase="'IMAGE'">
+<ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="true">
+    <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
         <div class="card-block" [ngClass]="listItem.styleClassFor">
             <a [name]="listItem.currentRecord.id"></a>
             <ng-container *ngIf="short">
@@ -8,6 +8,15 @@
                          [src]="listItem.previewUrl"
                          (click)="submitShowImage(listItem.currentRecord)"
                          alt="{{listItem.image.name}}">
+                </div>
+                <div class="picture-small" *ngIf="listItem.video">
+                    <video width="300px" controls="controls" class="small" title="{{listItem.video.name}}" preload="metadata">
+                        <source [src]="listItem.previewUrl" />
+                        <object [data]="listItem.previewUrl" width="300">
+                            <embed [src]="listItem.previewUrl" width="300">
+                        </object>
+                    </video>
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
                 </div>
                 <small class="text-muted"><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy>
                     {{listItem.currentRecord | sdocdate}}
@@ -25,6 +34,14 @@
                                  [src]="listItem.previewUrl"
                                  (click)="submitShowImage(listItem.currentRecord)"
                                  alt="{{listItem.image.name}}">
+                        </div>
+                        <div class="picture-small" *ngIf="listItem.video">
+                            <video width="300px" controls="controls" class="small" title="{{listItem.video.name}}" preload="metadata">
+                                <source [src]="listItem.previewUrl" />
+                                <object [data]="listItem.previewUrl" width="300">
+                                    <embed [src]="listItem.previewUrl" width="300">
+                                </object>
+                            </video>
                         </div>
                     </div>
                     <br />
@@ -75,6 +92,12 @@
                              [src]="listItem.thumbnailUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
                     </ng-container>
                 </div>
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>

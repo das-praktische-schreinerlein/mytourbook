@@ -117,7 +117,7 @@
             </div>
             <h5><span class="fx-bg-type" i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</span></h5>
             <ngb-tabset>
-                <ngb-tab title="Routen">
+                <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Routen'"
                                                     i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.sdoc.ROUTE"
@@ -133,7 +133,7 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Regionen">
+                <ngb-tab title="Regionen" *ngIf="availableTabs.LOCATION">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Regionen'"
                                                     i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.sdoc.LOCATION"
@@ -149,7 +149,7 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Bilder">
+                <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Bilder'"
                                                     i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -165,7 +165,7 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Tracks">
+                <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Tracks'"
                                                     i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.sdoc.TRACK"
@@ -181,7 +181,7 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Trips">
+                <ngb-tab title="Trips" *ngIf="availableTabs.TRIP">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Trips'"
                                                     i18n-label="label section-page TRIP|Label section-page TRIP@@linline-search.label.sdoc.TRIP"
@@ -197,7 +197,23 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title=Alles>
+                <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Videos'"
+                                                    i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.sdoc.VIDEO"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page VIDEO|SearchLinkLabel section-page VIDEO@@linline-search.searchLinkLabel.sdoc.VIDEO"
+                                                    [baseSearchUrl]="baseSearchUrl"
+                                                    [params]="getFiltersForType(pdoc, 'VIDEO', 'relevance')"
+                                                    [showForm]="false"
+                                                    [showResultList]="true"
+                                                    [loadFacets]="true"
+                                                    [layout]="Layout.SMALL"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Alles'"
                                                     i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.sdoc.ALL"
@@ -216,7 +232,7 @@
             </ngb-tabset>
             <h5><span class="fx-bg-type" i18n="heading favorite-results sectionPage|Heading to favorite-results sectionPage@@heading.sectionPage.favoriteResults">Favorites</span></h5>
             <ngb-tabset>
-                <ngb-tab title="Bilder">
+                <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Bilder'"
                                                     i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.sdoc.IMAGE"
@@ -232,7 +248,7 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Routen">
+                <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Routen'"
                                                     i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.sdoc.ROUTE"
@@ -248,7 +264,7 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title="Tracks">
+                <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Tracks'"
                                                     i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.sdoc.TRACK"
@@ -264,7 +280,23 @@
                                                     [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
                     </ng-template>
                 </ngb-tab>
-                <ngb-tab title=Alles>
+                <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
+                    <ng-template ngbTabContent>
+                        <app-sdoc-inline-searchpage [label]="'Videos'"
+                                                    i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.sdoc.VIDEO"
+                                                    [searchLinkLabel]="'Durchsuchen'"
+                                                    i18n-searchLinkLabel="searchLinkLabel section-page VIDEO|SearchLinkLabel section-page VIDEO@@linline-search.searchLinkLabel.sdoc.VIDEO"
+                                                    [baseSearchUrl]="baseSearchUrl"
+                                                    [params]="getFiltersForType(pdoc, 'VIDEO', 'ratePers')"
+                                                    [showForm]="false"
+                                                    [showResultList]="true"
+                                                    [loadFacets]="true"
+                                                    [layout]="Layout.SMALL"
+                                                    (searchResultFound)="onTopTenResultFound($event)"
+                                                    [showOnlyIfRecordsFound]="false"></app-sdoc-inline-searchpage>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
                     <ng-template ngbTabContent>
                         <app-sdoc-inline-searchpage [label]="'Alles'"
                                                     i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.sdoc.ALL"

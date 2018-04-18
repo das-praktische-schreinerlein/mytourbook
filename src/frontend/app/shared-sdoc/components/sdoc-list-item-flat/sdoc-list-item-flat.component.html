@@ -11,6 +11,12 @@
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
                     </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
                 </div>
                 <div class="col-2 type layout-big">
                     <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-sdoc-distance [record]="listItem.currentRecord"></app-sdoc-distance></h5>
@@ -45,6 +51,12 @@
                              [src]="listItem.thumbnailUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
                     </ng-container>
                 </div>
                 <ng-container [ngSwitch]="listItem.currentRecord.type">
@@ -97,6 +109,12 @@
                              [src]="listItem.thumbnailUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
                              alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
                     </ng-container>
                 </div>
                 <ng-container [ngSwitch]="listItem.currentRecord.type">
