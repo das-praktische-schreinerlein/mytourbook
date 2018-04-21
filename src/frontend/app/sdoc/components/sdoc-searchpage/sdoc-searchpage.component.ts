@@ -24,6 +24,7 @@ import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/
 import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -368,6 +369,12 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     private doSearch() {
+        if ((this.searchForm.type === undefined || this.searchForm.type === '')
+            && environment.emptyDefaultSearchTypes !== undefined && environment.emptyDefaultSearchTypes !== '') {
+            this.searchForm.type = environment.emptyDefaultSearchTypes;
+            return this.redirectToSearch();
+        }
+
         if (this.searchForm.sort === 'distance' && (this.searchForm.nearby === undefined || this.searchForm.nearby === '')) {
             // console.log('doSearch: redirect because of sort/nearby form:', this.searchForm);
             this.searchForm.sort = 'relevance';

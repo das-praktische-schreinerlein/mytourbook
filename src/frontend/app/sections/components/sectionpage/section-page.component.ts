@@ -23,7 +23,9 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/sdoc-searchform.component';
 import {LayoutService, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {LayoutSize} from '../../../../../shared/angular-commons/services/layout.service';
+import {LayoutSize} from '../../../../shared/angular-commons/services/layout.service';
+import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-sectionpage',
@@ -44,6 +46,14 @@ export class SectionPageComponent implements OnInit {
     routeSearchResult: SDocSearchResult = new SDocSearchResult(this.sdocSearchForm, 0, undefined, new Facets());
     SearchFormLayout = SearchFormLayout;
     searchFormLayout: SearchFormLayout = SearchFormLayout.GRID;
+    availableTabs = {
+        'IMAGE': true,
+        'ROUTE': true,
+        'TRACK': true,
+        'LOCATION': true,
+        'TRIP': true,
+        'ALL': true
+    };
 
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private commonRoutingService: CommonRoutingService, private searchFormConverter: SDocSearchFormConverter,
@@ -51,7 +61,7 @@ export class SectionPageComponent implements OnInit {
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private platformService: PlatformService,
-                private layoutService: LayoutService) {
+                private layoutService: LayoutService, private appService: GenericAppService) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -66,6 +76,11 @@ export class SectionPageComponent implements OnInit {
         this.route.data.subscribe(
             (data: { pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
+
+                const config = me.appService.getAppConfig();
+                if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableTabs') !== undefined) {
+                    me.availableTabs = BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableTabs');
+                }
 
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
@@ -257,7 +272,7 @@ export class SectionPageComponent implements OnInit {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
             theme: this.pdoc.theme,
             perPage: 10,
-            type: 'route,location,track,trip,news',
+            type: environment.defaultSearchTypes,
             actiontype: this.sdocSearchForm.actiontype.toString(),
             when: this.sdocSearchForm.when.toString(),
             what: this.sdocSearchForm.what.toString(),

@@ -22,7 +22,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {ActionTagEvent} from '../../../shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {Facets} from '../../../../../shared/search-commons/model/container/facets';
+import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {isArray, isNumber} from 'util';

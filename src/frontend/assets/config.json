@@ -477,6 +477,16 @@
         },
         "sdoc-listheader": {
             "allowAutoplay": false
+        },
+        "pdoc-sectionpage": {
+            "availableTabs": {
+                "IMAGE": true,
+                "ROUTE": true,
+                "TRACK": true,
+                "LOCATION": true,
+                "TRIP": true,
+                "ALL": true
+            }
         }
     },
     "services": {

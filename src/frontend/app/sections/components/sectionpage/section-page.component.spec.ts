@@ -23,6 +23,8 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 describe('SectionPageComponent', () => {
     let component: SectionPageComponent;
@@ -40,6 +42,7 @@ describe('SectionPageComponent', () => {
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonRoutingService,
                 PlatformService,
                 SDocSearchFormConverter,

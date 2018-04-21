@@ -7,7 +7,7 @@ import {FormBuilder} from '@angular/forms';
 import {SDocRecordSchema} from '../../../../shared/sdoc-commons/model/schemas/sdoc-record-schema';
 import {ToastsManager} from 'ng2-toastr';
 import {SchemaValidationError} from 'js-data';
-import {ComponentUtils} from '../../../../../shared/angular-commons/services/component.utils';
+import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';

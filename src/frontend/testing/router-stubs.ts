@@ -24,4 +24,12 @@ export class ActivatedRouteStub {
             data: '/sections'
         }
     });
+
+    public queryParamMap: {} = {
+        subscribe: function () {}
+    };
+
+    public fragment: {} = {
+        subscribe: function () {}
+    };
 }

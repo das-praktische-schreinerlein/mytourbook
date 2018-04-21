@@ -10,6 +10,8 @@ export const environment = {
     backendApiBaseUrl: 'http://localhost:4100/api/v1/',
     tracksBaseUrl: 'http://localhost:4100/api/assets/trackstore/',
     picsBaseUrl: 'http://localhost:4100/api/static/picturestore/',
+    defaultSearchTypes: 'route,location,track,trip,news',
+    emptyDefaultSearchTypes: 'route,location,track,trip,news,image',
     useAssetStoreUrls: true,
     sdocWritable: true,
     sdocActionTagWritable: true,

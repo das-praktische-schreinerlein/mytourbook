@@ -3,7 +3,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
-import {Facet, Facets} from '../../../../../shared/search-commons/model/container/facets';
+import {Facet, Facets} from '../../../../shared/search-commons/model/container/facets';
 
 export interface TimetableColumn {
     width: string;

@@ -10,9 +10,12 @@
  
 ### improvements
 - solr: improved data-import
+- frontend: configure availability of tabs on section-page 
+- frontend: configure types to search on section-page 
+- frontend: configure default types to search in none is selected
  
 ### bug fixes
-- none
+- frontend: fixed tests
  
 ### breaking changes
 - none
