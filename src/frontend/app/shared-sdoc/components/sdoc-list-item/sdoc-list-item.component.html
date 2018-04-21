@@ -54,7 +54,7 @@
                 </div>
             </ng-container>
         </div>
-        <div class="card-footer" *ngIf="!short">
+        <div class="card-footer card-footer-list-item" *ngIf="!short">
             <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
@@ -83,7 +83,7 @@
                 </p>
             </div>
             <br clear="all" />
-            <div class="card-text" *ngIf="!short">
+            <div class="card-text card-text-list-item" *ngIf="!short">
                 <ngb-accordion #acc="ngbAccordion" activeIds="">
                     <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
                         <ng-template ngbPanelContent>
@@ -109,7 +109,7 @@
                 </ngb-accordion>
             </div>
         </div>
-        <div class="card-footer" *ngIf="!short">
+        <div class="card-footer card-footer-list-item" *ngIf="!short">
             <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
