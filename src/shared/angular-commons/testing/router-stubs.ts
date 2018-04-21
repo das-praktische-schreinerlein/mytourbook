@@ -10,5 +10,14 @@ export class RouterStub {
     public events: {} = {
         subscribe: function () {}
     };
+
+    public queryParamMap: {} = {
+        subscribe: function () {}
+    };
+
+    public fragment: {} = {
+        subscribe: function () {}
+    };
+
     navigateByUrl(url: string) { return url; }
 }

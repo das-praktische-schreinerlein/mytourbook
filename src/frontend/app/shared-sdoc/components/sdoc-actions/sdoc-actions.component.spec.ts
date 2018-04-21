@@ -5,7 +5,7 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SDocActionsComponent} from './sdoc-actions.component';
 import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-components.service';
 import {Router} from '@angular/router';
-import {RouterStub} from '../../../../../shared/angular-commons/testing/router-stubs';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocAlbumService} from '../../services/sdoc-album.service';

@@ -11,6 +11,8 @@ export const environment = {
     tracksBaseUrl: 'http://localhost:4100/api/assets/trackstore/',
     picsBaseUrl: 'http://localhost:4100/api/static/picturestore/',
     videoBaseUrl: 'http://localhost:4100/api/static/videos/',
+    defaultSearchTypes: 'route,location,track,trip,news',
+    emptyDefaultSearchTypes: 'route,location,track,trip,news,image,video',
     useAssetStoreUrls: true,
     useVideoAssetStoreUrls: false,
     sdocWritable: true,

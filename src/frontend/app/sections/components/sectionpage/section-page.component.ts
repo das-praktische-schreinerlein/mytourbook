@@ -25,6 +25,7 @@ import {LayoutService, LayoutSizeData} from '../../../../shared/angular-commons/
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {LayoutSize} from '../../../../shared/angular-commons/services/layout.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-sectionpage',
@@ -272,7 +273,7 @@ export class SectionPageComponent implements OnInit {
         return this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, SDocSearchFormFactory.createSanitized({
             theme: this.pdoc.theme,
             perPage: 10,
-            type: 'route,location,track,trip,news',
+            type: environment.defaultSearchTypes,
             actiontype: this.sdocSearchForm.actiontype.toString(),
             when: this.sdocSearchForm.when.toString(),
             what: this.sdocSearchForm.what.toString(),
