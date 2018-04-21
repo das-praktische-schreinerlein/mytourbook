@@ -6,6 +6,10 @@ div.card-footer div.card-action-buttons {
     float: right;
 }
 
+button.show.btn-navigation {
+    font-size: 10px;
+}
+
 ul.props {
     float: left;
     list-style: none;
