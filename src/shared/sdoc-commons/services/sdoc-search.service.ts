@@ -7,6 +7,8 @@ import {DateUtils} from '../../commons/utils/date.utils';
 import {utils} from 'js-data';
 
 export class SDocSearchService extends GenericSearchService <SDocRecord, SDocSearchForm, SDocSearchResult> {
+    private maxPerRun = 99;
+
     constructor(dataStore: SDocDataStore) {
         super(dataStore, 'sdoc');
     }
@@ -33,11 +35,14 @@ export class SDocSearchService extends GenericSearchService <SDocRecord, SDocSea
 
         const promises: Promise<SDocSearchResult>[] = [];
         for (const type in idTypeMap) {
-            for (let page = 1; page <= (idTypeMap[type]['ids'].length / 99) + 1; page ++) {
+            for (let page = 1; page <= (idTypeMap[type]['ids'].length / this.maxPerRun) + 1; page ++) {
                 const typeSearchForm = new SDocSearchForm({});
-                typeSearchForm.moreFilter = 'id:' + idTypeMap[type]['ids'].join(',');
+                const start = (page - 1) * this.maxPerRun;
+                const end = Math.min(start + this.maxPerRun, idTypeMap[type]['ids'].length);
+                const idTranche = idTypeMap[type]['ids'].slice(start, end);
+                typeSearchForm.moreFilter = 'id:' + idTranche.join(',');
                 typeSearchForm.type = type;
-                typeSearchForm.perPage = 99;
+                typeSearchForm.perPage = this.maxPerRun;
                 typeSearchForm.pageNum = page;
                 typeSearchForm.sort = 'dateAsc';
                 promises.push(me.search(typeSearchForm, {
