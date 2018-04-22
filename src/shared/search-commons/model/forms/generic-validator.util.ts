@@ -324,7 +324,15 @@ export class KeyParamsValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required,
             new XRegExp('^[-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*$', 'gi'),
-            new XRegExp('[^-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*', 'gi'), '', 1000);
+            new XRegExp('[^-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*', 'gi'), '', 1500);
+    }
+}
+
+export class ExtendedKeyParamsValidationRule extends RegExValidationReplaceRule {
+    constructor(required: boolean) {
+        super(required,
+            new XRegExp('^[-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*$', 'gi'),
+            new XRegExp('[^-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*', 'gi'), '', 2000);
     }
 }
 
@@ -332,7 +340,7 @@ export class KeywordValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required,
             new XRegExp('^[-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*$', 'gi'),
-            new XRegExp('[^-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*', 'gi'), '', 1000);
+            new XRegExp('[^-a-zA-Z_0-9äöüßÄÖÜ,;:. ]*', 'gi'), '', 1500);
     }
 }
 
@@ -348,7 +356,7 @@ export class TextValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required,
             new XRegExp('^[-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*$', 'gi'),
-            new XRegExp('[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*', 'gi'), '', 1000);
+            new XRegExp('[^-A-Za-z0-9äöüßÄÖÜ+;,:._* ]*', 'gi'), '', 1500);
     }
 }
 

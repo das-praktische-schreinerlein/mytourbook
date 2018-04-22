@@ -1,7 +1,7 @@
 import {GenericSearchForm, GenericSearchFormFieldConfig} from '../../../search-commons/model/forms/generic-searchform';
 import {
-    GenericValidatorDatatypes, IdCsvValidationRule, IdValidationRule, KeyParamsValidationRule, NearbyParamValidationRule,
-    TextValidationRule
+    ExtendedKeyParamsValidationRule, GenericValidatorDatatypes, IdCsvValidationRule, IdValidationRule, KeyParamsValidationRule,
+    NearbyParamValidationRule, TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 
 export class SDocSearchForm extends GenericSearchForm {
@@ -12,7 +12,7 @@ export class SDocSearchForm extends GenericSearchForm {
         nearby: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NEARBY, new NearbyParamValidationRule(false)),
         nearbyAddress: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ADDRESS, new TextValidationRule(false)),
         what: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new IdCsvValidationRule(false)),
-        moreFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FILTER_LIST, new KeyParamsValidationRule(false)),
+        moreFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FILTER_LIST, new ExtendedKeyParamsValidationRule(false)),
         theme: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
         techDataAscent: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataAltitudeMax: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),

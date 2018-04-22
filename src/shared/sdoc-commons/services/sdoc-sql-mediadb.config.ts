@@ -528,8 +528,8 @@ export class SDocSqlMediadbConfig {
                 }
             },
             sortMapping: {
-                'date': 'i_date DESC, i_id DESC',
-                'dateAsc': 'i_date ASC, i_id ASC',
+                'date': 'i_date DESC, image.i_id DESC',
+                'dateAsc': 'i_date ASC, image.i_id ASC',
                 'distance': 'geodist ASC',
                 'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
                 'dataTechAltDesc': 'k_altitude_asc DESC',
@@ -539,7 +539,7 @@ export class SDocSqlMediadbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'i_gps_ele ASC',
                 'dataTechDistAsc': 'k_distance ASC',
-                'forExport': 'i_date ASC, i_id ASC',
+                'forExport': 'i_date ASC, image.i_id ASC',
                 'ratePers': 'i_rate DESC, i_date DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'
