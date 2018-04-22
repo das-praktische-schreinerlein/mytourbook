@@ -22,6 +22,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {HttpModule} from '@angular/http';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 describe('SDocListItemPageComponent', () => {
     let component: SDocListItemPageComponent;
@@ -34,6 +35,7 @@ describe('SDocListItemPageComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 PlatformService,
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                SearchParameterUtils,
                 SDocSearchFormConverter,
                 CommonRoutingService,
                 SDocRoutingService,
