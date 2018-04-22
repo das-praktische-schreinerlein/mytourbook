@@ -20,6 +20,9 @@ import {MarkdownService} from 'angular2-markdown';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {HttpModule} from '@angular/http';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 
 describe('SDocListItemPageComponent', () => {
     let component: SDocListItemPageComponent;
@@ -31,6 +34,9 @@ describe('SDocListItemPageComponent', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 PlatformService,
+                { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                SearchParameterUtils,
+                SDocSearchFormConverter,
                 CommonRoutingService,
                 SDocRoutingService,
                 SDocContentUtils,

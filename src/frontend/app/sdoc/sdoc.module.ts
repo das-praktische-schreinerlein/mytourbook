@@ -26,6 +26,7 @@ import {SDocAlbumResolver} from '../shared-sdoc/resolver/sdoc-album.resolver';
 import {SDocAlbumpageComponent} from './components/sdoc-albumpage/sdoc-albumpage.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LayoutService} from '../../shared/angular-commons/services/layout.service';
+import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
 
 @NgModule({
     declarations: [
@@ -58,6 +59,7 @@ import {LayoutService} from '../../shared/angular-commons/services/layout.servic
         ErrorResolver,
         PageUtils,
         SDocLightBoxService,
+        SDocDataService,
         AngularHtmlService,
         AngularMarkdownService,
         SDocAlbumResolver,

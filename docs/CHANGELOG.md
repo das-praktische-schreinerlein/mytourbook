@@ -7,12 +7,14 @@
  
 ### new features
 - common: added support for new type: video in frontend, video-server, backend, media-manager
+- frontend: show maps for trips on diashow
  
 ### improvements
 - solr: improved data-import
 - frontend: configure availability of tabs on section-page 
 - frontend: configure types to search on section-page 
 - frontend: configure default types to search in none is selected
+- frontend: improved list-layout
  
 ### bug fixes
 - frontend: fixed tests
