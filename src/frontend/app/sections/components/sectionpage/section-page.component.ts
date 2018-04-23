@@ -204,7 +204,7 @@ export class SectionPageComponent implements OnInit {
         }
 
         if (type === 'NEWS') {
-            filters['perPage'] = 3;
+            filters['perPage'] = 2;
             return filters;
         }
 

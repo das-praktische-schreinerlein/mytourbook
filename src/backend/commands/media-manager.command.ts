@@ -36,7 +36,7 @@ export class MediaManagerCommand implements AbstractCommand {
             case 'generateSDocsFromMediaDir':
                 if (importDir === undefined) {
                     console.error(action + ' missing parameter - usage: --importDir INPUTDIR', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: -importDir INPUTDIR [-force true/false]');
+                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR [-force true/false]');
                     return promise;
                 }
 

@@ -15,6 +15,7 @@
 - frontend: configure types to search on section-page 
 - frontend: configure default types to search in none is selected
 - frontend: improved list-layout
+- frontend: improved news-layout
  
 ### bug fixes
 - frontend: fixed tests
