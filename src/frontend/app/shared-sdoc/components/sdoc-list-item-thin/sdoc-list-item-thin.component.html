@@ -22,7 +22,6 @@
                     </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchDefault="">
-                    kein video
                     {{listItem.currentRecord.type | translate }}<br />
                     {{listItem.currentRecord.subtype | translate }}
                 </ng-container>
@@ -54,7 +53,6 @@
                     </ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="'VIDEO'">
-                    video
                     <ng-container *ngIf="listItem.video">
                         <img class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"
