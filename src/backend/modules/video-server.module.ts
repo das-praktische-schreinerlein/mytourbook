@@ -39,47 +39,6 @@ export class VideoServerModule {
 
     public static configureStoredVideoRoutes(app: express.Application, apiPrefix: string, backendConfig: {},
                                                errorFile: string, filePathErrorDocs: string) {
-
-        if (1 === 1) {
-            return;
-        }
-
         // TODO
-        if (backendConfig['apiRouteStoredVideos'] && backendConfig['apiRouteVideosStaticDir']) {
-            console.log('configure route videostore:',
-                apiPrefix + backendConfig['apiRouteStoredVideos'] + ':resolution/:resolveSdocBySdocId'
-                + ' to ' + backendConfig['apiRouteVideosStaticDir']);
-            app.param('resolution', function(req, res, next, resolution) {
-                req['resolution'] = undefined;
-                if (Object.keys(VideoResolutions).indexOf(resolution) < 0) {
-                    return next('not found');
-                }
-                req['resolution'] = resolution;
-                return next();
-            });
-            // use id: param to read from solr
-            app.route(apiPrefix + backendConfig['apiRouteStoredVideos'] + ':resolution/:resolveSdocBySdocId')
-                .all(function(req, res, next) {
-                    if (req.method !== 'GET') {
-                        return next('not allowed');
-                    }
-                    return next();
-                })
-                .get(function(req, res, next) {
-                    const sdoc: SDocRecord = req['sdoc'];
-                    const resolution = req['resolution'];
-                    if (resolution === undefined || sdoc === undefined ||
-                        !isArray(sdoc['sdocimages']) || sdoc['sdocimages'].length < 0) {
-                        res.status(200);
-                        res.sendFile(errorFile, {root: filePathErrorDocs});
-                        return;
-                    }
-                    res.status(200);
-                    res.sendFile((backendConfig['apiRouteStoredVideosResolutionPrefix'] || '')
-                        + resolution + '/' + sdoc['sdocimages'][0]['fileName'],
-                        {root: backendConfig['apiRouteVideosStaticDir']});
-                    return;
-                });
-        }
     }
 }

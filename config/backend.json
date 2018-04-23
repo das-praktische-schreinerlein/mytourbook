@@ -1,7 +1,7 @@
 {
     "filePathPDocJson": "config/pdocs.json",
     "filePathThemeFilterJson": "config/themeFilterConfig.json",
-    "apiVideoServerEnabled": "true",
+    "apiVideoServerEnabled": false,
     "apiRouteTracks": "/tracks/",
     "apiRoutePictures": "/pictures/",
     "apiRouteVideos": "/videos/",
@@ -10,7 +10,7 @@
     "apiRoutePicturesStaticDir": "D:/Bilder/www.michas-ausflugstipps.de/",
     "apiRoutePicturesStaticEnabled": false,
     "apiRouteVideosStaticDir": "D:/Bilder/videos/",
-    "apiRouteVideosStaticEnabled": true,
+    "apiRouteVideosStaticEnabled": false,
     "apiRouteStoredTracks": "/trackstore/",
     "apiRouteStoredPictures": "/picturestore/",
     "apiRouteStoredPicturesResolutionPrefix": "pics_",

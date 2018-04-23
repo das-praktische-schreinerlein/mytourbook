@@ -485,7 +485,6 @@
                 "TRACK": true,
                 "LOCATION": true,
                 "TRIP": true,
-                "VIDEO": true,
                 "ALL": true
             }
         }
