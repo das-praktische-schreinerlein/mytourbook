@@ -11,7 +11,7 @@ import {GenericSearchResult} from '../shared/search-commons/model/container/gene
 export class SDocExporterCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const perRun = 999;
-        const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image'];
+        const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];
 
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const serverConfig = {

@@ -210,7 +210,7 @@ export class MediaManagerModule {
                     .on('end', function (err, stdout, stderr) {
                         let gmCommand = me.gm();
                         for (const file of files) {
-                            gmCommand = gmCommand.in(fileDir + '/' + file).quality(80).delay(1000);
+                            gmCommand = gmCommand.in(me.tmpDir + '/' + file).quality(80).delay(1000);
                         }
                         gmCommand.write(destPath, function(err2){
                             if (err2) {

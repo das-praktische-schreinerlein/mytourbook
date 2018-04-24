@@ -115,7 +115,8 @@
     <div class="container content-container">
         <ng-container [ngSwitch]="record.type">
             <ng-container *ngSwitchCase="'LOCATION'">
-                <app-sdoc-inline-searchpage [label]="'Unterregionen'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Unterregionen'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
                                             [htmlId]="'LOCATION'"
@@ -123,7 +124,8 @@
                                             [layout]="Layout.FLAT"
                                             [showResultList]="showResultListTrigger.LOCATION"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Routen'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
@@ -136,7 +138,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.ROUTE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Bilder'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
+                                            [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
                                             [params]="getFiltersForType(record, 'IMAGE')"
                                             [htmlId]="'LOCATIONIMAGE'"
@@ -147,7 +150,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Videos'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
+                                            [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
                                             [params]="getFiltersForType(record, 'VIDEO')"
                                             [htmlId]="'LOCATIONVIDEO'"
@@ -158,7 +162,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.VIDEO"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Trips'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRIP"
+                                            [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
                                             [htmlId]="'TRIP'"
@@ -168,7 +173,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.TRIP"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Tracks'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [htmlId]="'TRACK'"
@@ -180,7 +186,8 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'ROUTE'">
-                <app-sdoc-inline-searchpage [label]="'Region'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
                                             [htmlId]="'LOCATION'"
@@ -189,7 +196,8 @@
                                             [layout]="Layout.FLAT"
                                             [showResultList]="showResultListTrigger.LOCATION"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Bilder'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
+                                            [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
                                             [params]="getFiltersForType(record, 'IMAGE')"
                                             [htmlId]="'ROUTEIMAGE'"
@@ -200,7 +208,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Videos'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
+                                            [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
                                             [params]="getFiltersForType(record, 'VIDEO')"
                                             [htmlId]="'ROUTEVIDEO'"
@@ -211,7 +220,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.VIDEO"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Trips'"
+                <app-sdoc-inline-searchpage  *ngIf="availableTabs.TRIP"
+                                            [label]="'Trips'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
                                             [htmlId]="'TRIP'"
@@ -220,7 +230,8 @@
                                             [layout]="Layout.FLAT"
                                             [showResultList]="showResultListTrigger.TRIP"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Tracks'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [htmlId]="'TRACK'"
@@ -232,7 +243,8 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRACK'">
-                <app-sdoc-inline-searchpage [label]="'Trip'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRIP"
+                                            [label]="'Trip'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
                                             [htmlId]="'TRIP'"
@@ -240,7 +252,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Region'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
                                             [htmlId]="'LOCATION'"
@@ -248,7 +261,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Routen'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
@@ -256,7 +270,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Bilder'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
+                                            [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
                                             [params]="getFiltersForType(record, 'IMAGE')"
                                             [htmlId]="'TRACKIMAGE'"
@@ -266,7 +281,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Videos'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
+                                            [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
                                             [params]="getFiltersForType(record, 'VIDEO')"
                                             [htmlId]="'TRACKVIDEO'"
@@ -276,7 +292,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.VIDEO"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'News'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.NEWS"
+                                            [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
                                             [params]="getFiltersForType(record, 'NEWS')"
                                             [htmlId]="'NEWS'"
@@ -286,7 +303,8 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'VIDEO'">
-                <app-sdoc-inline-searchpage [label]="'Trip'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRIP"
+                                            [label]="'Trip'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
                                             [htmlId]="'TRIP'"
@@ -294,7 +312,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Region'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
                                             [htmlId]="'LOCATION'"
@@ -302,7 +321,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Route'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Route'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
@@ -310,7 +330,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Track'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Track'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [htmlId]="'TRACK'"
@@ -318,7 +339,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'News'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.NEWS"
+                                            [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
                                             [params]="getFiltersForType(record, 'NEWS')"
                                             [htmlId]="'NEWS'"
@@ -328,7 +350,8 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'IMAGE'">
-                <app-sdoc-inline-searchpage [label]="'Trip'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRIP"
+                                            [label]="'Trip'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
                                             [htmlId]="'TRIP'"
@@ -336,7 +359,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Region'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
                                             [htmlId]="'LOCATION'"
@@ -344,7 +368,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Route'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Route'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
@@ -352,7 +377,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Track'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Track'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [htmlId]="'TRACK'"
@@ -360,7 +386,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'News'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.NEWS"
+                                            [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
                                             [params]="getFiltersForType(record, 'NEWS')"
                                             [htmlId]="'NEWS'"
@@ -370,7 +397,8 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRIP'">
-                <app-sdoc-inline-searchpage [label]="'Region'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
                                             i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.sdoc.LOCATION"
                                             [params]="getFiltersForType(record, 'LOCATION')"
                                             [htmlId]="'LOCATION'"
@@ -379,7 +407,8 @@
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Tracks'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [htmlId]="'TRACK'"
@@ -391,7 +420,8 @@
                                             [loadTrack]="'true'"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Routen'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"
@@ -402,7 +432,8 @@
                                             [showResultList]="showResultListTrigger.ROUTE"
                                             (searchResultFound)="onTackCloudRoutesFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Bilder'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
+                                            [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
                                             [params]="getFiltersForType(record, 'IMAGE')"
                                             [htmlId]="'TRIPIMAGE'"
@@ -412,7 +443,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Videos'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
+                                            [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
                                             [params]="getFiltersForType(record, 'VIDEO')"
                                             [htmlId]="'TRIPVIDEOE'"
@@ -422,7 +454,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.VIDEO"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'News'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.NEWS"
+                                            [label]="'News'"
                                             i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.sdoc.NEWS"
                                             [params]="getFiltersForType(record, 'NEWS')"
                                             [htmlId]="'NEWS'"
@@ -432,7 +465,8 @@
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'NEWS'">
-                <app-sdoc-inline-searchpage [label]="'Trip'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRIP"
+                                            [label]="'Trip'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.sdoc.TRIP"
                                             [params]="getFiltersForType(record, 'TRIP')"
                                             [htmlId]="'TRIP'"
@@ -440,7 +474,8 @@
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Tracks'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.sdoc.TRACK"
                                             [params]="getFiltersForType(record, 'TRACK')"
                                             [htmlId]="'TRACK'"
@@ -452,7 +487,8 @@
                                             [showResultList]="showResultListTrigger.TRACK"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Bilder'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
+                                            [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.sdoc.IMAGE"
                                             [params]="getFiltersForType(record, 'IMAGE')"
                                             [htmlId]="'NEWSIMAGE'"
@@ -462,7 +498,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Videos'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
+                                            [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.sdoc.VIDEO"
                                             [params]="getFiltersForType(record, 'VIDEO')"
                                             [htmlId]="'NEWSVIDEO'"
@@ -472,7 +509,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.VIDEO"
                                             [showOnlyIfRecordsFound]="true"></app-sdoc-inline-searchpage>
-                <app-sdoc-inline-searchpage [label]="'Routen'"
+                <app-sdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.sdoc.ROUTE"
                                             [params]="getFiltersForType(record, 'ROUTE')"
                                             [htmlId]="'ROUTE'"

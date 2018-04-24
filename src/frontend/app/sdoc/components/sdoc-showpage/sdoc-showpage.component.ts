@@ -71,7 +71,15 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         TRACK: false,
         TRIP: false
     };
-
+    availableTabs = {
+        'IMAGE': true,
+        'ROUTE': true,
+        'TRACK': true,
+        'LOCATION': true,
+        'TRIP': true,
+        'VIDEO': true,
+        'NEWS': true
+    };
 
     constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
@@ -102,6 +110,9 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
 
                 if (BeanUtils.getValue(config, 'components.sdoc-showpage.showBigImages') === true) {
                     this.defaultSubImageLayout = Layout.BIG;
+                }
+                if (BeanUtils.getValue(config, 'components.sdoc-showpage.availableTabs') !== undefined) {
+                    me.availableTabs = BeanUtils.getValue(config, 'components.sdoc-showpage.availableTabs');
                 }
                 if (isArray(BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams'))) {
                     const allowedParams = BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams');

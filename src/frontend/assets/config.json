@@ -470,7 +470,15 @@
         },
         "sdoc-showpage": {
             "showBigImages": false,
-            "allowedQueryParams": []
+            "allowedQueryParams": [],
+            "availableTabs": {
+                "IMAGE": true,
+                "ROUTE": true,
+                "TRACK": true,
+                "LOCATION": true,
+                "TRIP": true,
+                "NEWS": true
+            }
         },
         "sdoc-albumpage": {
             "allowAutoplay": false
