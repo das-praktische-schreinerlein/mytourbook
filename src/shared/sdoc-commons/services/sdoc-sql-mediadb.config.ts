@@ -831,7 +831,7 @@ export class SDocSqlMediadbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news'],
+                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image'],
                     filterField: '"video"',
                     selectLimit: 1
                 },
