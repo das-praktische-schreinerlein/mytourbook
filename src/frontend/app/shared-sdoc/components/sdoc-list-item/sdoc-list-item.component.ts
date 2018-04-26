@@ -23,6 +23,7 @@ export class SDocListItemComponent implements OnChanges {
         urlShow: undefined
     };
 
+    showFullScreenVideo = false;
 
     @Input()
     public record: SDocRecord;

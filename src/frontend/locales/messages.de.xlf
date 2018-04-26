@@ -72,7 +72,7 @@
       </trans-unit>
       <trans-unit id="button.listitemaction.sdoc.show" datatype="html">
         <source>Show</source>
-        <target>Anzeigen</target>
+        <target>Details</target>
         <context-group purpose="location">
           <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/shared-sdoc/components/sdoc-list-item/sdoc-list-item.component.ts</context>
           <context context-type="linenumber">33</context>
