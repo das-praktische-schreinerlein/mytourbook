@@ -85,6 +85,7 @@
                                           [layout]="layout"
                                           [sort]="sort"
                                           [showAutoplay]="true"
+                                          [pauseAutoplay]="pauseAutoPlay"
                                           (perPageChange)="onPerPageChange($event)"
                                           (sortChange)="onSortChange($event)"
                                           (layoutChange)="onLayoutChange($event)"
@@ -94,6 +95,8 @@
                     <app-sdoc-list [searchResult]="searchResult"
                                    [baseSearchUrl]="baseSearchUrl"
                                    [layout]="layout"
+                                   (playerStarted)="onPlayerStarted($event)"
+                                   (playerStopped)="onPlayerStopped($event)"
                                    (show)="onShowSDoc($event)"></app-sdoc-list>
                 </div>
             </div>

@@ -56,6 +56,12 @@ export class SDocListItemPageComponent implements OnChanges {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
+    @Output()
+    public playerStarted: EventEmitter<SDocRecord> = new EventEmitter();
+
+    @Output()
+    public playerStopped: EventEmitter<SDocRecord> = new EventEmitter();
+
     constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef, private platformService: PlatformService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter) {
@@ -68,18 +74,26 @@ export class SDocListItemPageComponent implements OnChanges {
         }
     }
 
-    public submitShow(sdoc: SDocRecord) {
+    submitShow(sdoc: SDocRecord) {
         this.show.emit(sdoc);
         return false;
     }
 
-    public onActionTagEvent(event: ActionTagEvent) {
+    onActionTagEvent(event: ActionTagEvent) {
         if (event.result !== undefined) {
             this.record = <SDocRecord>event.result;
             this.updateData();
         }
 
         return false;
+    }
+
+    onVideoStarted() {
+        this.playerStarted.emit(this.record);
+    }
+
+    onVideoEnded() {
+        this.playerStopped.emit(this.record);
     }
 
     renderDesc(): string {

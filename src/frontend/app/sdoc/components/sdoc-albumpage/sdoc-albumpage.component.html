@@ -27,6 +27,7 @@
                                           [layout]="layout"
                                           [sort]="listSearchForm.sort"
                                           [availableSorts]="['relevance', 'dateAsc']"
+                                          [pauseAutoplay]="pauseAutoPlay"
                                           (perPageChange)="onPerPageChange($event)"
                                           (sortChange)="onSortChange($event)"
                                           (layoutChange)="onLayoutChange($event)"
@@ -36,6 +37,8 @@
                     <app-sdoc-list [searchResult]="listSearchResult"
                                    [baseSearchUrl]="baseSearchUrl"
                                    [layout]="layout"
+                                   (playerStarted)="onPlayerStarted($event)"
+                                   (playerStopped)="onPlayerStopped($event)"
                                    (show)="onShowSDoc($event)"></app-sdoc-list>
                 </div>
                 <div class="container">
@@ -68,6 +71,8 @@
             <app-sdoc-list-item-page [record]="record"
                                      [layout]="layout"
                                      [backToSearchUrl]="backToSearchUrl"
+                                     (playerStarted)="onPlayerStarted($event)"
+                                     (playerStopped)="onPlayerStopped($event)"
                                      (show)="onShowSDoc($event)"
                                      (showImage)="onShowImage($event)"></app-sdoc-list-item-page>
         </ng-container>

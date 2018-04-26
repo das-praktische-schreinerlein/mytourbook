@@ -35,6 +35,12 @@ export class SDocListComponent implements OnChanges {
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 
+    @Output()
+    public playerStarted: EventEmitter<SDocRecord> = new EventEmitter();
+
+    @Output()
+    public playerStopped: EventEmitter<SDocRecord> = new EventEmitter();
+
     public Layout = Layout;
 
     private lightboxAlbumConfig: SDocLightboxAlbumConfig = {
@@ -64,6 +70,14 @@ export class SDocListComponent implements OnChanges {
             this.show.emit(record);
         }
         return false;
+    }
+
+    onPlayerStarted(sdoc: SDocRecord) {
+        this.playerStarted.emit(sdoc);
+    }
+
+    onPlayerStopped(sdoc: SDocRecord) {
+        this.playerStopped.emit(sdoc);
     }
 
     getBackToSearchUrl(searchResult: SDocSearchResult): string {

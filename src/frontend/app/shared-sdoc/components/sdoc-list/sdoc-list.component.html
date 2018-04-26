@@ -8,6 +8,8 @@
                                       [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                       (show)="onShow($event)"
                                       (showImage)="onShowImage($event)"
+                                      (playerStarted)="onPlayerStarted($event)"
+                                      (playerStopped)="onPlayerStopped($event)"
                                       *ngFor="let record of searchResult.currentRecords"></app-sdoc-list-item-page>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.SMALL">

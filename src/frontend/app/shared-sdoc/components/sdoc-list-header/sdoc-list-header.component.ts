@@ -42,6 +42,9 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
     @Input()
     public showAutoplay? = false;
 
+    @Input()
+    public pauseAutoplay? = false;
+
     @Output()
     public pageChange: EventEmitter<number> = new EventEmitter();
 
@@ -93,6 +96,10 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
     }
 
     onShowIntervalNext(): boolean {
+        if (this.pauseAutoplay) {
+            return false;
+        }
+
         let page = this.searchResult.searchForm.pageNum + 1;
         if (page < 1) {
             page = 1;

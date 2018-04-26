@@ -46,6 +46,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     curRecordNr = 0;
     albumKey = 'Current';
     autoPlayAllowed = false;
+    pauseAutoPlay = false;
 
     public editFormGroup = this.fb.group({
         albumSdocIds: ''
@@ -253,6 +254,14 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    onPlayerStarted(sdoc: SDocRecord) {
+        this.pauseAutoPlay = true;
+    }
+
+    onPlayerStopped(sdoc: SDocRecord) {
+        this.pauseAutoPlay = false;
+    }
+
     submitSave(event: Event): boolean {
         const ids = this.editFormGroup.getRawValue()['albumSdocIds'];
         if (this.idCsvValidationRule.isValid(ids)) {
@@ -274,12 +283,16 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
     doShow(): boolean {
         this.commonRoutingService.navigateByUrl(['sdoc/album/show', this.albumKey, this.listSearchForm.sort, 1,
-            this.listSearchForm.pageNum * this.listSearchForm.perPage].join('/'));
+            ((this.listSearchForm.pageNum - 1) * this.listSearchForm.perPage) + 1].join('/'));
         return false;
     }
 
     onAlbumIntervalNext(): boolean {
         const me = this;
+        if (me.pauseAutoPlay) {
+            return false;
+        }
+
         me.onCurRecordChange(me.curRecordNr + 1);
         this.searchForm.pageNum = this.curRecordNr;
         this.listSearchForm.pageNum = this.curRecordNr;
@@ -331,6 +344,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
     private loadRecord(nr: number): void {
         this.curRecordNr = nr;
+        this.pauseAutoPlay = false;
         if (this.searchResult !== undefined && this.searchResult.currentRecords.length >= nr) {
             this.record = this.searchResult.currentRecords[nr - 1];
         } else {

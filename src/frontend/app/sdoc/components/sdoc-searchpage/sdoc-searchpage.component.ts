@@ -59,6 +59,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     flgShowProfileMap = false;
     flgMapAvailable = false;
     flgProfileMapAvailable = false;
+    pauseAutoPlay = false;
     anchor = '';
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
@@ -346,6 +347,14 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         this.pageUtils.scrollToTop();
     }
 
+    onPlayerStarted(sdoc: SDocRecord) {
+        this.pauseAutoPlay = true;
+    }
+
+    onPlayerStopped(sdoc: SDocRecord) {
+        this.pauseAutoPlay = false;
+    }
+
     private redirectToSearch() {
         // reset initialized
         this.initialized = false;
@@ -394,6 +403,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
             loadTrack: true,
             showForm: true
         }).then(function doneSearch(sdocSearchResult) {
+            me.pauseAutoPlay = false;
             if (sdocSearchResult === undefined) {
                 // console.log('empty searchResult', sdocSearchResult);
                 me.flgMapAvailable = false;
