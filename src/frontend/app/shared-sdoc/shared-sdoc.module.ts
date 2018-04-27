@@ -45,6 +45,7 @@ import {SDocTagsStateComponent} from './components/sdoc-tagsstate/sdoc-tagsstate
 import {SDocPersonTagsStateComponent} from './components/sdoc-persontagsstate/sdoc-persontagsstate.component';
 import {SDocPersonTagsComponent} from './components/sdoc-persontags/sdoc-persontags.component';
 import {FileDropModule} from 'ngx-file-drop';
+import {SDocVideoplayerComponent} from './components/sdoc-videoplayer/sdoc-videoplayer.component';
 
 @NgModule({
     declarations: [
@@ -81,7 +82,8 @@ import {FileDropModule} from 'ngx-file-drop';
         SDocTagsComponent,
         SDocTagsStateComponent,
         SDocPersonTagsComponent,
-        SDocPersonTagsStateComponent
+        SDocPersonTagsStateComponent,
+        SDocVideoplayerComponent
     ],
     imports: [
         ToastModule,
@@ -135,7 +137,8 @@ import {FileDropModule} from 'ngx-file-drop';
         SDocTagsComponent,
         SDocTagsStateComponent,
         SDocPersonTagsComponent,
-        SDocPersonTagsStateComponent
+        SDocPersonTagsStateComponent,
+        SDocVideoplayerComponent
     ]
 })
 export class SharedSDocModule {}

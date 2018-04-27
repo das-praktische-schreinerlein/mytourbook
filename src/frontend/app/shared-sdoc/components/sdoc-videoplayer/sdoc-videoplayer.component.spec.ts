@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SDocListItemComponent} from './sdoc-list-item.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {SDocRoutingService} from '../../services/sdoc-routing.service';
@@ -15,14 +14,15 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {SDocDateFormatPipe} from '../../pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
+import {SDocVideoplayerComponent} from './sdoc-videoplayer.component';
 
-describe('SDocListItemComponent', () => {
-    let component: SDocListItemComponent;
-    let fixture: ComponentFixture<SDocListItemComponent>;
+describe('SDocVideoplayerComponent', () => {
+    let component: SDocVideoplayerComponent;
+    let fixture: ComponentFixture<SDocVideoplayerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SDocListItemComponent, SDocDateFormatPipe],
+            declarations: [SDocVideoplayerComponent, SDocDateFormatPipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
@@ -40,7 +40,7 @@ describe('SDocListItemComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SDocListItemComponent);
+        fixture = TestBed.createComponent(SDocVideoplayerComponent);
         component = fixture.componentInstance;
         component.record = SDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

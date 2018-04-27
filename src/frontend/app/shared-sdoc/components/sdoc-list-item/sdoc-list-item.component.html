@@ -3,21 +3,6 @@
         <div class="card-block" [ngClass]="listItem.styleClassFor">
             <a [name]="listItem.currentRecord.id"></a>
 
-            <ng-container *ngIf="showFullScreenVideo">
-                <div class="container fullscreenvideo-background-container" *ngIf="listItem.video">
-                    <div class="fullscreenvideo-container">
-                        <a class="fullscreenvideo-close" (click)="showFullScreenVideo = false"><span i18n="link listitemaction close video|Linktext to listitemaction:close video@@link.listitemaction.video.close">Schließen</span> &#x2612;</a>
-                        <video width="600px" controls="controls" class="picture-big" title="{{listItem.video.name}}" preload="metadata" autoplay="autoplay">
-                            <source [src]="contentUtils.getFullVideoUrl(listItem.video)" />
-                            <object [data]="contentUtils.getFullVideoUrl(listItem.video)" width="600">
-                                <embed [src]="contentUtils.getFullVideoUrl(listItem.video)" width="600">
-                            </object>
-                        </video>
-                        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
-                    </div>
-                </div>
-            </ng-container>
-
             <ng-container *ngIf="short">
                 <div class="picture-small" *ngIf="listItem.image">
                     <img class="picture-small" width="300px"
@@ -25,18 +10,11 @@
                          (click)="submitShowImage(listItem.currentRecord)"
                          alt="{{listItem.image.name}}">
                 </div>
-                <div class="picture-small" *ngIf="listItem.video">
-                    <video width="300px" controls="controls" class="small" title="{{listItem.video.name}}" preload="metadata">
-                        <source [src]="listItem.previewUrl" />
-                        <object [data]="listItem.previewUrl" width="300">
-                            <embed [src]="listItem.previewUrl" width="300">
-                        </object>
-                    </video>
-                    <a (click)="showFullScreenVideo = true" *ngIf="listItem.video">
-                        <span i18n="link listitemaction show video|Linktext to listitemaction:show video@@link.listitemaction.video.play">Gesamtes Video ansehen</span>
-                        &#x25B6;
-                    </a>
-                    <br />
+                <div *ngIf="listItem.video">
+                    <app-sdoc-videoplayer [record]="listItem.currentRecord"
+                                          [showPreview]="true"
+                                          [width]="300" [forceWidth]="300" [styleClass]="'picture-small'"
+                                          (show)="submitShow(listItem.currentRecord)"></app-sdoc-videoplayer>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
                 </div>
                 <small class="text-muted"><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy>
@@ -56,18 +34,12 @@
                                  (click)="submitShowImage(listItem.currentRecord)"
                                  alt="{{listItem.image.name}}">
                         </div>
-                        <div class="picture-small" *ngIf="listItem.video">
-                            <video width="300px" controls="controls" class="small" title="{{listItem.video.name}}" preload="metadata">
-                                <source [src]="listItem.previewUrl" />
-                                <object [data]="listItem.previewUrl" width="300">
-                                    <embed [src]="listItem.previewUrl" width="300">
-                                </object>
-                            </video>
-                        </div>
-                        <a (click)="showFullScreenVideo = true" *ngIf="listItem.video">
-                            <span i18n="link listitemaction show video|Linktext to listitemaction:show video@@link.listitemaction.video.play">Gesamtes Video ansehen</span>
-                            &#x25B6;
-                        </a>
+                        <app-sdoc-videoplayer *ngIf="listItem.video"
+                                  [record]="listItem.currentRecord"
+                                  [showPreview]="true"
+                                  [width]="300" [forceWidth]="300" [styleClass]="'picture-small'"
+                                  (show)="submitShow(listItem.currentRecord)"></app-sdoc-videoplayer>
+
                     </div>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
                 </div>
@@ -99,9 +71,6 @@
             <small class="text-muted">{{listItem.currentRecord | sdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show sdoc|Buttontext to listitemaction:show sdoc@@button.listitemaction.sdoc.show">Show</button>
-                <button class="show btn-navigation" *ngIf="listItem.video" (click)="showFullScreenVideo = true" >
-                    <span i18n="button listitemaction play video|Buttontext to listitemaction:play video@@button.listitemaction.video.play">Play</span> &#x25B6;
-                </button>
             </div>
             <app-sdoc-action [record]="listItem.currentRecord" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-sdoc-action>
         </div>

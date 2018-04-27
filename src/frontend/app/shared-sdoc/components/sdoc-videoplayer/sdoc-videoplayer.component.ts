@@ -1,17 +1,18 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange,
+    ViewChild
+} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {Layout} from '../sdoc-list/sdoc-list.component';
 import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 
 @Component({
-    selector: 'app-sdoc-list-item',
-    templateUrl: './sdoc-list-item.component.html',
-    styleUrls: ['./sdoc-list-item.component.css'],
+    selector: 'app-sdoc-videoplayer',
+    templateUrl: './sdoc-videoplayer.component.html',
+    styleUrls: ['./sdoc-videoplayer.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListItemComponent implements OnChanges {
+export class SDocVideoplayerComponent implements OnChanges {
     public contentUtils: SDocContentUtils;
     listItem: ItemData = {
         currentRecord: undefined,
@@ -22,24 +23,33 @@ export class SDocListItemComponent implements OnChanges {
         video: undefined,
         urlShow: undefined
     };
+    maxWidth = 600;
+    maxHeight = 800;
+    maxFullWidth = 1200;
+    maxFullHeight = 1200;
+
+    @ViewChild('videoPlayer') videoplayer: any;
 
     @Input()
     public record: SDocRecord;
 
     @Input()
-    public backToSearchUrl: string;
+    public width: 300;
 
     @Input()
-    public layout: Layout;
+    public forceWidth = '';
 
     @Input()
-    public short? = false;
+    public styleClass: 'picture-small';
+
+    @Input()
+    public showFullScreenVideo = false;
+
+    @Input()
+    public showPreview = true;
 
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
-
-    @Output()
-    public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
     constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
@@ -51,26 +61,19 @@ export class SDocListItemComponent implements OnChanges {
         }
     }
 
-    public submitShow(sdoc: SDocRecord) {
+    submitShow(sdoc: SDocRecord) {
         this.show.emit(sdoc);
         return false;
     }
 
-    public submitShowImage(sdoc: SDocRecord) {
-        this.showImage.emit(sdoc);
-        return false;
-    }
-
-    public onActionTagEvent(event: ActionTagEvent) {
-        if (event.result !== undefined) {
-            this.record = <SDocRecord>event.result;
-            this.updateData();
-        }
-
-        return false;
-    }
-
     private updateData() {
+        if (window) {
+            this.maxWidth = Math.min(600, window.innerWidth - 100);
+            this.maxHeight = Math.min(800, window.innerHeight - 80);
+            this.maxFullWidth = Math.min(1200, window.innerWidth - 50);
+            this.maxFullHeight = Math.min(1200, window.innerHeight - 80);
+        }
+        console.error("blimblam", this.forceWidth);
         this.contentUtils.updateItemData(this.listItem, this.record, 'default');
         this.cd.markForCheck();
     }

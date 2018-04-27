@@ -16,12 +16,9 @@
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | sdocdate}} {{record.name}}</span></h5>
                         <div class="image-container">
                             <ng-container *ngIf="record.sdocvideos !== undefined && record.sdocvideos.length > 0">
-                                <video width="600px" controls="controls" class="picture-big" title="{{record.sdocvideos[0].name}}" preload="metadata">
-                                    <source [src]="contentUtils.getFullVideoUrl(record.sdocvideos[0])" />
-                                    <object [data]="contentUtils.getFullVideoUrl(record.sdocvideos[0])" width="600">
-                                        <embed [src]="contentUtils.getFullVideoUrl(record.sdocvideos[0])" width="600">
-                                    </object>
-                                </video>
+                                <app-sdoc-videoplayer [record]="record"
+                                                      [showPreview]="false"
+                                                      [width]="600" [styleClass]="'picture-big'"></app-sdoc-videoplayer>
                             </ng-container>
                         </div>
                     </ng-container>
