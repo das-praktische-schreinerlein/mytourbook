@@ -102,7 +102,7 @@
     }
     .map-container {
         width: 46%;
-        display: inline-block;
+        display: inline-table;
     }
     .container-fullline {
         width: 95% !important;
@@ -112,6 +112,6 @@
 @media(min-width: 800px) {
     .edit-map-container {
         width: 46%;
-        display: inline-block;
+        display: inline-table;
     }
 }
