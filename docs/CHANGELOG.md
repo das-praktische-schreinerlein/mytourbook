@@ -3,7 +3,7 @@
 # Versions
  
 ## 1.4.0-alpha
-- added video-support
+- added video-support and many layout-improvements
  
 ### new features
 - common: added support for new type: video in frontend, video-server, backend, media-manager
@@ -13,7 +13,7 @@
 - solr: improved data-import
 - frontend: configure availability of tabs on section-page 
 - frontend: configure types to search on section-page 
-- frontend: configure default types to search in none is selected
+- frontend: configure default types to search if none is selected
 - frontend: improved list-layout
 - frontend: improved news-layout
  
@@ -21,7 +21,7 @@
 - frontend: fixed tests
  
 ### breaking changes
-- none
+- backend: needs video-tables from ```installer/db/*```
  
 ### known issues
 - frontend: IE till 11 not functional (can block rendering sometimes)
