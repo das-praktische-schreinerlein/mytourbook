@@ -2,6 +2,25 @@
  
 # Versions
  
+## 1.5.0-alpha
+- none
+ 
+### new features
+- none
+ 
+### improvements
+- none
+ 
+### bug fixes
+- none
+ 
+### breaking changes
+- none
+ 
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+ 
+ 
 ## 1.4.0
 - added video-support and many layout-improvements
  
