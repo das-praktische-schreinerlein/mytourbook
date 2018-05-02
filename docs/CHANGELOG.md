@@ -2,7 +2,7 @@
  
 # Versions
  
-## 1.4.0-alpha
+## 1.4.0
 - added video-support and many layout-improvements
  
 ### new features
