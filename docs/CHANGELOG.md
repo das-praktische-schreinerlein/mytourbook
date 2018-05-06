@@ -9,7 +9,7 @@
 - none
  
 ### improvements
-- none
+- backend: anonymize media-pathes
  
 ### bug fixes
 - none

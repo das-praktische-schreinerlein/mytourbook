@@ -1,7 +1,5 @@
 import proxy from 'http-proxy-middleware';
 import express from 'express';
-import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
-import {isArray} from 'util';
 import * as vidStreamer from 'vid-streamer';
 
 export enum VideoResolutions {

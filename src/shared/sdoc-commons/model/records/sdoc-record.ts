@@ -4,6 +4,7 @@ import {
     GpsTrackValidationRule, HierarchyValidationRule, HtmlValidationRule, IdCsvValidationRule, IdValidationRule, KeywordValidationRule,
     MarkdownValidationRule, NameValidationRule, NumberValidationRule, StringNumberValidationRule, TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
+import {isArray} from 'util';
 
 export class SDocRecord extends BaseEntityRecord {
     static sdocFields = {
@@ -76,6 +77,34 @@ export class SDocRecord extends BaseEntityRecord {
     subtype: string;
     type: string;
 
+    static cloneToSerializeToJsonObj(baseRecord: SDocRecord, anonymizeMedia?: boolean): {}  {
+        const record  = {};
+        for (const key in baseRecord) {
+            record[key] = baseRecord[key];
+        }
+        record['sdocdatatech'] = baseRecord.get('sdocdatatech');
+        record['sdocdatainfo'] = baseRecord.get('sdocdatainfo');
+        record['sdocimages'] = baseRecord.get('sdocimages');
+        record['sdocvideos'] = baseRecord.get('sdocvideos');
+        record['sdocratepers'] = baseRecord.get('sdocratepers');
+        record['sdocratetech'] = baseRecord.get('sdocratetech');
+
+        if (anonymizeMedia === true) {
+            if (isArray(record['sdocimages'])) {
+                for (const media of record['sdocimages']) {
+                    media.fileName = 'anonymized.JPG';
+                }
+            }
+            if (isArray(record['sdocvideos'])) {
+                for (const media of record['sdocvideos']) {
+                    media.fileName = 'anonymized.MP4';
+                }
+            }
+        }
+
+        return record;
+    }
+
     toString() {
         return 'SDocRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
@@ -84,20 +113,8 @@ export class SDocRecord extends BaseEntityRecord {
             '}';
     }
 
-    toSerializableJsonObj(): {} {
-        const record = {};
-        const me: SDocRecord = this;
-        for (const key in me) {
-            record[key] = me[key];
-        }
-        record['sdocdatatech'] = this.get('sdocdatatech');
-        record['sdocdatainfo'] = this.get('sdocdatainfo');
-        record['sdocimages'] = this.get('sdocimages');
-        record['sdocvideos'] = this.get('sdocvideos');
-        record['sdocratepers'] = this.get('sdocratepers');
-        record['sdocratetech'] = this.get('sdocratetech');
-
-        return record;
+    toSerializableJsonObj(anonymizeMedia?: boolean): {} {
+        return SDocRecord.cloneToSerializeToJsonObj(this, anonymizeMedia);
     }
 
     isValid(): boolean {

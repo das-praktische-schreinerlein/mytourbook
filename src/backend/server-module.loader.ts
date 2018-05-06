@@ -47,7 +47,8 @@ export class ServerModuleLoader {
         const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
 
         // add routes
-        const sdocServerModule = SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache);
+        const sdocServerModule = SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache,
+            serverConfig.backendConfig);
         if (writable) {
             SDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocServerModule);
         }

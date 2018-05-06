@@ -13,7 +13,7 @@ export class SDocServerModule {
     public idValidationRule = new IdValidationRule(true);
 
     public static configureRoutes(app: express.Application, apiPrefix: string, dataService: SDocDataService,
-                                  cache: DataCacheModule): SDocServerModule {
+                                  cache: DataCacheModule, backendConfig: {}): SDocServerModule {
         const sdocServerModule = new SDocServerModule(dataService, cache);
 
         // configure express
@@ -50,7 +50,7 @@ export class SDocServerModule {
                     res.json();
                     return next();
                 }
-                res.json(sdoc.toSerializableJsonObj());
+                res.json(sdoc.toSerializableJsonObj(backendConfig['apiAnonymizeMedia']));
                 return next();
             });
 
@@ -92,7 +92,7 @@ export class SDocServerModule {
                             if (searchOptions.showFacets === false) {
                                 searchResult.facets = new Facets();
                             }
-                            res.json(searchResult.toSerializableJsonObj());
+                            res.json(searchResult.toSerializableJsonObj(backendConfig['apiAnonymizeMedia']));
                             return next();
                         }
                     ).catch(

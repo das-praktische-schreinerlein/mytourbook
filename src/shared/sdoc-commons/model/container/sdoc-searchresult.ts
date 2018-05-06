@@ -17,7 +17,7 @@ export class SDocSearchResult extends GenericSearchResult <SDocRecord, SDocSearc
             '}';
     }
 
-    toSerializableJsonObj(): {} {
+    toSerializableJsonObj(anonymizeMedia?: boolean): {} {
         const result = {
             'recordCount': this.recordCount,
             'searchForm': this.searchForm,
@@ -29,16 +29,8 @@ export class SDocSearchResult extends GenericSearchResult <SDocRecord, SDocSearc
         };
         if (Array.isArray(this.currentRecords)) {
             for (let i = 0; i < this.currentRecords.length; i++) {
-                const record = {};
-                for (const key in this.currentRecords[i]) {
-                    record[key] = this.currentRecords[i][key];
-                }
-                record['sdocdatatech'] = this.currentRecords[i].get('sdocdatatech');
-                record['sdocdatainfo'] = this.currentRecords[i].get('sdocdatainfo');
-                record['sdocimages'] = this.currentRecords[i].get('sdocimages');
-                record['sdocvideos'] = this.currentRecords[i].get('sdocvideos');
-                record['sdocratetech'] = this.currentRecords[i].get('sdocratetech');
-                record['sdocratepers'] = this.currentRecords[i].get('sdocratepers');
+                const record = SDocRecord.cloneToSerializeToJsonObj(this.currentRecords[i], anonymizeMedia);
+
                 result.currentRecords.push(record);
             }
         }
