@@ -10,6 +10,8 @@
  
 ### improvements
 - backend: anonymize media-pathes
+- frontend: improved liability/impress-links
+- frontend: improved tagcloud, timetable, typetable-links
  
 ### bug fixes
 - none
