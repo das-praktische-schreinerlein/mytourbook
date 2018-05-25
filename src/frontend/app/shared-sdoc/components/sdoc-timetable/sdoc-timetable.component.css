@@ -2,6 +2,10 @@ div.timetable-column {
     width: 8.33%;
     border: 1px solid black;
 }
+div.timetable-column:hover {
+    background-color: lightblue !important;
+    font-weight: 500;
+}
 div.timetable-column-active {
     background-color: lightgreen;
     font-weight: 500;

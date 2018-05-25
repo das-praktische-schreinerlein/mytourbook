@@ -356,3 +356,14 @@ div.scroll-to-top-container span {
 div.scroll-to-top-container span::after {
     content: 'Top \290A';
 }
+
+
+/*******************
+ * Cookie-law
+ *******************/
+a.dismiss::after {
+    content: "OK" !IMPORTANT;
+}
+a.dismiss > svg {
+    display: none !IMPORTANT;
+}

@@ -20,3 +20,7 @@ div.tagcloud-column-4 {
 div.tagcloud-column-5 {
     font-size: 20px;
 }
+div.tagcloud-column:hover {
+    font-size: 21px;
+    background-color: lightblue !important;
+}
