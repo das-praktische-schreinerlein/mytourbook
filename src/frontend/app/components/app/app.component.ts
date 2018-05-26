@@ -9,6 +9,7 @@ import {PlatformService} from '../../../shared/angular-commons/services/platform
 import {LogUtils} from '../../../shared/commons/utils/log.utils';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 import {LayoutService} from '../../../shared/angular-commons/services/layout.service';
+import {environment} from '../../../environments/environment';
 
 @Component({
     selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent {
     showLoadingSpinner = true;
     title = 'MyTourBook';
     showLaw = false;
+    cookieLawSeenName = environment.cookieLawSeenName;
 
     constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,

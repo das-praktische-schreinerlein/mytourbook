@@ -12,6 +12,7 @@
 - backend: anonymize media-pathes
 - frontend: improved liability/impress-links
 - frontend: improved tagcloud, timetable, typetable-links
+- frontend: configurable cookiename for cookie-law
  
 ### bug fixes
 - none

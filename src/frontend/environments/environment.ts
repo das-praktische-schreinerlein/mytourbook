@@ -19,5 +19,6 @@ export const environment = {
     sdocActionTagWritable: true,
     allowAutoPlay: true,
     sdocMaxItemsPerAlbum: 20000,
+    cookieLawSeenName: 'cookieLawSeenV20180525',
     trackingProviders: [Angulartics2Piwik]
 };
