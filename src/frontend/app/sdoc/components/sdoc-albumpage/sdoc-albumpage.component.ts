@@ -173,7 +173,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         if (page < 1) {
             page = 1;
         }
-        if (page >= this.listSearchResult.recordCount) {
+        if (page > this.listSearchResult.recordCount) {
             page = 1;
         }
         this.curRecordNr = page;
@@ -264,13 +264,8 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     submitSave(event: Event): boolean {
-        const ids = this.editFormGroup.getRawValue()['albumSdocIds'];
-        if (this.idCsvValidationRule.isValid(ids)) {
-            this.sdocAlbumService.removeSdocIds(this.albumKey);
-            for (const id of ids.split(',')) {
-                this.sdocAlbumService.addIdToAlbum(this.albumKey, id);
-            }
-            this.doShow();
+        if (this.doSave() === true) {
+            return this.doShow();
         }
 
         return false;
@@ -289,8 +284,9 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     doSaveAsFile(): boolean {
-        const blob = new Blob([JSON.stringify(this.editFormGroup.getRawValue()['albumSdocIds'], null, 2)], {type : 'application/json'});
-        const filename = 'CurrentAlbum.json';
+        const albumEntry = { key: this.albumKey, ids: this.editFormGroup.getRawValue()['albumSdocIds']};
+        const blob = new Blob([JSON.stringify(albumEntry, null, 2)], {type : 'application/json'});
+        const filename = this.albumKey + '.mytbalbum.json';
         if (window.navigator && window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveOrOpenBlob(blob, filename);
         } else {
@@ -317,15 +313,17 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                         me.toastr.warning('Die Album-Datei darf höchstes ' + maxLength / 1000000 + 'MB sein.', 'Oje!');
                         return;
                     }
-                    if (!file.name.toLowerCase().endsWith('.json')) {
-                        me.toastr.warning('Es dürfen nur .json Dateien geladen werden.', 'Oje!');
+                    if (!file.name.toLowerCase().endsWith('.mytbalbum.json')) {
+                        me.toastr.warning('Es dürfen nur .mytbalbum.json Dateien geladen werden.', 'Oje!');
                         return;
                     }
 
                     reader.onload = (function(theFile) {
                         return function(e) {
-                            const list = e.target.result;
-                            me.editFormGroup.patchValue({albumSdocIds: JSON.parse(list) });
+                            const src = e.target.result;
+                            const albumEntry = JSON.parse(src);
+                            me.editFormGroup.patchValue({albumSdocIds:  albumEntry.ids || ''});
+                            return me.doSave() && me.doShow();
                         };
                     })(file);
 
@@ -358,6 +356,19 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
+    private doSave(): boolean {
+        const ids = this.editFormGroup.getRawValue()['albumSdocIds'];
+        if (this.idCsvValidationRule.isValid(ids)) {
+            this.sdocAlbumService.removeSdocIds(this.albumKey);
+            for (const id of ids.split(',')) {
+                this.sdocAlbumService.addIdToAlbum(this.albumKey, id);
+            }
+            return true;
+        } else {
+            this.toastr.warning('Leider stimmt in der Liste was nicht. Hast du die Ids nur mit "," getrennt?', 'Oje!');
+            return false;
+        }
+    }
     private doSearch() {
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.route.toString());

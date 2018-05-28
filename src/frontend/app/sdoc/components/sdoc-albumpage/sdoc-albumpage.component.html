@@ -61,7 +61,7 @@
                 <div [class]="(autoPlayAllowed ? 'col-sm-10' : 'col-sm-12')">
                     <ngb-pagination (pageChange)="onCurRecordChange($event)"
                                     [pageSize]="1"
-                                    [collectionSize]="searchResult.recordCount - 1"
+                                    [collectionSize]="searchResult.recordCount"
                                     [page]="curRecordNr"
                                     [maxSize]="10"
                                     [rotate]="true"
