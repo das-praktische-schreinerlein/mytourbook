@@ -27,6 +27,7 @@ import {SDocAlbumpageComponent} from './components/sdoc-albumpage/sdoc-albumpage
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LayoutService} from '../../shared/angular-commons/services/layout.service';
 import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
+import {FileDropModule} from 'ngx-file-drop';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.serv
         HttpModule,
         AngularCommonsModule,
         SharedSDocModule,
-        SDocRoutingModule
+        SDocRoutingModule,
+        FileDropModule
     ],
     providers: [
         TranslateService,

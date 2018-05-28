@@ -13,8 +13,12 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 form-inline input-group input-group-sm">
+                            <div class="col-sm-4 form-inline input-group input-group-sm">
                                 <button type="submit" class="btn btn-action btn-sm" i18n="button edit album|Buttontext to edit album@@button.form.album.edit">Speichern</button>
+                            </div>
+                            <div class="col-sm-8 form-inline input-group input-group-sm">
+                                <button type="button" (click)="doSaveAsFile()" class="btn btn-action btn-sm" i18n="button saveAsFile album|Buttontext to saveAsFile album@@button.form.album.saveAsFile">Als Datei speichern</button>
+                                <file-drop (onFileDrop)="onFileDropped($event)" i18n-headertext="fileFileDropZone label|Label for button: fileFileDropZone@@label.form.sdoc.fileFileDropZone">Album-File dropzone</file-drop>
                             </div>
                         </div>
                     </fieldset>

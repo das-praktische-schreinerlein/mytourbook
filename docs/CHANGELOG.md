@@ -6,7 +6,7 @@
 - none
  
 ### new features
-- none
+- frontend: added import/export of album-files
  
 ### improvements
 - backend: anonymize media-pathes

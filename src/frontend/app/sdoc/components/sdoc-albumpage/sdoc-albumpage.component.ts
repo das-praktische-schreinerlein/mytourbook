@@ -20,6 +20,7 @@ import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.compon
 import {FormBuilder} from '@angular/forms';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -285,6 +286,56 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         this.commonRoutingService.navigateByUrl(['sdoc/album/show', this.albumKey, this.listSearchForm.sort, 1,
             ((this.listSearchForm.pageNum - 1) * this.listSearchForm.perPage) + 1].join('/'));
         return false;
+    }
+
+    doSaveAsFile(): boolean {
+        const blob = new Blob([JSON.stringify(this.editFormGroup.getRawValue()['albumSdocIds'], null, 2)], {type : 'application/json'});
+        const filename = 'CurrentAlbum.json';
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            const e = document.createEvent('MouseEvents'),
+                a = document.createElement('a');
+            a.download = filename;
+            a.href = window.URL.createObjectURL(blob);
+            a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+            e.initEvent('click', true, false);
+            a.dispatchEvent(e);
+        }
+        return true;
+    }
+
+    onFileDropped(event: UploadEvent) {
+        const me = this;
+        for (const droppedFile of event.files) {
+            if (droppedFile.fileEntry.isFile) {
+                const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+                fileEntry.file((file: File) => {
+                    const reader = new FileReader();
+                    const maxLength = 10000000;
+                    if (file.size > maxLength) {
+                        me.toastr.warning('Die Album-Datei darf höchstes ' + maxLength / 1000000 + 'MB sein.', 'Oje!');
+                        return;
+                    }
+                    if (!file.name.toLowerCase().endsWith('.json')) {
+                        me.toastr.warning('Es dürfen nur .json Dateien geladen werden.', 'Oje!');
+                        return;
+                    }
+
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            const list = e.target.result;
+                            me.editFormGroup.patchValue({albumSdocIds: JSON.parse(list) });
+                        };
+                    })(file);
+
+                    // Read in the file as a data URL.
+                    reader.readAsText(file);
+                });
+
+                return;
+            }
+        }
     }
 
     onAlbumIntervalNext(): boolean {
