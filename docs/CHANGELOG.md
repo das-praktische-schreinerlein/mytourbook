@@ -7,6 +7,7 @@
  
 ### new features
 - frontend: added import/export of album-files
+- backend: added persons to solr
  
 ### improvements
 - backend: anonymize media-pathes
