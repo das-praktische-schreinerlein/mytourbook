@@ -39,6 +39,14 @@ ngb-accordion div.card div.card-header {
     margin: 0;
 }
 
+
+/*******************
+ * cookie-law-wrapper overrides
+ *******************/
+.cookie-law-wrapper {
+    max-width: 100vw !important;
+}
+
 /*******************
  * browser overrides
  *******************/

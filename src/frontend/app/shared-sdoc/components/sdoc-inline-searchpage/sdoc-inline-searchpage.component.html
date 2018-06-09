@@ -26,11 +26,11 @@
         </div>
         <div class="container" *ngIf="showLayout && showResultList">
             <app-sdoc-list-header [searchResult]="searchResult"
-                                  [perPage]="perPage"
+                                  [perPage]="searchForm.perPage"
                                   [availableLayouts]="[Layout.THIN, Layout.FLAT, Layout.SMALL, Layout.BIG]"
                                   [availablePerPage]="[10, 20, 50, 99]"
                                   [layout]="layout"
-                                  [sort]="sort"
+                                  [sort]="searchForm.sort"
                                   (perPageChange)="onPerPageChange($event)"
                                   (sortChange)="onSortChange($event)"
                                   (layoutChange)="onLayoutChange($event)"

@@ -14,9 +14,11 @@
 - frontend: improved liability/impress-links
 - frontend: improved tagcloud, timetable, typetable-links
 - frontend: configurable cookiename for cookie-law
+- frontend: improved list-layout (select-box -> links)
  
 ### bug fixes
-- none
+- frontend: fixed layoutbugs in mobile-version (cookielaw-width)
+- frontend: fixed current value of search-configuration
  
 ### breaking changes
 - none

@@ -3,7 +3,7 @@
         <div class="col-sm-6 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.sdoc.name">Name:</label>
             <input formControlName="name" required="required" class="form-control" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
-            <a class="" (click)="recommendName()">&#x27F8; Generate</a>
+            <span class="" (click)="recommendName()">&#x27F8; Generate</span>
         </div>
     </ng-template>
 
@@ -17,7 +17,7 @@
     <ng-template #inputDateStart let-recommend=recommend>
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.sdoc.datestart">Startdatum:</label>
-            <a class="" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</a>
+            <span class="" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</span>
             <input formControlName="datestart" required="required" type="datetime-local" placeholder="datestart" i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.sdoc.datestart">
         </div>
     </ng-template>
@@ -32,7 +32,7 @@
     <ng-template #inputDateEnd let-recommend=recommend>
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="dateend label|Label for field: dateend@@label.editform.sdoc.dateend">Enddatum:</label>
-            <a class="" *ngIf="recommend && editFormGroup.get('dateend').value != recommend" (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</a>
+            <span class="" *ngIf="recommend && editFormGroup.get('dateend').value != recommend" (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</span>
             <input formControlName="dateend" required="required" type="datetime-local" placeholder="dateend" i18n-placeholder="dateend placeholder|Placeholder for dateend@@placeholder.form.sdoc.dateend">
         </div>
     </ng-template>
@@ -139,7 +139,7 @@
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <input formControlName="{{formControlName}}" class="form-control" type="number" step="0.01" placeholder="{{key}}">
-            <a class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend" (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</a>
+            <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend" (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
         </div>
     </ng-template>
 

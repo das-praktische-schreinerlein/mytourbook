@@ -254,7 +254,7 @@
       </trans-unit>
       <trans-unit id="label.pageHeader.sdoc.sort" datatype="html">
         <source>Sort:</source>
-        <target>sort by:</target>
+        <target> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/shared-sdoc/components/sdoc-list-header/sdoc-list-header.component.ts</context>
           <context context-type="linenumber">19</context>
@@ -264,7 +264,7 @@
       </trans-unit>
       <trans-unit id="label.pageHeader.sdoc.perPage" datatype="html">
         <source>per Page:</source>
-        <target>per page:</target>
+        <target> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/shared-sdoc/components/sdoc-list-header/sdoc-list-header.component.ts</context>
           <context context-type="linenumber">25</context>
@@ -274,7 +274,7 @@
       </trans-unit>
       <trans-unit id="label.pageHeader.sdoc.listLayout" datatype="html">
         <source>Layout:</source>
-        <target>layout:</target>
+        <target> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">D:/Projekte/mytourbook/src/frontend/app/shared-sdoc/components/sdoc-list-header/sdoc-list-header.component.ts</context>
           <context context-type="linenumber">31</context>

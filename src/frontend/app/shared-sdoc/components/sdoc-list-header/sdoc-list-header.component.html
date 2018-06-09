@@ -31,17 +31,18 @@
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print" *ngIf="layout !== Layout.PAGE">
                 <ng-container *ngIf="availablePerPage.length > 0">
                     <label class="col-form-label" i18n="perPage label|Label for header: perPage@@label.pageHeader.sdoc.perPage">per Page:</label>
-                    <select class="form-control input-sm" name="perPage" id="perPage" formControlName="perPage" (change)="onPerPageChange()">
-                        <option *ngFor="let num of availablePerPage" [value]="num">{{ num }}</option>
-                    </select>
+                    <input type="hidden" name="perPage" id="perPage" formControlName="perPage">
+                    <span *ngFor="let num of availablePerPage" (click)="headerFormGroup.patchValue({perPage: num}); onPerPageChange()"
+                       [ngClass]="'option-link ' + (num === perPage ? 'option-link-active' : 'option-link-inactive')">{{ num }}</span>
                 </ng-container>
             </div>
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print">
                 <ng-container *ngIf="availableLayouts.length > 0">
                     <label class="col-form-label" i18n="listLayout label|Label for header: listLayout@@label.pageHeader.sdoc.listLayout">Layout:</label>
-                    <select class="form-control input-sm" name="layout" id="layout" formControlName="layout" (change)="onLayoutChange()">
-                        <option *ngFor="let layout of availableLayouts" [value]="layout">{{ 'listLayout_' + layout | translate }}</option>
-                    </select>
+                    <input type="hidden" name="layout" id="layout" formControlName="layout">
+                    <span *ngFor="let optionLayout of availableLayouts" (click)="headerFormGroup.patchValue({layout: optionLayout}); onLayoutChange()"
+                       [ngClass]="'option-link ' + (optionLayout === layout ? 'option-link-active' : 'option-link-inactive')"
+                       [innerHTML]="'listLayoutShort_' + optionLayout | translate" [title]="'listLayout_' + optionLayout | translate"></span>
                 </ng-container>
             </div>
         </div>

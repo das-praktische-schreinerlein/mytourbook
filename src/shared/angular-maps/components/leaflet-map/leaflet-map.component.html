@@ -1,5 +1,5 @@
 <div [class]="('container leaflet-map-container ' + (flgfullScreen ? 'leaflet-map-container-fullscreen' : ''))" style="margin-top: 10px;">
-    <a (click)="toggleFullScreen()">FullScreen &#x2612;</a>
+    <span (click)="toggleFullScreen()">FullScreen &#x2612;</span>
     <div id="{{ mapId }}" [style.height]="mapHeight"></div>
 </div>
 

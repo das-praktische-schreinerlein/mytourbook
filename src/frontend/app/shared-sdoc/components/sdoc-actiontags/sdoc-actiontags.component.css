@@ -1,4 +1,4 @@
-a {
+span {
     font-size: 10px;
 }
 .tagActive {
@@ -29,9 +29,9 @@ a {
     padding: 2px;
 }
 
-div.showInactive > a.tagInActive {
+div.showInactive > .tagInActive {
     display: inline;
 }
-div.hideInactive > a.tagInActive {
+div.hideInactive > .tagInActive {
     display: none;
 }

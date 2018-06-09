@@ -72,9 +72,9 @@
                <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearby label|Label for filter: nearby@@label.searchform.sdoc.nearby">Nahe:</label>
                 <input formControlName="nearbyAddress" type="text" (keydown.enter)="doLocationSearch('.nearbyAddressAutocompleteShort');" placeholder="Nahe" class="form-control nearbyAddressAutocompleteShort" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.sdoc.nearby">
                 <input formControlName="nearby" type="text" style="display: none">
-                <div class="input-group-addon"><a (click)="doLocationSearch('.nearbyAddressAutocompleteShort');">&#x27A4;</a></div>
-                <div class="input-group-addon"><a (click)="useBrowserGeoLocation()">&#9673;</a></div>
-                <div class="input-group-addon"><a (click)="clearNearBy()">&#10008;</a></div>
+                <div class="input-group-addon"><span (click)="doLocationSearch('.nearbyAddressAutocompleteShort');">&#x27A4;</span></div>
+                <div class="input-group-addon"><span (click)="useBrowserGeoLocation()">&#9673;</span></div>
+                <div class="input-group-addon"><span (click)="clearNearBy()">&#10008;</span></div>
             </div>
             <div [class]="(width4 + ' form-inline input-group input-group-sm')">
                <label [class]="'col-xs-1 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.sdoc.nearbyDistance">Umkreis:</label>
@@ -138,9 +138,9 @@
                    <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearby label|Label for filter: nearby@@label.searchform.sdoc.nearby">Nahe:</label>
                     <input formControlName="nearbyAddress" type="text" (keydown.enter)="doLocationSearch('.nearbyAddressAutocomplete');" placeholder="Nahe" class="form-control nearbyAddressAutocomplete" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.sdoc.nearby">
                     <input formControlName="nearby" type="text" style="display: none">
-                    <div class="input-group-addon"><a (click)="doLocationSearch('.nearbyAddressAutocomplete');">&#x27A4;</a></div>
-                    <div class="input-group-addon"><a (click)="useBrowserGeoLocation()">&#9673;</a></div>
-                    <div class="input-group-addon"><a (click)="clearNearBy()">&#10008;</a></div>
+                    <div class="input-group-addon"><span (click)="doLocationSearch('.nearbyAddressAutocomplete');">&#x27A4;</span></div>
+                    <div class="input-group-addon"><span (click)="useBrowserGeoLocation()">&#9673;</span></div>
+                    <div class="input-group-addon"><span (click)="clearNearBy()">&#10008;</span></div>
                 </div>
                 <div [class]="(width2 + ' form-inline input-group input-group-sm')">
                    <label [class]="'col-xs-1 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.sdoc.nearbyDistance">Umkreis:</label>

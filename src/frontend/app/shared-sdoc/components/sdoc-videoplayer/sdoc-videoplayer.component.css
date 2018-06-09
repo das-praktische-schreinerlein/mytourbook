@@ -30,7 +30,7 @@ div.fullscreenvideo-container a {
     color: white;
 }
 
-a.fullscreenvideo-close {
+.fullscreenvideo-close {
     display: inline-block;
     float: right;
 }
