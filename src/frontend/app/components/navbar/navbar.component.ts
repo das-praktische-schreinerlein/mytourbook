@@ -4,6 +4,7 @@ import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record
 import {ToastsManager} from 'ng2-toastr';
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
+import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-navbar',
@@ -12,10 +13,12 @@ import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit {
+    private config;
     sections: PDocRecord[];
+    albumAllowed = false;
     public isExpanded = false;
 
-    constructor(private route: ActivatedRoute, private toastr: ToastsManager, vcr: ViewContainerRef,
+    constructor(private route: ActivatedRoute, private toastr: ToastsManager, vcr: ViewContainerRef, private appService: GenericAppService,
                 private pdocDataService: PDocDataService, private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
         this.toastr.setRootViewContainerRef(vcr);
     }
@@ -23,6 +26,19 @@ export class NavbarComponent implements OnInit {
     ngOnInit() {
         // Subscribe to route params
         const me = this;
+        this.appService.getAppState().subscribe(appState => {
+            if (appState === AppState.Ready) {
+                this.config = this.appService.getAppConfig();
+                if (this.config && this.config['sdocMaxItemsPerAlbum'] > 0) {
+                    this.albumAllowed = true;
+                    return;
+                }
+
+            }
+
+            this.albumAllowed = false;
+        });
+
         this.route.data.subscribe(
             (data: { pdocs: PDocRecord[] }) => {
                 me.sections = [];

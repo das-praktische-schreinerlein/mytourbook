@@ -15,6 +15,7 @@
 - frontend: improved tagcloud, timetable, typetable-links
 - frontend: configurable cookiename for cookie-law
 - frontend: improved list-layout (select-box -> links)
+- frontend: improved albumlayout/show in navbar
  
 ### bug fixes
 - frontend: fixed layoutbugs in mobile-version (cookielaw-width)

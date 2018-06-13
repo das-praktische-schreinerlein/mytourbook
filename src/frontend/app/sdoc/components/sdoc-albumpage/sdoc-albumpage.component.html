@@ -7,18 +7,28 @@
                     <fieldset>
                         <legend i18n="album label|Label for fieldset: album@@label.editform.album.legend.base">Album</legend>
                         <div class="row">
-                            <div class="col-sm-12 form-inline input-group input-group-sm">
+                            <div class="col-sm-2 form-inline input-group input-group-sm">
+                                <button type="button" (click)="doShow()" class="btn btn-action btn-sm" i18n="button show album|Buttontext to show album@@button.form.album.show">Album Ansehen</button>
+                            </div>
+                            <div class="col-sm-2 form-inline input-group input-group-sm">
+                                <button type="button" (click)="onAlbumReset()" class="btn btn-action btn-sm" i18n="button reset album|Buttontext to reset album@@button.form.album.reset">Album zurücksetzen</button>
+                            </div>
+                            <div class="col-sm-2 form-inline input-group input-group-sm">
+                                <button type="button" (click)="doSaveAsFile()" class="btn btn-action btn-sm" i18n="button saveAsFile album|Buttontext to saveAsFile album@@button.form.album.saveAsFile">Album Exportieren</button>
+                            </div>
+                            <div class="col-sm-6 form-inline input-group input-group-sm album-dropzone">
+                                <label class="col-xs-3 col-form-label mr-2" i18n="albumImportFile label|Label for field: albumImportFile@@label.albumeditform.album.albumImportFile">Album aus Datei laden:</label>
+                                <input type="file" accept=".json" (change)="onFileSelected($event)" />
+                                <file-drop (onFileDrop)="onFileDropped($event)" i18n-headertext="fileFileDropZone label|Label for button: fileFileDropZone@@label.form.sdoc.fileFileDropZone">Album-Datei dropzone</file-drop>
+                            </div>
+                        </div>
+                        <div class="row hidden">
+                            <div class="col-sm-6 form-inline input-group input-group-sm">
                                 <label class="col-xs-3 col-form-label mr-2" i18n="albumSdocIds label|Label for field: albumSdocIds@@label.albumeditform.album.albumSdocIds">Ids:</label>
                                 <textarea formControlName="albumSdocIds" class="form-control" type="text" placeholder="ids" i18n-placeholder="albumSdocIds placeholder|Placeholder for albumSdocIds@@placeholder.form.album.albumSdocIds"></textarea>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 form-inline input-group input-group-sm">
+                            <div class="col-sm-6 form-inline input-group input-group-sm">
                                 <button type="submit" class="btn btn-action btn-sm" i18n="button edit album|Buttontext to edit album@@button.form.album.edit">Speichern</button>
-                            </div>
-                            <div class="col-sm-8 form-inline input-group input-group-sm">
-                                <button type="button" (click)="doSaveAsFile()" class="btn btn-action btn-sm" i18n="button saveAsFile album|Buttontext to saveAsFile album@@button.form.album.saveAsFile">Als Datei speichern</button>
-                                <file-drop (onFileDrop)="onFileDropped($event)" i18n-headertext="fileFileDropZone label|Label for button: fileFileDropZone@@label.form.sdoc.fileFileDropZone">Album-File dropzone</file-drop>
                             </div>
                         </div>
                     </fieldset>

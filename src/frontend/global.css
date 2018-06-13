@@ -83,6 +83,10 @@ body {
     width: 100%;
 }
 
+.hidden {
+    display: none;
+}
+
 /**
  * color-themes
  */
@@ -206,6 +210,17 @@ button.buttonselect {
 
 div.humanReadableSearchFilter div.filter {
     display: inline;
+}
+
+.album-dropzone{
+    max-height: 40px;
+}
+.album-dropzone file-drop, .album-dropzone #dropZone, .album-dropzone #dropZone > div {
+    max-height: inherit;
+}
+
+.album-dropzone:hover, .album-dropzone #dropZone:hover, .album-dropzone #dropZone > div:hover {
+    max-height: 100px;
 }
 
 

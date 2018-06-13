@@ -10,6 +10,8 @@ import {ToastsManagerStub} from '../../../testing/toasts-stubs';
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
 import {PDocDataServiceStub} from '../../../testing/pdoc-dataservice-stubs';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
+import {AppServiceStub} from '../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;
@@ -29,6 +31,7 @@ describe('NavbarComponent', () => {
                 { provide: PDocDataService, useValue: new PDocDataServiceStub() },
                 {provide: ToastsManager, useValue: new ToastsManagerStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+                {provide: GenericAppService, useValue: new AppServiceStub() },
                 PageUtils
             ],
         })

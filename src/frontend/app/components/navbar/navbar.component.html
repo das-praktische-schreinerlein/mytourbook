@@ -57,6 +57,9 @@
                     -->
                 </ul>
             </li>
+            <li class="nav-item" *ngIf="albumAllowed">
+                <a class="nav-link mdl-navigation__link" routerLink="/sdoc/album/edit/Current/dateAsc/20/1" routerLinkActive="active" i18n="link favorites navBar|Link favorites navBar@@a.navBar.favorites">&#x2764; Favoriten</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link mdl-navigation__link" routerLink="/pages/impress" routerLinkActive="active" i18n="link impress navBar|Link impress navBar@@a.navBar.impress">Impressum/Datenschutz</a>
             </li>
