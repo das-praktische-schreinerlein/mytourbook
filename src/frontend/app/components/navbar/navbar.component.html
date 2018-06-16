@@ -13,6 +13,10 @@
                 <a class="nav-link mdl-navigation__link" routerLink="/sections/start/search" routerLinkActive="active" i18n="link search navBar|Link search navBar@@a.navBar.search">Suche</a>
             </li>
 
+            <li class="nav-item" *ngIf="albumAllowed">
+                <a class="nav-link mdl-navigation__link" routerLink="/sdoc/album/edit/Current/dateAsc/20/1" routerLinkActive="active" i18n="link favorites navBar|Link favorites navBar@@a.navBar.favorites">&#x2764; Favoriten</a>
+            </li>
+
             <ng-container *ngIf="sections !== undefined && sections.length > 0">
                 <ng-container *ngFor="let menuSection of sections">
                     <li class="nav-item">
@@ -44,6 +48,7 @@
                 </ng-container>
             </ng-container>
 
+<!--
             <li class="nav-item">
                 <a class="nav-link mdl-navigation__link">Settings</a>
             </li>
@@ -52,14 +57,10 @@
                 <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdownMenuLinkSettings" role="menu">
                     <li class="dropdown-item"><div class="navbar-right"><app-browser-onoffline></app-browser-onoffline></div></li>
                     <div class="dropdown-divider"></div>
-                    <!--
                     <li class="dropdown-item"><app-switch-onoffline></app-switch-onoffline></li>
-                    -->
                 </ul>
             </li>
-            <li class="nav-item" *ngIf="albumAllowed">
-                <a class="nav-link mdl-navigation__link" routerLink="/sdoc/album/edit/Current/dateAsc/20/1" routerLinkActive="active" i18n="link favorites navBar|Link favorites navBar@@a.navBar.favorites">&#x2764; Favoriten</a>
-            </li>
+-->
             <li class="nav-item">
                 <a class="nav-link mdl-navigation__link" routerLink="/pages/impress" routerLinkActive="active" i18n="link impress navBar|Link impress navBar@@a.navBar.impress">Impressum/Datenschutz</a>
             </li>
