@@ -43,7 +43,7 @@ export class SDocSearchService extends GenericSearchService <SDocRecord, SDocSea
                 typeSearchForm.moreFilter = 'id:' + idTranche.join(',');
                 typeSearchForm.type = type;
                 typeSearchForm.perPage = this.maxPerRun;
-                typeSearchForm.pageNum = page;
+                typeSearchForm.pageNum = 1;
                 typeSearchForm.sort = 'dateAsc';
                 promises.push(me.search(typeSearchForm, {
                     showFacets: false,
