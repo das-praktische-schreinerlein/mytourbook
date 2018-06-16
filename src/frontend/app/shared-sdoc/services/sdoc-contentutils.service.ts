@@ -39,6 +39,7 @@ export interface ItemData {
     video: SDocVideoRecord;
     thumbnailUrl: SafeUrl;
     previewUrl: SafeUrl;
+    fullUrl: SafeUrl;
     tracks?: SDocRecord[];
     flgShowMap?: boolean;
     flgShowProfileMap?: boolean;
@@ -441,6 +442,7 @@ export class SDocContentUtils {
             itemData.video = undefined;
             itemData.thumbnailUrl = undefined;
             itemData.previewUrl = undefined;
+            itemData.fullUrl = undefined;
             itemData.flgShowMap = false;
             itemData.flgShowProfileMap = false;
             itemData.tracks = [];
@@ -454,15 +456,18 @@ export class SDocContentUtils {
         itemData.video = undefined;
         itemData.thumbnailUrl = undefined;
         itemData.previewUrl = undefined;
+        itemData.fullUrl = undefined;
 
         if (itemData.currentRecord['sdocimages'] !== undefined && itemData.currentRecord['sdocimages'].length > 0) {
             itemData.image = itemData.currentRecord['sdocimages'][0];
             itemData.thumbnailUrl = this.getThumbnailUrl(itemData.image);
             itemData.previewUrl = this.getPreviewUrl(itemData.image);
+            itemData.fullUrl = this.getFullUrl(itemData.image);
         } else if (itemData.currentRecord['sdocvideos'] !== undefined && itemData.currentRecord['sdocvideos'].length > 0) {
             itemData.video = itemData.currentRecord['sdocvideos'][0];
             itemData.thumbnailUrl = this.getVideoThumbnailUrl(itemData.video);
             itemData.previewUrl = this.getVideoPreviewUrl(itemData.video);
+            itemData.fullUrl = this.getFullVideoUrl(itemData.video);
         }
 
         if (record !== undefined && (record.gpsTrackBasefile || record.geoLoc !== undefined

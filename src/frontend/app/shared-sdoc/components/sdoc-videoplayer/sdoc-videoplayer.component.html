@@ -7,9 +7,9 @@
                     &#x2612;</span>
                 <br/>
                 <video [style.max-width]="maxFullWidth + 'px'" [style.max-height]="maxFullHeight + 'px'" controls="controls" class="picture-big" title="{{listItem.video.name}}" preload="metadata" autoplay="autoplay">
-                    <source [src]="contentUtils.getFullVideoUrl(listItem.video)" />
-                    <object [data]="contentUtils.getFullVideoUrl(listItem.video)" [width]="maxFullWidth">
-                        <embed [src]="contentUtils.getFullVideoUrl(listItem.video)" [width]="maxFullWidth">
+                    <source [src]="listItem.fullUrl" />
+                    <object [data]="listItem.fullUrl" [width]="maxFullWidth">
+                        <embed [src]="listItem.fullUrl" [width]="maxFullWidth">
                     </object>
                 </video>
                 <br />
@@ -42,9 +42,9 @@
     <div *ngIf="listItem.video && !showPreview" class="video-player-container">
         <div [class]="styleClass + ' video-player'">
             <video #videoPlayer2 [attr.width]="forceWidth !== undefined ? forceWidth : null" [style.max-width]="maxWidth + 'px'" [style.max-height]="maxHeight + 'px'" controls="controls" [class]="styleClass" title="{{listItem.video.name}}" preload="metadata">
-                <source [src]="contentUtils.getFullVideoUrl(listItem.video)" />
-                <object [data]="contentUtils.getFullVideoUrl(listItem.video)" [width]="maxWidth">
-                    <embed [src]="contentUtils.getFullVideoUrl(listItem.video)" [width]="maxWidth">
+                <source [src]="listItem.fullUrl" />
+                <object [data]="listItem.fullUrl" [width]="maxWidth">
+                    <embed [src]="listItem.fullUrl" [width]="maxWidth">
                 </object>
             </video>
         </div>

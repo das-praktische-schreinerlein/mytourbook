@@ -68,11 +68,11 @@
                 <div class="col-sm-2" *ngIf="autoPlayAllowed">
                     <app-interval-control (intervalNext)="onAlbumIntervalNext()" (intervalStarted)="onAlbumIntervalStarted()"></app-interval-control>
                 </div>
-                <div [class]="(autoPlayAllowed ? 'col-sm-10' : 'col-sm-12')">
+                <div [class]="(autoPlayAllowed ? 'col-sm-10' : 'col-sm-12')" *ngIf="searchResult.recordCount > 0">
                     <ngb-pagination (pageChange)="onCurRecordChange($event)"
                                     [pageSize]="1"
                                     [collectionSize]="searchResult.recordCount"
-                                    [page]="curRecordNr"
+                                    [page]="listSearchForm.pageNum"
                                     [maxSize]="10"
                                     [rotate]="true"
                                     [ellipses]="false"

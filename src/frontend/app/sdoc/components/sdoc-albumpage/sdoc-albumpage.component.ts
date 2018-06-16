@@ -170,6 +170,11 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     onCurRecordChange(page: number) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
         if (page < 1) {
             page = 1;
         }
@@ -177,9 +182,9 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
             page = 1;
         }
         this.curRecordNr = page;
-        this.loadRecord(this.curRecordNr);
-        this.cd.markForCheck();
-        this.pageUtils.scrollToTop();
+        this.searchForm.pageNum = this.curRecordNr;
+        this.listSearchForm.pageNum = this.curRecordNr;
+        this.redictToSearch();
 
         return false;
     }
@@ -256,10 +261,20 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     onPlayerStarted(sdoc: SDocRecord) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
         this.pauseAutoPlay = true;
     }
 
     onPlayerStopped(sdoc: SDocRecord) {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
         this.pauseAutoPlay = false;
     }
 
@@ -280,6 +295,12 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     doShow(): boolean {
         this.commonRoutingService.navigateByUrl(['sdoc/album/show', this.albumKey, this.listSearchForm.sort, 1,
             ((this.listSearchForm.pageNum - 1) * this.listSearchForm.perPage) + 1].join('/'));
+        return false;
+    }
+
+    redictToSearch(): boolean {
+        this.commonRoutingService.navigateByUrl(['sdoc/album/show', this.albumKey, this.listSearchForm.sort, 1,
+            this.curRecordNr].join('/'));
         return false;
     }
 
@@ -322,19 +343,28 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     onAlbumIntervalNext(): boolean {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
         const me = this;
         if (me.pauseAutoPlay) {
             return false;
         }
 
         me.onCurRecordChange(me.curRecordNr + 1);
-        this.searchForm.pageNum = this.curRecordNr;
-        this.listSearchForm.pageNum = this.curRecordNr;
+        this.redictToSearch();
 
         return false;
     }
 
     onAlbumIntervalStarted(): boolean {
+        if (!this.initialized) {
+            // ignore changes if not initialized
+            return;
+        }
+
         const me = this;
         me.listSearchForm.pageNum = me.curRecordNr;
 
@@ -387,6 +417,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     private doSearch() {
+        this.initialized = false;
         this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.sdocRoutingService.setLastSearchUrl(this.route.toString());
 
