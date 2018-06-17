@@ -1,7 +1,7 @@
 <ng-template #contentContainer>
     <div class="container content-container" *ngIf="(pdoc.descHtml !== undefined && pdoc.descHtml.length > 0) || (pdoc.descMd !== undefined && pdoc.descMd.length > 0)">
         <img src="{{pdoc.image}}" width="170px" class="picture" style="float: left; margin: 0 15px 15px 0;" alt="{{pdoc.name}}" *ngIf="pdoc.image !== undefined && pdoc.image.length > 0">
-        <div id="desc"></div>
+        <div id="desc" class="section-desc"></div>
         {{ renderDesc() }}
         <br clear="both">
     </div>
