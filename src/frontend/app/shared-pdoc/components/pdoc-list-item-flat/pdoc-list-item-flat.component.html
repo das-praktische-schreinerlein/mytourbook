@@ -5,7 +5,7 @@
                 <img src="{{record.image}}" width="170px" class="picture" style="float: left; margin: 0 15px 15px 0;" alt="{{record.name}}">
             </a>
             <a class="" [href]="getShowUrl(record)" (click)="submitShow(record)"><h6><span class="fx-bg-theme">{{record.name}}</span></h6></a>
-            <p class="">{{record.descTxt}}</p>
+            <p class="">{{record.descTxt || record.teaser}}</p>
             <a class="btn btn-navigation pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
         </div>
     </ng-container>
@@ -14,7 +14,7 @@
             <a [href]="getShowUrl(record)" (click)="submitShow(record)"><h6><span class="fx-bg-theme">{{record.name}}</span></h6></a>
         </div>
         <div class="col-9">
-            <p class="">{{record.descTxt}}</p>
+            <p class="">{{record.descTxt || record.teaser}}</p>
             <a class="btn btn-navigation pull-right" [href]="getShowUrl(record)" (click)="submitShow(record)" i18n="link pdoc listitem|Link show-pdoc listitem@@a.pdocListItem.show">mehr...</a>
         </div>
     </ng-container>
