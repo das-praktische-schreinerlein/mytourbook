@@ -74,7 +74,6 @@ export class SDocVideoplayerComponent implements OnChanges {
             this.maxFullWidth = Math.min(1200, window.innerWidth - 50);
             this.maxFullHeight = Math.min(1200, window.innerHeight - 80);
         }
-        console.error("blimblam", this.forceWidth);
         this.contentUtils.updateItemData(this.listItem, this.record, 'default');
         this.cd.markForCheck();
     }
