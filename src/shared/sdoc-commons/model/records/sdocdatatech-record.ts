@@ -1,12 +1,6 @@
-import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
+import {BaseDataTechRecord} from './basedatatech-record';
 
-export class SDocDataTechRecord extends BaseEntityRecord {
-    altAsc: number;
-    altDesc: number;
-    altMax: number;
-    altMin: number;
-    dist: number;
-    dur: number;
+export class SDocDataTechRecord extends BaseDataTechRecord {
     sdoc_id: string;
 
     toString() {

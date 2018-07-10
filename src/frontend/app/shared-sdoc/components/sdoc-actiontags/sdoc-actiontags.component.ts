@@ -1,12 +1,12 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {BaseEntityRecord} from '../../../../shared/search-commons/model/records/base-entity-record';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ActionTag, ActionTagConfig, ActionTagUtils} from '../../../../shared/commons/utils/actiontag.utils';
 import {SDocAlbumService} from '../../services/sdoc-album.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {SDocContentUtils, SDocItemData} from '../../services/sdoc-contentutils.service';
 
 export interface ActionTagEvent {
     record: BaseEntityRecord;
@@ -24,7 +24,7 @@ export interface ActionTagEvent {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocActionTagsComponent implements OnInit, OnChanges {
-    item: ItemData = {
+    item: SDocItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
         thumbnailUrl: undefined,
@@ -105,7 +105,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
         if (this.record === undefined) {
             this.tags = [];
         } else {
-            this.sdocAlbumService.initAlbenForSDocId(this.item.currentRecord);
+            this.sdocAlbumService.initAlbenForSDocId(<SDocRecord>this.item.currentRecord);
             this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord, this.config);
         }
 

@@ -3,7 +3,7 @@ import {
     SimpleChange
 } from '@angular/core';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {StructuredKeyword, StructuredKeywordState} from '../../services/sdoc-contentutils.service';
+import {StructuredKeyword, StructuredKeywordState} from '../../services/cdoc-contentutils.service';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 

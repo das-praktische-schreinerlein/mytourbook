@@ -10,10 +10,10 @@ import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service'
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
@@ -37,10 +37,10 @@ describe('SDocEditformComponent', () => {
                 SDocSearchFormUtils,
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
-                SDocRoutingService,
+                CommonDocRoutingService,
                 SearchFormUtils,
                 SearchParameterUtils,
-                SDocContentUtils,
+                CDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA]

@@ -1,13 +1,6 @@
-import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
+import {BaseRateTechRecord} from './baseratetech-record';
 
-export class SDocRateTechRecord extends BaseEntityRecord {
-    bergtour: string;
-    firn: string;
-    gletscher: string;
-    klettern: string;
-    ks: string;
-    overall: string;
-    schneeschuh: string;
+export class SDocRateTechRecord extends BaseRateTechRecord {
     sdoc_id: string;
 
     toString() {

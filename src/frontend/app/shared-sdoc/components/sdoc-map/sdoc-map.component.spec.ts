@@ -5,12 +5,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {SDocMapComponent} from './sdoc-map.component';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {Router} from '@angular/router';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocMapComponent', () => {
     let component: SDocMapComponent;
@@ -25,7 +25,7 @@ describe('SDocMapComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 PlatformService,
                 CommonRoutingService,
-                SDocRoutingService,
+                CommonDocRoutingService,
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ]

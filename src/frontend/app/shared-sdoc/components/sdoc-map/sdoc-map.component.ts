@@ -4,8 +4,8 @@ import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-map',

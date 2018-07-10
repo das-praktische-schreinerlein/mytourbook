@@ -4,10 +4,10 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemFlatComponent} from './sdoc-list-item-flat.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
@@ -26,8 +26,8 @@ describe('SDocListItemFlatComponent', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
-                SDocRoutingService,
-                SDocContentUtils,
+                CommonDocRoutingService,
+                CDocContentUtils,
                 DatePipe,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 LayoutService

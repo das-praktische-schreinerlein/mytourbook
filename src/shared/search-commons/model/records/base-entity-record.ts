@@ -19,14 +19,20 @@ export class BaseEntityRecordFieldConfig {
     }
 }
 
-export class BaseEntityRecord extends Record {
+export interface BaseEntityRecordType {
+    id: string;
+    toString(useWrapper?, includeId?): string;
+    isValid(): boolean;
+}
+
+export class BaseEntityRecord extends Record implements BaseEntityRecordType {
     static genericFields = {
         id: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
     id: string;
 
-    toString(useWrapper, includeId) {
+    toString(useWrapper, includeId): string {
         useWrapper = typeof useWrapper === 'boolean' ? useWrapper : true;
         includeId = typeof includeId === 'boolean' ? includeId : true;
         return (useWrapper ? '{\n' : '') +

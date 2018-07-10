@@ -19,7 +19,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
@@ -95,7 +95,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
 
     constructor(private appService: GenericAppService, private commonRoutingService: CommonRoutingService,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
-                private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private cdocRoutingService: CommonDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 private cd: ChangeDetectorRef, private elRef: ElementRef, private pageUtils: PageUtils) {
         this.searchForm = new SDocSearchForm({});
         this.searchResult = new SDocSearchResult(this.searchForm, 0, [], new Facets());
@@ -125,7 +125,7 @@ export class SDocInlineSearchpageComponent implements OnInit, OnDestroy, OnChang
     }
 
     onShowSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToShow(sdoc, '');
+        this.cdocRoutingService.navigateToShow(sdoc, '');
         return false;
     }
 

@@ -1,45 +1,15 @@
 import {Injectable} from '@angular/core';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {SDocImageRecord} from '../../../shared/sdoc-commons/model/records/sdocimage-record';
+import {DomSanitizer} from '@angular/platform-browser';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plugin';
-import {SDocRoutingService} from './sdoc-routing.service';
+import {CommonDocRoutingService} from './cdoc-routing.service';
 import * as L from 'leaflet';
-import {FilterUtils, SimpleFilter} from '../../../shared/commons/utils/filter.utils';
 import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
-import {SDocVideoRecord} from '../../../shared/sdoc-commons/model/records/sdocvideo-record';
+import {CDocContentUtils, CommonItemData} from './cdoc-contentutils.service';
 import LatLng = L.LatLng;
 
-export enum KeywordsState {
-    SET, NOTSET, SUGGESTED
-}
-
-export interface StructuredKeyword {
-    name: string;
-    keywords: string[];
-}
-
-export interface StructuredKeywordState {
-    name: string;
-    keywords: { keyword: string; state: KeywordsState}[];
-}
-
-export interface KeywordSuggestion {
-    name: string;
-    filters: SimpleFilter[];
-    keywords: string[];
-}
-
-export interface ItemData {
-    currentRecord: SDocRecord;
-    styleClassFor: string[];
-    urlShow: SafeUrl;
-    image: SDocImageRecord;
-    video: SDocVideoRecord;
-    thumbnailUrl: SafeUrl;
-    previewUrl: SafeUrl;
-    fullUrl: SafeUrl;
+export interface SDocItemData extends CommonItemData {
     tracks?: SDocRecord[];
     flgShowMap?: boolean;
     flgShowProfileMap?: boolean;
@@ -48,9 +18,10 @@ export interface ItemData {
 }
 
 @Injectable()
-export class SDocContentUtils {
+export class SDocContentUtils extends CDocContentUtils {
 
-    constructor(private sanitizer: DomSanitizer, private sdocRoutingService: SDocRoutingService, private appService: GenericAppService) {
+    constructor(sanitizer: DomSanitizer, cdocRoutingService: CommonDocRoutingService, appService: GenericAppService) {
+        super(sanitizer, cdocRoutingService, appService);
     }
 
     getLocationHierarchy(record: SDocRecord, lastOnly: boolean): any[] {
@@ -79,160 +50,10 @@ export class SDocContentUtils {
         return hierarchy;
     }
 
-    getThumbnails(record: SDocRecord): SDocImageRecord[] {
-        return record['sdocimages'].filter((item, index) => index < 10);
-    }
-
-    getThumbnail(image: SDocImageRecord): string {
-        return this.getImageUrl(image, 'x100');
-    }
-
-    getVideoThumbnail(image: SDocVideoRecord): string {
-        return this.getVideoUrl(image, 'screenshot', '.jpg');
-    }
-
-    getThumbnailUrl(image: SDocImageRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getThumbnail(image));
-    }
-
-    getVideoThumbnailUrl(image: SDocVideoRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoThumbnail(image));
-    }
-
-    getPreview(image: SDocImageRecord): string {
-        return this.getImageUrl(image, 'x600');
-    }
-
-    getVideoPreview(image: SDocVideoRecord): string {
-        return this.getVideoUrl(image, 'thumbnail', '.gif.mp4');
-    }
-
-    getPreviewUrl(image: SDocImageRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getPreview(image));
-    }
-
-    getVideoPreviewUrl(image: SDocVideoRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoPreview(image));
-    }
-
-    getFullUrl(image: SDocImageRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getImageUrl(image, 'x600'));
-    }
-
-    getFullVideoUrl(video: SDocVideoRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoUrl(video, 'x600'));
-    }
-
-    getImageUrl(image: SDocImageRecord, resolution: string): string {
-        if (image === undefined) {
-            return 'not found';
-        }
-
-        if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
-            return this.appService.getAppConfig()['picsBaseUrl'] + resolution + '/' + image.sdoc_id;
-        } else {
-            return this.appService.getAppConfig()['picsBaseUrl'] + 'pics_' + resolution + '/' + image.fileName;
-        }
-    }
-    getVideoUrl(video: SDocVideoRecord, resolution: string, suffix?: string): string {
-        if (video === undefined) {
-            return 'not found';
-        }
-
-        if (this.appService.getAppConfig()['useVideoAssetStoreUrls'] === true) {
-            return this.appService.getAppConfig()['videoBaseUrl'] + resolution + '/' + video.sdoc_id;
-        } else {
-            return this.appService.getAppConfig()['videoBaseUrl'] + 'video_' + resolution + '/' + video.fileName + (suffix ? suffix : '');
-        }
-    }
-
     getStyleClassForRecord(record: SDocRecord, layout: string): string[] {
         const value = record['sdocratepers'] || {gesamt: 0};
         const rate = Math.round(((value['gesamt'] || 0) / 3) + 0.5);
         return ['list-item-persrate-' + rate, 'list-item-' + layout + '-persrate-' + rate];
-    }
-
-    getSuggestedKeywords(suggestionConfigs: KeywordSuggestion[], prefix: string, values: any): string[] {
-        let suggestions = [];
-        for (const suggestionConfig of suggestionConfigs) {
-            if (FilterUtils.checkFilters(suggestionConfig.filters, values)) {
-                suggestions = suggestions.concat(suggestionConfig.keywords);
-            }
-        }
-
-        if (prefix !== undefined && prefix.length > 0) {
-            for (let i = 0; i < suggestions.length; i++) {
-                suggestions[i] = prefix + suggestions[i];
-            }
-        }
-
-        return suggestions;
-    }
-
-    getStructuredKeywords(config: StructuredKeyword[], keywords: string[], blacklist: string[], possiblePrefixes: string[]):
-        StructuredKeyword[] {
-        const keywordKats: StructuredKeyword[] = [];
-        if (keywords === undefined || keywords.length < 1) {
-            return keywordKats;
-        }
-        for (const keyword of blacklist) {
-            if (keywords.indexOf(keyword) > -1) {
-                // TODO remove
-            }
-        }
-
-        for (const keywordKat of config) {
-            const keywordFound = [];
-            for (const keyword of keywordKat.keywords) {
-                for (const prefix of (possiblePrefixes || [])) {
-                    const searchPrefix = prefix + keyword;
-                    if (keywords.indexOf(searchPrefix) > -1) {
-                        keywordFound.push(keyword);
-                        break;
-                    }
-                }
-            }
-            if (keywordFound.length > 0) {
-                keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
-            }
-        }
-
-        return keywordKats;
-    }
-
-    getStructuredKeywordsState(config: StructuredKeyword[], keywords: string[], suggested: string[], possiblePrefixes: string[]):
-        StructuredKeywordState[] {
-        const keywordKats: StructuredKeywordState[] = [];
-        if (keywords === undefined || keywords.length < 1) {
-            keywords = [];
-        }
-
-        for (const keywordKat of config) {
-            const keywordFound = [];
-            for (const keyword of keywordKat.keywords) {
-                let found = false;
-                for (const prefix of (possiblePrefixes || [])) {
-                    const searchPrefix = prefix + keyword;
-                    if (keywords.indexOf(searchPrefix) > -1) {
-                        keywordFound.push({keyword: keyword, state: KeywordsState.SET});
-                        found = true;
-                        break;
-                    } else if (suggested.indexOf(searchPrefix) > -1) {
-                        found = true;
-                        keywordFound.push({keyword: keyword, state: KeywordsState.SUGGESTED});
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    keywordFound.push({keyword: keyword, state: KeywordsState.NOTSET});
-                }
-
-            }
-            keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
-        }
-
-        return keywordKats;
     }
 
     getSDocSubItemFiltersForType(record: SDocRecord, type: string, theme: string, minPerPage?: number): any {
@@ -425,38 +246,16 @@ export class SDocContentUtils {
         return mapElements;
     }
 
-    calcRate(rate: number, max: number): number {
-        return Math.round((rate / 15 * max) + 0.5);
-    }
-
-    getShowUrl(record: SDocRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustUrl(this.sdocRoutingService.getShowUrl(record, ''));
-    }
-
-    updateItemData(itemData: ItemData, record: SDocRecord, layout: string): boolean {
+    updateItemData(itemData: SDocItemData, record: SDocRecord, layout: string): boolean {
+        super.updateItemData(itemData, record, layout);
         if (record === undefined) {
-            itemData.currentRecord = undefined;
-            itemData.styleClassFor = undefined;
-            itemData.urlShow = undefined;
-            itemData.image = undefined;
-            itemData.video = undefined;
-            itemData.thumbnailUrl = undefined;
-            itemData.previewUrl = undefined;
-            itemData.fullUrl = undefined;
             itemData.flgShowMap = false;
             itemData.flgShowProfileMap = false;
             itemData.tracks = [];
             return false;
         }
 
-        itemData.currentRecord = record;
-        itemData.styleClassFor = this.getStyleClassForRecord(itemData.currentRecord, layout);
-        itemData.urlShow = this.getShowUrl(itemData.currentRecord);
-        itemData.image = undefined;
-        itemData.video = undefined;
-        itemData.thumbnailUrl = undefined;
-        itemData.previewUrl = undefined;
-        itemData.fullUrl = undefined;
+        itemData.styleClassFor = this.getStyleClassForRecord(<SDocRecord>itemData.currentRecord, layout);
 
         if (itemData.currentRecord['sdocimages'] !== undefined && itemData.currentRecord['sdocimages'].length > 0) {
             itemData.image = itemData.currentRecord['sdocimages'][0];

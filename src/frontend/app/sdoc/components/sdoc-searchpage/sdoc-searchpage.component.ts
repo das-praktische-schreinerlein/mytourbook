@@ -7,7 +7,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
@@ -64,7 +64,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
-                private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private cdocRoutingService: CommonDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
                 private platformService: PlatformService, private layoutService: LayoutService) {
         this.searchForm = new SDocSearchForm({});
@@ -209,7 +209,7 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
     }
 
     onShowSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToShow(sdoc, this.sdocRoutingService.getLastSearchUrl());
+        this.cdocRoutingService.navigateToShow(sdoc, this.cdocRoutingService.getLastSearchUrl());
         return false;
     }
 
@@ -392,8 +392,8 @@ export class SDocSearchpageComponent implements OnInit, OnDestroy {
         }
 
         // console.log('doSearch form:', this.searchForm);
-        this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
-        this.sdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
+        this.cdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
+        this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
 
         const me = this;
         me.showLoadingSpinner = true;

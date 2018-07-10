@@ -1,13 +1,11 @@
-import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
+import {BaseImageRecord} from '../../../search-commons/model/records/baseimage-record';
 
-export class SDocImageRecord extends BaseEntityRecord {
-    descTxt: string;
-    descMd: string;
-    descHtml: string;
-    fileName: string;
-    name: string;
+export class SDocImageRecord extends BaseImageRecord {
     sdoc_id: string;
 
+    getMediaId(): string {
+        return this.sdoc_id;
+    }
     toString() {
         return 'SDocImageRecord Record {\n' +
             '  id: ' + this.id + ',\n' +

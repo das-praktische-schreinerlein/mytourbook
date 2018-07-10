@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {KeywordsState, SDocContentUtils, StructuredKeyword, StructuredKeywordState} from '../../services/sdoc-contentutils.service';
+import {KeywordsState, CDocContentUtils, StructuredKeyword, StructuredKeywordState} from '../../services/cdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-tagsstate',
@@ -36,7 +36,7 @@ export class SDocTagsStateComponent implements OnChanges {
     @Output()
     public tagsFound: EventEmitter<StructuredKeywordState[]> = new EventEmitter();
 
-    constructor(private contentUtils: SDocContentUtils) {
+    constructor(private contentUtils: CDocContentUtils) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {

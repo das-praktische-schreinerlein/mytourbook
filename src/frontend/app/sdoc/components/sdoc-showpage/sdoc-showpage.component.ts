@@ -2,9 +2,8 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
-import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
@@ -26,6 +25,7 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {isArray, isNumber} from 'util';
+import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -81,7 +81,7 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         'NEWS': true
     };
 
-    constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
+    constructor(private route: ActivatedRoute, private cdocRoutingService: CommonDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
@@ -344,12 +344,12 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     }
 
     submitBackToSearch() {
-        this.sdocRoutingService.navigateBackToSearch('#' + this.record.id);
+        this.cdocRoutingService.navigateBackToSearch('#' + this.record.id);
         return false;
     }
 
     getBackToSearchUrl(): string {
-        return this.sdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
+        return this.cdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
     }
 
     getFiltersForType(record: SDocRecord, type: string): any {

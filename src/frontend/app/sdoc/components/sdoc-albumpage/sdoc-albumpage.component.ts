@@ -7,7 +7,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {IdCsvValidationRule, IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
@@ -55,7 +55,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
-                private sdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private cdocRoutingService: CommonDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
                 public fb: FormBuilder, private sdocAlbumService: SDocAlbumService, private appService: GenericAppService) {
         this.searchForm = new SDocSearchForm({});
@@ -190,7 +190,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     }
 
     onShowSDoc(sdoc: SDocRecord) {
-        this.sdocRoutingService.navigateToShow(sdoc, this.sdocRoutingService.getLastSearchUrl());
+        this.cdocRoutingService.navigateToShow(sdoc, this.cdocRoutingService.getLastSearchUrl());
         return false;
     }
 
@@ -418,8 +418,8 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
     private doSearch() {
         this.initialized = false;
-        this.sdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
-        this.sdocRoutingService.setLastSearchUrl(this.route.toString());
+        this.cdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
+        this.cdocRoutingService.setLastSearchUrl(this.route.toString());
 
         const ids = this.searchForm.moreFilter.replace(/id:/g, '').split(',');
         this.editFormGroup = this.fb.group({

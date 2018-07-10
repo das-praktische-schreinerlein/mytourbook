@@ -6,12 +6,12 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {Lightbox, LightboxConfig, LightboxEvent} from 'angular2-lightbox';
 import {SDocLightBoxService} from '../../services/sdoc-lightbox.service';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
@@ -30,8 +30,8 @@ describe('SDocListComponent', () => {
                 SDocSearchFormConverter,
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
-                SDocRoutingService,
-                SDocContentUtils,
+                CommonDocRoutingService,
+                CDocContentUtils,
                 LightboxEvent,
                 LightboxConfig,
                 Lightbox,

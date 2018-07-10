@@ -4,10 +4,9 @@ import {SDocShowpageComponent} from './sdoc-showpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
-import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
@@ -27,6 +26,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -48,7 +48,7 @@ describe('SDocShowpageComponent', () => {
                 PlatformService,
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
-                SDocRoutingService,
+                CommonDocRoutingService,
                 ToastsManager,
                 TranslateService,
                 MarkdownService,

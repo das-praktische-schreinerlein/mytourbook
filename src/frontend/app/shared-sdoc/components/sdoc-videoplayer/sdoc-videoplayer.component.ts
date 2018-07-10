@@ -1,9 +1,16 @@
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChange,
     ViewChild
 } from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 
 @Component({
@@ -13,8 +20,8 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocVideoplayerComponent implements OnChanges {
-    public contentUtils: SDocContentUtils;
-    listItem: ItemData = {
+    public contentUtils: CDocContentUtils;
+    listItem: CommonItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
         thumbnailUrl: undefined,
@@ -52,7 +59,7 @@ export class SDocVideoplayerComponent implements OnChanges {
     @Output()
     public show: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {
+    constructor(contentUtils: CDocContentUtils, private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
     }
 

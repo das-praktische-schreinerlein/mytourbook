@@ -5,7 +5,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.resolver';
@@ -58,7 +58,7 @@ export class SectionPageComponent implements OnInit {
 
     constructor(private route: ActivatedRoute, private pdocDataService: PDocDataService,
                 private commonRoutingService: CommonRoutingService, private searchFormConverter: SDocSearchFormConverter,
-                private errorResolver: ErrorResolver, private sDocRoutingService: SDocRoutingService,
+                private errorResolver: ErrorResolver, private sDocRoutingService: CommonDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, private pageUtils: PageUtils,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private platformService: PlatformService,

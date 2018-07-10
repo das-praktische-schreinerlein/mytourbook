@@ -15,7 +15,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
-import {KeywordsState, SDocContentUtils, StructuredKeywordState} from '../../services/sdoc-contentutils.service';
+import {KeywordsState, CDocContentUtils, StructuredKeywordState} from '../../services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
@@ -254,7 +254,7 @@ export class SDocEditformComponent implements OnChanges {
 
     constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef,
                 private appService: GenericAppService, private searchFormUtils: SDocSearchFormUtils,
-                private sdocDataService: SDocDataService, private contentUtils: SDocContentUtils) {
+                private sdocDataService: SDocDataService, private contentUtils: CDocContentUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 

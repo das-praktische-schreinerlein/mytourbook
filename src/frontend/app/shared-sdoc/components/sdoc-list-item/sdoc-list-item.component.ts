@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CommonItemData, CDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 
@@ -12,8 +12,8 @@ import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocListItemComponent implements OnChanges {
-    public contentUtils: SDocContentUtils;
-    listItem: ItemData = {
+    public contentUtils: CDocContentUtils;
+    listItem: CommonItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
         thumbnailUrl: undefined,
@@ -42,7 +42,7 @@ export class SDocListItemComponent implements OnChanges {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef) {
+    constructor(contentUtils: CDocContentUtils, private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
     }
 

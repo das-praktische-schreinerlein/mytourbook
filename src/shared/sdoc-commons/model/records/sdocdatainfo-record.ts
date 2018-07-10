@@ -1,10 +1,6 @@
-import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
+import {BaseDataInfoRecord} from './basedatainfo-record';
 
-export class SDocDataInfoRecord extends BaseEntityRecord {
-    baseloc: string;
-    destloc: string;
-    guides: string;
-    region: string;
+export class SDocDataInfoRecord extends BaseDataInfoRecord {
     sdoc_id: string;
 
     toString() {

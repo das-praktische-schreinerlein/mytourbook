@@ -1,14 +1,6 @@
-import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
+import {BaseRatePersonalRecord} from './baseratepers-record';
 
-export class SDocRatePersonalRecord extends BaseEntityRecord {
-    ausdauer: number;
-    bildung: number;
-    gesamt: number;
-    kraft: number;
-    mental: number;
-    motive: number;
-    schwierigkeit: number;
-    wichtigkeit: number;
+export class SDocRatePersonalRecord extends BaseRatePersonalRecord {
     sdoc_id: string;
 
     toString() {

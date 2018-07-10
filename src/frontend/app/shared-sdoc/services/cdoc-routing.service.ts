@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
+import {CommonDocRecord} from '../../../shared/search-commons/model/records/cdoc-entity-record';
 
 @Injectable()
-export class SDocRoutingService {
+export class CommonDocRoutingService {
     private lastSearchUrl = '/sdoc/search/';
     private lastBaseUrl = '/sdoc/';
 
@@ -26,7 +26,7 @@ export class SDocRoutingService {
         return this.lastBaseUrl;
     }
 
-    getShowUrl(sDoc: SDocRecord, from: string): string {
+    getShowUrl(sDoc: CommonDocRecord, from: string): string {
         const name = (sDoc.name ? sDoc.name : 'name')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
             .replace(/ +/g, ' ').replace(/ /g, '-').trim();
@@ -37,7 +37,7 @@ export class SDocRoutingService {
         return this.commonRoutingService.navigateByUrl(this.getLastSearchUrl() + (suffix ? suffix : ''));
     }
 
-    navigateToShow(sDoc: SDocRecord, from: string): Promise<boolean> {
+    navigateToShow(sDoc: CommonDocRecord, from: string): Promise<boolean> {
         return this.commonRoutingService.navigateByUrl(this.getShowUrl(sDoc, from));
     }
 }

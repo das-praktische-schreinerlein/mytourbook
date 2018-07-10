@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/rou
 import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
 import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
-import {SDocRoutingService} from '../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../shared-sdoc/services/cdoc-routing.service';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
 import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
 import {LogUtils} from '../../../shared/commons/utils/log.utils';
@@ -16,7 +16,7 @@ export class SectionsPDocRecordResolver implements Resolve<ResolvedData<PDocReco
     idValidationRule = new IdValidationRule(true);
 
     constructor(private appService: GenericAppService, private dataService: PDocDataService,
-        private routingService: SDocRoutingService) {}
+        private routingService: CommonDocRoutingService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<ResolvedData<PDocRecord>> {
         const me = this;

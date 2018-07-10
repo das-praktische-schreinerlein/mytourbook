@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-linked-loc-hierarchy',
@@ -22,7 +22,7 @@ export class SDocLinkedLocHierarchyComponent implements OnChanges {
     public lastOnly? = false;
 
     constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
-                private sdocRoutingService: SDocRoutingService, private contentUtils: SDocContentUtils) {
+                private cdocRoutingService: CommonDocRoutingService, private contentUtils: SDocContentUtils) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -49,7 +49,7 @@ export class SDocLinkedLocHierarchyComponent implements OnChanges {
     }
 
     private getUrl(location: any): string {
-        return this.sdocRoutingService.getShowUrl(new SDocRecord({id: location[0], name: location[1], type: 'LOCATION'}), '');
+        return this.cdocRoutingService.getShowUrl(new SDocRecord({id: location[0], name: location[1], type: 'LOCATION'}), '');
     }
 
 }

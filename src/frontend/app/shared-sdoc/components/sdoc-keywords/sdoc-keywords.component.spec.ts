@@ -5,10 +5,10 @@ import {SDocKeywordsComponent} from './sdoc-keywords.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
@@ -24,8 +24,8 @@ describe('SDocKeywordsComponent', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
-                SDocRoutingService,
-                SDocContentUtils,
+                CommonDocRoutingService,
+                CDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             imports: [NgbModule.forRoot(),

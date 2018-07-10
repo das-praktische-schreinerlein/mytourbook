@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {SDocRatePersonalRecord} from '../../../../shared/sdoc-commons/model/records/sdocratepers-record';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {BaseRatePersonalRecordType} from '../../../../shared/sdoc-commons/model/records/baseratepers-record';
 
 @Component({
     selector: 'app-sdoc-ratepers',
@@ -11,7 +11,7 @@ import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocRatePersonalComponent implements OnChanges {
-    sdocratepers: SDocRatePersonalRecord;
+    sdocratepers: BaseRatePersonalRecordType;
 
     @Input()
     public record: SDocRecord;
@@ -19,7 +19,7 @@ export class SDocRatePersonalComponent implements OnChanges {
     @Input()
     public small? = false;
 
-    constructor(private contentUtils: SDocContentUtils) {}
+    constructor(private contentUtils: CDocContentUtils) {}
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {

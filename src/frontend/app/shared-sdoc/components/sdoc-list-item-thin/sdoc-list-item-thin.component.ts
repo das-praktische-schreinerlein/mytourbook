@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {CommonItemData, CDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -17,8 +17,8 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 })
 export class SDocListItemThinComponent implements OnChanges, OnDestroy {
     private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
-    public contentUtils: SDocContentUtils;
-    listItem: ItemData = {
+    public contentUtils: CDocContentUtils;
+    listItem: CommonItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
         thumbnailUrl: undefined,
@@ -49,7 +49,7 @@ export class SDocListItemThinComponent implements OnChanges, OnDestroy {
     @Output()
     public showImage: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef, private layoutService: LayoutService) {
+    constructor(contentUtils: CDocContentUtils, private cd: ChangeDetectorRef, private layoutService: LayoutService) {
         this.contentUtils = contentUtils;
         this.layoutSizeObservable = this.layoutService.getLayoutSizeData();
         this.layoutSizeObservable.subscribe(layoutSizeData => {

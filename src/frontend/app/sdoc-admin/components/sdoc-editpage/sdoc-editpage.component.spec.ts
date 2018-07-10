@@ -4,10 +4,9 @@ import {SDocEditpageComponent} from './sdoc-editpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
-import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
@@ -27,6 +26,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -50,7 +50,7 @@ describe('SDocEditpageComponent', () => {
                 PlatformService,
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
-                SDocRoutingService,
+                CommonDocRoutingService,
                 ToastsManager,
                 TranslateService,
                 MarkdownService,

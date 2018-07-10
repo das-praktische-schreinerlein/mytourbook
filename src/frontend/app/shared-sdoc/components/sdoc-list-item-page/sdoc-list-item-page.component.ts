@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {ItemData, SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
@@ -11,6 +10,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
+import {SDocContentUtils, SDocItemData} from '../../services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-list-item-page',
@@ -21,7 +21,7 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 export class SDocListItemPageComponent implements OnChanges {
     private flgDescRendered = false;
     public contentUtils: SDocContentUtils;
-    listItem: ItemData = {
+    listItem: SDocItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
         thumbnailUrl: undefined,
@@ -137,7 +137,7 @@ export class SDocListItemPageComponent implements OnChanges {
                 showForm: false
             }).then(function doneSearch(sdocSearchResult: SDocSearchResult) {
                 if (sdocSearchResult !== undefined && sdocSearchResult.recordCount > 0 &&
-                    sdocSearchResult.currentRecords[0].tripId === me.listItem.currentRecord.tripId) {
+                    sdocSearchResult.currentRecords[0].tripId === (<SDocRecord>me.listItem.currentRecord).tripId) {
                     // open map only if tripId of searchResut is for current trip: because of async
                     me.listItem.flgShowMap = sdocSearchResult.recordCount > 0;
                     me.listItem.flgShowProfileMap = me.listItem.flgShowMap;

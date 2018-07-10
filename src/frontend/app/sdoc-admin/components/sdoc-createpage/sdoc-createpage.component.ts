@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
-import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../../../shared-sdoc/services/cdoc-contentutils.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
@@ -30,15 +30,15 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
     private config;
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);
-    public contentUtils: SDocContentUtils;
+    public contentUtils: CDocContentUtils;
     public record: SDocRecord;
     public Layout = Layout;
     pdoc: PDocRecord;
     baseSearchUrl: string;
     tracks: SDocRecord[] = [];
 
-    constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
+    constructor(private route: ActivatedRoute, private cdocRoutingService: CommonDocRoutingService,
+                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: CDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,
@@ -147,7 +147,7 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
         const me = this;
 
         this.sdocDataService.add(values).then(function donCreated(sdoc: SDocRecord) {
-                me.sdocRoutingService.navigateToShow(sdoc, '');
+                me.cdocRoutingService.navigateToShow(sdoc, '');
             },
             function errorCreate(reason: any) {
                 console.error('create add failed:', reason);

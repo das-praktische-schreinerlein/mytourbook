@@ -2,9 +2,8 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {SDocRoutingService} from '../../../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
-import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
@@ -20,6 +19,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-editwpage',
@@ -39,7 +39,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     tracks: SDocRecord[] = [];
     trackRouten: SDocRecord[] = [];
 
-    constructor(private route: ActivatedRoute, private sdocRoutingService: SDocRoutingService,
+    constructor(private route: ActivatedRoute, private cdocRoutingService: CommonDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
@@ -194,9 +194,9 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
 
         this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
                 if (backToSearch) {
-                    me.sdocRoutingService.navigateBackToSearch('#' + me.record.id);
+                    me.cdocRoutingService.navigateBackToSearch('#' + me.record.id);
                 } else {
-                    me.sdocRoutingService.navigateToShow(sdoc, '');
+                    me.cdocRoutingService.navigateToShow(sdoc, '');
                 }
             },
             function errorCreate(reason: any) {
@@ -208,20 +208,20 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     }
 
     submitBackToShow() {
-        this.sdocRoutingService.navigateToShow(this.record, '');
+        this.cdocRoutingService.navigateToShow(this.record, '');
         return false;
     }
 
     submitBackToSearch() {
-        this.sdocRoutingService.navigateBackToSearch('#' + this.record.id);
+        this.cdocRoutingService.navigateBackToSearch('#' + this.record.id);
         return false;
     }
 
     getBackToSearchUrl(): string {
-        return this.sdocRoutingService.getLastSearchUrl();
+        return this.cdocRoutingService.getLastSearchUrl();
     }
 
     getBackToShowUrl(): string {
-        return this.sdocRoutingService.getShowUrl(this.record, '');
+        return this.cdocRoutingService.getShowUrl(this.record, '');
     }
 }

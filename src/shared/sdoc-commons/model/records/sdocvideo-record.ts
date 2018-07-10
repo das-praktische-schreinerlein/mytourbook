@@ -1,12 +1,11 @@
-import {BaseEntityRecord} from '../../../search-commons/model/records/base-entity-record';
+import {BaseVideoRecord} from '../../../search-commons/model/records/basevideo-record';
 
-export class SDocVideoRecord extends BaseEntityRecord {
-    descTxt: string;
-    descMd: string;
-    descHtml: string;
-    fileName: string;
-    name: string;
+export class SDocVideoRecord extends BaseVideoRecord {
     sdoc_id: string;
+
+    getMediaId(): string {
+        return this.sdoc_id;
+    }
 
     toString() {
         return 'SDocVideoRecord Record {\n' +

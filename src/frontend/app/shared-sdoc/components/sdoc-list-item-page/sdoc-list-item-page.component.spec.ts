@@ -4,10 +4,9 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemPageComponent} from './sdoc-list-item-page.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
-import {SDocRoutingService} from '../../services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {AngularCommonsModule} from '../../../../shared/angular-commons/angular-commons.module';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
@@ -23,6 +22,7 @@ import {HttpModule} from '@angular/http';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocListItemPageComponent', () => {
     let component: SDocListItemPageComponent;
@@ -38,7 +38,7 @@ describe('SDocListItemPageComponent', () => {
                 SearchParameterUtils,
                 SDocSearchFormConverter,
                 CommonRoutingService,
-                SDocRoutingService,
+                CommonDocRoutingService,
                 SDocContentUtils,
                 MarkdownService,
                 AngularMarkdownService,

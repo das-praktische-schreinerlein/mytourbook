@@ -3,14 +3,14 @@ import {HttpModule} from '@angular/http';
 import {SDocSearchpageComponent} from './components/sdoc-searchpage/sdoc-searchpage.component';
 import {SDocSearchFormConverter} from '../shared-sdoc/services/sdoc-searchform-converter.service';
 import {SDocShowpageComponent} from './components/sdoc-showpage/sdoc-showpage.component';
-import {SDocRoutingService} from '../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../shared-sdoc/services/cdoc-routing.service';
 import {SDocSearchFormUtils} from '../shared-sdoc/services/sdoc-searchform-utils.service';
 import {SDocSearchFormResolver} from '../shared-sdoc/resolver/sdoc-searchform.resolver';
 import {SDocRecordResolver} from '../shared-sdoc/resolver/sdoc-details.resolver';
 import {SDocRoutingModule} from './sdoc-routing.module';
 import {ToastModule} from 'ng2-toastr';
 import {SearchParameterUtils} from '../../shared/search-commons/services/searchparameter.utils';
-import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../shared-sdoc/services/cdoc-contentutils.service';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -28,6 +28,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LayoutService} from '../../shared/angular-commons/services/layout.service';
 import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
 import {FileDropModule} from 'ngx-file-drop';
+import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.service';
 
 @NgModule({
     declarations: [
@@ -52,9 +53,10 @@ import {FileDropModule} from 'ngx-file-drop';
         TranslateService,
         CommonRoutingService,
         SDocSearchFormConverter,
-        SDocRoutingService,
+        CommonDocRoutingService,
         SDocSearchFormUtils,
         SearchParameterUtils,
+        { provide: CDocContentUtils, useClass: SDocContentUtils },
         SDocContentUtils,
         SDocSearchFormResolver,
         SDocRecordResolver,

@@ -1,13 +1,13 @@
 import {NgModule} from '@angular/core';
 import {HttpModule} from '@angular/http';
 import {SDocSearchFormConverter} from '../shared-sdoc/services/sdoc-searchform-converter.service';
-import {SDocRoutingService} from '../shared-sdoc/services/sdoc-routing.service';
+import {CommonDocRoutingService} from '../shared-sdoc/services/cdoc-routing.service';
 import {SDocSearchFormUtils} from '../shared-sdoc/services/sdoc-searchform-utils.service';
 import {SDocSearchFormResolver} from '../shared-sdoc/resolver/sdoc-searchform.resolver';
 import {SDocRecordResolver} from '../shared-sdoc/resolver/sdoc-details.resolver';
 import {ToastModule} from 'ng2-toastr';
 import {SearchParameterUtils} from '../../shared/search-commons/services/searchparameter.utils';
-import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.service';
+import {CDocContentUtils} from '../shared-sdoc/services/cdoc-contentutils.service';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -23,6 +23,7 @@ import {SDocEditpageComponent} from './components/sdoc-editpage/sdoc-editpage.co
 import {SDocAdminRoutingModule} from './sdoc-admin-routing.module';
 import {SDocCreatepageComponent} from './components/sdoc-createpage/sdoc-createpage.component';
 import {SDocRecordCreateResolver} from '../shared-sdoc/resolver/sdoc-create.resolver';
+import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.service';
 
 @NgModule({
     declarations: [
@@ -43,9 +44,10 @@ import {SDocRecordCreateResolver} from '../shared-sdoc/resolver/sdoc-create.reso
         TranslateService,
         CommonRoutingService,
         SDocSearchFormConverter,
-        SDocRoutingService,
+        CommonDocRoutingService,
         SDocSearchFormUtils,
         SearchParameterUtils,
+        { provide: CDocContentUtils, useClass: SDocContentUtils },
         SDocContentUtils,
         SDocSearchFormResolver,
         SDocRecordResolver,
