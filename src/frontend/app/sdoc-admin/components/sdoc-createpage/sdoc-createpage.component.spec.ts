@@ -7,7 +7,7 @@ import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
-import {CDocContentUtils} from '../../../shared-sdoc/services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../../shared-sdoc/services/cdoc-contentutils.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
@@ -48,7 +48,7 @@ describe('SDocCreatepageComponent', () => {
                 DatePipe,
                 CommonRoutingService,
                 PlatformService,
-                CDocContentUtils,
+                CommonDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonDocRoutingService,
                 ToastsManager,

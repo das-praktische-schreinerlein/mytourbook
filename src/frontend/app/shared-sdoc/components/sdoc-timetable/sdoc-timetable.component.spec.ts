@@ -2,10 +2,10 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocTimetableComponent} from './sdoc-timetable.component';
-import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {TranslateModule} from '@ngx-translate/core';
+import {CommonDocDataServiceStub} from '../../../../testing/cdoc-dataservice-stubs';
 
 describe('SDocTimetableComponent', () => {
     let component: SDocTimetableComponent;
@@ -29,7 +29,7 @@ describe('SDocTimetableComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocTimetableComponent);
         component = fixture.componentInstance;
-        component.searchResult = SDocDataServiceStub.defaultSearchResult();
+        component.searchResult = CommonDocDataServiceStub.defaultSearchResult();
         fixture.detectChanges();
     });
 

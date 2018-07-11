@@ -39,7 +39,7 @@ export interface CommonItemData {
 }
 
 @Injectable()
-export class CDocContentUtils {
+export class CommonDocContentUtils {
 
     constructor(protected sanitizer: DomSanitizer, protected cdocRoutingService: CommonDocRoutingService,
                 protected appService: GenericAppService) {

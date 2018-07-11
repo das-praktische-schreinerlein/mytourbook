@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
-import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {StructuredKeyword} from '../../services/cdoc-contentutils.service';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';
 
 @Component({
     selector: 'app-sdoc-keywords',
@@ -17,7 +17,7 @@ export class SDocKeywordsComponent implements OnInit, OnChanges {
     possiblePrefixes = [];
 
     @Input()
-    public record: SDocRecord;
+    public record: CommonDocRecord;
 
     constructor(private appService: GenericAppService, private cd: ChangeDetectorRef) {
     }

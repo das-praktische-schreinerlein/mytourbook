@@ -7,7 +7,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {Router} from '@angular/router';
@@ -27,7 +27,7 @@ describe('SDocRatePersonalComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 CommonDocRoutingService,
-                CDocContentUtils,
+                CommonDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ]
         })

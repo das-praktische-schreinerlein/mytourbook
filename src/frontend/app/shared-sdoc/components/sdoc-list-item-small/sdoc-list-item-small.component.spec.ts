@@ -6,14 +6,14 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
-import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {SDocDateFormatPipe} from '../../pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
+import {CommonDocDataServiceStub} from '../../../../testing/cdoc-dataservice-stubs';
 
 describe('SDocListItemSmallComponent', () => {
     let component: SDocListItemSmallComponent;
@@ -26,7 +26,7 @@ describe('SDocListItemSmallComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 CommonDocRoutingService,
-                CDocContentUtils,
+                CommonDocContentUtils,
                 DatePipe,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
@@ -40,7 +40,7 @@ describe('SDocListItemSmallComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocListItemSmallComponent);
         component = fixture.componentInstance;
-        component.record = SDocDataServiceStub.defaultRecord();
+        component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();
     });
 

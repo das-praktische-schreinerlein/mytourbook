@@ -1,8 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
-import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {TimetableColumn} from '../sdoc-timetable/sdoc-timetable.component';
-import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {CommonDocSearchFormUtils} from '../../services/cdoc-searchform-utils.service';
+import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '../../../../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocSearchResult} from '../../../../shared/search-commons/model/container/cdoc-searchresult';
 
 export interface TypetableColumn extends TimetableColumn {}
 
@@ -16,12 +19,12 @@ export class SDocTypetableComponent implements OnChanges {
     columns: TypetableColumn[] = [];
 
     @Input()
-    public searchResult: SDocSearchResult;
+    public searchResult: CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>;
 
     @Output()
     public columnClicked: EventEmitter<string> = new EventEmitter();
 
-    constructor(private searchFormUtils: SDocSearchFormUtils) {
+    constructor(private searchFormUtils: SearchFormUtils, private cdocSearchFormUtils: CommonDocSearchFormUtils) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
@@ -38,7 +41,7 @@ export class SDocTypetableComponent implements OnChanges {
     private renderTypetable() {
         const result = [];
         const values = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTypeValues(this.searchResult), false, [], true)
+            this.cdocSearchFormUtils.getTypeValues(this.searchResult), false, [], true)
             .sort(function (a, b) {
                 return a.name.localeCompare(b.name);
             });

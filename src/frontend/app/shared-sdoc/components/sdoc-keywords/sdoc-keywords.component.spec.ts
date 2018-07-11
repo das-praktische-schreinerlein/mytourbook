@@ -4,14 +4,14 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocKeywordsComponent} from './sdoc-keywords.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
-import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {CommonDocDataServiceStub} from '../../../../testing/cdoc-dataservice-stubs';
 
 describe('SDocKeywordsComponent', () => {
     let component: SDocKeywordsComponent;
@@ -25,7 +25,7 @@ describe('SDocKeywordsComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 CommonDocRoutingService,
-                CDocContentUtils,
+                CommonDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             imports: [NgbModule.forRoot(),
@@ -37,7 +37,7 @@ describe('SDocKeywordsComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocKeywordsComponent);
         component = fixture.componentInstance;
-        component.record = SDocDataServiceStub.defaultRecord();
+        component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();
     });
 

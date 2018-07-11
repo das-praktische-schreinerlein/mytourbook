@@ -1,10 +1,10 @@
-import {SDocSearchForm} from '../forms/sdoc-searchform';
-import {SDocRecord} from '../records/sdoc-record';
-import {Facet, Facets} from '../../../search-commons/model/container/facets';
-import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
+import {GenericSearchResult} from './generic-searchresult';
+import {Facet, Facets} from './facets';
+import {CommonDocRecord} from '../records/cdoc-entity-record';
+import {CommonDocSearchForm} from '../forms/cdoc-searchform';
 
-export class SDocSearchResult extends CommonDocSearchResult <SDocRecord, SDocSearchForm> {
-    constructor(sdocSearchForm: SDocSearchForm, recordCount: number, currentRecords: SDocRecord[], facets: Facets) {
+export class CommonDocSearchResult<R extends CommonDocRecord, F extends CommonDocSearchForm> extends GenericSearchResult<R, F> {
+    constructor(sdocSearchForm: F, recordCount: number, currentRecords: R[], facets: Facets) {
         super(sdocSearchForm, recordCount, currentRecords, facets);
     }
 
@@ -29,7 +29,7 @@ export class SDocSearchResult extends CommonDocSearchResult <SDocRecord, SDocSea
         };
         if (Array.isArray(this.currentRecords)) {
             for (let i = 0; i < this.currentRecords.length; i++) {
-                const record = SDocRecord.cloneToSerializeToJsonObj(this.currentRecords[i], anonymizeMedia);
+                const record = CommonDocRecord.cloneToSerializeToJsonObj(this.currentRecords[i], anonymizeMedia);
 
                 result.currentRecords.push(record);
             }

@@ -2,11 +2,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListHeaderComponent} from './sdoc-list-header.component';
-import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {TranslateModule} from '@ngx-translate/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {CommonDocDataServiceStub} from '../../../../testing/cdoc-dataservice-stubs';
 
 describe('SDocListHeaderComponent', () => {
     let component: SDocListHeaderComponent;
@@ -29,7 +29,7 @@ describe('SDocListHeaderComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocListHeaderComponent);
         component = fixture.componentInstance;
-        component.searchResult = SDocDataServiceStub.defaultSearchResult();
+        component.searchResult = CommonDocDataServiceStub.defaultSearchResult();
         fixture.detectChanges();
     });
 

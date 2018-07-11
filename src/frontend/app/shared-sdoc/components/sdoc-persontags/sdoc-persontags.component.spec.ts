@@ -5,7 +5,7 @@ import {SDocPersonTagsComponent} from './sdoc-persontags.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
@@ -25,7 +25,7 @@ describe('SDocPersonTagsComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 CommonDocRoutingService,
-                CDocContentUtils,
+                CommonDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             imports: [NgbModule.forRoot(),

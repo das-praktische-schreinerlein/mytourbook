@@ -1,11 +1,15 @@
 import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
+import {SearchParameterUtils} from '../../search-commons/services/searchparameter.utils';
+import {GenericSearchResult} from '../../search-commons/model/container/generic-searchresult';
+import {GenericSearchForm} from '../../search-commons/model/forms/generic-searchform';
+import {BaseEntityRecord} from '../../search-commons/model/records/base-entity-record';
 
 @Injectable()
 export class SearchFormUtils {
 
-    constructor(private translateService: TranslateService) {
+    constructor(private translateService: TranslateService, private searchParameterUtils: SearchParameterUtils) {
     }
 
     public getIMultiSelectOptionsFromExtractedFacetValuesList(values: any[][], withCount: boolean,
@@ -45,4 +49,65 @@ export class SearchFormUtils {
             return result;
         });
     }
+
+    getFacetValues(searchResult: GenericSearchResult<BaseEntityRecord, GenericSearchForm>, facetName: string, valuePrefix: string,
+                   labelPrefix: string): any[] {
+        if (searchResult === undefined || searchResult.facets === undefined || searchResult.facets.facets.size === 0) {
+            return [];
+        }
+
+        return [].concat(
+            this.searchParameterUtils.extractFacetValues(searchResult.facets, facetName, valuePrefix, labelPrefix));
+    }
+
+    public moveSelectedToTop(options: IMultiSelectOption[], selected: any[]): IMultiSelectOption[] {
+        if (selected === undefined || selected.length < 1) {
+            return options;
+        }
+
+        const selectedOptions: IMultiSelectOption[] = [];
+        const otherOptions: IMultiSelectOption[] = [];
+        for (const option of options) {
+            if (selected.indexOf(option.id) >= 0) {
+                selectedOptions.push(option);
+            } else {
+                otherOptions.push(option);
+            }
+        }
+
+        return [].concat(selectedOptions, otherOptions);
+    }
+
+    public extractSelected(options: IMultiSelectOption[], selected: any[]): IMultiSelectOption[] {
+        if (selected === undefined || selected.length < 1) {
+            return [];
+        }
+
+        const selectedOptions: IMultiSelectOption[] = [];
+        for (const option of options) {
+            if (selected.indexOf(option.id) >= 0) {
+                selectedOptions.push(option);
+            }
+        }
+
+        return selectedOptions;
+    }
+
+    public prepareExtendedSelectValues(src: any[]): any[] {
+        const values = [];
+        for (const value of src) {
+            // use value as label if not set
+            if (!value[4]) {
+                value[4] = value[1];
+            }
+            // use id as value instead of name
+            if (value[5]) {
+                value[1] = value[5];
+            }
+            values.push(value);
+        }
+
+        return values;
+    }
+
 }

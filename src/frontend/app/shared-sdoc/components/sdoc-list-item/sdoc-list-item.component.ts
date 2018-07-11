@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
-import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {CommonItemData, CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonItemData, CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
+import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';
 
 @Component({
     selector: 'app-sdoc-list-item',
@@ -12,7 +12,7 @@ import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocListItemComponent implements OnChanges {
-    public contentUtils: CDocContentUtils;
+    public contentUtils: CommonDocContentUtils;
     listItem: CommonItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
@@ -25,7 +25,7 @@ export class SDocListItemComponent implements OnChanges {
     };
 
     @Input()
-    public record: SDocRecord;
+    public record: CommonDocRecord;
 
     @Input()
     public backToSearchUrl: string;
@@ -37,12 +37,12 @@ export class SDocListItemComponent implements OnChanges {
     public short? = false;
 
     @Output()
-    public show: EventEmitter<SDocRecord> = new EventEmitter();
+    public show: EventEmitter<CommonDocRecord> = new EventEmitter();
 
     @Output()
-    public showImage: EventEmitter<SDocRecord> = new EventEmitter();
+    public showImage: EventEmitter<CommonDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: CDocContentUtils, private cd: ChangeDetectorRef) {
+    constructor(contentUtils: CommonDocContentUtils, private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
     }
 
@@ -52,19 +52,19 @@ export class SDocListItemComponent implements OnChanges {
         }
     }
 
-    public submitShow(sdoc: SDocRecord) {
+    public submitShow(sdoc: CommonDocRecord) {
         this.show.emit(sdoc);
         return false;
     }
 
-    public submitShowImage(sdoc: SDocRecord) {
+    public submitShowImage(sdoc: CommonDocRecord) {
         this.showImage.emit(sdoc);
         return false;
     }
 
     public onActionTagEvent(event: ActionTagEvent) {
         if (event.result !== undefined) {
-            this.record = <SDocRecord>event.result;
+            this.record = <CommonDocRecord>event.result;
             this.updateData();
         }
 

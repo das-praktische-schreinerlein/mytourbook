@@ -1,14 +1,21 @@
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, Output,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    Output,
     SimpleChange
 } from '@angular/core';
-import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../sdoc-list/sdoc-list.component';
-import {CommonItemData, CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';
 
 @Component({
     selector: 'app-sdoc-list-item-flat',
@@ -18,7 +25,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 })
 export class SDocListItemFlatComponent implements OnChanges, OnDestroy {
     private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
-    public contentUtils: CDocContentUtils;
+    public contentUtils: CommonDocContentUtils;
     listItem: CommonItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
@@ -33,7 +40,7 @@ export class SDocListItemFlatComponent implements OnChanges, OnDestroy {
     layoutSize = LayoutSize.BIG;
 
     @Input()
-    public record: SDocRecord;
+    public record: CommonDocRecord;
 
     @Input()
     public backToSearchUrl: string;
@@ -45,12 +52,12 @@ export class SDocListItemFlatComponent implements OnChanges, OnDestroy {
     public short? = false;
 
     @Output()
-    public show: EventEmitter<SDocRecord> = new EventEmitter();
+    public show: EventEmitter<CommonDocRecord> = new EventEmitter();
 
     @Output()
-    public showImage: EventEmitter<SDocRecord> = new EventEmitter();
+    public showImage: EventEmitter<CommonDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: CDocContentUtils, private cd: ChangeDetectorRef, private layoutService: LayoutService) {
+    constructor(contentUtils: CommonDocContentUtils, private cd: ChangeDetectorRef, private layoutService: LayoutService) {
         this.contentUtils = contentUtils;
         this.layoutSizeObservable = this.layoutService.getLayoutSizeData();
         this.layoutSizeObservable.subscribe(layoutSizeData => {
@@ -70,19 +77,19 @@ export class SDocListItemFlatComponent implements OnChanges, OnDestroy {
         }
     }
 
-    public submitShow(sdoc: SDocRecord) {
+    public submitShow(sdoc: CommonDocRecord) {
         this.show.emit(sdoc);
         return false;
     }
 
-    public submitShowImage(sdoc: SDocRecord) {
+    public submitShowImage(sdoc: CommonDocRecord) {
         this.showImage.emit(sdoc);
         return false;
     }
 
     public onActionTagEvent(event: ActionTagEvent) {
         if (event.result !== undefined) {
-            this.record = <SDocRecord>event.result;
+            this.record = <CommonDocRecord>event.result;
             this.updateData();
         }
 

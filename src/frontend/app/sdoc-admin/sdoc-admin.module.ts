@@ -7,7 +7,7 @@ import {SDocSearchFormResolver} from '../shared-sdoc/resolver/sdoc-searchform.re
 import {SDocRecordResolver} from '../shared-sdoc/resolver/sdoc-details.resolver';
 import {ToastModule} from 'ng2-toastr';
 import {SearchParameterUtils} from '../../shared/search-commons/services/searchparameter.utils';
-import {CDocContentUtils} from '../shared-sdoc/services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../shared-sdoc/services/cdoc-contentutils.service';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -24,6 +24,7 @@ import {SDocAdminRoutingModule} from './sdoc-admin-routing.module';
 import {SDocCreatepageComponent} from './components/sdoc-createpage/sdoc-createpage.component';
 import {SDocRecordCreateResolver} from '../shared-sdoc/resolver/sdoc-create.resolver';
 import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.service';
+import {CommonDocSearchFormUtils} from '../shared-sdoc/services/cdoc-searchform-utils.service';
 
 @NgModule({
     declarations: [
@@ -45,9 +46,10 @@ import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.servic
         CommonRoutingService,
         SDocSearchFormConverter,
         CommonDocRoutingService,
+        { provide: CommonDocSearchFormUtils, useClass: SDocSearchFormUtils },
         SDocSearchFormUtils,
         SearchParameterUtils,
-        { provide: CDocContentUtils, useClass: SDocContentUtils },
+        { provide: CommonDocContentUtils, useClass: SDocContentUtils },
         SDocContentUtils,
         SDocSearchFormResolver,
         SDocRecordResolver,

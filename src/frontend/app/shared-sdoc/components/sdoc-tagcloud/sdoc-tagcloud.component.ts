@@ -1,8 +1,10 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
-import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {CommonDocSearchResult} from '../../../../shared/search-commons/model/container/cdoc-searchresult';
+import {CommonDocSearchForm} from '../../../../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';
 
 export interface TagcloudEntry {
     size: string;
@@ -20,7 +22,7 @@ export class SDocTagcloudComponent implements OnChanges {
     columns: TagcloudEntry[] = [];
 
     @Input()
-    public searchResult: SDocSearchResult;
+    public searchResult: CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>;
 
     @Input()
     public facetName: string;

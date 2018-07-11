@@ -6,13 +6,13 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
-import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
-import {CDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {CommonDocDataServiceStub} from '../../../../testing/cdoc-dataservice-stubs';
 
 describe('SDocListItemThinComponent', () => {
     let component: SDocListItemThinComponent;
@@ -25,7 +25,7 @@ describe('SDocListItemThinComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 CommonDocRoutingService,
-                CDocContentUtils,
+                CommonDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 LayoutService
             ],
@@ -39,7 +39,7 @@ describe('SDocListItemThinComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocListItemThinComponent);
         component = fixture.componentInstance;
-        component.record = SDocDataServiceStub.defaultRecord();
+        component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();
     });
 

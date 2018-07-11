@@ -4,7 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
 import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
-import {CDocContentUtils} from '../../../shared-sdoc/services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../../shared-sdoc/services/cdoc-contentutils.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
@@ -30,7 +30,7 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
     private config;
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);
-    public contentUtils: CDocContentUtils;
+    public contentUtils: CommonDocContentUtils;
     public record: SDocRecord;
     public Layout = Layout;
     pdoc: PDocRecord;
@@ -38,7 +38,7 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
     tracks: SDocRecord[] = [];
 
     constructor(private route: ActivatedRoute, private cdocRoutingService: CommonDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: CDocContentUtils,
+                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: CommonDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,

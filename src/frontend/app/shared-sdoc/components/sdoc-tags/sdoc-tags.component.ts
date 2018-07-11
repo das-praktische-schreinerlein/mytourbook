@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {CDocContentUtils, StructuredKeyword} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils, StructuredKeyword} from '../../services/cdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-tags',
@@ -23,7 +23,7 @@ export class SDocTagsComponent implements OnChanges {
     @Input()
     public blacklist = [];
 
-    constructor(private contentUtils: CDocContentUtils) {
+    constructor(private contentUtils: CommonDocContentUtils) {
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {

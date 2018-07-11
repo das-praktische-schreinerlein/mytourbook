@@ -405,7 +405,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
     private doSave(): boolean {
         const ids = this.editFormGroup.getRawValue()['albumSdocIds'];
         if (this.idCsvValidationRule.isValid(ids)) {
-            this.sdocAlbumService.removeSdocIds(this.albumKey);
+            this.sdocAlbumService.removeDocIds(this.albumKey);
             for (const id of ids.split(',')) {
                 this.sdocAlbumService.addIdToAlbum(this.albumKey, id);
             }

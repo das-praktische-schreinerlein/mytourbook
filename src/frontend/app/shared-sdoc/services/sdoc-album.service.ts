@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
+import {CommonDocRecord} from '../../../shared/search-commons/model/records/cdoc-entity-record';
 
 @Injectable()
 export class SDocAlbumService {
@@ -13,7 +13,7 @@ export class SDocAlbumService {
         this.initCache();
     }
 
-    public getSdocIds(albumKey: string): string[] {
+    public getDocIds(albumKey: string): string[] {
         const album = this.albumCache[albumKey];
         if (album !== undefined) {
             return album;
@@ -22,58 +22,58 @@ export class SDocAlbumService {
         return [];
     }
 
-    public removeSdocIds(albumKey: string): void {
-        const ids = [].concat(this.getSdocIds(albumKey));
+    public removeDocIds(albumKey: string): void {
+        const ids = [].concat(this.getDocIds(albumKey));
         for (const id of ids) {
             this.removeIdFromAlbum(albumKey, id);
         }
         this.albumCache[albumKey] = [];
     }
 
-    public getAlbenBySdocIds(sdocId: string): string[] {
-        return this.idCache[sdocId];
+    public getAlbenByDocIds(cdocId: string): string[] {
+        return this.idCache[cdocId];
     }
 
-    public initAlbenForSDocId(sdoc: SDocRecord) {
-        sdoc['localalbum'] = this.getAlbenBySdocIds(sdoc.id);
+    public initAlbenForDocId(doc: CommonDocRecord) {
+        doc['localalbum'] = this.getAlbenByDocIds(doc.id);
     }
 
-    public addIdToAlbum(albumKey: string, sdocId: string): void {
+    public addIdToAlbum(albumKey: string, docId: string): void {
         let album = this.albumCache[albumKey];
         if (album === undefined) {
             album = [];
         }
-        const index = album.indexOf(sdocId);
+        const index = album.indexOf(docId);
         if (index >= 0) {
             return;
         }
 
-        album.push(sdocId);
+        album.push(docId);
         this.albumCache[albumKey] = album;
         this.saveCache();
 
-        let keys = this.idCache[sdocId];
+        let keys = this.idCache[docId];
         if (keys === undefined) {
             keys = [];
         }
         keys.push(albumKey);
-        this.idCache[sdocId] = keys;
+        this.idCache[docId] = keys;
     }
 
 
-    public removeIdFromAlbum(albumKey: string, sdocId: string): void {
+    public removeIdFromAlbum(albumKey: string, docId: string): void {
         const album = this.albumCache[albumKey];
         if (album !== undefined) {
-            let index = album.indexOf(sdocId);
+            let index = album.indexOf(docId);
             while (index >= 0) {
                 album.splice(index, 1);
-                index = album.indexOf(sdocId);
+                index = album.indexOf(docId);
 
-                const sdocAlben = this.idCache[sdocId];
-                let index2 = sdocAlben.indexOf(albumKey);
+                const docAlben = this.idCache[docId];
+                let index2 = docAlben.indexOf(albumKey);
                 while (index2 >= 0) {
-                    sdocAlben.splice(index2, 1);
-                    index2 = sdocAlben.indexOf(albumKey);
+                    docAlben.splice(index2, 1);
+                    index2 = docAlben.indexOf(albumKey);
                 }
             }
 
@@ -81,14 +81,14 @@ export class SDocAlbumService {
         }
     }
 
-    public removeFromAlbum(albumKey: string, sdoc: SDocRecord): void {
-        this.removeIdFromAlbum(albumKey, sdoc.id);
-        this.initAlbenForSDocId(sdoc);
+    public removeFromAlbum(albumKey: string, doc: CommonDocRecord): void {
+        this.removeIdFromAlbum(albumKey, doc.id);
+        this.initAlbenForDocId(doc);
     }
 
-    public addToAlbum(albumKey: string, sdoc: SDocRecord): void {
-        this.addIdToAlbum(albumKey, sdoc.id);
-        this.initAlbenForSDocId(sdoc);
+    public addToAlbum(albumKey: string, doc: CommonDocRecord): void {
+        this.addIdToAlbum(albumKey, doc.id);
+        this.initAlbenForDocId(doc);
     }
 
     private initStorage() {
@@ -115,13 +115,13 @@ export class SDocAlbumService {
         if (item !== undefined && item !== null && item !== '') {
             this.albumCache = JSON.parse(item);
             for (const albumKey in this.albumCache) {
-                for (const sdocId of this.albumCache[albumKey]) {
-                    let keys = this.idCache[sdocId];
+                for (const docId of this.albumCache[albumKey]) {
+                    let keys = this.idCache[docId];
                     if (keys === undefined) {
                         keys = [];
                     }
                     keys.push(albumKey);
-                    this.idCache[sdocId] = keys;
+                    this.idCache[docId] = keys;
                 }
             }
         }

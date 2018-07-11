@@ -2,11 +2,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocTypetableComponent} from './sdoc-typetable.component';
-import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {TranslateModule} from '@ngx-translate/core';
-import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {CommonDocSearchFormUtils} from '../../services/cdoc-searchform-utils.service';
+import {CommonDocDataServiceStub} from '../../../../testing/cdoc-dataservice-stubs';
 
 describe('SDocTypetableComponent', () => {
     let component: SDocTypetableComponent;
@@ -22,7 +22,7 @@ describe('SDocTypetableComponent', () => {
             providers: [
                 SearchParameterUtils,
                 SearchFormUtils,
-                SDocSearchFormUtils
+                CommonDocSearchFormUtils
             ]
         })
             .compileComponents();
@@ -31,7 +31,7 @@ describe('SDocTypetableComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SDocTypetableComponent);
         component = fixture.componentInstance;
-        component.searchResult = SDocDataServiceStub.defaultSearchResult();
+        component.searchResult = CommonDocDataServiceStub.defaultSearchResult();
         fixture.detectChanges();
     });
 

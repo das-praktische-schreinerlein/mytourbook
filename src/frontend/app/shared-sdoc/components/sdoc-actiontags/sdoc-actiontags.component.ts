@@ -105,7 +105,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
         if (this.record === undefined) {
             this.tags = [];
         } else {
-            this.sdocAlbumService.initAlbenForSDocId(<SDocRecord>this.item.currentRecord);
+            this.sdocAlbumService.initAlbenForDocId(<SDocRecord>this.item.currentRecord);
             this.tags = ActionTagUtils.generateTags(this.tagConfigs, this.item.currentRecord, this.config);
         }
 

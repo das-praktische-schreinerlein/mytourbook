@@ -34,7 +34,7 @@ export class SDocAlbumResolver implements Resolve<ResolvedData<SDocSearchForm>> 
                         return resolve(result);
                     }
 
-                    let ids = this.sdocAlbumService.getSdocIds(albumKey).join(',');
+                    let ids = this.sdocAlbumService.getDocIds(albumKey).join(',');
                     if (ids === undefined || ids.length === 0) {
                         ids = route.params['ids'] || '';
                     }

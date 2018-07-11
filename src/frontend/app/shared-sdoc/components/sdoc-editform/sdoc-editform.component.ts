@@ -15,13 +15,14 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
-import {KeywordsState, CDocContentUtils, StructuredKeywordState} from '../../services/cdoc-contentutils.service';
+import {KeywordsState, CommonDocContentUtils, StructuredKeywordState} from '../../services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {isArray} from 'util';
 import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -253,8 +254,9 @@ export class SDocEditformComponent implements OnChanges {
     public saveAndSearch: EventEmitter<SDocRecord> = new EventEmitter();
 
     constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef,
-                private appService: GenericAppService, private searchFormUtils: SDocSearchFormUtils,
-                private sdocDataService: SDocDataService, private contentUtils: CDocContentUtils) {
+                private appService: GenericAppService, private sdocSearchFormUtils: SDocSearchFormUtils,
+                private searchFormUtils: SearchFormUtils, private sdocDataService: SDocDataService,
+                private contentUtils: CommonDocContentUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -573,7 +575,7 @@ export class SDocEditformComponent implements OnChanges {
         if (sdocSearchResult !== undefined) {
             const rawValues = this.editFormGroup.getRawValue();
             // console.log('update searchResult', sdocSearchResult);
-            const whereValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getWhereValues(sdocSearchResult));
+            const whereValues = me.searchFormUtils.prepareExtendedSelectValues(me.sdocSearchFormUtils.getWhereValues(sdocSearchResult));
             me.optionsSelect['locId'] = me.searchFormUtils.moveSelectedToTop(
                 me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(whereValues, true, [],
                     false), rawValues['locId']);
@@ -582,20 +584,20 @@ export class SDocEditformComponent implements OnChanges {
                     false), rawValues['locIdParent']);
 
             me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                me.searchFormUtils.getPlaylistValues(sdocSearchResult), true, [], true);
+                me.sdocSearchFormUtils.getPlaylistValues(sdocSearchResult), true, [], true);
             me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                me.searchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
+                me.sdocSearchFormUtils.getPersonValues(sdocSearchResult), true, [], true);
 
-            const routeValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getRouteValues(sdocSearchResult));
+            const routeValues = me.searchFormUtils.prepareExtendedSelectValues(me.sdocSearchFormUtils.getRouteValues(sdocSearchResult));
             me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(
                 me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(routeValues, true, [],
                     false), rawValues['routeId']);
 
-            const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTrackValues(sdocSearchResult));
+            const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.sdocSearchFormUtils.getTrackValues(sdocSearchResult));
             me.optionsSelect['trackId'] = me.searchFormUtils.moveSelectedToTop(
                 me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(trackValues, true, [],
                     false), rawValues['trackId']);
-            const tripValues = me.searchFormUtils.prepareExtendedSelectValues(me.searchFormUtils.getTripValues(sdocSearchResult));
+            const tripValues = me.searchFormUtils.prepareExtendedSelectValues(me.sdocSearchFormUtils.getTripValues(sdocSearchResult));
             me.optionsSelect['tripId'] = me.searchFormUtils.moveSelectedToTop(
                 me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(tripValues, true, [],
                     false), rawValues['tripId']);

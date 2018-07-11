@@ -1,10 +1,12 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
-import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {Layout} from '../sdoc-list/sdoc-list.component';
 import {FormBuilder} from '@angular/forms';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {CommonDocSearchResult} from '../../../../shared/search-commons/model/container/cdoc-searchresult';
+import {CommonDocSearchForm} from '../../../../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';
 
 @Component({
     selector: 'app-sdoc-list-header',
@@ -28,7 +30,7 @@ export class SDocListHeaderComponent implements OnInit, OnChanges {
     public availablePerPage?: number[] = [1, 10, 20, 50];
 
     @Input()
-    public searchResult: SDocSearchResult;
+    public searchResult: CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>;
 
     @Input()
     public perPage: number;

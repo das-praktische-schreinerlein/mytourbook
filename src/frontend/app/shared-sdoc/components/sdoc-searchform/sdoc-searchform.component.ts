@@ -11,6 +11,7 @@ import {HumanReadableFilter, SDocSearchFormConverter} from '../../services/sdoc-
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocDataCacheService} from '../../services/sdoc-datacache.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 
 export enum SearchFormLayout {
     STACKED,
@@ -262,9 +263,10 @@ export class SDocSearchformComponent implements OnInit {
         pageNum: 1
     });
 
-    constructor(private sanitizer: DomSanitizer, public fb: FormBuilder, private searchFormUtils: SDocSearchFormUtils,
-                private searchFormConverter: SDocSearchFormConverter, private sdocDataCacheService: SDocDataCacheService,
-                private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef) {
+    constructor(private sanitizer: DomSanitizer, public fb: FormBuilder, private searchFormUtils: SearchFormUtils,
+                private sdocSearchFormUtils: SDocSearchFormUtils, private searchFormConverter: SDocSearchFormConverter,
+                private sdocDataCacheService: SDocDataCacheService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private cd: ChangeDetectorRef) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -350,19 +352,19 @@ export class SDocSearchformComponent implements OnInit {
 
         this.optionsSelectWhen = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true),
+                this.sdocSearchFormUtils.getWhenValues(sdocSearchSearchResult), true, [], true),
             rawValues['when']);
         this.optionsSelectWhere = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getWhereValues(sdocSearchSearchResult), true, [/^_+/, /_+$/], false),
+                this.sdocSearchFormUtils.getWhereValues(sdocSearchSearchResult), true, [/^_+/, /_+$/], false),
             rawValues['where']);
         this.optionsSelectWhat = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getWhatValues(sdocSearchSearchResult), true, [/^kw_/gi], true),
+                this.sdocSearchFormUtils.getWhatValues(sdocSearchSearchResult), true, [/^kw_/gi], true),
             rawValues['what']);
         this.optionsSelectActionType = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getActionTypeValues(sdocSearchSearchResult), true, [], true)
+                this.sdocSearchFormUtils.getActionTypeValues(sdocSearchSearchResult), true, [], true)
                 .sort(function (a, b) {
                     if (a['count'] < b['count']) {
                         return 1;
@@ -374,12 +376,12 @@ export class SDocSearchformComponent implements OnInit {
                 }),
             rawValues['actiontype']);
         this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true)
+                this.sdocSearchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true)
                 .sort(function (a, b) {
                     return a.name.localeCompare(b.name);
                 });
-        if (this.searchFormUtils.getTypeLimit(sdocSearchSearchResult) > 0) {
-            this.settingsSelectType.selectionLimit = this.searchFormUtils.getTypeLimit(sdocSearchSearchResult);
+        if (this.sdocSearchFormUtils.getTypeLimit(sdocSearchSearchResult) > 0) {
+            this.settingsSelectType.selectionLimit = this.sdocSearchFormUtils.getTypeLimit(sdocSearchSearchResult);
         } else {
             this.settingsSelectType.selectionLimit = 0;
         }
@@ -387,29 +389,29 @@ export class SDocSearchformComponent implements OnInit {
 
         this.optionsSelectTechRateOverall = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true),
+                this.sdocSearchFormUtils.getTechRateOverallValues(sdocSearchSearchResult), true, [], true),
             rawValues['techRateOverall']);
         this.optionsSelectTechDataDistance = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTechDataDistanceValues(sdocSearchSearchResult), true, [], true);
+            this.sdocSearchFormUtils.getTechDataDistanceValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataAscent = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTechDataAscentValues(sdocSearchSearchResult), true, [], true);
+            this.sdocSearchFormUtils.getTechDataAscentValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataAltitudeMax = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getTechDataAltitudeMaxValues(sdocSearchSearchResult), true, [], true);
+            this.sdocSearchFormUtils.getTechDataAltitudeMaxValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectTechDataDuration = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.searchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true),
+                this.sdocSearchFormUtils.getTechDataDurationValues(sdocSearchSearchResult), true, [], true),
             rawValues['techDataDuration']);
         this.optionsSelectPersonalRateOverall = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getPersonalRateOverallValues(sdocSearchSearchResult), true, [], true);
+            this.sdocSearchFormUtils.getPersonalRateOverallValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectPersonalRateDifficulty = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getPersonalRateDifficultyValues(sdocSearchSearchResult), true, [], true);
+            this.sdocSearchFormUtils.getPersonalRateDifficultyValues(sdocSearchSearchResult), true, [], true);
 
         this.optionsSelectPlaylists = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getPlaylistValues(sdocSearchSearchResult), true, [], true);
+            this.sdocSearchFormUtils.getPlaylistValues(sdocSearchSearchResult), true, [], true);
         this.optionsSelectPersons = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.searchFormUtils.getPersonValues(sdocSearchSearchResult), true, [], true);
+            this.sdocSearchFormUtils.getPersonValues(sdocSearchSearchResult), true, [], true);
 
-        const [lat, lon, dist] = this.searchFormUtils.extractNearbyPos(values.nearby);
+        const [lat, lon, dist] = this.sdocSearchFormUtils.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
             this.geoLocationService.doReverseLookup(lat, lon).then(function (result: any) {
                 me.searchFormGroup.patchValue({'nearbyAddress':
@@ -491,7 +493,7 @@ export class SDocSearchformComponent implements OnInit {
 
     private doSearch() {
         const values = this.searchFormGroup.getRawValue();
-        values.nearby = this.searchFormUtils.joinNearbyPos(values);
+        values.nearby = this.sdocSearchFormUtils.joinNearbyPos(values);
         this.searchFormGroup.patchValue({'nearby': values.nearby});
         this.search.emit(values);
         return false;

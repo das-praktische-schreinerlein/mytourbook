@@ -6,7 +6,7 @@ import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plug
 import {CommonDocRoutingService} from './cdoc-routing.service';
 import * as L from 'leaflet';
 import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
-import {CDocContentUtils, CommonItemData} from './cdoc-contentutils.service';
+import {CommonDocContentUtils, CommonItemData} from './cdoc-contentutils.service';
 import LatLng = L.LatLng;
 
 export interface SDocItemData extends CommonItemData {
@@ -18,7 +18,7 @@ export interface SDocItemData extends CommonItemData {
 }
 
 @Injectable()
-export class SDocContentUtils extends CDocContentUtils {
+export class SDocContentUtils extends CommonDocContentUtils {
 
     constructor(sanitizer: DomSanitizer, cdocRoutingService: CommonDocRoutingService, appService: GenericAppService) {
         super(sanitizer, cdocRoutingService, appService);

@@ -9,9 +9,9 @@ import {
     SimpleChange,
     ViewChild
 } from '@angular/core';
-import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {CDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';
 
 @Component({
     selector: 'app-sdoc-videoplayer',
@@ -20,7 +20,7 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocVideoplayerComponent implements OnChanges {
-    public contentUtils: CDocContentUtils;
+    public contentUtils: CommonDocContentUtils;
     listItem: CommonItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
@@ -39,7 +39,7 @@ export class SDocVideoplayerComponent implements OnChanges {
     @ViewChild('videoPlayer') videoplayer: any;
 
     @Input()
-    public record: SDocRecord;
+    public record: CommonDocRecord;
 
     @Input()
     public width: 300;
@@ -57,9 +57,9 @@ export class SDocVideoplayerComponent implements OnChanges {
     public showPreview = true;
 
     @Output()
-    public show: EventEmitter<SDocRecord> = new EventEmitter();
+    public show: EventEmitter<CommonDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: CDocContentUtils, private cd: ChangeDetectorRef) {
+    constructor(contentUtils: CommonDocContentUtils, private cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
     }
 
@@ -69,7 +69,7 @@ export class SDocVideoplayerComponent implements OnChanges {
         }
     }
 
-    submitShow(sdoc: SDocRecord) {
+    submitShow(sdoc: CommonDocRecord) {
         this.show.emit(sdoc);
         return false;
     }
