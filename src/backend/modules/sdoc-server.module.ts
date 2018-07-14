@@ -5,7 +5,7 @@ import {Router} from 'js-data-express';
 import express from 'express';
 import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {DataCacheModule} from '../shared-node/server-commons/datacache.module';
-import {CommonDocServerModule} from '../shared/backend-commons/modules/cdoc-server.module';
+import {CommonDocServerModule} from '../shared-node/backend-commons/modules/cdoc-server.module';
 import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
 
 export class SDocServerModule extends CommonDocServerModule<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {

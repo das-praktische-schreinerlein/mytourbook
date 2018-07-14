@@ -3,13 +3,13 @@ import express from 'express';
 import {CommonDocServerModule} from './cdoc-server.module';
 import {Adapter} from 'js-data-adapter';
 import {Mapper, utils} from 'js-data';
-import {ActionTagForm} from '../../commons/utils/actiontag.utils';
-import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
-import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
-import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
-import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
-import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
-import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
+import {ActionTagForm} from '../../../shared/commons/utils/actiontag.utils';
+import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
+import {CommonDocSearchForm} from '../../../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocDataService} from '../../../shared/search-commons/services/cdoc-data.service';
+import {CommonDocRecord} from '../../../shared/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchResult} from '../../../shared/search-commons/model/container/cdoc-searchresult';
+import {GenericAdapterResponseMapper} from '../../../shared/search-commons/services/generic-adapter-response.mapper';
 
 export abstract class CommonDocWriterServerModule<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> {

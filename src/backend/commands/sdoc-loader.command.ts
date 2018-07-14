@@ -1,11 +1,14 @@
 import {AbstractCommand} from './abstract.command';
 import * as fs from 'fs';
-import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
 import {SDocFileUtils} from '../shared/sdoc-commons/services/sdoc-file.utils';
 import {Mapper, utils} from 'js-data';
-import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-adapter-response.mapper';
+import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocDataService} from '../shared/search-commons/services/cdoc-data.service';
+import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
+import {GenericAdapterResponseMapper} from '../shared/search-commons/services/generic-adapter-response.mapper';
 
 export class SDocLoaderCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -25,20 +28,22 @@ export class SDocLoaderCommand implements AbstractCommand {
         }
         const recordSrcs = SDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(dataFileName, { encoding: 'utf8' }));
 
-        const dataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr', serverConfig.backendConfig);
+        const dataService: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
+            CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
+            SDocDataServiceModule.getDataService('sdocSolr', serverConfig.backendConfig);
         dataService.setWritable(true);
-        const mapper: Mapper = dataService.getMapper('sdoc');
-        const responseMapper = new SDocAdapterResponseMapper(serverConfig.backendConfig);
+        const mapper: Mapper = dataService.getMapper(dataService.getBaseMapperName());
+        const responseMapper: GenericAdapterResponseMapper = new SDocAdapterResponseMapper(serverConfig.backendConfig);
 
         let records = [];
         const recordsPerType = {};
-        for (const sdocSrc of recordSrcs) {
-            const sdoc: SDocRecord = <SDocRecord>responseMapper.mapResponseDocument(mapper, sdocSrc, {});
-            const type = sdoc.type.toLowerCase();
+        for (const docSrc of recordSrcs) {
+            const doc: CommonDocRecord = <CommonDocRecord>responseMapper.mapResponseDocument(mapper, docSrc, {});
+            const type = doc.type.toLowerCase();
             if (!recordsPerType.hasOwnProperty(type)) {
                 recordsPerType[type] = [];
             }
-            recordsPerType[type].push(sdoc);
+            recordsPerType[type].push(doc);
         }
         for (const type of typeOrder) {
             if (recordsPerType[type]) {
@@ -52,13 +57,13 @@ export class SDocLoaderCommand implements AbstractCommand {
         let newRecords = [];
         const readUpdateOrInsert = function(start): Promise<any> {
             const chunk = records.slice(start, start + perRun);
-            const promises = chunk.map(sdoc => {
-                return dataService.importRecord(sdoc, recordIdMapping, recordRecoverIdMapping)
-                    .then(function recordsDone(newSdocRecord: SDocRecord) {
-                        console.log('DONE - import newrecord', newSdocRecord.id);
-                        return utils.resolve(newSdocRecord);
+            const promises = chunk.map(doc => {
+                return dataService.importRecord(doc, recordIdMapping, recordRecoverIdMapping)
+                    .then(function recordsDone(newDocRecord: CommonDocRecord) {
+                        console.log('DONE - import newrecord', newDocRecord.id);
+                        return utils.resolve(newDocRecord);
                     }).catch(function onError(error) {
-                        console.error('error thrown while importRecord SDoc: ', error);
+                        console.error('error thrown while importRecord Doc: ', error);
                         return utils.reject(error);
                     });
             });
@@ -68,7 +73,7 @@ export class SDocLoaderCommand implements AbstractCommand {
                 newRecords = newRecords.concat(data);
                 console.log('DONE - chunk pos:' + (start + 1) + '/' + records.length);
                 if (start + perRun > records.length) {
-                    console.log('DONE - load sdocs');
+                    console.log('DONE - load docs');
                     return utils.resolve('WELL DONE');
                 } else {
                     return readUpdateOrInsert(start + perRun);
@@ -82,13 +87,13 @@ export class SDocLoaderCommand implements AbstractCommand {
         let finishedRecords = [];
         const updateRecoverIds = function(start): Promise<any> {
             const chunk = newRecords.slice(start, start + perRun);
-            const promises = chunk.map(sdoc => {
-                return dataService.postProcessImportRecord(sdoc, recordIdMapping, recordRecoverIdMapping)
-                    .then(function onDone(newSdocRecord: SDocRecord) {
-                        console.log('DONE - postprocess newrecord', newSdocRecord.id);
-                        return utils.resolve(newSdocRecord);
+            const promises = chunk.map(doc => {
+                return dataService.postProcessImportRecord(doc, recordIdMapping, recordRecoverIdMapping)
+                    .then(function onDone(newDocRecord: CommonDocRecord) {
+                        console.log('DONE - postprocess newrecord', newDocRecord.id);
+                        return utils.resolve(newDocRecord);
                     }).catch(function onError(error) {
-                        console.error('error thrown while postProcessImportRecord SDoc: ', error);
+                        console.error('error thrown while postProcessImportRecord Doc: ', error);
                         return utils.reject(error);
                     });
             });
@@ -98,7 +103,7 @@ export class SDocLoaderCommand implements AbstractCommand {
                 finishedRecords = finishedRecords.concat(data);
                 console.log('DONE - chunk pos:' + (start + 1) + '/' + records.length);
                 if (start + perRun > records.length) {
-                    console.log('DONE - postprocess sdocs', finishedRecords);
+                    console.log('DONE - postprocess docs', finishedRecords);
                     return utils.resolve('WELL DONE');
                 } else {
                     return updateRecoverIds(start + perRun);

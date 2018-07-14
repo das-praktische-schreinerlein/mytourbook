@@ -1,17 +1,17 @@
 import {Router} from 'js-data-express';
 import express from 'express';
-import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
-import {Facets} from '../../search-commons/model/container/facets';
-import {GenericSearchOptions} from '../../search-commons/services/generic-search.service';
-import {GenericSearchResult} from '../../search-commons/model/container/generic-searchresult';
+import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
+import {Facets} from '../../../shared/search-commons/model/container/facets';
+import {GenericSearchOptions} from '../../../shared/search-commons/services/generic-search.service';
+import {GenericSearchResult} from '../../../shared/search-commons/model/container/generic-searchresult';
 import {utils} from 'js-data';
-import {GenericSearchForm} from '../../search-commons/model/forms/generic-searchform';
-import {BaseEntityRecord} from '../../search-commons/model/records/base-entity-record';
-import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
-import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
-import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
-import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
-import {DataCacheModule} from '../../../shared-node/server-commons/datacache.module';
+import {GenericSearchForm} from '../../../shared/search-commons/model/forms/generic-searchform';
+import {BaseEntityRecord} from '../../../shared/search-commons/model/records/base-entity-record';
+import {CommonDocRecord} from '../../../shared/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '../../../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocSearchResult} from '../../../shared/search-commons/model/container/cdoc-searchresult';
+import {CommonDocDataService} from '../../../shared/search-commons/services/cdoc-data.service';
+import {DataCacheModule} from '../../server-commons/datacache.module';
 
 export abstract class CommonDocServerModule<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> {

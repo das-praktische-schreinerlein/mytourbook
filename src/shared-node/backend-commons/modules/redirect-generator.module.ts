@@ -1,8 +1,8 @@
 import {Router} from 'js-data-express';
-import {GenericSearchResult} from '../../search-commons/model/container/generic-searchresult';
-import {GenericSearchForm} from '../../search-commons/model/forms/generic-searchform';
-import {BaseEntityRecord} from '../../search-commons/model/records/base-entity-record';
-import {GenericSearchService} from '../../search-commons/services/generic-search.service';
+import {GenericSearchResult} from '../../../shared/search-commons/model/container/generic-searchresult';
+import {GenericSearchForm} from '../../../shared/search-commons/model/forms/generic-searchform';
+import {BaseEntityRecord} from '../../../shared/search-commons/model/records/base-entity-record';
+import {GenericSearchService} from '../../../shared/search-commons/services/generic-search.service';
 import {utils} from 'js-data';
 
 export interface RedirectConfig {

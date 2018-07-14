@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {SitemapConfig, SitemapGeneratorModule} from '../shared/backend-commons/modules/sitemap-generator.module';
+import {SitemapConfig, SitemapGeneratorModule} from '../shared-node/backend-commons/modules/sitemap-generator.module';
 import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';

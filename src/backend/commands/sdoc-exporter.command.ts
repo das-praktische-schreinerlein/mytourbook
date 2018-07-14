@@ -1,12 +1,13 @@
 import {AbstractCommand} from './abstract.command';
 import * as fs from 'fs';
-import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
 import {utils} from 'js-data';
-import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-adapter-response.mapper';
-import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {GenericSearchResult} from '../shared/search-commons/model/container/generic-searchresult';
+import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
+import {CommonDocDataService} from '../shared/search-commons/services/cdoc-data.service';
+import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
+import {GenericAdapterResponseMapper} from '../shared/search-commons/services/generic-adapter-response.mapper';
 
 export class SDocExporterCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -24,9 +25,11 @@ export class SDocExporterCommand implements AbstractCommand {
             console.error('option --file expected');
             return;
         }
-        const dataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr', serverConfig.backendConfig);
+        const dataService: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
+            CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
+            SDocDataServiceModule.getDataService('sdocSolr', serverConfig.backendConfig);
         dataService.setWritable(false);
-        const responseMapper = new SDocAdapterResponseMapper(serverConfig.backendConfig);
+        const responseMapper: GenericAdapterResponseMapper = new SDocAdapterResponseMapper(serverConfig.backendConfig);
 
         fs.writeFileSync(dataFileName, '{"sdocs": [');
         let first = true;
@@ -40,13 +43,13 @@ export class SDocExporterCommand implements AbstractCommand {
         };
 
 
-        const exportSearchResultToJson = function(searchForm: SDocSearchForm): Promise<any> {
+        const exportSearchResultToJson = function(searchForm: CommonDocSearchForm): Promise<any> {
             return dataService.search(searchForm, {
                 showFacets: false,
                 showForm: false,
                 loadDetailsMode: 'full',
                 loadTrack: true}).then(
-                function searchDone(searchResult: GenericSearchResult<SDocRecord, SDocSearchForm>) {
+                function searchDone(searchResult: CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>) {
                     let output = '';
                     for (const doc of searchResult.currentRecords) {
                         output += (first ? '\n  ' : ',\n  ') + JSON.stringify(responseMapper.mapToAdapterDocument({}, doc), replacer);
@@ -75,7 +78,7 @@ export class SDocExporterCommand implements AbstractCommand {
                 return utils.resolve('DONE');
             }
 
-            const globSearchForm = new SDocSearchForm({});
+            const globSearchForm = dataService.newSearchForm({});
             globSearchForm.perPage = perRun;
             globSearchForm.pageNum = 1;
             globSearchForm.type = types[nr];
