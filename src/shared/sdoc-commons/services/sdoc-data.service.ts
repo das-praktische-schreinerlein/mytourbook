@@ -19,13 +19,21 @@ import {SDocVideoRecordSchema} from '../model/schemas/sdocvideo-record-schema';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
 import {Facets} from '../../search-commons/model/container/facets';
-import {CommonDocDataService} from './cdoc-data.service';
+import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 
 export class SDocDataService extends CommonDocDataService<SDocRecord, SDocSearchForm, SDocSearchResult> {
     public defaultLocIdParent = 1;
 
     constructor(dataStore: SDocDataStore) {
         super(dataStore, new SDocSearchService(dataStore), new SDocAdapterResponseMapper({}));
+    }
+
+    public getBaseMapperName(): string {
+        return 'sdoc';
+    }
+
+    public isRecordInstanceOf(record: any): boolean {
+        return record instanceof SDocRecord;
     }
 
     public createRecord(props, opts): SDocRecord {
@@ -92,14 +100,6 @@ export class SDocDataService extends CommonDocDataService<SDocRecord, SDocSearch
             trip: 'tripId',
             news: 'newsId'
         };
-    }
-
-    protected getBaseMapperName(): string {
-        return 'sdoc';
-    }
-
-    protected isRecordInstanceOf(record: any): boolean {
-        return record instanceof SDocRecord;
     }
 
     protected onImportRecordNewRecordProcessDefaults(record: SDocRecord): void {

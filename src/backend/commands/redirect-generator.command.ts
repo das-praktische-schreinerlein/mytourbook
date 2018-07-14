@@ -2,12 +2,12 @@ import * as fs from 'fs';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
 import {AbstractCommand} from './abstract.command';
-import {RedirectConfig, RedirectGeneratorModule} from '../modules/redirect-generator.module';
+import {RedirectConfig, RedirectGeneratorModule} from '../shared/backend-commons/modules/redirect-generator.module';
 import {utils} from 'js-data';
 import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
 import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
-import {CommonDocDataService} from '../shared/sdoc-commons/services/cdoc-data.service';
+import {CommonDocDataService} from '../shared/search-commons/services/cdoc-data.service';
 
 export class RedirectGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {

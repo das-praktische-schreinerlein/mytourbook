@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {SitemapConfig, SitemapGeneratorModule} from '../modules/sitemap-generator.module';
+import {SitemapConfig, SitemapGeneratorModule} from '../shared/backend-commons/modules/sitemap-generator.module';
 import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
@@ -8,7 +8,7 @@ import {AbstractCommand} from './abstract.command';
 import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
 import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
-import {CommonDocDataService} from '../shared/sdoc-commons/services/cdoc-data.service';
+import {CommonDocDataService} from '../shared/search-commons/services/cdoc-data.service';
 
 export class SiteMapGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {

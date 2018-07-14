@@ -25,6 +25,10 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         this.idMappingAliases = this.defineIdMappingAlliases();
     }
 
+    public abstract getBaseMapperName(): string;
+
+    public abstract isRecordInstanceOf(record: any): boolean;
+
     public abstract createRecord(props, opts): R;
 
     public abstract newRecord(values: {}): R;
@@ -317,7 +321,6 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         return this.doActionTags(newRecord, actionTagForms, opts);
     }
 
-    protected abstract isRecordInstanceOf(record: any): boolean;
 
     protected abstract defineDatastoreMapper(): void;
 
@@ -330,7 +333,5 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
     protected abstract onImportRecordNewRecordProcessDefaults(record: R): void;
 
     protected abstract addAdditionalActionTagForms(origRecord: R, newRecord: R, actionTagForms: ActionTagForm[]);
-
-    protected abstract getBaseMapperName(): string;
 
 }
