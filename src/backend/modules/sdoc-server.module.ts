@@ -1,5 +1,5 @@
 import {SDocSearchResult} from '../shared/sdoc-commons/model/container/sdoc-searchresult';
-import {SDocSearchForm, SDocSearchFormValidator} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchFormValidator} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
 import {Router} from 'js-data-express';
 import express from 'express';
@@ -15,7 +15,13 @@ export class SDocServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string, dataService: SDocDataService,
                                   cache: DataCacheModule, backendConfig: {}): SDocServerModule {
         const sdocServerModule = new SDocServerModule(dataService, cache);
+        this.configureServerRoutes(app, apiPrefix, sdocServerModule, cache, backendConfig);
+        return sdocServerModule;
+    }
 
+    public static configureServerRoutes(app: express.Application, apiPrefix: string,
+                                        sdocServerModule: SDocServerModule,
+                                        cache: DataCacheModule, backendConfig: {}) {
         // configure express
         app.param('resolveSdocBySdocId', function(req, res, next, id) {
             const idParam = (id || '');
@@ -26,7 +32,7 @@ export class SDocServerModule {
             const cacheKey = sdocServerModule.generateCacheKey(id);
             cache.get(cacheKey).then(value => {
                 if (value !== undefined) {
-                    req['sdoc'] = Object.assign(new SDocRecord(), value.details);
+                    req['sdoc'] = Object.assign(sdocServerModule.getDataService().newRecord({}), value.details);
                     return next();
                 }
 
@@ -64,10 +70,11 @@ export class SDocServerModule {
                 return next();
             })
             .get(function(req, res, next) {
-                const searchForm = new SDocSearchForm(req.query);
+                const searchForm = sdocServerModule.getDataService().newSearchForm(req.query);
                 if (!SDocSearchFormValidator.isValid(searchForm)) {
                     console.warn('form invalid');
-                    res.json((new SDocSearchResult(searchForm, 0, [], new Facets())).toSerializableJsonObj());
+                    res.json((sdocServerModule.getDataService().newSearchResult(searchForm, 0, [], new Facets())
+                        .toSerializableJsonObj()));
                     return next();
                 }
                 try {
@@ -84,10 +91,10 @@ export class SDocServerModule {
                         searchOptions.showFacets = req.query['showFacets'].toString().split(',');
                     }
 
-                    dataService.search(searchForm, searchOptions).then(
+                    sdocServerModule.getDataService().search(searchForm, searchOptions).then(
                         function searchDone(searchResult: SDocSearchResult) {
                             if (searchOptions.showForm === false) {
-                                searchResult.searchForm = new SDocSearchForm({});
+                                searchResult.searchForm = sdocServerModule.getDataService().newSearchForm({});
                             }
                             if (searchOptions.showFacets === false) {
                                 searchResult.facets = new Facets();
@@ -106,8 +113,6 @@ export class SDocServerModule {
                     return next('not found');
                 }
             });
-
-        return sdocServerModule;
     }
 
     public constructor(private dataService: SDocDataService, private cache: DataCacheModule) {
@@ -119,7 +124,7 @@ export class SDocServerModule {
             loadTrack: false,
             showFacets: false
         };
-        const searchForm = new SDocSearchForm({moreFilter: 'id:' + this.idValidationRule.sanitize(id)});
+        const searchForm = this.dataService.newSearchForm({moreFilter: 'id:' + this.idValidationRule.sanitize(id)});
         const cacheKey = this.generateCacheKey(id);
         const me = this;
         return me.dataService.search(searchForm, searchOptions).then(

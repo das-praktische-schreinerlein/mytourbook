@@ -1,10 +1,13 @@
 import * as fs from 'fs';
-import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
 import {AbstractCommand} from './abstract.command';
 import {RedirectConfig, RedirectGeneratorModule} from '../modules/redirect-generator.module';
 import {utils} from 'js-data';
+import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
+import {CommonDocDataService} from '../shared/sdoc-commons/services/cdoc-data.service';
 
 export class RedirectGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -41,11 +44,14 @@ export class RedirectGeneratorCommand implements AbstractCommand {
                 default:
                     return utils.reject('ERROR - unknown profile to generate redirects for: ' + profile);
             }
+            const dataservice: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
+                CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
+                    SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig);
 
             const promise = RedirectGeneratorModule.generateRedirectFiles(
-                SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig),
+                dataservice.getSearchService(),
                 redirectConfig,
-                new SDocSearchForm({'type': types})
+                dataservice.newSearchForm({'type': types})
             );
             promises.push(promise);
         }

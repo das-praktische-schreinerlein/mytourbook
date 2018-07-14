@@ -6,5 +6,7 @@ export interface GenericAdapterResponseMapper {
     mapResponseDocument(mapper: Mapper, doc: any, mapping: {}): Record;
 
     mapDetailDataToAdapterDocument(mapper: Mapper, profile: string, record: Record, docs: any): void;
+
+    mapValuesToRecord(mapper: Mapper, values: {}): Record;
 }
 

@@ -1,11 +1,14 @@
 import * as fs from 'fs';
 import {SitemapConfig, SitemapGeneratorModule} from '../modules/sitemap-generator.module';
-import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
 import {PDocDataServiceModule} from '../modules/pdoc-dataservice.module';
 import {AbstractCommand} from './abstract.command';
+import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
+import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
+import {CommonDocDataService} from '../shared/sdoc-commons/services/cdoc-data.service';
 
 export class SiteMapGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -28,10 +31,14 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
             }
         });
 
+        const dataservice: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
+        CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
+            SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig);
+
         return SitemapGeneratorModule.generateSiteMapFiles(
-            SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig),
+            dataservice.getSearchService(),
             sitemapConfig,
-            new SDocSearchForm(sitemapConfig.sdocSearchForm)
+            dataservice.newSearchForm(sitemapConfig.sdocSearchForm)
         ).then(value => {
             sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
                 fileBase: 'sitemap-pdoc-',

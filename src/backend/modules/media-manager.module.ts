@@ -51,14 +51,22 @@ export class MediaManagerModule {
     public readAndUpdateDateFormSDocRecord(sdoc: SDocRecord): Promise<{}> {
         const sdocImages = sdoc.get('sdocimages');
         if (sdocImages === undefined  || sdocImages.length === 0) {
-            console.warn('no image found for ' + sdoc.id);
+            console.warn('no image found for ' + sdoc.id + ' details:' + sdoc);
             return utils.resolve({});
         }
 
         const me = this;
         return this.readExifForSDocImageRecord(sdocImages[0]).then(value => {
             // Exif-dates are not in UTC they are in localtimezone
+            if (value === undefined || value === null) {
+                console.warn('no exif found for ' + sdoc.id + ' details:' + sdocImages[0]);
+                return utils.resolve({});
+            }
             const exifDate = BeanUtils.getValue(value, 'exif.DateTimeOriginal');
+            if (exifDate === undefined || exifDate === null) {
+                console.warn('no exif.DateTimeOriginal found for ' + sdoc.id + ' details:' + sdocImages[0] + ' exif:' + exifDate);
+                return utils.resolve({});
+            }
             const myDate = new Date();
             myDate.setHours(exifDate.getUTCHours(), exifDate.getUTCMinutes(), exifDate.getUTCSeconds(), exifDate.getUTCMilliseconds());
             myDate.setFullYear(exifDate.getUTCFullYear(), exifDate.getUTCMonth(), exifDate.getUTCDate());

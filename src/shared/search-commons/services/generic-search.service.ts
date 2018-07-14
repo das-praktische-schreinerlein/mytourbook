@@ -33,7 +33,6 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         this.dataStore.clearLocalStore(this.searchMapperName);
     }
 
-
     getAll(opts?: any): Promise<R[]> {
         const allForm = this.createDefaultSearchForm();
         allForm.perPage = -1;
