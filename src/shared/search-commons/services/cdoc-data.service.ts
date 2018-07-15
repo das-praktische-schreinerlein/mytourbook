@@ -99,7 +99,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         }
 
         if (record === undefined || !record.isValid()) {
-            return utils.reject('sdo-values not valid');
+            return utils.reject('doc-values not valid');
         }
 
         return <Promise<R>>this.dataStore.create(this.getBaseMapperName(), record, opts);
@@ -211,7 +211,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
 
                 // new record: map refIds
                 record.subtype = record.subtype ? record.subtype.replace(/[-a-zA-Z_]+/g, '') : '';
-                this.onImportRecordNewRecordProcessDefaults(record);
+                me.onImportRecordNewRecordProcessDefaults(record);
                 for (const refIdFieldName of me.idMappings) {
                     if (recordIdMapping[refIdFieldName] && recordIdMapping[refIdFieldName][record[refIdFieldName]]) {
                         console.log('orig: ' + record.id + ' map ref ' + refIdFieldName + ' ' + record[refIdFieldName]
