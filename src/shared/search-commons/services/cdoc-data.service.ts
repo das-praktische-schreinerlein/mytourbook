@@ -1,13 +1,14 @@
 import {ActionTagForm} from '../../commons/utils/actiontag.utils';
 import {Mapper, utils} from 'js-data';
 import {Adapter} from 'js-data-adapter';
-import {Facets} from '../../search-commons/model/container/facets';
-import {GenericDataStore} from '../../search-commons/services/generic-data.store';
-import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
-import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
-import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
-import {GenericSearchOptions, GenericSearchService} from '../../search-commons/services/generic-search.service';
-import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
+import {Facets} from '../model/container/facets';
+import {GenericDataStore} from './generic-data.store';
+import {CommonDocRecord} from '../model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '../model/forms/cdoc-searchform';
+import {CommonDocSearchResult} from '../model/container/cdoc-searchresult';
+import {GenericSearchOptions, GenericSearchService} from './generic-search.service';
+import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
+import {CommonDocSearchService} from './cdoc-search.service';
 
 export abstract class CommonDocDataService<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>> {
@@ -17,7 +18,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
     public idMappings = [];
     public idMappingAliases = {};
 
-    constructor(protected dataStore: GenericDataStore<R, F, S>, protected searchService: GenericSearchService<R, F, S>,
+    constructor(protected dataStore: GenericDataStore<R, F, S>, protected searchService: CommonDocSearchService<R, F, S>,
                 protected responseMapper: GenericAdapterResponseMapper) {
         this.defineDatastoreMapper();
         this.typeMapping = this.defineTypeMappings();
@@ -25,18 +26,29 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         this.idMappingAliases = this.defineIdMappingAlliases();
     }
 
-    public abstract getBaseMapperName(): string;
-
-    public abstract isRecordInstanceOf(record: any): boolean;
-
     public abstract createRecord(props, opts): R;
 
-    public abstract newRecord(values: {}): R;
+    public getBaseMapperName(): string {
+        return this.searchService.getBaseMapperName();
+    }
 
-    public abstract newSearchForm(values: {}): F;
+    public isRecordInstanceOf(record: any): boolean {
+        return this.searchService.isRecordInstanceOf(record);
+    }
 
-    public abstract newSearchResult(searchForm: F, recordCount: number,
-                           currentRecords: R[], facets: Facets): S;
+    public newRecord(values: {}): R {
+        return this.searchService.newRecord(values);
+    }
+
+    public newSearchForm(values: {}): F {
+        return this.searchService.newSearchForm(values);
+    }
+
+    public newSearchResult(searchForm: F, recordCount: number,
+                           currentRecords: R[], facets: Facets): S {
+        return this.searchService.newSearchResult(searchForm, recordCount, currentRecords, facets);
+    }
+
 
     public getMapper(mapperName: string): Mapper {
         return this.searchService.getMapper(mapperName);
@@ -67,7 +79,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
     }
 
     doMultiSearch(searchForm: F, ids: string[]): Promise<S> {
-        return undefined; // TODOthis.searchService.do
+        return this.searchService.doMultiSearch(searchForm, ids);
     }
 
     search(searchForm: F, opts?: GenericSearchOptions): Promise<S> {

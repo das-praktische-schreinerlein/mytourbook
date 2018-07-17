@@ -18,7 +18,6 @@ import {SDocVideoRecord, SDocVideoRecordRelation} from '../model/records/sdocvid
 import {SDocVideoRecordSchema} from '../model/schemas/sdocvideo-record-schema';
 import {SDocSearchForm} from '../model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../model/container/sdoc-searchresult';
-import {Facets} from '../../search-commons/model/container/facets';
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 
 export class SDocDataService extends CommonDocDataService<SDocRecord, SDocSearchForm, SDocSearchResult> {
@@ -28,29 +27,8 @@ export class SDocDataService extends CommonDocDataService<SDocRecord, SDocSearch
         super(dataStore, new SDocSearchService(dataStore), new SDocAdapterResponseMapper({}));
     }
 
-    public getBaseMapperName(): string {
-        return 'sdoc';
-    }
-
-    public isRecordInstanceOf(record: any): boolean {
-        return record instanceof SDocRecord;
-    }
-
     public createRecord(props, opts): SDocRecord {
         return <SDocRecord>this.dataStore.createRecord(this.getBaseMapperName(), props, opts);
-    }
-
-    public newRecord(values: {}): SDocRecord {
-        return new SDocRecord(values);
-    }
-
-    public newSearchForm(values: {}): SDocSearchForm {
-        return new SDocSearchForm(values);
-    }
-
-    public newSearchResult(sdocSearchForm: SDocSearchForm, recordCount: number,
-                           currentRecords: SDocRecord[], facets: Facets): SDocSearchResult {
-        return new SDocSearchResult(sdocSearchForm, recordCount, currentRecords, facets);
     }
 
     protected addAdditionalActionTagForms(origSdocRecord: SDocRecord, newSdocRecord: SDocRecord,

@@ -3,6 +3,7 @@ import {GenericSearchForm} from '../model/forms/generic-searchform';
 import {GenericSearchResult} from '../model/container/generic-searchresult';
 import {Mapper, Record} from 'js-data';
 import {Adapter} from 'js-data-adapter';
+import {Facets} from '../model/container/facets';
 
 export interface GenericSearchOptions {
     showForm: boolean;
@@ -13,6 +14,7 @@ export interface GenericSearchOptions {
 
 export abstract class GenericSearchService <R extends Record, F extends GenericSearchForm,
     S extends GenericSearchResult<R, F>> {
+    protected maxPerRun = 99;
     dataStore: GenericDataStore<R, F, S>;
     searchMapperName: string;
 
@@ -20,6 +22,17 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
         this.dataStore = dataStore;
         this.searchMapperName = mapperName;
     }
+
+    public abstract getBaseMapperName(): string;
+
+    public abstract isRecordInstanceOf(record: any): boolean;
+
+    public abstract newRecord(values: {}): R;
+
+    public abstract newSearchForm(values: {}): F;
+
+    public abstract newSearchResult(searchForm: F, recordCount: number,
+                                    currentRecords: R[], facets: Facets): S;
 
     public getMapper(mapperName: string): Mapper {
         return this.dataStore.getMapper(mapperName);
@@ -82,6 +95,8 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
     getByIdFromLocalStore(id: string): R {
         return <R>this.dataStore.getFromLocalStore(this.searchMapperName, id);
     }
+
+    abstract doMultiSearch(searchForm: F, ids: string[]): Promise<S>;
 
     abstract createDefaultSearchForm(): F;
 }
