@@ -44,7 +44,7 @@ export class CommonDocSearchForm extends GenericSearchForm {
     }
 }
 
-export class SDocSearchFormFactory {
+export class CommonDocSearchFormFactory {
     static createSanitized(values: {}): CommonDocSearchForm {
         const sanitizedValues: any = {};
         sanitizedValues.fulltext = GenericSearchForm.genericFields.fulltext.validator.sanitize(values['fulltext']) || '';
@@ -76,7 +76,7 @@ export class SDocSearchFormFactory {
     }
 }
 
-export class SDocSearchFormValidator {
+export class CommonDocSearchFormValidator {
     static isValidValues(values: {}): boolean {
         let state = true;
         state = state && GenericSearchForm.genericFields.fulltext.validator.isValid(values['fulltext']);

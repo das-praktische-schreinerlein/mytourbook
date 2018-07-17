@@ -286,7 +286,6 @@ export class SDocRecordValidator {
         state = !SDocRecord.sdocFields.gpsTrackSrc.validator.isValid(values['gpsTrackSrc']) ? errors.push('gpsTrackSrc') &&  false : true;
         state = !SDocRecord.sdocFields.gpsTrackBasefile.validator.isValid(values['gpsTrackBasefile'])
             ? errors.push('gpsTrackBasefile') && false : true;
-        state = !CommonDocRecord.cdocFields.keywords.validator.isValid(values['keywords']) ? errors.push('keywords') &&  false : true;
         state = !SDocRecord.sdocFields.locHirarchie.validator.isValid(values['locHirarchie'])
             ? errors.push('locHirarchie') &&  false : true;
         state = !SDocRecord.sdocFields.locHirarchieIds.validator.isValid(values['locHirarchieIds'])
