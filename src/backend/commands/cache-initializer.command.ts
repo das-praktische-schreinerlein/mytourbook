@@ -1,4 +1,4 @@
-import {AbstractCommand} from './abstract.command';
+import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 import {ServerConfig} from '../server-module.loader';
 import * as fs from 'fs';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';

@@ -1,4 +1,4 @@
-import {AbstractCommand} from './abstract.command';
+import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 import * as fs from 'fs';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
 import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-adapter-response.mapper';

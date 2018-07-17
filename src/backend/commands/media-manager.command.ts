@@ -1,11 +1,13 @@
 import * as fs from 'fs';
 import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
-import {AbstractCommand} from './abstract.command';
-import {MediaManagerModule} from '../modules/media-manager.module';
+import {CommonDocMediaManagerModule} from '../modules/cdoc-media-manager.module';
 import {utils} from 'js-data';
 import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-adapter-response.mapper';
 import * as os from 'os';
+import {MediaManagerModule} from '../shared-node/media-commons/modules/media-manager.module';
+import {CommonMediaManagerCommand} from '../shared-node/backend-commons/commands/common-media-manager.command';
+import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 
 export class MediaManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -16,21 +18,21 @@ export class MediaManagerCommand implements AbstractCommand {
         const dataService = SDocDataServiceModule.getDataService('sdocSolrReadOnly', backendConfig);
         const action = argv['action'];
         const importDir = argv['importDir'];
-        const outputDir = argv['outputDir'];
-        const force = argv['force'];
         if (writable) {
             dataService.setWritable(true);
         }
-        const imageManagerModule = new MediaManagerModule(backendConfig, dataService, os.tmpdir());
+        const mediaManagerModule = new MediaManagerModule(backendConfig['imageMagicAppPath'], os.tmpdir());
+        const cdocManagerModule = new CommonDocMediaManagerModule(backendConfig, dataService, mediaManagerModule);
+        const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
 
         let promise: Promise<any>;
         switch (action) {
             case 'readImageDates':
-                promise = imageManagerModule.readImageDates(searchForm);
+                promise = cdocManagerModule.readImageDates(searchForm);
 
                 break;
             case 'scaleImages':
-                promise = imageManagerModule.scaleImages(searchForm);
+                promise = cdocManagerModule.scaleImages(searchForm);
 
                 break;
             case 'generateSDocsFromMediaDir':
@@ -40,7 +42,7 @@ export class MediaManagerCommand implements AbstractCommand {
                     return promise;
                 }
 
-                promise = imageManagerModule.generateSDocRecordsFromMediaDir(importDir);
+                promise = cdocManagerModule.generateSDocRecordsFromMediaDir(importDir);
                 promise.then(value => {
                     const responseMapper = new SDocAdapterResponseMapper(backendConfig);
                     const sdocs = [];
@@ -51,84 +53,8 @@ export class MediaManagerCommand implements AbstractCommand {
                 });
 
                 break;
-            case 'convertVideosFromMediaDirToMP4':
-                if (importDir === undefined || outputDir === undefined) {
-                    console.error(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR [--force true/false]',
-                        argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR' +
-                        ' [--force true/false]');
-                    return promise;
-                }
-
-                promise = imageManagerModule.convertVideosFromMediaDirToMP4(importDir, outputDir, !force);
-                promise.then(value => {
-                    console.log('DONE converted files to mp4', value);
-                });
-
-                break;
-            case 'scaleVideosFromMediaDirToMP4':
-                if (importDir === undefined || outputDir === undefined) {
-                    console.error(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR [--force true/false]',
-                        argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR' +
-                        ' [--force true/false]');
-                    return promise;
-                }
-
-                promise = imageManagerModule.scaleVideosFromMediaDirToMP4(importDir, outputDir, 600, !force);
-                promise.then(value => {
-                    console.log('DONE scaled videos', value);
-                });
-
-                break;
-            case 'generateVideoScreenshotFromMediaDir':
-                if (importDir === undefined || outputDir === undefined) {
-                    console.error(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR [--force true/false]',
-                        argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR' +
-                        ' [--force true/false]');
-                    return promise;
-                }
-
-                promise = imageManagerModule.generateVideoScreenshotFromMediaDir(importDir, outputDir, 200, !force);
-                promise.then(value => {
-                    console.log('DONE created screenshot for videos', value);
-                });
-
-                break;
-            case 'generateVideoPreviewFromMediaDir':
-                if (importDir === undefined || outputDir === undefined) {
-                    console.error(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR [--force true/false]',
-                        argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputDir OUTPUTDIR' +
-                        ' [--force true/false]');
-                    return promise;
-                }
-
-                promise = imageManagerModule.generateVideoPreviewFromMediaDir(importDir, outputDir, 200, !force);
-                promise.then(value => {
-                    console.log('DONE created screenshot for videos', value);
-                });
-
-                break;
-            case 'rotateVideo':
-                const srcFile = argv['srcFile'];
-                const rotate = argv['rotate'];
-                if (srcFile === undefined || rotate === undefined) {
-                    console.error(action + ' missing parameter - usage: --srcFile SRCFILE --rotate DEGREES', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --srcFile SRCFILE --rotate DEGREES [--force true/false]');
-                    return promise;
-                }
-
-                promise = imageManagerModule.rotateVideo(srcFile, rotate);
-                promise.then(value => {
-                    console.log('DONE rotated videos', value);
-                });
-
-                break;
             default:
-                console.error('unknown action:', argv);
-                promise = utils.reject('unknown action');
+                return commonMediadManagerCommand.process(argv);
         }
 
         return promise;

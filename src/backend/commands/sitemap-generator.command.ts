@@ -4,7 +4,7 @@ import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
 import {PDocDataServiceModule} from '../modules/pdoc-dataservice.module';
-import {AbstractCommand} from './abstract.command';
+import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
 import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
-import {AbstractCommand} from './abstract.command';
+import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 import {RedirectConfig, RedirectGeneratorModule} from '../shared-node/backend-commons/modules/redirect-generator.module';
 import {utils} from 'js-data';
 import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
