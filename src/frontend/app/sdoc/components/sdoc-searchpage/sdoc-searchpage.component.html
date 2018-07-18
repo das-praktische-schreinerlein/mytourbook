@@ -1,13 +1,13 @@
 <ng-template #resultContainer let-searchFormLayout=searchFormLayout>
     <div class="container">
-        <app-sdoc-list-header [searchResult]="searchResult"
+        <app-cdoc-list-header [searchResult]="searchResult"
                               [perPage]="perPage"
                               [layout]="layout"
                               [sort]="sort"
                               (perPageChange)="onPerPageChange($event)"
                               (sortChange)="onSortChange($event)"
                               (layoutChange)="onLayoutChange($event)"
-                              (pageChange)="onPageChange($event, false)" ></app-sdoc-list-header>
+                              (pageChange)="onPageChange($event, false)" ></app-cdoc-list-header>
     </div>
     <div class="container">
         <app-sdoc-list [searchResult]="searchResult"
@@ -16,8 +16,8 @@
                        (show)="onShowSDoc($event)"></app-sdoc-list>
     </div>
     <div class="container">
-        <app-sdoc-list-footer [searchResult]="searchResult"
-                              (pageChange)="onPageChange($event, true)" ></app-sdoc-list-footer>
+        <app-cdoc-list-footer [searchResult]="searchResult"
+                              (pageChange)="onPageChange($event, true)" ></app-cdoc-list-footer>
         <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
     </div>
 
@@ -42,7 +42,7 @@
 
 <ng-template #mapContainer let-searchFormLayout=searchFormLayout>
     <div class="container">
-        <app-sdoc-timetable [searchResult]="searchResult" (columnClicked)="onTimeTableColumnClicked($event)"></app-sdoc-timetable>
+        <app-cdoc-timetable [searchResult]="searchResult" (columnClicked)="onTimeTableColumnClicked($event)"></app-cdoc-timetable>
     </div>
     <div [class]="('container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
         <app-sdoc-map [mapId]="'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
@@ -69,7 +69,7 @@
             <span class="btn-action-icon">&#x21D1;</span></button>
     </div>
     <div class="container">
-        <app-sdoc-typetable [searchResult]="searchResult" (columnClicked)="onTypeTableColumnClicked($event)"></app-sdoc-typetable>
+        <app-cdoc-typetable [searchResult]="searchResult" (columnClicked)="onTypeTableColumnClicked($event)"></app-cdoc-typetable>
     </div>
 </ng-template>
 
@@ -80,7 +80,7 @@
             <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
             <div class="container content-container">
                 <div class="container list-header-container">
-                    <app-sdoc-list-header [searchResult]="searchResult"
+                    <app-cdoc-list-header [searchResult]="searchResult"
                                           [perPage]="perPage"
                                           [layout]="layout"
                                           [sort]="sort"
@@ -89,7 +89,7 @@
                                           (perPageChange)="onPerPageChange($event)"
                                           (sortChange)="onSortChange($event)"
                                           (layoutChange)="onLayoutChange($event)"
-                                          (pageChange)="onPageChange($event, true)" ></app-sdoc-list-header>
+                                          (pageChange)="onPageChange($event, true)" ></app-cdoc-list-header>
                 </div>
                 <div class="container list-container">
                     <app-sdoc-list [searchResult]="searchResult"
@@ -111,26 +111,26 @@
                         <ng-container *ngTemplateOutlet="formContainer;context:{searchFormLayout: searchFormLayout, showForm: true}"></ng-container>
                         <div class="container hidden-print" *ngIf="searchResult.recordCount > 0">
                             <span class="text-bold" i18n="text shortlinks|Hint for shortlinks@@text.searchform.hints.shortLinks">Oder auf einen Klick...</span>
-                            <app-sdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
+                            <app-cdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
                                                (columnClicked)="onTagcloudClicked($event, 'actiontype')"
-                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
-                            <app-sdoc-tagcloud [label]="'Jahr'" [facetName]="'year_is'" [valuePrefix]="'year'"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Jahr'" [facetName]="'year_is'" [valuePrefix]="'year'"
                                                [sortKey]="'key'"
                                                (columnClicked)="onTagcloudClicked($event, 'when')"
-                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
-                            <app-sdoc-tagcloud [label]="'Wann'" [facetName]="'month_is'" [valuePrefix]="'month'"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Wann'" [facetName]="'month_is'" [valuePrefix]="'month'"
                                                [labelPrefix]="'Monat'" [sortKey]="'key'"
                                                (columnClicked)="onTagcloudClicked($event, 'when')"
-                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
-                            <app-sdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
                                                (columnClicked)="onTagcloudClicked($event, 'where')"
-                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
-                            <app-sdoc-tagcloud [label]="'Schwierig?'" [facetName]="'rate_pers_schwierigkeit_is'" [max]="50"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Schwierig?'" [facetName]="'rate_pers_schwierigkeit_is'" [max]="50"
                                                (columnClicked)="onTagcloudClicked($event, 'personalRateDifficulty')"
-                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
-                            <app-sdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
                                                (columnClicked)="onTagcloudClicked($event, 'techRateOverall')"
-                                               [searchResult]="searchResult"></app-sdoc-tagcloud>
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
                         </div>
                     </div>
 

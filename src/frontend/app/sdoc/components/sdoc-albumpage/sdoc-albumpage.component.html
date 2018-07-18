@@ -36,7 +36,7 @@
             </div>
             <div class="container content-container">
                 <div class="container">
-                    <app-sdoc-list-header [searchResult]="listSearchResult"
+                    <app-cdoc-list-header [searchResult]="listSearchResult"
                                           [perPage]="listSearchForm.perPage"
                                           [layout]="layout"
                                           [sort]="listSearchForm.sort"
@@ -45,7 +45,7 @@
                                           (perPageChange)="onPerPageChange($event)"
                                           (sortChange)="onSortChange($event)"
                                           (layoutChange)="onLayoutChange($event)"
-                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-header>
+                                          (pageChange)="onPageChange($event)" ></app-cdoc-list-header>
                 </div>
                 <div class="container">
                     <app-sdoc-list [searchResult]="listSearchResult"
@@ -56,8 +56,8 @@
                                    (show)="onShowSDoc($event)"></app-sdoc-list>
                 </div>
                 <div class="container">
-                    <app-sdoc-list-footer [searchResult]="listSearchResult"
-                                          (pageChange)="onPageChange($event)" ></app-sdoc-list-footer>
+                    <app-cdoc-list-footer [searchResult]="listSearchResult"
+                                          (pageChange)="onPageChange($event)" ></app-cdoc-list-footer>
                 </div>
             </div>
         </div>

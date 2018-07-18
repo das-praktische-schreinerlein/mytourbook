@@ -131,6 +131,14 @@ export class LayoutService {
     }
 }
 
+export enum Layout {
+    THIN,
+    FLAT,
+    SMALL,
+    BIG,
+    PAGE
+}
+
 
 /**
     // Browser

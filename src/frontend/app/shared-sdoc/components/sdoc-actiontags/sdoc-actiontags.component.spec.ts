@@ -5,7 +5,7 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SDocActionTagsComponent} from './sdoc-actiontags.component';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {Router} from '@angular/router';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';

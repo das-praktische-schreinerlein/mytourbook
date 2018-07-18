@@ -3,10 +3,10 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
 import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plugin';
-import {CommonDocRoutingService} from './cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../shared/frontend-commons/services/cdoc-routing.service';
 import * as L from 'leaflet';
 import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
-import {CommonDocContentUtils, CommonItemData} from './cdoc-contentutils.service';
+import {CommonDocContentUtils, CommonItemData} from '../../../shared/frontend-commons/services/cdoc-contentutils.service';
 import LatLng = L.LatLng;
 
 export interface SDocItemData extends CommonItemData {

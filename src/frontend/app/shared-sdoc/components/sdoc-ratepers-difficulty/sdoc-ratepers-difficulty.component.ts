@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocRatePersonalRecord} from '../../../../shared/sdoc-commons/model/records/sdocratepers-record';
-import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-ratepers-difficulty',

@@ -4,7 +4,7 @@ import {SDocEditpageComponent} from './sdoc-editpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';

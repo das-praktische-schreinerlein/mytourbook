@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
-
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';

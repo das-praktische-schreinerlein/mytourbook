@@ -8,7 +8,7 @@ import {SDocDataStore, SDocTeamFilterConfig} from '../../../../shared/sdoc-commo
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';

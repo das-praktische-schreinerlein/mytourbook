@@ -20,6 +20,7 @@ import {AngularMarkdownService} from '../../shared/angular-commons/services/angu
 import {AngularHtmlService} from '../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
+import {FrontendCommonsModule} from '../../shared/frontend-commons/frontend-commons.module';
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import {TranslateModule} from '@ngx-translate/core';
         ReactiveFormsModule,
         SharedSDocModule,
         SharedPDocModule,
-        SectionsRoutingModule
+        SectionsRoutingModule,
+        FrontendCommonsModule
     ],
     providers: [
         CommonRoutingService,

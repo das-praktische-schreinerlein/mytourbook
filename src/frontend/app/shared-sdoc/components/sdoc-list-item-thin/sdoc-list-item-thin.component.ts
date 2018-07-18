@@ -9,8 +9,8 @@ import {
     Output,
     SimpleChange
 } from '@angular/core';
-import {Layout} from '../sdoc-list/sdoc-list.component';
-import {CommonDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
+import {Layout} from '../../../../shared/angular-commons/services/layout.service';
+import {CommonDocContentUtils, CommonItemData} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';

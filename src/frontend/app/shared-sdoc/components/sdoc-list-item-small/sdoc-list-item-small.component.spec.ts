@@ -4,16 +4,16 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemSmallComponent} from './sdoc-list-item-small.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
-import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
-import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {SDocDateFormatPipe} from '../../pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
-import {CommonDocDataServiceStub} from '../../../../testing/cdoc-dataservice-stubs';
+import {CommonDocDataServiceStub} from '../../../../shared/testing/cdoc-dataservice-stubs';
 
 describe('SDocListItemSmallComponent', () => {
     let component: SDocListItemSmallComponent;

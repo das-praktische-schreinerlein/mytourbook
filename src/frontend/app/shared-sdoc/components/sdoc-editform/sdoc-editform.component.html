@@ -181,13 +181,13 @@
             <textarea formControlName="keywords" class="form-control" type="text" placeholder="keywords" i18n-placeholder="keywords placeholder|Placeholder for keywords@@placeholder.form.sdoc.keywords"></textarea>
         </div>
         <div class="col-sm-12 form-inline input-group input-group-sm">
-            <app-sdoc-persontagsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="personTagSuggestions"
+            <app-cdoc-persontagsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="personTagSuggestions"
                                       (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"
-                                      (tagsFound)="setPersonsFound($event)"></app-sdoc-persontagsstate>
+                                      (tagsFound)="setPersonsFound($event)"></app-cdoc-persontagsstate>
         </div>
         <div class="col-sm-12 form-inline input-group input-group-sm">
-            <app-sdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="keywordSuggestions"
-                                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-sdoc-keywordsstate>
+            <app-cdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="keywordSuggestions"
+                                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-cdoc-keywordsstate>
         </div>
     </ng-template>
 

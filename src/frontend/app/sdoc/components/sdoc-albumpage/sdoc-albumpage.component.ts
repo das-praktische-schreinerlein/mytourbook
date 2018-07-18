@@ -7,7 +7,7 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {IdCsvValidationRule, IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
@@ -16,7 +16,7 @@ import {PageUtils} from '../../../../shared/angular-commons/services/page.utils'
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {SDocAlbumResolver} from '../../../shared-sdoc/resolver/sdoc-album.resolver';
-import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
+import {Layout} from '../../../../shared/angular-commons/services/layout.service';
 import {FormBuilder} from '@angular/forms';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';

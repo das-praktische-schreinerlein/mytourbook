@@ -10,7 +10,7 @@ import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-search
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
-import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {ErrorResolver} from '../../resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';

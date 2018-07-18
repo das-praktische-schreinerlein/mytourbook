@@ -13,11 +13,11 @@
                              alt="{{listItem.image.name}}">
                     </ng-container>
                     <ng-container *ngIf="listItem.video">
-                        <app-sdoc-videoplayer *ngIf="listItem.video"
+                        <app-cdoc-videoplayer *ngIf="listItem.video"
                                               [record]="listItem.currentRecord"
                                               [showPreview]="true"
                                               [width]="100" [forceWidth]="100" [styleClass]="'picture-thumbnail'"
-                                              (show)="submitShow(listItem.currentRecord)"></app-sdoc-videoplayer>
+                                              (show)="submitShow(listItem.currentRecord)"></app-cdoc-videoplayer>
                     </ng-container>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord | sdocdate}}</h5></a>
                     <app-sdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-sdoc-ratepers >
@@ -45,11 +45,11 @@
                              alt="{{listItem.image.name}}">
                     </ng-container>
                     <ng-container *ngIf="listItem.video">
-                        <app-sdoc-videoplayer *ngIf="listItem.video"
+                        <app-cdoc-videoplayer *ngIf="listItem.video"
                                               [record]="listItem.currentRecord"
                                               [showPreview]="true"
                                               [width]="100" [forceWidth]="100" [styleClass]="'picture-thumbnail'"
-                                              (show)="submitShow(listItem.currentRecord)"></app-sdoc-videoplayer>
+                                              (show)="submitShow(listItem.currentRecord)"></app-cdoc-videoplayer>
                     </ng-container>
                 </div>
                 <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>

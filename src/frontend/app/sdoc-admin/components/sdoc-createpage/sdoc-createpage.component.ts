@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
-import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
-import {CommonDocContentUtils} from '../../../shared-sdoc/services/cdoc-contentutils.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
+import {Layout} from '../../../../shared/angular-commons/services/layout.service';
+import {CommonDocContentUtils} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';

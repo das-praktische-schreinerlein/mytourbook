@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {FormBuilder} from '@angular/forms';

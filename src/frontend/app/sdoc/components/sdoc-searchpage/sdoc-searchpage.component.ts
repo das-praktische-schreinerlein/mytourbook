@@ -7,8 +7,8 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../shared-sdoc/services/cdoc-routing.service';
-import {Layout} from '../../../shared-sdoc/components/sdoc-list/sdoc-list.component';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
+import {Layout} from '../../../../shared/angular-commons/services/layout.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../sections/resolver/error.resolver';
 import {SectionsSearchFormResolver} from '../../../sections/resolver/sections-searchform.resolver';

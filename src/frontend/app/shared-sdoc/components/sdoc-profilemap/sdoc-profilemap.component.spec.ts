@@ -6,7 +6,7 @@ import {SDocProfileMapComponent} from './sdoc-profilemap.component';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';

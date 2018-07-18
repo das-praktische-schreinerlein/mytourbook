@@ -10,10 +10,10 @@ import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service'
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
-import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
-import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';

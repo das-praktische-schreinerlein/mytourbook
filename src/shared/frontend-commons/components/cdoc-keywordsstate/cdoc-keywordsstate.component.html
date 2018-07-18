@@ -1,0 +1,4 @@
+<app-cdoc-tagsstate [tags]="keywords" [tagsConfig]="keywordsConfig"
+                    [possiblePrefixes]="possiblePrefixes" [suggestions]="suggestions" [prefix]="prefix"
+                    (setTag)="doSetKeyword($event)" (unsetTag)="doUnsetKeyword($event)"
+                    (tagsFound)="tagsFound.emit($event)"></app-cdoc-tagsstate>

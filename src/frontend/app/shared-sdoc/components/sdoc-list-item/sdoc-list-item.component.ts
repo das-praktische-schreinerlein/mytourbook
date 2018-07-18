@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
-import {Layout} from '../sdoc-list/sdoc-list.component';
-import {CommonItemData, CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
+import {Layout} from '../../../../shared/angular-commons/services/layout.service';
+import {CommonItemData, CommonDocContentUtils} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {CommonDocRecord} from '../../../../shared/search-commons/model/records/cdoc-entity-record';

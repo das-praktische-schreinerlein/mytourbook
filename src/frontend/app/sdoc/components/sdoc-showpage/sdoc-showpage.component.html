@@ -16,9 +16,9 @@
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | sdocdate}} {{record.name}}</span></h5>
                         <div class="image-container">
                             <ng-container *ngIf="record.sdocvideos !== undefined && record.sdocvideos.length > 0">
-                                <app-sdoc-videoplayer [record]="record"
+                                <app-cdoc-videoplayer [record]="record"
                                                       [showPreview]="false"
-                                                      [width]="600" [styleClass]="'picture-big'"></app-sdoc-videoplayer>
+                                                      [width]="600" [styleClass]="'picture-big'"></app-cdoc-videoplayer>
                             </ng-container>
                         </div>
                     </ng-container>
@@ -40,18 +40,18 @@
                 <app-sdoc-datatech [record]="record"></app-sdoc-datatech >
                 <app-sdoc-datainfo [record]="record"></app-sdoc-datainfo >
                 <div class="tagcloud-container" *ngIf="record.type === 'LOCATION'">
-                    <app-sdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
+                    <app-cdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
                                        [label]="'Was kann man hier tun?'"
-                                       (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-sdoc-tagcloud>
+                                       (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-cdoc-tagcloud>
                 </div>
                 <!--
                 <div class="tagcloud-container" *ngIf="record.type === 'TRIP' || record.type === 'NEWS'">
-                    <app-sdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
+                    <app-cdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
                                        [label]="'Was wurde alles gemacht?'"
-                                       (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-sdoc-tagcloud>
+                                       (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-cdoc-tagcloud>
                 </div>
                 -->
-                <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
+                <app-cdoc-keywords [record]="record"></app-cdoc-keywords>
                 <app-sdoc-persontags [record]="record"></app-sdoc-persontags>
                 <app-sdoc-datameta [record]="record"></app-sdoc-datameta>
             </div>

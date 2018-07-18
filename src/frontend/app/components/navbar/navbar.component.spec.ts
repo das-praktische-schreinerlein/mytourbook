@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ActivatedRouteStub} from '../../../testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ToastsManagerStub} from '../../../testing/toasts-stubs';
+import {ToastsManagerStub} from '../../../shared/testing/toasts-stubs';
 import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
 import {PDocDataServiceStub} from '../../../testing/pdoc-dataservice-stubs';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';

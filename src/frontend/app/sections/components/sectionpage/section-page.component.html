@@ -67,21 +67,21 @@
 <ng-template #tagcloudContainer>
     <ng-container *ngIf="sdocSearchResult.recordCount > 0">
         <span class="text-bold" i18n="text shortlinks|Hint for shortlinks@@text.searchform.hints.shortLinks">Oder auf einen Klick...</span>
-        <app-sdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
+        <app-cdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
                            (columnClicked)="onTagcloudClicked($event, 'actiontype')"
-                           [searchResult]="routeSearchResult"></app-sdoc-tagcloud>
-        <app-sdoc-tagcloud [label]="'Wann'" [facetName]="'month_is'" [valuePrefix]="'month'"
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Wann'" [facetName]="'month_is'" [valuePrefix]="'month'"
                            [labelPrefix]="'Monat'" [sortKey]="'key'" (columnClicked)="onTagcloudClicked($event, 'when')"
-                           [searchResult]="routeSearchResult"></app-sdoc-tagcloud>
-        <app-sdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
                            (columnClicked)="onTagcloudClicked($event, 'where')" [searchResult]="routeSearchResult">
-        </app-sdoc-tagcloud>
-        <app-sdoc-tagcloud [label]="'Schwierig?'" [facetName]="'rate_pers_schwierigkeit_is'" [max]="50"
+        </app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Schwierig?'" [facetName]="'rate_pers_schwierigkeit_is'" [max]="50"
                            (columnClicked)="onTagcloudClicked($event, 'personalRateDifficulty')"
-                           [searchResult]="routeSearchResult"></app-sdoc-tagcloud>
-        <app-sdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
                            (columnClicked)="onTagcloudClicked($event, 'techRateOverall')"
-                           [searchResult]="routeSearchResult"></app-sdoc-tagcloud>
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
     </ng-container>
 </ng-template>
 
