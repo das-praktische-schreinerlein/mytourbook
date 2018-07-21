@@ -49,6 +49,14 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         return this.searchService.newSearchResult(searchForm, recordCount, currentRecords, facets);
     }
 
+    public createSanitizedSearchForm(values: {}): F {
+        return this.searchService.createSanitizedSearchForm(values);
+    }
+
+    public cloneSanitizedSearchForm(src: F): F {
+        return this.searchService.cloneSanitizedSearchForm(src);
+    }
+
 
     public getMapper(mapperName: string): Mapper {
         return this.searchService.getMapper(mapperName);

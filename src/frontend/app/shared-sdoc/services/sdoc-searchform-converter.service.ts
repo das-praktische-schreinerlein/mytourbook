@@ -3,6 +3,7 @@ import {SDocSearchForm} from '../../../shared/sdoc-commons/model/forms/sdoc-sear
 import {GenericSearchFormSearchFormConverter} from '../../../shared/search-commons/services/generic-searchform.converter';
 import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
 import {TranslateService} from '@ngx-translate/core';
+import {SDocSearchFormValidator} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 
 export interface HumanReadableFilter {
     id: string;
@@ -31,6 +32,13 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
     constructor(private searchParameterUtils: SearchParameterUtils, private translateService: TranslateService) {
     }
 
+    isValid(searchForm: SDocSearchForm): boolean {
+        return SDocSearchFormValidator.isValid(searchForm);
+    }
+
+    newSearchForm(values: {}): SDocSearchForm {
+        return new SDocSearchForm(values);
+    }
 
     joinWhereParams(sdocSearchForm: SDocSearchForm): string {
         const searchForm = (sdocSearchForm ? sdocSearchForm : new SDocSearchForm({}));

@@ -6,7 +6,7 @@ import {CommonDocRoutingService} from '../../../../shared/frontend-commons/servi
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
-import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {IdValidationRule, KeywordValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';

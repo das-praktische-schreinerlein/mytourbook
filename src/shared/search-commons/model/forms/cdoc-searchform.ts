@@ -3,6 +3,7 @@ import {
     ExtendedKeyParamsValidationRule,
     GenericValidatorDatatypes,
     IdCsvValidationRule,
+    IdValidationRule,
     KeyParamsValidationRule,
     TextValidationRule
 } from './generic-validator.util';
@@ -13,6 +14,7 @@ export class CommonDocSearchForm extends GenericSearchForm {
         what: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new IdCsvValidationRule(false)),
         moreFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.FILTER_LIST, new ExtendedKeyParamsValidationRule(false)),
         playlists: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        theme: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
         type: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false))
     };
 
@@ -20,6 +22,7 @@ export class CommonDocSearchForm extends GenericSearchForm {
     what: string;
     moreFilter: string;
     playlists: string;
+    theme: string;
     type: string;
 
     constructor(values: {}) {
@@ -28,6 +31,7 @@ export class CommonDocSearchForm extends GenericSearchForm {
         this.what = values['what'] || '';
         this.moreFilter = values['moreFilter'] || '';
         this.playlists = values['playlists'] || '';
+        this.theme = values['theme'] || '';
         this.type = values['type'] || '';
     }
 
@@ -55,6 +59,7 @@ export class CommonDocSearchFormFactory {
         sanitizedValues.what = CommonDocSearchForm.cdocFields.what.validator.sanitize(values['what']) || '';
         sanitizedValues.moreFilter = CommonDocSearchForm.cdocFields.moreFilter.validator.sanitize(values['moreFilter']) || '';
         sanitizedValues.playlists = CommonDocSearchForm.cdocFields.playlists.validator.sanitize(values['playlists']) || '';
+        sanitizedValues.theme = CommonDocSearchForm.cdocFields.theme.validator.sanitize(values['theme']) || '';
         sanitizedValues.type = CommonDocSearchForm.cdocFields.type.validator.sanitize(values['type']) || '';
 
         return new CommonDocSearchForm(sanitizedValues);
@@ -70,6 +75,7 @@ export class CommonDocSearchFormFactory {
         sanitizedValues.what = CommonDocSearchForm.cdocFields.what.validator.sanitize(searchForm.what) || '';
         sanitizedValues.moreFilter = CommonDocSearchForm.cdocFields.moreFilter.validator.sanitize(searchForm.moreFilter) || '';
         sanitizedValues.playlists = CommonDocSearchForm.cdocFields.playlists.validator.sanitize(searchForm.playlists) || '';
+        sanitizedValues.theme = CommonDocSearchForm.cdocFields.theme.validator.sanitize(searchForm.theme) || '';
         sanitizedValues.type = CommonDocSearchForm.cdocFields.type.validator.sanitize(searchForm.type) || '';
 
         return new CommonDocSearchForm(sanitizedValues);
@@ -87,6 +93,7 @@ export class CommonDocSearchFormValidator {
         state = state && CommonDocSearchForm.cdocFields.what.validator.isValid(values['what']);
         state = state && CommonDocSearchForm.cdocFields.moreFilter.validator.isValid(values['moreFilter']);
         state = state && CommonDocSearchForm.cdocFields.playlists.validator.isValid(values['playlists']);
+        state = state && CommonDocSearchForm.cdocFields.theme.validator.isValid(values['theme']);
         state = state && CommonDocSearchForm.cdocFields.type.validator.isValid(values['type']);
 
         return state;
@@ -102,6 +109,7 @@ export class CommonDocSearchFormValidator {
         state = state && CommonDocSearchForm.cdocFields.what.validator.isValid(searchForm.what);
         state = state && CommonDocSearchForm.cdocFields.moreFilter.validator.isValid(searchForm.moreFilter);
         state = state && CommonDocSearchForm.cdocFields.playlists.validator.isValid(searchForm.playlists);
+        state = state && CommonDocSearchForm.cdocFields.theme.validator.isValid(searchForm.theme);
         state = state && CommonDocSearchForm.cdocFields.type.validator.isValid(searchForm.type);
 
         return state;

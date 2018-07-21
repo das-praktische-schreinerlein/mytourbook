@@ -7,7 +7,7 @@ import {Layout} from '../../../../shared/angular-commons/services/layout.service
 import {CommonDocContentUtils} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
-import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {IdValidationRule, KeywordValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';

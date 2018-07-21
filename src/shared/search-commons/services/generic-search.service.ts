@@ -31,6 +31,10 @@ export abstract class GenericSearchService <R extends Record, F extends GenericS
 
     public abstract newSearchForm(values: {}): F;
 
+    public abstract createSanitizedSearchForm(values: {}): F;
+
+    public abstract cloneSanitizedSearchForm(src: F): F;
+
     public abstract newSearchResult(searchForm: F, recordCount: number,
                                     currentRecords: R[], facets: Facets): S;
 

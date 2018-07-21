@@ -12,11 +12,7 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocDataCacheService} from '../../services/sdoc-datacache.service';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
-
-export enum SearchFormLayout {
-    STACKED,
-    GRID
-}
+import {SearchFormLayout} from '../../../../shared/angular-commons/services/layout.service';
 
 @Component({
     selector: 'app-sdoc-searchform',

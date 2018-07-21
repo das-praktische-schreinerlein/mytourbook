@@ -7,7 +7,7 @@ import {Layout} from '../../../../shared/angular-commons/services/layout.service
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
-import {ErrorResolver} from '../../resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
@@ -20,7 +20,7 @@ import {AngularHtmlService} from '../../../../shared/angular-commons/services/an
 import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {SearchFormLayout} from '../../../shared-sdoc/components/sdoc-searchform/sdoc-searchform.component';
+import {SearchFormLayout} from '../../../../shared/angular-commons/services/layout.service';
 import {LayoutService, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {LayoutSize} from '../../../../shared/angular-commons/services/layout.service';

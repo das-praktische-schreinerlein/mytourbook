@@ -10,7 +10,7 @@ import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '../../../../testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
-import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';

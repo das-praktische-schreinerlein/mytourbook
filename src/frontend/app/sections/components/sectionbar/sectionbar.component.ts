@@ -5,7 +5,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {FormBuilder} from '@angular/forms';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
-import {ErrorResolver} from '../../resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';

@@ -11,7 +11,7 @@ import {CommonDocContentUtils} from '../../../../shared/frontend-commons/service
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {MarkdownModule, MarkdownService} from 'angular2-markdown';

@@ -13,7 +13,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ErrorResolver} from '../sections/resolver/error.resolver';
+import {ErrorResolver} from '../../shared/frontend-commons/resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 import {SDocLightBoxService} from '../shared-sdoc/services/sdoc-lightbox.service';
 import {AngularHtmlService} from '../../shared/angular-commons/services/angular-html.service';

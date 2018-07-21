@@ -1,7 +1,7 @@
 import {ToastsManager} from 'ng2-toastr';
 import {Injectable} from '@angular/core';
-import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
-import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
+import {ResolvedData, ResolverError} from '../../angular-commons/resolver/resolver.utils';
+import {CommonRoutingService} from '../../angular-commons/services/common-routing.service';
 
 @Injectable()
 export class ErrorResolver {

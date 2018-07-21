@@ -4,8 +4,9 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 import {Angulartics2Piwik} from 'angulartics2/piwik';
+import {AppEnvironment} from './app-environment';
 
-export const environment = {
+export const environment: AppEnvironment = {
     production: false,
     backendApiBaseUrl: 'http://localhost:4100/api/v1/',
     tracksBaseUrl: 'http://localhost:4100/api/assets/trackstore/',

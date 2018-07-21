@@ -1,7 +1,10 @@
 import {GenericSearchForm, GenericSearchFormFieldConfig} from '../../../search-commons/model/forms/generic-searchform';
 import {
-    ExtendedKeyParamsValidationRule, GenericValidatorDatatypes, IdCsvValidationRule, IdValidationRule, KeyParamsValidationRule,
-    NearbyParamValidationRule, TextValidationRule
+    GenericValidatorDatatypes,
+    IdCsvValidationRule,
+    KeyParamsValidationRule,
+    NearbyParamValidationRule,
+    TextValidationRule
 } from '../../../search-commons/model/forms/generic-validator.util';
 import {CommonDocSearchForm, CommonDocSearchFormValidator} from '../../../search-commons/model/forms/cdoc-searchform';
 
@@ -11,7 +14,6 @@ export class SDocSearchForm extends CommonDocSearchForm {
         locId: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         nearby: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NEARBY, new NearbyParamValidationRule(false)),
         nearbyAddress: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ADDRESS, new TextValidationRule(false)),
-        theme: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false)),
         techDataAscent: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataAltitudeMax: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         techDataDistance: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
@@ -27,7 +29,6 @@ export class SDocSearchForm extends CommonDocSearchForm {
     locId: string;
     nearby: string;
     nearbyAddress: string;
-    theme: string;
     techDataAscent: string;
     techDataAltitudeMax: string;
     techDataDistance: string;
@@ -44,7 +45,6 @@ export class SDocSearchForm extends CommonDocSearchForm {
         this.locId = values['locId'] || '';
         this.nearby = values['nearby'] || '';
         this.nearbyAddress = values['nearbyAddress'] || '';
-        this.theme = values['theme'] || '';
         this.techDataAscent = values['techDataAscent'] || '';
         this.techDataAltitudeMax = values['techDataAltitudeMax'] || '';
         this.techDataDistance = values['techDataDistance'] || '';
@@ -88,7 +88,7 @@ export class SDocSearchFormFactory {
         sanitizedValues.nearbyAddress = SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(values['nearbyAddress']) || '';
         sanitizedValues.what = CommonDocSearchForm.cdocFields.what.validator.sanitize(values['what']) || '';
         sanitizedValues.moreFilter = CommonDocSearchForm.cdocFields.moreFilter.validator.sanitize(values['moreFilter']) || '';
-        sanitizedValues.theme = SDocSearchForm.sdocFields.theme.validator.sanitize(values['theme']) || '';
+        sanitizedValues.theme = CommonDocSearchForm.cdocFields.theme.validator.sanitize(values['theme']) || '';
         sanitizedValues.techDataAltitudeMax =
             SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(values['techDataAltitudeMax']) || '';
         sanitizedValues.techDataAscent = SDocSearchForm.sdocFields.techDataAscent.validator.sanitize(values['techDataAscent']) || '';
@@ -120,7 +120,7 @@ export class SDocSearchFormFactory {
         sanitizedValues.nearbyAddress = SDocSearchForm.sdocFields.nearbyAddress.validator.sanitize(searchForm.nearbyAddress) || '';
         sanitizedValues.what = CommonDocSearchForm.cdocFields.what.validator.sanitize(searchForm.what) || '';
         sanitizedValues.moreFilter = CommonDocSearchForm.cdocFields.moreFilter.validator.sanitize(searchForm.moreFilter) || '';
-        sanitizedValues.theme = SDocSearchForm.sdocFields.theme.validator.sanitize(searchForm.theme) || '';
+        sanitizedValues.theme = CommonDocSearchForm.cdocFields.theme.validator.sanitize(searchForm.theme) || '';
         sanitizedValues.techDataAltitudeMax =
             SDocSearchForm.sdocFields.techDataAltitudeMax.validator.sanitize(searchForm.techDataAltitudeMax) || '';
         sanitizedValues.techDataAscent = SDocSearchForm.sdocFields.techDataAscent.validator.sanitize(searchForm.techDataAscent) || '';
@@ -147,7 +147,6 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.locId.validator.isValid(values['locId']);
         state = state && SDocSearchForm.sdocFields.nearby.validator.isValid(values['nearby']);
         state = state && SDocSearchForm.sdocFields.nearbyAddress.validator.isValid(values['nearbyAddress']);
-        state = state && SDocSearchForm.sdocFields.theme.validator.isValid(values['theme']);
         state = state && SDocSearchForm.sdocFields.techDataAltitudeMax.validator.isValid(values['techDataAltitudeMax']);
         state = state && SDocSearchForm.sdocFields.techDataAscent.validator.isValid(values['techDataAscent']);
         state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(values['techDataDistance']);
@@ -168,7 +167,6 @@ export class SDocSearchFormValidator {
         state = state && SDocSearchForm.sdocFields.nearby.validator.isValid(searchForm.nearby);
         state = state && SDocSearchForm.sdocFields.nearbyAddress.validator.isValid(searchForm.nearbyAddress);
         state = state && SDocSearchForm.sdocFields.persons.validator.isValid(searchForm.persons);
-        state = state && SDocSearchForm.sdocFields.theme.validator.isValid(searchForm.theme);
         state = state && SDocSearchForm.sdocFields.techDataAltitudeMax.validator.isValid(searchForm.techDataAltitudeMax);
         state = state && SDocSearchForm.sdocFields.techDataAscent.validator.isValid(searchForm.techDataAscent);
         state = state && SDocSearchForm.sdocFields.techDataDistance.validator.isValid(searchForm.techDataDistance);

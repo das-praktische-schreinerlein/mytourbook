@@ -139,6 +139,11 @@ export enum Layout {
     PAGE
 }
 
+export enum SearchFormLayout {
+    STACKED,
+    GRID
+}
+
 
 /**
     // Browser

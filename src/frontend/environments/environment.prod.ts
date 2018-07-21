@@ -1,6 +1,7 @@
 import {Angulartics2Piwik} from 'angulartics2/piwik';
+import {AppEnvironment} from './app-environment';
 
-export const environment = {
+export const environment: AppEnvironment = {
     production: true,
     backendApiBaseUrl: 'http://localhost:4102/api/v1/',
     tracksBaseUrl: 'http://localhost:4102/api/assets/trackstore/',

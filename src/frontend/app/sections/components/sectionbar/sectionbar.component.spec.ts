@@ -10,7 +10,7 @@ import {CommonDocRoutingService} from '../../../../shared/frontend-commons/servi
 import {PDocDataServiceStub} from '../../../../testing/pdoc-dataservice-stubs';
 import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
 import {FormBuilder} from '@angular/forms';
-import {ErrorResolver} from '../../resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';

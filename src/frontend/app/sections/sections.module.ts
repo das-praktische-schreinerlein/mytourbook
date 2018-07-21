@@ -13,7 +13,7 @@ import {SharedPDocModule} from '../shared-pdoc/shared-pdoc.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SectionsPDocsResolver} from './resolver/sections-pdocs.resolver';
-import {ErrorResolver} from './resolver/error.resolver';
+import {ErrorResolver} from '../../shared/frontend-commons/resolver/error.resolver';
 import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
 import {MarkdownModule} from 'angular2-markdown';
 import {AngularMarkdownService} from '../../shared/angular-commons/services/angular-markdown.service';

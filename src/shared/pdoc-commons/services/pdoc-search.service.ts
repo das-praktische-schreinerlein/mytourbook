@@ -39,6 +39,14 @@ export class PDocSearchService extends GenericSearchService <PDocRecord, PDocSea
         return new PDocSearchResult(sdocSearchForm, recordCount, currentRecords, facets);
     }
 
+    public cloneSanitizedSearchForm(src: PDocSearchForm): PDocSearchForm {
+        return undefined;
+    }
+
+    public createSanitizedSearchForm(values: {}): PDocSearchForm {
+        return undefined;
+    }
+
     doMultiSearch(searchForm: PDocSearchForm, ids: string[]): Promise<PDocSearchResult> {
         return undefined;
     }

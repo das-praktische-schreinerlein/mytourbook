@@ -9,7 +9,7 @@ import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-search
 import {ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
-import {ErrorResolver} from '../../../sections/resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
 import {IdCsvValidationRule, IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
