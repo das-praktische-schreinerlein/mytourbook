@@ -26,6 +26,8 @@ import {environment} from '../../../../environments/environment';
 })
 export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult,
     SDocDataService> {
+    mapCenterPos: L.LatLng = undefined;
+    mapZoom = 9;
     mapElements: MapElement[] = [];
     profileMapElements: MapElement[] = [];
     flgShowMap = false;

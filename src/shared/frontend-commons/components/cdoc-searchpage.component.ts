@@ -41,8 +41,6 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
     layout = Layout.FLAT;
     sort = 'relevance';
     perPage = 10;
-    mapCenterPos: L.LatLng = undefined;
-    mapZoom = 9;
     searchFormLayout: SearchFormLayout = SearchFormLayout.GRID;
     showSearchFormElements = true;
     pauseAutoPlay = false;
