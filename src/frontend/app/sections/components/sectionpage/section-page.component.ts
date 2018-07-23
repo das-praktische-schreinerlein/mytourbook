@@ -8,7 +8,7 @@ import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-dat
 import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
-import {SectionsPDocRecordResolver} from '../../resolver/sections-pdoc-details.resolver';
+import {SectionsPDocRecordResolver} from '../../../../shared/frontend-commons/resolver/sections-pdoc-details.resolver';
 import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocSearchForm, SDocSearchFormFactory} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';

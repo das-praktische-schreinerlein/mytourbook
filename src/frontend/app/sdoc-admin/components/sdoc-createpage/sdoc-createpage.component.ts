@@ -114,7 +114,7 @@ export class SDocCreatepageComponent implements OnInit, OnDestroy {
                     const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
                     const sdocName = (flgSDocError ? 'name' : data.record.data.name);
                     switch (errorCode) {
-                        case SDocRecordCreateResolver.ERROR_UNKNOWN_SDOC_TYPE:
+                        case SDocRecordCreateResolver.ERROR_UNKNOWN_DOC_TYPE:
                             code = ErrorResolver.ERROR_UNKNOWN_ID;
                             me.baseSearchUrl = ['sdoc'].join('/');
                             newUrl = [me.baseSearchUrl].join('/');

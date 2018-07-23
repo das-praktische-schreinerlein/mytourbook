@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
-import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
+import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
+import {ResolvedData, ResolverError} from '../../angular-commons/resolver/resolver.utils';
 
 @Injectable()
 export class SectionsBaseUrlResolver implements Resolve<ResolvedData<string>> {

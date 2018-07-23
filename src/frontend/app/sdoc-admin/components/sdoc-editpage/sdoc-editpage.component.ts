@@ -118,7 +118,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                     const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
                     const sdocName = (flgSDocError ? 'name' : data.record.data.name);
                     switch (errorCode) {
-                        case SDocRecordResolver.ERROR_INVALID_SDOC_ID:
+                        case SDocRecordResolver.ERROR_INVALID_DOC_ID:
                             code = ErrorResolver.ERROR_INVALID_ID;
                             me.baseSearchUrl = ['sdoc'].join('/');
                             newUrl = [me.baseSearchUrl,
@@ -127,13 +127,13 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
                                 this.idValidationRule.sanitize(sdocId)].join('/');
                             msg = undefined;
                             break;
-                        case SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID:
+                        case SDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
                             code = ErrorResolver.ERROR_UNKNOWN_ID;
                             me.baseSearchUrl = ['sdoc'].join('/');
                             newUrl = [me.baseSearchUrl].join('/');
                             msg = undefined;
                             break;
-                        case SDocRecordResolver.ERROR_READING_SDOC_ID:
+                        case SDocRecordResolver.ERROR_READING_DOC_ID:
                             code = ErrorResolver.ERROR_WHILE_READING;
                             me.baseSearchUrl = ['sdoc'].join('/');
                             newUrl = undefined;

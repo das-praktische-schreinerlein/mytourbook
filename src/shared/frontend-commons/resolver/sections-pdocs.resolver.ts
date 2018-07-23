@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
-import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
-import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
-import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
+import {AppState, GenericAppService} from '../../commons/services/generic-app.service';
+import {PDocDataService} from '../../pdoc-commons/services/pdoc-data.service';
+import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
+import {ResolvedData, ResolverError} from '../../angular-commons/resolver/resolver.utils';
 
 @Injectable()
 export class SectionsPDocsResolver implements Resolve<ResolvedData<PDocRecord[]>> {

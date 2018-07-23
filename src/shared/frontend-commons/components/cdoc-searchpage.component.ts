@@ -11,7 +11,6 @@ import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
 import {GenericAppService} from '../../commons/services/generic-app.service';
 import {PageUtils} from '../../angular-commons/services/page.utils';
 import {CommonRoutingService, RoutingState} from '../../angular-commons/services/common-routing.service';
-import * as L from 'leaflet';
 import {GenericTrackingService} from '../../angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../angular-commons/services/platform.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -21,7 +20,7 @@ import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-s
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 import {GenericSearchFormSearchFormConverter} from '../../search-commons/services/generic-searchform.converter';
 import {CommonEnvironment} from '../common-environment';
-import {CommonSearchFormResolver} from '../resolver/searchform.resolver';
+import {AbstractCommonSectionSearchFormResolver} from '../resolver/abstract-cdoc-section-searchform.resolver';
 
 export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
@@ -53,8 +52,8 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                 vcr: ViewContainerRef, protected pageUtils: PageUtils, protected cd: ChangeDetectorRef,
                 protected trackingProvider: GenericTrackingService, protected platformService: PlatformService,
                 protected layoutService: LayoutService, protected environment: CommonEnvironment) {
-        this.searchForm = this.cdocDataService.newSearchForm({});
-        this.searchResult = this.cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
+        this.searchForm = cdocDataService.newSearchForm({});
+        this.searchResult = cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
     }
 
@@ -146,7 +145,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                     searchForm = data.searchForm.data;
                 }
                 switch (errorCode) {
-                    case CommonSearchFormResolver.ERROR_INVALID_SEARCHFORM:
+                    case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM:
                         code = ErrorResolver.ERROR_INVALID_DATA;
                         if (sectionId && sectionId !== '') {
                             me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
@@ -157,7 +156,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                            this.baseSearchUrl + '/', me.cdocDataService.cloneSanitizedSearchForm(searchForm));
                         msg = undefined;
                         break;
-                    case CommonSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID:
+                    case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID:
                         code = ErrorResolver.ERROR_INVALID_ID;
                         if (sectionId && sectionId !== '') {
                             me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');

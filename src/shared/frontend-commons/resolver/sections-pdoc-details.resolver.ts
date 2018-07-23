@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
-import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
-import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
-import {CommonDocRoutingService} from '../../../shared/frontend-commons/services/cdoc-routing.service';
-import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
-import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
-import {LogUtils} from '../../../shared/commons/utils/log.utils';
+import {AppState, GenericAppService} from '../../commons/services/generic-app.service';
+import {PDocDataService} from '../../pdoc-commons/services/pdoc-data.service';
+import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
+import {CommonDocRoutingService} from '../services/cdoc-routing.service';
+import {ResolvedData, ResolverError} from '../../angular-commons/resolver/resolver.utils';
+import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
+import {LogUtils} from '../../commons/utils/log.utils';
 
 @Injectable()
 export class SectionsPDocRecordResolver implements Resolve<ResolvedData<PDocRecord>> {

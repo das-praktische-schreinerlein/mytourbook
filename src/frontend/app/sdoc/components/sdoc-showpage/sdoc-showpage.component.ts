@@ -1,31 +1,27 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
-import {Layout} from '../../../../shared/angular-commons/services/layout.service';
-import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
-import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
+import {Layout, LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
-import {SectionsPDocRecordResolver} from '../../../sections/resolver/sections-pdoc-details.resolver';
-import {IdValidationRule, KeywordValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
-import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {ActionTagEvent} from '../../../shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {isArray, isNumber} from 'util';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
+import {AbstractCommonDocShowpageComponent} from '../../../../shared/frontend-commons/components/cdoc-showpage.component';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -33,15 +29,10 @@ import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.
     styleUrls: ['./sdoc-showpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocShowpageComponent implements OnInit, OnDestroy {
-    private flgDescRendered = false;
-    idValidationRule = new IdValidationRule(true);
-    keywordsValidationRule = new KeywordValidationRule(true);
+export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult,
+    SDocDataService> {
     public contentUtils: SDocContentUtils;
     public record: SDocRecord;
-    public Layout = Layout;
-    pdoc: PDocRecord;
-    baseSearchUrl: string;
     tracks: SDocRecord[] = [];
     tagcloudSearchResult = new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets());
     flgShowMap = false;
@@ -51,7 +42,6 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
     flgProfileMapAvailable = false;
     flgTopImagesAvailable = false;
     defaultSubImageLayout = Layout.SMALL;
-    queryParamMap: ParamMap = undefined;
     showResultListTrigger: {
         IMAGE: boolean|number;
         VIDEO: boolean|number;
@@ -81,195 +71,15 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         'NEWS': true
     };
 
-    constructor(private route: ActivatedRoute, private cdocRoutingService: CommonDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
-                private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
-                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,
-                private platformService: PlatformService, private layoutService: LayoutService,
+    constructor(route: ActivatedRoute, cdocRoutingService: CommonDocRoutingService,
+                toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
+                errorResolver: ErrorResolver, pageUtils: PageUtils, commonRoutingService: CommonRoutingService,
+                angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
+                cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
+                platformService: PlatformService, private layoutService: LayoutService,
                 private searchFormConverter: SDocSearchFormConverter) {
-        this.contentUtils = contentUtils;
-        this.toastr.setRootViewContainerRef(vcr);
-    }
-
-    ngOnInit() {
-        // Subscribe to route params
-        const me = this;
-        this.route.queryParamMap.subscribe(value => {
-            me.queryParamMap = value;
-        });
-        this.route.data.subscribe(
-            (data: { record: ResolvedData<SDocRecord>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
-                me.commonRoutingService.setRoutingState(RoutingState.DONE);
-
-                const config = me.appService.getAppConfig();
-                const flgSDocError = ErrorResolver.isResolverError(data.record);
-                const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
-                const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
-                me.flgDescRendered = false;
-
-                if (BeanUtils.getValue(config, 'components.sdoc-showpage.showBigImages') === true) {
-                    this.defaultSubImageLayout = Layout.BIG;
-                }
-                if (BeanUtils.getValue(config, 'components.sdoc-showpage.availableTabs') !== undefined) {
-                    me.availableTabs = BeanUtils.getValue(config, 'components.sdoc-showpage.availableTabs');
-                }
-                if (isArray(BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams'))) {
-                    const allowedParams = BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams');
-                    for (const type in me.showResultListTrigger) {
-                        const paramName = 'show' + type;
-                        if (allowedParams.indexOf(paramName) >= 0 && me.queryParamMap && me.queryParamMap.get(paramName)) {
-                            me.showResultListTrigger[type] =
-                                SDocSearchForm.genericFields.perPage.validator.sanitize(me.queryParamMap.get(paramName));
-                        }
-                    }
-                }
-
-                if (!flgSDocError && !flgPDocError && !flgBaseSearchUrlError) {
-                    me.record = data.record.data;
-                    me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
-                    me.baseSearchUrl = data.baseSearchUrl.data;
-                    me.tagcloudSearchResult = new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets());
-
-                    if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
-                        || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
-                        me.tracks = [me.record];
-                        me.flgMapAvailable = true;
-                        me.flgProfileMapAvailable = (me.record.gpsTrackBasefile !== undefined
-                            || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20));
-                    } else {
-                        me.tracks = [];
-                        me.flgMapAvailable = false;
-                        me.flgProfileMapAvailable = false;
-                    }
-
-                    me.flgShowMap = this.flgMapAvailable;
-                    me.calcShowMaps();
-                    me.flgTopImagesAvailable = true;
-                    me.flgShowTopImages = true;
-
-                    const recordName = me.keywordsValidationRule.sanitize(me.record.name);
-                    if (me.pdoc) {
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
-                            {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
-                            {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
-                        this.pageUtils.setRobots(false, false);
-
-                        let indexableTypes = [];
-                        if (BeanUtils.getValue(config, 'services.seo.sdocIndexableTypes')) {
-                            indexableTypes = config['services']['seo']['sdocIndexableTypes'];
-                        }
-
-                        if (me.pdoc.id === 'start' && indexableTypes.indexOf(me.record.type) >= 0) {
-                            this.pageUtils.setRobots(true, true);
-                        } else {
-                            this.pageUtils.setRobots(false, false);
-                        }
-                    } else {
-                        me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
-                            {sdoc: recordName}, recordName);
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',
-                            {sdoc: recordName}, recordName);
-                        this.pageUtils.setRobots(false, false);
-                    }
-                    this.pageUtils.setMetaLanguage();
-
-                    me.cd.markForCheck();
-                    me.pageUtils.scrollToTop();
-
-                    this.trackingProvider.trackPageView();
-                    return;
-                }
-
-                let newUrl, msg, code;
-                let errorCode;
-                if (flgSDocError) {
-                    errorCode = data.record.error.code;
-                } else {
-                    errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
-                }
-                const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
-                const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
-                const sdocName = (flgSDocError ? 'name' : data.record.data.name);
-                switch (errorCode) {
-                    case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
-                    case SDocRecordResolver.ERROR_INVALID_SDOC_ID:
-                        code = ErrorResolver.ERROR_INVALID_ID;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = [me.baseSearchUrl,
-                            'show',
-                            this.idValidationRule.sanitize(sdocName),
-                            this.idValidationRule.sanitize(sdocId)].join('/');
-                        msg = undefined;
-                        break;
-                    case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
-                        code = ErrorResolver.ERROR_UNKNOWN_ID;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = [me.baseSearchUrl,
-                            'show',
-                            this.idValidationRule.sanitize(sdocName),
-                            this.idValidationRule.sanitize(sdocId)].join('/');
-                        msg = undefined;
-                        break;
-                    case SDocRecordResolver.ERROR_UNKNOWN_SDOC_ID:
-                        code = ErrorResolver.ERROR_UNKNOWN_ID;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = [me.baseSearchUrl].join('/');
-                        msg = undefined;
-                        break;
-                    case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
-                    case SDocRecordResolver.ERROR_READING_SDOC_ID:
-                        code = ErrorResolver.ERROR_WHILE_READING;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = undefined;
-                        msg = undefined;
-                        break;
-                    case GenericAppService.ERROR_APP_NOT_INITIALIZED:
-                        code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
-                        newUrl = undefined;
-                        msg = undefined;
-                        break;
-                    default:
-                        code = ErrorResolver.ERROR_OTHER;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = undefined;
-                        msg = undefined;
-                }
-
-                this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
-                me.cd.markForCheck();
-                return;
-            }
-        );
-    }
-
-    renderDesc(): string {
-        if (this.flgDescRendered || !this.record) {
-            return;
-        }
-
-        if (!this.platformService.isClient()) {
-            return this.record.descTxt || '';
-        }
-
-        if (this.record.descHtml) {
-            this.flgDescRendered = this.angularHtmlService.renderHtml('#desc', this.record.descHtml, true);
-        } else {
-            const desc = this.record.descMd ? this.record.descMd : '';
-            this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#desc', desc, true);
-        }
-
-        return '';
+        super(route, cdocRoutingService, toastr, vcr, contentUtils, errorResolver, pageUtils, commonRoutingService,
+            angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService);
     }
 
     onRouteTracksFound(searchresult: SDocSearchResult) {
@@ -336,27 +146,54 @@ export class SDocShowpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    onScrollToTop() {
-        this.pageUtils.scrollToTop();
-    }
-
-    ngOnDestroy() {
-    }
-
-    submitBackToSearch() {
-        this.cdocRoutingService.navigateBackToSearch('#' + this.record.id);
-        return false;
-    }
-
-    getBackToSearchUrl(): string {
-        return this.cdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
-    }
-
     getFiltersForType(record: SDocRecord, type: string): any {
         const minPerPage = isNumber(this.showResultListTrigger[type]) ? this.showResultListTrigger[type] : 0;
 
         return this.contentUtils.getSDocSubItemFiltersForType(record, type,
             (this.pdoc ? this.pdoc.theme : undefined), minPerPage);
+    }
+
+    protected configureProcessingOfResolvedData(): void {
+        const me = this;
+        const config = me.appService.getAppConfig();
+        if (BeanUtils.getValue(config, 'components.sdoc-showpage.showBigImages') === true) {
+            this.defaultSubImageLayout = Layout.BIG;
+        }
+        if (BeanUtils.getValue(config, 'components.sdoc-showpage.availableTabs') !== undefined) {
+            me.availableTabs = BeanUtils.getValue(config, 'components.sdoc-showpage.availableTabs');
+        }
+        if (isArray(BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams'))) {
+            const allowedParams = BeanUtils.getValue(config, 'components.sdoc-showpage.allowedQueryParams');
+            for (const type in me.showResultListTrigger) {
+                const paramName = 'show' + type;
+                if (allowedParams.indexOf(paramName) >= 0 && me.queryParamMap && me.queryParamMap.get(paramName)) {
+                    me.showResultListTrigger[type] =
+                        SDocSearchForm.genericFields.perPage.validator.sanitize(me.queryParamMap.get(paramName));
+                }
+            }
+        }
+    }
+
+    protected doProcessAfterResolvedData(): void {
+        const me = this;
+        me.tagcloudSearchResult = new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets());
+
+        if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
+            || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
+            me.tracks = [me.record];
+            me.flgMapAvailable = true;
+            me.flgProfileMapAvailable = (me.record.gpsTrackBasefile !== undefined
+                || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20));
+        } else {
+            me.tracks = [];
+            me.flgMapAvailable = false;
+            me.flgProfileMapAvailable = false;
+        }
+
+        me.flgShowMap = this.flgMapAvailable;
+        me.calcShowMaps();
+        me.flgTopImagesAvailable = true;
+        me.flgShowTopImages = true;
     }
 
     private calcShowMaps() {
