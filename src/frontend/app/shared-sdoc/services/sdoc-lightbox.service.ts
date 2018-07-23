@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Lightbox} from 'angular2-lightbox';
-import {CommonDocContentUtils} from '../../../shared/frontend-commons/services/cdoc-contentutils.service';
+import {CommonDocContentUtils} from '../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {SDocSearchResult} from '../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 
 export interface SDocLightboxAlbumConfig {

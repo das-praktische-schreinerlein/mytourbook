@@ -4,7 +4,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SDocListItemPageComponent} from './sdoc-list-item-page.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
-import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {AngularCommonsModule} from '../../../../shared/angular-commons/angular-commons.module';

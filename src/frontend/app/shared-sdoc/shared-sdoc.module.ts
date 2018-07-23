@@ -35,7 +35,7 @@ import {SDocActionsComponent} from './components/sdoc-actions/sdoc-actions.compo
 import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiontags.component';
 import {SDocPersonTagsComponent} from './components/sdoc-persontags/sdoc-persontags.component';
 import {FileDropModule} from 'ngx-file-drop';
-import {FrontendCommonsModule} from '../../shared/frontend-commons/frontend-commons.module';
+import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
 
 @NgModule({
     declarations: [
@@ -76,7 +76,7 @@ import {FrontendCommonsModule} from '../../shared/frontend-commons/frontend-comm
         HttpModule,
         AngularCommonsModule,
         AngularMapsModule,
-        FrontendCommonsModule,
+        FrontendCdocCommonsModule,
         LightboxModule,
         FileDropModule
     ],

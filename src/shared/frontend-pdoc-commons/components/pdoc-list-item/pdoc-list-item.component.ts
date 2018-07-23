@@ -1,15 +1,15 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
+import {PDocRecord} from '../../../pdoc-commons/model/records/pdoc-record';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {Layout} from '../pdoc-list/pdoc-list.component';
 
 @Component({
-    selector: 'app-pdoc-list-item-flat',
-    templateUrl: './pdoc-list-item-flat.component.html',
-    styleUrls: ['./pdoc-list-item-flat.component.css'],
+    selector: 'app-pdoc-list-item',
+    templateUrl: './pdoc-list-item.component.html',
+    styleUrls: ['./pdoc-list-item.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PDocListItemFlatComponent {
+export class PDocListItemComponent {
     @Input()
     public record: PDocRecord;
 
@@ -26,7 +26,6 @@ export class PDocListItemFlatComponent {
         this.show.emit(pdoc);
         return false;
     }
-
     public getShowUrl(record: PDocRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustUrl('sections/' + record.id);
     }

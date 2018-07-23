@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {SDocSearchResult} from '../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SearchFormUtils} from '../../../shared/angular-commons/services/searchform-utils.service';
 import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
-import {CommonDocSearchFormUtils} from '../../../shared/frontend-commons/services/cdoc-searchform-utils.service';
+import {CommonDocSearchFormUtils} from '../../../shared/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
 
 @Injectable()
 export class SDocSearchFormUtils extends CommonDocSearchFormUtils {

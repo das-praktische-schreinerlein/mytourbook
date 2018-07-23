@@ -6,16 +6,16 @@ import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-s
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
-import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import * as L from 'leaflet';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
-import {AbstractCDocSearchpageComponent} from '../../../../shared/frontend-commons/components/cdoc-searchpage.component';
+import {AbstractCDocSearchpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchpage.component';
 import {environment} from '../../../../environments/environment';
 
 @Component({

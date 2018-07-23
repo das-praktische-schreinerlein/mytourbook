@@ -54,5 +54,5 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
         CDocVideoplayerComponent
     ]
 })
-export class FrontendCommonsModule {
+export class FrontendCdocCommonsModule {
 }

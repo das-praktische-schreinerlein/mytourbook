@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {NavbarComponent} from './components/navbar/navbar.component';
-import {SectionsPDocsResolver} from './sections/resolver/sections-pdocs.resolver';
+import {SectionsPDocsResolver} from '../shared/frontend-cdoc-commons/resolver/sections-pdocs.resolver';
 import {ErrorPageComponent} from './components/errorpage/errorpage.component';
 
 export const appRoutes: Routes = [

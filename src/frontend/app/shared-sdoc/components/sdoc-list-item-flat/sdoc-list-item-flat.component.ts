@@ -10,7 +10,7 @@ import {
     SimpleChange
 } from '@angular/core';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
-import {CommonDocContentUtils, CommonItemData} from '../../../../shared/frontend-commons/services/cdoc-contentutils.service';
+import {CommonDocContentUtils, CommonItemData} from '../../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {LayoutService, LayoutSize, LayoutSizeData} from '../../../../shared/angular-commons/services/layout.service';

@@ -2,9 +2,9 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef}
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-commons/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {Layout, LayoutService} from '../../../../shared/angular-commons/services/layout.service';
-import {ErrorResolver} from '../../../../shared/frontend-commons/resolver/error.resolver';
+import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
@@ -21,7 +21,7 @@ import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {isArray, isNumber} from 'util';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
-import {AbstractCommonDocShowpageComponent} from '../../../../shared/frontend-commons/components/cdoc-showpage.component';
+import {AbstractCommonDocShowpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-showpage.component';
 
 @Component({
     selector: 'app-sdoc-showpage',

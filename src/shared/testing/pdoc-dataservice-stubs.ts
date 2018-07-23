@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
-import {PDocSearchResult} from '../shared/pdoc-commons/model/container/pdoc-searchresult';
-import {Facets} from '../shared/search-commons/model/container/facets';
-import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
+import {PDocSearchForm} from '../../../shared/pdoc-commons/model/forms/pdoc-searchform';
+import {PDocSearchResult} from '../../../shared/pdoc-commons/model/container/pdoc-searchresult';
+import {Facets} from '../../../shared/search-commons/model/container/facets';
+import {PDocRecord} from '../../../shared/pdoc-commons/model/records/pdoc-record';
 
 @Injectable()
 export class PDocDataServiceStub {

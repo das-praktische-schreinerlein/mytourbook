@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
+import {PDocRecord} from '../../../../../shared/pdoc-commons/model/records/pdoc-record';
 
 export enum Layout {
     FLAT,
