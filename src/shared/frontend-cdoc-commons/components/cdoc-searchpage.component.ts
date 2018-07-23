@@ -74,8 +74,9 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
             (data: { searchForm: ResolvedData<F>, pdoc: ResolvedData<PDocRecord>,
                 flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
-
                 me.onResize(this.layoutSizeObservable.getValue());
+
+                this.configureProcessingOfResolvedData({});
 
                 const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
                 const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
@@ -103,7 +104,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                     this.perPage = this.searchForm.perPage;
                     this.sort = this.searchForm.sort;
 
-                    this.doProcessAfterSearchFormResolved();
+                    this.doProcessAfterResolvedData({});
 
                     me.pdoc = data.pdoc ? data.pdoc.data : undefined;
                     if (me.pdoc) {
@@ -328,8 +329,10 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         this.cd.markForCheck();
     }
 
-    protected doProcessAfterSearchFormResolved(): void {
+    protected configureProcessingOfResolvedData(config: {}): void {
+    }
 
+    protected doProcessAfterResolvedData(config: {}): void {
     }
 
     protected doPreChecksBeforeSearch(): boolean {

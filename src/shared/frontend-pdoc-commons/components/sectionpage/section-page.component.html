@@ -1,0 +1,56 @@
+<ng-template #contentContainer>
+    <div class="container content-container" *ngIf="(pdoc.descHtml !== undefined && pdoc.descHtml.length > 0) || (pdoc.descMd !== undefined && pdoc.descMd.length > 0)">
+        <img src="{{pdoc.image}}" width="170px" class="picture" style="float: left; margin: 0 15px 15px 0;" alt="{{pdoc.name}}" *ngIf="pdoc.image !== undefined && pdoc.image.length > 0">
+        <div id="desc" class="section-desc section-desc-{{pdoc.id}}"></div>
+        {{ renderDesc() }}
+        <br clear="both">
+    </div>
+</ng-template>
+
+<ng-template #sectionsContainer>
+    <ng-container *ngIf="sections.length > 0">
+        <ng-container *ngFor="let section of sections">
+            <div class="container content-container">
+                <app-pdoc-list-item-flat class="app-pdoc-list-item"
+                                         [record]="section"
+                                         [layout]="Layout.FLAT"
+                                         (show)="onShow($event)"></app-pdoc-list-item-flat>
+                <div class="container inline-content-container app-pdoc-list" *ngIf="getSubSections(section).length > 0">
+                    <app-pdoc-list class="app-pdoc-list"
+                                   [records]="getSubSections(section)"
+                                   [layout]="Layout.BIG"
+                                   (show)="onShow($event)"></app-pdoc-list>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #sidebarContainer>
+    <div>
+        <div class="text-center">
+            <a routerLink="/pages/start">
+                <img src="assets/images/banner-big.png" width="200" class="picture-thumbnail align-top">
+            </a>
+        </div>
+    </div>
+</ng-template>
+
+<ng-container *ngIf="pdoc !== undefined">
+    <ng-container [ngSwitch]="searchFormLayout">
+        <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
+            <div class="container content-container" style="width: 25%; float: right">
+                <ng-container *ngTemplateOutlet="sidebarContainer"></ng-container>
+            </div>
+
+            <div style="width: 73%; display: inline-block;">
+                <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault="">
+            <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+        </ng-container>
+    </ng-container>
+</ng-container>

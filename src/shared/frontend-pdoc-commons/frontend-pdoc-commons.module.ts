@@ -11,6 +11,7 @@ import {PDocListItemComponent} from './components/pdoc-list-item/pdoc-list-item.
 import {SectionBarComponent} from './components/sectionbar/sectionbar.component';
 import {SectionComponent} from './components/section/section.component';
 import {RouterModule} from '@angular/router';
+import {SectionPageComponent} from './components/sectionpage/section-page.component';
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import {RouterModule} from '@angular/router';
         PDocListItemComponent,
         PDocListItemFlatComponent,
         SectionComponent,
-        SectionBarComponent
+        SectionBarComponent,
+        SectionPageComponent
     ],
     imports: [
         NgbModule,
@@ -35,7 +37,8 @@ import {RouterModule} from '@angular/router';
         PDocListItemComponent,
         PDocListItemFlatComponent,
         SectionComponent,
-        SectionBarComponent
+        SectionBarComponent,
+        SectionPageComponent
     ]
 })
 export class FrontendPDocCommonsModule {

@@ -75,7 +75,7 @@ export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDo
     }
 
 
-    protected doProcessAfterSearchFormResolved(): void {
+    protected doProcessAfterResolvedData(config: {}): void {
         if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
             const [lat, lon] = this.searchForm.nearby.split('_');
             this.mapCenterPos = new L.LatLng(+lat, +lon);

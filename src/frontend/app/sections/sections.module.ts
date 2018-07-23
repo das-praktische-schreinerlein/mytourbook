@@ -4,7 +4,7 @@ import {SectionsSDocRecordResolver} from './resolver/sections-sdoc-details.resol
 import {SectionsRoutingModule} from './sections-routing.module';
 import {SectionsBaseUrlResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
 import {SectionsPDocRecordResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
-import {SectionPageComponent} from './components/sectionpage/section-page.component';
+import {SDocSectionPageComponent} from './components/sectionpage/sdoc-section-page.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -22,7 +22,7 @@ import {FrontendPDocCommonsModule} from '../../shared/frontend-pdoc-commons/fron
 
 @NgModule({
     declarations: [
-        SectionPageComponent
+        SDocSectionPageComponent
     ],
     imports: [
         TranslateModule,

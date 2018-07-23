@@ -62,14 +62,14 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 me.flgDescRendered = false;
 
-                me.configureProcessingOfResolvedData();
+                me.configureProcessingOfResolvedData({});
 
                 if (!flgCDocError && !flgPDocError && !flgBaseSearchUrlError) {
                     me.record = data.record.data;
                     me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
                     me.baseSearchUrl = data.baseSearchUrl.data;
 
-                    me.doProcessAfterResolvedData();
+                    me.doProcessAfterResolvedData({});
 
                     const recordName = me.keywordsValidationRule.sanitize(me.record.name);
                     if (me.pdoc) {
@@ -211,9 +211,9 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
         return this.cdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
     }
 
-    protected configureProcessingOfResolvedData(): void {
+    protected configureProcessingOfResolvedData(config: {}): void {
     }
 
-    protected doProcessAfterResolvedData(): void {
+    protected doProcessAfterResolvedData(config: {}): void {
     }
 }

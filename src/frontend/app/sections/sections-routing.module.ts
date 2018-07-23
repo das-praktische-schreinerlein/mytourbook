@@ -8,7 +8,7 @@ import {SectionsSDocRecordResolver} from './resolver/sections-sdoc-details.resol
 import {SectionsBaseUrlResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
 import {SectionBarComponent} from '../../shared/frontend-pdoc-commons/components/sectionbar/sectionbar.component';
 import {SectionComponent} from '../../shared/frontend-pdoc-commons/components/section/section.component';
-import {SectionPageComponent} from './components/sectionpage/section-page.component';
+import {SDocSectionPageComponent} from './components/sectionpage/sdoc-section-page.component';
 
 const sectionRoutes: Routes = [
     {
@@ -29,7 +29,7 @@ const sectionRoutes: Routes = [
                     {
                         path: '',
                         pathMatch: 'full',
-                        component: SectionPageComponent,
+                        component: SDocSectionPageComponent,
                         data: {
                             id: 'sections_section',
                         },
@@ -120,7 +120,7 @@ const sectionRoutes: Routes = [
                     {
                         path: '',
                         pathMatch: 'full',
-                        component: SectionPageComponent,
+                        component: SDocSectionPageComponent,
                         data: {
                             id: 'sections_section',
                         },

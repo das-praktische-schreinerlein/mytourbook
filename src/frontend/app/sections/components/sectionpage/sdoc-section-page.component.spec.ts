@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {SectionPageComponent} from './section-page.component';
+import {SDocSectionPageComponent} from './sdoc-section-page.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ActivatedRouteStub} from '../../../../shared/testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
@@ -27,12 +27,12 @@ import {AppServiceStub} from '../../../../shared/angular-commons/testing/appserv
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
 describe('SectionPageComponent', () => {
-    let component: SectionPageComponent;
-    let fixture: ComponentFixture<SectionPageComponent>;
+    let component: SDocSectionPageComponent;
+    let fixture: ComponentFixture<SDocSectionPageComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SectionPageComponent],
+            declarations: [SDocSectionPageComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [
                 ToastModule.forRoot(),
@@ -64,7 +64,7 @@ describe('SectionPageComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SectionPageComponent);
+        fixture = TestBed.createComponent(SDocSectionPageComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
