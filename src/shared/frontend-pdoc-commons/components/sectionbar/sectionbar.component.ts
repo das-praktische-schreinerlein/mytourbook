@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
+import {PDocRecord} from '../../../pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
-import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
+import {PDocDataService} from '../../../pdoc-commons/services/pdoc-data.service';
 import {FormBuilder} from '@angular/forms';
-import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
-import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
-import {IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {ResolvedData} from '../../../angular-commons/resolver/resolver.utils';
+import {ErrorResolver} from '../../../frontend-cdoc-commons/resolver/error.resolver';
+import {IdValidationRule} from '../../../search-commons/model/forms/generic-validator.util';
+import {PageUtils} from '../../../angular-commons/services/page.utils';
+import {CommonRoutingService} from '../../../angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-sectionbar',

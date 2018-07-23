@@ -8,7 +8,7 @@ import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-search
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ActivatedRouteStub} from '../../../../testing/router-stubs';
+import {ActivatedRouteStub} from '../../../../shared/testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';

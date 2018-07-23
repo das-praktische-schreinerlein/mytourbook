@@ -8,17 +8,23 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {PDocListItemFlatComponent} from './components/pdoc-list-item-flat/pdoc-list-item-flat.component';
 import {PDocListComponent} from './components/pdoc-list/pdoc-list.component';
 import {PDocListItemComponent} from './components/pdoc-list-item/pdoc-list-item.component';
+import {SectionBarComponent} from './components/sectionbar/sectionbar.component';
+import {SectionComponent} from './components/section/section.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
     declarations: [
         PDocListComponent,
         PDocListItemComponent,
-        PDocListItemFlatComponent
+        PDocListItemFlatComponent,
+        SectionComponent,
+        SectionBarComponent
     ],
     imports: [
         NgbModule,
         MultiselectDropdownModule,
         TranslateModule,
+        RouterModule,
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
@@ -27,7 +33,9 @@ import {PDocListItemComponent} from './components/pdoc-list-item/pdoc-list-item.
     exports: [
         PDocListComponent,
         PDocListItemComponent,
-        PDocListItemFlatComponent
+        PDocListItemFlatComponent,
+        SectionComponent,
+        SectionBarComponent
     ]
 })
 export class FrontendPDocCommonsModule {

@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ActivatedRouteStub} from '../../../../testing/router-stubs';
+import {ActivatedRouteStub} from '../../../../shared/testing/router-stubs';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';

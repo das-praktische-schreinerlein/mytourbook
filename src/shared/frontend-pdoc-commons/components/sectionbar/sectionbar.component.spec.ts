@@ -3,17 +3,17 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {SectionBarComponent} from './sectionbar.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ActivatedRouteStub} from '../../../../testing/router-stubs';
+import {ActivatedRouteStub} from '../../../testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
-import {PDocDataServiceStub} from '../../../../shared/testing/pdoc-dataservice-stubs';
-import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
+import {CommonDocRoutingService} from '../../../frontend-cdoc-commons/services/cdoc-routing.service';
+import {PDocDataServiceStub} from '../../../testing/pdoc-dataservice-stubs';
+import {PDocDataService} from '../../../pdoc-commons/services/pdoc-data.service';
 import {FormBuilder} from '@angular/forms';
-import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {ErrorResolver} from '../../../frontend-cdoc-commons/resolver/error.resolver';
+import {PageUtils} from '../../../angular-commons/services/page.utils';
+import {CommonRoutingService} from '../../../angular-commons/services/common-routing.service';
+import {RouterStub} from '../../../angular-commons/testing/router-stubs';
 
 describe('SectionBarComponent', () => {
     let component: SectionBarComponent;

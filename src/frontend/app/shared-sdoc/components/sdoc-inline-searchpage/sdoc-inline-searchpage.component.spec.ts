@@ -11,7 +11,7 @@ import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {ActivatedRouteStub} from '../../../../testing/router-stubs';
+import {ActivatedRouteStub} from '../../../../shared/testing/router-stubs';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';

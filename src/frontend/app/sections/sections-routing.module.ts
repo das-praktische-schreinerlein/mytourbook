@@ -6,8 +6,8 @@ import {SectionsSearchFormResolver} from './resolver/sections-searchform.resolve
 import {SectionsPDocRecordResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
 import {SectionsSDocRecordResolver} from './resolver/sections-sdoc-details.resolver';
 import {SectionsBaseUrlResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
-import {SectionBarComponent} from './components/sectionbar/sectionbar.component';
-import {SectionComponent} from './components/section/section.component';
+import {SectionBarComponent} from '../../shared/frontend-pdoc-commons/components/sectionbar/sectionbar.component';
+import {SectionComponent} from '../../shared/frontend-pdoc-commons/components/section/section.component';
 import {SectionPageComponent} from './components/sectionpage/section-page.component';
 
 const sectionRoutes: Routes = [

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
-import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
+import {SDocRecord} from '../sdoc-commons/model/records/sdoc-record';
+import {SDocSearchForm} from '../sdoc-commons/model/forms/sdoc-searchform';
+import {PDocRecord} from '../pdoc-commons/model/records/pdoc-record';
 
 @Injectable()
 export class ActivatedRouteStub {

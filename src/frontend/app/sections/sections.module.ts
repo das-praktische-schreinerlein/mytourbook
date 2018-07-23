@@ -3,9 +3,7 @@ import {SectionsSearchFormResolver} from './resolver/sections-searchform.resolve
 import {SectionsSDocRecordResolver} from './resolver/sections-sdoc-details.resolver';
 import {SectionsRoutingModule} from './sections-routing.module';
 import {SectionsBaseUrlResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
-import {SectionBarComponent} from './components/sectionbar/sectionbar.component';
 import {SectionsPDocRecordResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
-import {SectionComponent} from './components/section/section.component';
 import {SectionPageComponent} from './components/sectionpage/section-page.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
@@ -24,9 +22,7 @@ import {FrontendPDocCommonsModule} from '../../shared/frontend-pdoc-commons/fron
 
 @NgModule({
     declarations: [
-        SectionComponent,
-        SectionPageComponent,
-        SectionBarComponent
+        SectionPageComponent
     ],
     imports: [
         TranslateModule,

@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {NavbarComponent} from './navbar.component';
 import {ActivatedRoute} from '@angular/router';
-import {ActivatedRouteStub} from '../../../testing/router-stubs';
+import {ActivatedRouteStub} from '../../../shared/testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ToastsManagerStub} from '../../../shared/testing/toasts-stubs';
