@@ -1,0 +1,11 @@
+<ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="true">
+    <div class="card-block" [ngClass]="listItem.styleClassFor">
+        <a [name]="listItem.currentRecord.id"></a>
+        <div>
+            <div style="width: 100px; float: left">
+                <h5 class="listItem.currentRecord-subtype">{{listItem.currentRecord.subtype | translate }}</h5>
+            </div>
+            <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+        </div>
+    </div>
+</ng-container>

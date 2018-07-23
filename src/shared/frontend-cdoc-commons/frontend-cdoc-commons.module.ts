@@ -11,16 +11,20 @@ import {CDocTagsStateComponent} from './components/cdoc-tagsstate/cdoc-tagsstate
 import {CDocTagsComponent} from './components/cdoc-tags/cdoc-tags.component';
 import {CDocVideoplayerComponent} from './components/cdoc-videoplayer/cdoc-videoplayer.component';
 import {CDocPersonTagsStateComponent} from './components/cdoc-persontagsstate/cdoc-persontagsstate.component';
+import {CDocListItemComponent} from './components/cdoc-list-item/cdoc-list-item.component';
 import {AngularCommonsModule} from '../angular-commons/angular-commons.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {CDocListComponent} from './components/cdoc-list/cdoc-list.component';
 
 @NgModule({
     declarations: [
+        CDocListComponent,
         CDocListHeaderComponent,
         CDocListFooterComponent,
+        CDocListItemComponent,
         CDocKeywordsComponent,
         CDocKeywordsStateComponent,
         CDocTimetableComponent,
@@ -41,8 +45,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
         AngularCommonsModule
     ],
     exports: [
+        CDocListComponent,
         CDocListHeaderComponent,
         CDocListFooterComponent,
+        CDocListItemComponent,
         CDocKeywordsComponent,
         CDocKeywordsStateComponent,
         CDocTimetableComponent,

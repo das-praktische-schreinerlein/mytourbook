@@ -1,0 +1,14 @@
+<div class="row card-deck" *ngIf="searchResult.currentRecords != undefined && searchResult.currentRecords.length > 0">
+    <ng-container [ngSwitch]="layout">
+        <ng-container *ngSwitchDefault>
+            <app-cdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-cdoc-list-item"
+                                [record]="record"
+                                [layout]="layout"
+                                [short]="short"
+                                [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                (show)="onShow($event)"
+                                (showImage)="onShowImage($event)"
+                                *ngFor="let record of searchResult.currentRecords"></app-cdoc-list-item>
+        </ng-container>
+    </ng-container>
+</div>

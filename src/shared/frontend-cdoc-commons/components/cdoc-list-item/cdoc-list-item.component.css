@@ -1,0 +1,7 @@
+div.card-block h5 {
+    font-size: 0.75rem;
+}
+
+div.card-footer div.card-action-buttons {
+    float: right;
+}

@@ -14,6 +14,7 @@ import {RouterStub} from '../../../../shared/angular-commons/testing/router-stub
 import {SDocDateFormatPipe} from '../../pipes/sdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
 import {CommonDocDataServiceStub} from '../../../../shared/testing/cdoc-dataservice-stubs';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocListItemSmallComponent', () => {
     let component: SDocListItemSmallComponent;
@@ -28,6 +29,7 @@ describe('SDocListItemSmallComponent', () => {
                 CommonDocRoutingService,
                 CommonDocContentUtils,
                 DatePipe,
+                LayoutService,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA],

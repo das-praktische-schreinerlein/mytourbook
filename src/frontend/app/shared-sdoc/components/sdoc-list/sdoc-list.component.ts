@@ -1,10 +1,12 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnChanges, Output, SimpleChange} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocLightboxAlbumConfig, SDocLightBoxService} from '../../services/sdoc-lightbox.service';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
+import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {CDocListComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
 
 @Component({
     selector: 'app-sdoc-list',
@@ -12,22 +14,7 @@ import {Layout} from '../../../../shared/angular-commons/services/layout.service
     styleUrls: ['./sdoc-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListComponent implements OnChanges {
-    @Input()
-    public searchResult: SDocSearchResult;
-
-    @Input()
-    public baseSearchUrl: string;
-
-    @Input()
-    public layout: Layout;
-
-    @Input()
-    public short? = false;
-
-    @Output()
-    public show: EventEmitter<SDocRecord> = new EventEmitter();
-
+export class SDocListComponent extends CDocListComponent<SDocRecord, SDocSearchForm, SDocSearchResult> implements OnChanges {
     @Output()
     public playerStarted: EventEmitter<SDocRecord> = new EventEmitter();
 
@@ -43,17 +30,13 @@ export class SDocListComponent implements OnChanges {
 
     constructor(private searchFormConverter: SDocSearchFormConverter,
                 private lightboxService: SDocLightBoxService) {
+        super();
     }
 
     ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
         if (ComponentUtils.hasNgChanged(changes)) {
             this.lightboxAlbumConfig = this.lightboxService.createAlbumConfig(this.searchResult);
         }
-    }
-
-    onShow(record: SDocRecord) {
-        this.show.emit(record);
-        return false;
     }
 
     onShowImage(record: SDocRecord) {
