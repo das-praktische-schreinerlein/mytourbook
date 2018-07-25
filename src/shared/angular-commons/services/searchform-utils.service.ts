@@ -6,6 +6,12 @@ import {GenericSearchResult} from '../../search-commons/model/container/generic-
 import {GenericSearchForm} from '../../search-commons/model/forms/generic-searchform';
 import {BaseEntityRecord} from '../../search-commons/model/records/base-entity-record';
 
+export interface HumanReadableFilter {
+    id: string;
+    prefix: string;
+    values: string[];
+}
+
 @Injectable()
 export class SearchFormUtils {
 
@@ -110,4 +116,92 @@ export class SearchFormUtils {
         return values;
     }
 
+    searchFormToHumanReadableMarkup(filters: HumanReadableFilter[], textOnly: boolean, objCache: Map<string, string>, hrdIds: {}): string {
+        const str = [];
+
+        for (const filter of filters) {
+            if (filter && filter.values && filter.values.length > 0) {
+                let resolvedValues = [];
+                if (objCache) {
+                    for (const value of filter.values) {
+                        const resolvedValue = objCache.get(hrdIds[filter.id.replace('hrt_', '')] + '_' + value);
+                        resolvedValues.push(resolvedValue ? resolvedValue : value);
+                    }
+                } else {
+                    resolvedValues = filter.values;
+                }
+                if (textOnly) {
+                    str.push([(filter.prefix ? filter.prefix + ' ' : ''), '"', resolvedValues.join(','), '"'].join(' '));
+                } else {
+                    str.push(['<div class="filter filter_' + filter.id + '">',
+                        '<span class="filterPrefix filterPrefix_' + filter.id + '">', (filter.prefix ? filter.prefix + ' ' : ''), '</span>',
+                        '<span class="filterValue filterValue_' + filter.id + '">', '"', resolvedValues.join(','), '"', '</span>', '</div>'
+                    ].join(''));
+                }
+            }
+        }
+
+        return str.join(' ');
+    }
+
+    extractResolvableFilters(filters: HumanReadableFilter[], hrdIds: {}): HumanReadableFilter[] {
+        const res: HumanReadableFilter[] = [];
+        for (const filter of filters) {
+            if (!filter || !filter.values || filter.values.length <= 0 || !hrdIds[filter.id.replace('hrt_', '')]) {
+                continue;
+            }
+            res.push(filter);
+        }
+
+        return res;
+    }
+
+    extractResolvableIds(filters: HumanReadableFilter[], hrdIds: {}): Map<string, string> {
+        const obJCache = new Map<string, string>();
+
+        for (const filter of filters) {
+            if (!filter || !filter.values || filter.values.length <= 0) {
+                continue;
+            }
+
+            for (const value of filter.values) {
+                obJCache.set(hrdIds[filter.id.replace('hrt_', '')] + '_' + value, undefined);
+            }
+        }
+
+        return obJCache;
+    }
+
+    valueToHumanReadableText(valueString: any, prefix: string, defaultValue: string, translate: boolean): HumanReadableFilter {
+        let res: HumanReadableFilter;
+        if (valueString && valueString.toString() !== '') {
+            res = {
+                id: prefix,
+                prefix: undefined,
+                values: []
+            };
+            if (prefix) {
+                res.prefix = (translate ? this.translateService.instant(prefix) : prefix);
+            }
+            const values = valueString.toString().split(',');
+            for (const value of values) {
+                const safeValue = this.searchParameterUtils.escapeHtml(value);
+                if (safeValue) {
+                    res.values.push((translate ? this.translateService.instant(safeValue) || safeValue : safeValue));
+                }
+            }
+        } else if (defaultValue) {
+            res = {
+                id: prefix,
+                prefix: undefined,
+                values: []
+            };
+            if (prefix) {
+                res.prefix = (translate ? this.translateService.instant(prefix) : prefix);
+            }
+            res.values.push((translate ? this.translateService.instant(defaultValue) : defaultValue));
+        }
+
+        return res;
+    }
 }
