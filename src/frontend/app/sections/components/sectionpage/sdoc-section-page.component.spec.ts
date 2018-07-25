@@ -25,6 +25,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 
 describe('SectionPageComponent', () => {
     let component: SDocSectionPageComponent;
@@ -57,7 +58,8 @@ describe('SectionPageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
-                LayoutService
+                LayoutService,
+                SearchFormUtils
             ]
         })
             .compileComponents();

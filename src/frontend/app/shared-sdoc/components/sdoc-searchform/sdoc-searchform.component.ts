@@ -7,12 +7,12 @@ import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {GeoLocationService} from '../../../../shared/commons/services/geolocation.service';
-import {HumanReadableFilter, SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {ToastsManager} from 'ng2-toastr';
 import {SDocDataCacheService} from '../../services/sdoc-datacache.service';
-import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {HumanReadableFilter, SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SearchFormLayout} from '../../../../shared/angular-commons/services/layout.service';
+import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 
 @Component({
     selector: 'app-sdoc-searchform',
@@ -429,27 +429,29 @@ export class SDocSearchformComponent implements OnInit {
         me.humanReadableSpecialFilter = '';
         this.humanReadableSearchForm = '';
         const filters: HumanReadableFilter[] = this.searchFormConverter.searchFormToHumanReadableFilter(sdocSearchSearchResult.searchForm);
-        const resolveableFilters = this.searchFormConverter.extractResolvableFilters(filters);
+        const resolveableFilters = this.searchFormUtils.extractResolvableFilters(filters, this.searchFormConverter.getHrdIds());
         if (resolveableFilters.length > 0) {
-            const resolveableIds = this.searchFormConverter.extractResolvableIds(resolveableFilters);
+            const resolveableIds = this.searchFormUtils.extractResolvableIds(resolveableFilters, this.searchFormConverter.getHrdIds());
             this.sdocDataCacheService.resolveNamesForIds(Array.from(resolveableIds.keys())).then(nameCache => {
                 me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
-                    me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, nameCache));
-                me.humanReadableSpecialFilter = me.searchFormConverter.searchFormToHumanReadableMarkup(resolveableFilters, true, nameCache);
+                    me.searchFormUtils.searchFormToHumanReadableMarkup(filters, false, nameCache, me.searchFormConverter.getHrdIds()));
+                me.humanReadableSpecialFilter = me.searchFormUtils.searchFormToHumanReadableMarkup(resolveableFilters, true,
+                    nameCache, me.searchFormConverter.getHrdIds());
 
                 me.cd.markForCheck();
             }).catch(function onRejected(reason) {
                 me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
                 console.error('resolve moreFilterIds failed:', reason);
                 me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
-                    me.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
-                me.humanReadableSpecialFilter = me.searchFormConverter.searchFormToHumanReadableMarkup(resolveableFilters, true, undefined);
+                    me.searchFormUtils.searchFormToHumanReadableMarkup(filters, false, undefined, me.searchFormConverter.getHrdIds()));
+                me.humanReadableSpecialFilter = me.searchFormUtils.searchFormToHumanReadableMarkup(
+                    resolveableFilters, true, undefined, me.searchFormConverter.getHrdIds());
 
                 me.cd.markForCheck();
             });
         } else {
             this.humanReadableSearchForm = this.sanitizer.bypassSecurityTrustHtml(
-                this.searchFormConverter.searchFormToHumanReadableMarkup(filters, false, undefined));
+                this.searchFormUtils.searchFormToHumanReadableMarkup(filters, false, undefined, this.searchFormConverter.getHrdIds()));
             me.cd.markForCheck();
         }
     }

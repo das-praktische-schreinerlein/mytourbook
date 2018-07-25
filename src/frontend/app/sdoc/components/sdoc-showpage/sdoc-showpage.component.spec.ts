@@ -27,6 +27,7 @@ import {LayoutService} from '../../../../shared/angular-commons/services/layout.
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -60,6 +61,7 @@ describe('SDocShowpageComponent', () => {
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
                 LayoutService,
                 SDocSearchFormConverter,
+                SearchFormUtils,
                 SearchParameterUtils
         ],
             schemas: [NO_ERRORS_SCHEMA]

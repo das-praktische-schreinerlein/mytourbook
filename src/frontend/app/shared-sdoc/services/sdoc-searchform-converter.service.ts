@@ -1,15 +1,9 @@
 import {Injectable} from '@angular/core';
-import {SDocSearchForm} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {SDocSearchForm, SDocSearchFormValidator} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {GenericSearchFormSearchFormConverter} from '../../../shared/search-commons/services/generic-searchform.converter';
 import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
 import {TranslateService} from '@ngx-translate/core';
-import {SDocSearchFormValidator} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-
-export interface HumanReadableFilter {
-    id: string;
-    prefix: string;
-    values: string[];
-}
+import {HumanReadableFilter, SearchFormUtils} from '../../../shared/angular-commons/services/searchform-utils.service';
 
 @Injectable()
 export class SDocSearchFormConverter implements GenericSearchFormSearchFormConverter<SDocSearchForm> {
@@ -29,7 +23,8 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
         loc_parent_id_i: 'LOCATION'};
 
     private splitter = '_,_';
-    constructor(private searchParameterUtils: SearchParameterUtils, private translateService: TranslateService) {
+    constructor(private searchParameterUtils: SearchParameterUtils, private translateService: TranslateService,
+                private searchFormUtils: SearchFormUtils) {
     }
 
     isValid(searchForm: SDocSearchForm): boolean {
@@ -233,62 +228,7 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
     }
 
     searchFormToHumanReadableText(filters: HumanReadableFilter[], textOnly: boolean, obJCache: Map<string, string>): string {
-        return this.searchFormToHumanReadableMarkup(filters, true, obJCache);
-    }
-
-    searchFormToHumanReadableMarkup(filters: HumanReadableFilter[], textOnly: boolean, objCache: Map<string, string>): string {
-        const str = [];
-
-        for (const filter of filters) {
-            if (filter && filter.values && filter.values.length > 0) {
-                let resolvedValues = [];
-                if (objCache) {
-                    for (const value of filter.values) {
-                        const resolvedValue = objCache.get(this.HRD_IDS[filter.id.replace('hrt_', '')] + '_' + value);
-                        resolvedValues.push(resolvedValue ? resolvedValue : value);
-                    }
-                } else {
-                    resolvedValues = filter.values;
-                }
-                if (textOnly) {
-                    str.push([(filter.prefix ? filter.prefix + ' ' : ''), '"', resolvedValues.join(','), '"'].join(' '));
-                } else {
-                    str.push(['<div class="filter filter_' + filter.id + '">',
-                        '<span class="filterPrefix filterPrefix_' + filter.id + '">', (filter.prefix ? filter.prefix + ' ' : ''), '</span>',
-                        '<span class="filterValue filterValue_' + filter.id + '">', '"', resolvedValues.join(','), '"', '</span>', '</div>'
-                    ].join(''));
-                }
-            }
-        }
-
-        return str.join(' ');
-    }
-
-    extractResolvableFilters(filters: HumanReadableFilter[]): HumanReadableFilter[] {
-        const res: HumanReadableFilter[] = [];
-        for (const filter of filters) {
-            if (!filter || !filter.values || filter.values.length <= 0 || !this.HRD_IDS[filter.id.replace('hrt_', '')]) {
-                continue;
-            }
-            res.push(filter);
-        }
-
-        return res;
-    }
-    extractResolvableIds(filters: HumanReadableFilter[]): Map<string, string> {
-        const obJCache = new Map<string, string>();
-
-        for (const filter of filters) {
-            if (!filter || !filter.values || filter.values.length <= 0) {
-                continue;
-            }
-
-            for (const value of filter.values) {
-                obJCache.set(this.HRD_IDS[filter.id.replace('hrt_', '')] + '_' + value, undefined);
-            }
-        }
-
-        return obJCache;
+        return this.searchFormUtils.searchFormToHumanReadableMarkup(filters, true, obJCache, this.getHrdIds());
     }
 
     searchFormToHumanReadableFilter(sdocSearchForm: SDocSearchForm): HumanReadableFilter[] {
@@ -296,70 +236,46 @@ export class SDocSearchFormConverter implements GenericSearchFormSearchFormConve
 
         const res: HumanReadableFilter[] = [];
         res.push(this.translateService.instant('hrt_search') || 'search');
-        res.push(this.valueToHumanReadableText(sdocSearchForm.type, 'hrt_type', 'hrt_alltypes', true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.where, 'hrt_in', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.nearbyAddress, 'hrt_nearby', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.actiontype, 'hrt_actiontype', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.type, 'hrt_type', 'hrt_alltypes', true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.where, 'hrt_in', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.nearbyAddress, 'hrt_nearby', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.actiontype, 'hrt_actiontype', undefined, true));
 
         const when = (sdocSearchForm.when ? sdocSearchForm.when : '')
             .replace(new RegExp('year', 'g'), '')
             .replace(new RegExp('month', 'g'), 'Monat')
             .replace(new RegExp('week', 'g'), 'Woche');
-        res.push(this.valueToHumanReadableText(when, 'hrt_when', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(when, 'hrt_when', undefined, true));
         const what = (sdocSearchForm.what ? sdocSearchForm.what : '').replace(new RegExp('kw_', 'gi'), '');
-        res.push(this.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(sdocSearchForm.moreFilter, this.splitter,
-            Object.getOwnPropertyNames(this.HRD_IDS));
+            Object.getOwnPropertyNames(this.getHrdIds()));
         moreFilterValues.forEach((value, key) => {
             const moreValue = this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get(key), key + ':', ',');
-            res.push(this.valueToHumanReadableText(moreValue, key === 'unknown' ? 'hrt_moreFilter' : 'hrt_' + key, undefined, true));
+            res.push(this.searchFormUtils.valueToHumanReadableText(moreValue, key === 'unknown' ? 'hrt_moreFilter' : 'hrt_' + key,
+                undefined, true));
         });
 
-        res.push(this.valueToHumanReadableText(sdocSearchForm.fulltext, 'hrt_fulltext', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataAltitudeMax, 'hrt_techDataAltitudeMax', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataAscent, 'hrt_techDataAscent', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDistance, 'hrt_techDataDistance', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.personalRateOverall, 'hrt_personalRateOverall', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.personalRateDifficulty, 'hrt_personalRateDifficulty', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.persons, 'hrt_persons', undefined, true));
-        res.push(this.valueToHumanReadableText(sdocSearchForm.playlists, 'hrt_playlists', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.fulltext, 'hrt_fulltext', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.techDataAltitudeMax, 'hrt_techDataAltitudeMax',
+            undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.techDataAscent, 'hrt_techDataAscent', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.techDataDistance, 'hrt_techDataDistance', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.personalRateOverall, 'hrt_personalRateOverall',
+            undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.personalRateDifficulty, 'hrt_personalRateDifficulty',
+            undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.persons, 'hrt_persons', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(sdocSearchForm.playlists, 'hrt_playlists', undefined, true));
 
         return res;
     }
 
-    private valueToHumanReadableText(valueString: any, prefix: string, defaultValue: string, translate: boolean): HumanReadableFilter {
-        let res: HumanReadableFilter;
-        if (valueString && valueString.toString() !== '') {
-            res = {
-                id: prefix,
-                prefix: undefined,
-                values: []
-            };
-            if (prefix) {
-                res.prefix = (translate ? this.translateService.instant(prefix) : prefix);
-            }
-            const values = valueString.toString().split(',');
-            for (const value of values) {
-                const safeValue = this.searchParameterUtils.escapeHtml(value);
-                if (safeValue) {
-                    res.values.push((translate ? this.translateService.instant(safeValue) || safeValue : safeValue));
-                }
-            }
-        } else if (defaultValue) {
-            res = {
-                id: prefix,
-                prefix: undefined,
-                values: []
-            };
-            if (prefix) {
-                res.prefix = (translate ? this.translateService.instant(prefix) : prefix);
-            }
-            res.values.push((translate ? this.translateService.instant(defaultValue) : defaultValue));
-        }
-
-        return res;
+    getHrdIds(): {} {
+        return this.HRD_IDS;
     }
+
 }

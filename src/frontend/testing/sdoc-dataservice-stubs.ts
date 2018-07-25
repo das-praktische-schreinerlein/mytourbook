@@ -18,4 +18,13 @@ export class SDocDataServiceStub {
     search(searchForm: SDocSearchForm): Promise<SDocSearchResult> {
         return Promise.resolve(new SDocSearchResult(searchForm, 0, [], new Facets()));
     };
+
+    newSearchForm(values: {}): SDocSearchForm {
+        return new SDocSearchForm(values);
+    }
+
+    newSearchResult(sdocSearchForm: SDocSearchForm, recordCount: number,
+                    currentRecords: SDocRecord[], facets: Facets): SDocSearchResult {
+        return new SDocSearchResult(sdocSearchForm, recordCount, currentRecords, facets);
+    }
 }

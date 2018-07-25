@@ -20,6 +20,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 
 describe('SDocSearchpageComponent', () => {
     let component: SDocSearchpageComponent;
@@ -38,6 +39,7 @@ describe('SDocSearchpageComponent', () => {
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
                 SDocSearchFormConverter,
+                SearchFormUtils,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 CommonDocRoutingService,
                 ToastsManager,

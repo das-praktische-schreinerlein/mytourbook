@@ -23,6 +23,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 
 describe('SDocListItemPageComponent', () => {
     let component: SDocListItemPageComponent;
@@ -39,6 +40,7 @@ describe('SDocListItemPageComponent', () => {
                 SDocSearchFormConverter,
                 CommonRoutingService,
                 CommonDocRoutingService,
+                SearchFormUtils,
                 SDocContentUtils,
                 MarkdownService,
                 AngularMarkdownService,
