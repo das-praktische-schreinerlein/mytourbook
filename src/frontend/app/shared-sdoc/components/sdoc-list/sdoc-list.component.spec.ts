@@ -15,6 +15,7 @@ import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -36,6 +37,7 @@ describe('SDocListComponent', () => {
                 LightboxConfig,
                 Lightbox,
                 SDocLightBoxService,
+                SearchFormUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() }
             ],

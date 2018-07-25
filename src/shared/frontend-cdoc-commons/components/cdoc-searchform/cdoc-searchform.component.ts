@@ -18,8 +18,8 @@ import {CommonDocDataCacheService} from '../../services/cdoc-datacache.service';
 export abstract class CDocSearchformComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
-    private _searchResult: BehaviorSubject<S>;
-    private defaultSeLectSettings: IMultiSelectSettings =
+    protected _searchResult: BehaviorSubject<S>;
+    protected defaultSeLectSettings: IMultiSelectSettings =
         {dynamicTitleMaxItems: 5,
             buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
             containerClasses: 'dropdown-inline fullwidth',
@@ -115,10 +115,10 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
     // empty default
     public searchFormGroup;
 
-    constructor(private sanitizer: DomSanitizer, public fb: FormBuilder, private searchFormUtils: SearchFormUtils,
-                private cdocSearchFormUtils: CommonDocSearchFormUtils, private searchFormConverter: GenericSearchFormSearchFormConverter<F>,
-                private sdocDataCacheService: CommonDocDataCacheService<R, F, S, D>, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private cd: ChangeDetectorRef) {
+    constructor(protected sanitizer: DomSanitizer, public fb: FormBuilder, protected searchFormUtils: SearchFormUtils,
+                protected cdocSearchFormUtils: CommonDocSearchFormUtils, protected searchFormConverter: GenericSearchFormSearchFormConverter<F>,
+                protected sdocDataCacheService: CommonDocDataCacheService<R, F, S, D>, protected toastr: ToastsManager, vcr: ViewContainerRef,
+                protected cd: ChangeDetectorRef) {
         this._searchResult = new BehaviorSubject<S>(this.createDefaultSearchResult());
         this.searchFormGroup = this.createDefaultFormGroup();
         this.toastr.setRootViewContainerRef(vcr);
