@@ -31,8 +31,6 @@ import {AbstractCommonDocShowpageComponent} from '../../../../shared/frontend-cd
 })
 export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult,
     SDocDataService> {
-    public contentUtils: SDocContentUtils;
-    public record: SDocRecord;
     tracks: SDocRecord[] = [];
     tagcloudSearchResult = new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets());
     flgShowMap = false;
@@ -149,7 +147,7 @@ export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SD
     getFiltersForType(record: SDocRecord, type: string): any {
         const minPerPage = isNumber(this.showResultListTrigger[type]) ? this.showResultListTrigger[type] : 0;
 
-        return this.contentUtils.getSDocSubItemFiltersForType(record, type,
+        return (<SDocContentUtils>this.contentUtils).getSDocSubItemFiltersForType(record, type,
             (this.pdoc ? this.pdoc.theme : undefined), minPerPage);
     }
 

@@ -116,9 +116,10 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
     public searchFormGroup;
 
     constructor(protected sanitizer: DomSanitizer, public fb: FormBuilder, protected searchFormUtils: SearchFormUtils,
-                protected cdocSearchFormUtils: CommonDocSearchFormUtils, protected searchFormConverter: GenericSearchFormSearchFormConverter<F>,
-                protected sdocDataCacheService: CommonDocDataCacheService<R, F, S, D>, protected toastr: ToastsManager, vcr: ViewContainerRef,
-                protected cd: ChangeDetectorRef) {
+                protected cdocSearchFormUtils: CommonDocSearchFormUtils,
+                protected searchFormConverter: GenericSearchFormSearchFormConverter<F>,
+                protected sdocDataCacheService: CommonDocDataCacheService<R, F, S, D>, protected toastr: ToastsManager,
+                vcr: ViewContainerRef, protected cd: ChangeDetectorRef) {
         this._searchResult = new BehaviorSubject<S>(this.createDefaultSearchResult());
         this.searchFormGroup = this.createDefaultFormGroup();
         this.toastr.setRootViewContainerRef(vcr);
