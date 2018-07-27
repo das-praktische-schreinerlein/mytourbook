@@ -6,6 +6,9 @@
                 <h5 class="listItem.currentRecord-subtype">{{listItem.currentRecord.subtype | translate }}</h5>
             </div>
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+            <div class="techvaluetable">
+                <div *ngIf="listItem.currentRecord.playlists !== undefined && listItem.currentRecord.playlists.length > 0" class="entry"><div class="label">Playlists:</div><div class="value">{{listItem.currentRecord.playlists}}</div></div>
+            </div>
         </div>
     </div>
 </ng-container>

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Facets} from '../../shared/search-commons/model/container/facets';
-import {CommonDocRecord} from '../../shared/search-commons/model/records/cdoc-entity-record';
-import {CommonDocSearchForm} from '../../shared/search-commons/model/forms/cdoc-searchform';
-import {CommonDocSearchResult} from '../../shared/search-commons/model/container/cdoc-searchresult';
+import {Facets} from '../search-commons/model/container/facets';
+import {CommonDocRecord} from '../search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '../search-commons/model/forms/cdoc-searchform';
+import {CommonDocSearchResult} from '../search-commons/model/container/cdoc-searchresult';
 
 @Injectable()
 export class CommonDocDataServiceStub {

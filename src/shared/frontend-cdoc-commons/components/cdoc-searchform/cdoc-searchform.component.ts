@@ -253,7 +253,7 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
         this.search.emit(values);
     }
 
-    protected updateFormState(state?: boolean): void {
+    updateFormState(state?: boolean): void {
         if (state !== undefined) {
             this.showForm = this.showDetails = this.showFulltext = this.showMeta = this.showSpecialFilter = this.showWhat = state;
         } else {
