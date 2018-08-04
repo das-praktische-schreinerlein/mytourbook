@@ -6,6 +6,7 @@ import {FilterUtils, SimpleFilter} from '../../commons/utils/filter.utils';
 import {BaseVideoRecord} from '../../search-commons/model/records/basevideo-record';
 import {BaseImageRecord} from '../../search-commons/model/records/baseimage-record';
 import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
+import {BaseAudioRecord} from '../../search-commons/model/records/baseaudio-record';
 
 export enum KeywordsState {
     SET, NOTSET, SUGGESTED
@@ -31,8 +32,9 @@ export interface CommonItemData {
     currentRecord: CommonDocRecord;
     styleClassFor: string[];
     urlShow: SafeUrl;
-    image: BaseImageRecord;
-    video: BaseVideoRecord;
+    audio?: BaseAudioRecord;
+    image?: BaseImageRecord;
+    video?: BaseVideoRecord;
     thumbnailUrl: SafeUrl;
     previewUrl: SafeUrl;
     fullUrl: SafeUrl;
@@ -49,32 +51,48 @@ export class CommonDocContentUtils {
         return this.getImageUrl(image, 'x100');
     }
 
-    getVideoThumbnail(image: BaseVideoRecord): string {
-        return this.getVideoUrl(image, 'screenshot', '.jpg');
+    getVideoThumbnail(video: BaseVideoRecord): string {
+        return this.getVideoUrl(video, 'screenshot', '.jpg');
+    }
+
+    getAudioThumbnail(audio: BaseAudioRecord): string {
+        return this.getAudioUrl(audio, 'thumbnail', '');
     }
 
     getThumbnailUrl(image: BaseImageRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(this.getThumbnail(image));
     }
 
-    getVideoThumbnailUrl(image: BaseVideoRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoThumbnail(image));
+    getVideoThumbnailUrl(video: BaseVideoRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoThumbnail(video));
+    }
+
+    getAudioThumbnailUrl(audio: BaseAudioRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getAudioThumbnail(audio));
     }
 
     getPreview(image: BaseImageRecord): string {
         return this.getImageUrl(image, 'x600');
     }
 
-    getVideoPreview(image: BaseVideoRecord): string {
-        return this.getVideoUrl(image, 'thumbnail', '.gif.mp4');
+    getVideoPreview(video: BaseVideoRecord): string {
+        return this.getVideoUrl(video, 'thumbnail', '.gif.mp4');
+    }
+
+    getAudioPreview(audio: BaseAudioRecord): string {
+        return this.getAudioUrl(audio, 'thumbnail', '');
     }
 
     getPreviewUrl(image: BaseImageRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(this.getPreview(image));
     }
 
-    getVideoPreviewUrl(image: BaseVideoRecord): SafeUrl {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoPreview(image));
+    getVideoPreviewUrl(video: BaseVideoRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoPreview(video));
+    }
+
+    getAudioPreviewUrl(audio: BaseAudioRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getAudioPreview(audio));
     }
 
     getFullUrl(image: BaseImageRecord): SafeUrl {
@@ -83,6 +101,10 @@ export class CommonDocContentUtils {
 
     getFullVideoUrl(video: BaseVideoRecord): SafeUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(this.getVideoUrl(video, 'x600'));
+    }
+
+    getFullAudioUrl(audio: BaseAudioRecord): SafeUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(this.getAudioUrl(audio, 'x600'));
     }
 
     getImageUrl(image: BaseImageRecord, resolution: string): string {
@@ -96,6 +118,7 @@ export class CommonDocContentUtils {
             return this.appService.getAppConfig()['picsBaseUrl'] + 'pics_' + resolution + '/' + image.fileName;
         }
     }
+
     getVideoUrl(video: BaseVideoRecord, resolution: string, suffix?: string): string {
         if (video === undefined) {
             return 'not found';
@@ -105,6 +128,18 @@ export class CommonDocContentUtils {
             return this.appService.getAppConfig()['videoBaseUrl'] + resolution + '/' + video['sdoc_id'];
         } else {
             return this.appService.getAppConfig()['videoBaseUrl'] + 'video_' + resolution + '/' + video.fileName + (suffix ? suffix : '');
+        }
+    }
+
+    getAudioUrl(audio: BaseAudioRecord, resolution: string, suffix?: string): string {
+        if (audio === undefined) {
+            return 'not found';
+        }
+
+        if (this.appService.getAppConfig()['useAudioAssetStoreUrls'] === true) {
+            return this.appService.getAppConfig()['audioBaseUrl'] + resolution + '/' + audio['mdoc_id'];
+        } else {
+            return this.appService.getAppConfig()['audioBaseUrl'] + 'audio_' + resolution + '/' + audio.fileName + (suffix ? suffix : '');
         }
     }
 
@@ -200,27 +235,29 @@ export class CommonDocContentUtils {
     }
 
     updateItemData(itemData: CommonItemData, record: CommonDocRecord, layout: string): boolean {
-        if (record === undefined) {
-            itemData.currentRecord = undefined;
-            itemData.styleClassFor = undefined;
-            itemData.urlShow = undefined;
-            itemData.image = undefined;
-            itemData.video = undefined;
-            itemData.thumbnailUrl = undefined;
-            itemData.previewUrl = undefined;
-            itemData.fullUrl = undefined;
-            return false;
-        }
-
-        itemData.currentRecord = record;
-        itemData.urlShow = this.getShowUrl(itemData.currentRecord);
+        itemData.audio = undefined;
         itemData.image = undefined;
         itemData.video = undefined;
         itemData.thumbnailUrl = undefined;
         itemData.previewUrl = undefined;
         itemData.fullUrl = undefined;
 
-        if (itemData.currentRecord['sdocimages'] !== undefined && itemData.currentRecord['sdocimages'].length > 0) {
+        if (record === undefined) {
+            itemData.currentRecord = undefined;
+            itemData.styleClassFor = undefined;
+            itemData.urlShow = undefined;
+            return false;
+        }
+
+        itemData.currentRecord = record;
+        itemData.urlShow = this.getShowUrl(itemData.currentRecord);
+
+        if (itemData.currentRecord['sdocaudios'] !== undefined && itemData.currentRecord['sdocaudios'].length > 0) {
+            itemData.audio = itemData.currentRecord['sdocaudios'][0];
+            itemData.thumbnailUrl = this.getAudioThumbnailUrl(itemData.audio);
+            itemData.previewUrl = this.getAudioPreviewUrl(itemData.audio);
+            itemData.fullUrl = this.getFullAudioUrl(itemData.audio);
+        } else if (itemData.currentRecord['sdocimages'] !== undefined && itemData.currentRecord['sdocimages'].length > 0) {
             itemData.image = itemData.currentRecord['sdocimages'][0];
             itemData.thumbnailUrl = this.getThumbnailUrl(itemData.image);
             itemData.previewUrl = this.getPreviewUrl(itemData.image);

@@ -1,0 +1,18 @@
+div.picture-small {
+    width: 150px;
+    max-width: 95%;
+    max-height: 50px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+div.audio-player-container {
+}
+
+div.audio-player {
+}
+
+audio {
+    width: 150px;
+    max-width: 95%;
+}

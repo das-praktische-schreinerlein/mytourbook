@@ -18,6 +18,7 @@ import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CDocListComponent} from './components/cdoc-list/cdoc-list.component';
+import {CDocAudioplayerComponent} from './components/cdoc-audioplayer/cdoc-audioplayer.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import {CDocListComponent} from './components/cdoc-list/cdoc-list.component';
         CDocTagsComponent,
         CDocTagsStateComponent,
         CDocPersonTagsStateComponent,
-        CDocVideoplayerComponent
+        CDocVideoplayerComponent,
+        CDocAudioplayerComponent
     ],
     imports: [
         NgbModule,
@@ -57,7 +59,8 @@ import {CDocListComponent} from './components/cdoc-list/cdoc-list.component';
         CDocTagsComponent,
         CDocTagsStateComponent,
         CDocPersonTagsStateComponent,
-        CDocVideoplayerComponent
+        CDocVideoplayerComponent,
+        CDocAudioplayerComponent
     ]
 })
 export class FrontendCdocCommonsModule {

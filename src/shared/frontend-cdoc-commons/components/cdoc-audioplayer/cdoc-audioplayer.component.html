@@ -1,0 +1,12 @@
+<ng-container *ngIf="listItem.currentRecord !== undefined">
+    <div *ngIf="listItem.audio" class="audio-player-container">
+        <div [class]="styleClass + ' audio-player'">
+            <audio (play)="startPlaying()" [attr.mediaid]="listItem.currentRecord.id" #audioPlayer [attr.width]="forceWidth !== undefined ? forceWidth : null" [style.max-width]="maxWidth + 'px'" [style.max-height]="maxHeight + 'px'" controls="controls" [class]="styleClass" title="{{listItem.audio.name}}" preload="metadata">
+                <source [src]="listItem.fullUrl" />
+                <object [data]="listItem.fullUrl" [width]="maxWidth">
+                    <embed [src]="listItem.fullUrl" [width]="maxWidth">
+                </object>
+            </audio>
+        </div>
+    </div>
+</ng-container>
