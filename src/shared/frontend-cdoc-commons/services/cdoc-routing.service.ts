@@ -4,10 +4,10 @@ import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-re
 
 @Injectable()
 export class CommonDocRoutingService {
-    private lastSearchUrl = '/sdoc/search/';
-    private lastBaseUrl = '/sdoc/';
+    protected lastSearchUrl = '/sdoc/search/';
+    protected lastBaseUrl = '/sdoc/';
 
-    constructor(private commonRoutingService: CommonRoutingService) {
+    constructor(protected commonRoutingService: CommonRoutingService) {
     }
 
     setLastSearchUrl(lastSearchUrl: string): void {

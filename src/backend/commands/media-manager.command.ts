@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {SDocSearchForm} from '../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
-import {CommonDocMediaManagerModule} from '../modules/cdoc-media-manager.module';
+import {SDocMediaManagerModule} from '../modules/sdoc-media-manager.module';
 import {utils} from 'js-data';
 import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-adapter-response.mapper';
 import * as os from 'os';
@@ -22,17 +22,17 @@ export class MediaManagerCommand implements AbstractCommand {
             dataService.setWritable(true);
         }
         const mediaManagerModule = new MediaManagerModule(backendConfig['imageMagicAppPath'], os.tmpdir());
-        const cdocManagerModule = new CommonDocMediaManagerModule(backendConfig, dataService, mediaManagerModule);
+        const sdocManagerModule = new SDocMediaManagerModule(backendConfig, dataService, mediaManagerModule);
         const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
 
         let promise: Promise<any>;
         switch (action) {
             case 'readImageDates':
-                promise = cdocManagerModule.readImageDates(searchForm);
+                promise = sdocManagerModule.readImageDates(searchForm);
 
                 break;
             case 'scaleImages':
-                promise = cdocManagerModule.scaleImages(searchForm);
+                promise = sdocManagerModule.scaleImages(searchForm);
 
                 break;
             case 'generateSDocsFromMediaDir':
@@ -42,7 +42,7 @@ export class MediaManagerCommand implements AbstractCommand {
                     return promise;
                 }
 
-                promise = cdocManagerModule.generateSDocRecordsFromMediaDir(importDir);
+                promise = sdocManagerModule.generateSDocRecordsFromMediaDir(importDir);
                 promise.then(value => {
                     const responseMapper = new SDocAdapterResponseMapper(backendConfig);
                     const sdocs = [];

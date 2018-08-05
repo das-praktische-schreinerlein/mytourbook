@@ -9,6 +9,8 @@ import * as ffmpeg from 'fluent-ffmpeg';
 import {FfmpegCommand} from 'fluent-ffmpeg';
 import * as Promise_serial from 'promise-serial';
 import {utils} from 'js-data';
+import * as mm from 'music-metadata';
+import {IAudioMetadata} from 'music-metadata';
 
 export class MediaManagerModule {
     private gm;
@@ -92,7 +94,7 @@ export class MediaManagerModule {
             'mp4': 'VIDEO'
         };
 
-        return this.doActionOnVideosFromMediaDir(baseDir, destDir, '.jpg', mediaTypes,
+        return this.doActionOnFilesFromMediaDir(baseDir, destDir, '.jpg', mediaTypes,
             function (srcPath, destPath, processorResolve, processorReject) {
             if (flgIgnoreIfExists && fs.existsSync(destPath)) {
                 console.log('SKIP - already exists', destPath);
@@ -133,7 +135,7 @@ export class MediaManagerModule {
         };
         const me = this;
 
-        return this.doActionOnVideosFromMediaDir(baseDir, destDir, '.gif', mediaTypes,
+        return this.doActionOnFilesFromMediaDir(baseDir, destDir, '.gif', mediaTypes,
             function (srcPath, destPath, processorResolve, processorReject) {
                 if (flgIgnoreIfExists && fs.existsSync(destPath) && fs.existsSync(destPath + '.mp4')) {
                     console.log('SKIP - already exists', destPath);
@@ -209,6 +211,18 @@ export class MediaManagerModule {
         return exif.read(imagePath);
     }
 
+    public readMusicTagsForMusicFile(musicPath: string): Promise<IAudioMetadata> {
+        return new Promise<IAudioMetadata>((resolve, reject) => {
+            mm.parseFile(musicPath)
+                .then(metadata => {
+                    resolve(metadata);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
     public scaleImage(imagePath: string, resultPath: string, width: number): Promise<{}> {
         if (fs.existsSync(resultPath)) {
             return utils.resolve(imagePath);
@@ -273,7 +287,7 @@ export class MediaManagerModule {
 
     private doFfmegActionOnVideosFromMediaDir(baseDir: string, destDir: string, destSuffix: string, mediaTypes: {},
                                               flgIgnoreIfExists: boolean, ffmegCommandExtender: any): Promise<{}> {
-        return this.doActionOnVideosFromMediaDir(baseDir, destDir, destSuffix, mediaTypes,
+        return this.doActionOnFilesFromMediaDir(baseDir, destDir, destSuffix, mediaTypes,
             function (srcPath, destPath, processorResolve, processorReject) {
                 if (flgIgnoreIfExists && fs.existsSync(destPath)) {
                     console.log('SKIP - already exists', srcPath, destPath);
@@ -301,7 +315,7 @@ export class MediaManagerModule {
         });
     }
 
-    private doActionOnVideosFromMediaDir(baseDir: string, destDir: string, destSuffix: string, mediaTypes: {},
+    private doActionOnFilesFromMediaDir(baseDir: string, destDir: string, destSuffix: string, mediaTypes: {},
                                          commandExtender: any): Promise<{}> {
         const fileExtensions = [];
         for (const mediaType in mediaTypes) {

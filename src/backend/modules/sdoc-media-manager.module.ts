@@ -11,7 +11,7 @@ import {SDocAdapterResponseMapper} from '../shared/sdoc-commons/services/sdoc-ad
 import {DateUtils} from '../shared/commons/utils/date.utils';
 import {MediaManagerModule} from '../shared-node/media-commons/modules/media-manager.module';
 
-export class CommonDocMediaManagerModule {
+export class SDocMediaManagerModule {
     private dataService: SDocDataService;
     private backendConfig: {};
 
