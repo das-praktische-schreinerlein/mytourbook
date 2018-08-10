@@ -8,8 +8,8 @@ import {CDocKeywordsComponent} from '../../../../shared/frontend-cdoc-commons/co
 
 @Component({
     selector: 'app-sdoc-persontags',
-    templateUrl: './sdoc-persontags.component.html',
-    styleUrls: ['./sdoc-persontags.component.css'],
+    templateUrl: '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.html',
+    styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocPersonTagsComponent extends CDocKeywordsComponent {

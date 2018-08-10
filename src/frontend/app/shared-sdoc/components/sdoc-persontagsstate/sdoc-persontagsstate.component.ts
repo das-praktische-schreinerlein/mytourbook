@@ -5,8 +5,8 @@ import {SDocKeywordsstateComponent} from '../sdoc-keywordsstate/sdoc-keywordssta
 
 @Component({
     selector: 'app-sdoc-persontagsstate',
-    templateUrl: './sdoc-persontagsstate.component.html',
-    styleUrls: ['./sdoc-persontagsstate.component.css'],
+    templateUrl: '../../../../shared/frontend-cdoc-commons/components/cdoc-keywordsstate/cdoc-keywordsstate.component.html',
+    styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-keywordsstate/cdoc-keywordsstate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocPersontagsstateComponent extends SDocKeywordsstateComponent {

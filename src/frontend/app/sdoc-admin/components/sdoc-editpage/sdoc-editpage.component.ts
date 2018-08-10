@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
 import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
@@ -20,9 +19,10 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 @Component({
-    selector: 'app-sdoc-editwpage',
+    selector: 'app-sdoc-editpage',
     templateUrl: './sdoc-editpage.component.html',
     styleUrls: ['./sdoc-editpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -39,7 +39,7 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
     tracks: SDocRecord[] = [];
     trackRouten: SDocRecord[] = [];
 
-    constructor(private route: ActivatedRoute, private cdocRoutingService: CommonDocRoutingService,
+    constructor(private route: ActivatedRoute, private cdocRoutingService: SDocRoutingService,
                 private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
