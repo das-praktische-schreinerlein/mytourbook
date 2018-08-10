@@ -262,7 +262,7 @@
         <note priority="1" from="description">Label for header: sort</note>
         <note priority="1" from="meaning">sort label</note>
       </trans-unit>
-      <trans-unit id="label.pageHeader.sdoc.perPage" datatype="html">
+      <trans-unit id="label.pageHeader.cdoc.perPage" datatype="html">
         <source>per Page:</source>
         <target> </target>
         <context-group purpose="location">
@@ -272,7 +272,7 @@
         <note priority="1" from="description">Label for header: perPage</note>
         <note priority="1" from="meaning">perPage label</note>
       </trans-unit>
-      <trans-unit id="label.pageHeader.sdoc.listLayout" datatype="html">
+      <trans-unit id="label.pageHeader.cdoc.listLayout" datatype="html">
         <source>Layout:</source>
         <target> </target>
         <context-group purpose="location">
