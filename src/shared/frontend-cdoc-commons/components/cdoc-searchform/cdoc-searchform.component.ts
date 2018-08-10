@@ -118,7 +118,7 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
     constructor(protected sanitizer: DomSanitizer, public fb: FormBuilder, protected searchFormUtils: SearchFormUtils,
                 protected cdocSearchFormUtils: CommonDocSearchFormUtils,
                 protected searchFormConverter: GenericSearchFormSearchFormConverter<F>,
-                protected sdocDataCacheService: CommonDocDataCacheService<R, F, S, D>, protected toastr: ToastsManager,
+                protected cdocDataCacheService: CommonDocDataCacheService<R, F, S, D>, protected toastr: ToastsManager,
                 vcr: ViewContainerRef, protected cd: ChangeDetectorRef) {
         this._searchResult = new BehaviorSubject<S>(this.createDefaultSearchResult());
         this.searchFormGroup = this.createDefaultFormGroup();
@@ -127,8 +127,8 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
 
     ngOnInit() {
         this._searchResult.subscribe(
-            sdocSearchSearchResult => {
-                this.updateSearchForm(sdocSearchSearchResult);
+            cdocSearchSearchResult => {
+                this.updateSearchForm(cdocSearchSearchResult);
             },
         );
     }
@@ -178,8 +178,8 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
         this.updateHumanReadableFiltes(searchSearchResult);
     }
 
-    protected updateFormGroup(sdocSearchSearchResult: S): void {
-        const values: F = sdocSearchSearchResult.searchForm;
+    protected updateFormGroup(cdocSearchSearchResult: S): void {
+        const values: F = cdocSearchSearchResult.searchForm;
         this.searchFormGroup = this.fb.group({
             what: [(values.what ? values.what.split(/,/) : [])],
             fulltext: values.fulltext,
@@ -189,36 +189,36 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
         });
     }
 
-    protected updateSelectComponents(sdocSearchSearchResult: S) {
+    protected updateSelectComponents(cdocSearchSearchResult: S) {
         const rawValues = this.searchFormGroup.getRawValue();
         this.optionsSelectWhat = this.searchFormUtils.moveSelectedToTop(
             this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-                this.cdocSearchFormUtils.getWhatValues(sdocSearchSearchResult), true, [/^kw_/gi], true),
+                this.cdocSearchFormUtils.getWhatValues(cdocSearchSearchResult), true, [/^kw_/gi], true),
             rawValues['what']);
         this.optionsSelectType = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.cdocSearchFormUtils.getTypeValues(sdocSearchSearchResult), true, [], true)
+            this.cdocSearchFormUtils.getTypeValues(cdocSearchSearchResult), true, [], true)
             .sort(function (a, b) {
                 return a.name.localeCompare(b.name);
             });
-        if (this.cdocSearchFormUtils.getTypeLimit(sdocSearchSearchResult) > 0) {
-            this.settingsSelectType.selectionLimit = this.cdocSearchFormUtils.getTypeLimit(sdocSearchSearchResult);
+        if (this.cdocSearchFormUtils.getTypeLimit(cdocSearchSearchResult) > 0) {
+            this.settingsSelectType.selectionLimit = this.cdocSearchFormUtils.getTypeLimit(cdocSearchSearchResult);
         } else {
             this.settingsSelectType.selectionLimit = 0;
         }
         this.settingsSelectType.autoUnselect = this.settingsSelectType.selectionLimit + '' === '1';
         this.optionsSelectPlaylists = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.cdocSearchFormUtils.getPlaylistValues(sdocSearchSearchResult), true, [], true);
+            this.cdocSearchFormUtils.getPlaylistValues(cdocSearchSearchResult), true, [], true);
     }
 
-    protected updateHumanReadableFiltes(sdocSearchSearchResult: S) {
+    protected updateHumanReadableFiltes(cdocSearchSearchResult: S) {
         const me = this;
         this.humanReadableSpecialFilter = '';
         this.humanReadableSearchForm = '';
-        const filters: HumanReadableFilter[] = this.searchFormConverter.searchFormToHumanReadableFilter(sdocSearchSearchResult.searchForm);
+        const filters: HumanReadableFilter[] = this.searchFormConverter.searchFormToHumanReadableFilter(cdocSearchSearchResult.searchForm);
         const resolveableFilters = this.searchFormUtils.extractResolvableFilters(filters, this.searchFormConverter.getHrdIds());
         if (resolveableFilters.length > 0) {
             const resolveableIds = this.searchFormUtils.extractResolvableIds(resolveableFilters, this.searchFormConverter.getHrdIds());
-            this.sdocDataCacheService.resolveNamesForIds(Array.from(resolveableIds.keys())).then(nameCache => {
+            this.cdocDataCacheService.resolveNamesForIds(Array.from(resolveableIds.keys())).then(nameCache => {
                 me.humanReadableSearchForm = me.sanitizer.bypassSecurityTrustHtml(
                     me.searchFormUtils.searchFormToHumanReadableMarkup(filters, false, nameCache, me.searchFormConverter.getHrdIds()));
                 me.humanReadableSpecialFilter = me.searchFormUtils.searchFormToHumanReadableMarkup(resolveableFilters, true, nameCache,
@@ -242,7 +242,7 @@ export abstract class CDocSearchformComponent <R extends CommonDocRecord, F exte
         }
     }
 
-    protected updateAvailabilityFlags(sdocSearchSearchResult: S) {
+    protected updateAvailabilityFlags(cdocSearchSearchResult: S) {
         this.showDetailsAvailable = (this.optionsSelectWhat.length > 0);
         this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0);
     }

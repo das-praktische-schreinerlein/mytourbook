@@ -64,7 +64,7 @@ export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends
     public label: string;
 
     @Input()
-    public baseSearchUrl? = 'sdoc/';
+    public baseSearchUrl? = 'cdoc/';
 
     @Input()
     public searchLinkLabel?: string;
@@ -118,8 +118,8 @@ export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends
         }
     }
 
-    onShowSDoc(sdoc: R) {
-        this.cdocRoutingService.navigateToShow(sdoc, '');
+    onShowDoc(cdoc: R) {
+        this.cdocRoutingService.navigateToShow(cdoc, '');
         return false;
     }
 
@@ -174,8 +174,8 @@ export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends
         return false;
     }
 
-    onSearchSDoc(sdocSearchForm: F) {
-        this.searchForm = sdocSearchForm;
+    onSearchDoc(cdocSearchForm: F) {
+        this.searchForm = cdocSearchForm;
         this.doSearch();
         return false;
     }
@@ -209,16 +209,16 @@ export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends
                 showFacets: this.showForm || this.loadFacets || (this.showTimetable ? ['week_is', 'month_is'] : false),
                 loadTrack: this.loadTrack,
                 showForm: this.showForm
-            }).then(function doneSearch(sdocSearchResult) {
+            }).then(function doneSearch(cdocSearchResult) {
             me.showLoadingSpinner = false;
-            if (sdocSearchResult === undefined) {
-                // console.log('empty searchResult', sdocSearchResult);
+            if (cdocSearchResult === undefined) {
+                // console.log('empty searchResult', cdocSearchResult);
                 me.searchResult = me.cdocDataService.newSearchResult(me.searchForm, 0, [], new Facets());
             } else {
-                // console.log('update searchResult', sdocSearchResult);
+                // console.log('update searchResult', cdocSearchResult);
                 me.initialized = true;
-                me.searchResult = sdocSearchResult;
-                me.searchForm = sdocSearchResult.searchForm;
+                me.searchResult = cdocSearchResult;
+                me.searchForm = cdocSearchResult.searchForm;
             }
             me.searchResultFound.emit(me.searchResult);
 

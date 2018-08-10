@@ -19,23 +19,14 @@ export class CDocKeywordsComponent implements OnInit, OnChanges {
     @Input()
     public record: CommonDocRecord;
 
-    constructor(private appService: GenericAppService, private cd: ChangeDetectorRef) {
+    constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
-                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords');
-                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes');
-                    this.updateData();
-                } else {
-                    console.warn('no valid keywordsConfig found');
-                    this.keywordsConfig = [];
-                    this.possiblePrefixes = [];
-                    this.updateData();
-                }
+                this.configureComponent(config);
             }
         });
     }
@@ -46,7 +37,20 @@ export class CDocKeywordsComponent implements OnInit, OnChanges {
         }
     }
 
-    private updateData() {
+    protected configureComponent(config: {}): void {
+        if (BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords')) {
+            this.keywordsConfig = BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords');
+            this.possiblePrefixes = BeanUtils.getValue(config, 'components.cdoc-keywords.possiblePrefixes');
+            this.updateData();
+        } else {
+            console.warn('no valid keywordsConfig found');
+            this.keywordsConfig = [];
+            this.possiblePrefixes = [];
+            this.updateData();
+        }
+    }
+
+    protected updateData() {
         this.cd.markForCheck();
     }
 }

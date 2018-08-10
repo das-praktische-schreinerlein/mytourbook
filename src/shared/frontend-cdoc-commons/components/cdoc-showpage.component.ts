@@ -33,6 +33,7 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
     public Layout = Layout;
     pdoc: PDocRecord;
     baseSearchUrl: string;
+    baseSearchUrlDefault: string;
     queryParamMap: ParamMap = undefined;
 
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: CommonDocRoutingService,
@@ -44,6 +45,7 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 protected platformService: PlatformService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
+        this.configureBaseSearchUrlDefault();
     }
 
     ngOnInit() {
@@ -57,121 +59,26 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
                 const config = me.appService.getAppConfig();
-                const flgCDocError = ErrorResolver.isResolverError(data.record);
-                const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
-                const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
                 me.flgDescRendered = false;
 
                 me.configureProcessingOfResolvedData({});
-
-                if (!flgCDocError && !flgPDocError && !flgBaseSearchUrlError) {
-                    me.record = data.record.data;
-                    me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
-                    me.baseSearchUrl = data.baseSearchUrl.data;
-
-                    me.doProcessAfterResolvedData({});
-
-                    const recordName = me.keywordsValidationRule.sanitize(me.record.name);
-                    if (me.pdoc) {
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
-                            {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
-                            {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
-                        this.pageUtils.setRobots(false, false);
-
-                        let indexableTypes = [];
-                        if (BeanUtils.getValue(config, 'services.seo.sdocIndexableTypes')) {
-                            indexableTypes = config['services']['seo']['sdocIndexableTypes'];
-                        }
-
-                        if (me.pdoc.id === 'start' && indexableTypes.indexOf(me.record.type) >= 0) {
-                            this.pageUtils.setRobots(true, true);
-                        } else {
-                            this.pageUtils.setRobots(false, false);
-                        }
-                    } else {
-                        me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
-                            {sdoc: recordName}, recordName);
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',
-                            {sdoc: recordName}, recordName);
-                        this.pageUtils.setRobots(false, false);
-                    }
-                    this.pageUtils.setMetaLanguage();
-
-                    me.cd.markForCheck();
-                    me.pageUtils.scrollToTop();
-
-                    this.trackingProvider.trackPageView();
+                if (me.processError(data)) {
                     return;
                 }
 
-                let newUrl, msg, code;
-                let errorCode;
-                if (flgCDocError) {
-                    errorCode = data.record.error.code;
-                } else {
-                    errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
-                }
-                const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
-                const sdocId = (flgCDocError ? data.record.error.data : data.record.data.id);
-                const sdocName = (flgCDocError ? 'name' : data.record.data.name);
-                switch (errorCode) {
-                    case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
-                    case AbstractCommonDocRecordResolver.ERROR_INVALID_DOC_ID:
-                        code = ErrorResolver.ERROR_INVALID_ID;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = [me.baseSearchUrl,
-                            'show',
-                            this.idValidationRule.sanitize(sdocName),
-                            this.idValidationRule.sanitize(sdocId)].join('/');
-                        msg = undefined;
-                        break;
-                    case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
-                        code = ErrorResolver.ERROR_UNKNOWN_ID;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = [me.baseSearchUrl,
-                            'show',
-                            this.idValidationRule.sanitize(sdocName),
-                            this.idValidationRule.sanitize(sdocId)].join('/');
-                        msg = undefined;
-                        break;
-                    case AbstractCommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
-                        code = ErrorResolver.ERROR_UNKNOWN_ID;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = [me.baseSearchUrl].join('/');
-                        msg = undefined;
-                        break;
-                    case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
-                    case AbstractCommonDocRecordResolver.ERROR_READING_DOC_ID:
-                        code = ErrorResolver.ERROR_WHILE_READING;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = undefined;
-                        msg = undefined;
-                        break;
-                    case GenericAppService.ERROR_APP_NOT_INITIALIZED:
-                        code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
-                        newUrl = undefined;
-                        msg = undefined;
-                        break;
-                    default:
-                        code = ErrorResolver.ERROR_OTHER;
-                        me.baseSearchUrl = ['sdoc'].join('/');
-                        newUrl = undefined;
-                        msg = undefined;
-                }
+                me.record = data.record.data;
+                me.pdoc = (data.pdoc ? data.pdoc.data : undefined);
+                me.baseSearchUrl = data.baseSearchUrl.data;
 
-                this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+                me.doProcessAfterResolvedData({});
+
+                me.setMetaTags(me.pdoc, me.record, config);
+                me.pageUtils.setMetaLanguage();
+
                 me.cd.markForCheck();
-                return;
+                me.pageUtils.scrollToTop();
+
+                this.trackingProvider.trackPageView();
             }
         );
     }
@@ -211,9 +118,116 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
         return this.cdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
     }
 
+    protected abstract configureBaseSearchUrlDefault(): void;
+
     protected configureProcessingOfResolvedData(config: {}): void {
     }
 
+    protected abstract getConfiguredIndexableTypes(config: {}): string[];
+
     protected doProcessAfterResolvedData(config: {}): void {
+    }
+
+    protected setMetaTags(pdoc: PDocRecord, record: CommonDocRecord, config: {}): void {
+        const recordName = this.keywordsValidationRule.sanitize(record.name);
+        if (pdoc) {
+            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSectionShowPage',
+                {title: pdoc.heading, cdoc: recordName}, pdoc.heading + ' ' + recordName);
+            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocSectionShowPage',
+                {title: pdoc.heading, teaser: pdoc.teaser, cdoc: recordName}, recordName);
+            this.pageUtils.setRobots(false, false);
+
+            const indexableTypes = this.getConfiguredIndexableTypes(config);
+            if (pdoc.id === 'start' && indexableTypes.indexOf(record.type) >= 0) {
+                this.pageUtils.setRobots(true, true);
+            } else {
+                this.pageUtils.setRobots(false, false);
+            }
+        } else {
+            this.pageUtils.setGlobalStyle('', 'sectionStyle');
+            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocShowPage',
+                {cdoc: recordName}, recordName);
+            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocShowPage',
+                {cdoc: recordName}, recordName);
+            this.pageUtils.setRobots(false, false);
+        }
+    }
+
+    protected processError(data: { record: ResolvedData<R>, pdoc: ResolvedData<PDocRecord>,
+        baseSearchUrl: ResolvedData<string> }): boolean {
+        const flgCDocError = ErrorResolver.isResolverError(data.record);
+        const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
+        const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
+
+        if (!flgCDocError && !flgPDocError && !flgBaseSearchUrlError) {
+            return false;
+        }
+
+        let newUrl, msg, code;
+        let errorCode;
+        if (flgCDocError) {
+            errorCode = data.record.error.code;
+        } else {
+            errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
+        }
+        const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
+        const cdocId = (flgCDocError ? data.record.error.data : data.record.data.id);
+        const cdocName = (flgCDocError ? 'name' : data.record.data.name);
+        switch (errorCode) {
+            case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
+            case AbstractCommonDocRecordResolver.ERROR_INVALID_DOC_ID:
+                code = ErrorResolver.ERROR_INVALID_ID;
+                if (sectionId && sectionId !== '') {
+                    this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                } else {
+                    this.baseSearchUrl = this.baseSearchUrlDefault;
+                }
+                newUrl = [this.baseSearchUrl,
+                    'show',
+                    this.idValidationRule.sanitize(cdocName),
+                    this.idValidationRule.sanitize(cdocId)].join('/');
+                msg = undefined;
+                break;
+            case SectionsPDocRecordResolver.ERROR_UNKNOWN_SECTION_ID:
+                code = ErrorResolver.ERROR_UNKNOWN_ID;
+                this.baseSearchUrl = this.baseSearchUrlDefault;
+                newUrl = [this.baseSearchUrl,
+                    'show',
+                    this.idValidationRule.sanitize(cdocName),
+                    this.idValidationRule.sanitize(cdocId)].join('/');
+                msg = undefined;
+                break;
+            case AbstractCommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
+                code = ErrorResolver.ERROR_UNKNOWN_ID;
+                if (sectionId && sectionId !== '') {
+                    this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                } else {
+                    this.baseSearchUrl = this.baseSearchUrlDefault;
+                }
+                newUrl = [this.baseSearchUrl].join('/');
+                msg = undefined;
+                break;
+            case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
+            case AbstractCommonDocRecordResolver.ERROR_READING_DOC_ID:
+                code = ErrorResolver.ERROR_WHILE_READING;
+                this.baseSearchUrl = this.baseSearchUrlDefault;
+                newUrl = undefined;
+                msg = undefined;
+                break;
+            case GenericAppService.ERROR_APP_NOT_INITIALIZED:
+                code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
+                newUrl = undefined;
+                msg = undefined;
+                break;
+            default:
+                code = ErrorResolver.ERROR_OTHER;
+                this.baseSearchUrl = this.baseSearchUrlDefault;
+                newUrl = undefined;
+                msg = undefined;
+        }
+
+        this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+        this.cd.markForCheck();
+        return true;
     }
 }

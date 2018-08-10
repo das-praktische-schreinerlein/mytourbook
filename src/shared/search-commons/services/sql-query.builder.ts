@@ -230,7 +230,6 @@ export class SqlQueryBuilder {
                     continue;
                 }
 
-
                 if (facetConfig.selectField !== undefined) {
                     const orderBy = facetConfig.orderBy ? facetConfig.orderBy : 'count desc';
                     const from = facetConfig.selectFrom !== undefined ? facetConfig.selectFrom : tableConfig.tableName;

@@ -31,7 +31,7 @@ export abstract class AbstractCommonDocRecordCreateResolver<R extends CommonDocR
                 if (appState === AppState.Ready) {
                     const type = route.params['createByType'];
                     if (!this.idValidationRule.isValid(type)) {
-                        console.warn('warning no valid type for sdoc:', LogUtils.sanitizeLogMsg(type));
+                        console.warn('warning no valid type for cdoc:', LogUtils.sanitizeLogMsg(type));
                         result.error = new ResolverError(AbstractCommonDocRecordCreateResolver.ERROR_UNKNOWN_DOC_TYPE, type, undefined);
                         return resolve(result);
                     }
@@ -41,26 +41,26 @@ export abstract class AbstractCommonDocRecordCreateResolver<R extends CommonDocR
                     const baseId = route.params['createBaseId'];
                     if (baseId && this.idValidationRule.isValid(baseId)) {
                         this.dataService.getById(baseId).then(
-                            function doneGetById(sdoc: R) {
-                                if (sdoc === undefined) {
-                                    console.log('no sdoc for id:' + LogUtils.sanitizeLogMsg(baseId));
+                            function doneGetById(cdoc: R) {
+                                if (cdoc === undefined) {
+                                    console.log('no cdoc for id:' + LogUtils.sanitizeLogMsg(baseId));
                                     result.error = new ResolverError(AbstractCommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID, baseId, undefined);
                                     return resolve(result);
                                 }
 
                                 const fields = ['name', 'keywords', 'descTxt', 'descMd'];
                                 me.configureDefaultFieldToSet(type, fields);
-                                me.copyDefaultFields(type, sdoc, values);
+                                me.copyDefaultFields(type, cdoc, values);
 
                                 for (const field of fields) {
-                                    values[field] = BeanUtils.getValue(sdoc, field);
+                                    values[field] = BeanUtils.getValue(cdoc, field);
                                 }
 
                                 result.data = me.dataService.newRecord(values);
 
                                 return resolve(result);
                             }).catch(function errorGetById(reason: any) {
-                                console.error('error sdoc for id:' + LogUtils.sanitizeLogMsg(baseId), reason);
+                                console.error('error cdoc for id:' + LogUtils.sanitizeLogMsg(baseId), reason);
                                 result.error = new ResolverError(AbstractCommonDocRecordResolver.ERROR_READING_DOC_ID, baseId, reason);
                                 return resolve(result);
                             }
@@ -82,7 +82,7 @@ export abstract class AbstractCommonDocRecordCreateResolver<R extends CommonDocR
     protected configureDefaultFieldToSet(type: string, fields: string[]): void {
     }
 
-    protected copyDefaultFields(type: string, sdoc: R, values: {}): void {
+    protected copyDefaultFields(type: string, cdoc: R, values: {}): void {
     }
 
     protected setDefaultFields(type: string, values: {}): void {

@@ -59,7 +59,7 @@ export class CDocVideoplayerComponent implements OnChanges {
     @Output()
     public show: EventEmitter<CommonDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: CommonDocContentUtils, private cd: ChangeDetectorRef) {
+    constructor(contentUtils: CommonDocContentUtils, protected cd: ChangeDetectorRef) {
         this.contentUtils = contentUtils;
     }
 
@@ -69,8 +69,8 @@ export class CDocVideoplayerComponent implements OnChanges {
         }
     }
 
-    submitShow(sdoc: CommonDocRecord) {
-        this.show.emit(sdoc);
+    submitShow(cdoc: CommonDocRecord) {
+        this.show.emit(cdoc);
         return false;
     }
 

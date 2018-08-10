@@ -72,10 +72,7 @@ export class CDocListHeaderComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
-                    BeanUtils.getValue(config, 'components.sdoc-listheader.allowAutoplay') + '' === 'true') {
-                    this.autoPlayAllowed = this.showAutoplay;
-                }
+                this.configureComponent(config);
             }
         });
         this.headerFormGroup = this.fb.group({
@@ -128,5 +125,12 @@ export class CDocListHeaderComponent implements OnInit, OnChanges {
 
     onLayoutChange() {
         this.layoutChange.emit(this.headerFormGroup.getRawValue()['layout']);
+    }
+
+    protected configureComponent(config: {}): void {
+        if (BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
+            BeanUtils.getValue(config, 'components.cdoc-listheader.allowAutoplay') + '' === 'true') {
+            this.autoPlayAllowed = this.showAutoplay;
+        }
     }
 }

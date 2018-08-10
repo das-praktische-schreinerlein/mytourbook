@@ -33,24 +33,14 @@ export class CDocKeywordsStateComponent implements OnInit, OnChanges {
     @Output()
     public tagsFound: EventEmitter<StructuredKeywordState[]> = new EventEmitter();
 
-    constructor(private appService: GenericAppService, private cd: ChangeDetectorRef) {
+    constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
     }
 
     ngOnInit() {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
-                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords');
-                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes');
-                    this.prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix') || '';
-                    this.updateData();
-                } else {
-                    console.warn('no valid keywordsConfig found');
-                    this.keywordsConfig = [];
-                    this.possiblePrefixes = [];
-                    this.prefix = '';
-                }
+                this.configureComponent(config);
             }
         });
     }
@@ -69,7 +59,21 @@ export class CDocKeywordsStateComponent implements OnInit, OnChanges {
         this.unsetKeyword.emit(keyword);
     }
 
-    private updateData() {
+    protected configureComponent(config: {}): void {
+        if (BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords')) {
+            this.keywordsConfig = BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords');
+            this.possiblePrefixes = BeanUtils.getValue(config, 'components.cdoc-keywords.possiblePrefixes');
+            this.prefix = BeanUtils.getValue(config, 'components.cdoc-keywords.editPrefix') || '';
+            this.updateData();
+        } else {
+            console.warn('no valid keywordsConfig found');
+            this.keywordsConfig = [];
+            this.possiblePrefixes = [];
+            this.prefix = '';
+        }
+    }
+
+    protected updateData() {
         this.cd.markForCheck();
     }
 }

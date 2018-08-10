@@ -5,7 +5,7 @@
                 <app-interval-control (intervalNext)="onShowIntervalNext()"></app-interval-control>
             </div>
             <div [class]="(autoPlayAllowed ? 'col-sm-4' : 'col-sm-6')">
-                <span class="sdoc-count" *ngIf="searchResult.recordCount != undefined" i18n="searchresult text sdoc|Text for searchresult sdoc@@text.search.sdoc.result">{searchResult.recordCount, plural, =0 {no result} =1 {one result} other { <strong>{{searchResult.recordCount}}</strong> results}}</span>
+                <span class="cdoc-count" *ngIf="searchResult.recordCount != undefined" i18n="searchresult text cdoc|Text for searchresult cdoc@@text.search.cdoc.result">{searchResult.recordCount, plural, =0 {no result} =1 {one result} other { <strong>{{searchResult.recordCount}}</strong> results}}</span>
                 <ng-container *ngIf="searchResult.recordCount > searchResult.searchForm.perPage">
                     <ngb-pagination (pageChange)="onPageChange($event)"
                                     [pageSize]="searchResult.searchForm.perPage"
@@ -20,7 +20,7 @@
             </div>
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print">
                 <ng-container *ngIf="availableSorts.length > 0">
-                    <label class="col-form-label" i18n="sort label|Label for header: sort@@label.pageHeader.sdoc.sort">Sort:</label>
+                    <label class="col-form-label" i18n="sort label|Label for header: sort@@label.pageHeader.cdoc.sort">Sort:</label>
                     <select class="form-control input-sm" name="sort" id="sort" formControlName="sort" (change)="onSortChange()">
                         <ng-container *ngFor="let sortValue of availableSorts">
                             <option [value]="sortValue">{{ 'listSorts_' + sortValue | translate }}</option>
@@ -30,7 +30,7 @@
             </div>
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print" *ngIf="layout !== Layout.PAGE">
                 <ng-container *ngIf="availablePerPage.length > 0">
-                    <label class="col-form-label" i18n="perPage label|Label for header: perPage@@label.pageHeader.sdoc.perPage">per Page:</label>
+                    <label class="col-form-label" i18n="perPage label|Label for header: perPage@@label.pageHeader.cdoc.perPage"> </label>
                     <input type="hidden" name="perPage" id="perPage" formControlName="perPage">
                     <span *ngFor="let num of availablePerPage" (click)="headerFormGroup.patchValue({perPage: num}); onPerPageChange()"
                        [ngClass]="'option-link ' + (num === perPage ? 'option-link-active' : 'option-link-inactive')">{{ num }}</span>
@@ -38,7 +38,7 @@
             </div>
             <div class="col-sm-2 form-inline input-group input-group-sm hidden-print">
                 <ng-container *ngIf="availableLayouts.length > 0">
-                    <label class="col-form-label" i18n="listLayout label|Label for header: listLayout@@label.pageHeader.sdoc.listLayout">Layout:</label>
+                    <label class="col-form-label" i18n="listLayout label|Label for header: listLayout@@label.pageHeader.cdoc.listLayout"> </label>
                     <input type="hidden" name="layout" id="layout" formControlName="layout">
                     <span *ngFor="let optionLayout of availableLayouts" (click)="headerFormGroup.patchValue({layout: optionLayout}); onLayoutChange()"
                        [ngClass]="'option-link ' + (optionLayout === layout ? 'option-link-active' : 'option-link-inactive')"

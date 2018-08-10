@@ -42,9 +42,14 @@ export interface CommonItemData {
 
 @Injectable()
 export class CommonDocContentUtils {
+    protected cdocRecordRefIdField = 'cdoc_id';
+    protected cdocAudiosKey = 'cdocaudios';
+    protected cdocImagesKey = 'cdocimages';
+    protected cdocVideosKey = 'cdocvideos';
 
     constructor(protected sanitizer: DomSanitizer, protected cdocRoutingService: CommonDocRoutingService,
                 protected appService: GenericAppService) {
+        this.configureService();
     }
 
     getThumbnail(image: BaseImageRecord): string {
@@ -113,7 +118,7 @@ export class CommonDocContentUtils {
         }
 
         if (this.appService.getAppConfig()['useAssetStoreUrls'] === true) {
-            return this.appService.getAppConfig()['picsBaseUrl'] + resolution + '/' + image['sdoc_id'];
+            return this.appService.getAppConfig()['picsBaseUrl'] + resolution + '/' + image[this.cdocRecordRefIdField];
         } else {
             return this.appService.getAppConfig()['picsBaseUrl'] + 'pics_' + resolution + '/' + image.fileName;
         }
@@ -125,7 +130,7 @@ export class CommonDocContentUtils {
         }
 
         if (this.appService.getAppConfig()['useVideoAssetStoreUrls'] === true) {
-            return this.appService.getAppConfig()['videoBaseUrl'] + resolution + '/' + video['sdoc_id'];
+            return this.appService.getAppConfig()['videoBaseUrl'] + resolution + '/' + video[this.cdocRecordRefIdField];
         } else {
             return this.appService.getAppConfig()['videoBaseUrl'] + 'video_' + resolution + '/' + video.fileName + (suffix ? suffix : '');
         }
@@ -137,7 +142,7 @@ export class CommonDocContentUtils {
         }
 
         if (this.appService.getAppConfig()['useAudioAssetStoreUrls'] === true) {
-            return this.appService.getAppConfig()['audioBaseUrl'] + resolution + '/' + audio['mdoc_id'];
+            return this.appService.getAppConfig()['audioBaseUrl'] + resolution + '/' + audio[this.cdocRecordRefIdField];
         } else {
             return this.appService.getAppConfig()['audioBaseUrl'] + 'audio_' + resolution + '/' + audio.fileName + (suffix ? suffix : '');
         }
@@ -184,7 +189,7 @@ export class CommonDocContentUtils {
                 }
             }
             if (keywordFound.length > 0) {
-                keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
+                keywordKats.push({name: keywordKat.name, keywords: keywordFound});
             }
         }
 
@@ -220,7 +225,7 @@ export class CommonDocContentUtils {
                 }
 
             }
-            keywordKats.push({ name: keywordKat.name, keywords: keywordFound});
+            keywordKats.push({name: keywordKat.name, keywords: keywordFound});
         }
 
         return keywordKats;
@@ -251,23 +256,24 @@ export class CommonDocContentUtils {
 
         itemData.currentRecord = record;
         itemData.urlShow = this.getShowUrl(itemData.currentRecord);
-
-        if (itemData.currentRecord['sdocaudios'] !== undefined && itemData.currentRecord['sdocaudios'].length > 0) {
-            itemData.audio = itemData.currentRecord['sdocaudios'][0];
+        if (itemData.currentRecord[this.cdocAudiosKey] !== undefined && itemData.currentRecord[this.cdocAudiosKey].length > 0) {
+            itemData.audio = itemData.currentRecord[this.cdocAudiosKey][0];
             itemData.thumbnailUrl = this.getAudioThumbnailUrl(itemData.audio);
             itemData.previewUrl = this.getAudioPreviewUrl(itemData.audio);
             itemData.fullUrl = this.getFullAudioUrl(itemData.audio);
-        } else if (itemData.currentRecord['sdocimages'] !== undefined && itemData.currentRecord['sdocimages'].length > 0) {
-            itemData.image = itemData.currentRecord['sdocimages'][0];
+        } else if (itemData.currentRecord[this.cdocImagesKey] !== undefined && itemData.currentRecord[this.cdocImagesKey].length > 0) {
+            itemData.image = itemData.currentRecord[this.cdocImagesKey][0];
             itemData.thumbnailUrl = this.getThumbnailUrl(itemData.image);
             itemData.previewUrl = this.getPreviewUrl(itemData.image);
             itemData.fullUrl = this.getFullUrl(itemData.image);
-        } else if (itemData.currentRecord['sdocvideos'] !== undefined && itemData.currentRecord['sdocvideos'].length > 0) {
-            itemData.video = itemData.currentRecord['sdocvideos'][0];
+        } else if (itemData.currentRecord[this.cdocVideosKey] !== undefined && itemData.currentRecord[this.cdocVideosKey].length > 0) {
+            itemData.video = itemData.currentRecord[this.cdocVideosKey][0];
             itemData.thumbnailUrl = this.getVideoThumbnailUrl(itemData.video);
             itemData.previewUrl = this.getVideoPreviewUrl(itemData.video);
             itemData.fullUrl = this.getFullVideoUrl(itemData.video);
         }
     }
 
+    protected configureService(): void {
+    }
 }

@@ -40,17 +40,7 @@ export class CDocPersonTagsStateComponent implements OnInit, OnChanges {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
-                if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
-                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords');
-                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes');
-                    this.prefix = BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix') || '';
-                    this.updateData();
-                } else {
-                    console.warn('no valid keywordsConfig found');
-                    this.keywordsConfig = [];
-                    this.possiblePrefixes = [];
-                    this.prefix = '';
-                }
+                this.configureComponent(config);
             }
         });
     }
@@ -69,7 +59,22 @@ export class CDocPersonTagsStateComponent implements OnInit, OnChanges {
         this.unsetKeyword.emit(keyword);
     }
 
-    private updateData() {
+
+    protected configureComponent(config: {}): void {
+        if (BeanUtils.getValue(config, 'components.cdoc-persontags.structuredKeywords')) {
+            this.keywordsConfig = BeanUtils.getValue(config, 'components.cdoc-persontags.structuredKeywords');
+            this.possiblePrefixes = BeanUtils.getValue(config, 'components.cdoc-persontags.possiblePrefixes');
+            this.prefix = BeanUtils.getValue(config, 'components.cdoc-persontags.editPrefix') || '';
+            this.updateData();
+        } else {
+            console.warn('no valid keywordsConfig found');
+            this.keywordsConfig = [];
+            this.possiblePrefixes = [];
+            this.prefix = '';
+        }
+    }
+
+    protected updateData() {
         this.cd.markForCheck();
     }
 }

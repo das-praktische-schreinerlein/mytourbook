@@ -4,8 +4,8 @@ import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-re
 
 @Injectable()
 export class CommonDocRoutingService {
-    protected lastSearchUrl = '/sdoc/search/';
-    protected lastBaseUrl = '/sdoc/';
+    protected lastSearchUrl = '/cdoc/search/';
+    protected lastBaseUrl = '/cdoc/';
 
     constructor(protected commonRoutingService: CommonRoutingService) {
     }
@@ -26,18 +26,18 @@ export class CommonDocRoutingService {
         return this.lastBaseUrl;
     }
 
-    getShowUrl(sDoc: CommonDocRecord, from: string): string {
-        const name = (sDoc.name ? sDoc.name : 'name')
+    getShowUrl(cdoc: CommonDocRecord, from: string): string {
+        const name = (cdoc.name ? cdoc.name : 'name')
             .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
             .replace(/ +/g, ' ').replace(/ /g, '-').trim();
-        return this.lastBaseUrl + 'show/' + name + '/' + sDoc.id; // + (from ? '?from=' + from : '');
+        return this.lastBaseUrl + 'show/' + name + '/' + cdoc.id; // + (from ? '?from=' + from : '');
     }
 
     navigateBackToSearch(suffix?: string): Promise<boolean> {
         return this.commonRoutingService.navigateByUrl(this.getLastSearchUrl() + (suffix ? suffix : ''));
     }
 
-    navigateToShow(sDoc: CommonDocRecord, from: string): Promise<boolean> {
-        return this.commonRoutingService.navigateByUrl(this.getShowUrl(sDoc, from));
+    navigateToShow(cdoc: CommonDocRecord, from: string): Promise<boolean> {
+        return this.commonRoutingService.navigateByUrl(this.getShowUrl(cdoc, from));
     }
 }

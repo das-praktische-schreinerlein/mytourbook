@@ -11,9 +11,9 @@ import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-re
 export abstract class AbstractCommonDocRecordResolver<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>>
     implements Resolve<ResolvedData<R>> {
-    static ERROR_UNKNOWN_DOC_ID = 'ERROR_UNKNOWN_SDOC_ID';
-    static ERROR_INVALID_DOC_ID = 'ERROR_INVALID_SDOC_ID';
-    static ERROR_READING_DOC_ID = 'ERROR_READING_SDOC_ID';
+    static ERROR_UNKNOWN_DOC_ID = 'ERROR_UNKNOWN_DOC_ID';
+    static ERROR_INVALID_DOC_ID = 'ERROR_INVALID_DOC_ID';
+    static ERROR_READING_DOC_ID = 'ERROR_READING_DOC_ID';
     idValidationRule = new IdValidationRule(true);
 
     constructor(private appService: GenericAppService, private dataService: D) {
@@ -30,24 +30,24 @@ export abstract class AbstractCommonDocRecordResolver<R extends CommonDocRecord,
                 if (appState === AppState.Ready) {
                     let id = route.params['id'];
                     if (!this.idValidationRule.isValid(id)) {
-                        console.warn('warning no id for sdoc:', LogUtils.sanitizeLogMsg(id));
+                        console.warn('warning no id for cdoc:', LogUtils.sanitizeLogMsg(id));
                         result.error = new ResolverError(AbstractCommonDocRecordResolver.ERROR_INVALID_DOC_ID, id, undefined);
                         return resolve(result);
                     }
 
                     id = this.idValidationRule.sanitize(id);
                     this.dataService.getById(id).then(
-                        function doneGetById(sdoc: R) {
-                            if (sdoc === undefined) {
-                                console.log('no sdoc for id:' + LogUtils.sanitizeLogMsg(id));
+                        function doneGetById(cdoc: R) {
+                            if (cdoc === undefined) {
+                                console.log('no cdoc for id:' + LogUtils.sanitizeLogMsg(id));
                                 result.error = new ResolverError(AbstractCommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID, id, undefined);
                                 return resolve(result);
                             }
 
-                            result.data = sdoc;
+                            result.data = cdoc;
                             return resolve(result);
                         }).catch(function errorGetById(reason: any) {
-                            console.error('error sdoc for id:' + LogUtils.sanitizeLogMsg(id), reason);
+                            console.error('error cdoc for id:' + LogUtils.sanitizeLogMsg(id), reason);
                             result.error = new ResolverError(AbstractCommonDocRecordResolver.ERROR_READING_DOC_ID, id, reason);
                             return resolve(result);
                         }

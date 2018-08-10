@@ -77,13 +77,13 @@ export class CDocListItemComponent implements OnChanges, OnDestroy {
         }
     }
 
-    public submitShow(sdoc: CommonDocRecord) {
-        this.show.emit(sdoc);
+    public submitShow(cdoc: CommonDocRecord) {
+        this.show.emit(cdoc);
         return false;
     }
 
-    public submitShowImage(sdoc: CommonDocRecord) {
-        this.showImage.emit(sdoc);
+    public submitShowImage(cdoc: CommonDocRecord) {
+        this.showImage.emit(cdoc);
         return false;
     }
 

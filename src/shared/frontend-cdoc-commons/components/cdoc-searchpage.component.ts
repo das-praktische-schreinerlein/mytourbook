@@ -36,7 +36,8 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
     pdoc: PDocRecord;
     searchResult: S;
     searchForm: F;
-    baseSearchUrl = '/sdoc/';
+    baseSearchUrl: string;
+    baseSearchUrlDefault: string;
     layout = Layout.FLAT;
     sort = 'relevance';
     perPage = 10;
@@ -55,6 +56,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         this.searchForm = cdocDataService.newSearchForm({});
         this.searchResult = cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
+        this.configureBaseSearchUrlDefault();
     }
 
     ngOnInit() {
@@ -77,111 +79,41 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                 me.onResize(this.layoutSizeObservable.getValue());
 
                 this.configureProcessingOfResolvedData({});
-
-                const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
-                const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
-                const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
-                if (!flgSearchFormError && !flgBaseSearchUrlError) {
-                    me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
-                    if (!data.flgDoSearch) {
-                        // console.log('ngOnInit: redirect for ', data);
-                        return this.redirectToSearch();
-                    }
-
-                    // console.log('route: search for ', data);
-                    this.searchForm = data.searchForm.data;
-                    if (this.searchForm.perPage === 1) {
-                        this.layout = Layout.PAGE;
-                        this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
-                            '.show-on-fullpage-block { display: block; } ' +
-                            '.content-container, .list-container, .card-deck, .card { background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ' +
-                            '.other-content-container, .map-container { background: white !IMPORTANT; border: 2px !IMPORTANT;} ' +
-                            '.list-header-container { background: #dadada; opacity: 0.1; } ' +
-                            'div:hover { opacity: 1 }', 'fullPageStyle');
-                    } else {
-                        this.pageUtils.setGlobalStyle('.show-on-fullpage-block { display: none; }', 'fullPageStyle');
-                    }
-                    this.perPage = this.searchForm.perPage;
-                    this.sort = this.searchForm.sort;
-
-                    this.doProcessAfterResolvedData({});
-
-                    me.pdoc = data.pdoc ? data.pdoc.data : undefined;
-                    if (me.pdoc) {
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionSearchPage',
-                            {title: me.pdoc.heading}, me.pdoc.heading);
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionSearchPage',
-                            {title: me.pdoc.heading, teaser: me.pdoc.teaser}, me.pdoc.teaser);
-                        this.pageUtils.setRobots(false, false);
-                    } else {
-                        me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSearchPage',
-                            {}, 'Search');
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSearchPage',
-                            {}, 'Search');
-                        this.pageUtils.setRobots(false, false);
-                    }
-                    this.pageUtils.setMetaLanguage();
-
-                    this.trackingProvider.trackPageView();
-
-                    return this.doSearch();
+                if (this.processError(data)) {
+                    return;
                 }
 
-                let newUrl, msg, code;
-                const errorCode = (flgSearchFormError ? data.searchForm.error.code : data.baseSearchUrl.error.code);
-                let sectionId = undefined;
-                let searchForm = undefined;
-                if (flgSearchFormError) {
-                    if (data.searchForm.error.data) {
-                        sectionId = data.searchForm.error.data.theme;
-                    }
-                    if (data.searchForm.error.data) {
-                        searchForm = me.cdocDataService.createSanitizedSearchForm(data.searchForm.error.data);
-                    } else {
-                        searchForm = me.cdocDataService.newSearchForm({});
-                    }
-                } else if (data.searchForm.data) {
-                    sectionId = data.searchForm.data.theme;
-                    searchForm = data.searchForm.data;
-                }
-                switch (errorCode) {
-                    case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM:
-                        code = ErrorResolver.ERROR_INVALID_DATA;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = this.searchFormConverter.searchFormToUrl(
-                           this.baseSearchUrl + '/', me.cdocDataService.cloneSanitizedSearchForm(searchForm));
-                        msg = undefined;
-                        break;
-                    case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID:
-                        code = ErrorResolver.ERROR_INVALID_ID;
-                        if (sectionId && sectionId !== '') {
-                            me.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
-                        } else {
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                        }
-                        newUrl = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl + '/', searchForm);
-                        msg = undefined;
-                        break;
-                    case GenericAppService.ERROR_APP_NOT_INITIALIZED:
-                        code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
-                        newUrl = undefined;
-                        msg = undefined;
-                        break;
-                    default:
-                        code = ErrorResolver.ERROR_OTHER;
-                        me.baseSearchUrl = ['sdoc'].join('/') + '/';
-                        newUrl = undefined;
-                        msg = undefined;
+                me.pdoc = data.pdoc ? data.pdoc.data : undefined;
+                me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
+                if (!data.flgDoSearch) {
+                    // console.log('ngOnInit: redirect for ', data);
+                    return this.redirectToSearch();
                 }
 
-                this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
-                me.cd.markForCheck();
-                return;
+                // console.log('route: search for ', data);
+                this.searchForm = data.searchForm.data;
+                if (this.searchForm.perPage === 1) {
+                    this.layout = Layout.PAGE;
+                    this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
+                        '.show-on-fullpage-block { display: block; } ' +
+                        '.content-container, .list-container, .card-deck, .card { background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ' +
+                        '.other-content-container, .map-container { background: white !IMPORTANT; border: 2px !IMPORTANT;} ' +
+                        '.list-header-container { background: #dadada; opacity: 0.1; } ' +
+                        'div:hover { opacity: 1 }', 'fullPageStyle');
+                } else {
+                    this.pageUtils.setGlobalStyle('.show-on-fullpage-block { display: none; }', 'fullPageStyle');
+                }
+                this.perPage = this.searchForm.perPage;
+                this.sort = this.searchForm.sort;
+
+                this.doProcessAfterResolvedData({});
+
+                this.setMetaTags(me.pdoc, {});
+                this.pageUtils.setMetaLanguage();
+
+                this.trackingProvider.trackPageView();
+
+                return this.doSearch();
             }
         );
     }
@@ -190,7 +122,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         // this.layoutSizeObservable.unsubscribe();
     }
 
-    onShowSDoc(cdoc: R) {
+    onShowDoc(cdoc: R) {
         this.cdocRoutingService.navigateToShow(cdoc, this.cdocRoutingService.getLastSearchUrl());
         return false;
     }
@@ -257,13 +189,13 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         return false;
     }
 
-    onSearchSDoc(searchForm: F) {
+    onSearchDoc(searchForm: F) {
         const origSearchForm = this.searchForm;
         this.searchForm = searchForm;
         this.searchForm.perPage = origSearchForm.perPage;
         this.searchForm.sort = origSearchForm.sort;
         this.searchForm.pageNum = 1;
-        // console.log('onSearchSDoc: redirect to ', sdocSearchForm);
+        // console.log('onSearchDoc: redirect to ', searchForm);
         this.redirectToSearch();
         return false;
     }
@@ -329,10 +261,95 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         this.cd.markForCheck();
     }
 
+    protected abstract configureBaseSearchUrlDefault(): void;
+
     protected configureProcessingOfResolvedData(config: {}): void {
     }
 
     protected doProcessAfterResolvedData(config: {}): void {
+    }
+
+    protected setMetaTags(pdoc: PDocRecord, config: {}): void {
+        if (pdoc) {
+            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSectionSearchPage',
+                {title: pdoc.heading}, pdoc.heading);
+            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocSectionSearchPage',
+                {title: pdoc.heading, teaser: pdoc.teaser}, pdoc.teaser);
+            this.pageUtils.setRobots(false, false);
+        } else {
+            this.pageUtils.setGlobalStyle('', 'sectionStyle');
+            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSearchPage',
+                {}, 'Search');
+            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocSearchPage',
+                {}, 'Search');
+            this.pageUtils.setRobots(false, false);
+        }
+    }
+
+    protected processError(data: { searchForm: ResolvedData<F>, pdoc: ResolvedData<PDocRecord>,
+        flgDoSearch: boolean, baseSearchUrl: ResolvedData<string> }): boolean {
+        const flgSearchFormError = ErrorResolver.isResolverError(data.searchForm);
+        const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
+        const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
+        if (!flgSearchFormError && !flgBaseSearchUrlError) {
+            return false;
+        }
+
+        let newUrl, msg, code;
+        const errorCode = (flgSearchFormError ? data.searchForm.error.code : data.baseSearchUrl.error.code);
+        let sectionId = undefined;
+        let searchForm = undefined;
+        if (flgSearchFormError) {
+            if (data.searchForm.error.data) {
+                sectionId = data.searchForm.error.data.theme;
+            }
+            if (data.searchForm.error.data) {
+                searchForm = this.cdocDataService.createSanitizedSearchForm(data.searchForm.error.data);
+            } else {
+                searchForm = this.cdocDataService.newSearchForm({});
+            }
+        } else if (data.searchForm.data) {
+            sectionId = data.searchForm.data.theme;
+            searchForm = data.searchForm.data;
+        }
+        switch (errorCode) {
+            case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM:
+                code = ErrorResolver.ERROR_INVALID_DATA;
+                if (sectionId && sectionId !== '') {
+                    this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                } else {
+                    this.baseSearchUrl = this.baseSearchUrlDefault;
+                }
+                newUrl = this.searchFormConverter.searchFormToUrl(
+                    this.baseSearchUrl + '/', this.cdocDataService.cloneSanitizedSearchForm(searchForm));
+                msg = undefined;
+                break;
+            case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID:
+                code = ErrorResolver.ERROR_INVALID_ID;
+                if (sectionId && sectionId !== '') {
+                    this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
+                } else {
+                    this.baseSearchUrl = this.baseSearchUrlDefault;
+                }
+                newUrl = this.searchFormConverter.searchFormToUrl(this.baseSearchUrl + '/', searchForm);
+                msg = undefined;
+                break;
+            case GenericAppService.ERROR_APP_NOT_INITIALIZED:
+                code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
+                newUrl = undefined;
+                msg = undefined;
+                break;
+            default:
+                code = ErrorResolver.ERROR_OTHER;
+                this.baseSearchUrl = this.baseSearchUrlDefault + '/';
+                newUrl = undefined;
+                msg = undefined;
+        }
+
+        this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
+        this.cd.markForCheck();
+
+        return true;
     }
 
     protected doPreChecksBeforeSearch(): boolean {
