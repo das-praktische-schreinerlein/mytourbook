@@ -6,7 +6,6 @@ import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-s
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
@@ -17,6 +16,7 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
 import {AbstractCDocSearchpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchpage.component';
 import {environment} from '../../../../environments/environment';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -37,7 +37,7 @@ export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDo
 
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService, errorResolver: ErrorResolver,
                 sdocDataService: SDocDataService, searchFormConverter: SDocSearchFormConverter,
-                cdocRoutingService: CommonDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef,
+                cdocRoutingService: SDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef,
                 pageUtils: PageUtils, cd: ChangeDetectorRef, trackingProvider: GenericTrackingService,
                 platformService: PlatformService, layoutService: LayoutService) {
         super(route, commonRoutingService, errorResolver, sdocDataService, searchFormConverter, cdocRoutingService,
@@ -74,6 +74,10 @@ export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDo
         return false;
     }
 
+
+    protected configureBaseSearchUrlDefault(): void {
+        this.baseSearchUrl = this.baseSearchUrlDefault = ['mdoc'].join('/');
+    }
 
     protected doProcessAfterResolvedData(config: {}): void {
         if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {

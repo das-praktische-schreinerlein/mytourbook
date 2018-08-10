@@ -7,7 +7,6 @@ import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
 import {IdCsvValidationRule, IdValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
@@ -21,6 +20,7 @@ import {FormBuilder} from '@angular/forms';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -55,7 +55,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
 
     constructor(private route: ActivatedRoute, private commonRoutingService: CommonRoutingService, private errorResolver: ErrorResolver,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter,
-                private cdocRoutingService: CommonDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
+                private cdocRoutingService: SDocRoutingService, private toastr: ToastsManager, vcr: ViewContainerRef,
                 private pageUtils: PageUtils, private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService,
                 public fb: FormBuilder, private sdocAlbumService: SDocAlbumService, private appService: GenericAppService) {
         this.searchForm = new SDocSearchForm({});
@@ -107,9 +107,9 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
                         this.listSearchForm = SDocSearchFormFactory.cloneSanitized(data.searchForm.data);
 
                         me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                        this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSearchPage',
+                        this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSearchPage',
                             {}, 'Search');
-                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSearchPage',
+                        this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocSearchPage',
                             {}, 'Search');
                         this.pageUtils.setRobots(false, false);
                         this.pageUtils.setMetaLanguage();
@@ -189,7 +189,7 @@ export class SDocAlbumpageComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    onShowSDoc(sdoc: SDocRecord) {
+    onShowDoc(sdoc: SDocRecord) {
         this.cdocRoutingService.navigateToShow(sdoc, this.cdocRoutingService.getLastSearchUrl());
         return false;
     }

@@ -25,6 +25,7 @@ import {GenericAppService} from '../../../../shared/commons/services/generic-app
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 describe('SDocAlbumpageComponent', () => {
     let component: SDocAlbumpageComponent;
@@ -49,6 +50,7 @@ describe('SDocAlbumpageComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 CommonDocRoutingService,
+                SDocRoutingService,
                 ToastsManager,
                 TranslateService,
                 ErrorResolver,

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Lightbox} from 'angular2-lightbox';
-import {CommonDocContentUtils} from '../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {SDocSearchResult} from '../../../shared/sdoc-commons/model/container/sdoc-searchresult';
+import {SDocContentUtils} from './sdoc-contentutils.service';
 
 export interface SDocLightboxAlbumConfig {
     album: any[];
@@ -10,7 +10,7 @@ export interface SDocLightboxAlbumConfig {
 
 @Injectable()
 export class SDocLightBoxService {
-    constructor(private contentUtils: CommonDocContentUtils, private lightbox: Lightbox) {
+    constructor(private contentUtils: SDocContentUtils, private lightbox: Lightbox) {
     }
 
     createAlbumConfig(searchResult: SDocSearchResult): SDocLightboxAlbumConfig {

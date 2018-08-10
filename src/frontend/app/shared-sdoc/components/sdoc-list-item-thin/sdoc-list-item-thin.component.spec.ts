@@ -13,6 +13,7 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {CommonDocDataServiceStub} from '../../../../shared/testing/cdoc-dataservice-stubs';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocListItemThinComponent', () => {
     let component: SDocListItemThinComponent;
@@ -26,6 +27,7 @@ describe('SDocListItemThinComponent', () => {
                 CommonRoutingService,
                 CommonDocRoutingService,
                 CommonDocContentUtils,
+                SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 LayoutService
             ],

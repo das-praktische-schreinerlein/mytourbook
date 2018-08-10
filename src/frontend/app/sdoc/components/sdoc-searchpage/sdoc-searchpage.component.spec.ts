@@ -21,6 +21,7 @@ import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angul
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 describe('SDocSearchpageComponent', () => {
     let component: SDocSearchpageComponent;
@@ -42,6 +43,7 @@ describe('SDocSearchpageComponent', () => {
                 SearchFormUtils,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 CommonDocRoutingService,
+                SDocRoutingService,
                 ToastsManager,
                 TranslateService,
                 ErrorResolver,

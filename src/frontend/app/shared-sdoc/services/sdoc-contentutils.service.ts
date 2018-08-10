@@ -19,7 +19,6 @@ export interface SDocItemData extends CommonItemData {
 
 @Injectable()
 export class SDocContentUtils extends CommonDocContentUtils {
-
     constructor(sanitizer: DomSanitizer, cdocRoutingService: CommonDocRoutingService, appService: GenericAppService) {
         super(sanitizer, cdocRoutingService, appService);
     }
@@ -270,7 +269,7 @@ export class SDocContentUtils extends CommonDocContentUtils {
         }
 
         if (record !== undefined && (record.gpsTrackBasefile || record.geoLoc !== undefined
-                || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20))) {
+            || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20))) {
             itemData.tracks = [record];
             itemData.flgMapAvailable = true;
             itemData.flgProfileMapAvailable = (record.gpsTrackBasefile !== undefined
@@ -285,4 +284,10 @@ export class SDocContentUtils extends CommonDocContentUtils {
         itemData.flgShowProfileMap = itemData.flgProfileMapAvailable;
     }
 
+    protected configureService(): void {
+        this.cdocRecordRefIdField = 'sdoc_id';
+        this.cdocAudiosKey = 'sdocaudios';
+        this.cdocImagesKey = 'sdocimages';
+        this.cdocVideosKey = 'sdocvideos';
+    }
 }

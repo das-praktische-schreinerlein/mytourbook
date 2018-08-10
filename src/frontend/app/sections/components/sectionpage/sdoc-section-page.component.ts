@@ -87,7 +87,7 @@ export class SDocSectionPageComponent extends SectionPageComponent {
         return filters;
     }
 
-    onSearchSDoc(sdocSearchForm: SDocSearchForm) {
+    onSearchDoc(sdocSearchForm: SDocSearchForm) {
         this.sdocSearchForm = sdocSearchForm;
         this.sDocRoutingService.setLastSearchUrl(this.getToSearchUrl());
         this.cd.markForCheck();

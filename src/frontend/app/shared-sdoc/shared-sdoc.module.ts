@@ -36,6 +36,9 @@ import {SDocActionTagsComponent} from './components/sdoc-actiontags/sdoc-actiont
 import {SDocPersonTagsComponent} from './components/sdoc-persontags/sdoc-persontags.component';
 import {FileDropModule} from 'ngx-file-drop';
 import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
+import {SDocKeywordsComponent} from './components/sdoc-keywords/sdoc-keywords.component';
+import {SdocKeywordsstateComponent} from './components/sdoc-keywordsstate/sdoc-keywordsstate.component';
+import {SDocVideoplayerComponent} from './components/sdoc-videoplayer/sdoc-videoplayer.component';
 
 @NgModule({
     declarations: [
@@ -62,7 +65,10 @@ import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/fron
         SDocDateFormatPipe,
         SDocActionsComponent,
         SDocActionTagsComponent,
-        SDocPersonTagsComponent
+        SDocPersonTagsComponent,
+        SDocKeywordsComponent,
+        SdocKeywordsstateComponent,
+        SDocVideoplayerComponent
     ],
     imports: [
         ToastModule,
@@ -107,7 +113,10 @@ import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/fron
         SDocDateFormatPipe,
         SDocActionsComponent,
         SDocActionTagsComponent,
-        SDocPersonTagsComponent
+        SDocPersonTagsComponent,
+        SDocKeywordsComponent,
+        SdocKeywordsstateComponent,
+        SDocVideoplayerComponent
     ]
 })
 export class SharedSDocModule {}

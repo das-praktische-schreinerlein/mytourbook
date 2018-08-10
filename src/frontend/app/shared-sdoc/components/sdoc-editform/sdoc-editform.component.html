@@ -186,8 +186,8 @@
                                       (tagsFound)="setPersonsFound($event)"></app-cdoc-persontagsstate>
         </div>
         <div class="col-sm-12 form-inline input-group input-group-sm">
-            <app-cdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="keywordSuggestions"
-                                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-cdoc-keywordsstate>
+            <app-sdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="keywordSuggestions"
+                                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-sdoc-keywordsstate>
         </div>
     </ng-template>
 

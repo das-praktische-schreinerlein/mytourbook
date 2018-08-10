@@ -1,5 +1,12 @@
 import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChange,
     ViewContainerRef
 } from '@angular/core';
 import {SDocRecord, SDocRecordFactory, SDocRecordValidator} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
@@ -15,7 +22,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
-import {KeywordsState, CommonDocContentUtils, StructuredKeywordState} from '../../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {KeywordsState, StructuredKeywordState} from '../../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {DateUtils} from '../../../../shared/commons/utils/date.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
@@ -23,6 +30,7 @@ import {isArray} from 'util';
 import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -256,7 +264,7 @@ export class SDocEditformComponent implements OnChanges {
     constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef,
                 private appService: GenericAppService, private sdocSearchFormUtils: SDocSearchFormUtils,
                 private searchFormUtils: SearchFormUtils, private sdocDataService: SDocDataService,
-                private contentUtils: CommonDocContentUtils) {
+                private contentUtils: SDocContentUtils) {
         this.toastr.setRootViewContainerRef(vcr);
     }
 

@@ -17,6 +17,7 @@ import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocEditformComponent', () => {
     let component: SDocEditformComponent;
@@ -41,6 +42,7 @@ describe('SDocEditformComponent', () => {
                 SearchFormUtils,
                 SearchParameterUtils,
                 CommonDocContentUtils,
+                SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA]

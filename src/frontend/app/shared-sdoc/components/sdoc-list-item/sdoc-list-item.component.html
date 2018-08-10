@@ -11,10 +11,10 @@
                          alt="{{listItem.image.name}}">
                 </div>
                 <div *ngIf="listItem.video">
-                    <app-cdoc-videoplayer [record]="listItem.currentRecord"
+                    <app-sdoc-videoplayer [record]="listItem.currentRecord"
                                           [showPreview]="true"
                                           [width]="300" [forceWidth]="300" [styleClass]="'picture-small'"
-                                          (show)="submitShow(listItem.currentRecord)"></app-cdoc-videoplayer>
+                                          (show)="submitShow(listItem.currentRecord)"></app-sdoc-videoplayer>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
                 </div>
                 <small class="text-muted"><app-sdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-sdoc-linked-loc-hierarchy>
@@ -34,11 +34,11 @@
                                  (click)="submitShowImage(listItem.currentRecord)"
                                  alt="{{listItem.image.name}}">
                         </div>
-                        <app-cdoc-videoplayer *ngIf="listItem.video"
+                        <app-sdoc-videoplayer *ngIf="listItem.video"
                                               [record]="listItem.currentRecord"
                                               [showPreview]="true"
                                               [width]="300" [forceWidth]="300" [styleClass]="'picture-small'"
-                                              (show)="submitShow(listItem.currentRecord)"></app-cdoc-videoplayer>
+                                              (show)="submitShow(listItem.currentRecord)"></app-sdoc-videoplayer>
 
                     </div>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
@@ -58,7 +58,7 @@
                         <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.sdoc.title">
                             <ng-template ngbPanelContent>
                                 <app-sdoc-ratepers [record]="listItem.currentRecord"></app-sdoc-ratepers>
-                                <app-cdoc-keywords [record]="listItem.currentRecord"></app-cdoc-keywords>
+                                <app-sdoc-keywords [record]="listItem.currentRecord"></app-sdoc-keywords>
                                 <app-sdoc-persontags [record]="listItem.currentRecord"></app-sdoc-persontags>
                                 <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta>
                             </ng-template>
@@ -110,7 +110,7 @@
                             <app-sdoc-ratepers-difficulty [record]="listItem.currentRecord"></app-sdoc-ratepers-difficulty>
                             <app-sdoc-ratetech [record]="listItem.currentRecord"></app-sdoc-ratetech>
                             <app-sdoc-datatech [record]="listItem.currentRecord"></app-sdoc-datatech >
-                            <app-cdoc-keywords [record]="listItem.currentRecord"></app-cdoc-keywords>
+                            <app-sdoc-keywords [record]="listItem.currentRecord"></app-sdoc-keywords>
                             <app-sdoc-persontags [record]="listItem.currentRecord"></app-sdoc-persontags>
                             <app-sdoc-datainfo [record]="listItem.currentRecord"></app-sdoc-datainfo >
                             <app-sdoc-datameta [record]="listItem.currentRecord"></app-sdoc-datameta>

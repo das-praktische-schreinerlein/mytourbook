@@ -26,6 +26,7 @@ import {SDocRecordCreateResolver} from '../shared-sdoc/resolver/sdoc-create.reso
 import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.service';
 import {CommonDocSearchFormUtils} from '../../shared/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
 import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
+import {SDocRoutingService} from '../../shared/sdoc-commons/services/sdoc-routing.service';
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/fron
         TranslateService,
         CommonRoutingService,
         SDocSearchFormConverter,
-        CommonDocRoutingService,
+        { provide: CommonDocRoutingService, useClass: SDocRoutingService },
+        SDocRoutingService,
         { provide: CommonDocSearchFormUtils, useClass: SDocSearchFormUtils },
         SDocSearchFormUtils,
         SearchParameterUtils,

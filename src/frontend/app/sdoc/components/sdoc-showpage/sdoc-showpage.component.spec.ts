@@ -28,6 +28,7 @@ import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-search
 import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 describe('SDocShowpageComponent', () => {
     let component: SDocShowpageComponent;
@@ -50,6 +51,7 @@ describe('SDocShowpageComponent', () => {
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonDocRoutingService,
+                SDocRoutingService,
                 ToastsManager,
                 TranslateService,
                 MarkdownService,

@@ -16,6 +16,7 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocListComponent', () => {
     let component: SDocListComponent;
@@ -33,6 +34,7 @@ describe('SDocListComponent', () => {
                 CommonRoutingService,
                 CommonDocRoutingService,
                 CommonDocContentUtils,
+                SDocContentUtils,
                 LightboxEvent,
                 LightboxConfig,
                 Lightbox,

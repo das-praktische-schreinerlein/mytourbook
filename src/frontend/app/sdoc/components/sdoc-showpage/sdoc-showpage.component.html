@@ -16,9 +16,9 @@
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | sdocdate}} {{record.name}}</span></h5>
                         <div class="image-container">
                             <ng-container *ngIf="record.sdocvideos !== undefined && record.sdocvideos.length > 0">
-                                <app-cdoc-videoplayer [record]="record"
+                                <app-sdoc-videoplayer [record]="record"
                                                       [showPreview]="false"
-                                                      [width]="600" [styleClass]="'picture-big'"></app-cdoc-videoplayer>
+                                                      [width]="600" [styleClass]="'picture-big'"></app-sdoc-videoplayer>
                             </ng-container>
                         </div>
                     </ng-container>
@@ -51,7 +51,7 @@
                                        (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-cdoc-tagcloud>
                 </div>
                 -->
-                <app-cdoc-keywords [record]="record"></app-cdoc-keywords>
+                <app-sdoc-keywords [record]="record"></app-sdoc-keywords>
                 <app-sdoc-persontags [record]="record"></app-sdoc-persontags>
                 <app-sdoc-datameta [record]="record"></app-sdoc-datameta>
             </div>

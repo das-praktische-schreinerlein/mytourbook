@@ -19,7 +19,7 @@
         </div>
         <div class="container" *ngIf="showForm">
             <app-sdoc-searchform [searchResult]="searchResult"
-                                 (search)="onSearchSDoc($event)"></app-sdoc-searchform>
+                                 (search)="onSearchDoc($event)"></app-sdoc-searchform>
         </div>
         <div class="container" *ngIf="showTimetable && showResultList">
             <app-cdoc-timetable [searchResult]="searchResult"></app-cdoc-timetable>
@@ -40,7 +40,7 @@
             <app-sdoc-list [searchResult]="searchResult"
                            [layout]="layout"
                            [short]="short"
-                           (show)="onShowSDoc($event)"></app-sdoc-list>
+                           (show)="onShowDoc($event)"></app-sdoc-list>
         </div>
         <div class="container" *ngIf="showResultList">
             <app-cdoc-list-footer [searchResult]="searchResult"

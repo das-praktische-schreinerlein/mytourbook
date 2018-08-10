@@ -13,7 +13,7 @@
         <app-sdoc-list [searchResult]="searchResult"
                        [baseSearchUrl]="baseSearchUrl"
                        [layout]="layout"
-                       (show)="onShowSDoc($event)"></app-sdoc-list>
+                       (show)="onShowDoc($event)"></app-sdoc-list>
     </div>
     <div class="container">
         <app-cdoc-list-footer [searchResult]="searchResult"
@@ -36,7 +36,7 @@
                              [showWhen]="showForm"
                              [showWhere]="showForm"
                              (changedShowForm)="onShowFormChanged($event)"
-                             (search)="onSearchSDoc($event)"></app-sdoc-searchform>
+                             (search)="onSearchDoc($event)"></app-sdoc-searchform>
     </div>
 </ng-template>
 
@@ -97,7 +97,7 @@
                                    [layout]="layout"
                                    (playerStarted)="onPlayerStarted($event)"
                                    (playerStopped)="onPlayerStopped($event)"
-                                   (show)="onShowSDoc($event)"></app-sdoc-list>
+                                   (show)="onShowDoc($event)"></app-sdoc-list>
                 </div>
             </div>
         </div>

@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
-import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
+import {IdCsvValidationRule, IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
 import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
 import {LogUtils} from '../../../shared/commons/utils/log.utils';
 import {SDocSearchForm, SDocSearchFormFactory} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {IdCsvValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
 import {SDocAlbumService} from '../services/sdoc-album.service';
 
 @Injectable()

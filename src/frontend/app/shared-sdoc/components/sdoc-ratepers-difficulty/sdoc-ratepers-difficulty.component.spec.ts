@@ -12,6 +12,7 @@ import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocRatePersonalDifficultyComponent', () => {
     let component: SDocRatePersonalDifficultyComponent;
@@ -28,6 +29,7 @@ describe('SDocRatePersonalDifficultyComponent', () => {
                 CommonRoutingService,
                 CommonDocRoutingService,
                 CommonDocContentUtils,
+                SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ]
         })

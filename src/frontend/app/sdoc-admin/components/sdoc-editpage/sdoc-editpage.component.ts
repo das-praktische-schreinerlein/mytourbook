@@ -86,17 +86,17 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
 
                         const recordName = me.keywordsValidationRule.sanitize(me.record.name);
                         if (me.pdoc) {
-                            this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocSectionShowPage',
-                                {title: me.pdoc.heading, sdoc: recordName}, me.pdoc.heading + ' ' + recordName);
-                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocSectionShowPage',
-                                {title: me.pdoc.heading, teaser: me.pdoc.teaser, sdoc: recordName}, recordName);
+                            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSectionShowPage',
+                                {title: me.pdoc.heading, cdoc: recordName}, me.pdoc.heading + ' ' + recordName);
+                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocSectionShowPage',
+                                {title: me.pdoc.heading, teaser: me.pdoc.teaser, cdoc: recordName}, recordName);
                             this.pageUtils.setRobots(false, false);
                         } else {
                             me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                            this.pageUtils.setTranslatedTitle('meta.title.prefix.sdocShowPage',
-                                {sdoc: recordName}, recordName);
-                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.sdocShowPage',
-                                {sdoc: recordName}, recordName);
+                            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocShowPage',
+                                {cdoc: recordName}, recordName);
+                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocShowPage',
+                                {cdoc: recordName}, recordName);
                             this.pageUtils.setRobots(false, false);
                         }
                         this.pageUtils.setMetaLanguage();

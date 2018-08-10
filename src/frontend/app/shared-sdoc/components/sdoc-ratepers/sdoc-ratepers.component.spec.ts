@@ -12,6 +12,7 @@ import {CommonRoutingService} from '../../../../shared/angular-commons/services/
 import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocRatePersonalComponent', () => {
     let component: SDocRatePersonalComponent;
@@ -28,6 +29,7 @@ describe('SDocRatePersonalComponent', () => {
                 CommonRoutingService,
                 CommonDocRoutingService,
                 CommonDocContentUtils,
+                SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ]
         })

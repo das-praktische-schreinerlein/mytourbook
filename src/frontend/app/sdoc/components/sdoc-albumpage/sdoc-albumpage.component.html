@@ -53,7 +53,7 @@
                                    [layout]="layout"
                                    (playerStarted)="onPlayerStarted($event)"
                                    (playerStopped)="onPlayerStopped($event)"
-                                   (show)="onShowSDoc($event)"></app-sdoc-list>
+                                   (show)="onShowDoc($event)"></app-sdoc-list>
                 </div>
                 <div class="container">
                     <app-cdoc-list-footer [searchResult]="listSearchResult"
@@ -87,7 +87,7 @@
                                      [backToSearchUrl]="backToSearchUrl"
                                      (playerStarted)="onPlayerStarted($event)"
                                      (playerStopped)="onPlayerStopped($event)"
-                                     (show)="onShowSDoc($event)"
+                                     (show)="onShowDoc($event)"
                                      (showImage)="onShowImage($event)"></app-sdoc-list-item-page>
         </ng-container>
         <div class="edit-link"><span (click)="doEdit()" i18n="link edit album|Linktext to edit album@@link.album.edit">Ändern</span></div>

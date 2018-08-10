@@ -15,6 +15,7 @@ import {DatePipe} from '@angular/common';
 import {SDocDateFormatPipe} from '../../pipes/sdoc-dateformat.pipe';
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {CommonDocDataServiceStub} from '../../../../shared/testing/cdoc-dataservice-stubs';
+import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 describe('SDocListItemFlatComponent', () => {
     let component: SDocListItemFlatComponent;
@@ -28,6 +29,7 @@ describe('SDocListItemFlatComponent', () => {
                 CommonRoutingService,
                 CommonDocRoutingService,
                 CommonDocContentUtils,
+                SDocContentUtils,
                 DatePipe,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 LayoutService

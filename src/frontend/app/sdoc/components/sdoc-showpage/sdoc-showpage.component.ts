@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef}
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import {Layout, LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
@@ -22,6 +21,7 @@ import {isArray, isNumber} from 'util';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {AbstractCommonDocShowpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-showpage.component';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -69,7 +69,7 @@ export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SD
         'NEWS': true
     };
 
-    constructor(route: ActivatedRoute, cdocRoutingService: CommonDocRoutingService,
+    constructor(route: ActivatedRoute, cdocRoutingService: SDocRoutingService,
                 toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
                 errorResolver: ErrorResolver, pageUtils: PageUtils, commonRoutingService: CommonRoutingService,
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
@@ -151,6 +151,10 @@ export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SD
             (this.pdoc ? this.pdoc.theme : undefined), minPerPage);
     }
 
+    protected configureBaseSearchUrlDefault(): void {
+        this.baseSearchUrl = this.baseSearchUrlDefault = ['mdoc'].join('/');
+    }
+
     protected configureProcessingOfResolvedData(): void {
         const me = this;
         const config = me.appService.getAppConfig();
@@ -170,6 +174,15 @@ export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SD
                 }
             }
         }
+    }
+
+    protected getConfiguredIndexableTypes(config: {}): string[] {
+        let indexableTypes = [];
+        if (BeanUtils.getValue(config, 'services.seo.sdocIndexableTypes')) {
+            indexableTypes = config['services']['seo']['sdocIndexableTypes'];
+        }
+
+        return indexableTypes;
     }
 
     protected doProcessAfterResolvedData(): void {
