@@ -37,8 +37,9 @@ import {SDocPersonTagsComponent} from './components/sdoc-persontags/sdoc-persont
 import {FileDropModule} from 'ngx-file-drop';
 import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {SDocKeywordsComponent} from './components/sdoc-keywords/sdoc-keywords.component';
-import {SdocKeywordsstateComponent} from './components/sdoc-keywordsstate/sdoc-keywordsstate.component';
+import {SDocKeywordsstateComponent} from './components/sdoc-keywordsstate/sdoc-keywordsstate.component';
 import {SDocVideoplayerComponent} from './components/sdoc-videoplayer/sdoc-videoplayer.component';
+import {SDocPersontagsstateComponent} from './components/sdoc-persontagsstate/sdoc-persontagsstate.component';
 
 @NgModule({
     declarations: [
@@ -67,8 +68,9 @@ import {SDocVideoplayerComponent} from './components/sdoc-videoplayer/sdoc-video
         SDocActionTagsComponent,
         SDocPersonTagsComponent,
         SDocKeywordsComponent,
-        SdocKeywordsstateComponent,
-        SDocVideoplayerComponent
+        SDocKeywordsstateComponent,
+        SDocVideoplayerComponent,
+        SDocPersontagsstateComponent
     ],
     imports: [
         ToastModule,
@@ -115,8 +117,9 @@ import {SDocVideoplayerComponent} from './components/sdoc-videoplayer/sdoc-video
         SDocActionTagsComponent,
         SDocPersonTagsComponent,
         SDocKeywordsComponent,
-        SdocKeywordsstateComponent,
-        SDocVideoplayerComponent
+        SDocKeywordsstateComponent,
+        SDocVideoplayerComponent,
+        SDocPersontagsstateComponent
     ]
 })
 export class SharedSDocModule {}

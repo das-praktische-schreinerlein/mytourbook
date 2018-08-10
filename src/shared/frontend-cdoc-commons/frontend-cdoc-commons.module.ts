@@ -10,7 +10,6 @@ import {CDocTypetableComponent} from './components/cdoc-typetable/cdoc-typetable
 import {CDocTagsStateComponent} from './components/cdoc-tagsstate/cdoc-tagsstate.component';
 import {CDocTagsComponent} from './components/cdoc-tags/cdoc-tags.component';
 import {CDocVideoplayerComponent} from './components/cdoc-videoplayer/cdoc-videoplayer.component';
-import {CDocPersonTagsStateComponent} from './components/cdoc-persontagsstate/cdoc-persontagsstate.component';
 import {CDocListItemComponent} from './components/cdoc-list-item/cdoc-list-item.component';
 import {AngularCommonsModule} from '../angular-commons/angular-commons.module';
 import {TranslateModule} from '@ngx-translate/core';
@@ -33,7 +32,6 @@ import {CDocAudioplayerComponent} from './components/cdoc-audioplayer/cdoc-audio
         CDocTagcloudComponent,
         CDocTagsComponent,
         CDocTagsStateComponent,
-        CDocPersonTagsStateComponent,
         CDocVideoplayerComponent,
         CDocAudioplayerComponent
     ],
@@ -58,7 +56,6 @@ import {CDocAudioplayerComponent} from './components/cdoc-audioplayer/cdoc-audio
         CDocTagcloudComponent,
         CDocTagsComponent,
         CDocTagsStateComponent,
-        CDocPersonTagsStateComponent,
         CDocVideoplayerComponent,
         CDocAudioplayerComponent
     ]

@@ -1,24 +1,24 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CDocPersonTagsStateComponent} from './cdoc-persontagsstate.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
-import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
-import {GenericAppService} from '../../../commons/services/generic-app.service';
-import {AppServiceStub} from '../../../angular-commons/testing/appservice-stubs';
-import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
-import {CommonRoutingService} from '../../../angular-commons/services/common-routing.service';
 import {Router} from '@angular/router';
-import {RouterStub} from '../../../angular-commons/testing/router-stubs';
+import {SDocPersontagsstateComponent} from './sdoc-persontagsstate.component';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
+import {CommonDocContentUtils} from '../../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 
-describe('CDocPersonTagsStateComponent', () => {
-    let component: CDocPersonTagsStateComponent;
-    let fixture: ComponentFixture<CDocPersonTagsStateComponent>;
+describe('SDocPersonTagsStateComponent', () => {
+    let component: SDocPersontagsstateComponent;
+    let fixture: ComponentFixture<SDocPersontagsstateComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocPersonTagsStateComponent],
+            declarations: [SDocPersontagsstateComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
@@ -34,7 +34,7 @@ describe('CDocPersonTagsStateComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocPersonTagsStateComponent);
+        fixture = TestBed.createComponent(SDocPersontagsstateComponent);
         component = fixture.componentInstance;
         component.keywords = '';
         fixture.detectChanges();

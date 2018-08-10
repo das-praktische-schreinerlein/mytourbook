@@ -9,16 +9,16 @@ import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
     styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-keywordsstate/cdoc-keywordsstate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SdocKeywordsstateComponent extends CDocKeywordsStateComponent {
+export class SDocKeywordsstateComponent extends CDocKeywordsStateComponent {
     constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
         super(appService, cd);
     }
 
     protected configureComponent(config: {}): void {
-        if (BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords')) {
-            this.keywordsConfig = BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords');
-            this.possiblePrefixes = BeanUtils.getValue(config, 'components.cdoc-keywords.possiblePrefixes');
-            this.prefix = BeanUtils.getValue(config, 'components.cdoc-keywords.editPrefix') || '';
+        if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
+            this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords');
+            this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes');
+            this.prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix') || '';
             this.updateData();
         } else {
             console.warn('no valid keywordsConfig found');

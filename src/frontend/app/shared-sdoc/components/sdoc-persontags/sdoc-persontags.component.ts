@@ -4,6 +4,7 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
 import {StructuredKeyword} from '../../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {CDocKeywordsComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
 
 @Component({
     selector: 'app-sdoc-persontags',
@@ -11,42 +12,21 @@ import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
     styleUrls: ['./sdoc-persontags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocPersonTagsComponent implements OnInit, OnChanges {
-    blacklist = [];
-    keywordsConfig: StructuredKeyword[] = [];
-    possiblePrefixes = [];
-
-    @Input()
-    public record: SDocRecord;
-
-    constructor(private appService: GenericAppService, private cd: ChangeDetectorRef) {
+export class SDocPersonTagsComponent extends CDocKeywordsComponent {
+    constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
+        super(appService, cd);
     }
 
-    ngOnInit() {
-        this.appService.getAppState().subscribe(appState => {
-            if (appState === AppState.Ready) {
-                const config = this.appService.getAppConfig();
-                if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
-                    this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords');
-                    this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes');
-                    this.updateData();
-                } else {
-                    console.warn('no valid persontagsConfig found');
-                    this.keywordsConfig = [];
-                    this.possiblePrefixes = [];
-                    this.updateData();
-                }
-            }
-        });
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
+    protected configureComponent(config: {}): void {
+        if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
+            this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords');
+            this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes');
+            this.updateData();
+        } else {
+            console.warn('no valid persontagsConfig found');
+            this.keywordsConfig = [];
+            this.possiblePrefixes = [];
             this.updateData();
         }
-    }
-
-    private updateData() {
-        this.cd.markForCheck();
     }
 }
