@@ -2,6 +2,15 @@
  
 # Versions
  
+## 1.6.0-alpha
+
+### breaking changes
+- changed some component configuration
+```
+components.cdoc-listheader...
+components.cdoc-persontags...
+```
+
 ## 1.5.0-alpha
 - none
  
