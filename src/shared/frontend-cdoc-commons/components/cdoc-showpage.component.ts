@@ -15,7 +15,6 @@ import {AngularHtmlService} from '../../angular-commons/services/angular-html.se
 import {CommonRoutingService, RoutingState} from '../../angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../angular-commons/services/platform.service';
-import {BeanUtils} from '../../commons/utils/bean.utils';
 import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
 import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
