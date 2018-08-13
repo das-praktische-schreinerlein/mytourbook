@@ -27,6 +27,8 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
+import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 
 describe('SDocCreatepageComponent', () => {
     let component: SDocCreatepageComponent;
@@ -49,8 +51,10 @@ describe('SDocCreatepageComponent', () => {
                 CommonRoutingService,
                 PlatformService,
                 CommonDocContentUtils,
+                SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonDocRoutingService,
+                SDocRoutingService,
                 ToastsManager,
                 TranslateService,
                 MarkdownService,

@@ -27,6 +27,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -51,6 +52,7 @@ describe('SDocEditpageComponent', () => {
                 SDocContentUtils,
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonDocRoutingService,
+                SDocRoutingService,
                 ToastsManager,
                 TranslateService,
                 MarkdownService,

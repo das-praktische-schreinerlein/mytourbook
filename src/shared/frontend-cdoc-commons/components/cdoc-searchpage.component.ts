@@ -92,17 +92,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
 
                 // console.log('route: search for ', data);
                 this.searchForm = data.searchForm.data;
-                if (this.searchForm.perPage === 1) {
-                    this.layout = Layout.PAGE;
-                    this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
-                        '.show-on-fullpage-block { display: block; } ' +
-                        '.content-container, .list-container, .card-deck, .card { background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ' +
-                        '.other-content-container, .map-container { background: white !IMPORTANT; border: 2px !IMPORTANT;} ' +
-                        '.list-header-container { background: #dadada; opacity: 0.1; } ' +
-                        'div:hover { opacity: 1 }', 'fullPageStyle');
-                } else {
-                    this.pageUtils.setGlobalStyle('.show-on-fullpage-block { display: none; }', 'fullPageStyle');
-                }
+                this.setPageLayoutAndStyles();
                 this.perPage = this.searchForm.perPage;
                 this.sort = this.searchForm.sort;
 
@@ -284,6 +274,21 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                 {}, 'Search');
             this.pageUtils.setRobots(false, false);
         }
+    }
+
+    protected setPageLayoutAndStyles(): void {
+        if (this.searchForm.perPage === 1) {
+            this.layout = Layout.PAGE;
+            this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
+                '.show-on-fullpage-block { display: block; } ' +
+                '.content-container, .list-container, .card-deck, .card { background: #130b0b !IMPORTANT; border: none !IMPORTANT;} ' +
+                '.other-content-container, .map-container { background: white !IMPORTANT; border: 2px !IMPORTANT;} ' +
+                '.list-header-container { background: #dadada; opacity: 0.1; } ' +
+                'div:hover { opacity: 1 }', 'fullPageStyle');
+        } else {
+            this.pageUtils.setGlobalStyle('.show-on-fullpage-block { display: none; }', 'fullPageStyle');
+        }
+
     }
 
     protected processError(data: { searchForm: ResolvedData<F>, pdoc: ResolvedData<PDocRecord>,

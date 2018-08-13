@@ -76,7 +76,7 @@ export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDo
 
 
     protected configureBaseSearchUrlDefault(): void {
-        this.baseSearchUrl = this.baseSearchUrlDefault = ['mdoc'].join('/');
+        this.baseSearchUrl = this.baseSearchUrlDefault = ['sdoc'].join('/');
     }
 
     protected doProcessAfterResolvedData(config: {}): void {

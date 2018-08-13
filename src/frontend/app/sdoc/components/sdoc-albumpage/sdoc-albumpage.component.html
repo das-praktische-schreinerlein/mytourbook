@@ -19,13 +19,13 @@
                             <div class="col-sm-6 form-inline input-group input-group-sm album-dropzone">
                                 <label class="col-xs-3 col-form-label mr-2" i18n="albumImportFile label|Label for field: albumImportFile@@label.albumeditform.album.albumImportFile">Album aus Datei laden:</label>
                                 <input type="file" accept=".json" (change)="onFileSelected($event)" />
-                                <file-drop (onFileDrop)="onFileDropped($event)" i18n-headertext="fileFileDropZone label|Label for button: fileFileDropZone@@label.form.sdoc.fileFileDropZone">Album-Datei dropzone</file-drop>
+                                <file-drop (onFileDrop)="onFileDropped($event)" i18n-headertext="fileFileDropZone label|Label for button: fileFileDropZone@@label.form.cdoc.fileFileDropZone">Album-Datei dropzone</file-drop>
                             </div>
                         </div>
                         <div class="row hidden">
                             <div class="col-sm-6 form-inline input-group input-group-sm">
-                                <label class="col-xs-3 col-form-label mr-2" i18n="albumSdocIds label|Label for field: albumSdocIds@@label.albumeditform.album.albumSdocIds">Ids:</label>
-                                <textarea formControlName="albumSdocIds" class="form-control" type="text" placeholder="ids" i18n-placeholder="albumSdocIds placeholder|Placeholder for albumSdocIds@@placeholder.form.album.albumSdocIds"></textarea>
+                                <label class="col-xs-3 col-form-label mr-2" i18n="albumIds label|Label for field: albumIds@@label.albumeditform.album.albumIds">Ids:</label>
+                                <textarea formControlName="albumIds" class="form-control" type="text" placeholder="ids" i18n-placeholder="albumIds placeholder|Placeholder for albumIds@@placeholder.form.album.albumIds"></textarea>
                             </div>
                             <div class="col-sm-6 form-inline input-group input-group-sm">
                                 <button type="submit" class="btn btn-action btn-sm" i18n="button edit album|Buttontext to edit album@@button.form.album.edit">Speichern</button>
