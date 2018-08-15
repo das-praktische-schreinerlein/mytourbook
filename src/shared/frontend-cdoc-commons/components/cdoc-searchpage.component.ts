@@ -22,6 +22,11 @@ import {GenericSearchFormSearchFormConverter} from '../../search-commons/service
 import {CommonEnvironment} from '../common-environment';
 import {AbstractCommonSectionSearchFormResolver} from '../resolver/abstract-cdoc-section-searchform.resolver';
 
+export interface CommonDocSearchpageComponentConfig {
+    baseSearchUrl: string;
+    baseSearchUrlDefault: string;
+}
+
 export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
     protected initialized = false;
@@ -56,7 +61,6 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         this.searchForm = cdocDataService.newSearchForm({});
         this.searchResult = cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
-        this.configureBaseSearchUrlDefault();
     }
 
     ngOnInit() {
@@ -78,8 +82,9 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
                 me.onResize(this.layoutSizeObservable.getValue());
 
-                this.configureProcessingOfResolvedData({});
-                if (this.processError(data)) {
+                me.configureComponent({});
+                me.configureProcessingOfResolvedData({});
+                if (me.processError(data)) {
                     return;
                 }
 
@@ -251,7 +256,14 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         this.cd.markForCheck();
     }
 
-    protected abstract configureBaseSearchUrlDefault(): void;
+    protected abstract getComponentConfig(config: {}): CommonDocSearchpageComponentConfig;
+
+    protected configureComponent(config: {}): void {
+        const componentConfig = this.getComponentConfig(config);
+
+        this.baseSearchUrl = componentConfig.baseSearchUrl;
+        this.baseSearchUrlDefault = componentConfig.baseSearchUrlDefault;
+    }
 
     protected configureProcessingOfResolvedData(config: {}): void {
     }

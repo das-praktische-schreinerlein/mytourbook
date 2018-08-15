@@ -22,6 +22,11 @@ import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-re
 import {CommonDocContentUtils} from '../services/cdoc-contentutils.service';
 import {AbstractCommonDocRecordResolver} from '../resolver/abstract-cdoc-details.resolver';
 
+export interface CommonDocShowpageComponentConfig {
+    baseSearchUrl: string;
+    baseSearchUrlDefault: string;
+}
+
 export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
     private flgDescRendered = false;
@@ -44,7 +49,6 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 protected platformService: PlatformService) {
         this.contentUtils = contentUtils;
         this.toastr.setRootViewContainerRef(vcr);
-        this.configureBaseSearchUrlDefault();
     }
 
     ngOnInit() {
@@ -60,6 +64,7 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 const config = me.appService.getAppConfig();
                 me.flgDescRendered = false;
 
+                me.configureComponent(config);
                 me.configureProcessingOfResolvedData({});
                 if (me.processError(data)) {
                     return;
@@ -117,7 +122,14 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
         return this.cdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
     }
 
-    protected abstract configureBaseSearchUrlDefault(): void;
+    protected abstract getComponentConfig(config: {}): CommonDocShowpageComponentConfig;
+
+    protected configureComponent(config: {}): void {
+        const componentConfig = this.getComponentConfig(config);
+
+        this.baseSearchUrl = componentConfig.baseSearchUrl;
+        this.baseSearchUrlDefault = componentConfig.baseSearchUrlDefault;
+    }
 
     protected configureProcessingOfResolvedData(config: {}): void {
     }

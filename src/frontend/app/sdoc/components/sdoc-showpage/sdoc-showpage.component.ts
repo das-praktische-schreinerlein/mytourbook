@@ -20,7 +20,10 @@ import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {isArray, isNumber} from 'util';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
-import {AbstractCommonDocShowpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-showpage.component';
+import {
+    AbstractCommonDocShowpageComponent,
+    CommonDocShowpageComponentConfig
+} from '../../../../shared/frontend-cdoc-commons/components/cdoc-showpage.component';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 @Component({
@@ -151,8 +154,11 @@ export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SD
             (this.pdoc ? this.pdoc.theme : undefined), minPerPage);
     }
 
-    protected configureBaseSearchUrlDefault(): void {
-        this.baseSearchUrl = this.baseSearchUrlDefault = ['mdoc'].join('/');
+    protected getComponentConfig(config: {}): CommonDocShowpageComponentConfig {
+        return {
+            baseSearchUrl: ['sdoc'].join('/'),
+            baseSearchUrlDefault: ['sdoc'].join('/')
+        };
     }
 
     protected configureProcessingOfResolvedData(): void {

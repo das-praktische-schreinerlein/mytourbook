@@ -14,7 +14,10 @@ import * as L from 'leaflet';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
-import {AbstractCDocSearchpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchpage.component';
+import {
+    AbstractCDocSearchpageComponent,
+    CommonDocSearchpageComponentConfig
+} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchpage.component';
 import {environment} from '../../../../environments/environment';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
@@ -75,8 +78,11 @@ export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDo
     }
 
 
-    protected configureBaseSearchUrlDefault(): void {
-        this.baseSearchUrl = this.baseSearchUrlDefault = ['sdoc'].join('/');
+    protected getComponentConfig(config: {}): CommonDocSearchpageComponentConfig {
+        return {
+            baseSearchUrl: ['sdoc'].join('/'),
+            baseSearchUrlDefault: ['sdoc'].join('/')
+        };
     }
 
     protected doProcessAfterResolvedData(config: {}): void {

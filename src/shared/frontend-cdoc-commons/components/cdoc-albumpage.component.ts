@@ -20,7 +20,14 @@ import {AppState, GenericAppService} from '../../commons/services/generic-app.se
 import {Facets} from '../../search-commons/model/container/facets';
 import {ResolvedData} from '../../angular-commons/resolver/resolver.utils';
 import {AbstractCommonDocAlbumResolver} from '../resolver/abstract-cdoc-album.resolver';
-import {BeanUtils} from '../../commons/utils/bean.utils';
+
+export interface CommonDocAlbumpageComponentConfig {
+    baseSearchUrl: string;
+    baseSearchUrlDefault: string;
+    baseAlbumUrl: string;
+    autoPlayAllowed: boolean;
+    maxAllowedItems: number;
+}
 
 export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
@@ -44,6 +51,7 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
     curRecordNr = 0;
     albumKey = 'Current';
     autoPlayAllowed = false;
+    maxAllowedItems = -1;
     pauseAutoPlay = false;
 
     public editFormGroup = this.fb.group({
@@ -56,8 +64,6 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
                 protected cdocRoutingService: CommonDocRoutingService, protected toastr: ToastsManager, vcr: ViewContainerRef,
                 protected pageUtils: PageUtils, protected cd: ChangeDetectorRef, protected trackingProvider: GenericTrackingService,
                 public fb: FormBuilder, protected cdocAlbumService: CommonDocAlbumService, protected appService: GenericAppService) {
-        this.configureBaseSearchUrlDefault();
-        this.configureBaseAlbumUrl();
         this.searchForm = cdocDataService.newSearchForm({});
         this.listSearchForm = cdocDataService.newSearchForm({});
         this.searchResult = cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
@@ -72,25 +78,24 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
 
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
-                this.config = this.appService.getAppConfig();
-                if (!(this.getMaxAllowedItems(this.config) > 0)) {
+                me.config = me.appService.getAppConfig();
+                me.configureComponent(me.config);
+                if (!(me.maxAllowedItems > 0)) {
                     console.warn('album not allowed');
-                    this.record = undefined;
-                    this.searchForm = undefined;
-                    this.listSearchForm = undefined;
+                    me.record = undefined;
+                    me.searchForm = undefined;
+                    me.listSearchForm = undefined;
 
-                    this.errorResolver.redirectAfterRouterError(ErrorResolver.ERROR_READONLY, undefined, this.toastr, undefined);
+                    me.errorResolver.redirectAfterRouterError(ErrorResolver.ERROR_READONLY, undefined, me.toastr, undefined);
                     me.cd.markForCheck();
                     return;
                 }
 
-                me.configureComponent(this.config);
-
-                this.route.data.subscribe(
+                me.route.data.subscribe(
                     (data: { searchForm: ResolvedData<F>, flgDoEdit: boolean, baseSearchUrl: ResolvedData<string> }) => {
                         me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
-                        me.configureProcessingOfResolvedData(this.config);
+                        me.configureProcessingOfResolvedData(me.config);
                         if (me.processError(data)) {
                             return;
                         }
@@ -102,16 +107,16 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
                         }
 
                         // console.log('route: search for ', data);
-                        this.searchForm = this.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
-                        this.listSearchForm = this.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
+                        me.searchForm = me.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
+                        me.listSearchForm = me.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
 
 
                         me.setMetaTags();
-                        this.trackingProvider.trackPageView();
+                        me.trackingProvider.trackPageView();
                         me.setGlobalStyles();
 
-                        me.curRecordNr = this.listSearchForm.pageNum;
-                        return this.doSearch();
+                        me.curRecordNr = me.listSearchForm.pageNum;
+                        return me.doSearch();
                     });
             }
         });
@@ -327,20 +332,18 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
         return this.doSave() && this.doShow();
     }
 
-    protected abstract configureBaseSearchUrlDefault(): void;
-
-    protected abstract configureBaseAlbumUrl();
-
-    protected getMaxAllowedItems(config: {}): number {
-       return -1;
-    }
+    protected abstract getComponentConfig(config: {}): CommonDocAlbumpageComponentConfig;
 
     protected configureComponent(config: {}): void {
-        if (BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
-            BeanUtils.getValue(config, 'components.cdoc-albumpage.allowAutoplay') + '' === 'true') {
-            this.autoPlayAllowed = true;
-        }
+        const componentConfig = this.getComponentConfig(config);
+
+        this.baseAlbumUrl = componentConfig.baseAlbumUrl;
+        this.baseSearchUrl = componentConfig.baseSearchUrl;
+        this.baseSearchUrlDefault = componentConfig.baseSearchUrlDefault;
+        this.autoPlayAllowed = componentConfig.autoPlayAllowed;
+        this.maxAllowedItems = componentConfig.maxAllowedItems;
     }
+
 
     protected configureProcessingOfResolvedData(config: {}): void {
     }

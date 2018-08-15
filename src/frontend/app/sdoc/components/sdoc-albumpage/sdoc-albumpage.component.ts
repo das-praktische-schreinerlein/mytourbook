@@ -15,7 +15,10 @@ import {FormBuilder} from '@angular/forms';
 import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
-import {AbstractCDocAlbumpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-albumpage.component';
+import {
+    AbstractCDocAlbumpageComponent,
+    CommonDocAlbumpageComponentConfig
+} from '../../../../shared/frontend-cdoc-commons/components/cdoc-albumpage.component';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -34,22 +37,14 @@ export class SDocAlbumpageComponent extends AbstractCDocAlbumpageComponent<SDocR
             pageUtils, cd, trackingProvider, fb, cdocAlbumService, appService);
     }
 
-    protected configureBaseSearchUrlDefault(): void {
-        this.baseSearchUrl = this.baseSearchUrlDefault = ['sdoc'].join('/');
-    }
-
-    protected configureBaseAlbumUrl(): void {
-        this.baseAlbumUrl = 'sdoc/album';
-    }
-
-    protected getMaxAllowedItems(config: {}): number {
-        return config && config['sdocMaxItemsPerAlbum'] >= 0 ? config['sdocMaxItemsPerAlbum'] : -1;
-    }
-
-    protected configureComponent(config: {}): void {
-        if (BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
-            BeanUtils.getValue(config, 'components.sdoc-albumpage.allowAutoplay') + '' === 'true') {
-            this.autoPlayAllowed = true;
-        }
+    protected getComponentConfig(config: {}): CommonDocAlbumpageComponentConfig {
+        return {
+            baseAlbumUrl: 'sdoc/album',
+            baseSearchUrl: ['sdoc'].join('/'),
+            baseSearchUrlDefault: ['sdoc'].join('/'),
+            maxAllowedItems: config && config['sdocMaxItemsPerAlbum'] >= 0 ? config['sdocMaxItemsPerAlbum'] : -1,
+            autoPlayAllowed: BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
+                BeanUtils.getValue(config, 'components.sdoc-albumpage.allowAutoplay') + '' === 'true'
+        };
     }
 }
