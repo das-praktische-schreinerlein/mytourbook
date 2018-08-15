@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {FormBuilder} from '@angular/forms';
@@ -8,7 +8,7 @@ import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-re
 import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
 import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
-import {Layout} from '../../angular-commons/services/layout.service';
+import {Layout, LayoutService} from '../../angular-commons/services/layout.service';
 import {CommonRoutingService, RoutingState} from '../../angular-commons/services/common-routing.service';
 import {ErrorResolver} from '../resolver/error.resolver';
 import {CommonDocRoutingService} from '../services/cdoc-routing.service';
@@ -16,10 +16,14 @@ import {GenericSearchFormSearchFormConverter} from '../../search-commons/service
 import {PageUtils} from '../../angular-commons/services/page.utils';
 import {GenericTrackingService} from '../../angular-commons/services/generic-tracking.service';
 import {CommonDocAlbumService} from '../services/cdoc-album.service';
-import {AppState, GenericAppService} from '../../commons/services/generic-app.service';
+import {GenericAppService} from '../../commons/services/generic-app.service';
 import {Facets} from '../../search-commons/model/container/facets';
 import {ResolvedData} from '../../angular-commons/resolver/resolver.utils';
 import {AbstractCommonDocAlbumResolver} from '../resolver/abstract-cdoc-album.resolver';
+import {AbstractCDocPageComponent} from './cdoc-page.component';
+import {PlatformService} from '../../angular-commons/services/platform.service';
+import {CommonEnvironment} from '../common-environment';
+import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
 
 export interface CommonDocAlbumpageComponentConfig {
     baseSearchUrl: string;
@@ -30,12 +34,9 @@ export interface CommonDocAlbumpageComponentConfig {
 }
 
 export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
-    protected config;
-    protected initialized = false;
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractCDocPageComponent<R, F, S, D> {
     protected idCsvValidationRule = new IdCsvValidationRule(true);
 
-    showLoadingSpinner = false;
     idValidationRule = new IdValidationRule(true);
 
     searchResult: S;
@@ -43,8 +44,6 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
     record: R;
     searchForm: F;
     listSearchForm: F;
-    baseSearchUrl: string;
-    baseSearchUrlDefault: string;
     baseAlbumUrl: string;
     mode = 'show';
     layout = Layout.FLAT;
@@ -63,66 +62,55 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
                 protected searchFormConverter: GenericSearchFormSearchFormConverter<F>,
                 protected cdocRoutingService: CommonDocRoutingService, protected toastr: ToastsManager, vcr: ViewContainerRef,
                 protected pageUtils: PageUtils, protected cd: ChangeDetectorRef, protected trackingProvider: GenericTrackingService,
-                public fb: FormBuilder, protected cdocAlbumService: CommonDocAlbumService, protected appService: GenericAppService) {
+                public fb: FormBuilder, protected cdocAlbumService: CommonDocAlbumService, protected appService: GenericAppService,
+                protected platformService: PlatformService, protected layoutService: LayoutService,
+                protected environment: CommonEnvironment) {
+        super(route, toastr, vcr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, environment);
         this.searchForm = cdocDataService.newSearchForm({});
         this.listSearchForm = cdocDataService.newSearchForm({});
         this.searchResult = cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
         this.listSearchResult = cdocDataService.newSearchResult(this.listSearchForm, 0, [], new Facets());
-        this.toastr.setRootViewContainerRef(vcr);
     }
 
-    ngOnInit() {
-        // reset initialized
-        this.initialized = false;
-        const me = this;
+    protected configureProcessing() {
+        if (!(this.maxAllowedItems > 0)) {
+            console.warn('album not allowed');
+            this.record = undefined;
+            this.searchForm = undefined;
+            this.listSearchForm = undefined;
 
-        this.appService.getAppState().subscribe(appState => {
-            if (appState === AppState.Ready) {
-                me.config = me.appService.getAppConfig();
-                me.configureComponent(me.config);
-                if (!(me.maxAllowedItems > 0)) {
-                    console.warn('album not allowed');
-                    me.record = undefined;
-                    me.searchForm = undefined;
-                    me.listSearchForm = undefined;
+            this.errorResolver.redirectAfterRouterError(ErrorResolver.ERROR_READONLY, undefined, this.toastr, undefined);
+            this.cd.markForCheck();
+            return;
+        }
 
-                    me.errorResolver.redirectAfterRouterError(ErrorResolver.ERROR_READONLY, undefined, me.toastr, undefined);
-                    me.cd.markForCheck();
+        this.route.data.subscribe(
+            (data: { searchForm: ResolvedData<F>, flgDoEdit: boolean, baseSearchUrl: ResolvedData<string> }) => {
+                this.commonRoutingService.setRoutingState(RoutingState.DONE);
+
+                this.configureProcessingOfResolvedData(this.config);
+                if (this.processError(data)) {
                     return;
                 }
 
-                me.route.data.subscribe(
-                    (data: { searchForm: ResolvedData<F>, flgDoEdit: boolean, baseSearchUrl: ResolvedData<string> }) => {
-                        me.commonRoutingService.setRoutingState(RoutingState.DONE);
+                this.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : this.baseSearchUrl);
 
-                        me.configureProcessingOfResolvedData(me.config);
-                        if (me.processError(data)) {
-                            return;
-                        }
+                if (data.flgDoEdit === true) {
+                    this.mode = 'edit';
+                }
 
-                        me.baseSearchUrl = (data.baseSearchUrl.data ? data.baseSearchUrl.data : me.baseSearchUrl);
-
-                        if (data.flgDoEdit === true) {
-                            me.mode = 'edit';
-                        }
-
-                        // console.log('route: search for ', data);
-                        me.searchForm = me.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
-                        me.listSearchForm = me.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
+                // console.log('route: search for ', data);
+                this.searchForm = this.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
+                this.listSearchForm = this.cdocDataService.cloneSanitizedSearchForm(data.searchForm.data);
 
 
-                        me.setMetaTags();
-                        me.trackingProvider.trackPageView();
-                        me.setGlobalStyles();
+                this.setMetaTags(this.config, null, null);
+                this.trackingProvider.trackPageView();
+                this.setPageLayoutAndStyles();
 
-                        me.curRecordNr = me.listSearchForm.pageNum;
-                        return me.doSearch();
-                    });
-            }
-        });
-    }
-
-    ngOnDestroy() {
+                this.curRecordNr = this.listSearchForm.pageNum;
+                return this.doSearch();
+            });
     }
 
     onCurRecordChange(page: number) {
@@ -393,7 +381,7 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
         return;
     }
 
-    protected setMetaTags(): void {
+    protected setMetaTags(config: {}, pdoc: PDocRecord, record: CommonDocRecord): void {
         this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSearchPage',
             {}, 'Search');
         this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocSearchPage',
@@ -402,7 +390,7 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
         this.pageUtils.setMetaLanguage();
     }
 
-    protected setGlobalStyles(): void {
+    protected setPageLayoutAndStyles(): void {
         this.pageUtils.setGlobalStyle('', 'sectionStyle');
         this.pageUtils.setGlobalStyle('.hide-on-fullpage { display: none; } ' +
             '.show-on-fullpage-block { display: block; } ' +

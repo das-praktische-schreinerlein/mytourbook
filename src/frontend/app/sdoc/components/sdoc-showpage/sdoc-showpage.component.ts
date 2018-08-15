@@ -25,6 +25,7 @@ import {
     CommonDocShowpageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-showpage.component';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-sdoc-showpage',
@@ -77,10 +78,10 @@ export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SD
                 errorResolver: ErrorResolver, pageUtils: PageUtils, commonRoutingService: CommonRoutingService,
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
-                platformService: PlatformService, private layoutService: LayoutService,
-                private searchFormConverter: SDocSearchFormConverter) {
+                platformService: PlatformService, protected searchFormConverter: SDocSearchFormConverter,
+                layoutService: LayoutService) {
         super(route, cdocRoutingService, toastr, vcr, contentUtils, errorResolver, pageUtils, commonRoutingService,
-            angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService);
+            angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment);
     }
 
     onRouteTracksFound(searchresult: SDocSearchResult) {

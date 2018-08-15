@@ -26,6 +26,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocAlbumpageComponent', () => {
     let component: SDocAlbumpageComponent;
@@ -59,6 +61,8 @@ describe('SDocAlbumpageComponent', () => {
                 SDocAlbumService,
                 FormBuilder,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
+                PlatformService,
+                LayoutService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Facets} from '../../search-commons/model/container/facets';
 import {ToastsManager} from 'ng2-toastr';
@@ -13,7 +13,6 @@ import {PageUtils} from '../../angular-commons/services/page.utils';
 import {CommonRoutingService, RoutingState} from '../../angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../angular-commons/services/platform.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
 import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
@@ -21,6 +20,7 @@ import {CommonDocDataService} from '../../search-commons/services/cdoc-data.serv
 import {GenericSearchFormSearchFormConverter} from '../../search-commons/services/generic-searchform.converter';
 import {CommonEnvironment} from '../common-environment';
 import {AbstractCommonSectionSearchFormResolver} from '../resolver/abstract-cdoc-section-searchform.resolver';
+import {AbstractCDocPageComponent} from './cdoc-page.component';
 
 export interface CommonDocSearchpageComponentConfig {
     baseSearchUrl: string;
@@ -28,11 +28,7 @@ export interface CommonDocSearchpageComponentConfig {
 }
 
 export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
-    protected initialized = false;
-    protected layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
-
-    showLoadingSpinner = false;
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractCDocPageComponent<R, F, S, D> {
     idValidationRule = new IdValidationRule(true);
     Layout = Layout;
     SearchFormLayout = SearchFormLayout;
@@ -41,8 +37,6 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
     pdoc: PDocRecord;
     searchResult: S;
     searchForm: F;
-    baseSearchUrl: string;
-    baseSearchUrlDefault: string;
     layout = Layout.FLAT;
     sort = 'relevance';
     perPage = 10;
@@ -56,23 +50,16 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                 protected searchFormConverter: GenericSearchFormSearchFormConverter<F>,
                 protected cdocRoutingService: CommonDocRoutingService, protected toastr: ToastsManager,
                 vcr: ViewContainerRef, protected pageUtils: PageUtils, protected cd: ChangeDetectorRef,
-                protected trackingProvider: GenericTrackingService, protected platformService: PlatformService,
-                protected layoutService: LayoutService, protected environment: CommonEnvironment) {
+                protected trackingProvider: GenericTrackingService, protected appService: GenericAppService,
+                protected platformService: PlatformService, protected layoutService: LayoutService,
+                protected environment: CommonEnvironment) {
+        super(route, toastr, vcr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, environment);
         this.searchForm = cdocDataService.newSearchForm({});
         this.searchResult = cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
-        this.toastr.setRootViewContainerRef(vcr);
     }
 
-    ngOnInit() {
-        // reset initialized
-        this.initialized = false;
+    protected configureProcessing() {
         const me = this;
-
-        this.layoutSizeObservable = this.layoutService.getLayoutSizeData();
-        this.layoutSizeObservable.subscribe(layoutSizeData => {
-            me.onResize(layoutSizeData);
-        });
-
         this.route.fragment.subscribe(value => {
             this.anchor = this.idValidationRule.sanitize(value);
         });
@@ -82,8 +69,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
                 me.onResize(this.layoutSizeObservable.getValue());
 
-                me.configureComponent({});
-                me.configureProcessingOfResolvedData({});
+                me.configureProcessingOfResolvedData(me.config);
                 if (me.processError(data)) {
                     return;
                 }
@@ -103,7 +89,8 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
 
                 this.doProcessAfterResolvedData({});
 
-                this.setMetaTags(me.pdoc, {});
+                this.setMetaTags(me.config, me.pdoc, null);
+
                 this.pageUtils.setMetaLanguage();
 
                 this.trackingProvider.trackPageView();
@@ -111,10 +98,6 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                 return this.doSearch();
             }
         );
-    }
-
-    ngOnDestroy() {
-        // this.layoutSizeObservable.unsubscribe();
     }
 
     onShowDoc(cdoc: R) {
@@ -222,10 +205,6 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         return false;
     }
 
-    onScrollToTop() {
-        this.pageUtils.scrollToTop();
-    }
-
     onPlayerStarted(cdoc: R) {
         this.pauseAutoPlay = true;
     }
@@ -271,7 +250,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
     protected doProcessAfterResolvedData(config: {}): void {
     }
 
-    protected setMetaTags(pdoc: PDocRecord, config: {}): void {
+    protected setMetaTags(config: {}, pdoc: PDocRecord, record: CommonDocRecord): void {
         if (pdoc) {
             this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSectionSearchPage',
                 {title: pdoc.heading}, pdoc.heading);
@@ -388,9 +367,9 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
         this.cdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.cdocRoutingService.setLastSearchUrl(this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, this.searchForm));
 
+        this.showLoadingSpinner = true;
+        this.cd.markForCheck();
         const me = this;
-        me.showLoadingSpinner = true;
-        me.cd.markForCheck();
         this.cdocDataService.search(this.searchForm, {
             showFacets: true,
             loadTrack: true,

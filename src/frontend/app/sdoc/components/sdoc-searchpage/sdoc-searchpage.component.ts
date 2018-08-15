@@ -18,8 +18,9 @@ import {
     AbstractCDocSearchpageComponent,
     CommonDocSearchpageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchpage.component';
-import {environment} from '../../../../environments/environment';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-sdoc-searchpage',
@@ -42,9 +43,9 @@ export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDo
                 sdocDataService: SDocDataService, searchFormConverter: SDocSearchFormConverter,
                 cdocRoutingService: SDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef,
                 pageUtils: PageUtils, cd: ChangeDetectorRef, trackingProvider: GenericTrackingService,
-                platformService: PlatformService, layoutService: LayoutService) {
+                appService: GenericAppService, platformService: PlatformService, layoutService: LayoutService) {
         super(route, commonRoutingService, errorResolver, sdocDataService, searchFormConverter, cdocRoutingService,
-            toastr, vcr, pageUtils, cd, trackingProvider, platformService, layoutService, environment);
+            toastr, vcr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, environment);
     }
 
     onMapSDocClicked(sdoc: SDocRecord) {

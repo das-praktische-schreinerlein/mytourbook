@@ -19,6 +19,9 @@ import {
     AbstractCDocAlbumpageComponent,
     CommonDocAlbumpageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-albumpage.component';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
     selector: 'app-sdoc-albumpage',
@@ -32,9 +35,10 @@ export class SDocAlbumpageComponent extends AbstractCDocAlbumpageComponent<SDocR
                 protected searchFormConverter: SDocSearchFormConverter, protected cdocRoutingService: SDocRoutingService,
                 protected toastr: ToastsManager, vcr: ViewContainerRef, protected pageUtils: PageUtils, protected cd: ChangeDetectorRef,
                 protected trackingProvider: GenericTrackingService, public fb: FormBuilder, protected cdocAlbumService: SDocAlbumService,
-                protected appService: GenericAppService) {
+                protected appService: GenericAppService, platformService: PlatformService,
+                layoutService: LayoutService) {
         super(route, commonRoutingService, errorResolver, cdocDataService, searchFormConverter, cdocRoutingService, toastr, vcr,
-            pageUtils, cd, trackingProvider, fb, cdocAlbumService, appService);
+            pageUtils, cd, trackingProvider, fb, cdocAlbumService, appService, platformService, layoutService, environment);
     }
 
     protected getComponentConfig(config: {}): CommonDocAlbumpageComponentConfig {

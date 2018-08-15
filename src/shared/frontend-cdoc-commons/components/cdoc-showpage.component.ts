@@ -1,8 +1,8 @@
-import {ChangeDetectorRef, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
 import {CommonDocRoutingService} from '../services/cdoc-routing.service';
-import {Layout} from '../../angular-commons/services/layout.service';
+import {Layout, LayoutService} from '../../angular-commons/services/layout.service';
 import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
 import {ResolvedData} from '../../angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../resolver/error.resolver';
@@ -21,6 +21,8 @@ import {CommonDocDataService} from '../../search-commons/services/cdoc-data.serv
 import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
 import {CommonDocContentUtils} from '../services/cdoc-contentutils.service';
 import {AbstractCommonDocRecordResolver} from '../resolver/abstract-cdoc-details.resolver';
+import {AbstractCDocPageComponent} from './cdoc-page.component';
+import {CommonEnvironment} from '../common-environment';
 
 export interface CommonDocShowpageComponentConfig {
     baseSearchUrl: string;
@@ -28,7 +30,7 @@ export interface CommonDocShowpageComponentConfig {
 }
 
 export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractCDocPageComponent<R, F, S, D> {
     private flgDescRendered = false;
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);
@@ -36,8 +38,6 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
     public record: R;
     public Layout = Layout;
     pdoc: PDocRecord;
-    baseSearchUrl: string;
-    baseSearchUrlDefault: string;
     queryParamMap: ParamMap = undefined;
 
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: CommonDocRoutingService,
@@ -46,13 +46,13 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 protected commonRoutingService: CommonRoutingService, protected angularMarkdownService: AngularMarkdownService,
                 protected angularHtmlService: AngularHtmlService, protected cd: ChangeDetectorRef,
                 protected trackingProvider: GenericTrackingService, protected appService: GenericAppService,
-                protected platformService: PlatformService) {
+                protected platformService: PlatformService, protected layoutService: LayoutService,
+                protected environment: CommonEnvironment) {
+        super(route, toastr, vcr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, environment);
         this.contentUtils = contentUtils;
-        this.toastr.setRootViewContainerRef(vcr);
     }
 
-    ngOnInit() {
-        // Subscribe to route params
+    protected configureProcessing() {
         const me = this;
         this.route.queryParamMap.subscribe(value => {
             me.queryParamMap = value;
@@ -61,11 +61,9 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
             (data: { record: ResolvedData<R>, pdoc: ResolvedData<PDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
                 me.commonRoutingService.setRoutingState(RoutingState.DONE);
 
-                const config = me.appService.getAppConfig();
                 me.flgDescRendered = false;
 
-                me.configureComponent(config);
-                me.configureProcessingOfResolvedData({});
+                me.configureProcessingOfResolvedData(me.config);
                 if (me.processError(data)) {
                     return;
                 }
@@ -76,7 +74,7 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
 
                 me.doProcessAfterResolvedData({});
 
-                me.setMetaTags(me.pdoc, me.record, config);
+                me.setMetaTags(me.config, me.pdoc, me.record);
                 me.pageUtils.setMetaLanguage();
 
                 me.cd.markForCheck();
@@ -106,13 +104,6 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
         return '';
     }
 
-    onScrollToTop() {
-        this.pageUtils.scrollToTop();
-    }
-
-    ngOnDestroy() {
-    }
-
     submitBackToSearch() {
         this.cdocRoutingService.navigateBackToSearch('#' + this.record.id);
         return false;
@@ -139,7 +130,7 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
     protected doProcessAfterResolvedData(config: {}): void {
     }
 
-    protected setMetaTags(pdoc: PDocRecord, record: CommonDocRecord, config: {}): void {
+    protected setMetaTags(config: {}, pdoc: PDocRecord, record: CommonDocRecord): void {
         const recordName = this.keywordsValidationRule.sanitize(record.name);
         if (pdoc) {
             this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSectionShowPage',
@@ -162,6 +153,9 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 {cdoc: recordName}, recordName);
             this.pageUtils.setRobots(false, false);
         }
+    }
+
+    protected setPageLayoutAndStyles(): void {
     }
 
     protected processError(data: { record: ResolvedData<R>, pdoc: ResolvedData<PDocRecord>,

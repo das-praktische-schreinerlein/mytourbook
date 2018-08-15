@@ -22,6 +22,8 @@ import {PlatformService} from '../../../../shared/angular-commons/services/platf
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
 
 describe('SDocSearchpageComponent', () => {
     let component: SDocSearchpageComponent;
@@ -48,6 +50,7 @@ describe('SDocSearchpageComponent', () => {
                 TranslateService,
                 ErrorResolver,
                 PageUtils,
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 PlatformService,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
