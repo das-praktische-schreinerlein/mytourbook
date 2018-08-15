@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocDataInfoRecord} from '../../../../shared/sdoc-commons/model/records/sdocdatainfo-record';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-datainfo',
@@ -10,7 +10,7 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
     styleUrls: ['./sdoc-datainfo.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocDataInfoComponent implements OnChanges {
+export class SDocDataInfoComponent extends AbstractInlineComponent {
     sdocdatainfo: SDocDataInfoRecord;
     guides: SafeHtml = '';
 
@@ -20,16 +20,11 @@ export class SDocDataInfoComponent implements OnChanges {
     @Input()
     public small? = false;
 
-    constructor(private sanitizer: DomSanitizer) {
+    constructor(private sanitizer: DomSanitizer, protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
-    }
-
-    private updateData() {
+    protected updateData(): void {
         if (this.record === undefined) {
             this.sdocdatainfo = undefined;
             return;

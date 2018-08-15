@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocLightboxAlbumConfig, SDocLightBoxService} from '../../services/sdoc-lightbox.service';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
@@ -14,7 +13,7 @@ import {CDocListComponent} from '../../../../shared/frontend-cdoc-commons/compon
     styleUrls: ['./sdoc-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListComponent extends CDocListComponent<SDocRecord, SDocSearchForm, SDocSearchResult> implements OnChanges {
+export class SDocListComponent extends CDocListComponent<SDocRecord, SDocSearchForm, SDocSearchResult> {
     @Output()
     public playerStarted: EventEmitter<SDocRecord> = new EventEmitter();
 
@@ -29,14 +28,8 @@ export class SDocListComponent extends CDocListComponent<SDocRecord, SDocSearchF
     };
 
     constructor(private searchFormConverter: SDocSearchFormConverter,
-                private lightboxService: SDocLightBoxService) {
-        super();
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.lightboxAlbumConfig = this.lightboxService.createAlbumConfig(this.searchResult);
-        }
+                private lightboxService: SDocLightBoxService, protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     onShowImage(record: SDocRecord) {
@@ -59,5 +52,9 @@ export class SDocListComponent extends CDocListComponent<SDocRecord, SDocSearchF
     getBackToSearchUrl(searchResult: SDocSearchResult): string {
         return (searchResult.searchForm ?
             this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, searchResult.searchForm) : undefined);
+    }
+
+    protected updateData(): void {
+        this.lightboxAlbumConfig = this.lightboxService.createAlbumConfig(this.searchResult);
     }
 }

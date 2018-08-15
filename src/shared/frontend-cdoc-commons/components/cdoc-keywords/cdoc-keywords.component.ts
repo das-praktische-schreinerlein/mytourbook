@@ -1,9 +1,9 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {StructuredKeyword} from '../../services/cdoc-contentutils.service';
 import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
 import {BeanUtils} from '../../../commons/utils/bean.utils';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-keywords',
@@ -11,7 +11,7 @@ import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity
     styleUrls: ['./cdoc-keywords.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocKeywordsComponent implements OnInit, OnChanges {
+export class CDocKeywordsComponent extends AbstractInlineComponent implements OnInit {
     blacklist = [];
     keywordsConfig: StructuredKeyword[] = [];
     possiblePrefixes = [];
@@ -20,6 +20,7 @@ export class CDocKeywordsComponent implements OnInit, OnChanges {
     public record: CommonDocRecord;
 
     constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     ngOnInit() {
@@ -29,12 +30,6 @@ export class CDocKeywordsComponent implements OnInit, OnChanges {
                 this.configureComponent(config);
             }
         });
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     protected configureComponent(config: {}): void {

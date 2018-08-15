@@ -1,4 +1,3 @@
-import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';

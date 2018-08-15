@@ -1,24 +1,23 @@
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     Input,
-    OnChanges,
     Output,
-    SimpleChange,
     ViewChild,
     ViewContainerRef
 } from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocDynamicComponentService} from '../../services/sdoc-dynamic-components.service';
 import {DynamicComponentHostDirective} from '../../../../shared/angular-commons/components/directives/dynamic-component-host.directive';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {Router} from '@angular/router';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ToastsManager} from 'ng2-toastr';
 import {ActionTagForm} from '../../../../shared/commons/utils/actiontag.utils';
 import {SDocAlbumService} from '../../services/sdoc-album.service';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-action',
@@ -26,7 +25,7 @@ import {SDocAlbumService} from '../../services/sdoc-album.service';
     styleUrls: ['./sdoc-actions.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocActionsComponent implements OnChanges {
+export class SDocActionsComponent extends AbstractInlineComponent {
 
     @Input()
     public record: SDocRecord;
@@ -44,7 +43,8 @@ export class SDocActionsComponent implements OnChanges {
 
     constructor(private dynamicComponentService: SDocDynamicComponentService, private router: Router,
                 private sdocDataService: SDocDataService, private toastr: ToastsManager, vcr: ViewContainerRef,
-                private sdocAlbumService: SDocAlbumService) {
+                private sdocAlbumService: SDocAlbumService, protected cd: ChangeDetectorRef) {
+        super(cd);
         this.toastr.setRootViewContainerRef(vcr);
         const me = this;
         this.childActionTagEvent.asObservable().subscribe(actionTagEvent => {
@@ -70,7 +70,7 @@ export class SDocActionsComponent implements OnChanges {
                 actionTagEvent.processed = true;
                 actionTagEvent.error = undefined;
                 actionTagEvent.result = actionTagEvent.record;
-                this.renderComponents();
+                this.updateData();
                 this.actionTagEvent.emit(actionTagEvent);
             } else if (actionTagEvent.config.type === 'tag') {
                 const payload = JSON.parse(JSON.stringify(actionTagEvent.config.payload));
@@ -100,13 +100,7 @@ export class SDocActionsComponent implements OnChanges {
         });
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.renderComponents();
-        }
-    }
-
-    renderComponents() {
+    protected updateData(): void {
         const componentRef = this.dynamicComponentService.createComponentByName(this.type, this.widgetHost);
         (componentRef.instance)['type'] = this.type;
         (componentRef.instance)['actionTagEvent'] = this.childActionTagEvent;

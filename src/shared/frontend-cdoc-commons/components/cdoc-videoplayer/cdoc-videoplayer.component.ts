@@ -1,17 +1,7 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChange,
-    ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {CommonDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-videoplayer',
@@ -19,7 +9,7 @@ import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity
     styleUrls: ['./cdoc-videoplayer.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocVideoplayerComponent implements OnChanges {
+export class CDocVideoplayerComponent extends AbstractInlineComponent {
     public contentUtils: CommonDocContentUtils;
     listItem: CommonItemData = {
         currentRecord: undefined,
@@ -60,13 +50,8 @@ export class CDocVideoplayerComponent implements OnChanges {
     public show: EventEmitter<CommonDocRecord> = new EventEmitter();
 
     constructor(contentUtils: CommonDocContentUtils, protected cd: ChangeDetectorRef) {
+        super(cd);
         this.contentUtils = contentUtils;
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     submitShow(cdoc: CommonDocRecord) {
@@ -74,7 +59,7 @@ export class CDocVideoplayerComponent implements OnChanges {
         return false;
     }
 
-    private updateData() {
+    protected updateData(): void {
         if (window) {
             this.maxWidth = Math.min(600, window.innerWidth - 100);
             this.maxHeight = Math.min(800, window.innerHeight - 80);

@@ -1,12 +1,12 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {BaseEntityRecord} from '../../../../shared/search-commons/model/records/base-entity-record';
 import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {ActionTag, ActionTagConfig, ActionTagUtils} from '../../../../shared/commons/utils/actiontag.utils';
 import {SDocAlbumService} from '../../services/sdoc-album.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocContentUtils, SDocItemData} from '../../services/sdoc-contentutils.service';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 export interface ActionTagEvent {
     record: BaseEntityRecord;
@@ -23,7 +23,7 @@ export interface ActionTagEvent {
     styleUrls: ['./sdoc-actiontags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocActionTagsComponent implements OnInit, OnChanges {
+export class SDocActionTagsComponent extends AbstractInlineComponent implements OnInit {
     item: SDocItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
@@ -51,7 +51,9 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
     @Input()
     public actionTagEvent: EventEmitter<ActionTagEvent>;
 
-    constructor(private appService: GenericAppService, private contentUtils: SDocContentUtils, private sdocAlbumService: SDocAlbumService) {
+    constructor(private appService: GenericAppService, private contentUtils: SDocContentUtils, private sdocAlbumService: SDocAlbumService,
+                protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     ngOnInit() {
@@ -68,12 +70,6 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
                 this.updateData();
             }
         });
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     public setTag(tag: ActionTag): boolean {
@@ -100,7 +96,7 @@ export class SDocActionTagsComponent implements OnInit, OnChanges {
         this.toggleClass = 'showInactive';
     }
 
-    private updateData() {
+    protected updateData(): void {
         this.contentUtils.updateItemData(this.item, this.record, 'default');
         if (this.record === undefined) {
             this.tags = [];

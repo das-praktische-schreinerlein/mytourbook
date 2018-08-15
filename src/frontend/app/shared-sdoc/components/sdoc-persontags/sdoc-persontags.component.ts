@@ -1,8 +1,5 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChange} from '@angular/core';
-import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
-import {StructuredKeyword} from '../../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
-import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {CDocKeywordsComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
 

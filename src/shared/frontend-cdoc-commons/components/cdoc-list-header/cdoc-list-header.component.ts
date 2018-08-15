@@ -1,12 +1,12 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Layout} from '../../../angular-commons/services/layout.service';
 import {FormBuilder} from '@angular/forms';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
 import {BeanUtils} from '../../../commons/utils/bean.utils';
 import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocSearchForm} from '../../../search-commons/model/forms/cdoc-searchform';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-list-header',
@@ -14,7 +14,7 @@ import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity
     styleUrls: ['./cdoc-list-header.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocListHeaderComponent implements OnInit, OnChanges {
+export class CDocListHeaderComponent extends AbstractInlineComponent implements OnInit {
     autoPlayAllowed = false;
     public Layout = Layout;
 
@@ -65,7 +65,8 @@ export class CDocListHeaderComponent implements OnInit, OnChanges {
         layout: Layout.FLAT
     });
 
-    constructor(public fb: FormBuilder, private appService: GenericAppService) {
+    constructor(public fb: FormBuilder, private appService: GenericAppService, protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     ngOnInit() {
@@ -80,18 +81,6 @@ export class CDocListHeaderComponent implements OnInit, OnChanges {
             perPage: this.perPage,
             layout: this.layout
         });
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            const facets = this.searchResult.facets;
-            if (facets !== undefined && facets.facets.get('sorts') !== undefined) {
-                this.availableSorts = facets.facets.get('sorts').facet.map(facet => {
-                    return facet[0];
-                });
-                this.availableSorts.sort();
-            }
-        }
     }
 
     onShowIntervalNext(): boolean {
@@ -131,6 +120,16 @@ export class CDocListHeaderComponent implements OnInit, OnChanges {
         if (BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
             BeanUtils.getValue(config, 'components.cdoc-listheader.allowAutoplay') + '' === 'true') {
             this.autoPlayAllowed = this.showAutoplay;
+        }
+    }
+
+    protected updateData(): void {
+        const facets = this.searchResult.facets;
+        if (facets !== undefined && facets.facets.get('sorts') !== undefined) {
+            this.availableSorts = facets.facets.get('sorts').facet.map(facet => {
+                return facet[0];
+            });
+            this.availableSorts.sort();
         }
     }
 }

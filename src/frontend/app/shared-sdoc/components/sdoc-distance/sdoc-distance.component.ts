@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-distance',
@@ -8,23 +8,21 @@ import {ComponentUtils} from '../../../../shared/angular-commons/services/compon
     styleUrls: ['./sdoc-distance.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocDistanceComponent implements OnChanges {
+export class SDocDistanceComponent extends AbstractInlineComponent {
     distance: number;
 
     @Input()
     public record: SDocRecord;
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
+    constructor(protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     calcDistance(distance: number): number {
         return Math.round(distance + 0.5);
     }
 
-    private updateData() {
+    protected updateData(): void {
         if (this.record === undefined) {
             this.distance = undefined;
             return;

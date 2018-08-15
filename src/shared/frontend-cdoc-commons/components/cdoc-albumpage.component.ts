@@ -20,10 +20,10 @@ import {GenericAppService} from '../../commons/services/generic-app.service';
 import {Facets} from '../../search-commons/model/container/facets';
 import {ResolvedData} from '../../angular-commons/resolver/resolver.utils';
 import {AbstractCommonDocAlbumResolver} from '../resolver/abstract-cdoc-album.resolver';
-import {AbstractCDocPageComponent} from './cdoc-page.component';
+import {AbstractPageComponent} from '../../frontend-pdoc-commons/components/pdoc-page.component';
 import {PlatformService} from '../../angular-commons/services/platform.service';
-import {CommonEnvironment} from '../common-environment';
 import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
+import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
 
 export interface CommonDocAlbumpageComponentConfig {
     baseSearchUrl: string;
@@ -34,7 +34,7 @@ export interface CommonDocAlbumpageComponentConfig {
 }
 
 export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractCDocPageComponent<R, F, S, D> {
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     protected idCsvValidationRule = new IdCsvValidationRule(true);
 
     idValidationRule = new IdValidationRule(true);

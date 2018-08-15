@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Layout} from '../../../angular-commons/services/layout.service';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocSearchForm} from '../../../search-commons/model/forms/cdoc-searchform';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-list',
@@ -10,8 +11,8 @@ import {CommonDocSearchForm} from '../../../search-commons/model/forms/cdoc-sear
     styleUrls: ['./cdoc-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocListComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>> implements OnChanges {
+export class CDocListComponent <R extends CommonDocRecord, F extends CommonDocSearchForm, S extends CommonDocSearchResult<R, F>>
+    extends  AbstractInlineComponent {
     @Input()
     public searchResult: S;
 
@@ -29,9 +30,8 @@ export class CDocListComponent <R extends CommonDocRecord, F extends CommonDocSe
 
     public Layout = Layout;
 
-    constructor() {}
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
+    constructor(protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     onShow(record: R) {
@@ -41,5 +41,8 @@ export class CDocListComponent <R extends CommonDocRecord, F extends CommonDocSe
 
     getBackToSearchUrl(searchResult: S): string {
         return '';
+    }
+
+    protected updateData(): void {
     }
 }

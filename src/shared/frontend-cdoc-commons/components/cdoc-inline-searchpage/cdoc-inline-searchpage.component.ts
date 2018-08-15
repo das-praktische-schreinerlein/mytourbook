@@ -1,22 +1,10 @@
-import {
-    ChangeDetectorRef,
-    ElementRef,
-    EventEmitter,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    SimpleChange,
-    ViewContainerRef
-} from '@angular/core';
+import {ChangeDetectorRef, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {Facets} from '../../../search-commons/model/container/facets';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../frontend-cdoc-commons/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
 import {Layout} from '../../../angular-commons/services/layout.service';
 import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {CommonRoutingService} from '../../../angular-commons/services/common-routing.service';
 import {PageUtils} from '../../../angular-commons/services/page.utils';
 import {CommonDocSearchForm} from '../../../search-commons/model/forms/cdoc-searchform';
@@ -24,9 +12,11 @@ import {CommonDocDataService} from '../../../search-commons/services/cdoc-data.s
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
 import {GenericSearchFormSearchFormConverter} from '../../../search-commons/services/generic-searchform.converter';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy, OnChanges {
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractInlineComponent
+    implements OnInit, OnDestroy {
     protected initialized = false;
     protected appStateSubscription: Subscription;
 
@@ -91,6 +81,7 @@ export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends
                 protected cdocDataService: D, protected searchFormConverter: GenericSearchFormSearchFormConverter<F>,
                 protected cdocRoutingService: CommonDocRoutingService, protected toastr: ToastsManager, vcr: ViewContainerRef,
                 protected cd: ChangeDetectorRef, protected elRef: ElementRef, protected pageUtils: PageUtils) {
+        super(cd);
         this.searchForm = this.cdocDataService.newSearchForm({});
         this.searchResult = this.cdocDataService.newSearchResult(this.searchForm, 0, [], new Facets());
         this.toastr.setRootViewContainerRef(vcr);
@@ -110,12 +101,6 @@ export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends
 
     ngOnDestroy() {
         // Clean sub to avoid memory leak
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.initialized && ComponentUtils.hasNgChanged(changes)) {
-            return this.doSearchWithParams(this.params);
-        }
     }
 
     onShowDoc(cdoc: R) {
@@ -191,6 +176,12 @@ export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends
         return false;
     }
 
+    protected updateData(): void {
+        if (this.initialized) {
+            return this.doSearchWithParams(this.params);
+        }
+
+    }
 
     protected doSearchWithParams(params: any) {
         // console.log('doSearchWithParams params:', params);

@@ -1,17 +1,17 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-profilemap',
     templateUrl: './sdoc-profilemap.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocProfileMapComponent implements OnChanges {
+export class SDocProfileMapComponent extends AbstractInlineComponent {
     mapElements: MapElement[] = [];
 
     @Input()
@@ -29,13 +29,9 @@ export class SDocProfileMapComponent implements OnChanges {
     @Output()
     public mapElementsFound: EventEmitter<MapElement[]> = new EventEmitter();
 
-    constructor(private cd: ChangeDetectorRef, private contentUtils: SDocContentUtils, private appService: GenericAppService,
-                private platformService: PlatformService) {}
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.platformService.isClient() && ComponentUtils.hasNgChanged(changes)) {
-            this.renderMap();
-        }
+    constructor(protected cd: ChangeDetectorRef, private contentUtils: SDocContentUtils, private appService: GenericAppService,
+                private platformService: PlatformService) {
+        super(cd);
     }
 
     renderMap() {
@@ -55,5 +51,11 @@ export class SDocProfileMapComponent implements OnChanges {
         this.mapElementsFound.emit(this.mapElements);
 
         this.cd.markForCheck();
+    }
+
+    protected updateData(): void {
+        if (this.platformService.isClient()) {
+            this.renderMap();
+        }
     }
 }

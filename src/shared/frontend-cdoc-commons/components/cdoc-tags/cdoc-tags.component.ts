@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {CommonDocContentUtils, StructuredKeyword} from '../../services/cdoc-contentutils.service';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-tags',
@@ -8,7 +8,7 @@ import {CommonDocContentUtils, StructuredKeyword} from '../../services/cdoc-cont
     styleUrls: ['./cdoc-tags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTagsComponent implements OnChanges {
+export class CDocTagsComponent extends AbstractInlineComponent{
     tagsKats: StructuredKeyword[] = [];
 
     @Input()
@@ -23,16 +23,11 @@ export class CDocTagsComponent implements OnChanges {
     @Input()
     public blacklist = [];
 
-    constructor(private contentUtils: CommonDocContentUtils) {
+    constructor(private contentUtils: CommonDocContentUtils, protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
-    }
-
-    private updateData() {
+    protected updateData(): void {
         this.tagsKats = [];
         if (this.tags === undefined) {
             return;

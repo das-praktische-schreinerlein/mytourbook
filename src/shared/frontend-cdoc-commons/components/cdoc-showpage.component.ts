@@ -21,8 +21,8 @@ import {CommonDocDataService} from '../../search-commons/services/cdoc-data.serv
 import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
 import {CommonDocContentUtils} from '../services/cdoc-contentutils.service';
 import {AbstractCommonDocRecordResolver} from '../resolver/abstract-cdoc-details.resolver';
-import {AbstractCDocPageComponent} from './cdoc-page.component';
-import {CommonEnvironment} from '../common-environment';
+import {AbstractPageComponent} from '../../frontend-pdoc-commons/components/pdoc-page.component';
+import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
 
 export interface CommonDocShowpageComponentConfig {
     baseSearchUrl: string;
@@ -30,7 +30,7 @@ export interface CommonDocShowpageComponentConfig {
 }
 
 export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractCDocPageComponent<R, F, S, D> {
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     private flgDescRendered = false;
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);

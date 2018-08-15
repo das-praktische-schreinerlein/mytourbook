@@ -18,9 +18,9 @@ import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchf
 import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 import {GenericSearchFormSearchFormConverter} from '../../search-commons/services/generic-searchform.converter';
-import {CommonEnvironment} from '../common-environment';
 import {AbstractCommonSectionSearchFormResolver} from '../resolver/abstract-cdoc-section-searchform.resolver';
-import {AbstractCDocPageComponent} from './cdoc-page.component';
+import {AbstractPageComponent} from '../../frontend-pdoc-commons/components/pdoc-page.component';
+import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
 
 export interface CommonDocSearchpageComponentConfig {
     baseSearchUrl: string;
@@ -28,7 +28,7 @@ export interface CommonDocSearchpageComponentConfig {
 }
 
 export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractCDocPageComponent<R, F, S, D> {
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     idValidationRule = new IdValidationRule(true);
     Layout = Layout;
     SearchFormLayout = SearchFormLayout;

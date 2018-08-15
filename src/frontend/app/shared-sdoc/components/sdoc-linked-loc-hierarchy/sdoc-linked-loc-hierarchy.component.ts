@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-linked-loc-hierarchy',
@@ -12,7 +12,7 @@ import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
     styleUrls: ['./sdoc-linked-loc-hierarchy.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocLinkedLocHierarchyComponent implements OnChanges {
+export class SDocLinkedLocHierarchyComponent extends AbstractInlineComponent {
     locations: any[];
 
     @Input()
@@ -22,16 +22,14 @@ export class SDocLinkedLocHierarchyComponent implements OnChanges {
     public lastOnly? = false;
 
     constructor(private sanitizer: DomSanitizer, private commonRoutingService: CommonRoutingService,
-                private cdocRoutingService: CommonDocRoutingService, private contentUtils: SDocContentUtils) {
+                private cdocRoutingService: CommonDocRoutingService, private contentUtils: SDocContentUtils,
+                protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateLocation();
-        }
-    }
 
-    private updateLocation() {
+
+    protected updateData(): void {
         if (this.record === undefined || this.record.type === 'NEWS') {
             this.locations = [];
             return;

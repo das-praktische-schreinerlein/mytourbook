@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {SearchParameterUtils} from '../../../search-commons/services/searchparameter.utils';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {SearchFormUtils} from '../../../angular-commons/services/searchform-utils.service';
 import {Facet, Facets} from '../../../search-commons/model/container/facets';
 import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocSearchForm} from '../../../search-commons/model/forms/cdoc-searchform';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 export interface TimetableColumn {
     width: string;
@@ -21,7 +21,7 @@ export interface TimetableColumn {
     styleUrls: ['./cdoc-timetable.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTimetableComponent implements OnChanges {
+export class CDocTimetableComponent extends AbstractInlineComponent {
     columns: TimetableColumn[] = [];
 
     @Input()
@@ -30,13 +30,9 @@ export class CDocTimetableComponent implements OnChanges {
     @Output()
     public columnClicked: EventEmitter<string> = new EventEmitter();
 
-    constructor(private searchParameterUtils: SearchParameterUtils, private searchFormUtils: SearchFormUtils) {
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.renderTimetable();
-        }
+    constructor(private searchParameterUtils: SearchParameterUtils, private searchFormUtils: SearchFormUtils,
+                protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     onColumnClicked(key: any) {
@@ -44,7 +40,7 @@ export class CDocTimetableComponent implements OnChanges {
         return false;
     }
 
-    private renderTimetable() {
+    protected updateData(): void {
         const result = [];
         const facetName = 'month_is';
         const origFacet = this.searchResult.facets.facets.get(facetName);

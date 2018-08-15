@@ -1,19 +1,9 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    OnDestroy,
-    Output,
-    SimpleChange
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, Output} from '@angular/core';
 import {Layout, LayoutService, LayoutSize, LayoutSizeData} from '../../../angular-commons/services/layout.service';
-import {CommonDocContentUtils, CommonItemData} from '../../../frontend-cdoc-commons/services/cdoc-contentutils.service';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
+import {CommonDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-list-item',
@@ -21,7 +11,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
     styleUrls: ['./cdoc-list-item.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocListItemComponent implements OnChanges, OnDestroy {
+export class CDocListItemComponent extends AbstractInlineComponent implements OnDestroy {
     private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
     listLayoutName = 'default';
     listItem: CommonItemData = {
@@ -59,6 +49,7 @@ export class CDocListItemComponent implements OnChanges, OnDestroy {
 
     constructor(contentUtils: CommonDocContentUtils, protected cd: ChangeDetectorRef,
         protected layoutService: LayoutService) {
+        super(cd);
         this.contentUtils = contentUtils;
         this.layoutSizeObservable = this.layoutService.getLayoutSizeData();
         this.layoutSizeObservable.subscribe(layoutSizeData => {
@@ -69,12 +60,6 @@ export class CDocListItemComponent implements OnChanges, OnDestroy {
 
     ngOnDestroy() {
         // this.layoutSizeObservable.unsubscribe();
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     public submitShow(cdoc: CommonDocRecord) {

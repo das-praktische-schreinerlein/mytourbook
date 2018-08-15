@@ -1,5 +1,8 @@
 import {
-    GenericValidatorDatatypes, IdValidationRule, NumberValidationRule, SolrValidationRule,
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NumberValidationRule,
+    SolrValidationRule,
     ValidationRule
 } from './generic-validator.util';
 

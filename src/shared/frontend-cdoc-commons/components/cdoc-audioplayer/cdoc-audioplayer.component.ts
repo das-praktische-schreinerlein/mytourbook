@@ -1,17 +1,7 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChange,
-    ViewChild
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {CommonDocContentUtils, CommonItemData} from '../../services/cdoc-contentutils.service';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-audioplayer',
@@ -19,7 +9,7 @@ import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity
     styleUrls: ['./cdoc-audioplayer.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocAudioplayerComponent implements OnChanges {
+export class CDocAudioplayerComponent extends AbstractInlineComponent {
     public contentUtils: CommonDocContentUtils;
     listItem: CommonItemData = {
         currentRecord: undefined,
@@ -48,13 +38,8 @@ export class CDocAudioplayerComponent implements OnChanges {
     public show: EventEmitter<CommonDocRecord> = new EventEmitter();
 
     constructor(contentUtils: CommonDocContentUtils, protected cd: ChangeDetectorRef) {
+        super(cd);
         this.contentUtils = contentUtils;
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     submitShow(cdoc: CommonDocRecord) {
@@ -72,7 +57,7 @@ export class CDocAudioplayerComponent implements OnChanges {
         }
     }
 
-    private updateData() {
+    protected updateData(): void {
         this.contentUtils.updateItemData(this.listItem, this.record, 'default');
         this.cd.markForCheck();
     }

@@ -1,20 +1,9 @@
-import {
-    ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChange,
-    ViewContainerRef
-} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
 import {SDocRecord, SDocRecordFactory, SDocRecordValidator} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {SDocRecordSchema} from '../../../../shared/sdoc-commons/model/schemas/sdoc-record-schema';
 import {ToastsManager} from 'ng2-toastr';
 import {SchemaValidationError} from 'js-data';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
@@ -31,6 +20,7 @@ import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -38,7 +28,7 @@ import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
     styleUrls: ['./sdoc-editform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocEditformComponent implements OnChanges {
+export class SDocEditformComponent extends AbstractInlineComponent {
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
     private defaultSelectSetting: IMultiSelectSettings =
@@ -261,17 +251,12 @@ export class SDocEditformComponent implements OnChanges {
     @Output()
     public saveAndSearch: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, private cd: ChangeDetectorRef,
+    constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, protected cd: ChangeDetectorRef,
                 private appService: GenericAppService, private sdocSearchFormUtils: SDocSearchFormUtils,
                 private searchFormUtils: SearchFormUtils, private sdocDataService: SDocDataService,
                 private contentUtils: SDocContentUtils) {
+        super(cd);
         this.toastr.setRootViewContainerRef(vcr);
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     setKeyword(keyword: string): void {
@@ -520,7 +505,7 @@ export class SDocEditformComponent implements OnChanges {
         return false;
     }
 
-    private updateData() {
+    protected updateData(): void {
         if (this.record === undefined) {
             this.editFormGroup = this.fb.group({});
             return;

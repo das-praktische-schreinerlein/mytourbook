@@ -1,18 +1,18 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 
 import 'leaflet';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-map',
     templateUrl: './sdoc-map.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocMapComponent implements OnChanges {
+export class SDocMapComponent extends AbstractInlineComponent {
     showLoadingSpinner = false;
     mapElements: MapElement[] = [];
     mapElementsReverseMap = new Map<MapElement, SDocRecord>();
@@ -44,13 +44,9 @@ export class SDocMapComponent implements OnChanges {
     @Output()
     public mapElementsFound: EventEmitter<MapElement[]> = new EventEmitter();
 
-    constructor(private contentUtils: SDocContentUtils, private cd: ChangeDetectorRef,
-                private platformService: PlatformService) {}
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (this.platformService.isClient() && ComponentUtils.hasNgChanged(changes)) {
-            this.renderMap();
-        }
+    constructor(private contentUtils: SDocContentUtils, protected cd: ChangeDetectorRef,
+                private platformService: PlatformService) {
+        super(cd);
     }
 
     onTrackClicked(mapElement: MapElement) {
@@ -82,5 +78,11 @@ export class SDocMapComponent implements OnChanges {
         this.mapElementsFound.emit(this.mapElements);
 
         this.cd.markForCheck();
+    }
+
+    protected updateData(): void {
+        if (this.platformService.isClient()) {
+            this.renderMap();
+        }
     }
 }

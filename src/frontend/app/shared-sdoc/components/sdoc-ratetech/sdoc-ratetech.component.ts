@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {SDocRateTechRecord} from '../../../../shared/sdoc-commons/model/records/sdocratetech-record';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-ratetech',
@@ -9,7 +9,7 @@ import {SDocRateTechRecord} from '../../../../shared/sdoc-commons/model/records/
     styleUrls: ['./sdoc-ratetech.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocRateTechComponent implements OnChanges {
+export class SDocRateTechComponent extends AbstractInlineComponent {
     sdocratetech: SDocRateTechRecord;
 
     @Input()
@@ -18,13 +18,11 @@ export class SDocRateTechComponent implements OnChanges {
     @Input()
     public small? = false;
 
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
+    constructor(protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
-    private updateData() {
+    protected updateData(): void {
         if (this.record === undefined) {
             this.sdocratetech = undefined;
             return;

@@ -1,7 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
-import {ComponentUtils} from '../../../../shared/angular-commons/services/component.utils';
 import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
@@ -11,6 +10,7 @@ import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-s
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {SDocContentUtils, SDocItemData} from '../../services/sdoc-contentutils.service';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-sdoc-list-item-page',
@@ -18,7 +18,7 @@ import {SDocContentUtils, SDocItemData} from '../../services/sdoc-contentutils.s
     styleUrls: ['./sdoc-list-item-page.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListItemPageComponent implements OnChanges {
+export class SDocListItemPageComponent extends AbstractInlineComponent {
     private flgDescRendered = false;
     public contentUtils: SDocContentUtils;
     listItem: SDocItemData = {
@@ -63,16 +63,11 @@ export class SDocListItemPageComponent implements OnChanges {
     @Output()
     public playerStopped: EventEmitter<SDocRecord> = new EventEmitter();
 
-    constructor(contentUtils: SDocContentUtils, private cd: ChangeDetectorRef, private platformService: PlatformService,
+    constructor(contentUtils: SDocContentUtils, protected cd: ChangeDetectorRef, private platformService: PlatformService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
                 private sdocDataService: SDocDataService, private searchFormConverter: SDocSearchFormConverter) {
+        super(cd);
         this.contentUtils = contentUtils;
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     submitShow(sdoc: SDocRecord) {
@@ -116,7 +111,7 @@ export class SDocListItemPageComponent implements OnChanges {
         return '';
     }
 
-    private updateData() {
+    protected updateData(): void {
         const me = this;
 
         this.contentUtils.updateItemData(this.listItem, this.record, 'page');

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Facets} from '../../../search-commons/model/container/facets';

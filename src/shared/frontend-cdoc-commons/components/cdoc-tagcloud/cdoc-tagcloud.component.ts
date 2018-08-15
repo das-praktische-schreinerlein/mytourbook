@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {SearchParameterUtils} from '../../../search-commons/services/searchparameter.utils';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
 import {SearchFormUtils} from '../../../angular-commons/services/searchform-utils.service';
 import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocSearchForm} from '../../../search-commons/model/forms/cdoc-searchform';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 export interface TagcloudEntry {
     size: string;
@@ -18,7 +18,7 @@ export interface TagcloudEntry {
     styleUrls: ['./cdoc-tagcloud.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTagcloudComponent implements OnChanges {
+export class CDocTagcloudComponent extends AbstractInlineComponent{
     columns: TagcloudEntry[] = [];
 
     @Input()
@@ -52,13 +52,9 @@ export class CDocTagcloudComponent implements OnChanges {
     maxCount = 0;
     factor = 0;
 
-    constructor(private searchParameterUtils: SearchParameterUtils, private searchFormUtils: SearchFormUtils) {
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.render();
-        }
+    constructor(private searchParameterUtils: SearchParameterUtils, private searchFormUtils: SearchFormUtils,
+                protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     onColumnClicked(key: any) {
@@ -66,7 +62,7 @@ export class CDocTagcloudComponent implements OnChanges {
         return false;
     }
 
-    private render() {
+    protected updateData(): void {
         let result = [];
         const facetName = this.facetName;
         const origFacet = this.searchResult.facets;

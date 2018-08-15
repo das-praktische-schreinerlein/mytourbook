@@ -1,11 +1,8 @@
-import {
-    ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output,
-    SimpleChange
-} from '@angular/core';
-import {ComponentUtils} from '../../../angular-commons/services/component.utils';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StructuredKeyword, StructuredKeywordState} from '../../services/cdoc-contentutils.service';
 import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
 import {BeanUtils} from '../../../commons/utils/bean.utils';
+import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-cdoc-keywordsstate',
@@ -13,7 +10,7 @@ import {BeanUtils} from '../../../commons/utils/bean.utils';
     styleUrls: ['./cdoc-keywordsstate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocKeywordsStateComponent implements OnInit, OnChanges {
+export class CDocKeywordsStateComponent extends AbstractInlineComponent implements OnInit {
     possiblePrefixes = [];
     keywordsConfig: StructuredKeyword[] = [];
     prefix = '';
@@ -34,6 +31,7 @@ export class CDocKeywordsStateComponent implements OnInit, OnChanges {
     public tagsFound: EventEmitter<StructuredKeywordState[]> = new EventEmitter();
 
     constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
+        super(cd);
     }
 
     ngOnInit() {
@@ -43,12 +41,6 @@ export class CDocKeywordsStateComponent implements OnInit, OnChanges {
                 this.configureComponent(config);
             }
         });
-    }
-
-    ngOnChanges(changes: {[propKey: string]: SimpleChange}) {
-        if (ComponentUtils.hasNgChanged(changes)) {
-            this.updateData();
-        }
     }
 
     doSetKeyword(keyword: string): void {

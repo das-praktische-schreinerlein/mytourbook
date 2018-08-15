@@ -1,21 +1,16 @@
 import {ChangeDetectorRef, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
-import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
-import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
-import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 import {PageUtils} from '../../angular-commons/services/page.utils';
 import {GenericTrackingService} from '../../angular-commons/services/generic-tracking.service';
 import {AppState, GenericAppService} from '../../commons/services/generic-app.service';
 import {LayoutService, LayoutSizeData} from '../../angular-commons/services/layout.service';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {PlatformService} from '../../angular-commons/services/platform.service';
-import {CommonEnvironment} from '../common-environment';
 import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
+import {CommonEnvironment} from '../common-environment';
 
-export abstract class AbstractCDocPageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit, OnDestroy {
+export abstract class AbstractPageComponent implements OnInit, OnDestroy {
     protected config;
     protected initialized = false;
     protected layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
@@ -66,7 +61,7 @@ export abstract class AbstractCDocPageComponent <R extends CommonDocRecord, F ex
 
     protected abstract processError(data: any): boolean;
 
-    protected abstract setMetaTags(config: {}, pdoc: PDocRecord, record: CommonDocRecord): void;
+    protected abstract setMetaTags(config: {}, pdoc: PDocRecord, record: any): void;
 
     protected abstract setPageLayoutAndStyles(): void;
 }
