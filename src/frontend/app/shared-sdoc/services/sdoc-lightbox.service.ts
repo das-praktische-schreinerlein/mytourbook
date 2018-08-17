@@ -2,47 +2,13 @@ import {Injectable} from '@angular/core';
 import {Lightbox} from 'angular2-lightbox';
 import {SDocSearchResult} from '../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocContentUtils} from './sdoc-contentutils.service';
-
-export interface SDocLightboxAlbumConfig {
-    album: any[];
-    idPos: {};
-}
+import {CommonDocLightBoxService} from '../../../shared/frontend-cdoc-commons/services/cdoc-lightbox.service';
+import {SDocRecord} from '../../../shared/sdoc-commons/model/records/sdoc-record';
+import {SDocSearchForm} from '../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 
 @Injectable()
-export class SDocLightBoxService {
-    constructor(private contentUtils: SDocContentUtils, private lightbox: Lightbox) {
-    }
-
-    createAlbumConfig(searchResult: SDocSearchResult): SDocLightboxAlbumConfig {
-        const lightboxConfig: SDocLightboxAlbumConfig = {
-            album: [],
-            idPos: {}
-        };
-
-        for (let i = 0; i <= searchResult.currentRecords.length; i++) {
-            const record = searchResult.currentRecords[i];
-            if (record && record.type === 'IMAGE') {
-                const src = this.contentUtils.getPreview(record['sdocimages'][0]);
-                const caption = record.name;
-                const thumb = this.contentUtils.getThumbnail(record['sdocimages'][0]);
-                const image = {
-                    src: src,
-                    caption: caption,
-                    thumb: thumb,
-                    id: record.id
-                };
-                lightboxConfig.album.push(image);
-                lightboxConfig.idPos[record.id] = lightboxConfig.album.length - 1;
-            }
-        }
-        return lightboxConfig;
-    }
-
-    openId(config: SDocLightboxAlbumConfig, id: any): void {
-        this.openPos(config, config.idPos[id]);
-    }
-
-    openPos(config: SDocLightboxAlbumConfig, pos: number): void {
-        this.lightbox.open(config.album, pos || 0);
+export class SDocLightBoxService extends CommonDocLightBoxService<SDocRecord, SDocSearchForm, SDocSearchResult> {
+    constructor(protected contentUtils: SDocContentUtils, protected lightbox: Lightbox) {
+        super(contentUtils, lightbox);
     }
 }

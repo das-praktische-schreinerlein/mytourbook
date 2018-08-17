@@ -4,6 +4,12 @@ import {AppState, GenericAppService} from '../../../commons/services/generic-app
 import {BeanUtils} from '../../../commons/utils/bean.utils';
 import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
+export interface CDocKeywordsStateComponentConfig {
+    prefix: string;
+    keywordsConfig: StructuredKeyword[];
+    possiblePrefixes: string[];
+}
+
 @Component({
     selector: 'app-cdoc-keywordsstate',
     templateUrl: './cdoc-keywordsstate.component.html',
@@ -39,6 +45,7 @@ export class CDocKeywordsStateComponent extends AbstractInlineComponent implemen
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
                 this.configureComponent(config);
+                this.updateData();
             }
         });
     }
@@ -51,18 +58,29 @@ export class CDocKeywordsStateComponent extends AbstractInlineComponent implemen
         this.unsetKeyword.emit(keyword);
     }
 
-    protected configureComponent(config: {}): void {
+    protected getComponentConfig(config: {}): CDocKeywordsStateComponentConfig {
         if (BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords')) {
-            this.keywordsConfig = BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords');
-            this.possiblePrefixes = BeanUtils.getValue(config, 'components.cdoc-keywords.possiblePrefixes');
-            this.prefix = BeanUtils.getValue(config, 'components.cdoc-keywords.editPrefix') || '';
-            this.updateData();
+            return {
+                keywordsConfig: BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords'),
+                possiblePrefixes: BeanUtils.getValue(config, 'components.cdoc-keywords.possiblePrefixes'),
+                prefix: BeanUtils.getValue(config, 'components.cdoc-keywords.editPrefix') || ''
+            };
         } else {
-            console.warn('no valid keywordsConfig found');
-            this.keywordsConfig = [];
-            this.possiblePrefixes = [];
-            this.prefix = '';
+            console.warn('no valid keywordsConfig found for components.cdoc-keywords.structuredKeywords');
+            return {
+                keywordsConfig: [],
+                possiblePrefixes: [],
+                prefix: ''
+            };
         }
+    }
+
+    protected configureComponent(config: {}): void {
+        const componentConfig = this.getComponentConfig(config);
+
+        this.prefix = componentConfig.prefix;
+        this.keywordsConfig = componentConfig.keywordsConfig;
+        this.possiblePrefixes = componentConfig.possiblePrefixes;
     }
 
     protected updateData() {

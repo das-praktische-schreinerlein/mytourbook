@@ -27,6 +27,7 @@ import {SDocContentUtils} from '../shared-sdoc/services/sdoc-contentutils.servic
 import {CommonDocSearchFormUtils} from '../../shared/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
 import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {SDocRoutingService} from '../../shared/sdoc-commons/services/sdoc-routing.service';
+import {LayoutService} from '../../shared/angular-commons/services/layout.service';
 
 @NgModule({
     declarations: [
@@ -62,7 +63,8 @@ import {SDocRoutingService} from '../../shared/sdoc-commons/services/sdoc-routin
         PageUtils,
         SDocLightBoxService,
         AngularHtmlService,
-        AngularMarkdownService
+        AngularMarkdownService,
+        LayoutService
     ],
     exports: [
         SDocEditpageComponent,

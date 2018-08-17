@@ -134,6 +134,7 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
     }
 
     onShowDoc(cdoc: R) {
+        this.cdocRoutingService.setLastBaseUrl(this.baseSearchUrlDefault);
         this.cdocRoutingService.navigateToShow(cdoc, this.cdocRoutingService.getLastSearchUrl());
         return false;
     }
@@ -331,7 +332,6 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
         this.autoPlayAllowed = componentConfig.autoPlayAllowed;
         this.maxAllowedItems = componentConfig.maxAllowedItems;
     }
-
 
     protected configureProcessingOfResolvedData(config: {}): void {
     }

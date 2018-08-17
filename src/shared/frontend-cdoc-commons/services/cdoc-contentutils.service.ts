@@ -40,6 +40,13 @@ export interface CommonItemData {
     fullUrl: SafeUrl;
 }
 
+export interface CommonDocContentUtilsConfig {
+    cdocRecordRefIdField: string;
+    cdocAudiosKey: string;
+    cdocImagesKey: string;
+    cdocVideosKey: string;
+}
+
 @Injectable()
 export class CommonDocContentUtils {
     protected cdocRecordRefIdField = 'cdoc_id';
@@ -50,6 +57,18 @@ export class CommonDocContentUtils {
     constructor(protected sanitizer: DomSanitizer, protected cdocRoutingService: CommonDocRoutingService,
                 protected appService: GenericAppService) {
         this.configureService();
+    }
+
+    getImages(cdocRecord: CommonDocRecord): BaseImageRecord[] {
+        return cdocRecord[this.cdocImagesKey];
+    }
+
+    getVideos(cdocRecord: CommonDocRecord): BaseVideoRecord[] {
+        return cdocRecord[this.cdocVideosKey];
+    }
+
+    getAudios(cdocRecord: CommonDocRecord): BaseAudioRecord[] {
+        return cdocRecord[this.cdocAudiosKey];
     }
 
     getThumbnail(image: BaseImageRecord): string {
@@ -274,6 +293,21 @@ export class CommonDocContentUtils {
         }
     }
 
+    protected getServiceConfig(): CommonDocContentUtilsConfig {
+        return {
+            cdocRecordRefIdField: 'cdoc_id',
+            cdocAudiosKey: 'cdocaudios',
+            cdocImagesKey: 'cdocimages',
+            cdocVideosKey: 'cdocvideos'
+        };
+    }
+
     protected configureService(): void {
+        const serviceConfig = this.getServiceConfig();
+
+        this.cdocRecordRefIdField = serviceConfig.cdocRecordRefIdField;
+        this.cdocAudiosKey = serviceConfig.cdocAudiosKey;
+        this.cdocImagesKey = serviceConfig.cdocImagesKey;
+        this.cdocVideosKey = serviceConfig.cdocVideosKey;
     }
 }

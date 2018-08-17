@@ -1,0 +1,9 @@
+form {
+    max-width: 1000px;
+}
+
+textarea:focus {
+    height:60vh;
+    min-height: 300px;
+    max-height: 1000px;
+}

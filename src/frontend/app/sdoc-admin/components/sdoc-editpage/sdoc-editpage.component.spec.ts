@@ -28,6 +28,7 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocEditpageComponent', () => {
     let component: SDocEditpageComponent;
@@ -62,7 +63,8 @@ describe('SDocEditpageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
-                { provide: SDocDataService, useValue: new SDocDataServiceStub() }
+                { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                LayoutService
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

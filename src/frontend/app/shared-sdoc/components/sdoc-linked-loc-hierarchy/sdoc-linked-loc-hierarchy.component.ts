@@ -27,8 +27,6 @@ export class SDocLinkedLocHierarchyComponent extends AbstractInlineComponent {
         super(cd);
     }
 
-
-
     protected updateData(): void {
         if (this.record === undefined || this.record.type === 'NEWS') {
             this.locations = [];

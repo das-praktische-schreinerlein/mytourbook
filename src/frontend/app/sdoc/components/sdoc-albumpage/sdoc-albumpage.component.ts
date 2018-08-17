@@ -44,8 +44,8 @@ export class SDocAlbumpageComponent extends AbstractCDocAlbumpageComponent<SDocR
     protected getComponentConfig(config: {}): CommonDocAlbumpageComponentConfig {
         return {
             baseAlbumUrl: 'sdoc/album',
-            baseSearchUrl: ['sdoc'].join('/'),
-            baseSearchUrlDefault: ['sdoc'].join('/'),
+            baseSearchUrl: ['sdoc', ''].join('/'),
+            baseSearchUrlDefault: ['sdoc', ''].join('/'),
             maxAllowedItems: config && config['sdocMaxItemsPerAlbum'] >= 0 ? config['sdocMaxItemsPerAlbum'] : -1,
             autoPlayAllowed: BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
                 BeanUtils.getValue(config, 'components.sdoc-albumpage.allowAutoplay') + '' === 'true'

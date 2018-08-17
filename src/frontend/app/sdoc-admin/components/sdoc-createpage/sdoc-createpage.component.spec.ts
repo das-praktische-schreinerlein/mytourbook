@@ -29,6 +29,7 @@ import {SDocDataServiceStub} from '../../../../testing/sdoc-dataservice-stubs';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 
 describe('SDocCreatepageComponent', () => {
     let component: SDocCreatepageComponent;
@@ -64,7 +65,8 @@ describe('SDocCreatepageComponent', () => {
                 PageUtils,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
-                { provide: SDocDataService, useValue: new SDocDataServiceStub() }
+                { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                LayoutService
         ],
             schemas: [NO_ERRORS_SCHEMA]
         })

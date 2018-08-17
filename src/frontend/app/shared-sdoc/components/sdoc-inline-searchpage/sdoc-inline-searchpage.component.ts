@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewContainerRef} from '@angular/core';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
@@ -19,6 +19,10 @@ import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-
 })
 export class SDocInlineSearchpageComponent extends
     CDocInlineSearchpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+
+    @Input()
+    public baseSearchUrl? = 'sdoc/';
+
     constructor(appService: GenericAppService, commonRoutingService: CommonRoutingService,
                 sdocDataService: SDocDataService, searchFormConverter: SDocSearchFormConverter,
                 cdocRoutingService: SDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef,

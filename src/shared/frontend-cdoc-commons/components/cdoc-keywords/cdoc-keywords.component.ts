@@ -5,6 +5,12 @@ import {BeanUtils} from '../../../commons/utils/bean.utils';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
 import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
+export interface CDocKeywordsComponentConfig {
+    blacklist: string[];
+    keywordsConfig: StructuredKeyword[];
+    possiblePrefixes: string[];
+}
+
 @Component({
     selector: 'app-cdoc-keywords',
     templateUrl: './cdoc-keywords.component.html',
@@ -28,21 +34,34 @@ export class CDocKeywordsComponent extends AbstractInlineComponent implements On
             if (appState === AppState.Ready) {
                 const config = this.appService.getAppConfig();
                 this.configureComponent(config);
+                this.updateData();
             }
         });
     }
 
-    protected configureComponent(config: {}): void {
+    protected getComponentConfig(config: {}): CDocKeywordsComponentConfig {
         if (BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords')) {
-            this.keywordsConfig = BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords');
-            this.possiblePrefixes = BeanUtils.getValue(config, 'components.cdoc-keywords.possiblePrefixes');
-            this.updateData();
+            return {
+                keywordsConfig: BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords'),
+                possiblePrefixes: BeanUtils.getValue(config, 'components.cdoc-keywords.possiblePrefixes'),
+                blacklist: []
+            };
         } else {
-            console.warn('no valid keywordsConfig found');
-            this.keywordsConfig = [];
-            this.possiblePrefixes = [];
-            this.updateData();
+            console.warn('no valid keywordsConfig found for components.cdoc-keywords.structuredKeywords');
+            return {
+                keywordsConfig: [],
+                possiblePrefixes: [],
+                blacklist: []
+            };
         }
+    }
+
+    protected configureComponent(config: {}): void {
+        const componentConfig = this.getComponentConfig(config);
+
+        this.blacklist = componentConfig.blacklist;
+        this.keywordsConfig = componentConfig.keywordsConfig;
+        this.possiblePrefixes = componentConfig.possiblePrefixes;
     }
 
     protected updateData() {

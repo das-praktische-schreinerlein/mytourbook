@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/co
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocKeywordsstateComponent} from '../sdoc-keywordsstate/sdoc-keywordsstate.component';
+import {CDocKeywordsStateComponentConfig} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywordsstate/cdoc-keywordsstate.component';
 
 @Component({
     selector: 'app-sdoc-persontagsstate',
@@ -13,17 +14,21 @@ export class SDocPersontagsstateComponent extends SDocKeywordsstateComponent {
     constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
         super(appService, cd);
     }
-    protected configureComponent(config: {}): void {
+
+    protected getComponentConfig(config: {}): CDocKeywordsStateComponentConfig {
         if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
-            this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords');
-            this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes');
-            this.prefix = BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix') || '';
-            this.updateData();
+            return {
+                keywordsConfig: BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords'),
+                possiblePrefixes: BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes'),
+                prefix: BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix') || ''
+            };
         } else {
-            console.warn('no valid keywordsConfig found');
-            this.keywordsConfig = [];
-            this.possiblePrefixes = [];
-            this.prefix = '';
+            console.warn('no valid persontagsConfig found for components.sdoc-persontags.structuredKeywords');
+            return {
+                keywordsConfig: [],
+                possiblePrefixes: [],
+                prefix: ''
+            };
         }
     }
 }

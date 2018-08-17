@@ -6,7 +6,11 @@ import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plug
 import {CommonDocRoutingService} from '../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
 import * as L from 'leaflet';
 import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
-import {CommonDocContentUtils, CommonItemData} from '../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {
+    CommonDocContentUtils,
+    CommonDocContentUtilsConfig,
+    CommonItemData
+} from '../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import LatLng = L.LatLng;
 
 export interface SDocItemData extends CommonItemData {
@@ -284,10 +288,12 @@ export class SDocContentUtils extends CommonDocContentUtils {
         itemData.flgShowProfileMap = itemData.flgProfileMapAvailable;
     }
 
-    protected configureService(): void {
-        this.cdocRecordRefIdField = 'sdoc_id';
-        this.cdocAudiosKey = 'sdocaudios';
-        this.cdocImagesKey = 'sdocimages';
-        this.cdocVideosKey = 'sdocvideos';
+    protected getServiceConfig(): CommonDocContentUtilsConfig {
+        return {
+            cdocRecordRefIdField: 'sdoc_id',
+            cdocAudiosKey: 'sdocaudios',
+            cdocImagesKey: 'sdocimages',
+            cdocVideosKey: 'sdocvideos'
+        };
     }
 }

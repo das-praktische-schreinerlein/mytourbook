@@ -1,25 +1,28 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {Layout} from '../../../../shared/angular-commons/services/layout.service';
-import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
-import {ResolvedData} from '../../../../shared/angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
-import {IdValidationRule, KeywordValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {SDocRecordResolver} from '../../../shared-sdoc/resolver/sdoc-details.resolver';
-import {AppState, GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
-import {CommonRoutingService, RoutingState} from '../../../../shared/angular-commons/services/common-routing.service';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {environment} from '../../../../environments/environment';
+import {
+    AbstractCommonDocEditpageComponent,
+    CommonDocEditpageComponentConfig
+} from '../../../../shared/frontend-cdoc-commons/components/cdoc-editpage.component';
+import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
+import {Layout} from '../../../../../shared/angular-commons/services/layout.service';
 
 @Component({
     selector: 'app-sdoc-editpage',
@@ -27,136 +30,58 @@ import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-
     styleUrls: ['./sdoc-editpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocEditpageComponent implements OnInit, OnDestroy {
-    private config;
-    idValidationRule = new IdValidationRule(true);
-    keywordsValidationRule = new KeywordValidationRule(true);
-    public contentUtils: SDocContentUtils;
-    public record: SDocRecord;
-    public Layout = Layout;
-    pdoc: PDocRecord;
-    baseSearchUrl: string;
+export class SDocEditpageComponent
+    extends AbstractCommonDocEditpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     tracks: SDocRecord[] = [];
     trackRouten: SDocRecord[] = [];
+    defaultSubImageLayout = Layout.SMALL;
+    showResultListTrigger: {
+        IMAGE: boolean|number;
+        VIDEO: boolean|number;
+        LOCATION: boolean|number;
+        NEWS: boolean|number;
+        ROUTE: boolean|number;
+        TOPIMAGE: boolean|number;
+        TRACK: boolean|number;
+        TRIP: boolean|number;
+    } = {
+        IMAGE: false,
+        VIDEO: false,
+        LOCATION: false,
+        NEWS: false,
+        ROUTE: false,
+        TOPIMAGE: false,
+        TRACK: false,
+        TRIP: false
+    };
+    availableTabs = {
+        'IMAGE': true,
+        'ROUTE': true,
+        'TRACK': true,
+        'LOCATION': true,
+        'TRIP': true,
+        'VIDEO': true,
+        'NEWS': true
+    };
 
-    constructor(private route: ActivatedRoute, private cdocRoutingService: SDocRoutingService,
-                private toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
-                private errorResolver: ErrorResolver, private pageUtils: PageUtils, private commonRoutingService: CommonRoutingService,
-                private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private cd: ChangeDetectorRef, private trackingProvider: GenericTrackingService, private appService: GenericAppService,
-                private platformService: PlatformService, private sdocDataService: SDocDataService) {
-        this.contentUtils = contentUtils;
-        this.toastr.setRootViewContainerRef(vcr);
+    constructor(protected route: ActivatedRoute, protected cdocRoutingService: SDocRoutingService,
+                protected toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: SDocContentUtils,
+                protected errorResolver: ErrorResolver, protected pageUtils: PageUtils,
+                protected commonRoutingService: CommonRoutingService, protected angularMarkdownService: AngularMarkdownService,
+                protected angularHtmlService: AngularHtmlService, protected cd: ChangeDetectorRef,
+                protected trackingProvider: GenericTrackingService, protected appService: GenericAppService,
+                protected platformService: PlatformService, protected layoutService: LayoutService,
+                protected sdocDataService: SDocDataService) {
+        super(route, cdocRoutingService, toastr, vcr, contentUtils, errorResolver, pageUtils, commonRoutingService, angularMarkdownService,
+            angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment, sdocDataService);
     }
 
-    ngOnInit() {
-        // Subscribe to route params
-        const me = this;
-        this.appService.getAppState().subscribe(appState => {
-            if (appState === AppState.Ready) {
-                this.config = this.appService.getAppConfig();
-                if (! (BeanUtils.getValue(this.config, 'permissions.sdocWritable') === true)) {
-                    console.warn('sdoc not writable');
-                    this.record = undefined;
-                    this.pdoc = undefined;
-                    this.tracks = [];
-                    this.trackRouten = [];
-
-                    this.errorResolver.redirectAfterRouterError(ErrorResolver.ERROR_READONLY, undefined, this.toastr, undefined);
-                    me.cd.markForCheck();
-                    return;
-                }
-
-                this.route.data.subscribe(
-                (data: { record: ResolvedData<SDocRecord>, baseSearchUrl: ResolvedData<string> }) => {
-                    me.commonRoutingService.setRoutingState(RoutingState.DONE);
-                    me.trackRouten = [];
-
-                    const flgSDocError = ErrorResolver.isResolverError(data.record);
-                    const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
-                    if (!flgSDocError && !flgBaseSearchUrlError) {
-                        me.record = data.record.data;
-                        me.baseSearchUrl = data.baseSearchUrl.data;
-
-                        if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined) {
-                            me.tracks = [me.record];
-                        } else {
-                            me.tracks = [];
-                        }
-
-                        const recordName = me.keywordsValidationRule.sanitize(me.record.name);
-                        if (me.pdoc) {
-                            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocSectionShowPage',
-                                {title: me.pdoc.heading, cdoc: recordName}, me.pdoc.heading + ' ' + recordName);
-                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocSectionShowPage',
-                                {title: me.pdoc.heading, teaser: me.pdoc.teaser, cdoc: recordName}, recordName);
-                            this.pageUtils.setRobots(false, false);
-                        } else {
-                            me.pageUtils.setGlobalStyle('', 'sectionStyle');
-                            this.pageUtils.setTranslatedTitle('meta.title.prefix.cdocShowPage',
-                                {cdoc: recordName}, recordName);
-                            this.pageUtils.setTranslatedDescription('meta.desc.prefix.cdocShowPage',
-                                {cdoc: recordName}, recordName);
-                            this.pageUtils.setRobots(false, false);
-                        }
-                        this.pageUtils.setMetaLanguage();
-
-                        me.cd.markForCheck();
-                        me.pageUtils.scrollToTop();
-
-                        this.trackingProvider.trackPageView();
-                        return;
-                    }
-
-                    let newUrl, msg, code;
-                    let errorCode;
-                    if (flgSDocError) {
-                        errorCode = data.record.error.code;
-                    } else {
-                        errorCode = data.baseSearchUrl.error.code;
-                    }
-                    const sdocId = (flgSDocError ? data.record.error.data : data.record.data.id);
-                    const sdocName = (flgSDocError ? 'name' : data.record.data.name);
-                    switch (errorCode) {
-                        case SDocRecordResolver.ERROR_INVALID_DOC_ID:
-                            code = ErrorResolver.ERROR_INVALID_ID;
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                            newUrl = [me.baseSearchUrl,
-                                'show',
-                                this.idValidationRule.sanitize(sdocName),
-                                this.idValidationRule.sanitize(sdocId)].join('/');
-                            msg = undefined;
-                            break;
-                        case SDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
-                            code = ErrorResolver.ERROR_UNKNOWN_ID;
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                            newUrl = [me.baseSearchUrl].join('/');
-                            msg = undefined;
-                            break;
-                        case SDocRecordResolver.ERROR_READING_DOC_ID:
-                            code = ErrorResolver.ERROR_WHILE_READING;
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                            newUrl = undefined;
-                            msg = undefined;
-                            break;
-                        case GenericAppService.ERROR_APP_NOT_INITIALIZED:
-                            code = ErrorResolver.ERROR_APP_NOT_INITIALIZED;
-                            newUrl = undefined;
-                            msg = undefined;
-                            break;
-                        default:
-                            code = ErrorResolver.ERROR_OTHER;
-                            me.baseSearchUrl = ['sdoc'].join('/');
-                            newUrl = undefined;
-                            msg = undefined;
-                    }
-
-                    this.errorResolver.redirectAfterRouterError(code, newUrl, this.toastr, msg);
-                    me.cd.markForCheck();
-                    return;
-                });
-            }
-        });
+    protected getComponentConfig(config: {}): CommonDocEditpageComponentConfig {
+        return {
+            baseSearchUrl: ['sdoc'].join('/'),
+            baseSearchUrlDefault: ['sdoc'].join('/'),
+            editAllowed: (BeanUtils.getValue(config, 'permissions.sdocWritable') === true)
+        };
     }
 
     onTracksFound(searchresult: SDocSearchResult) {
@@ -181,47 +106,17 @@ export class SDocEditpageComponent implements OnInit, OnDestroy {
         this.trackRouten = trackRouten;
     }
 
-    ngOnDestroy() {
-    }
-
     getFiltersForType(record: SDocRecord, type: string): any {
-        return this.contentUtils.getSDocSubItemFiltersForType(record, type,
+        return (<SDocContentUtils>this.contentUtils).getSDocSubItemFiltersForType(record, type,
             (this.pdoc ? this.pdoc.theme : undefined));
     }
 
-    submitSave(values: {}, backToSearch: boolean) {
-        const me = this;
-
-        this.sdocDataService.updateById(values['id'], values).then(function doneUpdateById(sdoc: SDocRecord) {
-                if (backToSearch) {
-                    me.cdocRoutingService.navigateBackToSearch('#' + me.record.id);
-                } else {
-                    me.cdocRoutingService.navigateToShow(sdoc, '');
-                }
-            },
-            function errorCreate(reason: any) {
-                console.error('edit updateById failed:', reason);
-                me.toastr.error('Es gibt leider Probleme bei der Speichern - am besten noch einmal probieren :-(', 'Oje!');
-            }
-        );
-        return false;
-    }
-
-    submitBackToShow() {
-        this.cdocRoutingService.navigateToShow(this.record, '');
-        return false;
-    }
-
-    submitBackToSearch() {
-        this.cdocRoutingService.navigateBackToSearch('#' + this.record.id);
-        return false;
-    }
-
-    getBackToSearchUrl(): string {
-        return this.cdocRoutingService.getLastSearchUrl();
-    }
-
-    getBackToShowUrl(): string {
-        return this.cdocRoutingService.getShowUrl(this.record, '');
+    protected doProcessAfterResolvedData(config: {}): void {
+        this.trackRouten = [];
+        if (this.record !== undefined && this.record.gpsTrackBasefile || this.record.geoLoc !== undefined) {
+            this.tracks = [this.record];
+        } else {
+            this.tracks = [];
+        }
     }
 }

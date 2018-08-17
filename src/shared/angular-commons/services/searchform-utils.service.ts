@@ -67,7 +67,7 @@ export class SearchFormUtils {
     }
 
     public moveSelectedToTop(options: IMultiSelectOption[], selected: any[]): IMultiSelectOption[] {
-        if (selected === undefined || selected.length < 1) {
+        if (selected === undefined || selected === null || selected.length < 1) {
             return options;
         }
 
@@ -85,7 +85,7 @@ export class SearchFormUtils {
     }
 
     public extractSelected(options: IMultiSelectOption[], selected: any[]): IMultiSelectOption[] {
-        if (selected === undefined || selected.length < 1) {
+        if (selected === undefined || selected === null || selected.length < 1) {
             return [];
         }
 

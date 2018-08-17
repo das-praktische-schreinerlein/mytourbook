@@ -1,6 +1,9 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {CDocKeywordsComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
+import {
+    CDocKeywordsComponent,
+    CDocKeywordsComponentConfig
+} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
 @Component({
@@ -14,16 +17,20 @@ export class SDocKeywordsComponent extends CDocKeywordsComponent {
         super(appService, cd);
     }
 
-    protected configureComponent(config: {}): void {
+    protected getComponentConfig(config: {}): CDocKeywordsComponentConfig {
         if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
-            this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords');
-            this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes');
-            this.updateData();
+            return {
+                keywordsConfig: BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords'),
+                possiblePrefixes: BeanUtils.getValue(config, 'components.sdoc-keywords.possiblePrefixes'),
+                blacklist: []
+            };
         } else {
-            console.warn('no valid keywordsConfig found');
-            this.keywordsConfig = [];
-            this.possiblePrefixes = [];
-            this.updateData();
+            console.warn('no valid keywordsConfig found for components.sdoc-keywords.structuredKeywords');
+            return {
+                keywordsConfig: [],
+                possiblePrefixes: [],
+                blacklist: []
+            };
         }
     }
 }

@@ -1,7 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
-import {CDocKeywordsComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
+import {
+    CDocKeywordsComponent,
+    CDocKeywordsComponentConfig
+} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
 
 @Component({
     selector: 'app-sdoc-persontags',
@@ -14,16 +17,20 @@ export class SDocPersonTagsComponent extends CDocKeywordsComponent {
         super(appService, cd);
     }
 
-    protected configureComponent(config: {}): void {
+    protected getComponentConfig(config: {}): CDocKeywordsComponentConfig {
         if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
-            this.keywordsConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords');
-            this.possiblePrefixes = BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes');
-            this.updateData();
+            return {
+                keywordsConfig: BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords'),
+                possiblePrefixes: BeanUtils.getValue(config, 'components.sdoc-persontags.possiblePrefixes'),
+                blacklist: []
+            };
         } else {
-            console.warn('no valid persontagsConfig found');
-            this.keywordsConfig = [];
-            this.possiblePrefixes = [];
-            this.updateData();
+            console.warn('no valid persontagsConfig found for components.sdoc-persontags.structuredKeywords');
+            return {
+                keywordsConfig: [],
+                possiblePrefixes: [],
+                blacklist: []
+            };
         }
     }
 }

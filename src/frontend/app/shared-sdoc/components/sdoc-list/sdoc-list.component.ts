@@ -2,10 +2,11 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Out
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
-import {SDocLightboxAlbumConfig, SDocLightBoxService} from '../../services/sdoc-lightbox.service';
+import {SDocLightBoxService} from '../../services/sdoc-lightbox.service';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {CDocListComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
+import {CommonDocLightboxAlbumConfig} from '../../../../shared/frontend-cdoc-commons/services/cdoc-lightbox.service';
 
 @Component({
     selector: 'app-sdoc-list',
@@ -22,7 +23,7 @@ export class SDocListComponent extends CDocListComponent<SDocRecord, SDocSearchF
 
     public Layout = Layout;
 
-    private lightboxAlbumConfig: SDocLightboxAlbumConfig = {
+    private lightboxAlbumConfig: CommonDocLightboxAlbumConfig = {
         album: [],
         idPos: {}
     };

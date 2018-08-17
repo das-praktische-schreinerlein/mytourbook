@@ -1,0 +1,491 @@
+<form [formGroup]="editFormGroup" class="form-control-sm" (ngSubmit)="submitSave($event)" *ngIf="record !== undefined">
+    <ng-template #inputName>
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.sdoc.name">Name:</label>
+            <input formControlName="name" required="required" class="form-control" type="text" placeholder="name" i18n-placeholder="name placeholder|Placeholder for name@@placeholder.form.sdoc.name">
+            <span class="" (click)="recommendName()">&#x27F8; Generate</span>
+        </div>
+    </ng-template>
+
+    <ng-template #inputDateShow>
+        <div class="col-sm-4 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="dateshow label|Label for field: dateshow@@label.editform.sdoc.dateshow">Anzeigedatum:</label>
+            <input formControlName="dateshow" required="required" type="datetime-local" placeholder="dateshow" i18n-placeholder="dateshow placeholder|Placeholder for dateshow@@placeholder.form.sdoc.dateshow">
+        </div>
+    </ng-template>
+
+    <ng-template #inputDateStart let-recommend=recommend>
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.sdoc.datestart">Startdatum:</label>
+            <span class="" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</span>
+            <input formControlName="datestart" required="required" type="datetime-local" placeholder="datestart" i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.sdoc.datestart">
+        </div>
+    </ng-template>
+
+    <ng-template #inputDateStartTime>
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.sdoc.datestart">Startdatum:</label>
+            <input formControlName="datestart" required="required" type="text" placeholder="datestart" i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.sdoc.datestart">
+        </div>
+    </ng-template>
+
+    <ng-template #inputDateEnd let-recommend=recommend>
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="dateend label|Label for field: dateend@@label.editform.sdoc.dateend">Enddatum:</label>
+            <span class="" *ngIf="recommend && editFormGroup.get('dateend').value != recommend" (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</span>
+            <input formControlName="dateend" required="required" type="datetime-local" placeholder="dateend" i18n-placeholder="dateend placeholder|Placeholder for dateend@@placeholder.form.sdoc.dateend">
+        </div>
+    </ng-template>
+
+    <ng-template #inputLocation>
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['locId']"
+                                     [settings]="settingsSelectWhere"
+                                     [texts]="textsSelectWhere"
+                                     class="fullwidth"
+                                     required="required"
+                                     formControlName="locId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputLocationParent>
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.sdoc.where">Where:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['locIdParent']"
+                                     [settings]="settingsSelectWhere"
+                                     [texts]="textsSelectWhere"
+                                     required="required"
+                                     class="fullwidth"
+                                     formControlName="locIdParent"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputLoctype>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="loctype label|Label for filter: loctype@@label.searchform.sdoc.loctype">Regiontype:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['subTypeLocType']"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     required="required"
+                                     formControlName="subtype"
+                                     ngDefaultControl
+                                     class="fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputActiontype>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.sdoc.actiontype">Action:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['subTypeActiontype']"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     required="required"
+                                     formControlName="subtype"
+                                     ngDefaultControl
+                                     class="fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputRoute>
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="route label|Label for filter: route@@label.searchform.sdoc.routeId">Route:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
+                                     [settings]="settingsSelectRoute"
+                                     [texts]="textsSelectRoute"
+                                     class="fullwidth"
+                                     required="required"
+                                     formControlName="routeId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputTrack>
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="track label|Label for filter: track@@label.searchform.sdoc.trackId">Track:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['trackId']"
+                                     [settings]="settingsSelectTrack"
+                                     [texts]="textsSelectTrack"
+                                     class="fullwidth"
+                                     required="required"
+                                     formControlName="trackId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputTrip>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="trip label|Label for filter: trip@@label.searchform.sdoc.tripId">Trip:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['tripId']"
+                                     [settings]="settingsSelectTrip"
+                                     [texts]="textsSelectTrip"
+                                     class="fullwidth"
+                                     required="required"
+                                     formControlName="tripId"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputDesc>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.sdoc.descMd">Beschreibung Markdown:</label>
+            <textarea formControlName="descTxt" class="form-control" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.sdoc.desc"></textarea>
+        </div>
+    </ng-template>
+
+    <ng-template #inputNumber let-key="key" let-formControlName="formControlName" let-recommend="recommend">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}" class="form-control" type="number" step="0.01" placeholder="{{key}}">
+            <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend" (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
+        </div>
+    </ng-template>
+
+    <ng-template #inputTextTech let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-3 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}" [attr.list]="formControlName">
+            <datalist [attr.id]="formControlName" *ngIf="inputSuggestionValues[formControlName]">
+                <option *ngFor="let suggestion of inputSuggestionValues[formControlName]">{{suggestion}}</option>
+            </datalist>
+        </div>
+    </ng-template>
+
+    <ng-template #inputText let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-6 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <input formControlName="{{formControlName}}" class="form-control" type="text" placeholder="{{key}}" [attr.list]="formControlName">
+            <datalist [attr.id]="formControlName" *ngIf="inputSuggestionValues[formControlName]">
+                <option *ngFor="let suggestion of inputSuggestionValues[formControlName]">{{suggestion}}</option>
+            </datalist>
+        </div>
+    </ng-template>
+
+    <ng-template #selectPersRate let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-3 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+            <ss-multiselect-dropdown [options]="optionsSelect[key]"
+                                     [settings]="settingsSelectPersRate"
+                                     [texts]="textsSelectPersRate"
+                                     formControlName="{{formControlName}}"
+                                     ngDefaultControl
+                                     class="fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputKeywords>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="keywords label|Label for field: keywords@@label.editform.sdoc.keywords">Keywords:</label>
+            <textarea formControlName="keywords" class="form-control" type="text" placeholder="keywords" i18n-placeholder="keywords placeholder|Placeholder for keywords@@placeholder.form.sdoc.keywords"></textarea>
+        </div>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <app-sdoc-persontagsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="personTagSuggestions"
+                                      (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"
+                                      (tagsFound)="setPersonsFound($event)"></app-sdoc-persontagsstate>
+        </div>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <app-sdoc-keywordsstate [keywords]="editFormGroup.getRawValue()['keywords']" [suggestions]="keywordSuggestions"
+                                    (setKeyword)="setKeyword($event)" (unsetKeyword)="unsetKeyword($event)"></app-sdoc-keywordsstate>
+        </div>
+    </ng-template>
+
+    <ng-template #submitRow>
+        <div class="row">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <button type="submit" (click)="submitSave($event, false)" class="btn btn-action btn-sm" i18n="button edit sdoc|Buttontext to edit sdoc@@button.form.sdoc.edit">Save</button>
+                <button type="submit" (click)="submitSave($event, true)" *ngIf="backToSearch" class="btn btn-action btn-sm" i18n="button editAndSearch sdoc|Buttontext to editAndSearch sdoc@@button.form.sdoc.editAndSearch">Save and Search</button>
+            </div>
+        </div>
+    </ng-template>
+
+
+    <ng-template #inputGpsTrack>
+        <div class="col-sm-12 form-inline input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="gpsTrackSrc label|Label for field: gpsTrackSrc@@label.editform.sdoc.gpsTrackSrc">Track:</label>
+            <textarea formControlName="gpsTrackSrc" class="form-control" type="text" placeholder="gpsTrackSrc" i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpsTrackSrc@@placeholder.form.sdoc.gpsTrackSrc"></textarea>
+            <button (click)="updateMap()" i18n="updateGpsTrackMap label|Label for button: updateGpsTrackMap@@label.editform.sdoc.updateGpsTrackMap">Update</button>
+            <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editform.sdoc.fixGpsTrackSrc">Fix errors</button>
+            <file-drop (onFileDrop)="gpxDropped($event)" i18n-headertext="gpsFileDropZone label|Label for button: gpsFileDropZone@@label.editform.sdoc.gpsFileDropZone">GPX-File dropzone</file-drop>
+        </div>
+        <ng-container *ngIf="trackStatistic.posStart !== undefined">
+            <div class="col-sm-12 form-inline input-group input-group-sm">
+                <div class="container content-container edit-map-container">
+                    <app-sdoc-map [mapId]="'showMap'"
+                                  [height]="'400px'"
+                                  [mapZoom]="'9'"
+                                  [sdocs]="trackRecords"
+                                  [showImageTrackAndGeoPos]="'true'"
+                                  [mapCenterPos]="undefined"></app-sdoc-map>
+                </div>
+                <div class="container content-container edit-map-container">
+                    <app-sdoc-profilemap [mapId]="'showProfileMap'"
+                                         [height]="'400px'"
+                                         [showImageTrackAndGeoPos]="'true'"
+                                         [sdocs]="trackRecords"></app-sdoc-profilemap>
+                </div>
+            </div>
+        </ng-container>
+    </ng-template>
+
+    <ng-container [ngSwitch]="record.type">
+        <ng-container *ngSwitchCase="'LOCATION'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputLoctype"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'TRACK'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStart;context:{recommend: formatInputDate(trackStatistic.dateStart)}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateEnd;context:{recommend: formatInputDate(trackStatistic.dateEnd)}"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTrip"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputRoute"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">&#x231a; technische Daten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altDesc', formControlName: 'sdocdatatech_altDesc', recommend: trackStatistic.altDesc}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMin', formControlName: 'sdocdatatech_altMin', recommend: trackStatistic.altMin}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.bildung', formControlName: 'sdocratepers_bildung'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.kraft', formControlName: 'sdocratepers_kraft'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.mental', formControlName: 'sdocratepers_mental'}"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
+                </div>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="'IMAGE'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt_image', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="'VIDEO'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt_image', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="'ROUTE'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTrack"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.sdoc.legend.dataTech">&#x231a; technische Daten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dist', formControlName: 'sdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altMax', formControlName: 'sdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.altAsc', formControlName: 'sdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'sdocdatatech.dur', formControlName: 'sdocdatatech_dur', recommend: trackStatistic.duration}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.sdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.gesamt', formControlName: 'sdocratepers_gesamt'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.wichtigkeit', formControlName: 'sdocratepers_wichtigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.motive', formControlName: 'sdocratepers_motive'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.bildung', formControlName: 'sdocratepers_bildung'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.sdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.schwierigkeit', formControlName: 'sdocratepers_schwierigkeit'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.ausdauer', formControlName: 'sdocratepers_ausdauer'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.kraft', formControlName: 'sdocratepers_kraft'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'sdocratepers.mental', formControlName: 'sdocratepers_mental'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="rateTech label|Label for fieldset: rateTech@@label.editform.sdoc.legend.rateTech">&#x2757; technische Bewertung</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.overall', formControlName: 'sdocratetech_overall'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.klettern', formControlName: 'sdocratetech_klettern'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.ks', formControlName: 'sdocratetech_ks'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.bergtour', formControlName: 'sdocratetech_bergtour'}"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.firn', formControlName: 'sdocratetech_firn'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.gletscher', formControlName: 'sdocratetech_gletscher'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'sdocratetech.schneeschuh', formControlName: 'sdocratetech_schneeschuh'}"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend i18n="dataInfo label|Label for fieldset: dataInfo@@label.editform.sdoc.legend.dataInfo">&#x26f3; Daten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.baseloc', formControlName: 'sdocdatainfo_baseloc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.destloc', formControlName: 'sdocdatainfo_destloc'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.guides', formControlName: 'sdocdatainfo_guides'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'sdocdatainfo.region', formControlName: 'sdocdatainfo_region'}"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
+                </div>
+            </fieldset>
+        </ng-container>
+        <ng-container *ngSwitchCase="'TRIP'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'NEWS'">
+            <fieldset>
+                <legend i18n="base label|Label for fieldset: base@@label.editform.sdoc.legend.base">&#x26bd; Stammdaten</legend>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+                </div>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
+                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
+                </div>
+            </fieldset>
+            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </ng-container>
+    </ng-container>
+</form>

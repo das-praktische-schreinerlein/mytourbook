@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
 import {SDocRecord, SDocRecordFactory, SDocRecordValidator} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {SDocRecordSchema} from '../../../../shared/sdoc-commons/model/schemas/sdoc-record-schema';
 import {ToastsManager} from 'ng2-toastr';
 import {SchemaValidationError} from 'js-data';
-import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
+import {IMultiSelectOption, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SDocSearchFormUtils} from '../../services/sdoc-searchform-utils.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
@@ -20,7 +20,10 @@ import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
-import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+import {
+    CDocEditformComponent,
+    CDocEditformComponentConfig
+} from '../../../../shared/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 
 @Component({
     selector: 'app-sdoc-editform',
@@ -28,99 +31,10 @@ import {AbstractInlineComponent} from '../../../../shared/angular-commons/compon
     styleUrls: ['./sdoc-editform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocEditformComponent extends AbstractInlineComponent {
+export class SDocEditformComponent extends CDocEditformComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
-    private defaultSelectSetting: IMultiSelectSettings =
-        {dynamicTitleMaxItems: 5,
-            buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm',
-            containerClasses: 'dropdown-inline fullwidth',
-            enableSearch: true,
-            showUncheckAll: false,
-            autoUnselect: true,
-            selectionLimit: 1};
     private personsFound: StructuredKeywordState[] = [];
-    private numBeanFieldConfig = {
-        'sdocratepers.gesamt': { labelPrefix: 'label.sdocratepers.gesamt.', values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.gesamt_image': { labelPrefix: 'label.image.sdocratepers.gesamt.', values: [0, 2, 5, 6, 8, 9, 10, 11, 14]},
-        'sdocratepers.ausdauer': { labelPrefix: 'label.sdocratepers.ausdauer.', values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.bildung': { labelPrefix: 'label.sdocratepers.bildung.', values: [0, 2, 8, 11]},
-        'sdocratepers.kraft': { labelPrefix: 'label.sdocratepers.kraft.', values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.mental': { labelPrefix: 'label.sdocratepers.mental.', values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.motive': { labelPrefix: 'label.sdocratepers.motive.', values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.schwierigkeit': { labelPrefix: 'label.sdocratepers.schwierigkeit.', values: [0, 2, 5, 8, 11, 14]},
-        'sdocratepers.wichtigkeit': { labelPrefix: 'label.sdocratepers.wichtigkeit.', values: [0, 2, 5, 8, 11, 14]},
-        'locId': {},
-        'locIdParent': {},
-        'routeId': {},
-        'sdocdatatech.altAsc': {},
-        'sdocdatatech.altDesc': {},
-        'sdocdatatech.altMin': {},
-        'sdocdatatech.altMax': {},
-        'sdocdatatech.dist': {},
-        'sdocdatatech.dur': {},
-        'trackId': {},
-        'tripId': {}
-    };
-    private stringBeanFieldConfig = {
-        'subtype': {},
-        'subTypeActiontype': {
-            labelPrefix: 'ac_',
-            values: [0, 1, 2, 3, 4, 5, 101, 102, 103, 104, 105, 106, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131,
-                132]
-        },
-        'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
-        'sdocdatainfo.baseloc': {},
-        'sdocdatainfo.destloc': {},
-        'sdocdatainfo.guides': {},
-        'sdocdatainfo.region': {},
-        'sdocratetech.bergtour': {},
-        'sdocratetech.firn': {},
-        'sdocratetech.gletscher': {},
-        'sdocratetech.klettern': {},
-        'sdocratetech.ks': {},
-        'sdocratetech.overall': {},
-        'sdocratetech.schneeschuh': {},
-    };
-    private stringArrayBeanFieldConfig = {
-        'persons': {},
-        'playlists': {},
-    };
-    private inputSuggestionValueConfig = {
-        'sdocdatainfo.baseloc': {
-            'facetName': 'data_info_baseloc_s'
-        },
-        'sdocdatainfo.destloc': {
-            'facetName': 'data_info_destloc_s'
-        },
-        'sdocdatainfo.guides': {
-            'facetName': 'data_info_guides_s'
-        },
-        'sdocdatainfo.region': {
-            'facetName': 'data_info_region_s'
-        },
-        'sdocratetech.bergtour': {
-            'facetName': 'rate_tech_bergtour_ss'
-        },
-        'sdocratetech.firn': {
-            'facetName': 'rate_tech_firn_ss'
-        },
-        'sdocratetech.gletscher': {
-            'facetName': 'rate_tech_gletscher_ss'
-        },
-        'sdocratetech.klettern': {
-            'facetName': 'rate_tech_klettern_ss'
-        },
-        'sdocratetech.ks': {
-            'facetName': 'rate_tech_ks_ss'
-        },
-        'sdocratetech.overall': {
-            'facetName': 'rate_tech_overall_ss'
-        },
-        'sdocratetech.schneeschuh': {
-            'facetName': 'rate_tech_schneeschuh_ss'
-        },
-    };
 
     public optionsSelect: {
         'sdocratepers.gesamt': IMultiSelectOption[];
@@ -141,27 +55,7 @@ export class SDocEditformComponent extends AbstractInlineComponent {
         'subTypeLocType': IMultiSelectOption[];
         'trackId': IMultiSelectOption[];
         'tripId': IMultiSelectOption[];
-    } = {'sdocratepers.gesamt': [],
-        'sdocratepers.ausdauer': [],
-        'sdocratepers.bildung': [],
-        'sdocratepers.kraft': [],
-        'sdocratepers.mental': [],
-        'sdocratepers.motive': [],
-        'sdocratepers.schwierigkeit': [],
-        'sdocratepers.wichtigkeit': [],
-        'persons': [],
-        'playlists': [],
-        'locId': [],
-        'locIdParent': [],
-        'routeId': [],
-        'subType': [],
-        'subTypeActiontype': [],
-        'subTypeLocType': [],
-        'trackId': [],
-        'tripId': []
     };
-
-    public inputSuggestionValues = {};
 
     public settingsSelectWhere = this.defaultSelectSetting;
     public settingsSelectActionType = this.defaultSelectSetting;
@@ -184,13 +78,6 @@ export class SDocEditformComponent extends AbstractInlineComponent {
         searchPlaceholder: 'Find',
         defaultTitle: '--',
         allSelected: 'alles'};
-    public textsSelectPlaylists: IMultiSelectTexts = { checkAll: 'Alle auswählen',
-        uncheckAll: 'Alle abwählen',
-        checked: 'Typ ausgewählt',
-        checkedPlural: 'Typen ausgewählt',
-        searchPlaceholder: 'Find',
-        defaultTitle: '--',
-        allSelected: 'Alle'};
     public textsSelectPersons: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Typ ausgewählt',
@@ -227,69 +114,15 @@ export class SDocEditformComponent extends AbstractInlineComponent {
         defaultTitle: '--',
         allSelected: 'alles'};
 
-    // empty default
-    public editFormGroup = this.fb.group({
-        id: '',
-        name: '',
-        desc: '',
-        keywords: ''
-    });
     trackRecords: SDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
-    keywordSuggestions: string[] = [];
     personTagSuggestions: string[] = [];
 
-    @Input()
-    public record: SDocRecord;
-
-    @Input()
-    public backToSearch? = false;
-
-    @Output()
-    public save: EventEmitter<SDocRecord> = new EventEmitter();
-
-    @Output()
-    public saveAndSearch: EventEmitter<SDocRecord> = new EventEmitter();
-
-    constructor(public fb: FormBuilder, private toastr: ToastsManager, vcr: ViewContainerRef, protected cd: ChangeDetectorRef,
-                private appService: GenericAppService, private sdocSearchFormUtils: SDocSearchFormUtils,
-                private searchFormUtils: SearchFormUtils, private sdocDataService: SDocDataService,
-                private contentUtils: SDocContentUtils) {
-        super(cd);
-        this.toastr.setRootViewContainerRef(vcr);
-    }
-
-    setKeyword(keyword: string): void {
-        let keywords = this.editFormGroup.getRawValue()['keywords'];
-        if (keywords.length > 0) {
-            keywords = keywords + ', ' + keyword;
-        } else {
-            keywords = keyword;
-        }
-
-        this.editFormGroup.patchValue({ keywords: keywords});
-    }
-
-    unsetKeyword(keyword: string): void {
-        let keywords = this.editFormGroup.getRawValue()['keywords'];
-        if (keywords.length > 0) {
-            keywords = keywords.replace(new RegExp(' ' + keyword + ','), '')
-                .replace(new RegExp('^' + keyword + ', '), '')
-                .replace(new RegExp(', ' + keyword + '$'), '')
-                .replace(new RegExp('^' + keyword + '$'), '');
-        }
-
-        this.editFormGroup.patchValue({ keywords: keywords});
-    }
-
-    setValue(field: string, value: any): void {
-        const config = {};
-        config[field] = value;
-        this.editFormGroup.patchValue(config);
-    }
-
-    formatInputDate(value: Date): String {
-        return DateUtils.dateToLocalISOString(value);
+    constructor(public fb: FormBuilder, protected toastr: ToastsManager, vcr: ViewContainerRef, protected cd: ChangeDetectorRef,
+                protected appService: GenericAppService, protected sdocSearchFormUtils: SDocSearchFormUtils,
+                protected searchFormUtils: SearchFormUtils, protected sdocDataService: SDocDataService,
+                protected contentUtils: SDocContentUtils) {
+        super(fb, toastr, vcr, cd, appService, sdocSearchFormUtils, searchFormUtils, sdocDataService, contentUtils);
     }
 
     setPersonsFound(persons: StructuredKeywordState[]) {
@@ -423,146 +256,160 @@ export class SDocEditformComponent extends AbstractInlineComponent {
         return this.updateMap();
     }
 
-    submitSave(event: Event, backToSearch: boolean): boolean {
-        const values = this.editFormGroup.getRawValue();
+    protected validateSchema(record: SDocRecord): SchemaValidationError[] {
+        return SDocRecordSchema.validate(record);
+    }
 
+    protected validateValues(record: SDocRecord): string[] {
+        return SDocRecordValidator.validateValues(record);
+    }
+
+    protected getComponentConfig(config: {}): CDocEditformComponentConfig {
+        let prefix = '';
+        let suggestionConfig = [];
+        if (BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions')) {
+            suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions');
+            prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix');
+        }
+
+        return {
+            suggestionConfigs: suggestionConfig,
+            editPrefix: prefix,
+            numBeanFieldConfig: {
+                'sdocratepers.gesamt': { labelPrefix: 'label.sdocratepers.gesamt.', values: [0, 2, 5, 8, 11, 14]},
+                'sdocratepers.gesamt_image': { labelPrefix: 'label.image.sdocratepers.gesamt.', values: [0, 2, 5, 6, 8, 9, 10, 11, 14]},
+                'sdocratepers.ausdauer': { labelPrefix: 'label.sdocratepers.ausdauer.', values: [0, 2, 5, 8, 11, 14]},
+                'sdocratepers.bildung': { labelPrefix: 'label.sdocratepers.bildung.', values: [0, 2, 8, 11]},
+                'sdocratepers.kraft': { labelPrefix: 'label.sdocratepers.kraft.', values: [0, 2, 5, 8, 11, 14]},
+                'sdocratepers.mental': { labelPrefix: 'label.sdocratepers.mental.', values: [0, 2, 5, 8, 11, 14]},
+                'sdocratepers.motive': { labelPrefix: 'label.sdocratepers.motive.', values: [0, 2, 5, 8, 11, 14]},
+                'sdocratepers.schwierigkeit': { labelPrefix: 'label.sdocratepers.schwierigkeit.', values: [0, 2, 5, 8, 11, 14]},
+                'sdocratepers.wichtigkeit': { labelPrefix: 'label.sdocratepers.wichtigkeit.', values: [0, 2, 5, 8, 11, 14]},
+                'locId': {},
+                'locIdParent': {},
+                'routeId': {},
+                'sdocdatatech.altAsc': {},
+                'sdocdatatech.altDesc': {},
+                'sdocdatatech.altMin': {},
+                'sdocdatatech.altMax': {},
+                'sdocdatatech.dist': {},
+                'sdocdatatech.dur': {},
+                'trackId': {},
+                'tripId': {}
+            },
+            stringBeanFieldConfig: {
+                'subtype': {},
+                'subTypeActiontype': {
+                    labelPrefix: 'ac_',
+                    values: [0, 1, 2, 3, 4, 5, 101, 102, 103, 104, 105, 106, 110, 111,
+                        120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132]
+                },
+                'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
+                'sdocdatainfo.baseloc': {},
+                'sdocdatainfo.destloc': {},
+                'sdocdatainfo.guides': {},
+                'sdocdatainfo.region': {},
+                'sdocratetech.bergtour': {},
+                'sdocratetech.firn': {},
+                'sdocratetech.gletscher': {},
+                'sdocratetech.klettern': {},
+                'sdocratetech.ks': {},
+                'sdocratetech.overall': {},
+                'sdocratetech.schneeschuh': {},
+            },
+            stringArrayBeanFieldConfig: {
+                'persons': {},
+                'playlists': {},
+            },
+            inputSuggestionValueConfig: {
+                'sdocdatainfo.baseloc': {
+                    'facetName': 'data_info_baseloc_s'
+                },
+                'sdocdatainfo.destloc': {
+                    'facetName': 'data_info_destloc_s'
+                },
+                'sdocdatainfo.guides': {
+                    'facetName': 'data_info_guides_s'
+                },
+                'sdocdatainfo.region': {
+                    'facetName': 'data_info_region_s'
+                },
+                'sdocratetech.bergtour': {
+                    'facetName': 'rate_tech_bergtour_ss'
+                },
+                'sdocratetech.firn': {
+                    'facetName': 'rate_tech_firn_ss'
+                },
+                'sdocratetech.gletscher': {
+                    'facetName': 'rate_tech_gletscher_ss'
+                },
+                'sdocratetech.klettern': {
+                    'facetName': 'rate_tech_klettern_ss'
+                },
+                'sdocratetech.ks': {
+                    'facetName': 'rate_tech_ks_ss'
+                },
+                'sdocratetech.overall': {
+                    'facetName': 'rate_tech_overall_ss'
+                },
+                'sdocratetech.schneeschuh': {
+                    'facetName': 'rate_tech_schneeschuh_ss'
+                },
+            },
+            optionsSelect: {
+                'sdocratepers.gesamt': [],
+                'sdocratepers.ausdauer': [],
+                'sdocratepers.bildung': [],
+                'sdocratepers.kraft': [],
+                'sdocratepers.mental': [],
+                'sdocratepers.motive': [],
+                'sdocratepers.schwierigkeit': [],
+                'sdocratepers.wichtigkeit': [],
+                'persons': [],
+                'playlists': [],
+                'locId': [],
+                'locIdParent': [],
+                'routeId': [],
+                'subType': [],
+                'subTypeActiontype': [],
+                'subTypeLocType': [],
+                'trackId': [],
+                'tripId': []
+            }
+        };
+    }
+
+    protected prepareSubmitValues(values: {}): void {
         if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
             values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
         }
 
-        // delete empty key
-        for (const key in values) {
-            if (values.hasOwnProperty(key) && values[key] === undefined || values[key] === null) {
-                delete values[key];
-            }
-        }
-
-        for (const key in this.numBeanFieldConfig) {
-            const formKey = key.replace('.', '_');
-            if (!values[formKey]) {
-                continue;
-            }
-
-            if (Array.isArray(values[formKey])) {
-                values[key] = Number(values[formKey][0]);
-            } else {
-                values[key] = Number(values[formKey]);
-            }
-        }
-
-        for (const key in this.stringBeanFieldConfig) {
-            const formKey = key.replace('.', '_');
-            if (!values[formKey]) {
-                continue;
-            }
-            if (Array.isArray(values[formKey])) {
-                values[key] = values[formKey][0] + '';
-            } else {
-                values[key] = values[formKey] + '';
-            }
-        }
-
-        for (const key in this.stringArrayBeanFieldConfig) {
-            const formKey = key.replace('.', '_');
-            if (!values[formKey]) {
-                continue;
-            }
-            if (Array.isArray(values[formKey])) {
-                values[key] = values[formKey].join(',');
-            } else {
-                values[key] = values[formKey] + '';
-            }
-        }
-
-        const schemaErrors: SchemaValidationError[] = SDocRecordSchema.validate(values);
-        if (schemaErrors !== undefined && schemaErrors.length > 0) {
-            let msg = '';
-            schemaErrors.map((value: SchemaValidationError, index, array) => {
-                msg += '- ' + value.path + ':' + value.expected + '<br>';
-            });
-            console.warn('warning while schema-validating values' + msg, values);
-            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
-            return false;
-        }
-
-        const errors: string[] = SDocRecordValidator.validateValues(values);
-        if (errors !== undefined && errors.length > 0) {
-            let msg = '';
-            errors.map((value: string, index, array) => {
-                msg += '- ' + value + '<br>';
-            });
-            console.warn('warning while validation values' + msg, values);
-            this.toastr.warning('Leider passen nicht alle Eingaben - Fehler:' + msg, 'Oje!');
-            return false;
-        }
-
-        if (backToSearch) {
-            this.saveAndSearch.emit(values);
-        } else {
-            this.save.emit(values);
-        }
-
-        return false;
+        return super.prepareSubmitValues(values);
     }
 
-    protected updateData(): void {
-        if (this.record === undefined) {
-            this.editFormGroup = this.fb.group({});
-            return;
+    protected createDefaultFormValueConfig(record: SDocRecord): {} {
+            return {
+                dateshow: [DateUtils.dateToLocalISOString(record.dateshow)],
+                datestart: [DateUtils.dateToLocalISOString(record.datestart)],
+                dateend: [DateUtils.dateToLocalISOString(record.dateend)],
+                locIdParent: [record.locIdParent],
+                gpsTrackSrc: [record.gpsTrackSrc]
+            };
         }
 
-        const config = {
-            dateshow: [DateUtils.dateToLocalISOString(this.record.dateshow)],
-            datestart: [DateUtils.dateToLocalISOString(this.record.datestart)],
-            dateend: [DateUtils.dateToLocalISOString(this.record.dateend)],
-            locIdParent: [this.record.locIdParent],
-            gpsTrackSrc: [this.record.gpsTrackSrc]
-        };
-
-        const fields = this.record.toJSON();
-        for (const key in fields) {
-            if (fields.hasOwnProperty(key) && !config.hasOwnProperty(key)) {
-                config[key] = [fields[key]];
-            }
+    protected postProcessFormValueConfig(record: SDocRecord, formValueConfig: {}): void {
+        if (formValueConfig['subtype'] && formValueConfig['subtype'].length > 0 && formValueConfig['subtype'][0]) {
+            formValueConfig['subtype'][0] = (formValueConfig['subtype'][0]  + '').replace(/ac_/g, '').replace(/loc_/g, '');
         }
+    }
 
-        // static lists
-        this.createSelectOptions(this.stringBeanFieldConfig, config, this.optionsSelect);
-        this.createSelectOptions(this.numBeanFieldConfig, config, this.optionsSelect);
-        this.createSelectOptions(this.stringArrayBeanFieldConfig, config, this.optionsSelect);
-
-        if (config['subtype'] && config['subtype'].length > 0 && config['subtype'][0]) {
-            config['subtype'][0] = (config['subtype'][0]  + '').replace(/ac_/g, '').replace(/loc_/g, '');
-        }
-
-        this.editFormGroup = this.fb.group(config);
-
+    protected updateFormComponents(): void {
+        super.updateFormComponents();
         this.updateMap();
-        this.updateKeywordSuggestions();
-
-        const me = this;
-        const searchForm = new SDocSearchForm({type: this.record.type});
-        this.sdocDataService.search(searchForm,
-            {
-                showFacets: true, // []
-                loadTrack: false,
-                showForm: false
-            }).then(function doneSearch(sdocSearchResult: SDocSearchResult) {
-                me.updateOptionValues(sdocSearchResult);
-                me.updateSuggestionValues(sdocSearchResult);
-                me.cd.markForCheck();
-
-                me.editFormGroup.valueChanges.subscribe((data) => {
-                    me.updateKeywordSuggestions();
-                });
-            }).catch(function errorSearch(reason) {
-                me.toastr.error('Es gibt leider Probleme bei der Suche - am besten noch einmal probieren :-(', 'Oje!');
-                console.error('doSearch failed:', reason);
-                me.cd.markForCheck();
-            });
     }
 
-    private updateOptionValues(sdocSearchResult: SDocSearchResult): boolean {
+    protected updateOptionValues(sdocSearchResult: SDocSearchResult): boolean {
+        super.updateOptionValues(sdocSearchResult);
         const me = this;
 
         if (sdocSearchResult !== undefined) {
@@ -609,39 +456,13 @@ export class SDocEditformComponent extends AbstractInlineComponent {
         return true;
     }
 
-    private updateSuggestionValues(sdocSearchResult: SDocSearchResult): boolean {
-        for (const suggestionName in this.inputSuggestionValueConfig) {
-            const suggestionConfig = this.inputSuggestionValueConfig[suggestionName];
-            const values = [];
-            if (suggestionConfig.facetName) {
-                if (sdocSearchResult !== undefined && sdocSearchResult.facets !== undefined && sdocSearchResult.facets.facets.size > 0) {
-                    const facets = this.searchFormUtils.getFacetValues(sdocSearchResult, suggestionConfig.facetName, '', '');
-                    for (const value of facets) {
-                        values.push(value[1]);
-                    }
-                }
-            }
 
-            this.inputSuggestionValues[suggestionName.replace('.', '_')] = values;
-        }
+    protected updateKeywordSuggestions(): boolean {
+        super.updateKeywordSuggestions();
 
-        return true;
-    }
-
-    private updateKeywordSuggestions(): boolean {
-        const config = this.appService.getAppConfig();
-        if (BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions')) {
-            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions');
-            const prefix = BeanUtils.getValue(config, 'components.sdoc-keywords.editPrefix');
-            this.keywordSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
-            this.cd.markForCheck();
-        } else {
-            console.warn('no valid keywordSugestions found');
-            this.keywordSuggestions = [];
-        }
-        if (BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions')) {
-            const suggestionConfig = BeanUtils.getValue(config, 'components.sdoc-persontags.keywordSuggestions');
-            const prefix = BeanUtils.getValue(config, 'components.sdoc-persontags.editPrefix');
+        if (BeanUtils.getValue(this.config, 'components.sdoc-persontags.keywordSuggestions')) {
+            const suggestionConfig = BeanUtils.getValue(this.config, 'components.sdoc-persontags.keywordSuggestions');
+            const prefix = BeanUtils.getValue(this.config, 'components.sdoc-persontags.editPrefix');
             this.personTagSuggestions = this.contentUtils.getSuggestedKeywords(suggestionConfig, prefix, this.editFormGroup.getRawValue());
             this.cd.markForCheck();
         } else {
@@ -650,26 +471,5 @@ export class SDocEditformComponent extends AbstractInlineComponent {
         }
 
         return true;
-    }
-
-    private createSelectOptions(definitions: {}, values: {}, optionsSelect: {}): void {
-        for (const key in definitions) {
-            const definition = definitions[key];
-            let value = BeanUtils.getValue(this.record, key);
-            if (value === null || value === 'null' || value === undefined || value === 'undefined') {
-                value = undefined;
-            } else {
-                value = value + '';
-            }
-            values[key.replace('.', '_')] = [[value]];
-            const options = [];
-            if (definition['values']) {
-                for (const optionValue of definition['values']) {
-                    options.push([definition['labelPrefix'], '' + optionValue, '', 0]);
-                }
-            }
-            optionsSelect[key] =
-                this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(options, false, [], true);
-        }
     }
 }
