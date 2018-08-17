@@ -9,6 +9,9 @@ import {RouterStub} from '../../../../shared/angular-commons/testing/router-stub
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {SDocAlbumService} from '../../services/sdoc-album.service';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {DynamicComponentService} from '../../../../shared/angular-commons/services/dynamic-components.service';
 
 describe('SDocActionsComponent', () => {
     let component: SDocActionsComponent;
@@ -23,8 +26,10 @@ describe('SDocActionsComponent', () => {
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: SDocDataService, useValue: new SDocDataServiceStub() },
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 ToastsManager,
                 SDocDynamicComponentService,
+                DynamicComponentService,
                 SDocAlbumService,
                 ComponentFactoryResolver
             ],

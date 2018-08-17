@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
-import {ActionTagEvent} from '../sdoc-actiontags/sdoc-actiontags.component';
 import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
 import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
@@ -11,6 +10,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
 import {SDocContentUtils, SDocItemData} from '../../services/sdoc-contentutils.service';
 import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+import {ActionTagEvent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
 
 @Component({
     selector: 'app-sdoc-list-item-page',

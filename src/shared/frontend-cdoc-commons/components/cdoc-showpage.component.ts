@@ -23,6 +23,7 @@ import {CommonDocContentUtils} from '../services/cdoc-contentutils.service';
 import {AbstractCommonDocRecordResolver} from '../resolver/abstract-cdoc-details.resolver';
 import {AbstractPageComponent} from '../../frontend-pdoc-commons/components/pdoc-page.component';
 import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
+import {ActionTagEvent} from './cdoc-actiontags/cdoc-actiontags.component';
 
 export interface CommonDocShowpageComponentConfig {
     baseSearchUrl: string;
@@ -111,6 +112,15 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
 
     getBackToSearchUrl(): string {
         return this.cdocRoutingService.getLastSearchUrl() + '#' + this.record.id;
+    }
+
+    public onActionTagEvent(event: ActionTagEvent) {
+        if (event.result !== undefined) {
+            this.record = <R>event.result;
+            this.cd.markForCheck();
+        }
+
+        return false;
     }
 
     protected abstract getComponentConfig(config: {}): CommonDocShowpageComponentConfig;

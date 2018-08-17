@@ -12,7 +12,6 @@ import {AngularHtmlService} from '../../../../shared/angular-commons/services/an
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {ActionTagEvent} from '../../../shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {Facets} from '../../../../shared/search-commons/model/container/facets';
 import {SDocSearchFormConverter} from '../../../shared-sdoc/services/sdoc-searchform-converter.service';
@@ -138,15 +137,6 @@ export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SD
         return false;
     }
 
-
-    public onActionTagEvent(event: ActionTagEvent) {
-        if (event.result !== undefined) {
-            this.record = <SDocRecord>event.result;
-            this.cd.markForCheck();
-        }
-
-        return false;
-    }
 
     getFiltersForType(record: SDocRecord, type: string): any {
         const minPerPage = isNumber(this.showResultListTrigger[type]) ? this.showResultListTrigger[type] : 0;

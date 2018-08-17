@@ -22,6 +22,7 @@ import {GenericTrackingService} from '../../angular-commons/services/generic-tra
 import {PlatformService} from '../../angular-commons/services/platform.service';
 import {GenericAppService} from '../../commons/services/generic-app.service';
 import {ResolvedData} from '../../angular-commons/resolver/resolver.utils';
+import {ActionTagEvent} from './cdoc-actiontags/cdoc-actiontags.component';
 
 export interface CommonDocEditpageComponentConfig {
     baseSearchUrl: string;
@@ -125,6 +126,15 @@ export abstract class AbstractCommonDocEditpageComponent <R extends CommonDocRec
 
     getBackToShowUrl(): string {
         return this.cdocRoutingService.getShowUrl(this.record, '');
+    }
+
+    public onActionTagEvent(event: ActionTagEvent) {
+        if (event.result !== undefined) {
+            this.record = <R>event.result;
+            this.cd.markForCheck();
+        }
+
+        return false;
     }
 
     protected abstract getComponentConfig(config: {}): CommonDocEditpageComponentConfig;

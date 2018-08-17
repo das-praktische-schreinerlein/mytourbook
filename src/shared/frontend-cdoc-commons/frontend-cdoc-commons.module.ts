@@ -18,6 +18,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CDocListComponent} from './components/cdoc-list/cdoc-list.component';
 import {CDocAudioplayerComponent} from './components/cdoc-audioplayer/cdoc-audioplayer.component';
+import {CDocActionTagsComponent} from './components/cdoc-actiontags/cdoc-actiontags.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +34,8 @@ import {CDocAudioplayerComponent} from './components/cdoc-audioplayer/cdoc-audio
         CDocTagsComponent,
         CDocTagsStateComponent,
         CDocVideoplayerComponent,
-        CDocAudioplayerComponent
+        CDocAudioplayerComponent,
+        CDocActionTagsComponent
     ],
     imports: [
         NgbModule,
@@ -57,7 +59,8 @@ import {CDocAudioplayerComponent} from './components/cdoc-audioplayer/cdoc-audio
         CDocTagsComponent,
         CDocTagsStateComponent,
         CDocVideoplayerComponent,
-        CDocAudioplayerComponent
+        CDocAudioplayerComponent,
+        CDocActionTagsComponent
     ]
 })
 export class FrontendCdocCommonsModule {

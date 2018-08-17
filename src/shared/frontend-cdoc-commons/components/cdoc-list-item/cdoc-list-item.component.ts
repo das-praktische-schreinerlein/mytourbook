@@ -4,6 +4,7 @@ import {CommonDocContentUtils, CommonItemData} from '../../services/cdoc-content
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
+import {ActionTagEvent} from '../cdoc-actiontags/cdoc-actiontags.component';
 
 @Component({
     selector: 'app-cdoc-list-item',
@@ -69,6 +70,15 @@ export class CDocListItemComponent extends AbstractInlineComponent implements On
 
     public submitShowImage(cdoc: CommonDocRecord) {
         this.showImage.emit(cdoc);
+        return false;
+    }
+
+    public onActionTagEvent(event: ActionTagEvent) {
+        if (event.result !== undefined) {
+            this.record = <CommonDocRecord>event.result;
+            this.updateData();
+        }
+
         return false;
     }
 
