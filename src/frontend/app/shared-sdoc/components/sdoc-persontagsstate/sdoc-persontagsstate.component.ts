@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/co
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocKeywordsstateComponent} from '../sdoc-keywordsstate/sdoc-keywordsstate.component';
-import {CDocKeywordsStateComponentConfig} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywordsstate/cdoc-keywordsstate.component';
+import {CommonDocKeywordsStateComponentConfig} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywordsstate/cdoc-keywordsstate.component';
 
 @Component({
     selector: 'app-sdoc-persontagsstate',
@@ -15,7 +15,7 @@ export class SDocPersontagsstateComponent extends SDocKeywordsstateComponent {
         super(appService, cd);
     }
 
-    protected getComponentConfig(config: {}): CDocKeywordsStateComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocKeywordsStateComponentConfig {
         if (BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords')) {
             return {
                 keywordsConfig: BeanUtils.getValue(config, 'components.sdoc-persontags.structuredKeywords'),

@@ -5,7 +5,7 @@ import {IdValidationRule} from '../../search-commons/model/forms/generic-validat
 import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
 import {GenericSearchFormSearchFormConverter} from '../../search-commons/services/generic-searchform.converter';
 
-export abstract class AbstractCommonSectionSearchFormResolver<F extends CommonDocSearchForm> implements Resolve<ResolvedData<F>> {
+export abstract class CommonSectionSearchFormResolver<F extends CommonDocSearchForm> implements Resolve<ResolvedData<F>> {
     static ERROR_INVALID_SEARCHFORM_SECTION_ID = 'ERROR_INVALID_SEARCHFORM_SECTION_ID';
     static ERROR_INVALID_SEARCHFORM = 'ERROR_INVALID_SEARCHFORM';
     idValidationRule = new IdValidationRule(true);
@@ -28,12 +28,12 @@ export abstract class AbstractCommonSectionSearchFormResolver<F extends CommonDo
                     this.searchFormConverter.paramsToSearchForm(route.params, route.data['searchFormDefaults'], searchForm);
                     searchForm.theme = this.idValidationRule.sanitize(id);
                     if (!this.searchFormConverter.isValid(searchForm)) {
-                        result.error = new ResolverError(AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM, searchForm,
+                        result.error = new ResolverError(CommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM, searchForm,
                             undefined);
                         return resolve(result);
                     }
                     if (!this.idValidationRule.isValid(id)) {
-                        result.error = new ResolverError(AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID,
+                        result.error = new ResolverError(CommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID,
                             searchForm, undefined);
                         return resolve(result);
                     }

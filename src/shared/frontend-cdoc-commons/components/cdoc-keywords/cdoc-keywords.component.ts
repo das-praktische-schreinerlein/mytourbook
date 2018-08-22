@@ -5,7 +5,7 @@ import {BeanUtils} from '../../../commons/utils/bean.utils';
 import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity-record';
 import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
-export interface CDocKeywordsComponentConfig {
+export interface CommonDocKeywordsComponentConfig {
     blacklist: string[];
     keywordsConfig: StructuredKeyword[];
     possiblePrefixes: string[];
@@ -17,7 +17,7 @@ export interface CDocKeywordsComponentConfig {
     styleUrls: ['./cdoc-keywords.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocKeywordsComponent extends AbstractInlineComponent implements OnInit {
+export class CommonDocKeywordsComponent extends AbstractInlineComponent implements OnInit {
     blacklist = [];
     keywordsConfig: StructuredKeyword[] = [];
     possiblePrefixes = [];
@@ -39,7 +39,7 @@ export class CDocKeywordsComponent extends AbstractInlineComponent implements On
         });
     }
 
-    protected getComponentConfig(config: {}): CDocKeywordsComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocKeywordsComponentConfig {
         if (BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords')) {
             return {
                 keywordsConfig: BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords'),

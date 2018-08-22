@@ -21,7 +21,7 @@ import {PlatformService} from '../../angular-commons/services/platform.service';
 import {Layout, LayoutService} from '../../angular-commons/services/layout.service';
 import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
 import {ResolvedData} from '../../angular-commons/resolver/resolver.utils';
-import {AbstractCommonDocRecordCreateResolver} from '../resolver/abstract-cdoc-create.resolver';
+import {CommonDocRecordCreateResolver} from '../resolver/cdoc-create.resolver';
 
 export interface CommonDocCreatepageComponentConfig {
     baseSearchUrl: string;
@@ -29,7 +29,7 @@ export interface CommonDocCreatepageComponentConfig {
     editAllowed: boolean;
 }
 
-export abstract class AbstractCommonDocCreatepageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocCreatepageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);
@@ -157,7 +157,7 @@ export abstract class AbstractCommonDocCreatepageComponent <R extends CommonDocR
         const cdocId = (flgCdocError ? data.record.error.data : data.record.data.id);
         const cdocName = (flgCdocError ? 'name' : data.record.data.name);
         switch (errorCode) {
-            case AbstractCommonDocRecordCreateResolver.ERROR_UNKNOWN_DOC_TYPE:
+            case CommonDocRecordCreateResolver.ERROR_UNKNOWN_DOC_TYPE:
                 code = ErrorResolver.ERROR_UNKNOWN_ID;
                 this.baseSearchUrl = this.baseSearchUrlDefault;
                 newUrl = [this.baseSearchUrl].join('/');

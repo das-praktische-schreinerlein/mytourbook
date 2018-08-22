@@ -21,7 +21,7 @@ export interface TimetableColumn {
     styleUrls: ['./cdoc-timetable.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTimetableComponent extends AbstractInlineComponent {
+export class CommonDocTimetableComponent extends AbstractInlineComponent {
     columns: TimetableColumn[] = [];
 
     @Input()

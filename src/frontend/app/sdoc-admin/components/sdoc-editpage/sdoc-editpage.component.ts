@@ -18,7 +18,7 @@ import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-
 import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
 import {environment} from '../../../../environments/environment';
 import {
-    AbstractCommonDocEditpageComponent,
+    CommonDocEditpageComponent,
     CommonDocEditpageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-editpage.component';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
@@ -31,7 +31,7 @@ import {Layout} from '../../../../../shared/angular-commons/services/layout.serv
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocEditpageComponent
-    extends AbstractCommonDocEditpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+    extends CommonDocEditpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     tracks: SDocRecord[] = [];
     trackRouten: SDocRecord[] = [];
     defaultSubImageLayout = Layout.SMALL;

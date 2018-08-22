@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {
-    CDocKeywordsComponent,
-    CDocKeywordsComponentConfig
+    CommonDocKeywordsComponent,
+    CommonDocKeywordsComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
@@ -12,12 +12,12 @@ import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
     styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocKeywordsComponent extends CDocKeywordsComponent {
+export class SDocKeywordsComponent extends CommonDocKeywordsComponent {
     constructor(protected appService: GenericAppService, protected cd: ChangeDetectorRef) {
         super(appService, cd);
     }
 
-    protected getComponentConfig(config: {}): CDocKeywordsComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocKeywordsComponentConfig {
         if (BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords')) {
             return {
                 keywordsConfig: BeanUtils.getValue(config, 'components.sdoc-keywords.structuredKeywords'),

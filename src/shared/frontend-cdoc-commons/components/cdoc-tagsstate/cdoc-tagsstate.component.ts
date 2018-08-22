@@ -8,7 +8,7 @@ import {AbstractInlineComponent} from '../../../angular-commons/components/inlin
     styleUrls: ['./cdoc-tagsstate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTagsStateComponent extends AbstractInlineComponent {
+export class CommonDocTagsStateComponent extends AbstractInlineComponent {
     tagsKats: StructuredKeywordState[] = [];
     public KeywordState = KeywordsState;
 

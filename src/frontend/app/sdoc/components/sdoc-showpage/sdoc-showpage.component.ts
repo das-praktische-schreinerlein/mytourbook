@@ -20,7 +20,7 @@ import {isArray, isNumber} from 'util';
 import {SDocContentUtils} from '../../../shared-sdoc/services/sdoc-contentutils.service';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 import {
-    AbstractCommonDocShowpageComponent,
+    CommonDocShowpageComponent,
     CommonDocShowpageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-showpage.component';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
@@ -32,7 +32,7 @@ import {environment} from '../../../../environments/environment';
     styleUrls: ['./sdoc-showpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocShowpageComponent extends AbstractCommonDocShowpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult,
+export class SDocShowpageComponent extends CommonDocShowpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult,
     SDocDataService> {
     tracks: SDocRecord[] = [];
     tagcloudSearchResult = new SDocSearchResult(new SDocSearchForm({}), 0, undefined, new Facets());

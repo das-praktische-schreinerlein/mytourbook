@@ -11,7 +11,7 @@ import {AbstractInlineComponent} from '../../../angular-commons/components/inlin
     styleUrls: ['./cdoc-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocListComponent <R extends CommonDocRecord, F extends CommonDocSearchForm, S extends CommonDocSearchResult<R, F>>
+export class CommonDocListComponent <R extends CommonDocRecord, F extends CommonDocSearchForm, S extends CommonDocSearchResult<R, F>>
     extends  AbstractInlineComponent {
     @Input()
     public searchResult: S;

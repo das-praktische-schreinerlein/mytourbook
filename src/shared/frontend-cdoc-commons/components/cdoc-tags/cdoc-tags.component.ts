@@ -8,7 +8,7 @@ import {AbstractInlineComponent} from '../../../angular-commons/components/inlin
     styleUrls: ['./cdoc-tags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTagsComponent extends AbstractInlineComponent{
+export class CommonDocTagsComponent extends AbstractInlineComponent{
     tagsKats: StructuredKeyword[] = [];
 
     @Input()

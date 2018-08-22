@@ -9,7 +9,7 @@ import {CommonDocRecord} from '../../../search-commons/model/records/cdoc-entity
     styleUrls: ['./cdoc-list-footer.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocListFooterComponent {
+export class CommonDocListFooterComponent {
 
     @Input()
     public searchResult: CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>;

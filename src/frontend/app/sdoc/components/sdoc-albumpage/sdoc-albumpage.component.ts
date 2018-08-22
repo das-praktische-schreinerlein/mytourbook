@@ -16,7 +16,7 @@ import {SDocAlbumService} from '../../../shared-sdoc/services/sdoc-album.service
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 import {
-    AbstractCDocAlbumpageComponent,
+    CommonDocAlbumpageComponent,
     CommonDocAlbumpageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-albumpage.component';
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
@@ -29,7 +29,7 @@ import {environment} from '../../../../environments/environment';
     styleUrls: ['./sdoc-albumpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocAlbumpageComponent extends AbstractCDocAlbumpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+export class SDocAlbumpageComponent extends CommonDocAlbumpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     constructor(protected route: ActivatedRoute, protected commonRoutingService: CommonRoutingService,
                 protected errorResolver: ErrorResolver, protected cdocDataService: SDocDataService,
                 protected searchFormConverter: SDocSearchFormConverter, protected cdocRoutingService: SDocRoutingService,

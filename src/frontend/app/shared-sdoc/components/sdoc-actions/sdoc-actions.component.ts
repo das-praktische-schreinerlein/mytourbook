@@ -6,8 +6,8 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
 import {ToastsManager} from 'ng2-toastr';
 import {SDocAlbumService} from '../../services/sdoc-album.service';
 import {
-    CDocActionsComponent,
-    CDocActionsComponentConfig
+    CommonDocActionsComponent,
+    CommonDocActionsComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
@@ -19,14 +19,14 @@ import {GenericAppService} from '../../../../shared/commons/services/generic-app
     styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocActionsComponent extends CDocActionsComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+export class SDocActionsComponent extends CommonDocActionsComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     constructor(protected dynamicComponentService: SDocDynamicComponentService, protected router: Router,
                 protected sdocDataService: SDocDataService, protected toastr: ToastsManager, vcr: ViewContainerRef,
                 protected sdocAlbumService: SDocAlbumService, protected cd: ChangeDetectorRef, protected appService: GenericAppService) {
         super(dynamicComponentService, router, sdocDataService, toastr, vcr, sdocAlbumService, cd, appService);
     }
 
-    protected getComponentConfig(config: {}): CDocActionsComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocActionsComponentConfig {
         return {
             baseEditPath: 'sdocadmin'
         };

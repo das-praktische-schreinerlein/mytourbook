@@ -3,8 +3,8 @@ import {GenericAppService} from '../../../../shared/commons/services/generic-app
 import {SDocAlbumService} from '../../services/sdoc-album.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {
-    CDocActionTagsComponent,
-    CDocActionTagsComponentConfig
+    CommonDocActionTagsComponent,
+    CommonDocActionTagsComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
 import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
 
@@ -14,13 +14,13 @@ import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
     styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocActionTagsComponent extends CDocActionTagsComponent {
+export class SDocActionTagsComponent extends CommonDocActionTagsComponent {
     constructor(protected appService: GenericAppService, protected contentUtils: SDocContentUtils,
                 protected sdocAlbumService: SDocAlbumService, protected cd: ChangeDetectorRef) {
         super(appService, contentUtils, sdocAlbumService, cd);
     }
 
-    protected getComponentConfig(config: {}): CDocActionTagsComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocActionTagsComponentConfig {
         if (BeanUtils.getValue(config, 'components.sdoc-actions.actionTags')) {
             return {
                 tagConfigs: config['components']['sdoc-actions']['actionTags']

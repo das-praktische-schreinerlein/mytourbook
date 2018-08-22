@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CDocTagsComponent} from './cdoc-tags.component';
+import {CommonDocTagsComponent} from './cdoc-tags.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
@@ -12,13 +12,13 @@ import {CommonRoutingService} from '../../../angular-commons/services/common-rou
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../angular-commons/testing/router-stubs';
 
-describe('CDocTagsComponent', () => {
-    let component: CDocTagsComponent;
-    let fixture: ComponentFixture<CDocTagsComponent>;
+describe('CommonDocTagsComponent', () => {
+    let component: CommonDocTagsComponent;
+    let fixture: ComponentFixture<CommonDocTagsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocTagsComponent],
+            declarations: [CommonDocTagsComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
@@ -34,7 +34,7 @@ describe('CDocTagsComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocTagsComponent);
+        fixture = TestBed.createComponent(CommonDocTagsComponent);
         component = fixture.componentInstance;
         component.tags = '';
         fixture.detectChanges();

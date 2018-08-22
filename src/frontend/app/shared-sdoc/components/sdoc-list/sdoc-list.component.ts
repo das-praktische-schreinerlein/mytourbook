@@ -5,7 +5,7 @@ import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.
 import {SDocLightBoxService} from '../../services/sdoc-lightbox.service';
 import {Layout} from '../../../../shared/angular-commons/services/layout.service';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
-import {CDocListComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
+import {CommonDocListComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
 import {CommonDocLightboxAlbumConfig} from '../../../../shared/frontend-cdoc-commons/services/cdoc-lightbox.service';
 
 @Component({
@@ -14,7 +14,7 @@ import {CommonDocLightboxAlbumConfig} from '../../../../shared/frontend-cdoc-com
     styleUrls: ['./sdoc-list.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocListComponent extends CDocListComponent<SDocRecord, SDocSearchForm, SDocSearchResult> {
+export class SDocListComponent extends CommonDocListComponent<SDocRecord, SDocSearchForm, SDocSearchResult> {
     @Output()
     public playerStarted: EventEmitter<SDocRecord> = new EventEmitter();
 

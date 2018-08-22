@@ -14,7 +14,7 @@ import {AbstractInlineComponent} from '../../../angular-commons/components/inlin
     styleUrls: ['./cdoc-list-header.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocListHeaderComponent extends AbstractInlineComponent implements OnInit {
+export class CommonDocListHeaderComponent extends AbstractInlineComponent implements OnInit {
     autoPlayAllowed = false;
     public Layout = Layout;
 

@@ -18,7 +18,7 @@ import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchf
 import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 import {GenericSearchFormSearchFormConverter} from '../../search-commons/services/generic-searchform.converter';
-import {AbstractCommonSectionSearchFormResolver} from '../resolver/abstract-cdoc-section-searchform.resolver';
+import {CommonSectionSearchFormResolver} from '../resolver/cdoc-section-searchform.resolver';
 import {AbstractPageComponent} from '../../frontend-pdoc-commons/components/pdoc-page.component';
 import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
 
@@ -27,7 +27,7 @@ export interface CommonDocSearchpageComponentConfig {
     baseSearchUrlDefault: string;
 }
 
-export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocSearchpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     idValidationRule = new IdValidationRule(true);
     Layout = Layout;
@@ -309,7 +309,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
             searchForm = data.searchForm.data;
         }
         switch (errorCode) {
-            case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM:
+            case CommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM:
                 code = ErrorResolver.ERROR_INVALID_DATA;
                 if (sectionId && sectionId !== '') {
                     this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
@@ -320,7 +320,7 @@ export abstract class AbstractCDocSearchpageComponent<R extends CommonDocRecord,
                     this.baseSearchUrl + '/', this.cdocDataService.cloneSanitizedSearchForm(searchForm));
                 msg = undefined;
                 break;
-            case AbstractCommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID:
+            case CommonSectionSearchFormResolver.ERROR_INVALID_SEARCHFORM_SECTION_ID:
                 code = ErrorResolver.ERROR_INVALID_ID;
                 if (sectionId && sectionId !== '') {
                     this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');

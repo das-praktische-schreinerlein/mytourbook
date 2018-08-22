@@ -15,7 +15,7 @@ import {GenericTrackingService} from '../../../../shared/angular-commons/service
 import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
 import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
 import {
-    AbstractCDocSearchpageComponent,
+    CommonDocSearchpageComponent,
     CommonDocSearchpageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchpage.component';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
@@ -28,7 +28,7 @@ import {environment} from '../../../../environments/environment';
     styleUrls: ['./sdoc-searchpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocSearchpageComponent extends AbstractCDocSearchpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult,
+export class SDocSearchpageComponent extends CommonDocSearchpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult,
     SDocDataService> {
     mapCenterPos: L.LatLng = undefined;
     mapZoom = 9;

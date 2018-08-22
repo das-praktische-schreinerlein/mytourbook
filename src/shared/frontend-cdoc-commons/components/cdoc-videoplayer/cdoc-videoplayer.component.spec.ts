@@ -12,16 +12,16 @@ import {AppServiceStub} from '../../../angular-commons/testing/appservice-stubs'
 import {CommonRoutingService} from '../../../angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../angular-commons/testing/router-stubs';
 import {DatePipe} from '@angular/common';
-import {CDocVideoplayerComponent} from './cdoc-videoplayer.component';
+import {CommonDocVideoplayerComponent} from './cdoc-videoplayer.component';
 import {CommonDocDataServiceStub} from '../../../testing/cdoc-dataservice-stubs';
 
-describe('CDocVideoplayerComponent', () => {
-    let component: CDocVideoplayerComponent;
-    let fixture: ComponentFixture<CDocVideoplayerComponent>;
+describe('CommonDocVideoplayerComponent', () => {
+    let component: CommonDocVideoplayerComponent;
+    let fixture: ComponentFixture<CommonDocVideoplayerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocVideoplayerComponent],
+            declarations: [CommonDocVideoplayerComponent],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
@@ -39,7 +39,7 @@ describe('CDocVideoplayerComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocVideoplayerComponent);
+        fixture = TestBed.createComponent(CommonDocVideoplayerComponent);
         component = fixture.componentInstance;
         component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

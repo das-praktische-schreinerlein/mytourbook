@@ -17,7 +17,7 @@ export interface ActionTagEvent {
     error: any;
 }
 
-export interface CDocActionTagsComponentConfig {
+export interface CommonDocActionTagsComponentConfig {
     tagConfigs: ActionTagConfig[];
 }
 
@@ -27,7 +27,7 @@ export interface CDocActionTagsComponentConfig {
     styleUrls: ['./cdoc-actiontags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocActionTagsComponent extends AbstractInlineComponent implements OnInit {
+export class CommonDocActionTagsComponent extends AbstractInlineComponent implements OnInit {
     item: CommonItemData = {
         currentRecord: undefined,
         styleClassFor: undefined,
@@ -94,7 +94,7 @@ export class CDocActionTagsComponent extends AbstractInlineComponent implements 
         this.toggleClass = 'showInactive';
     }
 
-    protected getComponentConfig(config: {}): CDocActionTagsComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocActionTagsComponentConfig {
         if (BeanUtils.getValue(config, 'components.cdoc-actions.actionTags')) {
             return {
                 tagConfigs: config['components']['cdoc-actions']['actionTags']

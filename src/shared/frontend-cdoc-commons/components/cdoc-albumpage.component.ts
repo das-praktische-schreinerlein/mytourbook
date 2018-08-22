@@ -19,7 +19,7 @@ import {CommonDocAlbumService} from '../services/cdoc-album.service';
 import {GenericAppService} from '../../commons/services/generic-app.service';
 import {Facets} from '../../search-commons/model/container/facets';
 import {ResolvedData} from '../../angular-commons/resolver/resolver.utils';
-import {AbstractCommonDocAlbumResolver} from '../resolver/abstract-cdoc-album.resolver';
+import {CommonDocAlbumResolver} from '../resolver/cdoc-album.resolver';
 import {AbstractPageComponent} from '../../frontend-pdoc-commons/components/pdoc-page.component';
 import {PlatformService} from '../../angular-commons/services/platform.service';
 import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
@@ -33,7 +33,7 @@ export interface CommonDocAlbumpageComponentConfig {
     maxAllowedItems: number;
 }
 
-export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocAlbumpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     protected idCsvValidationRule = new IdCsvValidationRule(true);
 
@@ -357,7 +357,7 @@ export abstract class AbstractCDocAlbumpageComponent <R extends CommonDocRecord,
         }
 
         switch (errorCode) {
-            case AbstractCommonDocAlbumResolver.ERROR_INVALID_DOC_ID:
+            case CommonDocAlbumResolver.ERROR_INVALID_DOC_ID:
                 code = ErrorResolver.ERROR_INVALID_DATA;
                 this.baseSearchUrl = this.baseSearchUrlDefault;
                 newUrl = this.searchFormConverter.searchFormToUrl(

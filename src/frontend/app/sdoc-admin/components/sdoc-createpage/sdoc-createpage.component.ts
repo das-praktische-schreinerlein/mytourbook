@@ -19,7 +19,7 @@ import {environment} from '../../../../environments/environment';
 import {SDocSearchForm} from '../../../../shared/sdoc-commons/model/forms/sdoc-searchform';
 import {SDocSearchResult} from '../../../../shared/sdoc-commons/model/container/sdoc-searchresult';
 import {
-    AbstractCommonDocCreatepageComponent,
+    CommonDocCreatepageComponent,
     CommonDocCreatepageComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-createpage.component';
 
@@ -30,7 +30,7 @@ import {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocCreatepageComponent
-    extends AbstractCommonDocCreatepageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+    extends CommonDocCreatepageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     tracks: SDocRecord[] = [];
 
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: SDocRoutingService,

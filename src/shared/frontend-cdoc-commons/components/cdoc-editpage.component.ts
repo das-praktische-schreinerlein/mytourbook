@@ -10,7 +10,7 @@ import {CommonDocContentUtils} from '../services/cdoc-contentutils.service';
 import {CommonDocRoutingService} from '../services/cdoc-routing.service';
 import {Layout, LayoutService} from '../../angular-commons/services/layout.service';
 import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
-import {AbstractCommonDocRecordResolver} from '../resolver/abstract-cdoc-details.resolver';
+import {CommonDocRecordResolver} from '../resolver/cdoc-details.resolver';
 import {IdValidationRule, KeywordValidationRule} from '../../search-commons/model/forms/generic-validator.util';
 import {PDocRecord} from '../../pdoc-commons/model/records/pdoc-record';
 import {ErrorResolver} from '../resolver/error.resolver';
@@ -30,7 +30,7 @@ export interface CommonDocEditpageComponentConfig {
     editAllowed: boolean;
 }
 
-export abstract class AbstractCommonDocEditpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocEditpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     idValidationRule = new IdValidationRule(true);
     keywordsValidationRule = new KeywordValidationRule(true);
@@ -191,7 +191,7 @@ export abstract class AbstractCommonDocEditpageComponent <R extends CommonDocRec
         const cdocId = (flgCdocError ? data.record.error.data : data.record.data.id);
         const cdocName = (flgCdocError ? 'name' : data.record.data.name);
         switch (errorCode) {
-            case AbstractCommonDocRecordResolver.ERROR_INVALID_DOC_ID:
+            case CommonDocRecordResolver.ERROR_INVALID_DOC_ID:
                 code = ErrorResolver.ERROR_INVALID_ID;
                 this.baseSearchUrl = this.baseSearchUrlDefault;
                 newUrl = [this.baseSearchUrl,
@@ -200,13 +200,13 @@ export abstract class AbstractCommonDocEditpageComponent <R extends CommonDocRec
                     this.idValidationRule.sanitize(cdocId)].join('/');
                 msg = undefined;
                 break;
-            case AbstractCommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
+            case CommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
                 code = ErrorResolver.ERROR_UNKNOWN_ID;
                 this.baseSearchUrl = this.baseSearchUrlDefault;
                 newUrl = [this.baseSearchUrl].join('/');
                 msg = undefined;
                 break;
-            case AbstractCommonDocRecordResolver.ERROR_READING_DOC_ID:
+            case CommonDocRecordResolver.ERROR_READING_DOC_ID:
                 code = ErrorResolver.ERROR_WHILE_READING;
                 this.baseSearchUrl = this.baseSearchUrlDefault;
                 newUrl = undefined;

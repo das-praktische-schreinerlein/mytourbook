@@ -1,20 +1,20 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CDocListHeaderComponent} from './cdoc-list-header.component';
+import {CommonDocListHeaderComponent} from './cdoc-list-header.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AppServiceStub} from '../../../angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../commons/services/generic-app.service';
 import {CommonDocDataServiceStub} from '../../../testing/cdoc-dataservice-stubs';
 
-describe('CDocListHeaderComponent', () => {
-    let component: CDocListHeaderComponent;
-    let fixture: ComponentFixture<CDocListHeaderComponent>;
+describe('CommonDocListHeaderComponent', () => {
+    let component: CommonDocListHeaderComponent;
+    let fixture: ComponentFixture<CommonDocListHeaderComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocListHeaderComponent],
+            declarations: [CommonDocListHeaderComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [
                 ReactiveFormsModule,
@@ -27,7 +27,7 @@ describe('CDocListHeaderComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocListHeaderComponent);
+        fixture = TestBed.createComponent(CommonDocListHeaderComponent);
         component = fixture.componentInstance;
         component.searchResult = CommonDocDataServiceStub.defaultSearchResult();
         fixture.detectChanges();

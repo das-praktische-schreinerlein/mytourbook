@@ -14,7 +14,7 @@ import {CommonDocSearchResult} from '../../../search-commons/model/container/cdo
 import {GenericSearchFormSearchFormConverter} from '../../../search-commons/services/generic-searchform.converter';
 import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
-export class CDocInlineSearchpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
+export class CommonDocInlineSearchpageComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractInlineComponent
     implements OnInit, OnDestroy {
     protected initialized = false;

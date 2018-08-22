@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CDocListItemComponent} from './cdoc-list-item.component';
+import {CommonDocListItemComponent} from './cdoc-list-item.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {CommonDocRoutingService} from '../../../frontend-cdoc-commons/services/cdoc-routing.service';
@@ -15,13 +15,13 @@ import {DatePipe} from '@angular/common';
 import {CommonDocDataServiceStub} from '../../../testing/cdoc-dataservice-stubs';
 import {LayoutService} from '../../../angular-commons/services/layout.service';
 
-describe('CDocListItemComponent', () => {
-    let component: CDocListItemComponent;
-    let fixture: ComponentFixture<CDocListItemComponent>;
+describe('CommonDocListItemComponent', () => {
+    let component: CommonDocListItemComponent;
+    let fixture: ComponentFixture<CommonDocListItemComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocListItemComponent],
+            declarations: [CommonDocListItemComponent],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
@@ -39,7 +39,7 @@ describe('CDocListItemComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocListItemComponent);
+        fixture = TestBed.createComponent(CommonDocListItemComponent);
         component = fixture.componentInstance;
         component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

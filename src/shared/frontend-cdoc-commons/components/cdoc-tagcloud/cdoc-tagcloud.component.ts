@@ -18,7 +18,7 @@ export interface TagcloudEntry {
     styleUrls: ['./cdoc-tagcloud.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTagcloudComponent extends AbstractInlineComponent{
+export class CommonDocTagcloudComponent extends AbstractInlineComponent{
     columns: TagcloudEntry[] = [];
 
     @Input()

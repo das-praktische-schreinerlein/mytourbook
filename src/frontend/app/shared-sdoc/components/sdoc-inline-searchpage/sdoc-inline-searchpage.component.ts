@@ -8,7 +8,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
 import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
 import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {CDocInlineSearchpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-inline-searchpage/cdoc-inline-searchpage.component';
+import {CommonDocInlineSearchpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-inline-searchpage/cdoc-inline-searchpage.component';
 import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-routing.service';
 
 @Component({
@@ -18,7 +18,7 @@ import {SDocRoutingService} from '../../../../shared/sdoc-commons/services/sdoc-
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SDocInlineSearchpageComponent extends
-    CDocInlineSearchpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+    CommonDocInlineSearchpageComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
 
     @Input()
     public baseSearchUrl? = 'sdoc/';

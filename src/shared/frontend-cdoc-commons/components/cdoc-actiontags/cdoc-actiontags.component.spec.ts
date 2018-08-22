@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CDocActionTagsComponent} from './cdoc-actiontags.component';
+import {CommonDocActionTagsComponent} from './cdoc-actiontags.component';
 import {AppServiceStub} from '../../../angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '../../../commons/services/generic-app.service';
 import {CommonDocRoutingService} from '../../services/cdoc-routing.service';
@@ -13,13 +13,13 @@ import {CommonDocAlbumService} from '../../services/cdoc-album.service';
 import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
 import {CommonDocDataServiceStub} from '../../../testing/cdoc-dataservice-stubs';
 
-describe('CDocActionTagsComponent', () => {
-    let component: CDocActionTagsComponent;
-    let fixture: ComponentFixture<CDocActionTagsComponent>;
+describe('CommonDocActionTagsComponent', () => {
+    let component: CommonDocActionTagsComponent;
+    let fixture: ComponentFixture<CommonDocActionTagsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocActionTagsComponent],
+            declarations: [CommonDocActionTagsComponent],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 PlatformService,
@@ -35,7 +35,7 @@ describe('CDocActionTagsComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocActionTagsComponent);
+        fixture = TestBed.createComponent(CommonDocActionTagsComponent);
         component = fixture.componentInstance;
         component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

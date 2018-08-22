@@ -20,7 +20,7 @@ import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-s
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
 import {CommonDocContentUtils} from '../services/cdoc-contentutils.service';
-import {AbstractCommonDocRecordResolver} from '../resolver/abstract-cdoc-details.resolver';
+import {CommonDocRecordResolver} from '../resolver/cdoc-details.resolver';
 import {AbstractPageComponent} from '../../frontend-pdoc-commons/components/pdoc-page.component';
 import {CommonEnvironment} from '../../frontend-pdoc-commons/common-environment';
 import {ActionTagEvent} from './cdoc-actiontags/cdoc-actiontags.component';
@@ -30,7 +30,7 @@ export interface CommonDocShowpageComponentConfig {
     baseSearchUrlDefault: string;
 }
 
-export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocShowpageComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractPageComponent {
     private flgDescRendered = false;
     idValidationRule = new IdValidationRule(true);
@@ -170,27 +170,27 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
 
     protected processError(data: { record: ResolvedData<R>, pdoc: ResolvedData<PDocRecord>,
         baseSearchUrl: ResolvedData<string> }): boolean {
-        const flgCDocError = ErrorResolver.isResolverError(data.record);
+        const flgCommonDocError = ErrorResolver.isResolverError(data.record);
         const flgPDocError = ErrorResolver.isResolverError(data.pdoc);
         const flgBaseSearchUrlError = ErrorResolver.isResolverError(data.baseSearchUrl);
 
-        if (!flgCDocError && !flgPDocError && !flgBaseSearchUrlError) {
+        if (!flgCommonDocError && !flgPDocError && !flgBaseSearchUrlError) {
             return false;
         }
 
         let newUrl, msg, code;
         let errorCode;
-        if (flgCDocError) {
+        if (flgCommonDocError) {
             errorCode = data.record.error.code;
         } else {
             errorCode = (flgPDocError ? data.pdoc.error.code : data.baseSearchUrl.error.code);
         }
         const sectionId = (flgPDocError ? data.pdoc.error.data : data.pdoc.data.id);
-        const cdocId = (flgCDocError ? data.record.error.data : data.record.data.id);
-        const cdocName = (flgCDocError ? 'name' : data.record.data.name);
+        const cdocId = (flgCommonDocError ? data.record.error.data : data.record.data.id);
+        const cdocName = (flgCommonDocError ? 'name' : data.record.data.name);
         switch (errorCode) {
             case SectionsPDocRecordResolver.ERROR_INVALID_SECTION_ID:
-            case AbstractCommonDocRecordResolver.ERROR_INVALID_DOC_ID:
+            case CommonDocRecordResolver.ERROR_INVALID_DOC_ID:
                 code = ErrorResolver.ERROR_INVALID_ID;
                 if (sectionId && sectionId !== '') {
                     this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
@@ -212,7 +212,7 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                     this.idValidationRule.sanitize(cdocId)].join('/');
                 msg = undefined;
                 break;
-            case AbstractCommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
+            case CommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID:
                 code = ErrorResolver.ERROR_UNKNOWN_ID;
                 if (sectionId && sectionId !== '') {
                     this.baseSearchUrl = ['sections', this.idValidationRule.sanitize(sectionId)].join('/');
@@ -223,7 +223,7 @@ export abstract class AbstractCommonDocShowpageComponent<R extends CommonDocReco
                 msg = undefined;
                 break;
             case SectionsPDocRecordResolver.ERROR_READING_SECTION_ID:
-            case AbstractCommonDocRecordResolver.ERROR_READING_DOC_ID:
+            case CommonDocRecordResolver.ERROR_READING_DOC_ID:
                 code = ErrorResolver.ERROR_WHILE_READING;
                 this.baseSearchUrl = this.baseSearchUrlDefault;
                 newUrl = undefined;

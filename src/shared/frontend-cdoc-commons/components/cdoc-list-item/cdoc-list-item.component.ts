@@ -12,7 +12,7 @@ import {ActionTagEvent} from '../cdoc-actiontags/cdoc-actiontags.component';
     styleUrls: ['./cdoc-list-item.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocListItemComponent extends AbstractInlineComponent implements OnDestroy {
+export class CommonDocListItemComponent extends AbstractInlineComponent implements OnDestroy {
     private layoutSizeObservable: BehaviorSubject<LayoutSizeData>;
     listLayoutName = 'default';
     listItem: CommonItemData = {

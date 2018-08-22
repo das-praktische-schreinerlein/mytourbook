@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CDocKeywordsStateComponent} from './cdoc-keywordsstate.component';
+import {CommonDocKeywordsStateComponent} from './cdoc-keywordsstate.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
@@ -12,13 +12,13 @@ import {CommonRoutingService} from '../../../angular-commons/services/common-rou
 import {Router} from '@angular/router';
 import {RouterStub} from '../../../angular-commons/testing/router-stubs';
 
-describe('CDocKeywordsStateComponent', () => {
-    let component: CDocKeywordsStateComponent;
-    let fixture: ComponentFixture<CDocKeywordsStateComponent>;
+describe('CommonDocKeywordsStateComponent', () => {
+    let component: CommonDocKeywordsStateComponent;
+    let fixture: ComponentFixture<CommonDocKeywordsStateComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocKeywordsStateComponent],
+            declarations: [CommonDocKeywordsStateComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
@@ -34,7 +34,7 @@ describe('CDocKeywordsStateComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocKeywordsStateComponent);
+        fixture = TestBed.createComponent(CommonDocKeywordsStateComponent);
         component = fixture.componentInstance;
         component.keywords = '';
         fixture.detectChanges();

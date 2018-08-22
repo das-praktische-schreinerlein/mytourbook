@@ -4,7 +4,7 @@ import {ResolvedData, ResolverError} from '../../angular-commons/resolver/resolv
 import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
 import {GenericSearchFormSearchFormConverter} from '../../search-commons/services/generic-searchform.converter';
 
-export abstract class AbstractCommonDocSearchFormResolver<F extends CommonDocSearchForm> implements Resolve<ResolvedData<F>> {
+export abstract class CommonDocSearchFormResolver<F extends CommonDocSearchForm> implements Resolve<ResolvedData<F>> {
     static ERROR_INVALID_SEARCHFORM = 'ERROR_INVALID_SEARCHFORM';
 
     constructor(private appService: GenericAppService, private searchFormConverter: GenericSearchFormSearchFormConverter<F>) {}
@@ -21,7 +21,7 @@ export abstract class AbstractCommonDocSearchFormResolver<F extends CommonDocSea
                 if (appState === AppState.Ready) {
                     this.searchFormConverter.paramsToSearchForm(route.params, route.data['searchFormDefaults'], searchForm);
                     if (!this.searchFormConverter.isValid(searchForm)) {
-                        result.error = new ResolverError(AbstractCommonDocSearchFormResolver.ERROR_INVALID_SEARCHFORM, searchForm,
+                        result.error = new ResolverError(CommonDocSearchFormResolver.ERROR_INVALID_SEARCHFORM, searchForm,
                             undefined);
                         return resolve(result);
                     }

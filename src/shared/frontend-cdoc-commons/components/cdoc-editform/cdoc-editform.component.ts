@@ -15,7 +15,7 @@ import {CommonDocContentUtils, KeywordSuggestion} from '../../services/cdoc-cont
 import {CommonDocSearchFormUtils} from '../../services/cdoc-searchform-utils.service';
 import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
-export interface CDocEditformComponentConfig {
+export interface CommonDocEditformComponentConfig {
     numBeanFieldConfig: {};
     stringBeanFieldConfig: {};
     stringArrayBeanFieldConfig: {};
@@ -25,7 +25,7 @@ export interface CDocEditformComponentConfig {
     editPrefix;
 }
 
-export abstract class CDocEditformComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocEditformComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractInlineComponent {
     protected config: {};
     suggestionConfigs: KeywordSuggestion[] = [];
@@ -139,7 +139,7 @@ export abstract class CDocEditformComponent<R extends CommonDocRecord, F extends
         return false;
     }
 
-    protected getComponentConfig(config: {}): CDocEditformComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocEditformComponentConfig {
         let prefix = '';
         let suggestionConfig = [];
         if (BeanUtils.getValue(config, 'components.cdoc-keywords.keywordSuggestions')) {

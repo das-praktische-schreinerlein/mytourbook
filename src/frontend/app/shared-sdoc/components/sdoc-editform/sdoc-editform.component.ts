@@ -21,8 +21,8 @@ import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/fo
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 import {
-    CDocEditformComponent,
-    CDocEditformComponentConfig
+    CommonDocEditformComponent,
+    CommonDocEditformComponentConfig
 } from '../../../../shared/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 
 @Component({
@@ -31,7 +31,7 @@ import {
     styleUrls: ['./sdoc-editform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocEditformComponent extends CDocEditformComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+export class SDocEditformComponent extends CommonDocEditformComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
     private personsFound: StructuredKeywordState[] = [];
@@ -264,7 +264,7 @@ export class SDocEditformComponent extends CDocEditformComponent<SDocRecord, SDo
         return SDocRecordValidator.validateValues(record);
     }
 
-    protected getComponentConfig(config: {}): CDocEditformComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocEditformComponentConfig {
         let prefix = '';
         let suggestionConfig = [];
         if (BeanUtils.getValue(config, 'components.sdoc-keywords.keywordSuggestions')) {

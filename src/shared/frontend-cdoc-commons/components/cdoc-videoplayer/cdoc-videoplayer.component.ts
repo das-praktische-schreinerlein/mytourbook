@@ -9,7 +9,7 @@ import {AbstractInlineComponent} from '../../../angular-commons/components/inlin
     styleUrls: ['./cdoc-videoplayer.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocVideoplayerComponent extends AbstractInlineComponent {
+export class CommonDocVideoplayerComponent extends AbstractInlineComponent {
     public contentUtils: CommonDocContentUtils;
     listItem: CommonItemData = {
         currentRecord: undefined,

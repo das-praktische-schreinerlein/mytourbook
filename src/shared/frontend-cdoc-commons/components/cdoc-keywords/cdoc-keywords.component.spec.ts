@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {CDocKeywordsComponent} from './cdoc-keywords.component';
+import {CommonDocKeywordsComponent} from './cdoc-keywords.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonDocContentUtils} from '../../services/cdoc-contentutils.service';
@@ -13,13 +13,13 @@ import {Router} from '@angular/router';
 import {RouterStub} from '../../../angular-commons/testing/router-stubs';
 import {CommonDocDataServiceStub} from '../../../testing/cdoc-dataservice-stubs';
 
-describe('CDocKeywordsComponent', () => {
-    let component: CDocKeywordsComponent;
-    let fixture: ComponentFixture<CDocKeywordsComponent>;
+describe('CommonDocKeywordsComponent', () => {
+    let component: CommonDocKeywordsComponent;
+    let fixture: ComponentFixture<CommonDocKeywordsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocKeywordsComponent],
+            declarations: [CommonDocKeywordsComponent],
             schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
@@ -35,7 +35,7 @@ describe('CDocKeywordsComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocKeywordsComponent);
+        fixture = TestBed.createComponent(CommonDocKeywordsComponent);
         component = fixture.componentInstance;
         component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

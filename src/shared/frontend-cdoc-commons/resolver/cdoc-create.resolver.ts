@@ -8,9 +8,9 @@ import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-re
 import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
 import {CommonDocSearchResult} from '../../search-commons/model/container/cdoc-searchresult';
 import {CommonDocSearchForm} from '../../search-commons/model/forms/cdoc-searchform';
-import {AbstractCommonDocRecordResolver} from './abstract-cdoc-details.resolver';
+import {CommonDocRecordResolver} from './cdoc-details.resolver';
 
-export abstract class AbstractCommonDocRecordCreateResolver<R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocRecordCreateResolver<R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>>
     implements Resolve<ResolvedData<R>> {
     static ERROR_UNKNOWN_DOC_TYPE = 'ERROR_UNKNOWN_DOC_TYPE';
@@ -32,7 +32,7 @@ export abstract class AbstractCommonDocRecordCreateResolver<R extends CommonDocR
                     const type = route.params['createByType'];
                     if (!this.idValidationRule.isValid(type)) {
                         console.warn('warning no valid type for cdoc:', LogUtils.sanitizeLogMsg(type));
-                        result.error = new ResolverError(AbstractCommonDocRecordCreateResolver.ERROR_UNKNOWN_DOC_TYPE, type, undefined);
+                        result.error = new ResolverError(CommonDocRecordCreateResolver.ERROR_UNKNOWN_DOC_TYPE, type, undefined);
                         return resolve(result);
                     }
 
@@ -44,7 +44,7 @@ export abstract class AbstractCommonDocRecordCreateResolver<R extends CommonDocR
                             function doneGetById(cdoc: R) {
                                 if (cdoc === undefined) {
                                     console.log('no cdoc for id:' + LogUtils.sanitizeLogMsg(baseId));
-                                    result.error = new ResolverError(AbstractCommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID, baseId, undefined);
+                                    result.error = new ResolverError(CommonDocRecordResolver.ERROR_UNKNOWN_DOC_ID, baseId, undefined);
                                     return resolve(result);
                                 }
 
@@ -61,7 +61,7 @@ export abstract class AbstractCommonDocRecordCreateResolver<R extends CommonDocR
                                 return resolve(result);
                             }).catch(function errorGetById(reason: any) {
                                 console.error('error cdoc for id:' + LogUtils.sanitizeLogMsg(baseId), reason);
-                                result.error = new ResolverError(AbstractCommonDocRecordResolver.ERROR_READING_DOC_ID, baseId, reason);
+                                result.error = new ResolverError(CommonDocRecordResolver.ERROR_READING_DOC_ID, baseId, reason);
                                 return resolve(result);
                             }
                         );

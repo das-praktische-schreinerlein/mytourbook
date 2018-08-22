@@ -11,7 +11,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {SDocDataCacheService} from '../../services/sdoc-datacache.service';
 import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
 import {SDocSearchFormConverter} from '../../services/sdoc-searchform-converter.service';
-import {CDocSearchformComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchform/cdoc-searchform.component';
+import {CommonDocSearchformComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchform/cdoc-searchform.component';
 import {SDocRecord} from '../../../../shared/sdoc-commons/model/records/sdoc-record';
 import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-data.service';
 
@@ -21,7 +21,7 @@ import {SDocDataService} from '../../../../shared/sdoc-commons/services/sdoc-dat
     styleUrls: ['./sdoc-searchform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocSearchformComponent extends CDocSearchformComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
+export class SDocSearchformComponent extends CommonDocSearchformComponent<SDocRecord, SDocSearchForm, SDocSearchResult, SDocDataService> {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private geoLocationService = new GeoLocationService();
 

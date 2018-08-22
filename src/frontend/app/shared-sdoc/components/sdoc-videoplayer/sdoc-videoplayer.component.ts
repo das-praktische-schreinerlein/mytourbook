@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {CDocVideoplayerComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-videoplayer/cdoc-videoplayer.component';
+import {CommonDocVideoplayerComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-videoplayer/cdoc-videoplayer.component';
 import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
 
 @Component({
@@ -8,7 +8,7 @@ import {SDocContentUtils} from '../../services/sdoc-contentutils.service';
     styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-videoplayer/cdoc-videoplayer.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SDocVideoplayerComponent extends CDocVideoplayerComponent {
+export class SDocVideoplayerComponent extends CommonDocVideoplayerComponent {
     constructor(contentUtils: SDocContentUtils, protected cd: ChangeDetectorRef) {
         super(contentUtils, cd);
     }

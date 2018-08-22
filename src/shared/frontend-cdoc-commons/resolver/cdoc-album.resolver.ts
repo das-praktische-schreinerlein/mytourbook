@@ -9,7 +9,7 @@ import {IdCsvValidationRule, IdValidationRule} from '../../search-commons/model/
 import {AppState, GenericAppService} from '../../commons/services/generic-app.service';
 import {LogUtils} from '../../commons/utils/log.utils';
 
-export class AbstractCommonDocAlbumResolver <R extends CommonDocRecord, F extends CommonDocSearchForm,
+export class CommonDocAlbumResolver <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements Resolve<ResolvedData<F>> {
     static ERROR_INVALID_DOC_ID = 'ERROR_INVALID_DOC_ID';
     idValidationRule = new IdValidationRule(true);
@@ -31,7 +31,7 @@ export class AbstractCommonDocAlbumResolver <R extends CommonDocRecord, F extend
                     const albumKey = route.params['album'];
                     if (!this.idValidationRule.isValid(albumKey)) {
                         console.warn('warning no id for album:', LogUtils.sanitizeLogMsg(albumKey));
-                        result.error = new ResolverError(AbstractCommonDocAlbumResolver.ERROR_INVALID_DOC_ID, albumKey, undefined);
+                        result.error = new ResolverError(CommonDocAlbumResolver.ERROR_INVALID_DOC_ID, albumKey, undefined);
                         return resolve(result);
                     }
 
@@ -42,7 +42,7 @@ export class AbstractCommonDocAlbumResolver <R extends CommonDocRecord, F extend
 
                     if (!this.idCsvValidationRule.isValid(ids)) {
                         console.warn('warning no ids for cdoc:', LogUtils.sanitizeLogMsg(ids));
-                        result.error = new ResolverError(AbstractCommonDocAlbumResolver.ERROR_INVALID_DOC_ID, ids, undefined);
+                        result.error = new ResolverError(CommonDocAlbumResolver.ERROR_INVALID_DOC_ID, ids, undefined);
                         return resolve(result);
                     }
 

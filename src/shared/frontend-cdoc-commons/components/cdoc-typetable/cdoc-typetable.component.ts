@@ -15,7 +15,7 @@ export interface TypetableColumn extends TimetableColumn {}
     styleUrls: ['./cdoc-typetable.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocTypetableComponent implements OnChanges {
+export class CommonDocTypetableComponent implements OnChanges {
     columns: TypetableColumn[] = [];
 
     @Input()

@@ -4,7 +4,7 @@ import {AppState, GenericAppService} from '../../../commons/services/generic-app
 import {BeanUtils} from '../../../commons/utils/bean.utils';
 import {AbstractInlineComponent} from '../../../angular-commons/components/inline.component';
 
-export interface CDocKeywordsStateComponentConfig {
+export interface CommonDocKeywordsStateComponentConfig {
     prefix: string;
     keywordsConfig: StructuredKeyword[];
     possiblePrefixes: string[];
@@ -16,7 +16,7 @@ export interface CDocKeywordsStateComponentConfig {
     styleUrls: ['./cdoc-keywordsstate.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocKeywordsStateComponent extends AbstractInlineComponent implements OnInit {
+export class CommonDocKeywordsStateComponent extends AbstractInlineComponent implements OnInit {
     possiblePrefixes = [];
     keywordsConfig: StructuredKeyword[] = [];
     prefix = '';
@@ -58,7 +58,7 @@ export class CDocKeywordsStateComponent extends AbstractInlineComponent implemen
         this.unsetKeyword.emit(keyword);
     }
 
-    protected getComponentConfig(config: {}): CDocKeywordsStateComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocKeywordsStateComponentConfig {
         if (BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords')) {
             return {
                 keywordsConfig: BeanUtils.getValue(config, 'components.cdoc-keywords.structuredKeywords'),

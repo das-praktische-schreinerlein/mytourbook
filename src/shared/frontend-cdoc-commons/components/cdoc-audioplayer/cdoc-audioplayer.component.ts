@@ -9,7 +9,7 @@ import {AbstractInlineComponent} from '../../../angular-commons/components/inlin
     styleUrls: ['./cdoc-audioplayer.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CDocAudioplayerComponent extends AbstractInlineComponent {
+export class CommonDocAudioplayerComponent extends AbstractInlineComponent {
     public contentUtils: CommonDocContentUtils;
     listItem: CommonItemData = {
         currentRecord: undefined,

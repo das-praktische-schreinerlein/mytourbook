@@ -13,11 +13,11 @@ import {CommonDocSearchResult} from '../../../search-commons/model/container/cdo
 import {CommonDocDataService} from '../../../search-commons/services/cdoc-data.service';
 import {GenericAppService} from '../../../commons/services/generic-app.service';
 
-export interface CDocActionsComponentConfig {
+export interface CommonDocActionsComponentConfig {
     baseEditPath: string;
 }
 
-export class CDocActionsComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
+export class CommonDocActionsComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractInlineComponent {
     protected baseEditPath: string;
 
@@ -44,7 +44,7 @@ export class CDocActionsComponent <R extends CommonDocRecord, F extends CommonDo
         this.configureActionListener();
     }
 
-    protected getComponentConfig(config: {}): CDocActionsComponentConfig {
+    protected getComponentConfig(config: {}): CommonDocActionsComponentConfig {
         return {
             baseEditPath: 'cdocadmin'
         };

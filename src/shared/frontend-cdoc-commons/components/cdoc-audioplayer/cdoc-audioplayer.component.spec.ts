@@ -12,16 +12,16 @@ import {AppServiceStub} from '../../../angular-commons/testing/appservice-stubs'
 import {CommonRoutingService} from '../../../angular-commons/services/common-routing.service';
 import {RouterStub} from '../../../angular-commons/testing/router-stubs';
 import {DatePipe} from '@angular/common';
-import {CDocAudioplayerComponent} from './cdoc-audioplayer.component';
+import {CommonDocAudioplayerComponent} from './cdoc-audioplayer.component';
 import {CommonDocDataServiceStub} from '../../../testing/cdoc-dataservice-stubs';
 
-describe('CDocAudioplayerComponent', () => {
-    let component: CDocAudioplayerComponent;
-    let fixture: ComponentFixture<CDocAudioplayerComponent>;
+describe('CommonDocAudioplayerComponent', () => {
+    let component: CommonDocAudioplayerComponent;
+    let fixture: ComponentFixture<CommonDocAudioplayerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CDocAudioplayerComponent],
+            declarations: [CommonDocAudioplayerComponent],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
@@ -39,7 +39,7 @@ describe('CDocAudioplayerComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CDocAudioplayerComponent);
+        fixture = TestBed.createComponent(CommonDocAudioplayerComponent);
         component = fixture.componentInstance;
         component.record = CommonDocDataServiceStub.defaultRecord();
         fixture.detectChanges();

@@ -15,7 +15,7 @@ import {CommonDocSearchFormUtils} from '../../services/cdoc-searchform-utils.ser
 import {GenericSearchFormSearchFormConverter} from '../../../search-commons/services/generic-searchform.converter';
 import {CommonDocDataCacheService} from '../../services/cdoc-datacache.service';
 
-export abstract class CDocSearchformComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
+export abstract class CommonDocSearchformComponent <R extends CommonDocRecord, F extends CommonDocSearchForm,
     S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> implements OnInit {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     protected _searchResult: BehaviorSubject<S>;
