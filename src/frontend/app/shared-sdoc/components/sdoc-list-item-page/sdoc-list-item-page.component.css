@@ -1,8 +1,0 @@
-div.picture-small {
-    max-height: 250px;
-    overflow-y: hidden;
-}
-
-img.picture-big, video.picture-big {
-    max-width: 95%;
-}
