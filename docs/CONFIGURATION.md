@@ -272,7 +272,7 @@ export const environment = {
         "sdoc-albumpage": {
             "allowAutoplay": false
         },
-        "sdoc-listheader": {
+        "cdoc-listheader": {
             "allowAutoplay": false
         }
     }
