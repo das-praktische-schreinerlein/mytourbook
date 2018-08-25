@@ -22,21 +22,21 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         super(config);
     }
 
-    create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
+    create(mapper: Mapper, props: any, opts?: any): Promise<R> {
         opts = opts || {};
         opts.endpoint = this.getHttpEndpoint('create');
 
         return super.create(mapper, props, opts);
     }
 
-    update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts?: any): Promise<T> {
+    update(mapper: Mapper, id: string | number, props: any, opts?: any): Promise<R> {
         opts = opts || {};
         opts.endpoint = this.getHttpEndpoint('update');
 
         return super.update(mapper, id, props, opts);
     }
 
-    doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+    doActionTag(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
         const me = this;
         const result = new Promise<R>((resolve, reject) => {
             me._doActionTag(mapper, record, actionTagForm, opts).then(resultRecord => {
@@ -54,7 +54,7 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         return result;
     }
 
-    facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+    facets(mapper: Mapper, query: any, opts: any): Promise<Facets> {
         let op;
         query = query || {};
         opts = opts || {};
@@ -91,7 +91,7 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
             });
     }
 
-    search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+    search(mapper: Mapper, query: any, opts: any): Promise<S> {
         let op;
         query = query || {};
         opts = opts || {};
@@ -149,23 +149,23 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         return utils.Promise.resolve(<S>searchResult);
     }
 
-    afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
-        const record: T = <T>mapper.createRecord(result);
+    afterCreate(mapper: Mapper, props: IDict, opts: any, result: any): Promise<R> {
+        const record: R = <R>mapper.createRecord(result);
         opts.realResult = result;
         return utils.Promise.resolve(record);
     }
 
-    afterUpdate<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
+    afterUpdate(mapper: Mapper, id: number | string, opts: any, result: any): Promise<R> {
         opts.realResult = result;
         return this.find(mapper, id, opts);
     }
 
-    afterFind<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
+    afterFind(mapper: Mapper, id: number | string, opts: any, result: any): Promise<R> {
         return utils.Promise.resolve(result);
     }
 
-    afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        return utils.Promise.resolve(<T>undefined);
+    afterDestroy(mapper: Mapper, id: number | string, opts: any, result: any): Promise<R> {
+        return utils.Promise.resolve(<R>undefined);
     }
 
     deserialize(mapper: Mapper, response: any, opts: any) {
@@ -203,7 +203,7 @@ export abstract class GenericSearchHttpAdapter <R extends Record, F extends Gene
         return facets;
     }
 
-    protected _doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+    protected _doActionTag(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
         const me = this;
         opts = opts || {};
         opts.endpoint = this.getHttpEndpoint('doActionTag');

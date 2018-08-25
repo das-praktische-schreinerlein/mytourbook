@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PDocRecord} from '../../../pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
 import {PDocDataService} from '../../../pdoc-commons/services/pdoc-data.service';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ResolvedData} from '../../../angular-commons/resolver/resolver.utils';
 import {ErrorResolver} from '../../../frontend-cdoc-commons/resolver/error.resolver';
 import {IdValidationRule} from '../../../search-commons/model/forms/generic-validator.util';
@@ -21,7 +21,7 @@ export class SectionBarComponent implements OnInit {
     pdoc: PDocRecord;
     sections: PDocRecord[] = [];
 
-    public themeFormGroup = this.fb.group({
+    public themeFormGroup: FormGroup = this.fb.group({
         theme: undefined
     });
 

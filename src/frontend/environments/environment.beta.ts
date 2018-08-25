@@ -13,10 +13,10 @@ export const environment: AppEnvironment = {
     useAssetStoreUrls: true,
     useAudioAssetStoreUrls: false,
     useVideoAssetStoreUrls: false,
-    sdocWritable: false,
-    sdocActionTagWritable: false,
+    tdocWritable: false,
+    tdocActionTagWritable: false,
     allowAutoPlay: false,
-    sdocMaxItemsPerAlbum: -1,
+    tdocMaxItemsPerAlbum: -1,
     cookieLawSeenName: 'cookieLawSeenV20180525',
     trackingProviders: [Angulartics2Piwik]
 };

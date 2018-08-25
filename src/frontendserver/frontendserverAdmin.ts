@@ -53,7 +53,7 @@ app.listen(port, function () {
 });
 
 const siteBaseUrl = 'http://localhost:' + port + '/' + distProfile;
-const defaultSiteMaps = [siteMapBaseUrl + 'sitemap-sdoc-de.xml', siteMapBaseUrl + 'sitemap-pdoc-de.xml'];
+const defaultSiteMaps = [siteMapBaseUrl + 'sitemap-tdoc-de.xml', siteMapBaseUrl + 'sitemap-pdoc-de.xml'];
 const siteUrls = [];
 let notCached = 0;
 

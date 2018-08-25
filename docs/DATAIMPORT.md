@@ -79,8 +79,8 @@ node dist\backend\serverAdmin.js --command mediaManager --action rotateVideo  --
 ```cmd
 d:
 cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateSDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\pics_full\ --debug true > D:\Bilder\mytbbase\import\mediadb-import-images.json 
-node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateSDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --debug true > D:\Bilder\mytbbase\import\mediadb-import-videos.json 
+node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\pics_full\ --debug true > D:\Bilder\mytbbase\import\mediadb-import-images.json 
+node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --debug true > D:\Bilder\mytbbase\import\mediadb-import-videos.json 
 ```
 - manually fix json-import-file (locationnames...)
 - create sqlite database
@@ -90,8 +90,8 @@ node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager 
 ```
 d:
 cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js --debug --command loadSdoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-images.json
-node dist\backend\serverAdmin.js --debug --command loadSdoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-videos.json
+node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-images.json
+node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-videos.json
 ```
 - read image-dates and scale images
 ```
@@ -109,11 +109,11 @@ node dist\backend\serverAdmin.js --command mediaManager --action generateVideoPr
 node dist\backend\serverAdmin.js --command mediaManager --action scaleVideosFromMediaDirToMP4 --importDir D:\Bilder\mytbbase\import\video_full\ --outputDir D:\Bilder\mytbbase\import\video_x600\ --debug true
 ```
 ### do data-management....
-- [manage locations](http://localhost:4002/mytbdev/de/sdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/location/10/1)
-- [manage tracks](http://localhost:4002/mytbdev/de/sdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
-- [checkout images as favorites to export](http://localhost:4002/mytbdev/de/sdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
-- [create routes from tracks](http://localhost:4002/mytbdev/de/sdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
-- [create trips](http://localhost:4002/mytbdev/de/sdocadmin/create/TRIP)
+- [manage locations](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/location/10/1)
+- [manage tracks](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
+- [checkout images as favorites to export](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
+- [create routes from tracks](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
+- [create trips](http://localhost:4002/mytbdev/de/tdocadmin/create/TRIP)
 
 ### export to solr
 - import from mediadb to mytb

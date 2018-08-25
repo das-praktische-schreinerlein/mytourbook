@@ -8,11 +8,11 @@ import {ToastModule} from 'ng2-toastr';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AppRoutingModule} from './app.router';
-import {SDocModule} from './sdoc/sdoc.module';
-import {SDocDataStore, SDocTeamFilterConfig} from '../shared/sdoc-commons/services/sdoc-data.store';
+import {TourDocModule} from './tdoc/tdoc.module';
+import {TourDocDataStore, TourDocTeamFilterConfig} from '../shared/tdoc-commons/services/tdoc-data.store';
 import {SearchFormUtils} from '../shared/angular-commons/services/searchform-utils.service';
 import {GenericAppService} from '../shared/commons/services/generic-app.service';
-import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
+import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
 import {SectionsModule} from './sections/sections.module';
 import {PDocDataService} from '../shared/pdoc-commons/services/pdoc-data.service';
@@ -26,18 +26,18 @@ import {MinimalHttpBackendClient} from '../shared/commons/services/minimal-http-
 import {AngularHtmlService} from '../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../shared/angular-commons/services/common-routing.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {SDocDataCacheService} from './shared-sdoc/services/sdoc-datacache.service';
+import {TourDocDataCacheService} from './shared-tdoc/services/tdoc-datacache.service';
 import {GenericTrackingService} from '../shared/angular-commons/services/generic-tracking.service';
 import {TrackingService} from './services/tracking.service';
 import {Angulartics2Module} from 'angulartics2';
 import {registerLocaleData} from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import {PlatformService} from '../shared/angular-commons/services/platform.service';
-import {SDocDynamicComponentService} from './shared-sdoc/services/sdoc-dynamic-components.service';
+import {TourDocDynamicComponentService} from './shared-tdoc/services/tdoc-dynamic-components.service';
 import {DynamicComponentService} from '../shared/angular-commons/services/dynamic-components.service';
-import {SDocAdminModule} from './sdoc-admin/sdoc-admin.module';
-import {SDocActionTagsComponent} from './shared-sdoc/components/sdoc-actiontags/sdoc-actiontags.component';
-import {SDocAlbumService} from './shared-sdoc/services/sdoc-album.service';
+import {TourDocAdminModule} from './tdoc-admin/tdoc-admin.module';
+import {TourDocActionTagsComponent} from './shared-tdoc/components/tdoc-actiontags/tdoc-actiontags.component';
+import {TourDocAlbumService} from './shared-tdoc/services/tdoc-album.service';
 import {LayoutService} from '../shared/angular-commons/services/layout.service';
 import {CookieLawModule} from 'angular2-cookie-law';
 
@@ -60,12 +60,12 @@ export function getAngulartics2Providers(): any {
         NavbarComponent,
         ErrorPageComponent
     ],
-    entryComponents: [SDocActionTagsComponent],
+    entryComponents: [TourDocActionTagsComponent],
     imports: [
         HttpModule,
         HttpClientModule,
         NgbModule.forRoot(),
-        BrowserModule.withServerTransition({appId: 'sdoc-app'}),
+        BrowserModule.withServerTransition({appId: 'tdoc-app'}),
         ToastModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
@@ -76,8 +76,8 @@ export function getAngulartics2Providers(): any {
         }),
         Angulartics2Module.forRoot(getAngulartics2Providers()),
         AngularCommonsModule,
-        SDocModule,
-        SDocAdminModule,
+        TourDocModule,
+        TourDocAdminModule,
         SectionsModule,
         AppRoutingModule,
         CookieLawModule
@@ -87,14 +87,14 @@ export function getAngulartics2Providers(): any {
         CommonRoutingService,
         { provide: GenericAppService, useClass: AppService },
         DynamicComponentService,
-        SDocDynamicComponentService,
-        SDocTeamFilterConfig,
-        SDocDataStore,
-        SDocDataService,
+        TourDocDynamicComponentService,
+        TourDocTeamFilterConfig,
+        TourDocDataStore,
+        TourDocDataService,
         PDocDataStore,
-        SDocAlbumService,
+        TourDocAlbumService,
         PDocDataService,
-        SDocDataCacheService,
+        TourDocDataCacheService,
         SearchFormUtils,
         { provide: GenericTrackingService, useClass: TrackingService },
         AngularHtmlService,

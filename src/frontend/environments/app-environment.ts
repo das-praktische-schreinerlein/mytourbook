@@ -7,7 +7,7 @@ export interface AppEnvironment extends CommonEnvironment {
     videoBaseUrl: string;
     useVideoAssetStoreUrls: boolean;
     useAudioAssetStoreUrls: boolean;
-    sdocWritable: boolean;
-    sdocActionTagWritable: boolean;
-    sdocMaxItemsPerAlbum: number;
+    tdocWritable: boolean;
+    tdocActionTagWritable: boolean;
+    tdocMaxItemsPerAlbum: number;
 }

@@ -1,0 +1,153 @@
+import {TourDocDataStore, TourDocTeamFilterConfig} from '../shared/tdoc-commons/services/tdoc-data.store';
+import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
+import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
+import {TourDocSolrAdapter} from '../shared/tdoc-commons/services/tdoc-solr.adapter';
+import axios from 'axios';
+import * as fs from 'fs';
+import {HttpAdapter} from 'js-data-http';
+import {TourDocSqlMediadbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.adapter';
+import {TourDocSqlMytbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytb.adapter';
+import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsjs.adapter';
+import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
+
+export class TourDocDataServiceModule {
+    private static dataServices = new Map<string, TourDocDataService>();
+
+    public static getDataService(profile: string, backendConfig: {}): TourDocDataService {
+        if (!this.dataServices.has(profile)) {
+            switch (backendConfig['tdocDataStoreAdapter']) {
+                case 'TourDocSolrAdapter':
+                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceSolr(backendConfig));
+                    break;
+                case 'TourDocSqlMediadbAdapter':
+                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMediadbSql(backendConfig));
+                    break;
+                case 'TourDocSqlMytbAdapter':
+                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMytbSql(backendConfig));
+                    break;
+                case 'TourDocItemsJsAdapter':
+                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceItemsJs(backendConfig));
+                    break;
+                default:
+                    throw new Error('configured tdocDataStoreAdapter not exist:' + backendConfig['tdocDataStoreAdapter']);
+            }
+        }
+
+        return this.dataServices.get(profile);
+    }
+
+    private static createDataServiceSolr(backendConfig: {}): TourDocDataService {
+        // configure store
+        const filterConfig: TourDocTeamFilterConfig = new TourDocTeamFilterConfig();
+        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
+        for (const themeName in themeFilters) {
+            filterConfig.set(themeName, themeFilters[themeName]);
+        }
+        const dataStore: TourDocDataStore = new TourDocDataStore(new SearchParameterUtils(), filterConfig);
+        const dataService: TourDocDataService = new TourDocDataService(dataStore);
+
+        // configure solr-adapter
+        const solrConfig = backendConfig['TourDocSolrAdapter'];
+        if (solrConfig === undefined) {
+            throw new Error('config for TourDocSolrAdapter not exists');
+        }
+        const options = {
+            basePath: solrConfig['solrCoreTourDoc'],
+            suffix: '&wt=json&indent=on&datatype=jsonp&json.wrf=JSONP_CALLBACK&callback=JSONP_CALLBACK&',
+            http: axios,
+            beforeHTTP: function (config, opts) {
+                config.auth = {
+                    username: solrConfig['solrCoreTourDocReadUsername'],
+                    password: solrConfig['solrCoreTourDocReadPassword']
+                };
+
+                // Now do the default behavior
+                return HttpAdapter.prototype.beforeHTTP.call(this, config, opts);
+            },
+            mapperConfig: backendConfig['mapperConfig']
+        };
+        const adapter = new TourDocSolrAdapter(options);
+        dataStore.setAdapter('http', adapter, '', {});
+
+        return dataService;
+    }
+
+    private static createDataServiceMediadbSql(backendConfig: {}): TourDocDataService {
+        // configure store
+        const filterConfig: TourDocTeamFilterConfig = new TourDocTeamFilterConfig();
+        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
+        for (const themeName in themeFilters) {
+            filterConfig.set(themeName, themeFilters[themeName]);
+        }
+        const dataStore: TourDocDataStore = new TourDocDataStore(new SearchParameterUtils(), filterConfig);
+        const dataService: TourDocDataService = new TourDocDataService(dataStore);
+
+        // configure adapter
+        const sqlConfig = backendConfig['TourDocSqlMediadbAdapter'];
+        if (sqlConfig === undefined) {
+            throw new Error('config for TourDocSqlMediadbAdapter not exists');
+        }
+        const options = {
+            knexOpts: {
+                client: sqlConfig['client'],
+                connection: sqlConfig['connection']
+            },
+            mapperConfig: backendConfig['mapperConfig']
+        };
+        const adapter = new TourDocSqlMediadbAdapter(options);
+        dataStore.setAdapter('http', adapter, '', {});
+
+        return dataService;
+    }
+
+    private static createDataServiceMytbSql(backendConfig: {}): TourDocDataService {
+        // configure store
+        const filterConfig: TourDocTeamFilterConfig = new TourDocTeamFilterConfig();
+        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
+        for (const themeName in themeFilters) {
+            filterConfig.set(themeName, themeFilters[themeName]);
+        }
+        const dataStore: TourDocDataStore = new TourDocDataStore(new SearchParameterUtils(), filterConfig);
+        const dataService: TourDocDataService = new TourDocDataService(dataStore);
+
+        // configure adapter
+        const sqlConfig = backendConfig['TourDocSqlMytbAdapter'];
+        if (sqlConfig === undefined) {
+            throw new Error('config for TourDocSqlMytbAdapter not exists');
+        }
+        const options = {
+            knexOpts: {
+                client: sqlConfig['client'],
+                connection: sqlConfig['connection']
+            },
+            mapperConfig: backendConfig['mapperConfig']
+        };
+        const adapter = new TourDocSqlMytbAdapter(options);
+        dataStore.setAdapter('http', adapter, '', {});
+
+        return dataService;
+    }
+
+    private static createDataServiceItemsJs(backendConfig: {}): TourDocDataService {
+        // configure store
+        const filterConfig: TourDocTeamFilterConfig = new TourDocTeamFilterConfig();
+        const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
+        for (const themeName in themeFilters) {
+            filterConfig.set(themeName, themeFilters[themeName]);
+        }
+        const dataStore: TourDocDataStore = new TourDocDataStore(new SearchParameterUtils(), filterConfig);
+        const dataService: TourDocDataService = new TourDocDataService(dataStore);
+
+        // configure adapter
+        const itemsJsConfig = backendConfig['TourDocItemsJsAdapter'];
+        if (itemsJsConfig === undefined) {
+            throw new Error('config for TourDocItemsJsAdapter not exists');
+        }
+        const records = TourDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(itemsJsConfig['dataFile'], { encoding: 'utf8' }));
+
+        const adapter = new TourDocItemsJsAdapter({mapperConfig: backendConfig['mapperConfig']}, records);
+        dataStore.setAdapter('http', adapter, '', {});
+
+        return dataService;
+    }
+}

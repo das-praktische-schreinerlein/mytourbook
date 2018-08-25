@@ -1,10 +1,10 @@
 import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 import {ServerConfig} from '../server-module.loader';
 import * as fs from 'fs';
-import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
+import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {DataCacheModule} from '../shared-node/server-commons/datacache.module';
-import {SDocServerModule} from '../modules/sdoc-server.module';
-import {SDocDataService} from '../shared/sdoc-commons/services/sdoc-data.service';
+import {TourDocServerModule} from '../modules/tdoc-server.module';
+import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 
 export class CacheInitializerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -18,11 +18,11 @@ export class CacheInitializerCommand implements AbstractCommand {
             firewallConfig: undefined
         };
 
-        const sdocDataService: SDocDataService =
-            SDocDataServiceModule.getDataService('sdocSolr', serverConfig.backendConfig);
+        const tdocDataService: TourDocDataService =
+            TourDocDataServiceModule.getDataService('tdocSolr', serverConfig.backendConfig);
         const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
-        const sdocServerModule = new SDocServerModule(sdocDataService, cache);
+        const tdocServerModule = new TourDocServerModule(tdocDataService, cache);
 
-        return sdocServerModule.initCache();
+        return tdocServerModule.initCache();
     }
 }

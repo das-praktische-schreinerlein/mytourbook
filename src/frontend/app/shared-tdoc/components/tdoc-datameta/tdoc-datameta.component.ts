@@ -1,0 +1,31 @@
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
+import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
+import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+
+@Component({
+    selector: 'app-tdoc-datameta',
+    templateUrl: './tdoc-datameta.component.html',
+    styleUrls: ['./tdoc-datameta.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TourDocDataMetaComponent extends AbstractInlineComponent {
+    tdocdatameta: TourDocRecord;
+
+    @Input()
+    public record: TourDocRecord;
+
+    @Input()
+    public small? = false;
+
+    constructor(protected cd: ChangeDetectorRef) {
+        super(cd);
+    }
+
+    protected updateData(): void {
+        if (this.record === undefined) {
+            this.tdocdatameta = undefined;
+            return;
+        }
+        this.tdocdatameta = this.record;
+    }
+}

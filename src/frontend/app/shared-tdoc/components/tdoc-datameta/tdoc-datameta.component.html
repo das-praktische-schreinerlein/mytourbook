@@ -1,0 +1,6 @@
+<ng-container *ngIf="tdocdatameta !== undefined">
+    <div class="techvaluetable">
+        <div *ngIf="tdocdatameta.playlists !== undefined && tdocdatameta.playlists.length > 0" class="entry"><div class="label">Playlists:</div><div class="value">{{tdocdatameta.playlists}}</div></div>
+        <div *ngIf="tdocdatameta.persons !== undefined && tdocdatameta.persons.length > 0" class="entry"><div class="label">Personen:</div><div class="value">{{tdocdatameta.persons}}</div></div>
+    </div>
+</ng-container>

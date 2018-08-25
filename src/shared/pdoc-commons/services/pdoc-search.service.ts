@@ -34,9 +34,9 @@ export class PDocSearchService extends GenericSearchService <PDocRecord, PDocSea
         return new PDocSearchForm(values);
     }
 
-    public newSearchResult(sdocSearchForm: PDocSearchForm, recordCount: number,
+    public newSearchResult(pdocSearchForm: PDocSearchForm, recordCount: number,
                            currentRecords: PDocRecord[], facets: Facets): PDocSearchResult {
-        return new PDocSearchResult(sdocSearchForm, recordCount, currentRecords, facets);
+        return new PDocSearchResult(pdocSearchForm, recordCount, currentRecords, facets);
     }
 
     public cloneSanitizedSearchForm(src: PDocSearchForm): PDocSearchForm {

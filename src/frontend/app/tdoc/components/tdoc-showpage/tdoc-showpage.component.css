@@ -1,0 +1,25 @@
+.image-container {
+    width: 100%;
+}
+.tagcloud-container {
+    max-width: 578px;
+    display: inline-block
+}
+.profile-toggler-container {
+    text-align: right;
+}
+.image-container img {
+    margin: auto;
+    display: block;
+}
+table.rate {
+    display: inline-block;
+    border: 1px solid black;
+}
+ul.props {
+    list-style: none;
+    font-size: 0.75rem;
+}
+span.fx-bg-name {
+    width: 100%;
+}

@@ -1,0 +1,51 @@
+<div [class]="(!showResultList ? 'hidden-print tdoc-inline-searchpage': 'tdoc-inline-searchpage')" *ngIf="!showOnlyIfRecordsFound || searchResult.recordCount > 0 || showLoadingSpinner">
+    <div class="container inline-content-container relative-container" id="{{htmlId ? htmlId : ''}}">
+        <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-6">
+                    <h5 class="fx-bg-type">{{label}}: {{ searchResult.recordCount }}</h5>
+                    <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined  && searchResult && searchResult.recordCount > 0" class="btn btn-action btn-sm float">{{searchLinkLabel}}</a>
+                </div>
+                <div class="col-6">
+                    <button *ngIf="!showResultList" class="btn btn-configure btn-sm float-right" (click)="showResultList = true">
+                        <span i18n="button show resultlist|Buttontext to show resultlist@@button.inlineSearchPage.show.resultlist">anzeigen</span>
+                        <span class="btn-action-icon">&#x21D3;</span></button>
+                    <button *ngIf="showResultList && searchResult && searchResult.recordCount > 0" class="btn btn-configure btn-sm float-right" (click)="showResultList = false">
+                        <span i18n="button hide resultlist|Buttontext to hide resultlist@@button.inlineSearchPage.hide.resultlist">ausblenden</span>
+                        <span class="btn-action-icon">&#x21D1;</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="container" *ngIf="showForm">
+            <app-tdoc-searchform [searchResult]="searchResult"
+                                 (search)="onSearchDoc($event)"></app-tdoc-searchform>
+        </div>
+        <div class="container" *ngIf="showTimetable && showResultList">
+            <app-cdoc-timetable [searchResult]="searchResult"></app-cdoc-timetable>
+        </div>
+        <div class="container" *ngIf="showLayout && showResultList">
+            <app-cdoc-list-header [searchResult]="searchResult"
+                                  [perPage]="searchForm.perPage"
+                                  [availableLayouts]="[Layout.THIN, Layout.FLAT, Layout.SMALL, Layout.BIG]"
+                                  [availablePerPage]="[10, 20, 50, 99]"
+                                  [layout]="layout"
+                                  [sort]="searchForm.sort"
+                                  (perPageChange)="onPerPageChange($event)"
+                                  (sortChange)="onSortChange($event)"
+                                  (layoutChange)="onLayoutChange($event)"
+                                  (pageChange)="onPageChange($event)" ></app-cdoc-list-header>
+        </div>
+        <div class="container" *ngIf="showResultList">
+            <app-tdoc-list [searchResult]="searchResult"
+                           [layout]="layout"
+                           [short]="short"
+                           (show)="onShowDoc($event)"></app-tdoc-list>
+        </div>
+        <div class="container" *ngIf="showResultList">
+            <app-cdoc-list-footer [searchResult]="searchResult"
+                                  (pageChange)="onPageChange($event)" ></app-cdoc-list-footer>
+        </div>
+    </div>
+</div>
+

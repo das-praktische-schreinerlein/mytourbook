@@ -6,7 +6,7 @@ import {GenericSearchForm} from '../model/forms/generic-searchform';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import {Adapter} from 'js-data-adapter';
-import knex from 'knex';
+import * as knex from 'knex';
 import {GenericFacetAdapter} from './generic-search.adapter';
 import {isArray} from 'util';
 import {AdapterOpts, AdapterQuery, MapperUtils} from './mapper.utils';
@@ -30,13 +30,13 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         this.mapper = mapper;
     }
 
-    create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
+    create(mapper: Mapper, props: any, opts?: any): Promise<R> {
         props = props || {};
         opts = opts || {};
         return super.create(mapper, props, opts);
     }
 
-    createMany<T extends Record>(mapper: Mapper, props: any, opts: any): Promise<T> {
+    createMany(mapper: Mapper, props: any, opts: any): Promise<R> {
         throw new Error('createMany not implemented');
     }
 
@@ -48,7 +48,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         throw new Error('destroyAll not implemented');
     }
 
-    doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
+    doActionTag(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<R> {
         const adapterQuery: AdapterQuery = {
             loadTrack: false,
             where: {
@@ -78,7 +78,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     }
 
-    find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
+    find(mapper: Mapper, id: string | number, opts: any): Promise<R> {
         const adapterQuery: AdapterQuery = {
             loadTrack: false,
             where: {
@@ -89,7 +89,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         };
 
         const me = this;
-        const result = new Promise<T>((resolve, reject) => {
+        const result = new Promise<R>((resolve, reject) => {
             me._findAll(mapper, adapterQuery, opts).then(value => {
                 const [records] = value;
                 if (records.length === 1) {
@@ -110,7 +110,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         throw new Error('sum not implemented');
     }
 
-    update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts: any): Promise<T> {
+    update(mapper: Mapper, id: string | number, props: any, opts: any): Promise<R> {
         props = props || {};
         opts = opts || {};
         return super.update(mapper, id, props, opts);
@@ -120,7 +120,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         throw new Error('updateAll not implemented');
     }
 
-    updateMany<T extends Record>(mapper: Mapper, records: T[], opts?: any): Promise<any> {
+    updateMany(mapper: Mapper, records: R[], opts?: any): Promise<any> {
         throw new Error('updateMany not implemented');
     }
 
@@ -131,14 +131,14 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return super.count(mapper, query, opts);
     }
 
-    findAll<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<T[]> {
+    findAll(mapper: Mapper, query: any, opts: any): Promise<R[]> {
         query = query || {};
         opts = opts || {};
 
         return super.findAll(mapper, query, opts);
     }
 
-    facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+    facets(mapper: Mapper, query: any, opts: any): Promise<Facets> {
         query = query || {};
         opts = opts || {};
 
@@ -151,12 +151,12 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.Promise.resolve(result);
     }
 
-    afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
+    afterCreate(mapper: Mapper, props: IDict, opts: any, result: any): Promise<R> {
         opts.realResult = result;
         return utils.resolve(result);
     }
 
-    afterUpdate<T extends Record>(mapper: Mapper, id: string | number, props: IDict, opts: any, result: any): Promise<T> {
+    afterUpdate(mapper: Mapper, id: string | number, props: IDict, opts: any, result: any): Promise<R> {
         opts.realResult = result;
         return utils.resolve(result);
     }
@@ -165,7 +165,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return utils.resolve(true);
     }
 
-    protected _create<T extends Record>(mapper, props, opts): Promise<any> {
+    protected _create(mapper, props, opts): Promise<any> {
         if (opts.realSource) {
             props = opts.realSource;
         }
@@ -253,7 +253,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     };
 
-    protected _doActionTag<T extends Record>(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    protected _doActionTag(mapper: Mapper, record: R, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         const tableConfig = this.getTableConfigForTableKey((record['type'] + '').toLowerCase());
         if (tableConfig === undefined) {
             return utils.reject('no table for actiontag:' + LogUtils.sanitizeLogMsg(actionTagForm.key));
@@ -371,7 +371,7 @@ export abstract class GenericSqlAdapter <R extends Record, F extends GenericSear
         return result;
     };
 
-    protected _update<T extends Record>(mapper, id, props, opts): Promise<any> {
+    protected _update(mapper, id, props, opts): Promise<any> {
         if (opts.realSource) {
             props = opts.realSource;
         }

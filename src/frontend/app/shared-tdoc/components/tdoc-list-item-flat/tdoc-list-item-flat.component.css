@@ -1,0 +1,14 @@
+div.tdoc-list-item-flat {
+    width: 100%;
+    border: 1px solid #bfccd3;
+    border-radius: 5px;
+    padding: 5px;
+}
+div.tdoc-list-item-flat h5 {
+    font-size: 0.75rem;
+}
+
+div.tdoc-list-item-flat div.card-action-buttons {
+    float: right;
+}
+

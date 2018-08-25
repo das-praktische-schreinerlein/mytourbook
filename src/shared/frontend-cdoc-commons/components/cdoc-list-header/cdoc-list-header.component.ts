@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Layout} from '../../../angular-commons/services/layout.service';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {AppState, GenericAppService} from '../../../commons/services/generic-app.service';
 import {BeanUtils} from '../../../commons/utils/bean.utils';
 import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
@@ -59,7 +59,7 @@ export class CommonDocListHeaderComponent extends AbstractInlineComponent implem
     @Output()
     public layoutChange: EventEmitter<Layout> = new EventEmitter();
 
-    public headerFormGroup = this.fb.group({
+    public headerFormGroup: FormGroup = this.fb.group({
         sort: 'relevance',
         perPage: 10,
         layout: Layout.FLAT

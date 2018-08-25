@@ -1,0 +1,25 @@
+div.card-block h5 {
+    font-size: 0.75rem;
+}
+
+div.card-footer div.card-action-buttons {
+    float: right;
+}
+
+button.show.btn-navigation {
+    font-size: 10px;
+}
+
+ul.props {
+    float: left;
+    list-style: none;
+    font-size: 0.75rem;
+}
+
+div.picture-small {
+    width: 300px;
+    max-width: 95%;
+    max-height: 300px;
+    overflow: hidden;
+    border-radius: 10px;
+}

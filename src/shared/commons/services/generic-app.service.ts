@@ -20,9 +20,9 @@ export enum BrowserOnlineState {
 export abstract class GenericAppService {
     static ERROR_APP_NOT_INITIALIZED = 'ERROR_APP_NOT_INITIALIZED';
     private appState: AppState = AppState.Starting;
-    private appStateObservable = new ReplaySubject<AppState>();
-    private appOnlineStateObservable = new BehaviorSubject<AppOnlineState>(AppOnlineState.Online);
-    private browserOnlineStateObservable = new BehaviorSubject<BrowserOnlineState>(BrowserOnlineState.Online);
+    private appStateObservable: Subject<AppState> = new ReplaySubject<AppState>();
+    private appOnlineStateObservable: Subject<AppOnlineState> = new BehaviorSubject<AppOnlineState>(AppOnlineState.Online);
+    private browserOnlineStateObservable: Subject<BrowserOnlineState> = new BehaviorSubject<BrowserOnlineState>(BrowserOnlineState.Online);
 
     constructor() {
         this.appStateObservable.next(this.appState);

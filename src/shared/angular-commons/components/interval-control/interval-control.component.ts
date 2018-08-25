@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, Output} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
     selector: 'app-interval-control',
@@ -21,7 +21,7 @@ export class IntervalControlComponent implements OnDestroy {
     @Output()
     public intervalStopped: EventEmitter<any> = new EventEmitter();
 
-    public intervalFormGroup = this.fb.group({
+    public intervalFormGroup: FormGroup = this.fb.group({
         intervalTimeout: [5]
     });
 

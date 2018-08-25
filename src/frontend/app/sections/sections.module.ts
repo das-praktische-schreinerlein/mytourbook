@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {SectionsSearchFormResolver} from './resolver/sections-searchform.resolver';
-import {SectionsSDocRecordResolver} from './resolver/sections-sdoc-details.resolver';
+import {SectionsTourDocRecordResolver} from './resolver/sections-tdoc-details.resolver';
 import {SectionsRoutingModule} from './sections-routing.module';
 import {SectionsBaseUrlResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
 import {SectionsPDocRecordResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
-import {SDocSectionPageComponent} from './components/sectionpage/sdoc-section-page.component';
+import {TourDocSectionPageComponent} from './components/sectionpage/tdoc-section-page.component';
 import {BrowserModule} from '@angular/platform-browser';
-import {SharedSDocModule} from '../shared-sdoc/shared-sdoc.module';
+import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SectionsPDocsResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-pdocs.resolver';
@@ -22,7 +22,7 @@ import {FrontendPDocCommonsModule} from '../../shared/frontend-pdoc-commons/fron
 
 @NgModule({
     declarations: [
-        SDocSectionPageComponent
+        TourDocSectionPageComponent
     ],
     imports: [
         TranslateModule,
@@ -31,7 +31,7 @@ import {FrontendPDocCommonsModule} from '../../shared/frontend-pdoc-commons/fron
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        SharedSDocModule,
+        SharedTourDocModule,
         FrontendPDocCommonsModule,
         SectionsRoutingModule,
         FrontendCdocCommonsModule
@@ -40,7 +40,7 @@ import {FrontendPDocCommonsModule} from '../../shared/frontend-pdoc-commons/fron
         CommonRoutingService,
         SectionsBaseUrlResolver,
         SectionsSearchFormResolver,
-        SectionsSDocRecordResolver,
+        SectionsTourDocRecordResolver,
         SectionsPDocRecordResolver,
         SectionsPDocsResolver,
         ErrorResolver,

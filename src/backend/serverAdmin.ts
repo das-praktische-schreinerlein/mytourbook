@@ -1,10 +1,10 @@
 import minimist from 'minimist';
 import {CacheInitializerCommand} from './commands/cache-initializer.command';
 import {SiteMapGeneratorCommand} from './commands/sitemap-generator.command';
-import {SDocLoaderCommand} from './commands/sdoc-loader.command';
+import {TourDocLoaderCommand} from './commands/tdoc-loader.command';
 import {utils} from 'js-data';
 import {MediaManagerCommand} from './commands/media-manager.command';
-import {SDocExporterCommand} from './commands/sdoc-exporter.command';
+import {TourDocExporterCommand} from './commands/tdoc-exporter.command';
 import {RedirectGeneratorCommand} from './commands/redirect-generator.command';
 
 const argv = minimist(process.argv.slice(2));
@@ -19,8 +19,8 @@ if (!debug) {
 
 const cacheInitializer = new CacheInitializerCommand();
 const siteMapGenerator = new SiteMapGeneratorCommand();
-const sdocLoader = new SDocLoaderCommand();
-const sdocExporter = new SDocExporterCommand();
+const tdocLoader = new TourDocLoaderCommand();
+const tdocExporter = new TourDocExporterCommand();
 const imageManager = new MediaManagerCommand();
 const redirectGenerator = new RedirectGeneratorCommand();
 
@@ -35,11 +35,11 @@ switch (argv['command']) {
     case 'generateRedirects':
         promise = redirectGenerator.process(argv);
         break;
-    case 'loadSdoc':
-        promise = sdocLoader.process(argv);
+    case 'loadTourDoc':
+        promise = tdocLoader.process(argv);
         break;
-    case 'exportSdoc':
-        promise = sdocExporter.process(argv);
+    case 'exportTourDoc':
+        promise = tdocExporter.process(argv);
         break;
     case 'imageManager':
         promise = imageManager.process(argv);

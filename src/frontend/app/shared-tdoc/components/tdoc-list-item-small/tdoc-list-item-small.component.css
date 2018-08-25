@@ -1,0 +1,18 @@
+div.card-block h5 {
+    font-size: 0.75rem;
+}
+
+h5.image-date {
+    margin: 0;
+}
+div.card-footer div.card-action-buttons {
+    float: right;
+}
+div.card-block-image {
+    max-width: 135px;
+    padding: 5px;
+}
+div.image-container {
+    width: 100px;
+    margin: auto;
+}

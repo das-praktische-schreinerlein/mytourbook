@@ -24,29 +24,29 @@
             "pattern": "/api/v1/de/pdoc/.+",
             "file": "pdoc.json"
         },
-        "sdocsearch_de": {
-            "pattern": "/api/v1/de/sdocsearch.*",
-            "file": "sdocsearch.json"
+        "tdocsearch_de": {
+            "pattern": "/api/v1/de/tdocsearch.*",
+            "file": "tdocsearch.json"
         },
-        "sdocsearch_en": {
-            "pattern": "/api/v1/en/sdocsearch.*",
-            "file": "sdocsearch.json"
+        "tdocsearch_en": {
+            "pattern": "/api/v1/en/tdocsearch.*",
+            "file": "tdocsearch.json"
         },
-        "sdoc_de": {
-            "pattern": "/api/v1/de/sdoc/$",
-            "file": "sdocsearch.json"
+        "tdoc_de": {
+            "pattern": "/api/v1/de/tdoc/$",
+            "file": "tdocsearch.json"
         },
-        "sdoc_en": {
-            "pattern": "/api/v1/de/sdoc/$",
-            "file": "sdocsearch.json"
+        "tdoc_en": {
+            "pattern": "/api/v1/de/tdoc/$",
+            "file": "tdocsearch.json"
         },
-        "sdoc_params_de": {
-            "pattern": "/api/v1/de/sdoc/.+",
-            "file": "sdoc.json"
+        "tdoc_params_de": {
+            "pattern": "/api/v1/de/tdoc/.+",
+            "file": "tdoc.json"
         },
-        "sdoc_params_en": {
-            "pattern": "/api/v1/de/sdoc/.+",
-            "file": "sdoc.json"
+        "tdoc_params_en": {
+            "pattern": "/api/v1/de/tdoc/.+",
+            "file": "tdoc.json"
         },
         "tracks": {
             "pattern": "/tracks/.*",

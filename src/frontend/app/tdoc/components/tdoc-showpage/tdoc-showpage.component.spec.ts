@@ -1,0 +1,83 @@
+/* tslint:disable:no-unused-variable */
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {TourDocShowpageComponent} from './tdoc-showpage.component';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {ActivatedRouteStub} from '../../../../shared/testing/router-stubs';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
+import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
+import {MarkdownModule, MarkdownService} from 'angular2-markdown';
+import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
+import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {Angulartics2} from 'angulartics2';
+import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
+import {TourDocDateFormatPipe} from '../../../shared-tdoc/pipes/tdoc-dateformat.pipe';
+import {DatePipe} from '@angular/common';
+import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
+import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
+import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
+import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
+
+describe('TourDocShowpageComponent', () => {
+    let component: TourDocShowpageComponent;
+    let fixture: ComponentFixture<TourDocShowpageComponent>;
+
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [TourDocShowpageComponent, TourDocDateFormatPipe],
+            imports: [
+                NgbModule.forRoot(),
+                ToastModule.forRoot(),
+                TranslateModule.forRoot(),
+                MarkdownModule.forRoot()],
+            providers: [
+                { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+                { provide: Router, useValue: new RouterStub() },
+                DatePipe,
+                CommonRoutingService,
+                PlatformService,
+                TourDocContentUtils,
+                { provide: GenericAppService, useValue: new AppServiceStub() },
+                CommonDocRoutingService,
+                TourDocRoutingService,
+                ToastsManager,
+                TranslateService,
+                MarkdownService,
+                AngularMarkdownService,
+                AngularHtmlService,
+                ErrorResolver,
+                PageUtils,
+                GenericTrackingService,
+                { provide: Angulartics2, useValue: new Angulartics2Stub() },
+                LayoutService,
+                TourDocSearchFormConverter,
+                SearchFormUtils,
+                SearchParameterUtils
+        ],
+            schemas: [NO_ERRORS_SCHEMA]
+        })
+            .compileComponents();
+    }));
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TourDocShowpageComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+});

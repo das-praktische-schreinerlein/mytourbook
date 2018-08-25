@@ -1,0 +1,138 @@
+<ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="true">
+    <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+        <div class="card-block" [ngClass]="listItem.styleClassFor">
+            <a [name]="listItem.currentRecord.id"></a>
+
+            <ng-container *ngIf="short">
+                <div class="picture-small" *ngIf="listItem.image">
+                    <img class="picture-small" width="300px"
+                         [src]="listItem.previewUrl"
+                         (click)="submitShowImage(listItem.currentRecord)"
+                         alt="{{listItem.image.name}}">
+                </div>
+                <div *ngIf="listItem.video">
+                    <app-tdoc-videoplayer [record]="listItem.currentRecord"
+                                          [showPreview]="true"
+                                          [width]="300" [forceWidth]="300" [styleClass]="'picture-small'"
+                                          (show)="submitShow(listItem.currentRecord)"></app-tdoc-videoplayer>
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+                </div>
+                <small class="text-muted"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy>
+                    {{listItem.currentRecord | tdocdate}}
+                </small>
+            </ng-container>
+            <ng-container *ngIf="!short">
+                <h5><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance>
+                    <app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+                <div>
+                    <div>
+                        <h5>{{listItem.currentRecord.type | translate }}</h5>
+                        <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+                        <div class="picture-small" *ngIf="listItem.image">
+                            <img class="picture-small" width="300px"
+                                 [src]="listItem.previewUrl"
+                                 (click)="submitShowImage(listItem.currentRecord)"
+                                 alt="{{listItem.image.name}}">
+                        </div>
+                        <app-tdoc-videoplayer *ngIf="listItem.video"
+                                              [record]="listItem.currentRecord"
+                                              [showPreview]="true"
+                                              [width]="300" [forceWidth]="300" [styleClass]="'picture-small'"
+                                              (show)="submitShow(listItem.currentRecord)"></app-tdoc-videoplayer>
+
+                    </div>
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+                </div>
+                <br clear="all" />
+                <div class="card-text">
+                    <ngb-accordion #acc="ngbAccordion" activeIds="">
+                        <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
+                            <ng-template ngbPanelContent>
+                                <app-tdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
+                                              [height]="'150'"
+                                              [mapZoom]="'9'"
+                                              [tdocs]="[listItem.currentRecord]"
+                                              [mapCenterPos]="undefined"></app-tdoc-map>
+                            </ng-template>
+                        </ngb-panel>
+                        <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.tdoc.title">
+                            <ng-template ngbPanelContent>
+                                <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
+                                <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
+                                <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
+                                <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                            </ng-template>
+                        </ngb-panel>
+                    </ngb-accordion>
+                </div>
+            </ng-container>
+        </div>
+        <div class="card-footer card-footer-list-item" *ngIf="!short">
+            <small class="text-muted">{{listItem.currentRecord | tdocdate}}</small>
+            <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+                <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show tdoc|Buttontext to listitemaction:show tdoc@@button.listitemaction.tdoc.show">Show</button>
+            </div>
+            <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
+        </div>
+    </ng-container>
+    <ng-container *ngSwitchDefault="">
+        <div class="card-block" [ngClass]="listItem.styleClassFor">
+            <a [name]="listItem.currentRecord.id"></a>
+            <h5><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance>
+                <app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+            <div>
+                <div style="width: 100px; float: left">
+                    <h5>{{listItem.currentRecord.type | translate }}</h5>
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </div>
+                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
+                <p class="card-text">
+                    {{listItem.currentRecord.descTxt | truncate : 300 }}
+                </p>
+            </div>
+            <br clear="all" />
+            <div class="card-text card-text-list-item" *ngIf="!short">
+                <ngb-accordion #acc="ngbAccordion" activeIds="">
+                    <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.tdoc.title">
+                        <ng-template ngbPanelContent>
+                            <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
+                            <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord"></app-tdoc-ratepers-difficulty>
+                            <app-tdoc-ratetech [record]="listItem.currentRecord"></app-tdoc-ratetech>
+                            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                            <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
+                            <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
+                            <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
+                            <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                        </ng-template>
+                    </ngb-panel>
+                    <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
+                        <ng-template ngbPanelContent>
+                            <app-tdoc-map [mapId]="'listItemMap' + listItem.currentRecord.id"
+                                          [height]="'150'"
+                                          [mapZoom]="'9'"
+                                          [tdocs]="[listItem.currentRecord]"
+                                          [mapCenterPos]="undefined"></app-tdoc-map>
+                        </ng-template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </div>
+        </div>
+        <div class="card-footer card-footer-list-item" *ngIf="!short">
+            <small class="text-muted">{{listItem.currentRecord | tdocdate}}</small>
+            <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
+                <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show tdoc|Buttontext to listitemaction:show tdoc@@button.listitemaction.tdoc.show">Show</button>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>

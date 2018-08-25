@@ -1,0 +1,61 @@
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output} from '@angular/core';
+import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
+import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
+import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
+import {TourDocLightBoxService} from '../../services/tdoc-lightbox.service';
+import {Layout} from '../../../../shared/angular-commons/services/layout.service';
+import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
+import {CommonDocListComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
+import {CommonDocLightboxAlbumConfig} from '../../../../shared/frontend-cdoc-commons/services/cdoc-lightbox.service';
+
+@Component({
+    selector: 'app-tdoc-list',
+    templateUrl: './tdoc-list.component.html',
+    styleUrls: ['./tdoc-list.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
+    @Output()
+    public playerStarted: EventEmitter<TourDocRecord> = new EventEmitter();
+
+    @Output()
+    public playerStopped: EventEmitter<TourDocRecord> = new EventEmitter();
+
+    public Layout = Layout;
+
+    private lightboxAlbumConfig: CommonDocLightboxAlbumConfig = {
+        album: [],
+        idPos: {}
+    };
+
+    constructor(private searchFormConverter: TourDocSearchFormConverter,
+                private lightboxService: TourDocLightBoxService, protected cd: ChangeDetectorRef) {
+        super(cd);
+    }
+
+    onShowImage(record: TourDocRecord) {
+        if (record.type === 'IMAGE') {
+            this.lightboxService.openId(this.lightboxAlbumConfig, record.id);
+        } else {
+            this.show.emit(record);
+        }
+        return false;
+    }
+
+    onPlayerStarted(tdoc: TourDocRecord) {
+        this.playerStarted.emit(tdoc);
+    }
+
+    onPlayerStopped(tdoc: TourDocRecord) {
+        this.playerStopped.emit(tdoc);
+    }
+
+    getBackToSearchUrl(searchResult: TourDocSearchResult): string {
+        return (searchResult.searchForm ?
+            this.searchFormConverter.searchFormToUrl(this.baseSearchUrl, searchResult.searchForm) : undefined);
+    }
+
+    protected updateData(): void {
+        this.lightboxAlbumConfig = this.lightboxService.createAlbumConfig(this.searchResult);
+    }
+}

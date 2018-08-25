@@ -1,0 +1,11 @@
+<ng-container *ngIf="tdocratetech !== undefined && (!small || (tdocratetech.overall !== undefined && tdocratetech.overall.length > 0))">
+    <div class="techvaluetable">
+        <div *ngIf="tdocratetech.overall !== undefined && tdocratetech.overall.length > 0" class="entry"><div class="label">Overall:</div><div class="value">{{tdocratetech.overall}}</div></div>
+        <div *ngIf="!small && tdocratetech.bergtour !== undefined && tdocratetech.bergtour.length > 0" class="entry"><div class="label">Bergtour:</div><div class="value">{{tdocratetech.bergtour}}</div></div>
+        <div *ngIf="!small && tdocratetech.klettern !== undefined && tdocratetech.klettern.length > 0" class="entry"><div class="label">Klettern:</div><div class="value">{{tdocratetech.klettern}}</div></div>
+        <div *ngIf="!small && tdocratetech.ks !== undefined && tdocratetech.ks.length > 0" class="entry"><div class="label">Klettersteig:</div><div class="value">{{tdocratetech.ks}}</div></div>
+        <div *ngIf="!small && tdocratetech.gletscher !== undefined && tdocratetech.gletscher.length > 0" class="entry"><div class="label">Gletscher:</div><div class="value">{{tdocratetech.gletscher}}</div></div>
+        <div *ngIf="!small && tdocratetech.firn !== undefined && tdocratetech.firn.length > 0" class="entry"><div class="label">Firn:</div><div class="value">{{tdocratetech.firn}}</div></div>
+        <div *ngIf="!small && tdocratetech.schneeschuh !== undefined && tdocratetech.schneeschuh.length > 0" class="entry"><div class="label">Schneeschuh:</div><div class="value">{{tdocratetech.schneeschuh}}</div></div>
+    </div>
+</ng-container>

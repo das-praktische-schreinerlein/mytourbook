@@ -1,7 +1,7 @@
 import {ChangeDetectorRef, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {FormBuilder} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {IdCsvValidationRule, IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
 import {CommonDocRecord} from '../../search-commons/model/records/cdoc-entity-record';
@@ -53,7 +53,7 @@ export abstract class CommonDocAlbumpageComponent <R extends CommonDocRecord, F 
     maxAllowedItems = -1;
     pauseAutoPlay = false;
 
-    public editFormGroup = this.fb.group({
+    public editFormGroup: FormGroup = this.fb.group({
         albumIds: ''
     });
 

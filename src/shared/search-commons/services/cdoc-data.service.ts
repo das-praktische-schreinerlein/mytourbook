@@ -108,7 +108,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
 
     add(values: {}, opts?: any): Promise<R> {
         if (!this.isWritable()) {
-            throw new Error('SDocDataService configured: not writable');
+            throw new Error('CommonDocDataService configured: not writable');
         }
 
         let record: R;
@@ -127,21 +127,21 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
 
     addMany(docs: R[], opts?: any): Promise<R[]> {
         if (!this.isWritable()) {
-            throw new Error('SDocDataService configured: not writable');
+            throw new Error('CommonDocDataService configured: not writable');
         }
         return <Promise<R[]>>this.dataStore.createMany(this.getBaseMapperName(), docs, opts);
     }
 
     deleteById(id: string, opts?: any): Promise<R> {
         if (!this.isWritable()) {
-            throw new Error('SDocDataService configured: not writable');
+            throw new Error('CommonDocDataService configured: not writable');
         }
         return <Promise<R>>this.dataStore.destroy(this.getBaseMapperName(), id, opts);
     }
 
     updateById(id: string, values: {}, opts?: any): Promise<R> {
         if (!this.isWritable()) {
-            throw new Error('SDocDataService configured: not writable');
+            throw new Error('CommonDocDataService configured: not writable');
         }
 
         let record: R;
@@ -160,7 +160,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
 
     doActionTag(docRecord: R, actionTagForm: ActionTagForm, opts?: any): Promise<R> {
         if (!this.isWritable()) {
-            throw new Error('SDocDataService configured: not writable');
+            throw new Error('CommonDocDataService configured: not writable');
         }
 
         return <Promise<R>>this.dataStore.doActionTag(this.getBaseMapperName(), docRecord, actionTagForm, opts);
@@ -168,16 +168,16 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
 
     doActionTags(docRecord: R, actionTagForms: ActionTagForm[], opts?: any): Promise<R> {
         if (!this.isWritable()) {
-            throw new Error('SDocDataService configured: not writable');
+            throw new Error('CommonDocDataService configured: not writable');
         }
 
-        let curSdocRecord = docRecord;
+        let curCdocRecord = docRecord;
         const me = this;
         const promises = actionTagForms.map(actionTagForm => {
-            return me.doActionTag(curSdocRecord, actionTagForm, opts)
-                .then(function onDone(newSdocRecord: R) {
-                    curSdocRecord = newSdocRecord;
-                    return utils.resolve(newSdocRecord);
+            return me.doActionTag(curCdocRecord, actionTagForm, opts)
+                .then(function onDone(newCdocRecord: R) {
+                    curCdocRecord = newCdocRecord;
+                    return utils.resolve(newCdocRecord);
                 }).catch(function onError(error) {
                     return utils.reject(error);
                 });
@@ -185,7 +185,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         const results = Promise.all(promises);
 
         return results.then(data => {
-            return utils.resolve(curSdocRecord);
+            return utils.resolve(curCdocRecord);
         }).catch(errors => {
             return utils.reject(errors);
         });
@@ -197,7 +197,7 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         const mapper: Mapper = this.searchService.getMapper(this.getBaseMapperName());
         const adapter: Adapter = this.searchService.getAdapterForMapper(this.getBaseMapperName());
         if (!this.isWritable()) {
-            throw new Error('SDocDataService configured: not writable');
+            throw new Error('CommonDocDataService configured: not writable');
         }
 
         const query = {
@@ -245,24 +245,24 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
                 }
 
                 console.log('ADD - record', record.type + ' ' + record.name);
-                return me.add(record).then(function onFullfilled(newSdocRecord: R) {
-                    docRecord = newSdocRecord;
+                return me.add(record).then(function onFullfilled(newCdocRecord: R) {
+                    docRecord = newCdocRecord;
                     return me.doImportActionTags(record, docRecord, opts);
 
                 });
-            }).then(function recordsDone(newSdocRecord: R) {
+            }).then(function recordsDone(newCdocRecord: R) {
                 const idFieldName = me.typeMapping[record.type.toLowerCase()];
 
                 if (!recordIdMapping.hasOwnProperty(idFieldName)) {
                     recordIdMapping[idFieldName] = {};
                 }
-                console.log('new: ' + newSdocRecord.id + ' save recordIdMapping ' + idFieldName + ' ' + myMappings[idFieldName]
-                    + '->' + newSdocRecord[idFieldName]);
-                console.log('new: ' + newSdocRecord.id + ' save recordRecoverIdMapping for ' + ':', myMappings);
-                recordIdMapping[idFieldName][myMappings[idFieldName]] = newSdocRecord[idFieldName];
-                recordRecoverIdMapping[newSdocRecord.id] = myMappings;
+                console.log('new: ' + newCdocRecord.id + ' save recordIdMapping ' + idFieldName + ' ' + myMappings[idFieldName]
+                    + '->' + newCdocRecord[idFieldName]);
+                console.log('new: ' + newCdocRecord.id + ' save recordRecoverIdMapping for ' + ':', myMappings);
+                recordIdMapping[idFieldName][myMappings[idFieldName]] = newCdocRecord[idFieldName];
+                recordRecoverIdMapping[newCdocRecord.id] = myMappings;
 
-                return utils.resolve(newSdocRecord);
+                return utils.resolve(newCdocRecord);
             }).catch(function onError(error) {
                 return utils.reject(error);
             });
@@ -295,8 +295,8 @@ export abstract class CommonDocDataService<R extends CommonDocRecord, F extends 
         }
 
         record.subtype = record.subtype ? record.subtype.replace(/[-a-zA-Z_]+/g, '') : '';
-        return this.updateById(record.id, record, opts).then(function recordsDone(newSdocRecord: R) {
-            return utils.resolve(newSdocRecord);
+        return this.updateById(record.id, record, opts).then(function recordsDone(newCdocRecord: R) {
+            return utils.resolve(newCdocRecord);
         }).catch(function onError(error) {
             return utils.reject(error);
         });

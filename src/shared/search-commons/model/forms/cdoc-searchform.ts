@@ -36,7 +36,7 @@ export class CommonDocSearchForm extends GenericSearchForm {
     }
 
     toString() {
-        return 'SDocSearchForm {\n' +
+        return 'CommonDocSearchForm {\n' +
             '  when: ' + this.when + '\n' +
             '  what: ' + this.what + '\n' +
             '  fulltext: ' + this.fulltext + '\n' +

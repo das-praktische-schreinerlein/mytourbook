@@ -1,0 +1,56 @@
+<div class="row card-deck" *ngIf="searchResult.currentRecords != undefined && searchResult.currentRecords.length > 0">
+    <ng-container [ngSwitch]="layout">
+        <ng-container *ngSwitchCase="Layout.PAGE">
+            <app-tdoc-list-item-page style="min-width: 300px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-page"
+                                      [record]="record"
+                                      [layout]="layout"
+                                      [short]="short"
+                                      [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                      (show)="onShow($event)"
+                                      (showImage)="onShowImage($event)"
+                                      (playerStarted)="onPlayerStarted($event)"
+                                      (playerStopped)="onPlayerStopped($event)"
+                                      *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-page>
+        </ng-container>
+        <ng-container *ngSwitchCase="Layout.SMALL">
+            <app-tdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-small"
+                                [record]="record"
+                                [layout]="layout"
+                                [short]="short"
+                                [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                (show)="onShow($event)"
+                                (showImage)="onShowImage($event)"
+                                *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-small>
+        </ng-container>
+        <ng-container *ngSwitchCase="Layout.FLAT">
+            <app-tdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-flat"
+                                      [record]="record"
+                                      [layout]="layout"
+                                      [short]="short"
+                                      [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                      (show)="onShow($event)"
+                                      (showImage)="onShowImage($event)"
+                                      *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-flat>
+        </ng-container>
+        <ng-container *ngSwitchCase="Layout.THIN">
+            <app-tdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-thin"
+                                     [record]="record"
+                                     [layout]="layout"
+                                     [short]="short"
+                                     [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                     (show)="onShow($event)"
+                                     (showImage)="onShowImage($event)"
+                                     *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-thin>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <app-tdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-big"
+                                [record]="record"
+                                [layout]="layout"
+                                [short]="short"
+                                [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                (show)="onShow($event)"
+                                (showImage)="onShowImage($event)"
+                                *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item>
+        </ng-container>
+    </ng-container>
+</div>

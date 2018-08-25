@@ -37,7 +37,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return super.count(mapper, query, opts);
     }
 
-    create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
+    create(mapper: Mapper, props: any, opts?: any): Promise<R> {
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('create');
@@ -54,7 +54,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return super.create(mapper, query, opts);
     }
 
-    createMany<T extends Record>(mapper: Mapper, props: any, opts: any): Promise<T> {
+    createMany(mapper: Mapper, props: any, opts: any): Promise<R> {
         throw new Error('createMany not implemented');
     }
 
@@ -80,7 +80,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         throw new Error('destroyAll not implemented');
     }
 
-    find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
+    find(mapper: Mapper, id: string | number, opts: any): Promise<R> {
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('find');
@@ -96,7 +96,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return super.find(mapper, id, opts);
     }
 
-    findAll<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<T[]> {
+    findAll(mapper: Mapper, query: any, opts: any): Promise<R[]> {
         query = query || {};
         opts = opts || {};
 
@@ -108,7 +108,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return super.findAll(mapper, query, opts);
     }
 
-    facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+    facets(mapper: Mapper, query: any, opts: any): Promise<Facets> {
         let op;
         query = query || {};
         opts = opts || {};
@@ -147,7 +147,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
             });
     }
 
-    search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+    search(mapper: Mapper, query: any, opts: any): Promise<S> {
         let op;
         query = query || {};
         opts = opts || {};
@@ -190,7 +190,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         throw new Error('sum not implemented');
     }
 
-    update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts: any): Promise<T> {
+    update(mapper: Mapper, id: string | number, props: any, opts: any): Promise<R> {
         opts = opts || {};
 
         opts.endpoint = this.getHttpEndpoint('update');
@@ -211,7 +211,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         throw new Error('updateAll not implemented');
     }
 
-    updateMany<T extends Record>(mapper: Mapper, records: T[], opts?: any): Promise<any> {
+    updateMany(mapper: Mapper, records: R[], opts?: any): Promise<any> {
         throw new Error('updateMany not implemented');
     }
 
@@ -227,15 +227,15 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return utils.Promise.resolve(result);
     }
 
-    afterCreate<T extends Record>(mapper: Mapper, props: IDict, opts: any, result: any): Promise<T> {
+    afterCreate(mapper: Mapper, props: IDict, opts: any, result: any): Promise<R> {
         return this.find(mapper, props['add']['doc']['id'], opts);
     }
 
-    afterUpdate<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
+    afterUpdate(mapper: Mapper, id: number | string, opts: any, result: any): Promise<R> {
         return this.find(mapper, id, opts);
     }
 
-    afterFind<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
+    afterFind(mapper: Mapper, id: number | string, opts: any, result: any): Promise<R> {
         if (! (Array.isArray(result))) {
             return utils.Promise.reject('generic-solr-adapter.afterFind: no array as result');
         }
@@ -246,8 +246,8 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         return utils.Promise.resolve(result[0]);
     }
 
-    afterDestroy<T extends Record>(mapper: Mapper, id: number | string, opts: any, result: any): Promise<T> {
-        return utils.Promise.resolve(<T>undefined);
+    afterDestroy(mapper: Mapper, id: number | string, opts: any, result: any): Promise<R> {
+        return utils.Promise.resolve(<R>undefined);
     }
 
     _create (mapper: Mapper, props: any, opts: any) {
@@ -260,7 +260,7 @@ export abstract class GenericSolrAdapter <R extends Record, F extends GenericSea
         ).then((response) => this._end(mapper, opts, response));
     }
 
-    _doActionTag<T extends Record>(mapper: Mapper, Record: R, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    _doActionTag(mapper: Mapper, Record: R, actionTagForm: ActionTagForm, opts: any): Promise<any> {
         return utils.reject('not supported');
     }
 

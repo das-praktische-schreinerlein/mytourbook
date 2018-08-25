@@ -47,7 +47,7 @@
         page-break-inside: avoid;
     }
 
-    app-sdoc-list-item, .app-sdoc-list-item, .sdoc-list-item-flat, .sdoc-list-item-thin {
+    app-tdoc-list-item, .app-tdoc-list-item, .tdoc-list-item-flat, .tdoc-list-item-thin {
         page-break-before: auto;
         page-break-after: auto;
         page-break-inside: avoid;
@@ -58,7 +58,7 @@
         page-break-inside: avoid;
     }
 
-    .app-sdoc-list-item-big {
+    .app-tdoc-list-item-big {
         width: 275px !important;
         min-width: 260px !important;
         max-width: 290px !important;

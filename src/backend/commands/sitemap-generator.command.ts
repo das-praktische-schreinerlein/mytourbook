@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import {SitemapConfig, SitemapGeneratorModule} from '../shared-node/backend-commons/modules/sitemap-generator.module';
 import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
-import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
+import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {PDocDataServiceModule} from '../modules/pdoc-dataservice.module';
 import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
@@ -21,7 +21,7 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
 
         // generate SiteMap
         let sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
-            fileBase: 'sitemap-sdoc-',
+            fileBase: 'sitemap-tdoc-',
             showBaseUrl: generatorConfig.sitemapConfig.showBaseUrl + 'sections/start/show/',
             urlGenerator: function (config: SitemapConfig, doc: PDocRecord): string[] {
                 const name = (doc.name ? doc.name : 'name')
@@ -33,12 +33,12 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
 
         const dataservice: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
         CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
-            SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig);
+            TourDocDataServiceModule.getDataService('tdocSolrReadOnly', generatorConfig.backendConfig);
 
         return SitemapGeneratorModule.generateSiteMapFiles(
             dataservice.getSearchService(),
             sitemapConfig,
-            dataservice.newSearchForm(sitemapConfig.sdocSearchForm)
+            dataservice.newSearchForm(sitemapConfig.tdocSearchForm)
         ).then(value => {
             sitemapConfig = Object.assign({}, generatorConfig.sitemapConfig, {
                 fileBase: 'sitemap-pdoc-',

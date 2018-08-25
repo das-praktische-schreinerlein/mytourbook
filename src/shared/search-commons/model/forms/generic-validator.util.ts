@@ -167,11 +167,14 @@ export class RegExValidationReplaceRule extends ValidationRule {
         + '\\p{Nd}' // Nd 	Number, Decimal Digit
         + XRegExp.escape('/+;,:._*() ´`\'>')
     ;
+    // @ts-ignore: is functional
     protected _checkRegEx: XRegExp;
+    // @ts-ignore: is functional
     protected _replaceRegEx: XRegExp;
     protected _replaceMent: string;
     protected maxLength: number;
 
+    // @ts-ignore: is functional
     constructor(required: boolean, checkRegEx: XRegExp, replaceRegEx: XRegExp, replacement: string, maxLength?: number) {
         super(required);
         this._checkRegEx = checkRegEx;

@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
-                if (this.config && this.config['sdocMaxItemsPerAlbum'] > 0) {
+                if (this.config && this.config['tdocMaxItemsPerAlbum'] > 0) {
                     this.albumAllowed = true;
                     return;
                 }

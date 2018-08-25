@@ -1,6 +1,6 @@
 import proxy from 'http-proxy-middleware';
 import express from 'express';
-import {SDocRecord} from '../shared/sdoc-commons/model/records/sdoc-record';
+import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 import {isArray} from 'util';
 
 export enum PictureResolutions {
@@ -42,7 +42,7 @@ export class AssetsServerModule {
                                                errorFile: string, filePathErrorDocs: string) {
         if (backendConfig['apiRouteStoredTracks'] && backendConfig['apiRouteTracksStaticDir']) {
             console.log('configure route trackstore:',
-                apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveSdocBySdocId'
+                apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveTdocByTdocId'
                 + ' to ' + backendConfig['apiRouteTracksStaticDir']);
             app.param('trackFormat', function(req, res, next, trackFormat) {
                 req['trackFormat'] = undefined;
@@ -53,7 +53,7 @@ export class AssetsServerModule {
                 return next();
             });
             // use id: param to read from solr
-            app.route(apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveSdocBySdocId')
+            app.route(apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveTdocByTdocId')
                 .all(function(req, res, next) {
                     if (req.method !== 'GET') {
                         return next('not allowed');
@@ -61,15 +61,15 @@ export class AssetsServerModule {
                     return next();
                 })
                 .get(function(req, res, next) {
-                    const sdoc: SDocRecord = req['sdoc'];
+                    const tdoc: TourDocRecord = req['tdoc'];
                     const trackFormat = req['trackFormat'];
-                    if (trackFormat === undefined || sdoc === undefined || sdoc.gpsTrackBasefile === undefined) {
+                    if (trackFormat === undefined || tdoc === undefined || tdoc.gpsTrackBasefile === undefined) {
                         res.status(200);
                         res.sendFile(errorFile, {root: filePathErrorDocs});
                         return;
                     }
                     res.status(200);
-                    res.sendFile(sdoc.gpsTrackBasefile + '.' + trackFormat,
+                    res.sendFile(tdoc.gpsTrackBasefile + '.' + trackFormat,
                         {root: backendConfig['apiRouteTracksStaticDir']});
                     return;
                 });
@@ -107,7 +107,7 @@ export class AssetsServerModule {
                                                errorFile: string, filePathErrorDocs: string) {
         if (backendConfig['apiRouteStoredPictures'] && backendConfig['apiRoutePicturesStaticDir']) {
             console.log('configure route picturestore:',
-                apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveSdocBySdocId'
+                apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveTdocByTdocId'
                 + ' to ' + backendConfig['apiRoutePicturesStaticDir']);
             app.param('resolution', function(req, res, next, resolution) {
                 req['resolution'] = undefined;
@@ -118,7 +118,7 @@ export class AssetsServerModule {
                 return next();
             });
             // use id: param to read from solr
-            app.route(apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveSdocBySdocId')
+            app.route(apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveTdocByTdocId')
                 .all(function(req, res, next) {
                     if (req.method !== 'GET') {
                         return next('not allowed');
@@ -126,17 +126,17 @@ export class AssetsServerModule {
                     return next();
                 })
                 .get(function(req, res, next) {
-                    const sdoc: SDocRecord = req['sdoc'];
+                    const tdoc: TourDocRecord = req['tdoc'];
                     const resolution = req['resolution'];
-                    if (resolution === undefined || sdoc === undefined ||
-                        !isArray(sdoc['sdocimages']) || sdoc['sdocimages'].length < 0) {
+                    if (resolution === undefined || tdoc === undefined ||
+                        !isArray(tdoc['tdocimages']) || tdoc['tdocimages'].length < 0) {
                         res.status(200);
                         res.sendFile(errorFile, {root: filePathErrorDocs});
                         return;
                     }
                     res.status(200);
                     res.sendFile((backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '')
-                        + resolution + '/' + sdoc['sdocimages'][0]['fileName'],
+                        + resolution + '/' + tdoc['tdocimages'][0]['fileName'],
                         {root: backendConfig['apiRoutePicturesStaticDir']});
                     return;
                 });

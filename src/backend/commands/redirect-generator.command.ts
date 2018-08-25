@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
-import {SDocDataServiceModule} from '../modules/sdoc-dataservice.module';
+import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
 import {RedirectConfig, RedirectGeneratorModule} from '../shared-node/backend-commons/modules/redirect-generator.module';
 import {utils} from 'js-data';
@@ -18,14 +18,14 @@ export class RedirectGeneratorCommand implements AbstractCommand {
         const srcBaseUrl = argv['srcBaseUrl'] || '/mytb/de/';
         const destBaseUrl = argv['destBaseUrl'] || '/mytb/de/';
         const types = argv['types'] || 'track,route,location,trip,news';
-        const profiles = argv['profiles'] || 'sdocShow';
+        const profiles = argv['profiles'] || 'tdocShow';
 
         const promises: Promise<any>[] = [];
         for (const profile of profiles.split(',')) {
             // generate Redirects
             let redirectConfig: RedirectConfig;
             switch (profile) {
-                case 'sdocShow':
+                case 'tdocShow':
                     redirectConfig = {
                         perPage: 100,
                         srcUrlPathGenerator: function (config: RedirectConfig, doc: PDocRecord): string[] {
@@ -46,7 +46,7 @@ export class RedirectGeneratorCommand implements AbstractCommand {
             }
             const dataservice: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
                 CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
-                    SDocDataServiceModule.getDataService('sdocSolrReadOnly', generatorConfig.backendConfig);
+                    TourDocDataServiceModule.getDataService('tdocSolrReadOnly', generatorConfig.backendConfig);
 
             const promise = RedirectGeneratorModule.generateRedirectFiles(
                 dataservice.getSearchService(),

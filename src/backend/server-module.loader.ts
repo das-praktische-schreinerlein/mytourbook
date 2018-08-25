@@ -1,16 +1,16 @@
 import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
-import {SDocServerModule} from './modules/sdoc-server.module';
+import {TourDocServerModule} from './modules/tdoc-server.module';
 import {PDocServerModule} from './modules/pdoc-server.module';
 import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
 import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
 import {FirewallModule} from './shared-node/server-commons/firewall.module';
 import {PDocDataService} from './shared/pdoc-commons/services/pdoc-data.service';
 import {PDocDataServiceModule} from './modules/pdoc-dataservice.module';
-import {SDocDataServiceModule} from './modules/sdoc-dataservice.module';
-import {SDocDataService} from './shared/sdoc-commons/services/sdoc-data.service';
+import {TourDocDataServiceModule} from './modules/tdoc-dataservice.module';
+import {TourDocDataService} from './shared/tdoc-commons/services/tdoc-data.service';
 import {AssetsServerModule} from './modules/assets-server.module';
 import {CacheConfig, DataCacheModule} from './shared-node/server-commons/datacache.module';
-import {SDocWriterServerModule} from './modules/sdoc-writer-server.module';
+import {TourDocWriterServerModule} from './modules/tdoc-writer-server.module';
 import {VideoServerModule} from './modules/video-server.module';
 
 export interface ServerConfig {
@@ -26,7 +26,7 @@ export interface ServerConfig {
 
 export class ServerModuleLoader {
     public static loadModules(app, serverConfig: ServerConfig) {
-        const writable = serverConfig.backendConfig['sdocWritable'] === true || serverConfig.backendConfig['sdocWritable'] === 'true';
+        const writable = serverConfig.backendConfig['tdocWritable'] === true || serverConfig.backendConfig['tdocWritable'] === 'true';
         const apiVideoServerEnabled = serverConfig.backendConfig['apiVideoServerEnabled'] === true
             || serverConfig.backendConfig['apiVideoServerEnabled'] === 'true';
 
@@ -38,7 +38,7 @@ export class ServerModuleLoader {
         DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 
         // configure dataservices
-        const sdocDataService: SDocDataService = SDocDataServiceModule.getDataService('sdocSolr',
+        const tdocDataService: TourDocDataService = TourDocDataServiceModule.getDataService('tdocSolr',
             serverConfig.backendConfig);
         const pdocDataServiceDE: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrDE',
             serverConfig.backendConfig, 'de');
@@ -47,10 +47,10 @@ export class ServerModuleLoader {
         const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
 
         // add routes
-        const sdocServerModule = SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache,
+        const tdocServerModule = TourDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, tdocDataService, cache,
             serverConfig.backendConfig);
         if (writable) {
-            SDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocServerModule);
+            TourDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, tdocServerModule);
         }
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de');
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en');

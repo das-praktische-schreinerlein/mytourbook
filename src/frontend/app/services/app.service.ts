@@ -1,10 +1,10 @@
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
-import {SDocDataService} from '../../shared/sdoc-commons/services/sdoc-data.service';
+import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.service';
 import {Http} from '@angular/http';
-import {SDocDataStore} from '../../shared/sdoc-commons/services/sdoc-data.store';
+import {TourDocDataStore} from '../../shared/tdoc-commons/services/tdoc-data.store';
 import {environment} from '../../environments/environment';
 import {AppState, GenericAppService} from '../../shared/commons/services/generic-app.service';
-import {SDocHttpAdapter} from '../../shared/sdoc-commons/services/sdoc-http.adapter';
+import {TourDocHttpAdapter} from '../../shared/tdoc-commons/services/tdoc-http.adapter';
 import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.service';
 import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';
 import {MinimalHttpBackendClient} from '../../shared/commons/services/minimal-http-backend-client';
@@ -21,16 +21,16 @@ export class AppService extends GenericAppService {
         useAssetStoreUrls: environment.useAssetStoreUrls,
         useVideoAssetStoreUrls: environment.useVideoAssetStoreUrls,
         permissions: {
-            sdocWritable: environment.sdocWritable,
-            sdocActionTagWritable: environment.sdocActionTagWritable,
+            tdocWritable: environment.tdocWritable,
+            tdocActionTagWritable: environment.tdocActionTagWritable,
             allowAutoPlay: environment.allowAutoPlay
         },
-        sdocMaxItemsPerAlbum: environment.sdocMaxItemsPerAlbum,
+        tdocMaxItemsPerAlbum: environment.tdocMaxItemsPerAlbum,
         components: {},
         services: {}
     };
 
-    constructor(private sdocDataService: SDocDataService, private sdocDataStore: SDocDataStore,
+    constructor(private tdocDataService: TourDocDataService, private tdocDataStore: TourDocDataStore,
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
                 private http: Http, private commonRoutingService: CommonRoutingService,
                 private backendHttpClient: MinimalHttpBackendClient, private platformService: PlatformService) {
@@ -101,12 +101,12 @@ export class AppService extends GenericAppService {
                 return me.backendHttpClient.makeHttpRequest(httpConfig);
             }
         };
-        const sdocAdapter = new SDocHttpAdapter(options);
+        const tdocAdapter = new TourDocHttpAdapter(options);
 
-        this.sdocDataStore.setAdapter('http', undefined, '', {});
+        this.tdocDataStore.setAdapter('http', undefined, '', {});
         this.pdocDataService.clearLocalStore();
-        this.sdocDataService.clearLocalStore();
-        this.sdocDataStore.setAdapter('http', sdocAdapter, '', {});
+        this.tdocDataService.clearLocalStore();
+        this.tdocDataStore.setAdapter('http', tdocAdapter, '', {});
 
         return new Promise<boolean>((resolve, reject) => {
             me.backendHttpClient.makeHttpRequest({ method: 'get', url: options.basePath + 'pdoc/', withCredentials: true })
@@ -117,7 +117,7 @@ export class AppService extends GenericAppService {
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     // console.log('initially loaded pdocs from server', records);
                     me.pdocDataService.setWritable(false);
-                    me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
+                    me.tdocDataService.setWritable(me.appConfig.permissions.tdocWritable);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:', reason);
@@ -129,9 +129,9 @@ export class AppService extends GenericAppService {
 
     initStaticData(): Promise<any> {
         const me = this;
-        this.sdocDataStore.setAdapter('http', undefined, '', {});
+        this.tdocDataStore.setAdapter('http', undefined, '', {});
         this.pdocDataService.clearLocalStore();
-        this.sdocDataService.clearLocalStore();
+        this.tdocDataService.clearLocalStore();
         return new Promise<boolean>((resolve, reject) => {
             me.http.request('./assets/pdocs.json').toPromise()
                 .then(function onDocsLoaded(res: any) {
@@ -142,20 +142,20 @@ export class AppService extends GenericAppService {
                     // console.log('initially loaded pdocs from assets', records);
                     me.pdocDataService.setWritable(false);
 
-                    return me.http.request('./assets/sdocs.json').toPromise();
+                    return me.http.request('./assets/tdocs.json').toPromise();
                 }).then(function onDocsLoaded(res: any) {
-                    const docs: any[] = res.json().sdocs;
-                    me.sdocDataService.setWritable(true);
+                    const docs: any[] = res.json().tdocs;
+                    me.tdocDataService.setWritable(true);
 
-                    return me.sdocDataService.addMany(docs);
+                    return me.tdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
-                    // console.log('initially loaded sdocs from assets', records);
-                    me.sdocDataService.setWritable(me.appConfig.permissions.sdocWritable);
+                    // console.log('initially loaded tdocs from assets', records);
+                    me.tdocDataService.setWritable(me.appConfig.permissions.tdocWritable);
                     return resolve(true);
                 }).catch(function onError(reason: any) {
                     console.error('loading appdata failed:', reason);
                     me.pdocDataService.setWritable(false);
-                    me.sdocDataService.setWritable(false);
+                    me.tdocDataService.setWritable(false);
                     return reject(false);
                 });
             });

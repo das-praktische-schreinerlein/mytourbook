@@ -21,13 +21,13 @@
     "proxyPicturesRouteToUrl": "http://localhost/michas/",
     "proxyVideosRouteToUrl": "http://localhost/michas/",
     "imageMagicAppPath": "D:\\ProgrammeShared\\ImageMagick-7.0.7-Q16\\",
-    "sdocDataStoreAdapter": "SDocSolrAdapter",
-    "sdocWritable": false,
+    "tdocDataStoreAdapter": "TourDocSolrAdapter",
+    "tdocWritable": false,
     "mapperConfig": {
         "allowedKeywordPatterns": ["KW_.*", "Harry", "Booga", "Buddy", "Micha"],
         "replaceKeywordPatterns": []
     },
-    "SDocSqlMediadbAdapter": {
+    "TourDocSqlMediadbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
@@ -38,11 +38,11 @@
             "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
         }
     },
-    "SDocItemsJsAdapter": {
+    "TourDocItemsJsAdapter": {
         "dataFile": "D:/Bilder/mytbbase/test/mytb.json"
     },
-    "SDocSqlMytbAdapter": {
-        "client": "mysql",
+    "TourDocSqlMytbAdapter": {
+        "client": "sqlite3",
         "connection": {
             "host": "localhost",
             "user": "root",
@@ -52,10 +52,10 @@
             "filename": "D:/Bilder/mytbbase/test/mytb.sqlite"
         }
     },
-    "SDocSolrAdapter": {
-        "solrCoreSDoc": "http://localhost:8983/solr/mytbdev/",
-        "solrCoreSDocReadUsername": "mytbread",
-        "solrCoreSDocReadPassword": "SolrRocks"
+    "TourDocSolrAdapter": {
+        "solrCoreTourDoc": "http://localhost:8983/solr/mytbdev/",
+        "solrCoreTourDocReadUsername": "mytbread",
+        "solrCoreTourDocReadPassword": "SolrRocks"
     },
     "cacheConfig": {
         "cacheRedisUrl": "redis://localhost:6379/",

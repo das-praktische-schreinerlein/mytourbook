@@ -1,0 +1,8 @@
+<ng-container *ngIf="tdocratepers !== undefined && (!small || tdocratepers.schwierigkeit > 0)">
+    <div class="techvaluetable">
+        <div *ngIf="tdocratepers.schwierigkeit > 0" class="entry"><div class="label">Schwierig?:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.schwierigkeit)" [readonly]="true"></ngb-rating></div></div>
+        <div *ngIf="!small && tdocratepers.ausdauer > 0" class="entry"><div class="label">Ausdauer:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.ausdauer)" [readonly]="true"></ngb-rating></div></div>
+        <div *ngIf="!small && tdocratepers.kraft > 0" class="entry"><div class="label">Kraft:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.kraft)" [readonly]="true"></ngb-rating></div></div>
+        <div *ngIf="!small && tdocratepers.mental > 0" class="entry"><div class="label">Mental:</div><div class="value"><ngb-rating [max]="'5'" [rate]="calcRate(tdocratepers.mental)" [readonly]="true"></ngb-rating></div></div>
+    </div>
+</ng-container>

@@ -9,7 +9,7 @@ import {GenericFacetAdapter, GenericSearchAdapter} from './generic-search.adapte
 import {AdapterOpts, AdapterQuery} from './mapper.utils';
 import {ItemsJsConfig, ItemsJsQueryBuilder, ItemsJsSelectQueryData} from './itemsjs-query.builder';
 import {GenericAdapterResponseMapper} from './generic-adapter-response.mapper';
-import itemsjs from 'itemsjs';
+import * as itemsjs from 'itemsjs';
 
 export interface ItemJsResultPagination {
     per_page: number;
@@ -46,11 +46,11 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         this.itemJs = itemsjs(data, itemJsConfig);
     }
 
-    create<T extends Record>(mapper: Mapper, props: any, opts?: any): Promise<T> {
+    create(mapper: Mapper, props: any, opts?: any): Promise<R> {
         throw new Error('create not implemented');
     }
 
-    createMany<T extends Record>(mapper: Mapper, props: any, opts: any): Promise<T> {
+    createMany(mapper: Mapper, props: any, opts: any): Promise<R> {
         throw new Error('createMany not implemented');
     }
 
@@ -62,7 +62,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         throw new Error('destroyAll not implemented');
     }
 
-    find<T extends Record>(mapper: Mapper, id: string | number, opts: any): Promise<T> {
+    find(mapper: Mapper, id: string | number, opts: any): Promise<R> {
         throw new Error('find not implemented');
     }
 
@@ -70,7 +70,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         throw new Error('sum not implemented');
     }
 
-    update<T extends Record>(mapper: Mapper, id: string | number, props: any, opts: any): Promise<T> {
+    update(mapper: Mapper, id: string | number, props: any, opts: any): Promise<R> {
         throw new Error('update not implemented');
     }
 
@@ -78,7 +78,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         throw new Error('updateAll not implemented');
     }
 
-    updateMany<T extends Record>(mapper: Mapper, records: T[], opts?: any): Promise<any> {
+    updateMany(mapper: Mapper, records: R[], opts?: any): Promise<any> {
         throw new Error('updateMany not implemented');
     }
 
@@ -89,14 +89,14 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return super.count(mapper, query, opts);
     }
 
-    findAll<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<T[]> {
+    findAll(mapper: Mapper, query: any, opts: any): Promise<R[]> {
         query = query || {};
         opts = opts || {};
 
         return super.findAll(mapper, query, opts);
     }
 
-    facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+    facets(mapper: Mapper, query: any, opts: any): Promise<Facets> {
         query = query || {};
         opts = opts || {};
 
@@ -105,7 +105,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return this._facets(mapper, query, opts);
     }
 
-    search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+    search(mapper: Mapper, query: any, opts: any): Promise<S> {
         query = query || {};
         opts = opts || {};
 
@@ -118,7 +118,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return utils.Promise.resolve(result);
     }
 
-    protected _facets<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<Facets> {
+    protected _facets(mapper: Mapper, query: any, opts: any): Promise<Facets> {
         opts.adapterQuery = true;
         const me = this;
         const queryData = me.queryTransformToAdapterQuery( mapper, query, opts);
@@ -132,7 +132,7 @@ export abstract class GenericItemsJsAdapter <R extends Record, F extends Generic
         return utils.Promise.resolve(facets);
     }
 
-    protected _search<T extends Record>(mapper: Mapper, query: any, opts: any): Promise<S> {
+    protected _search(mapper: Mapper, query: any, opts: any): Promise<S> {
         opts.adapterQuery = true;
         const me = this;
         const queryData = me.queryTransformToAdapterQuery(mapper, query, opts);

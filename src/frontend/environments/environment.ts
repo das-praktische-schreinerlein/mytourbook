@@ -18,10 +18,10 @@ export const environment: AppEnvironment = {
     useAssetStoreUrls: true,
     useAudioAssetStoreUrls: false,
     useVideoAssetStoreUrls: false,
-    sdocWritable: true,
-    sdocActionTagWritable: true,
+    tdocWritable: true,
+    tdocActionTagWritable: true,
     allowAutoPlay: true,
-    sdocMaxItemsPerAlbum: 20000,
+    tdocMaxItemsPerAlbum: 20000,
     cookieLawSeenName: 'cookieLawSeenV20180525',
     trackingProviders: [Angulartics2Piwik]
 };

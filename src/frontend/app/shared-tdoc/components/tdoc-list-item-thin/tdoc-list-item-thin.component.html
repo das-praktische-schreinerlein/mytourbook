@@ -1,0 +1,116 @@
+<div *ngIf="listItem.currentRecord !== undefined" class="row tdoc-list-item-thin" [ngClass]="listItem.styleClassFor">
+    <a [name]="listItem.currentRecord.id"></a>
+    <ng-container *ngIf="layoutSize >= LayoutSize.BIG">
+        <!--- BIG -->
+        <div class="col-2 layout-big">
+            <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
+            <ng-container [ngSwitch]="listItem.currentRecord.type">
+                <ng-container *ngSwitchCase="'IMAGE'">
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'VIDEO'">
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault="">
+                    {{listItem.currentRecord.type | translate }}<br />
+                    {{listItem.currentRecord.subtype | translate }}
+                </ng-container>
+            </ng-container>
+        </div>
+        <div class="col-6 layout-big">
+            <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
+        </div>
+        <div class="col-2 layout-big">
+            <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+            <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+        </div>
+        <div class="col-2 layout-big">
+            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="layoutSize === LayoutSize.SMALL">
+        <!--- SMALL -->
+        <div class="col-4 layout-small">
+            <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
+            <ng-container [ngSwitch]="listItem.currentRecord.type">
+                <ng-container *ngSwitchCase="'IMAGE'">
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'VIDEO'">
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault="">
+                    {{listItem.currentRecord.type | translate }}<br />
+                    {{listItem.currentRecord.subtype | translate }}
+                </ng-container>
+            </ng-container>
+            <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+            <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+        </div>
+        <div class="col-4 layout-small">
+            <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
+        </div>
+        <div class="col-4 layout-small">
+            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="layoutSize <= LayoutSize.VERYSMALL">
+        <!--- VERYSMALL -->
+        <div class="col-4 layout-verysmall">
+            <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
+            <ng-container [ngSwitch]="listItem.currentRecord.type">
+                <ng-container *ngSwitchCase="'IMAGE'">
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'VIDEO'">
+                    video
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="50px"
+                             [src]="listItem.thumbnailUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault="">
+                    {{listItem.currentRecord.type | translate }}<br />
+                    {{listItem.currentRecord.subtype | translate }}
+                </ng-container>
+            </ng-container>
+            <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+            <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+        </div>
+        <div class="col-4 layout-verysmall">
+            <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
+        </div>
+        <div class="col-4 layout-verysmall">
+            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+        </div>
+    </ng-container>
+</div>

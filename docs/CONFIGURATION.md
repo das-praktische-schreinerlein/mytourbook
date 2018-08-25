@@ -14,14 +14,14 @@ The configuration-file to configure the backend-api-server.
 - writable or readonly
 ```json
 {
-    "sdocWritable": false
+    "tdocWritable": false
 }
 ```
 - datastore and specific connection-attributes 
 ```json
 {
-    "sdocDataStoreAdapter": "SDocSolrAdapter",
-    "SDocSqlMediadbAdapter": {
+    "tdocDataStoreAdapter": "TourDocSolrAdapter",
+    "TourDocSqlMediadbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
@@ -32,7 +32,7 @@ The configuration-file to configure the backend-api-server.
             "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
         }
     },
-    "SDocSqlMytbAdapter": {
+    "TourDocSqlMytbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
@@ -43,10 +43,10 @@ The configuration-file to configure the backend-api-server.
             "filename": "D:/Bilder/mytbbase/test/mytb.sqlite"
         }
     },
-    "SDocSolrAdapter": {
-        "solrCoreSDoc": "http://localhost:8983/solr/mytbdev/",
-        "solrCoreSDocReadUsername": "mytbread",
-        "solrCoreSDocReadPassword": "SolrRocks"
+    "TourDocSolrAdapter": {
+        "solrCoreTourDoc": "http://localhost:8983/solr/mytbdev/",
+        "solrCoreTourDocReadUsername": "mytbread",
+        "solrCoreTourDocReadPassword": "SolrRocks"
     }
 }
 ```
@@ -166,15 +166,15 @@ export const environment = {
 ```typescript
 export const environment = {
     production: false,
-    sdocWritable: true,
-    sdocActionTagWritable: true
+    tdocWritable: true,
+    tdocActionTagWritable: true
 };
 ```
 - album-config
 ```typescript
 export const environment = {
     allowAutoPlay: true,
-    sdocMaxItemsPerAlbum: 20000
+    tdocMaxItemsPerAlbum: 20000
 };
 ```
 - tracking-provider
@@ -190,7 +190,7 @@ export const environment = {
 ```json
 {
     "components": {
-        "sdoc-keywords": {
+        "tdoc-keywords": {
             "editPrefix": "KW_",
             "possiblePrefixes": ["KW_", "", "kw_"],
             "structuredKeywords": [
@@ -206,7 +206,7 @@ export const environment = {
             ],
             "blacklist": ["OFFEN", "Mom", "Pa", "Micha"]
         },
-        "sdoc-persontags": {
+        "tdoc-persontags": {
             "editPrefix": "",
             "possiblePrefixes": ["KW_", "", "kw_", "Pers_"],
             "structuredKeywords": [
@@ -231,7 +231,7 @@ export const environment = {
 ```json
 {
     "components": {
-        "sdoc-actions": {
+        "tdoc-actions": {
             "actionTags": [
                 {
                     "key": "edit",
@@ -254,7 +254,7 @@ export const environment = {
                     ],
                     "configAvailability": [
                         {
-                            "property": "permissions.sdocWritable",
+                            "property": "permissions.tdocWritable",
                             "command": "EQ",
                             "expectedValues": [true]
                         }
@@ -269,7 +269,7 @@ export const environment = {
 ```json
 {
     "components": {
-        "sdoc-albumpage": {
+        "tdoc-albumpage": {
             "allowAutoplay": false
         },
         "cdoc-listheader": {
@@ -283,7 +283,7 @@ export const environment = {
 {
     "services": {
         "seo": {
-            "sdocIndexableTypes": ["ROUTE", "LOCATION", "NEWS"]
+            "tdocIndexableTypes": ["ROUTE", "LOCATION", "NEWS"]
         }
     }
 }

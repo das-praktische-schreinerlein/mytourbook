@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import {ChangeDetectorRef, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ToastsManager} from 'ng2-toastr';
 import {SchemaValidationError} from 'js-data';
 import {IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
@@ -55,7 +55,7 @@ export abstract class CommonDocEditformComponent<R extends CommonDocRecord, F ex
         allSelected: 'Alle'};
 
     // empty default
-    public editFormGroup = this.fb.group({
+    public editFormGroup: FormGroup = this.fb.group({
         id: '',
         name: '',
         desc: '',

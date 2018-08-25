@@ -1,14 +1,14 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {SDocSearchpageComponent} from '../sdoc/components/sdoc-searchpage/sdoc-searchpage.component';
-import {SDocShowpageComponent} from '../sdoc/components/sdoc-showpage/sdoc-showpage.component';
+import {TourDocSearchpageComponent} from '../tdoc/components/tdoc-searchpage/tdoc-searchpage.component';
+import {TourDocShowpageComponent} from '../tdoc/components/tdoc-showpage/tdoc-showpage.component';
 import {SectionsSearchFormResolver} from './resolver/sections-searchform.resolver';
 import {SectionsPDocRecordResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
-import {SectionsSDocRecordResolver} from './resolver/sections-sdoc-details.resolver';
+import {SectionsTourDocRecordResolver} from './resolver/sections-tdoc-details.resolver';
 import {SectionsBaseUrlResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
 import {SectionBarComponent} from '../../shared/frontend-pdoc-commons/components/sectionbar/sectionbar.component';
 import {SectionComponent} from '../../shared/frontend-pdoc-commons/components/section/section.component';
-import {SDocSectionPageComponent} from './components/sectionpage/sdoc-section-page.component';
+import {TourDocSectionPageComponent} from './components/sectionpage/tdoc-section-page.component';
 
 const sectionRoutes: Routes = [
     {
@@ -29,7 +29,7 @@ const sectionRoutes: Routes = [
                     {
                         path: '',
                         pathMatch: 'full',
-                        component: SDocSectionPageComponent,
+                        component: TourDocSectionPageComponent,
                         data: {
                             id: 'sections_section',
                         },
@@ -40,7 +40,7 @@ const sectionRoutes: Routes = [
                     },
                     {
                         path: 'show/:name/:id',
-                        component: SDocShowpageComponent,
+                        component: TourDocShowpageComponent,
                         pathMatch: 'full',
                         data: {
                             id: 'sections_show'
@@ -48,12 +48,12 @@ const sectionRoutes: Routes = [
                         resolve: {
                             pdoc: SectionsPDocRecordResolver,
                             baseSearchUrl: SectionsBaseUrlResolver,
-                            record: SectionsSDocRecordResolver
+                            record: SectionsTourDocRecordResolver
                         }
                     },
                     {
                         path: 'search',
-                        component: SDocSearchpageComponent,
+                        component: TourDocSearchpageComponent,
                         data: {
                             flgDoSearch: true,
                             id: 'sections_search_default',
@@ -67,7 +67,7 @@ const sectionRoutes: Routes = [
                     },
                     {
                         path: 'search/:type',
-                        component: SDocSearchpageComponent,
+                        component: TourDocSearchpageComponent,
                         data: {
                             flgDoSearch: true,
                             id: 'sections_search_types',
@@ -81,7 +81,7 @@ const sectionRoutes: Routes = [
                     },
                     {
                         path: 'search/:when/:where/:what/:fulltext/:moreFilter/:sort/:type/:perPage/:pageNum',
-                        component: SDocSearchpageComponent,
+                        component: TourDocSearchpageComponent,
                         data: {
                             flgDoSearch: true,
                             id: 'sections_search',
@@ -120,7 +120,7 @@ const sectionRoutes: Routes = [
                     {
                         path: '',
                         pathMatch: 'full',
-                        component: SDocSectionPageComponent,
+                        component: TourDocSectionPageComponent,
                         data: {
                             id: 'sections_section',
                         },

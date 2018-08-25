@@ -1,0 +1,96 @@
+<ng-container [ngSwitch]="mode">
+    <ng-container *ngSwitchCase="'edit'">
+        <div class="relative-container" *ngIf="searchResult !== undefined">
+            <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+            <div class="container content-container">
+                <form [formGroup]="editFormGroup" class="form-control-sm" (ngSubmit)="submitSave($event)">
+                    <fieldset>
+                        <legend i18n="album label|Label for fieldset: album@@label.editform.album.legend.base">Album</legend>
+                        <div class="row">
+                            <div class="col-sm-2 form-inline input-group input-group-sm">
+                                <button type="button" (click)="doShow()" class="btn btn-action btn-sm" i18n="button show album|Buttontext to show album@@button.form.album.show">Album Ansehen</button>
+                            </div>
+                            <div class="col-sm-2 form-inline input-group input-group-sm">
+                                <button type="button" (click)="onAlbumReset()" class="btn btn-action btn-sm" i18n="button reset album|Buttontext to reset album@@button.form.album.reset">Album zurücksetzen</button>
+                            </div>
+                            <div class="col-sm-2 form-inline input-group input-group-sm">
+                                <button type="button" (click)="doSaveAsFile()" class="btn btn-action btn-sm" i18n="button saveAsFile album|Buttontext to saveAsFile album@@button.form.album.saveAsFile">Album Exportieren</button>
+                            </div>
+                            <div class="col-sm-6 form-inline input-group input-group-sm album-dropzone">
+                                <label class="col-xs-3 col-form-label mr-2" i18n="albumImportFile label|Label for field: albumImportFile@@label.albumeditform.album.albumImportFile">Album aus Datei laden:</label>
+                                <input type="file" accept=".json" (change)="onFileSelected($event)" />
+                                <file-drop (onFileDrop)="onFileDropped($event)" i18n-headertext="fileFileDropZone label|Label for button: fileFileDropZone@@label.form.cdoc.fileFileDropZone">Album-Datei dropzone</file-drop>
+                            </div>
+                        </div>
+                        <div class="row hidden">
+                            <div class="col-sm-6 form-inline input-group input-group-sm">
+                                <label class="col-xs-3 col-form-label mr-2" i18n="albumIds label|Label for field: albumIds@@label.albumeditform.album.albumIds">Ids:</label>
+                                <textarea formControlName="albumIds" class="form-control" type="text" placeholder="ids" i18n-placeholder="albumIds placeholder|Placeholder for albumIds@@placeholder.form.album.albumIds"></textarea>
+                            </div>
+                            <div class="col-sm-6 form-inline input-group input-group-sm">
+                                <button type="submit" class="btn btn-action btn-sm" i18n="button edit album|Buttontext to edit album@@button.form.album.edit">Speichern</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="container content-container">
+                <div class="container">
+                    <app-cdoc-list-header [searchResult]="listSearchResult"
+                                          [perPage]="listSearchForm.perPage"
+                                          [layout]="layout"
+                                          [sort]="listSearchForm.sort"
+                                          [availableSorts]="['relevance', 'dateAsc']"
+                                          [pauseAutoplay]="pauseAutoPlay"
+                                          (perPageChange)="onPerPageChange($event)"
+                                          (sortChange)="onSortChange($event)"
+                                          (layoutChange)="onLayoutChange($event)"
+                                          (pageChange)="onPageChange($event)" ></app-cdoc-list-header>
+                </div>
+                <div class="container">
+                    <app-tdoc-list [searchResult]="listSearchResult"
+                                   [baseSearchUrl]="baseSearchUrl"
+                                   [layout]="layout"
+                                   (playerStarted)="onPlayerStarted($event)"
+                                   (playerStopped)="onPlayerStopped($event)"
+                                   (show)="onShowDoc($event)"></app-tdoc-list>
+                </div>
+                <div class="container">
+                    <app-cdoc-list-footer [searchResult]="listSearchResult"
+                                          (pageChange)="onPageChange($event)" ></app-cdoc-list-footer>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngSwitchDefault="">
+        <div class="container content-container navigation-content-container">
+            <div class="form-control-sm row">
+                <div class="col-sm-2" *ngIf="autoPlayAllowed">
+                    <app-interval-control (intervalNext)="onAlbumIntervalNext()" (intervalStarted)="onAlbumIntervalStarted()"></app-interval-control>
+                </div>
+                <div [class]="(autoPlayAllowed ? 'col-sm-10' : 'col-sm-12')" *ngIf="searchResult.recordCount > 0">
+                    <ngb-pagination (pageChange)="onCurRecordChange($event)"
+                                    [pageSize]="1"
+                                    [collectionSize]="searchResult.recordCount"
+                                    [page]="listSearchForm.pageNum"
+                                    [maxSize]="10"
+                                    [rotate]="true"
+                                    [ellipses]="false"
+                                    [boundaryLinks]="true"
+                                    size="sm" class="pagination-sm"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="record !== undefined">
+            <app-tdoc-list-item-page [record]="record"
+                                     [layout]="layout"
+                                     [backToSearchUrl]="backToSearchUrl"
+                                     (playerStarted)="onPlayerStarted($event)"
+                                     (playerStopped)="onPlayerStopped($event)"
+                                     (show)="onShowDoc($event)"
+                                     (showImage)="onShowImage($event)"></app-tdoc-list-item-page>
+        </ng-container>
+        <div class="edit-link"><span (click)="doEdit()" i18n="link edit album|Linktext to edit album@@link.album.edit">Ändern</span></div>
+
+    </ng-container>
+</ng-container>

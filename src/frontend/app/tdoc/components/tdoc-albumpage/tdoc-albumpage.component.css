@@ -1,0 +1,21 @@
+.navigation-content-container {
+    background-color: #dadada;
+    opacity: 0.1;
+}
+
+:hover {
+    opacity: 1;
+}
+textarea {
+    height: 100px;
+}
+textarea:focus {
+    height: 60vh;
+    min-height: 300px;
+    max-height: 1000px;
+}
+div.edit-link {
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+}

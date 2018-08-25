@@ -61,13 +61,13 @@ export class CommonDocRecord extends BaseEntityRecord implements CommonDocRecord
         }
 
         if (anonymizeMedia === true) {
-            if (isArray(record['sdocimages'])) {
-                for (const media of record['sdocimages']) {
+            if (isArray(record['cdocimages'])) {
+                for (const media of record['cdocimages']) {
                     media.fileName = 'anonymized.JPG';
                 }
             }
-            if (isArray(record['sdocvideos'])) {
-                for (const media of record['sdocvideos']) {
+            if (isArray(record['cdocvideos'])) {
+                for (const media of record['cdocvideos']) {
                     media.fileName = 'anonymized.MP4';
                 }
             }
@@ -117,24 +117,24 @@ export class CommonDocRecordValidator {
         return errors;
     }
 
-    static isValid(sdoc: CommonDocRecord): boolean {
-        return CommonDocRecordValidator.validate(sdoc).length > 0;
+    static isValid(cdoc: CommonDocRecord): boolean {
+        return CommonDocRecordValidator.validate(cdoc).length > 0;
     }
 
-    static validate(sdoc: CommonDocRecord): string[] {
+    static validate(cdoc: CommonDocRecord): string[] {
         const errors = [];
-        let state = BaseEntityRecord.genericFields.id.validator.isValid(sdoc.id) ? errors.push('id') && false : true;
+        let state = BaseEntityRecord.genericFields.id.validator.isValid(cdoc.id) ? errors.push('id') && false : true;
 
-        state = !CommonDocRecord.cdocFields.blocked.validator.isValid(sdoc.blocked) ? errors.push('blocked') &&  false : true;
-        state = !CommonDocRecord.cdocFields.dateshow.validator.isValid(sdoc.dateshow) ? errors.push('dateshow') &&  false : true;
-        state = !CommonDocRecord.cdocFields.descTxt.validator.isValid(sdoc.descTxt) ? errors.push('descTxt') &&  false : true;
-        state = !CommonDocRecord.cdocFields.descMd.validator.isValid(sdoc.descMd) ? errors.push('descMd') &&  false : true;
-        state = !CommonDocRecord.cdocFields.descHtml.validator.isValid(sdoc.descHtml) ? errors.push('descHtml') &&  false : true;
-        state = !CommonDocRecord.cdocFields.keywords.validator.isValid(sdoc.keywords) ? errors.push('keywords') &&  false : true;
-        state = !CommonDocRecord.cdocFields.name.validator.isValid(sdoc.name) ? errors.push('name') &&  false : true;
-        state = !CommonDocRecord.cdocFields.playlists.validator.isValid(sdoc.playlists) ? errors.push('playlists') &&  false : true;
-        state = !CommonDocRecord.cdocFields.subtype.validator.isValid(sdoc.subtype) ? errors.push('subtype') &&  false : true;
-        state = !CommonDocRecord.cdocFields.type.validator.isValid(sdoc.type) ? errors.push('type') &&  false : true;
+        state = !CommonDocRecord.cdocFields.blocked.validator.isValid(cdoc.blocked) ? errors.push('blocked') &&  false : true;
+        state = !CommonDocRecord.cdocFields.dateshow.validator.isValid(cdoc.dateshow) ? errors.push('dateshow') &&  false : true;
+        state = !CommonDocRecord.cdocFields.descTxt.validator.isValid(cdoc.descTxt) ? errors.push('descTxt') &&  false : true;
+        state = !CommonDocRecord.cdocFields.descMd.validator.isValid(cdoc.descMd) ? errors.push('descMd') &&  false : true;
+        state = !CommonDocRecord.cdocFields.descHtml.validator.isValid(cdoc.descHtml) ? errors.push('descHtml') &&  false : true;
+        state = !CommonDocRecord.cdocFields.keywords.validator.isValid(cdoc.keywords) ? errors.push('keywords') &&  false : true;
+        state = !CommonDocRecord.cdocFields.name.validator.isValid(cdoc.name) ? errors.push('name') &&  false : true;
+        state = !CommonDocRecord.cdocFields.playlists.validator.isValid(cdoc.playlists) ? errors.push('playlists') &&  false : true;
+        state = !CommonDocRecord.cdocFields.subtype.validator.isValid(cdoc.subtype) ? errors.push('subtype') &&  false : true;
+        state = !CommonDocRecord.cdocFields.type.validator.isValid(cdoc.type) ? errors.push('type') &&  false : true;
 
         return errors;
     }

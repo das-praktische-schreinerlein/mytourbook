@@ -4,12 +4,12 @@ import {CommonDocRecord} from '../records/cdoc-entity-record';
 import {CommonDocSearchForm} from '../forms/cdoc-searchform';
 
 export class CommonDocSearchResult<R extends CommonDocRecord, F extends CommonDocSearchForm> extends GenericSearchResult<R, F> {
-    constructor(sdocSearchForm: F, recordCount: number, currentRecords: R[], facets: Facets) {
-        super(sdocSearchForm, recordCount, currentRecords, facets);
+    constructor(cdocSearchForm: F, recordCount: number, currentRecords: R[], facets: Facets) {
+        super(cdocSearchForm, recordCount, currentRecords, facets);
     }
 
     toString() {
-        return 'SDocSearchResult {\n' +
+        return 'CommonDocSearchResult {\n' +
             '  facets: ' + this.facets + '' +
             '  currentRecords: ' + this.currentRecords + '' +
             '  recordCount: ' + this.recordCount + '' +

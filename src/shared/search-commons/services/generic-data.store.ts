@@ -58,7 +58,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     opts.realSource = props;
                     return utils.resolve(props);
                 },
-                afterCreate<T extends Record>(props: any, opts: any, result: any): Promise<T> {
+                afterCreate(props: any, opts: any, result: any): Promise<R> {
                     if (opts.realResult) {
                         result = opts.realResult;
                     }
@@ -68,7 +68,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                     opts.realSource = props;
                     return utils.resolve(props);
                 },
-                afterUpdate<T extends Record>(id: any, props: any, opts: any, result: any): Promise<T> {
+                afterUpdate(id: any, props: any, opts: any, result: any): Promise<R> {
                     if (opts.realResult) {
                         result = opts.realResult;
                     }
@@ -80,9 +80,9 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
                             me.store.add(mapperKey, obj);
                             result.set(mapperKey, obj);
                         } else {
-                            me.store.removeAll(mapperKey, { where: { 'sdoc_id': { 'contains': result.id }}});
-                            me.store.removeAll(mapperKey, { where: { ['sdoc_id']: { 'contains': [result.id] }}});
-                            me.store.removeAll(mapperKey, { where: { 'sdoc_id': { 'contains': [result.id] }}});
+                            me.store.removeAll(mapperKey, { where: { 'cdoc_id': { 'contains': result.id }}});
+                            me.store.removeAll(mapperKey, { where: { ['cdoc_id']: { 'contains': [result.id] }}});
+                            me.store.removeAll(mapperKey, { where: { 'cdoc_id': { 'contains': [result.id] }}});
                             result.set(mapperKey, undefined);
                         }
                     }
@@ -121,11 +121,11 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public createRecord<T extends Record>(mapperName: string, props, opts): T {
-        return <T>this.store.createRecord(mapperName, props, opts);
+    public createRecord(mapperName: string, props, opts): R {
+        return <R>this.store.createRecord(mapperName, props, opts);
     }
 
-    public create<T extends Record>(mapperName: string, record: any, opts?: any): Promise<T> {
+    public create(mapperName: string, record: any, opts?: any): Promise<R> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.add(mapperName, record, opts));
         } else {
@@ -133,7 +133,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public createMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
+    public createMany(mapperName: string, records: any[], opts?: any): Promise<R[]> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.add(mapperName, records, opts));
         } else {
@@ -141,7 +141,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public destroy<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
+    public destroy(mapperName: string, id: any, opts?: any): Promise<R> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.remove(mapperName, id, opts));
         } else {
@@ -149,7 +149,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public doActionTag<T extends Record>(mapperName: string, record: R, actionTagForm: ActionTagForm, opts?: any): Promise<R> {
+    public doActionTag(mapperName: string, record: R, actionTagForm: ActionTagForm, opts?: any): Promise<R> {
         const me = this;
         const result = new Promise<R>((resolve, reject) => {
             if (this.getAdapterForMapper(mapperName) === undefined ||
@@ -194,11 +194,11 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public getFromLocalStore<T extends Record>(mapperName: string, id: any): T {
+    public getFromLocalStore(mapperName: string, id: any): R {
         return this.store.get(mapperName, id);
     }
 
-    public find<T extends Record>(mapperName: string, id: any, opts?: any): Promise<T> {
+    public find(mapperName: string, id: any, opts?: any): Promise<R> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.get(mapperName, id));
         } else {
@@ -206,7 +206,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public findAll<T extends Record>(mapperName: string, query?: any, opts?: any): Promise<T[]> {
+    public findAll(mapperName: string, query?: any, opts?: any): Promise<R[]> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.resolve(this.store.filter(mapperName, query));
         } else {
@@ -278,7 +278,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
 
-    public update<T extends Record>(mapperName: string, id: string | number, record: any, opts?: any): Promise<T> {
+    public update(mapperName: string, id: string | number, record: any, opts?: any): Promise<R> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             if (id === undefined || id === null) {
                 return utils.Promise.reject('cant update records without id');
@@ -296,7 +296,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
     }
 
 
-    public updateAll<T extends Record>(mapperName: string, props: any, query?: any, opts?: any): Promise<T[]> {
+    public updateAll(mapperName: string, props: any, query?: any, opts?: any): Promise<R[]> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.reject('cant do update all without adapter');
         } else {
@@ -304,7 +304,7 @@ export abstract class GenericDataStore <R extends Record, F extends GenericSearc
         }
     }
 
-    public updateMany<T extends Record>(mapperName: string, records: any[], opts?: any): Promise<T[]> {
+    public updateMany(mapperName: string, records: any[], opts?: any): Promise<R[]> {
         if (this.getAdapterForMapper(mapperName) === undefined || (opts && opts.forceLocalStore)) {
             return utils.Promise.reject('cant do update many without adapter');
         } else {

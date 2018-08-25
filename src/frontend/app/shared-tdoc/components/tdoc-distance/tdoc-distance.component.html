@@ -1,0 +1,4 @@
+<ng-container *ngIf="distance !== undefined">
+    <span class="tdoc-count" i18n="tdoc text diszance|Text for distance to nearby of tdoc@@text.search.tdoc.distance">
+        in <strong>{{calcDistance(distance) | number : '1.0-1'}} km</strong></span>
+</ng-container>
