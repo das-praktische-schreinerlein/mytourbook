@@ -12,9 +12,6 @@ import {AssetsServerModule} from './modules/assets-server.module';
 import {CacheConfig, DataCacheModule} from './shared-node/server-commons/datacache.module';
 import {SDocWriterServerModule} from './modules/sdoc-writer-server.module';
 import {VideoServerModule} from './modules/video-server.module';
-import {MDocServerModule} from './modules/mdoc-server.module';
-import {MDocDataServiceModule} from './modules/mdoc-dataservice.module';
-import {MDocDataService} from './shared/mdoc-commons/services/mdoc-data.service';
 
 export interface ServerConfig {
     apiDataPrefix: string;
@@ -48,8 +45,6 @@ export class ServerModuleLoader {
         const pdocDataServiceEN: PDocDataService = PDocDataServiceModule.getDataService('pdocSolrEN',
             serverConfig.backendConfig, 'en');
         const cache: DataCacheModule = new DataCacheModule(serverConfig.backendConfig.cacheConfig);
-        const mdocDataService: MDocDataService = MDocDataServiceModule.getDataService('mdocSolr',
-            serverConfig.backendConfig);
 
         // add routes
         const sdocServerModule = SDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocDataService, cache,
@@ -57,8 +52,6 @@ export class ServerModuleLoader {
         if (writable) {
             SDocWriterServerModule.configureRoutes(app, serverConfig.apiDataPrefix, sdocServerModule);
         }
-        const mdocServerModule = MDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, mdocDataService, cache,
-            serverConfig.backendConfig);
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceDE, 'de');
         PDocServerModule.configureRoutes(app, serverConfig.apiDataPrefix, pdocDataServiceEN, 'en');
         AssetsServerModule.configureStaticTrackRoutes(app, serverConfig.apiAssetsPrefix, serverConfig.backendConfig);
