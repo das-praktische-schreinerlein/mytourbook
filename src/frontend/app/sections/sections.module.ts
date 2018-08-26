@@ -17,7 +17,7 @@ import {AngularMarkdownService} from '../../shared/angular-commons/services/angu
 import {AngularHtmlService} from '../../shared/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
-import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
+import {FrontendCommonDocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {FrontendPDocCommonsModule} from '../../shared/frontend-pdoc-commons/frontend-pdoc-commons.module';
 
 @NgModule({
@@ -34,7 +34,7 @@ import {FrontendPDocCommonsModule} from '../../shared/frontend-pdoc-commons/fron
         SharedTourDocModule,
         FrontendPDocCommonsModule,
         SectionsRoutingModule,
-        FrontendCdocCommonsModule
+        FrontendCommonDocCommonsModule
     ],
     providers: [
         CommonRoutingService,

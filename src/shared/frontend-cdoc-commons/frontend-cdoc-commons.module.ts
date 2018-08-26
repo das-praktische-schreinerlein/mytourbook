@@ -63,5 +63,5 @@ import {CommonDocActionTagsComponent} from './components/cdoc-actiontags/cdoc-ac
         CommonDocActionTagsComponent
     ]
 })
-export class FrontendCdocCommonsModule {
+export class FrontendCommonDocCommonsModule {
 }

@@ -25,7 +25,7 @@ import {TourDocCreatepageComponent} from './components/tdoc-createpage/tdoc-crea
 import {TourDocRecordCreateResolver} from '../shared-tdoc/resolver/tdoc-create.resolver';
 import {TourDocContentUtils} from '../shared-tdoc/services/tdoc-contentutils.service';
 import {CommonDocSearchFormUtils} from '../../shared/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
-import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
+import {FrontendCommonDocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocRoutingService} from '../../shared/tdoc-commons/services/tdoc-routing.service';
 import {LayoutService} from '../../shared/angular-commons/services/layout.service';
 
@@ -43,7 +43,7 @@ import {LayoutService} from '../../shared/angular-commons/services/layout.servic
         AngularCommonsModule,
         SharedTourDocModule,
         TourDocAdminRoutingModule,
-        FrontendCdocCommonsModule
+        FrontendCommonDocCommonsModule
     ],
     providers: [
         TranslateService,

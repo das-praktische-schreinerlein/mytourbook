@@ -35,7 +35,7 @@ import {TourDocActionsComponent} from './components/tdoc-actions/tdoc-actions.co
 import {TourDocActionTagsComponent} from './components/tdoc-actiontags/tdoc-actiontags.component';
 import {TourDocPersonTagsComponent} from './components/tdoc-persontags/tdoc-persontags.component';
 import {FileDropModule} from 'ngx-file-drop';
-import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
+import {FrontendCommonDocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocKeywordsComponent} from './components/tdoc-keywords/tdoc-keywords.component';
 import {TourDocKeywordsstateComponent} from './components/tdoc-keywordsstate/tdoc-keywordsstate.component';
 import {TourDocVideoplayerComponent} from './components/tdoc-videoplayer/tdoc-videoplayer.component';
@@ -84,7 +84,7 @@ import {TourDocPersontagsstateComponent} from './components/tdoc-persontagsstate
         HttpModule,
         AngularCommonsModule,
         AngularMapsModule,
-        FrontendCdocCommonsModule,
+        FrontendCommonDocCommonsModule,
         LightboxModule,
         FileDropModule
     ],

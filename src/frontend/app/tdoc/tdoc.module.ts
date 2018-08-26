@@ -30,7 +30,7 @@ import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.s
 import {FileDropModule} from 'ngx-file-drop';
 import {TourDocContentUtils} from '../shared-tdoc/services/tdoc-contentutils.service';
 import {CommonDocSearchFormUtils} from '../../shared/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
-import {FrontendCdocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
+import {FrontendCommonDocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocRoutingService} from '../../../shared/tdoc-commons/services/tdoc-routing.service';
 
 @NgModule({
@@ -51,7 +51,7 @@ import {TourDocRoutingService} from '../../../shared/tdoc-commons/services/tdoc-
         SharedTourDocModule,
         TourDocRoutingModule,
         FileDropModule,
-        FrontendCdocCommonsModule
+        FrontendCommonDocCommonsModule
     ],
     providers: [
         TranslateService,
