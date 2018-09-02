@@ -2,7 +2,7 @@
  
 # Versions
  
-## 1.5.0-alpha
+## 1.5.0
 - none
  
 ### new features
