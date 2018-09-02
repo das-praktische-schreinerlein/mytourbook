@@ -54,7 +54,7 @@ export class SDocWriterServerModule {
             });
         app.route(apiPrefix + '/:locale' + '/sdocwrite/:resolveSdocToWriteBySdocId')
             .all(function(req, res, next) {
-                if (req.method === 'PUT' && req.method === 'DEL') {
+                if (req.method === 'PUT' || req.method === 'DEL') {
                     return next('not allowed');
                 }
                 return next();
@@ -87,7 +87,7 @@ export class SDocWriterServerModule {
             });
         app.route(apiPrefix + '/:locale' + '/sdocaction')
             .all(function(req, res, next) {
-                if (req.method === 'PUT' && req.method === 'DEL') {
+                if (req.method === 'PUT' || req.method === 'DEL') {
                     return next('not allowed');
                 }
                 return next();
