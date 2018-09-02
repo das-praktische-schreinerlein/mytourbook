@@ -3,7 +3,7 @@
 # Versions
  
 ## 1.5.0
-- none
+- layout-improvements 
  
 ### new features
 - frontend: added import/export of album-files
