@@ -24,6 +24,7 @@ export class SDocServerModule {
             }
 
             const cacheKey = sdocServerModule.generateCacheKey(id);
+            // @ts-ignore: is functional
             cache.get(cacheKey).then(value => {
                 if (value !== undefined) {
                     req['sdoc'] = Object.assign(new SDocRecord(), value.details);
