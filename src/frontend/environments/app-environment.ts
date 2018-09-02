@@ -1,4 +1,4 @@
-import {CommonEnvironment} from '../shared/frontend-pdoc-commons/common-environment';
+import {CommonEnvironment} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/common-environment';
 
 export interface AppEnvironment extends CommonEnvironment {
     tracksBaseUrl: string;

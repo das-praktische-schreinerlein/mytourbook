@@ -13,12 +13,12 @@ import {TourDocRatePersonalRecord, TourDocRatePersonalRecordRelation} from '../m
 import {TourDocDataInfoRecord, TourDocDataInfoRecordRelation} from '../model/records/tdocdatainfo-record';
 import {TourDocDataInfoRecordSchema} from '../model/schemas/tdocdatainfo-record-schema';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {ActionTagForm} from '../../commons/utils/actiontag.utils';
+import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {TourDocVideoRecord, TourDocVideoRecordRelation} from '../model/records/tdocvideo-record';
 import {TourDocVideoRecordSchema} from '../model/schemas/tdocvideo-record-schema';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
-import {CommonDocDataService} from '../../search-commons/services/cdoc-data.service';
+import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;

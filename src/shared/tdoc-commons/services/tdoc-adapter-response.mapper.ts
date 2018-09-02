@@ -1,9 +1,9 @@
 import {Mapper, Record} from 'js-data';
 import {TourDocRecord, TourDocRecordFactory} from '../model/records/tdoc-record';
 import {TourDocImageRecord} from '../model/records/tdocimage-record';
-import {MapperUtils} from '../../search-commons/services/mapper.utils';
-import {GenericAdapterResponseMapper} from '../../search-commons/services/generic-adapter-response.mapper';
-import {BeanUtils} from '../../commons/utils/bean.utils';
+import {MapperUtils} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
+import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {TourDocVideoRecord} from '../model/records/tdocvideo-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {

@@ -1,9 +1,0 @@
-<form [formGroup]="intervalFormGroup">
-    <button class="btn btn-sm btn-action" (click)="doRunInterval(true)" *ngIf="!intervalRunning" i18n="button autoplay album start|Buttontext to start autoplay album@@button.album.startAutoPlay">Play &#x25b6;</button>
-    <button class="btn btn-sm btn-action" (click)="doRunInterval(false)" *ngIf="intervalRunning" i18n="button autoplay album stop|Buttontext to stop autoplay album@@button.album.stopAutoPlay">Pause &#10074;&#10074;</button>
-    <select class="" name="intervalTimeout" id="intervalTimeout" formControlName="intervalTimeout" (change)="onIntervalTimeoutChange($event)">
-        <ng-container *ngFor="let intervalValue of [2, 3, 5, 10, 15, 20, 30]">
-            <option [value]="intervalValue">{{ intervalValue }}s</option>
-        </ng-container>
-    </select>
-</form>

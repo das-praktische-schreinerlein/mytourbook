@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
 import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-record';
-import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
-import {MapElement} from '../../../shared/angular-maps/services/leaflet-geo.plugin';
-import {CommonDocRoutingService} from '../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
+import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import * as L from 'leaflet';
-import {BeanUtils} from '../../../shared/commons/utils/bean.utils';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {
     CommonDocContentUtils,
     CommonDocContentUtilsConfig,
     CommonItemData
-} from '../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import LatLng = L.LatLng;
 
 export interface TourDocItemData extends CommonItemData {

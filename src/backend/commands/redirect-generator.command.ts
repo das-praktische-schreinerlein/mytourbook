@@ -1,13 +1,13 @@
 import * as fs from 'fs';
-import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
+import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
-import {RedirectConfig, RedirectGeneratorModule} from '../shared-node/backend-commons/modules/redirect-generator.module';
+import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
+import {RedirectConfig, RedirectGeneratorModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/redirect-generator.module';
 import {utils} from 'js-data';
-import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
-import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
-import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
-import {CommonDocDataService} from '../shared/search-commons/services/cdoc-data.service';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
+import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
+import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
 
 export class RedirectGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {

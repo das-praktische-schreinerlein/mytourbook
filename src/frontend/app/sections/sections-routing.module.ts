@@ -3,11 +3,11 @@ import {RouterModule, Routes} from '@angular/router';
 import {TourDocSearchpageComponent} from '../tdoc/components/tdoc-searchpage/tdoc-searchpage.component';
 import {TourDocShowpageComponent} from '../tdoc/components/tdoc-showpage/tdoc-showpage.component';
 import {SectionsSearchFormResolver} from './resolver/sections-searchform.resolver';
-import {SectionsPDocRecordResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
+import {SectionsPDocRecordResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/sections-pdoc-details.resolver';
 import {SectionsTourDocRecordResolver} from './resolver/sections-tdoc-details.resolver';
-import {SectionsBaseUrlResolver} from '../../shared/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
-import {SectionBarComponent} from '../../shared/frontend-pdoc-commons/components/sectionbar/sectionbar.component';
-import {SectionComponent} from '../../shared/frontend-pdoc-commons/components/section/section.component';
+import {SectionsBaseUrlResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/sections-baseurl.resolver';
+import {SectionBarComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/sectionbar/sectionbar.component';
+import {SectionComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/section/section.component';
 import {TourDocSectionPageComponent} from './components/sectionpage/tdoc-section-page.component';
 
 const sectionRoutes: Routes = [

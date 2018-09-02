@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
-import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-tdoc-linked-loc-hierarchy',

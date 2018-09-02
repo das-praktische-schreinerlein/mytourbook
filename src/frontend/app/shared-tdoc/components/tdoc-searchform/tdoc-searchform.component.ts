@@ -2,16 +2,16 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewContai
 import {FormBuilder} from '@angular/forms';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {Facets} from '../../../../shared/search-commons/model/container/facets';
+import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
-import {GeoLocationService} from '../../../../shared/commons/services/geolocation.service';
+import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ToastsManager} from 'ng2-toastr';
 import {TourDocDataCacheService} from '../../services/tdoc-datacache.service';
-import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
-import {CommonDocSearchformComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchform/cdoc-searchform.component';
+import {CommonDocSearchformComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-searchform/cdoc-searchform.component';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 

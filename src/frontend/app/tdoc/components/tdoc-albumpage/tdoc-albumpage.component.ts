@@ -6,21 +6,21 @@ import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdo
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
+import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/generic-tracking.service';
 import {FormBuilder} from '@angular/forms';
 import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.service';
-import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {
     CommonDocAlbumpageComponent,
     CommonDocAlbumpageComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-albumpage.component';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-albumpage.component';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {environment} from '../../../../environments/environment';
 
 @Component({

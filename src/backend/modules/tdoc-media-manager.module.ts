@@ -5,11 +5,11 @@ import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {BeanUtils} from '../shared/commons/utils/bean.utils';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import * as readdirp from 'readdirp';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
-import {DateUtils} from '../shared/commons/utils/date.utils';
-import {MediaManagerModule} from '../shared-node/media-commons/modules/media-manager.module';
+import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
+import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
 
 export class TourDocMediaManagerModule {
     private dataService: TourDocDataService;

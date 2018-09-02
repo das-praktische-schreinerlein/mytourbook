@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDataService} from '../../../shared/tdoc-commons/services/tdoc-data.service';
-import {CommonDocRecordCreateResolver} from '../../../shared/frontend-cdoc-commons/resolver/cdoc-create.resolver';
+import {CommonDocRecordCreateResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/cdoc-create.resolver';
 import {TourDocSearchForm} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 

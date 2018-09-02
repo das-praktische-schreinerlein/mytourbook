@@ -1,7 +1,7 @@
-import {ActionTagForm} from '../../commons/utils/actiontag.utils';
-import {KeywordValidationRule, NumberValidationRule} from '../../search-commons/model/forms/generic-validator.util';
+import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
+import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
-import {SqlQueryBuilder} from '../../search-commons/services/sql-query.builder';
+import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 
 export class TourDocSqlMediadbActionTagAdapter {
 

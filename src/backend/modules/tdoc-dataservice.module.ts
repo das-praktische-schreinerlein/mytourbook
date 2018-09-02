@@ -1,5 +1,5 @@
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../shared/tdoc-commons/services/tdoc-data.store';
-import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSolrAdapter} from '../shared/tdoc-commons/services/tdoc-solr.adapter';
 import axios from 'axios';

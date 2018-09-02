@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
-import {CommonDocListItemComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-list-item/cdoc-list-item.component';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {CommonDocListItemComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-list-item/cdoc-list-item.component';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 
 @Component({

@@ -1,9 +1,9 @@
-import {GenericDataStore} from '../../search-commons/services/generic-data.store';
+import {GenericDataStore} from '@dps/mycms-commons/dist/search-commons/services/generic-data.store';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocRecord} from '../model/records/tdoc-record';
-import {Facets} from '../../search-commons/model/container/facets';
-import {SearchParameterUtils} from '../../search-commons/services/searchparameter.utils';
+import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 
 export class TourDocTeamFilterConfig {
     private values = new Map();

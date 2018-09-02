@@ -2,7 +2,7 @@ import {
     BaseEntityRecord,
     BaseEntityRecordFieldConfig,
     BaseEntityRecordType
-} from '../../../search-commons/model/records/base-entity-record';
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {
     DateValidationRule,
     DbIdValidationRule,
@@ -15,9 +15,9 @@ import {
     NumberValidationRule,
     StringNumberValidationRule,
     TextValidationRule
-} from '../../../search-commons/model/forms/generic-validator.util';
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {isArray} from 'util';
-import {CommonDocRecord, CommonDocRecordValidator} from '../../../search-commons/model/records/cdoc-entity-record';
+import {CommonDocRecord, CommonDocRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;

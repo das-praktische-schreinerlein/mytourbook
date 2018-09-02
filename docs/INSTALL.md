@@ -24,7 +24,10 @@ export class Graph3d {
     descriptor.configurable = true;
     Object.defineProperty(mapper.recordClass.prototype, localField, descriptor);
 ```
-
+- node_modules\@angular\cli\models\webpack-configs\common.js for tests: resolve .js before .ts
+```
+            extensions: ['.js', '.ts'],
+``` 
 
 ### prepare solr
 

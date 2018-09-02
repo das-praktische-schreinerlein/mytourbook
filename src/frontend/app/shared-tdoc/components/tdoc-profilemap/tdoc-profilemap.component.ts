@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
-import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-tdoc-profilemap',

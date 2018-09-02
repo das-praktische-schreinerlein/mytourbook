@@ -1,12 +1,12 @@
 // These are important and needed before anything else
 import * as express from 'express';
 import {join} from 'path';
-import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
-import {CacheConfig} from './shared-node/server-commons/datacache.module';
-import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
-import {FirewallModule} from './shared-node/server-commons/firewall.module';
+import {FirewallConfig} from '@dps/mycms-server-commons/dist/server-commons/firewall.commons';
+import {CacheConfig} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
+import {ConfigureServerModule} from '@dps/mycms-server-commons/dist/server-commons/configure-server.module';
+import {FirewallModule} from '@dps/mycms-server-commons/dist/server-commons/firewall.module';
 import * as fs from 'fs';
-import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
+import {DnsBLModule} from '@dps/mycms-server-commons/dist/server-commons/dnsbl.module';
 import {CacheModeType, MytbSimpleServerModule, ServerModuleConfig} from './mytb-simple-server.module';
 
 const minimist = require ('minimist');

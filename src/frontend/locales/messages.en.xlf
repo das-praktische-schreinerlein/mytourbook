@@ -242,7 +242,7 @@
         <note priority="1" from="description">Buttontext to create tdoc</note>
         <note priority="1" from="meaning">button create tdoc</note>
       </trans-unit>
-      <trans-unit id="text.search.tdoc.result" datatype="html">
+      <trans-unit id="text.search.cdoc.result" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {no result} =1 {one result} other {<x id="START_TAG_STRONG" ctype="x-strong"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRONG" ctype="x-strong"/> results} }</source>
         <target>{VAR_PLURAL, plural, =0 {no result :-(} =1 {EXACTLY one result :-)} other {UiUiUi <x id="START_TAG_STRONG" ctype="x-strong"/><x id="INTERPOLATION"/><x id="CLOSE_TAG_STRONG" ctype="x-strong"/> results :-)} }</target>
         <context-group purpose="location">
@@ -252,7 +252,7 @@
         <note priority="1" from="description">Text for searchresult tdoc</note>
         <note priority="1" from="meaning">searchresult text tdoc</note>
       </trans-unit>
-      <trans-unit id="label.pageHeader.tdoc.sort" datatype="html">
+      <trans-unit id="label.pageHeader.cdoc.sort" datatype="html">
         <source>Sort:</source>
         <target> </target>
         <context-group purpose="location">

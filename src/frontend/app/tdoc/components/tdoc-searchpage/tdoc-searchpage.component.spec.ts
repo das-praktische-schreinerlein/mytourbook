@@ -6,24 +6,24 @@ import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-
 import {ActivatedRoute, Router} from '@angular/router';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ActivatedRouteStub} from '../../../../shared/testing/router-stubs';
+import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
-import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
-import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
+import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {Angulartics2} from 'angulartics2';
-import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
-import {Angulartics2Stub} from '../../../../shared/angular-commons/testing/angulartics2-stubs';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
-import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/generic-tracking.service';
+import {Angulartics2Stub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/angulartics2-stubs';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 
 describe('TourDocSearchpageComponent', () => {
     let component: TourDocSearchpageComponent;

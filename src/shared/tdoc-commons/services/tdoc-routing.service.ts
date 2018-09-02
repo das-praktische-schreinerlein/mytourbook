@@ -1,5 +1,5 @@
-import {CommonDocRoutingService} from '../../frontend-cdoc-commons/services/cdoc-routing.service';
-import {CommonRoutingService} from '../../angular-commons/services/common-routing.service';
+import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {Injectable} from '@angular/core';
 
 @Injectable()

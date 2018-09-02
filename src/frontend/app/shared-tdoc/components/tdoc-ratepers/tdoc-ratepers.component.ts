@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@ang
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {BaseRatePersonalRecordType} from '../../../../shared/tdoc-commons/model/records/baseratepers-record';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
-import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-tdoc-ratepers',

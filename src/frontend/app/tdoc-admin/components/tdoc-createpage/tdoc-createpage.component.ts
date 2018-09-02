@@ -2,26 +2,26 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef}
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastsManager} from 'ng2-toastr';
-import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
-import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
+import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/generic-tracking.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
-import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {environment} from '../../../../environments/environment';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {
     CommonDocCreatepageComponent,
     CommonDocCreatepageComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-createpage.component';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-createpage.component';
 
 @Component({
     selector: 'app-tdoc-createpage',

@@ -1,4 +1,4 @@
-import {BaseEntityRecordSchema} from '../../../search-commons/model/schemas/base-entity-record-schema';
+import {BaseEntityRecordSchema} from '@dps/mycms-commons/dist/search-commons/model/schemas/base-entity-record-schema';
 import {Schema} from 'js-data';
 
 export const TourDocImageRecordSchema = new Schema({

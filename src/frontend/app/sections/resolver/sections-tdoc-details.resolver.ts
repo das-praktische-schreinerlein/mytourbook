@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
+import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {TourDocDataService} from '../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-record';
-import {IdValidationRule} from '../../../shared/search-commons/model/forms/generic-validator.util';
-import {ResolvedData, ResolverError} from '../../../shared/angular-commons/resolver/resolver.utils';
-import {LogUtils} from '../../../shared/commons/utils/log.utils';
+import {IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {ResolvedData, ResolverError} from '@dps/mycms-frontend-commons/dist/angular-commons/resolver/resolver.utils';
+import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 
 @Injectable()
 export class SectionsTourDocRecordResolver implements Resolve<ResolvedData<TourDocRecord>> {

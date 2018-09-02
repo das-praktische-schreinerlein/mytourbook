@@ -1,8 +1,8 @@
-import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
+import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {ServerConfig} from '../server-module.loader';
 import * as fs from 'fs';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {DataCacheModule} from '../shared-node/server-commons/datacache.module';
+import {DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {TourDocServerModule} from '../modules/tdoc-server.module';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 

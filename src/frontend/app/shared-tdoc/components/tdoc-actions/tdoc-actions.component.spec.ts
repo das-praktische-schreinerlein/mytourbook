@@ -5,13 +5,13 @@ import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs
 import {TourDocActionsComponent} from './tdoc-actions.component';
 import {TourDocDynamicComponentService} from '../../services/tdoc-dynamic-components.service';
 import {Router} from '@angular/router';
-import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
+import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TourDocAlbumService} from '../../services/tdoc-album.service';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
-import {DynamicComponentService} from '../../../../shared/angular-commons/services/dynamic-components.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
+import {DynamicComponentService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/dynamic-components.service';
 
 describe('TourDocActionsComponent', () => {
     let component: TourDocActionsComponent;

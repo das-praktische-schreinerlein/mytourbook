@@ -1,5 +1,5 @@
-import {TableConfig} from '../../search-commons/services/sql-query.builder';
-import {AdapterFilterActions} from '../../search-commons/services/mapper.utils';
+import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
 export class TourDocSqlMytbConfig {
     public static tableConfigs = {

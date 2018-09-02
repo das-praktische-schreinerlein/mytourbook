@@ -1,7 +1,7 @@
 import {TourDocSearchForm} from '../forms/tdoc-searchform';
 import {TourDocRecord} from '../records/tdoc-record';
-import {Facet, Facets} from '../../../search-commons/model/container/facets';
-import {CommonDocSearchResult} from '../../../search-commons/model/container/cdoc-searchresult';
+import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
+import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 
 export class TourDocSearchResult extends CommonDocSearchResult <TourDocRecord, TourDocSearchForm> {
     constructor(tdocSearchForm: TourDocSearchForm, recordCount: number, currentRecords: TourDocRecord[], facets: Facets) {

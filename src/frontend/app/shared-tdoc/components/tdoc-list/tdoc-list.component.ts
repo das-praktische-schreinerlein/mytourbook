@@ -3,10 +3,10 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
 import {TourDocLightBoxService} from '../../services/tdoc-lightbox.service';
-import {Layout} from '../../../../shared/angular-commons/services/layout.service';
+import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
-import {CommonDocListComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
-import {CommonDocLightboxAlbumConfig} from '../../../../shared/frontend-cdoc-commons/services/cdoc-lightbox.service';
+import {CommonDocListComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
+import {CommonDocLightboxAlbumConfig} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-lightbox.service';
 
 @Component({
     selector: 'app-tdoc-list',

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {Facets} from '../shared/search-commons/model/container/facets';
+import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 
 @Injectable()

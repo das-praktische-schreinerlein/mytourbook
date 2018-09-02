@@ -1,4 +1,4 @@
-import {BaseEntityRecord, BaseEntityRecordType} from '../../../search-commons/model/records/base-entity-record';
+import {BaseEntityRecord, BaseEntityRecordType} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 
 export interface BaseRatePersonalRecordType extends BaseEntityRecordType {
     ausdauer: number;

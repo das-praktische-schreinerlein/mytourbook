@@ -1,11 +1,11 @@
 import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
-import {GenericSqlAdapter} from '../../search-commons/services/generic-sql.adapter';
+import {GenericSqlAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-sql.adapter';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {TableConfig} from '../../search-commons/services/sql-query.builder';
-import {AdapterQuery} from '../../search-commons/services/mapper.utils';
-import {Facet, Facets} from '../../search-commons/model/container/facets';
+import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
+import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {TourDocSqlMytbConfig} from './tdoc-sql-mytb.config';
 
 export class TourDocSqlMytbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {

@@ -1,6 +1,6 @@
-import {IdValidationRule} from '../../search-commons/model/forms/generic-validator.util';
+import {IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {isArray} from 'util';
-import {DateUtils} from '../../commons/utils/date.utils';
+import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 
 export class TourDocFileUtils {
     public static parseRecordSourceFromJson(json: string): any[] {

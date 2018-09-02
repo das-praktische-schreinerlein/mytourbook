@@ -2,8 +2,8 @@ import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocSearchForm, TourDocSearchFormFactory} from '../model/forms/tdoc-searchform';
 import {TourDocDataStore} from './tdoc-data.store';
-import {CommonDocSearchService} from '../../search-commons/services/cdoc-search.service';
-import {Facets} from '../../search-commons/model/container/facets';
+import {CommonDocSearchService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
+import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 
 export class TourDocSearchService extends CommonDocSearchService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     constructor(dataStore: TourDocDataStore) {

@@ -8,15 +8,15 @@ import {TourDocAlbumService} from '../../services/tdoc-album.service';
 import {
     CommonDocActionsComponent,
     CommonDocActionsComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 
 @Component({
     selector: 'app-tdoc-action',
-    templateUrl: '../../../../shared/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.html',
-    styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocActionsComponent extends CommonDocActionsComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {

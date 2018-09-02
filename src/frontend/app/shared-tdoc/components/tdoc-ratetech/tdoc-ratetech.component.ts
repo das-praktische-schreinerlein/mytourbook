@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocRateTechRecord} from '../../../../shared/tdoc-commons/model/records/tdocratetech-record';
-import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-tdoc-ratetech',

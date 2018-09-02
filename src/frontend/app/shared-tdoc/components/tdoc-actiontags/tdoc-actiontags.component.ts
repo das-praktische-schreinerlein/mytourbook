@@ -1,17 +1,17 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {TourDocAlbumService} from '../../services/tdoc-album.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {
     CommonDocActionTagsComponent,
     CommonDocActionTagsComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
-import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-tdoc-actiontags',
-    templateUrl: '../../../../shared/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component.html',
-    styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocActionTagsComponent extends CommonDocActionTagsComponent {

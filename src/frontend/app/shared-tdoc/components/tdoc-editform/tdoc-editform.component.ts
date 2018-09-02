@@ -6,24 +6,24 @@ import {ToastsManager} from 'ng2-toastr';
 import {SchemaValidationError} from 'js-data';
 import {IMultiSelectOption, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
-import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
-import {TrackStatistic, TrackStatisticService} from '../../../../shared/angular-maps/services/track-statistic.service';
-import {GeoGpxParser} from '../../../../shared/angular-maps/services/geogpx.parser';
-import {KeywordsState, StructuredKeywordState} from '../../../../shared/frontend-cdoc-commons/services/cdoc-contentutils.service';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {DateUtils} from '../../../../shared/commons/utils/date.utils';
+import {TrackStatistic, TrackStatisticService} from '@dps/mycms-frontend-commons/dist/angular-maps/services/track-statistic.service';
+import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
+import {KeywordsState, StructuredKeywordState} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {isArray} from 'util';
 import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
-import {GpsTrackValidationRule} from '../../../../shared/search-commons/model/forms/generic-validator.util';
-import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {
     CommonDocEditformComponent,
     CommonDocEditformComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 
 @Component({
     selector: 'app-tdoc-editform',

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Injectable, OnInit} from '@angular/core';
-import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
-import {CommonRoutingService, RoutingState} from '../../../shared/angular-commons/services/common-routing.service';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {CommonRoutingService, RoutingState} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 
 @Component({
     selector: 'app-errorpage',

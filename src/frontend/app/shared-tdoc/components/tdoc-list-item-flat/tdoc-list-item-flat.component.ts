@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocListItemComponent} from '../tdoc-list-item/tdoc-list-item.component';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 

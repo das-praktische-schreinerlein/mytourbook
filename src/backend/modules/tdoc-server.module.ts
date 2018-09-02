@@ -4,9 +4,9 @@ import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.serv
 import {Router} from 'js-data-express';
 import express from 'express';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
-import {DataCacheModule} from '../shared-node/server-commons/datacache.module';
-import {CommonDocServerModule} from '../shared-node/backend-commons/modules/cdoc-server.module';
-import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
+import {DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
+import {CommonDocServerModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-server.module';
+import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
 
 export class TourDocServerModule extends CommonDocServerModule<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
     public static configureRoutes(app: express.Application, apiPrefix: string, dataService: TourDocDataService,

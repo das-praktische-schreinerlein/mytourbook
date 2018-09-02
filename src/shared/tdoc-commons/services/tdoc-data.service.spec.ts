@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import {TourDocDataStore, TourDocTeamFilterConfig} from './tdoc-data.store';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
-import {SearchParameterUtils} from '../../search-commons/services/searchparameter.utils';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 
 describe('TourDocDataService', () => {
     let tdoc1: TourDocRecord = undefined;

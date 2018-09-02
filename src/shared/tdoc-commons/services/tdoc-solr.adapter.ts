@@ -1,9 +1,9 @@
-import {GenericSolrAdapter} from '../../search-commons/services/generic-solr.adapter';
+import {GenericSolrAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-solr.adapter';
 import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {SolrConfig} from '../../search-commons/services/solr-query.builder';
+import {SolrConfig} from '@dps/mycms-commons/dist/search-commons/services/solr-query.builder';
 
 export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
 

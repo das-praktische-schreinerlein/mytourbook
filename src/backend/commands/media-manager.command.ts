@@ -5,9 +5,9 @@ import {TourDocMediaManagerModule} from '../modules/tdoc-media-manager.module';
 import {utils} from 'js-data';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import * as os from 'os';
-import {MediaManagerModule} from '../shared-node/media-commons/modules/media-manager.module';
-import {CommonMediaManagerCommand} from '../shared-node/backend-commons/commands/common-media-manager.command';
-import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
+import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
+import {CommonMediaManagerCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-media-manager.command';
+import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 
 export class MediaManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {

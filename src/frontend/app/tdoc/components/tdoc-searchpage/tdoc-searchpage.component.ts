@@ -6,20 +6,20 @@ import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdo
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
-import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import * as L from 'leaflet';
-import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {MapElement} from '../../../../shared/angular-maps/services/leaflet-geo.plugin';
+import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/generic-tracking.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {
     CommonDocSearchpageComponent,
     CommonDocSearchpageComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-searchpage.component';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-searchpage.component';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {environment} from '../../../../environments/environment';
 
 @Component({

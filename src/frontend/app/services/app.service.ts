@@ -3,13 +3,13 @@ import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.s
 import {Http} from '@angular/http';
 import {TourDocDataStore} from '../../shared/tdoc-commons/services/tdoc-data.store';
 import {environment} from '../../environments/environment';
-import {AppState, GenericAppService} from '../../shared/commons/services/generic-app.service';
+import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {TourDocHttpAdapter} from '../../shared/tdoc-commons/services/tdoc-http.adapter';
-import {PDocDataService} from '../../shared/pdoc-commons/services/pdoc-data.service';
-import {BaseEntityRecord} from '../../shared/search-commons/model/records/base-entity-record';
-import {MinimalHttpBackendClient} from '../../shared/commons/services/minimal-http-backend-client';
-import {CommonRoutingService} from '../../shared/angular-commons/services/common-routing.service';
-import {PlatformService} from '../../shared/angular-commons/services/platform.service';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {BaseEntityRecord} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {MinimalHttpBackendClient} from '@dps/mycms-commons/dist/commons/services/minimal-http-backend-client';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 
 @Injectable()
 export class AppService extends GenericAppService {

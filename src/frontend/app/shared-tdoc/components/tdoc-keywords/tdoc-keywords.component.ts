@@ -1,15 +1,15 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {
     CommonDocKeywordsComponent,
     CommonDocKeywordsComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
-import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-tdoc-keywords',
-    templateUrl: '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.html',
-    styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocKeywordsComponent extends CommonDocKeywordsComponent {

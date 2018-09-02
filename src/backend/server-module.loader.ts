@@ -1,15 +1,15 @@
-import {ConfigureServerModule} from './shared-node/server-commons/configure-server.module';
+import {ConfigureServerModule} from '@dps/mycms-server-commons/dist/server-commons/configure-server.module';
 import {TourDocServerModule} from './modules/tdoc-server.module';
 import {PDocServerModule} from './modules/pdoc-server.module';
-import {FirewallConfig} from './shared-node/server-commons/firewall.commons';
-import {DnsBLModule} from './shared-node/server-commons/dnsbl.module';
-import {FirewallModule} from './shared-node/server-commons/firewall.module';
-import {PDocDataService} from './shared/pdoc-commons/services/pdoc-data.service';
+import {FirewallConfig} from '@dps/mycms-server-commons/dist/server-commons/firewall.commons';
+import {DnsBLModule} from '@dps/mycms-server-commons/dist/server-commons/dnsbl.module';
+import {FirewallModule} from '@dps/mycms-server-commons/dist/server-commons/firewall.module';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {PDocDataServiceModule} from './modules/pdoc-dataservice.module';
 import {TourDocDataServiceModule} from './modules/tdoc-dataservice.module';
 import {TourDocDataService} from './shared/tdoc-commons/services/tdoc-data.service';
 import {AssetsServerModule} from './modules/assets-server.module';
-import {CacheConfig, DataCacheModule} from './shared-node/server-commons/datacache.module';
+import {CacheConfig, DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {TourDocWriterServerModule} from './modules/tdoc-writer-server.module';
 import {VideoServerModule} from './modules/video-server.module';
 

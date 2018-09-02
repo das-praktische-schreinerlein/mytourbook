@@ -1,12 +1,12 @@
-import {GenericSearchForm, GenericSearchFormFieldConfig} from '../../../search-commons/model/forms/generic-searchform';
+import {GenericSearchForm, GenericSearchFormFieldConfig} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-searchform';
 import {
     GenericValidatorDatatypes,
     IdCsvValidationRule,
     KeyParamsValidationRule,
     NearbyParamValidationRule,
     TextValidationRule
-} from '../../../search-commons/model/forms/generic-validator.util';
-import {CommonDocSearchForm, CommonDocSearchFormValidator} from '../../../search-commons/model/forms/cdoc-searchform';
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonDocSearchForm, CommonDocSearchFormValidator} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
 
 export class TourDocSearchForm extends CommonDocSearchForm {
     static tdocFields = {

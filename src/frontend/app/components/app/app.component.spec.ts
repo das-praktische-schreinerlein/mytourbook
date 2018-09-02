@@ -5,18 +5,18 @@ import {FormsModule} from '@angular/forms';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {AppServiceStub} from '../../../shared/angular-commons/testing/appservice-stubs';
-import {ToastsManagerStub} from '../../../shared/testing/toasts-stubs';
+import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
+import {ToastsManagerStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {Router} from '@angular/router';
 import {HttpModule, XHRBackend} from '@angular/http';
 import {MockBackend} from '@angular/http/testing';
-import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
-import {RouterStub} from '../../../shared/angular-commons/testing/router-stubs';
-import {PlatformService} from '../../../shared/angular-commons/services/platform.service';
-import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
-import {LayoutService} from '../../../shared/angular-commons/services/layout.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 
 describe('AppComponent', () => {
     beforeEach(() => {

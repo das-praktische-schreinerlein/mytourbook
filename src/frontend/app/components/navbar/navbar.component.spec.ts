@@ -3,15 +3,15 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {NavbarComponent} from './navbar.component';
 import {ActivatedRoute} from '@angular/router';
-import {ActivatedRouteStub} from '../../../shared/testing/router-stubs';
+import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {ToastsManagerStub} from '../../../shared/testing/toasts-stubs';
-import {PDocDataService} from '../../../shared/pdoc-commons/services/pdoc-data.service';
-import {PDocDataServiceStub} from '../../../shared/testing/pdoc-dataservice-stubs';
-import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
-import {AppServiceStub} from '../../../shared/angular-commons/testing/appservice-stubs';
-import {GenericAppService} from '../../../shared/commons/services/generic-app.service';
+import {ToastsManagerStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {PDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/pdoc-dataservice-stubs';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 
 describe('NavbarComponent', () => {
     let component: NavbarComponent;

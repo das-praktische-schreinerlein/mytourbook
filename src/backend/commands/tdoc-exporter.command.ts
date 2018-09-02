@@ -1,13 +1,13 @@
-import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
+import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import * as fs from 'fs';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
-import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
-import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
-import {CommonDocDataService} from '../shared/search-commons/services/cdoc-data.service';
-import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
-import {GenericAdapterResponseMapper} from '../shared/search-commons/services/generic-adapter-response.mapper';
-import {CommonDocTransportModule} from '../shared-node/backend-commons/modules/cdoc-transport.module';
+import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
+import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
+import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
+import {CommonDocTransportModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-transport.module';
 import {utils} from 'js-data';
 
 export class TourDocExporterCommand implements AbstractCommand {

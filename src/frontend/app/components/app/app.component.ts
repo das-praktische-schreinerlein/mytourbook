@@ -1,14 +1,14 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
 import {ToastsManager} from 'ng2-toastr';
 import {TranslateService} from '@ngx-translate/core';
-import {AppState, GenericAppService} from '../../../shared/commons/services/generic-app.service';
+import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
-import {CommonRoutingService, RoutingState} from '../../../shared/angular-commons/services/common-routing.service';
-import {PlatformService} from '../../../shared/angular-commons/services/platform.service';
-import {LogUtils} from '../../../shared/commons/utils/log.utils';
-import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
-import {LayoutService} from '../../../shared/angular-commons/services/layout.service';
+import {CommonRoutingService, RoutingState} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {environment} from '../../../environments/environment';
 
 @Component({

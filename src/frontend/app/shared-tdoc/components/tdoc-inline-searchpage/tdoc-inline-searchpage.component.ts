@@ -5,10 +5,10 @@ import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdo
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
 import {ToastsManager} from 'ng2-toastr';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {CommonDocInlineSearchpageComponent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-inline-searchpage/cdoc-inline-searchpage.component';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {CommonDocInlineSearchpageComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-inline-searchpage/cdoc-inline-searchpage.component';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 
 @Component({

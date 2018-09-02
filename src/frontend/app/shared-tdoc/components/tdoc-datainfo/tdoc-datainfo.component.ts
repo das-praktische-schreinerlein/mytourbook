@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@ang
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDataInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdocdatainfo-record';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
+import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 
 @Component({
     selector: 'app-tdoc-datainfo',

@@ -1,8 +1,8 @@
-import {PDocDataStore} from '../shared/pdoc-commons/services/pdoc-data.store';
-import {SearchParameterUtils} from '../shared/search-commons/services/searchparameter.utils';
-import {PDocDataService} from '../shared/pdoc-commons/services/pdoc-data.service';
-import {PDocInMemoryAdapter} from '../shared/pdoc-commons/services/pdoc-inmemory.adapter';
-import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
+import {PDocDataStore} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.store';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {PDocInMemoryAdapter} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-inmemory.adapter';
+import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import * as fs from 'fs';
 import marked from 'marked';
 import htmlToText from 'html-to-text';

@@ -1,6 +1,6 @@
-import {PDocSearchResult} from '../shared/pdoc-commons/model/container/pdoc-searchresult';
-import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
-import {PDocDataService} from '../shared/pdoc-commons/services/pdoc-data.service';
+import {PDocSearchResult} from '@dps/mycms-commons/dist/pdoc-commons/model/container/pdoc-searchresult';
+import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/pdoc-searchform';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {arser, Router} from 'js-data-express';
 import express from 'express';
 

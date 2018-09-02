@@ -7,8 +7,8 @@ import {TourDocSearchformComponent} from './components/tdoc-searchform/tdoc-sear
 import {TourDocInlineSearchpageComponent} from './components/tdoc-inline-searchpage/tdoc-inline-searchpage.component';
 import {TourDocListItemSmallComponent} from './components/tdoc-list-item-small/tdoc-list-item-small.component';
 import {TourDocListItemFlatComponent} from './components/tdoc-list-item-flat/tdoc-list-item-flat.component';
-import {AngularMapsModule} from '../../shared/angular-maps/angular-maps.module';
-import {AngularCommonsModule} from '../../shared/angular-commons/angular-commons.module';
+import {AngularMapsModule} from '@dps/mycms-frontend-commons/dist/angular-maps/angular-maps.module';
+import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
 import {HttpModule} from '@angular/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -35,7 +35,7 @@ import {TourDocActionsComponent} from './components/tdoc-actions/tdoc-actions.co
 import {TourDocActionTagsComponent} from './components/tdoc-actiontags/tdoc-actiontags.component';
 import {TourDocPersonTagsComponent} from './components/tdoc-persontags/tdoc-persontags.component';
 import {FileDropModule} from 'ngx-file-drop';
-import {FrontendCommonDocCommonsModule} from '../../shared/frontend-cdoc-commons/frontend-cdoc-commons.module';
+import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocKeywordsComponent} from './components/tdoc-keywords/tdoc-keywords.component';
 import {TourDocKeywordsstateComponent} from './components/tdoc-keywordsstate/tdoc-keywordsstate.component';
 import {TourDocVideoplayerComponent} from './components/tdoc-videoplayer/tdoc-videoplayer.component';

@@ -2,8 +2,8 @@ import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {ItemsJsConfig} from '../../search-commons/services/itemsjs-query.builder';
-import {GenericItemsJsAdapter} from '../../search-commons/services/generic-itemsjs.adapter';
+import {ItemsJsConfig} from '@dps/mycms-commons/dist/search-commons/services/itemsjs-query.builder';
+import {GenericItemsJsAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-itemsjs.adapter';
 
 export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public static itemsJsConfig: ItemsJsConfig = {

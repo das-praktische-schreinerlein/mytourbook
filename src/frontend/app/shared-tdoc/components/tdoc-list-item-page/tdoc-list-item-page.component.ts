@@ -1,16 +1,16 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {Layout} from '../../../../shared/angular-commons/services/layout.service';
-import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
-import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
+import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
+import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
 import {TourDocContentUtils, TourDocItemData} from '../../services/tdoc-contentutils.service';
-import {AbstractInlineComponent} from '../../../../shared/angular-commons/components/inline.component';
-import {ActionTagEvent} from '../../../../shared/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
+import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
+import {ActionTagEvent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
 
 @Component({
     selector: 'app-tdoc-list-item-page',

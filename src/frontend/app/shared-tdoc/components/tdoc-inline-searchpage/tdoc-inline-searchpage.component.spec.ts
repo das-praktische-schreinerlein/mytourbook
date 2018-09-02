@@ -5,19 +5,19 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../shared/tdoc-commons/services/tdoc-data.store';
-import {AppServiceStub} from '../../../../shared/angular-commons/testing/appservice-stubs';
+import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
 import {ToastModule, ToastsManager} from 'ng2-toastr';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
+import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {ActivatedRouteStub} from '../../../../shared/testing/router-stubs';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
-import {SearchParameterUtils} from '../../../../shared/search-commons/services/searchparameter.utils';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {RouterStub} from '../../../../shared/angular-commons/testing/router-stubs';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
-import {SearchFormUtils} from '../../../../shared/angular-commons/services/searchform-utils.service';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 
 describe('TourDocInlineSearchpageComponent', () => {

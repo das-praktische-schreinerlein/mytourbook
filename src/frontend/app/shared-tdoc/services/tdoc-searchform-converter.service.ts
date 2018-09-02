@@ -1,9 +1,12 @@
 import {Injectable} from '@angular/core';
 import {TourDocSearchForm, TourDocSearchFormValidator} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
-import {GenericSearchFormSearchFormConverter} from '../../../shared/search-commons/services/generic-searchform.converter';
-import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
+import {
+    GenericSearchFormSearchFormConverter,
+    HumanReadableFilter
+} from '@dps/mycms-commons/dist/search-commons/services/generic-searchform.converter';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TranslateService} from '@ngx-translate/core';
-import {HumanReadableFilter, SearchFormUtils} from '../../../shared/angular-commons/services/searchform-utils.service';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 
 @Injectable()
 export class TourDocSearchFormConverter implements GenericSearchFormSearchFormConverter<TourDocSearchForm> {
@@ -122,7 +125,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
             ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:',
-            'personalRateOverall:', 'personalRateDifficulty:']);
+                'personalRateOverall:', 'personalRateDifficulty:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
             moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');

@@ -3,7 +3,7 @@ import {TourDocDataService} from '../../../shared/tdoc-commons/services/tdoc-dat
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchForm} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-record';
-import {CommonDocDataCacheService} from '../../../shared/frontend-cdoc-commons/services/cdoc-datacache.service';
+import {CommonDocDataCacheService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-datacache.service';
 
 @Injectable()
 export class TourDocDataCacheService extends CommonDocDataCacheService<TourDocRecord, TourDocSearchForm, TourDocSearchResult,

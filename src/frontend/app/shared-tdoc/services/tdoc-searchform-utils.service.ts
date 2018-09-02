@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {SearchFormUtils} from '../../../shared/angular-commons/services/searchform-utils.service';
-import {SearchParameterUtils} from '../../../shared/search-commons/services/searchparameter.utils';
-import {CommonDocSearchFormUtils} from '../../../shared/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
+import {CommonDocSearchFormUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
 
 @Injectable()
 export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {

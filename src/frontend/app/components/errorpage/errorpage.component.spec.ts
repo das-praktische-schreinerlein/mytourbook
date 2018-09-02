@@ -4,9 +4,9 @@ import {ErrorPageComponent} from './errorpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {PageUtils} from '../../../shared/angular-commons/services/page.utils';
-import {CommonRoutingService} from '../../../shared/angular-commons/services/common-routing.service';
-import {RouterStub} from '../../../shared/angular-commons/testing/router-stubs';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {Router} from '@angular/router';
 
 describe('ErrorPageComponent', () => {

@@ -1,6 +1,6 @@
 import {utils} from 'js-data';
-import {KeywordValidationRule} from '../../search-commons/model/forms/generic-validator.util';
-import {SqlQueryBuilder} from '../../search-commons/services/sql-query.builder';
+import {KeywordValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 
 export class TourDocSqlMediadbKeywordAdapter {
 

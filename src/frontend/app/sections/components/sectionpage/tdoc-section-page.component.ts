@@ -1,25 +1,25 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {PDocRecord} from '../../../../shared/pdoc-commons/model/records/pdoc-record';
+import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {ToastsManager} from 'ng2-toastr';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
-import {LayoutService} from '../../../../shared/angular-commons/services/layout.service';
-import {PDocDataService} from '../../../../shared/pdoc-commons/services/pdoc-data.service';
-import {CommonDocRoutingService} from '../../../../shared/frontend-cdoc-commons/services/cdoc-routing.service';
-import {ErrorResolver} from '../../../../shared/frontend-cdoc-commons/resolver/error.resolver';
+import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
+import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
+import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {TourDocSearchForm, TourDocSearchFormFactory} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {PageUtils} from '../../../../shared/angular-commons/services/page.utils';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {Facets} from '../../../../shared/search-commons/model/container/facets';
-import {AngularMarkdownService} from '../../../../shared/angular-commons/services/angular-markdown.service';
-import {AngularHtmlService} from '../../../../shared/angular-commons/services/angular-html.service';
-import {CommonRoutingService} from '../../../../shared/angular-commons/services/common-routing.service';
-import {GenericTrackingService} from '../../../../shared/angular-commons/services/generic-tracking.service';
-import {PlatformService} from '../../../../shared/angular-commons/services/platform.service';
-import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
+import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
+import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
+import {GenericTrackingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/generic-tracking.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {environment} from '../../../../environments/environment';
-import {SectionPageComponent} from '../../../../shared/frontend-pdoc-commons/components/sectionpage/section-page.component';
+import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/sectionpage/section-page.component';
 
 @Component({
     selector: 'app-tdoc-sectionpage',

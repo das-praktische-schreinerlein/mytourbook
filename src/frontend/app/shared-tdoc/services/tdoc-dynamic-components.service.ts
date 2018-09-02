@@ -1,5 +1,5 @@
 import {ComponentFactoryResolver, Injectable, Type} from '@angular/core';
-import {DynamicComponentService} from '../../../shared/angular-commons/services/dynamic-components.service';
+import {DynamicComponentService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/dynamic-components.service';
 import {TourDocActionTagsComponent} from '../components/tdoc-actiontags/tdoc-actiontags.component';
 
 @Injectable()

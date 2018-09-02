@@ -1,15 +1,15 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
-import {GenericAppService} from '../../../../shared/commons/services/generic-app.service';
-import {BeanUtils} from '../../../../shared/commons/utils/bean.utils';
+import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {
     CommonDocKeywordsComponent,
     CommonDocKeywordsComponentConfig
-} from '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component';
 
 @Component({
     selector: 'app-tdoc-persontags',
-    templateUrl: '../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.html',
-    styleUrls: ['../../../../shared/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywords/cdoc-keywords.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocPersonTagsComponent extends CommonDocKeywordsComponent {

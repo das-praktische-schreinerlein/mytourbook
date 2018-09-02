@@ -1,14 +1,14 @@
 import * as fs from 'fs';
-import {SitemapConfig, SitemapGeneratorModule} from '../shared-node/backend-commons/modules/sitemap-generator.module';
-import {PDocSearchForm} from '../shared/pdoc-commons/model/forms/pdoc-searchform';
-import {PDocRecord} from '../shared/pdoc-commons/model/records/pdoc-record';
+import {SitemapConfig, SitemapGeneratorModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/sitemap-generator.module';
+import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/pdoc-searchform';
+import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {PDocDataServiceModule} from '../modules/pdoc-dataservice.module';
-import {AbstractCommand} from '../shared-node/backend-commons/commands/abstract.command';
-import {CommonDocSearchForm} from '../shared/search-commons/model/forms/cdoc-searchform';
-import {CommonDocRecord} from '../shared/search-commons/model/records/cdoc-entity-record';
-import {CommonDocSearchResult} from '../shared/search-commons/model/container/cdoc-searchresult';
-import {CommonDocDataService} from '../shared/search-commons/services/cdoc-data.service';
+import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
+import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
+import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
 
 export class SiteMapGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {

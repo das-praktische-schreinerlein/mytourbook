@@ -1,4 +1,4 @@
-import {BaseImageRecord} from '../../../search-commons/model/records/baseimage-record';
+import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 
 export class TourDocImageRecord extends BaseImageRecord {
     tdoc_id: string;
