@@ -1,7 +1,7 @@
 {
   "name": "mytourbook-frontend",
   "version": "1.5.0",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "angular-cli": {},
   "scripts": {
     "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js",
