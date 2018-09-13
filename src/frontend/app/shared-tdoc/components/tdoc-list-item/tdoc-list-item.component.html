@@ -96,7 +96,7 @@
                              alt="{{listItem.video.name}}">
                     </ng-container>
                 </div>
-                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
+                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
                 <p class="card-text">
                     {{listItem.currentRecord.descTxt | truncate : 300 }}
                 </p>

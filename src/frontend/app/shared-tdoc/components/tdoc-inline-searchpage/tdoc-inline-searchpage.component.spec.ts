@@ -19,6 +19,9 @@ import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testi
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
+import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
+import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
+import {TourDocAlbumService} from '../../services/tdoc-album.service';
 
 describe('TourDocInlineSearchpageComponent', () => {
     let component: TourDocInlineSearchpageComponent;
@@ -43,7 +46,10 @@ describe('TourDocInlineSearchpageComponent', () => {
                 CommonDocRoutingService,
                 TourDocRoutingService,
                 ToastsManager,
-                PageUtils
+                PageUtils,
+                TourDocSearchFormUtils,
+                TourDocActionTagService,
+                TourDocAlbumService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

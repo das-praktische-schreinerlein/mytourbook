@@ -1,6 +1,7 @@
 import {utils} from 'js-data';
 import {KeywordValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 export class TourDocSqlMediadbKeywordAdapter {
 
@@ -45,12 +46,13 @@ export class TourDocSqlMediadbKeywordAdapter {
             return utils.reject('setGenericKeywords ' + joinTable + ' keywords not valid');
         }
 
+        const newKeywords = StringUtils.uniqueKeywords(keywords).join(',');
         const deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable + ' WHERE ' + idField + ' IN (' + dbId + ')';
         let insertNewKeywordsSql;
         let insertNewKeywordJoinSql;
         if (this.config.knexOpts.client !== 'mysql') {
             const keywordSplit = ' WITH split(word, str, hascomma) AS ( ' +
-            '    VALUES("", "' + keywords.replace(/[ \\"']/g, '') + '", 1) ' +
+                '    VALUES("", "' + newKeywords.replace(/[ \\"']/g, '') + '", 1) ' +
             '    UNION ALL SELECT ' +
             '    substr(str, 0, ' +
             '        case when instr(str, ",") ' +
@@ -79,7 +81,7 @@ export class TourDocSqlMediadbKeywordAdapter {
                 '                  WHERE kkw2.kw_id = kkw1.kw_id AND ' + idField + ' = ' + dbId + '); ';
         } else {
             const keywordSplit = ' SELECT ' +
-                '"' + keywords.replace(/[ \\"']/g, '').split(',').join('" AS kw_name UNION ALL SELECT "') + '" AS kw_name ';
+                '"' + newKeywords.replace(/[ \\"']/g, '').split(',').join('" AS kw_name UNION ALL SELECT "') + '" AS kw_name ';
 
             insertNewKeywordsSql = 'INSERT INTO keyword (kw_name) ' +
                 'SELECT kw_name ' +

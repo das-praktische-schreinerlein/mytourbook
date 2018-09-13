@@ -27,7 +27,7 @@
                     <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
                 </div>
                 <div class="col-4 layout-big">
-                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a>
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
                     <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
                     <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
                 </div>
@@ -80,7 +80,7 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault="">
                         <div class="col-9 location layout-small">
-                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
+                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <div class="row">
                                 <div class="col-4 location layout-small">
                                     <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
@@ -132,7 +132,7 @@
                     </ng-container>
                     <ng-container *ngSwitchDefault="">
                         <div class="col-9 location layout-verysmall">
-                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 ngcclass="card-title">{{listItem.currentRecord.name}}</h5></a></div>
+                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
                             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                             <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >

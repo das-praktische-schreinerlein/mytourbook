@@ -1,10 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDynamicComponentService} from '../../services/tdoc-dynamic-components.service';
-import {Router} from '@angular/router';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {ToastsManager} from 'ng2-toastr';
-import {TourDocAlbumService} from '../../services/tdoc-album.service';
 import {
     CommonDocActionsComponent,
     CommonDocActionsComponentConfig
@@ -12,6 +10,7 @@ import {
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
+import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 
 @Component({
     selector: 'app-tdoc-action',
@@ -20,10 +19,11 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocActionsComponent extends CommonDocActionsComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
-    constructor(protected dynamicComponentService: TourDocDynamicComponentService, protected router: Router,
-                protected tdocDataService: TourDocDataService, protected toastr: ToastsManager, vcr: ViewContainerRef,
-                protected tdocAlbumService: TourDocAlbumService, protected cd: ChangeDetectorRef, protected appService: GenericAppService) {
-        super(dynamicComponentService, router, tdocDataService, toastr, vcr, tdocAlbumService, cd, appService);
+    constructor(protected dynamicComponentService: TourDocDynamicComponentService,
+                protected toastr: ToastsManager, vcr: ViewContainerRef,
+                protected cd: ChangeDetectorRef, protected appService: GenericAppService,
+                protected actionTagService: TourDocActionTagService) {
+        super(dynamicComponentService, toastr, vcr, cd, appService, actionTagService);
     }
 
     protected getComponentConfig(config: {}): CommonDocActionsComponentConfig {

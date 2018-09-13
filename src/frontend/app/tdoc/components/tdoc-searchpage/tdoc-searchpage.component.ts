@@ -21,6 +21,10 @@ import {
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {environment} from '../../../../environments/environment';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
+import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
+import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
 
 @Component({
     selector: 'app-tdoc-searchpage',
@@ -41,11 +45,13 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
 
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService, errorResolver: ErrorResolver,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
-                cdocRoutingService: TourDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef,
-                pageUtils: PageUtils, cd: ChangeDetectorRef, trackingProvider: GenericTrackingService,
-                appService: GenericAppService, platformService: PlatformService, layoutService: LayoutService) {
+                cdocRoutingService: TourDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef, pageUtils: PageUtils,
+                cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
+                platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
+                tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService) {
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
-            toastr, vcr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, environment);
+            toastr, vcr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
+            tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment);
     }
 
     onMapTourDocClicked(tdoc: TourDocRecord) {
@@ -109,23 +115,20 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     protected doCheckSearchResultAfterSearch(searchResult: TourDocSearchResult): void {
         super.doCheckSearchResultAfterSearch(searchResult);
 
-        const me = this;
         if (searchResult === undefined) {
             // console.log('empty searchResult', tdocSearchResult);
-            me.flgMapAvailable = false;
-            me.flgProfileMapAvailable = false;
-            me.flgShowProfileMap = me.flgProfileMapAvailable;
+            this.flgMapAvailable = false;
+            this.flgProfileMapAvailable = false;
+            this.flgShowProfileMap = this.flgProfileMapAvailable;
         } else {
             // console.log('update searchResult', tdocSearchResult);
-            me.initialized = true;
-            me.searchResult = searchResult;
-            me.searchForm = searchResult.searchForm;
-            me.flgMapAvailable = me.mapCenterPos !== undefined || me.searchResult.recordCount > 0;
-            me.flgProfileMapAvailable = me.flgMapAvailable;
+            this.flgMapAvailable = this.mapCenterPos !== undefined || this.searchResult.recordCount > 0;
+            this.flgProfileMapAvailable = this.flgMapAvailable;
         }
-        me.flgShowMap = me.flgMapAvailable;
-        me.flgShowProfileMap = me.flgShowProfileMap && me.flgProfileMapAvailable;
-        me.calcShowMaps();
+
+        this.flgShowMap = this.flgMapAvailable;
+        this.flgShowProfileMap = this.flgShowProfileMap && this.flgProfileMapAvailable;
+        this.calcShowMaps();
     }
 
     private calcShowMaps() {

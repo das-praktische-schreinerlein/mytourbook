@@ -40,6 +40,7 @@ import {TourDocActionTagsComponent} from './shared-tdoc/components/tdoc-actionta
 import {TourDocAlbumService} from './shared-tdoc/services/tdoc-album.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {CookieLawModule} from 'angular2-cookie-law';
+import {TourDocActionTagService} from './shared-tdoc/services/tdoc-actiontag.service';
 
 registerLocaleData(localeDe);
 
@@ -101,7 +102,8 @@ export function getAngulartics2Providers(): any {
         { provide: SearchParameterUtils, useClass: SearchParameterUtils },
         PageUtils,
         { provide: PlatformService, useClass: PlatformService},
-        LayoutService
+        LayoutService,
+        TourDocActionTagService
     ],
     bootstrap: [AppComponent]
 })

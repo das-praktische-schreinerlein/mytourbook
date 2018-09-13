@@ -7,7 +7,6 @@ import {Router} from '@angular/router';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
-import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
@@ -17,6 +16,7 @@ import {DatePipe} from '@angular/common';
 import {CommonDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/cdoc-dataservice-stubs';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
+import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
 
 describe('TourDocListItemComponent', () => {
     let component: TourDocListItemComponent;
@@ -38,7 +38,7 @@ describe('TourDocListItemComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot(),
-                AngularCommonsModule]
+            AngularCommonsModule]
         })
             .compileComponents();
     }));

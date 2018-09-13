@@ -15,13 +15,17 @@ export class TourDocDataServiceStub {
         return new TourDocRecord({id: '1', name: 'Test'});
     }
 
-    search(searchForm: TourDocSearchForm): Promise<TourDocSearchResult> {
-        return Promise.resolve(new TourDocSearchResult(searchForm, 0, [], new Facets()));
-    };
+    cloneSanitizedSearchForm(values: TourDocSearchForm): TourDocSearchForm {
+        return new TourDocSearchForm(values);
+    }
 
     newSearchForm(values: {}): TourDocSearchForm {
         return new TourDocSearchForm(values);
     }
+
+    search(searchForm: TourDocSearchForm): Promise<TourDocSearchResult> {
+        return Promise.resolve(new TourDocSearchResult(searchForm, 0, [], new Facets()));
+    };
 
     newSearchResult(tdocSearchForm: TourDocSearchForm, recordCount: number,
                     currentRecords: TourDocRecord[], facets: Facets): TourDocSearchResult {

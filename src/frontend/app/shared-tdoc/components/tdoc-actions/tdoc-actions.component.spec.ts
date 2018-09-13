@@ -12,6 +12,7 @@ import {TourDocAlbumService} from '../../services/tdoc-album.service';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {DynamicComponentService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/dynamic-components.service';
+import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 
 describe('TourDocActionsComponent', () => {
     let component: TourDocActionsComponent;
@@ -31,7 +32,8 @@ describe('TourDocActionsComponent', () => {
                 TourDocDynamicComponentService,
                 DynamicComponentService,
                 TourDocAlbumService,
-                ComponentFactoryResolver
+                ComponentFactoryResolver,
+                TourDocActionTagService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

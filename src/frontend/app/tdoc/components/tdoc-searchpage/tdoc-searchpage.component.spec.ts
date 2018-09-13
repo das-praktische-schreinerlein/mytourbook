@@ -24,6 +24,9 @@ import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
+import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
+import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
+import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.service';
 
 describe('TourDocSearchpageComponent', () => {
     let component: TourDocSearchpageComponent;
@@ -54,7 +57,10 @@ describe('TourDocSearchpageComponent', () => {
                 PlatformService,
                 GenericTrackingService,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
-                LayoutService
+                LayoutService,
+                TourDocSearchFormUtils,
+                TourDocActionTagService,
+                TourDocAlbumService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

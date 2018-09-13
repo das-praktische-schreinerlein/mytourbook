@@ -2,6 +2,7 @@ import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.uti
 import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 export class TourDocSqlMediadbActionTagAdapter {
 
@@ -30,6 +31,7 @@ export class TourDocSqlMediadbActionTagAdapter {
         if (!this.keywordValidationRule.isValid(playlistKey)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' playlistkey not valid');
         }
+        const playlistKeys = StringUtils.uniqueKeywords(playlistKey);
 
         const ratePersGesamt = actionTagForm.payload['tdocratepers.gesamt'] || 0;
         if (!this.rateValidationRule.isValid(ratePersGesamt)) {
@@ -72,10 +74,10 @@ export class TourDocSqlMediadbActionTagAdapter {
         }
 
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
-            'WHERE ' + joinTableName + '.p_id IN (SELECT playlist.p_id FROM playlist WHERE p_name IN ("' + playlistKey + '"))' +
+            'WHERE ' + joinTableName + '.p_id IN (SELECT playlist.p_id FROM playlist WHERE p_name IN ("' + playlistKeys.join('", "') + '"))' +
             ' AND ' + idName + ' = "' + id + '"';
         const insertSql = 'INSERT INTO ' + joinTableName + ' (p_id, ' + idName + ')' +
-            ' SELECT playlist.p_id AS p_id, "' + id + '" AS ' + idName + ' FROM playlist WHERE p_name = ("' + playlistKey + '")';
+            ' SELECT playlist.p_id AS p_id, "' + id + '" AS ' + idName + ' FROM playlist WHERE p_name IN ("' + playlistKeys.join('", "') + '")';
         let updateSql = 'UPDATE ' + baseTableName + ' SET ' + rateName + '=GREATEST(COALESCE(' + rateName + ', 0), ' + ratePersGesamt + '),' +
             ' ' + rateNameMotive + '=GREATEST(COALESCE(' + rateNameMotive + ', 0), ' + ratePersMotive + '),' +
             ' ' + rateNameWichtigkeit + '=GREATEST(COALESCE(' + rateNameWichtigkeit + ', 0), ' + ratePersWichtigkeit + ')' +
@@ -120,6 +122,9 @@ export class TourDocSqlMediadbActionTagAdapter {
         if (!this.keywordValidationRule.isValid(objectKey)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' objectkey not valid');
         }
+
+        const objectKeys = StringUtils.uniqueKeywords(objectKey);
+
         let baseTableName;
         let joinTableName;
         let idName;
@@ -142,10 +147,10 @@ export class TourDocSqlMediadbActionTagAdapter {
         }
 
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
-            'WHERE ' + joinTableName + '.' + typeName + ' IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKey + '"))' +
+            'WHERE ' + joinTableName + '.' + typeName + ' IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKeys.join('", "') + '"))' +
             ' AND ' + idName + ' = "' + id + '"';
         const insertSql = 'INSERT INTO ' + joinTableName + ' (' + typeName + ', ' + idName + ')' +
-            ' SELECT objects.o_key AS ' + typeName + ', "' + id + '" AS ' + idName + ' FROM objects WHERE o_name = ("' + objectKey + '")';
+            ' SELECT objects.o_key AS ' + typeName + ', "' + id + '" AS ' + idName + ' FROM objects WHERE o_name = ("' + objectKeys.join('", "') + '")';
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);

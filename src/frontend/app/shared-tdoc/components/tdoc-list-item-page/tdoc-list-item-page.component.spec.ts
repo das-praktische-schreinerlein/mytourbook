@@ -7,7 +7,6 @@ import {Router} from '@angular/router';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
-import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
@@ -51,7 +50,6 @@ describe('TourDocListItemPageComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot(),
-                AngularCommonsModule,
                 HttpModule]
         })
             .compileComponents();

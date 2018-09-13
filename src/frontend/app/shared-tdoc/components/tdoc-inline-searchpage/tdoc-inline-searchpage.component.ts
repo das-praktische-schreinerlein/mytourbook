@@ -10,6 +10,10 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {CommonDocInlineSearchpageComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-inline-searchpage/cdoc-inline-searchpage.component';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
+import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
+import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 
 @Component({
     selector: 'app-tdoc-inline-searchpage',
@@ -26,8 +30,10 @@ export class TourDocInlineSearchpageComponent extends
     constructor(appService: GenericAppService, commonRoutingService: CommonRoutingService,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
                 cdocRoutingService: TourDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef,
-                cd: ChangeDetectorRef, elRef: ElementRef, pageUtils: PageUtils) {
+                cd: ChangeDetectorRef, elRef: ElementRef, pageUtils: PageUtils, searchFormUtils: SearchFormUtils,
+                tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService) {
         super(appService, commonRoutingService, tdocDataService, searchFormConverter, cdocRoutingService,
-            toastr, vcr, cd, elRef, pageUtils);
+            toastr, vcr, cd, elRef, pageUtils, searchFormUtils, tdocSearchFormUtils,
+            new CommonDocMultiActionManager(appService, actionService));
     }
 }
