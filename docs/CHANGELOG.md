@@ -2,14 +2,34 @@
  
 # Versions
  
-## 1.6.0-alpha
+## 2.0.0
+- changed namespace
+- moved functionality to external mycms-modules
+- bumped dependency-versions
 
+### new features
+- none
+
+### improvements
+- none
+
+### bug fixes
+- frontend: fixed layoutbugs in mobile-version (cookielaw-width)
+- frontend: fixed current value of search-configuration
+ 
 ### breaking changes
+- moved functionality to external mycms-modules
+- bumped dependency-versions
+- changed namespace from SDoc=sdoc to TourDoc=tdoc over all components, configs, pathes...
 - changed some component configuration
 ```
 components.cdoc-listheader...
 components.cdoc-persontags...
 ```
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+
 
 ## 1.5.0-alpha
 - none
