@@ -14,8 +14,7 @@
 - none
 
 ### bug fixes
-- frontend: fixed layoutbugs in mobile-version (cookielaw-width)
-- frontend: fixed current value of search-configuration
+- none
  
 ### breaking changes
 - moved functionality to external mycms-modules
