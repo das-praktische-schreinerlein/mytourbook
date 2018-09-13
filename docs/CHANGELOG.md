@@ -31,8 +31,8 @@ components.cdoc-persontags...
 - frontend: IE till 11 not functional (can block rendering sometimes)
 
 
-## 1.5.0-alpha
-- none
+## 1.5.0
+- layout-improvements 
  
 ### new features
 - frontend: added import/export of album-files
