@@ -4,7 +4,7 @@
     "showBaseUrl": "http://localhost:4200/",
     "locale": "de",
     "perPage": 999,
-    "cdocSearchForm": {
+    "tdocSearchForm": {
         "type": "track,route,location,trip,news",
         "sort": "relevance"
     }
