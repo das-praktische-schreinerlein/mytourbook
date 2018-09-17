@@ -40,6 +40,7 @@ import {TourDocKeywordsComponent} from './components/tdoc-keywords/tdoc-keywords
 import {TourDocKeywordsstateComponent} from './components/tdoc-keywordsstate/tdoc-keywordsstate.component';
 import {TourDocVideoplayerComponent} from './components/tdoc-videoplayer/tdoc-videoplayer.component';
 import {TourDocPersontagsstateComponent} from './components/tdoc-persontagsstate/tdoc-persontagsstate.component';
+import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionheader/tdoc-multiactionheader.component';
 
 @NgModule({
     declarations: [
@@ -70,7 +71,8 @@ import {TourDocPersontagsstateComponent} from './components/tdoc-persontagsstate
         TourDocKeywordsComponent,
         TourDocKeywordsstateComponent,
         TourDocVideoplayerComponent,
-        TourDocPersontagsstateComponent
+        TourDocPersontagsstateComponent,
+        TourDocMultiActionHeaderComponent
     ],
     imports: [
         ToastModule,
@@ -119,7 +121,8 @@ import {TourDocPersontagsstateComponent} from './components/tdoc-persontagsstate
         TourDocKeywordsComponent,
         TourDocKeywordsstateComponent,
         TourDocVideoplayerComponent,
-        TourDocPersontagsstateComponent
+        TourDocPersontagsstateComponent,
+        TourDocMultiActionHeaderComponent
     ]
 })
 export class SharedTourDocModule {}

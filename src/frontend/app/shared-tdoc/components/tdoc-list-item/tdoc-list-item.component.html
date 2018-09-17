@@ -68,6 +68,11 @@
             </ng-container>
         </div>
         <div class="card-footer card-footer-list-item" *ngIf="!short">
+            <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
+                <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
+                       [checked]="isMultiActionSelectedForRecord()"
+                       (click)="onChangeMultiActionForRecord($event)">
+            </div>
             <small class="text-muted">{{listItem.currentRecord | tdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show tdoc|Buttontext to listitemaction:show tdoc@@button.listitemaction.tdoc.show">Show</button>
@@ -129,6 +134,11 @@
             </div>
         </div>
         <div class="card-footer card-footer-list-item" *ngIf="!short">
+            <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
+                <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
+                       [checked]="isMultiActionSelectedForRecord()"
+                       (click)="onChangeMultiActionForRecord($event)">
+            </div>
             <small class="text-muted">{{listItem.currentRecord | tdocdate}}</small>
             <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
                 <button class="show btn-navigation" (click)="submitShow(listItem.currentRecord)" i18n="button listitemaction show tdoc|Buttontext to listitemaction:show tdoc@@button.listitemaction.tdoc.show">Show</button>

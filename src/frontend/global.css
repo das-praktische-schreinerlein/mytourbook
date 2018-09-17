@@ -223,6 +223,10 @@ div.humanReadableSearchFilter div.filter {
     max-height: 100px;
 }
 
+div.multiaction-checkbox {
+    display: inline-block;
+}
+
 
 /*******************
  * Specific Elements

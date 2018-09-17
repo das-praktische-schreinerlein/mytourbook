@@ -10,9 +10,17 @@
                               (pageChange)="onPageChange($event, false)" ></app-cdoc-list-header>
     </div>
     <div class="container">
+        <app-tdoc-multiactionheader [multiActionManager]="multiActionManager"
+                                    [searchResult]="searchResult"
+                                    [selectValueMap]="multiActionSelectValueMap"
+                                    [type]="'searchpage'"
+                                    (submitSelectedMultiActions)="onSubmitSelectedMultiActions($event)"></app-tdoc-multiactionheader>
+    </div>
+    <div class="container">
         <app-tdoc-list [searchResult]="searchResult"
                        [baseSearchUrl]="baseSearchUrl"
                        [layout]="layout"
+                       [multiActionManager]="multiActionManager"
                        (show)="onShowDoc($event)"></app-tdoc-list>
     </div>
     <div class="container">

@@ -6,9 +6,12 @@
 - changed namespace
 - moved functionality to external mycms-modules
 - bumped dependency-versions
+- added m3u-Export
 
 ### new features
-- none
+- frontend; added m3u-Export to albumpage
+- frontend: added PlaylistService
+- frontend: added multiaction-header for lists
 
 ### improvements
 - none

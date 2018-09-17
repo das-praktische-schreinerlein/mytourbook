@@ -463,9 +463,79 @@
                         }
                     ],
                     "configAvailability": [
+                        {
+                            "property": "tdocMaxItemsPerAlbum",
+                            "command": "GE",
+                            "expectedValues": [10]
+                        }
                     ]
                 }
 
+            ]
+        },
+        "tdoc-multiactionheader": {
+            "actionTags": [
+                {
+                    "key": "local_album_current",
+                    "type": "albumtag",
+                    "name": "set local Album",
+                    "shortName": "&#x2764",
+                    "payload": {
+                        "albumkey": "Current",
+                        "set": true
+                    },
+                    "showFilter": [
+                    ],
+                    "profileAvailability": [
+                        {
+                            "property": "type",
+                            "command": "NEQ",
+                            "expectedValues": ["albumpage"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "tdocMaxItemsPerAlbum",
+                            "command": "GE",
+                            "expectedValues": [10]
+                        }
+                    ]
+                },
+                {
+                    "key": "unset_local_album_current",
+                    "type": "albumtag",
+                    "name": "unset local Album",
+                    "shortName": "&#x2764",
+                    "payload": {
+                        "albumkey": "Current",
+                        "set": false
+                    },
+                    "showFilter": [
+                    ],
+                    "profileAvailability": [
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "tdocMaxItemsPerAlbum",
+                            "command": "GE",
+                            "expectedValues": [10]
+                        }
+                    ]
+                }
             ]
         },
         "tdoc-showpage": {
@@ -481,7 +551,8 @@
             }
         },
         "tdoc-albumpage": {
-            "allowAutoplay": false
+            "allowAutoplay": false,
+            "m3uAvailable": true
         },
         "cdoc-listheader": {
             "allowAutoplay": false

@@ -28,6 +28,10 @@ import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
+import {CommonDocContentUtils} from '@dps//mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
+import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
 
 describe('TourDocAlbumpageComponent', () => {
     let component: TourDocAlbumpageComponent;
@@ -62,7 +66,11 @@ describe('TourDocAlbumpageComponent', () => {
                 FormBuilder,
                 { provide: Angulartics2, useValue: new Angulartics2Stub() },
                 PlatformService,
-                LayoutService
+                LayoutService,
+                TourDocPlaylistService,
+                CommonDocContentUtils,
+                TourDocActionTagService,
+                TourDocSearchFormUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

@@ -4,6 +4,11 @@
             <a [name]="listItem.currentRecord.id"></a>
             <div>
                 <div class="image-container">
+                    <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
+                        <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
+                               [checked]="isMultiActionSelectedForRecord()"
+                               (click)="onChangeMultiActionForRecord($event)">
+                    </div>
                     <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance></h5>
                     <h5 class="listItem.currentRecord-type">{{listItem.currentRecord.type | translate }}</h5>
                     <ng-container *ngIf="listItem.image">
@@ -32,6 +37,11 @@
     <ng-container *ngSwitchDefault="">
         <div class="card-block" [ngClass]="listItem.styleClassFor">
             <a [name]="listItem.currentRecord.id"></a>
+            <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
+                <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
+                       [checked]="isMultiActionSelectedForRecord()"
+                       (click)="onChangeMultiActionForRecord($event)">
+            </div>
             <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance></h5>
             <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
             <div>

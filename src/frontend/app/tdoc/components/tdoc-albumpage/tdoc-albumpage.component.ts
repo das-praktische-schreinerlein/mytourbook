@@ -18,27 +18,36 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
 import {
     CommonDocAlbumpageComponent,
     CommonDocAlbumpageComponentConfig
-} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-albumpage.component';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-albumpage/cdoc-albumpage.component';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {environment} from '../../../../environments/environment';
+import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
+import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
+import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
+import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
 
 @Component({
     selector: 'app-tdoc-albumpage',
     templateUrl: './tdoc-albumpage.component.html',
-    styleUrls: ['./tdoc-albumpage.component.css'],
+    styleUrls: ['../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-albumpage/cdoc-albumpage.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TourDocAlbumpageComponent extends CommonDocAlbumpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
-    constructor(protected route: ActivatedRoute, protected commonRoutingService: CommonRoutingService,
-                protected errorResolver: ErrorResolver, protected cdocDataService: TourDocDataService,
-                protected searchFormConverter: TourDocSearchFormConverter, protected cdocRoutingService: TourDocRoutingService,
-                protected toastr: ToastsManager, vcr: ViewContainerRef, protected pageUtils: PageUtils, protected cd: ChangeDetectorRef,
-                protected trackingProvider: GenericTrackingService, public fb: FormBuilder, protected cdocAlbumService: TourDocAlbumService,
-                protected appService: GenericAppService, platformService: PlatformService,
-                layoutService: LayoutService) {
+export class TourDocAlbumpageComponent
+    extends CommonDocAlbumpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
+
+    constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService,
+                errorResolver: ErrorResolver, cdocDataService: TourDocDataService,
+                searchFormConverter: TourDocSearchFormConverter, cdocRoutingService: TourDocRoutingService,
+                toastr: ToastsManager, vcr: ViewContainerRef, pageUtils: PageUtils, cd: ChangeDetectorRef,
+                trackingProvider: GenericTrackingService, public fb: FormBuilder, cdocAlbumService: TourDocAlbumService,
+                appService: GenericAppService, platformService: PlatformService, layoutService: LayoutService,
+                searchFormUtils: SearchFormUtils, tdocSearchFormUtils: TourDocSearchFormUtils,
+                playlistService: TourDocPlaylistService, protected actionService: TourDocActionTagService) {
         super(route, commonRoutingService, errorResolver, cdocDataService, searchFormConverter, cdocRoutingService, toastr, vcr,
-            pageUtils, cd, trackingProvider, fb, cdocAlbumService, appService, platformService, layoutService, environment);
+            pageUtils, cd, trackingProvider, fb, cdocAlbumService, appService, platformService, layoutService, searchFormUtils,
+            tdocSearchFormUtils, playlistService, new CommonDocMultiActionManager(appService, actionService), environment);
     }
 
     protected getComponentConfig(config: {}): CommonDocAlbumpageComponentConfig {
@@ -48,7 +57,9 @@ export class TourDocAlbumpageComponent extends CommonDocAlbumpageComponent<TourD
             baseSearchUrlDefault: ['tdoc', ''].join('/'),
             maxAllowedItems: config && config['tdocMaxItemsPerAlbum'] >= 0 ? config['tdocMaxItemsPerAlbum'] : -1,
             autoPlayAllowed: BeanUtils.getValue(config, 'permissions.allowAutoPlay') &&
-                BeanUtils.getValue(config, 'components.tdoc-albumpage.allowAutoplay') + '' === 'true'
+                BeanUtils.getValue(config, 'components.tdoc-albumpage.allowAutoplay') + '' === 'true',
+            m3uAvailable: BeanUtils.getValue(config, 'permissions.m3uAvailable') &&
+                BeanUtils.getValue(config, 'components.tdoc-albumpage.m3uAvailable') + '' === 'true'
         };
     }
 }

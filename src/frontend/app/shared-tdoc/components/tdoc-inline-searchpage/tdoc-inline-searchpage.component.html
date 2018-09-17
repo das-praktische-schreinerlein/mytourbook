@@ -36,8 +36,16 @@
                                   (layoutChange)="onLayoutChange($event)"
                                   (pageChange)="onPageChange($event)" ></app-cdoc-list-header>
         </div>
+        <div class="container" *ngIf="showMultiActionHeader && showResultList">
+            <app-tdoc-multiactionheader [multiActionManager]="multiActionManager"
+                                        [searchResult]="searchResult"
+                                        [selectValueMap]="multiActionSelectValueMap"
+                                        [type]="'inline-searchpage'"
+                                        (submitSelectedMultiActions)="onSubmitSelectedMultiActions($event)"></app-tdoc-multiactionheader>
+        </div>
         <div class="container" *ngIf="showResultList">
             <app-tdoc-list [searchResult]="searchResult"
+                           [multiActionManager]="multiActionManager"
                            [layout]="layout"
                            [short]="short"
                            (show)="onShowDoc($event)"></app-tdoc-list>

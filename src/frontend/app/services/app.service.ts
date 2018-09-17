@@ -23,7 +23,8 @@ export class AppService extends GenericAppService {
         permissions: {
             tdocWritable: environment.tdocWritable,
             tdocActionTagWritable: environment.tdocActionTagWritable,
-            allowAutoPlay: environment.allowAutoPlay
+            allowAutoPlay: environment.allowAutoPlay,
+            m3uAvailable: environment.m3uAvailable,
         },
         tdocMaxItemsPerAlbum: environment.tdocMaxItemsPerAlbum,
         components: {},

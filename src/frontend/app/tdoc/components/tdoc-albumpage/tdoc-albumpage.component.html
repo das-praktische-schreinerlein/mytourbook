@@ -13,8 +13,11 @@
                             <div class="col-sm-2 form-inline input-group input-group-sm">
                                 <button type="button" (click)="onAlbumReset()" class="btn btn-action btn-sm" i18n="button reset album|Buttontext to reset album@@button.form.album.reset">Album zurücksetzen</button>
                             </div>
-                            <div class="col-sm-2 form-inline input-group input-group-sm">
-                                <button type="button" (click)="doSaveAsFile()" class="btn btn-action btn-sm" i18n="button saveAsFile album|Buttontext to saveAsFile album@@button.form.album.saveAsFile">Album Exportieren</button>
+                            <div class="col-sm-1 form-inline input-group input-group-sm">
+                                <button type="button" (click)="doSaveAsFile()" class="btn btn-action btn-sm" i18n="button saveAsFile album|Buttontext to saveAsFile album@@button.form.album.saveAsFile">JSON-Export</button>
+                            </div>
+                            <div class="col-sm-1 form-inline input-group input-group-sm" *ngIf="m3uAvailable">
+                                <button type="button" (click)="doSaveAsM3U()" class="btn btn-action btn-sm" i18n="button saveAsM3U album|Buttontext to saveAsM3U album@@button.form.album.saveAsM3U">M3U-Export</button>
                             </div>
                             <div class="col-sm-6 form-inline input-group input-group-sm album-dropzone">
                                 <label class="col-xs-3 col-form-label mr-2" i18n="albumImportFile label|Label for field: albumImportFile@@label.albumeditform.album.albumImportFile">Album aus Datei laden:</label>
@@ -40,7 +43,7 @@
                                           [perPage]="listSearchForm.perPage"
                                           [layout]="layout"
                                           [sort]="listSearchForm.sort"
-                                          [availableSorts]="['relevance', 'dateAsc']"
+                                          [availableSorts]="cdocDataService.getSearchService().getAvailableSorts()"
                                           [pauseAutoplay]="pauseAutoPlay"
                                           (perPageChange)="onPerPageChange($event)"
                                           (sortChange)="onSortChange($event)"
@@ -48,9 +51,17 @@
                                           (pageChange)="onPageChange($event)" ></app-cdoc-list-header>
                 </div>
                 <div class="container">
+                    <app-tdoc-multiactionheader [multiActionManager]="multiActionManager"
+                                                [searchResult]="listSearchResult"
+                                                [type]="'albumpage'"
+                                                [selectValueMap]="multiActionSelectValueMap"
+                                                (submitSelectedMultiActions)="onSubmitSelectedMultiActions($event)"></app-tdoc-multiactionheader>
+                </div>
+                <div class="container">
                     <app-tdoc-list [searchResult]="listSearchResult"
                                    [baseSearchUrl]="baseSearchUrl"
                                    [layout]="layout"
+                                   [multiActionManager]="multiActionManager"
                                    (playerStarted)="onPlayerStarted($event)"
                                    (playerStopped)="onPlayerStopped($event)"
                                    (show)="onShowDoc($event)"></app-tdoc-list>
