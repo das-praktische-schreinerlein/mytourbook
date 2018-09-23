@@ -7,6 +7,7 @@
 - moved functionality to external mycms-modules
 - bumped dependency-versions
 - added m3u-Export
+- improvements on validation
 
 ### new features
 - frontend; added m3u-Export to albumpage
@@ -14,7 +15,9 @@
 - frontend: added multiaction-header for lists
 
 ### improvements
-- none
+- commons: improved validation
+- commons: improved sql
+- frontend: improved layout
 
 ### bug fixes
 - none
@@ -28,6 +31,7 @@
 components.cdoc-listheader...
 components.cdoc-persontags...
 ```
+- commons: changed validation
 
 ### known issues
 - frontend: IE till 11 not functional (can block rendering sometimes)
