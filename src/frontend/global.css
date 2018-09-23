@@ -3,6 +3,11 @@
 /*******************
  * bootstrap overrides
  *******************/
+dl, ol, ul {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
 .card-deck .card:not(:first-child) {
     margin-left: 3px;
 }

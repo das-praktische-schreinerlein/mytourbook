@@ -60,7 +60,7 @@ export class TourDocSqlMediadbConfig {
 //                'n_id',
                 'k_name',
 //                'k_html',
-                'CONCAT(COALESCE(k_name, ""), " ", COALESCE(k_meta_shortdesc, ""), " ", COALESCE(l_name, "")) AS html',
+                'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc, ""), " ", l_name) AS html',
                 'k_gesperrt',
                 'k_datevon AS k_dateshow',
                 'k_datevon',
@@ -233,7 +233,7 @@ export class TourDocSqlMediadbConfig {
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(COALESCE(k_name, ""), " ", COALESCE(k_meta_shortdesc, ""), " ", COALESCE(l_name, ""))'
+                html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc, ""), " ", l_name)'
             },
             spartialConfig: {
                 lat: 'l_geo_latdeg',
@@ -388,7 +388,7 @@ export class TourDocSqlMediadbConfig {
                 'kategorie.tr_id',
                 'kategorie.l_id',
                 'COALESCE(i_meta_name, k_name) AS i_meta_name',
-                'CONCAT(COALESCE(i_meta_name, ""), " ", COALESCE(l_name, "")) AS html',
+                'CONCAT(COALESCE(i_meta_name, ""), " ", l_name) AS html',
                 'i_gesperrt',
                 'i_date',
                 'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -565,7 +565,7 @@ export class TourDocSqlMediadbConfig {
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(COALESCE(i_meta_name, ""), " ", COALESCE(l_name, ""))'
+                html: 'CONCAT(COALESCE(i_meta_name, ""), " ", l_name)'
             },
             writeMapping: {
                 'image.l_id': ':loc_id_i:',
@@ -703,7 +703,7 @@ export class TourDocSqlMediadbConfig {
                 'kategorie.tr_id',
                 'kategorie.l_id',
                 'COALESCE(v_meta_name, k_name) AS v_meta_name',
-                'CONCAT(COALESCE(v_meta_name, ""), " ", COALESCE(l_name, "")) AS html',
+                'CONCAT(COALESCE(v_meta_name, ""), " ", l_name) AS html',
                 'v_gesperrt',
                 'v_date',
                 'DATE_FORMAT(v_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -880,7 +880,7 @@ export class TourDocSqlMediadbConfig {
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(COALESCE(v_meta_name, ""), " ", COALESCE(l_name, ""))'
+                html: 'CONCAT(COALESCE(v_meta_name, ""), " ", l_name)'
             },
             writeMapping: {
                 'video.l_id': ':loc_id_i:',
@@ -1007,7 +1007,7 @@ export class TourDocSqlMediadbConfig {
                 'tour.t_id',
                 'tour.l_id',
                 't_name',
-                'CONCAT(COALESCE(t_name, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", COALESCE(l_name, "")) AS html',
+                'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc, ""), " ", l_name) AS html',
                 't_datevon AS t_date_show',
                 't_datevon',
                 'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -1205,7 +1205,7 @@ export class TourDocSqlMediadbConfig {
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(COALESCE(t_name, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", COALESCE(l_name, ""))'
+                html: 'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc, ""), " ", _name)'
             },
             writeMapping: {
                 'tour.l_id': ':loc_id_i:',
@@ -1344,7 +1344,7 @@ export class TourDocSqlMediadbConfig {
                 'location.l_id',
                 'l_parent_id',
                 'l_name',
-                'CONCAT(COALESCE(l_name, ""), " ", COALESCE(l_meta_shortdesc, "")) AS html',
+                'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc, "")) AS html',
                 'l_meta_shortdesc',
                 'l_meta_shortdesc AS l_meta_shortdesc_md',
                 'l_meta_shortdesc AS l_meta_shortdesc_html',
@@ -1442,7 +1442,7 @@ export class TourDocSqlMediadbConfig {
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
                 trip_id_is: '"dummy"',
-                html: 'CONCAT(COALESCE(l_name, ""), " ", COALESCE(l_meta_shortdesc, ""))'
+                html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc, ""))'
             },
             writeMapping: {
                 'location.l_meta_shortdesc': ':desc_txt:',
@@ -1506,7 +1506,7 @@ export class TourDocSqlMediadbConfig {
                 'CONCAT("TRIP", "_", trip.tr_id) AS id',
                 'trip.tr_id',
                 'trip.tr_name',
-                'CONCAT(COALESCE(tr_name, ""), " ", COALESCE(tr_meta_shortdesc, "")) AS html',
+                'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, "")) AS html',
                 'tr_datevon AS tr_dateshow',
                 'tr_datevon',
                 'tr_datebis',
@@ -1598,7 +1598,7 @@ export class TourDocSqlMediadbConfig {
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(COALESCE(tr_name, ""), " ", COALESCE(tr_meta_shortdesc, ""))'
+                html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc, ""))'
             },
             writeMapping: {
                 'trip.tr_datevon': ':datestart_dt:',
@@ -1649,7 +1649,7 @@ export class TourDocSqlMediadbConfig {
                 'CONCAT("NEWS", "_", news.n_id) AS id',
                 'news.n_id',
                 'n_headline',
-                'CONCAT(COALESCE(n_headline, ""), " ", COALESCE(n_message, "")) AS html',
+                'CONCAT(n_headline, " ", COALESCE(n_message, "")) AS html',
                 'n_date',
                 'n_datevon',
                 'n_datebis',
@@ -1735,7 +1735,7 @@ export class TourDocSqlMediadbConfig {
                 trip_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(COALESCE(n_headline, ""), " ", COALESCE(n_message, ""))'
+                html: 'CONCAT(n_headline, " ", COALESCE(n_message, ""))'
             },
             writeMapping: {
                 'news.n_date': ':dateshow_dt:',

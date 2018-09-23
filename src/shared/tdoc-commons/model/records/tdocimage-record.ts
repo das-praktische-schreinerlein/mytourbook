@@ -1,4 +1,8 @@
-import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
+import {
+    BaseImageRecord,
+    BaseImageRecordFactory,
+    BaseImageRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 
 export class TourDocImageRecord extends BaseImageRecord {
     tdoc_id: string;
@@ -14,6 +18,32 @@ export class TourDocImageRecord extends BaseImageRecord {
             '  tdoc_id: ' + this.tdoc_id + '' +
             '}';
     }
+}
+
+export class TourDocImageRecordFactory {
+    static getSanitizedValues(values: {}): any {
+        return BaseImageRecordFactory.getSanitizedValues(values);
+    }
+
+    static getSanitizedValuesFromObj(doc: TourDocImageRecord): any {
+        return BaseImageRecordFactory.getSanitizedValuesFromObj(doc);
+    }
+
+    static createSanitized(values: {}): TourDocImageRecord {
+        const sanitizedValues = TourDocImageRecordFactory.getSanitizedValues(values);
+
+        return new TourDocImageRecord(sanitizedValues);
+    }
+
+    static cloneSanitized(doc: TourDocImageRecord): TourDocImageRecord {
+        const sanitizedValues = TourDocImageRecordFactory.getSanitizedValuesFromObj(doc);
+
+        return new TourDocImageRecord(sanitizedValues);
+    }
+}
+
+export class TourDocImageRecordValidator extends BaseImageRecordValidator {
+    public static instance = new TourDocImageRecordValidator();
 }
 
 export let TourDocImageRecordRelation: any = {

@@ -261,7 +261,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected validateValues(record: TourDocRecord): string[] {
-        return TourDocRecordValidator.validateValues(record);
+        return TourDocRecordValidator.instance.validateValues(record);
     }
 
     protected getComponentConfig(config: {}): CommonDocEditformComponentConfig {
