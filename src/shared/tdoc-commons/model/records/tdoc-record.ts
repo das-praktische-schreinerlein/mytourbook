@@ -191,136 +191,71 @@ export let TourDocRecordRelation: any = {
     }
 };
 
-export class TourDocRecordFactory {
-    static getSanitizedRelationValues(relation: string, values: {}): {} {
-        switch (relation) {
-            case 'tdocdatatech':
-                return TourDocDataTechRecordFactory.getSanitizedValues(values);
-            case 'tdocdatainfo':
-                return TourDocDataInfoRecordFactory.getSanitizedValues(values);
-            case 'tdocimages':
-                return TourDocImageRecordFactory.getSanitizedValues(values);
-            case 'tdocvideos':
-                return TourDocVideoRecordFactory.getSanitizedValues(values);
-            case 'tdocratepers':
-                return TourDocRatePersonalRecordFactory.getSanitizedValues(values);
-            case 'tdocratetech':
-                return TourDocRateTechRecordFactory.getSanitizedValues(values);
-            default:
-                throw new Error('unknown relation:' + relation);
-        }
-    };
+export class TourDocRecordFactory extends CommonDocRecordFactory {
+    public static instance = new TourDocRecordFactory();
 
-    static getSanitizedValues(values: {}): any {
-        const sanitizedValues = CommonDocRecordFactory.getSanitizedValues(values);
-
-        sanitizedValues.locId = TourDocRecord.tdocFields.locId.validator.sanitize(values['locId']) || undefined;
-        sanitizedValues.locIdParent = TourDocRecord.tdocFields.locIdParent.validator.sanitize(values['locIdParent']) || undefined;
-        sanitizedValues.routeId = TourDocRecord.tdocFields.routeId.validator.sanitize(values['routeId']) || undefined;
-        sanitizedValues.trackId = TourDocRecord.tdocFields.trackId.validator.sanitize(values['trackId']) || undefined;
-        sanitizedValues.tripId = TourDocRecord.tdocFields.tripId.validator.sanitize(values['tripId']) || undefined;
-        sanitizedValues.newsId = TourDocRecord.tdocFields.newsId.validator.sanitize(values['newsId']) || undefined;
-        sanitizedValues.imageId = TourDocRecord.tdocFields.imageId.validator.sanitize(values['imageId']) || undefined;
-        sanitizedValues.videoId = TourDocRecord.tdocFields.imageId.validator.sanitize(values['videoId']) || undefined;
-
-        sanitizedValues.datestart = TourDocRecord.tdocFields.datestart.validator.sanitize(values['datestart']) || undefined;
-        sanitizedValues.dateend = TourDocRecord.tdocFields.dateend.validator.sanitize(values['dateend']) || undefined;
-        sanitizedValues.geoDistance = TourDocRecord.tdocFields.geoDistance.validator.sanitize(values['geoDistance']) || undefined;
-        sanitizedValues.geoLon = TourDocRecord.tdocFields.geoLon.validator.sanitize(values['geoLon']) || undefined;
-        sanitizedValues.geoLat = TourDocRecord.tdocFields.geoLat.validator.sanitize(values['geoLat']) || undefined;
-        sanitizedValues.geoLoc = TourDocRecord.tdocFields.geoLoc.validator.sanitize(values['geoLoc']) || undefined;
-        sanitizedValues.gpsTrackSrc = TourDocRecord.tdocFields.gpsTrackSrc.validator.sanitize(values['gpsTrackSrc']) || undefined;
-        sanitizedValues.gpsTrackBasefile = TourDocRecord.tdocFields.gpsTrackBasefile.validator.sanitize(values['gpsTrackBasefile'])
-            || undefined;
-        sanitizedValues.locHirarchie = TourDocRecord.tdocFields.locHirarchie.validator.sanitize(values['locHirarchie']) || undefined;
-        sanitizedValues.locHirarchieIds = TourDocRecord.tdocFields.locHirarchieIds.validator.sanitize(values['locHirarchieIds']) || undefined;
-        sanitizedValues.persons = TourDocRecord.tdocFields.persons.validator.sanitize(values['persons']) || undefined;
-
-        return sanitizedValues;
-    }
-
-    static getSanitizedValuesFromObj(doc: TourDocRecord): any {
-        return TourDocRecordFactory.getSanitizedValues(doc);
+    static createSanitized(values: {}): TourDocRecord {
+        const sanitizedValues = TourDocRecordFactory.instance.getSanitizedValues(values, {});
+        return new TourDocRecord(sanitizedValues);
     }
 
     static cloneSanitized(doc: TourDocRecord): TourDocRecord {
-        const sanitizedValues = TourDocRecordFactory.getSanitizedValuesFromObj(doc);
-
+        const sanitizedValues = TourDocRecordFactory.instance.getSanitizedValuesFromObj(doc);
         return new TourDocRecord(sanitizedValues);
     }
 
-    static createSanitized(values: {}): TourDocRecord {
-        const sanitizedValues = TourDocRecordFactory.getSanitizedValues(values);
-
-        return new TourDocRecord(sanitizedValues);
+    getSanitizedValues(values: {}, result: {}): {} {
+        super.getSanitizedValues(values, result);
+        this.sanitizeFieldValues(values, TourDocRecord.tdocFields, result, '');
+        return result;
     }
+
+    getSanitizedRelationValues(relation: string, values: {}): {} {
+        switch (relation) {
+            case 'tdocdatatech':
+                return TourDocDataTechRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocdatainfo':
+                return TourDocDataInfoRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocimages':
+                return TourDocImageRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocvideos':
+                return TourDocVideoRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocratepers':
+                return TourDocRatePersonalRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocratetech':
+                return TourDocRateTechRecordFactory.instance.getSanitizedValues(values, {});
+            default:
+                return super.getSanitizedRelationValues(relation, values);
+        }
+    };
+
 }
 
 export class TourDocRecordValidator extends CommonDocRecordValidator {
     public static instance = new TourDocRecordValidator();
 
-    validateMyRules(values: {}, errors: string[], fieldPrefix?: string, errFieldPrefix?: string): boolean {
+    isValid(doc: BaseEntityRecord, errFieldPrefix?: string): boolean {
+        console.error("errors", this.validate(doc, errFieldPrefix));
+        return this.validate(doc, errFieldPrefix).length === 0;
+    }
+
+    validateMyFieldRules(values: {}, errors: string[], fieldPrefix?: string, errFieldPrefix?: string): boolean {
         fieldPrefix = fieldPrefix !== undefined ? fieldPrefix : '';
         errFieldPrefix = errFieldPrefix !== undefined ? errFieldPrefix : '';
 
-        let state = super.validateMyRules(values, errors, fieldPrefix, errFieldPrefix);
-
-        state = this.validateRule(values, TourDocRecord.tdocFields.locId.validator, fieldPrefix + 'locId', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.locIdParent.validator, fieldPrefix + 'locIdParent', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.routeId.validator, fieldPrefix + 'routeId', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.trackId.validator, fieldPrefix + 'trackId', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.tripId.validator, fieldPrefix + 'tripId', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.newsId.validator, fieldPrefix + 'newsId', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.imageId.validator, fieldPrefix + 'imageId', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.videoId.validator, fieldPrefix + 'videoId', errors, errFieldPrefix) && state;
-
-        state = this.validateRule(values, TourDocRecord.tdocFields.datestart.validator, fieldPrefix + 'datestart', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.dateend.validator, fieldPrefix + 'dateend', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.geoDistance.validator, fieldPrefix + 'geoDistance', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.geoLon.validator, fieldPrefix + 'geoLon', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.geoLat.validator, fieldPrefix + 'geoLat', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.geoLoc.validator, fieldPrefix + 'geoLoc', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.gpsTrackSrc.validator, fieldPrefix + 'gpsTrackSrc', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.gpsTrackBasefile.validator, fieldPrefix + 'gpsTrackBasefile', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.locHirarchie.validator, fieldPrefix + 'locHirarchie', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.locHirarchieIds.validator, fieldPrefix + 'locHirarchieIds', errors, errFieldPrefix) && state;
-        state = this.validateRule(values, TourDocRecord.tdocFields.persons.validator, fieldPrefix + 'persons', errors, errFieldPrefix) && state;
-
-        return state;
+        const state = super.validateMyFieldRules(values, errors, fieldPrefix, errFieldPrefix);
+        return this.validateFieldRules(values, TourDocRecord.tdocFields, fieldPrefix, errors, errFieldPrefix) && state;
     }
 
     validateMyValueRelationRules(values: {}, errors: string[], fieldPrefix?: string, errFieldPrefix?: string): boolean {
-        fieldPrefix = fieldPrefix !== undefined ? fieldPrefix : '';
-        errFieldPrefix = errFieldPrefix !== undefined ? errFieldPrefix : '';
-
-        const relErrors = [];
-        for (const relation of TourDocRecord.tdocValidationRelationNames) {
-            relErrors.push(...this.validateValueRelationDoc(relation, values,
-                fieldPrefix + relation + '.', errFieldPrefix));
-        }
-        errors.push(...relErrors);
-
-        return relErrors.length === 0;
+        return this.validateValueRelationRules(values, TourDocRecord.tdocValidationRelationNames, errors, fieldPrefix, errFieldPrefix);
     }
 
     validateMyRelationRules(doc: BaseEntityRecord, errors: string[], fieldPrefix?: string, errFieldPrefix?: string): boolean {
-        const relErrors = [];
-        for (const relation of TourDocRecord.tdocRelationNames) {
-            const subRecords = doc.get(relation) || doc[relation];
-            if (isArray(subRecords)) {
-                for (const subRecord of subRecords) {
-                    relErrors.push(...this.validateRelationDoc(relation, subRecord, errFieldPrefix + relation + '.'));
-                }
-            } else if (subRecords) {
-                relErrors.push(...this.validateRelationDoc(relation, subRecords, errFieldPrefix + relation + '.'));
-            }
-        }
-        errors.push(...relErrors);
-
-        return relErrors.length === 0;
+        return this.validateRelationRules(doc, TourDocRecord.tdocRelationNames, errors, fieldPrefix, errFieldPrefix);
     }
 
-    validateRelationDoc(relation: string, doc: BaseEntityRecord, errFieldPrefix?: string): string[] {
+    protected validateRelationDoc(relation: string, doc: BaseEntityRecord, errFieldPrefix?: string): string[] {
         switch (relation) {
             case 'tdocdatatech':
                 return TourDocDataTechRecordValidator.instance.validate(<TourDocDataTechRecord>doc, errFieldPrefix);
@@ -335,11 +270,11 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
             case 'tdocratetech':
                 return TourDocRateTechRecordValidator.instance.validate(<TourDocRateTechRecord>doc, errFieldPrefix);
             default:
-                throw new Error('unknown relation:' + relation);
+                super.validateRelationDoc(relation, doc, errFieldPrefix);
         }
     };
 
-    validateValueRelationDoc(relation: string, values: {}, fieldPrefix?: string, errFieldPrefix?: string): string[] {
+    protected validateValueRelationDoc(relation: string, values: {}, fieldPrefix?: string, errFieldPrefix?: string): string[] {
         switch (relation) {
             case 'tdocdatatech':
                 return TourDocDataTechRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
@@ -354,7 +289,7 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
             case 'tdocratetech':
                 return TourDocRateTechRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             default:
-                throw new Error('unknown relation:' + relation);
+                super.validateValueRelationDoc(relation, values, fieldPrefix, errFieldPrefix);
         }
     };
 }

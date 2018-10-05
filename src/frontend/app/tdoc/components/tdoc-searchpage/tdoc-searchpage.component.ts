@@ -25,6 +25,7 @@ import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
 import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-multiaction.manager';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 
 @Component({
     selector: 'app-tdoc-searchpage',
@@ -88,7 +89,8 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     protected getComponentConfig(config: {}): CommonDocSearchpageComponentConfig {
         return {
             baseSearchUrl: ['tdoc'].join('/'),
-            baseSearchUrlDefault: ['tdoc'].join('/')
+            baseSearchUrlDefault: ['tdoc'].join('/'),
+            maxAllowedM3UExportItems: BeanUtils.getValue(config, 'services.serverItemExport.maxAllowedM3UItems')
         };
     }
 

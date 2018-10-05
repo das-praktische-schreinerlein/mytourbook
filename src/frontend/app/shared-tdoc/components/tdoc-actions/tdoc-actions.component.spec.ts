@@ -13,6 +13,10 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {DynamicComponentService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/dynamic-components.service';
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
+import {TourDocPlaylistService} from '../../services/tdoc-playlist.service';
+import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
+import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 
 describe('TourDocActionsComponent', () => {
     let component: TourDocActionsComponent;
@@ -33,7 +37,11 @@ describe('TourDocActionsComponent', () => {
                 DynamicComponentService,
                 TourDocAlbumService,
                 ComponentFactoryResolver,
-                TourDocActionTagService
+                TourDocActionTagService,
+                TourDocPlaylistService,
+                CommonDocContentUtils,
+                CommonDocRoutingService,
+                CommonRoutingService
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

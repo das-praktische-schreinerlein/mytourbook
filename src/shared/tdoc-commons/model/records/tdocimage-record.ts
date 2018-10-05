@@ -10,6 +10,7 @@ export class TourDocImageRecord extends BaseImageRecord {
     getMediaId(): string {
         return this.tdoc_id;
     }
+
     toString() {
         return 'TourDocImageRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
@@ -20,24 +21,16 @@ export class TourDocImageRecord extends BaseImageRecord {
     }
 }
 
-export class TourDocImageRecordFactory {
-    static getSanitizedValues(values: {}): any {
-        return BaseImageRecordFactory.getSanitizedValues(values);
-    }
-
-    static getSanitizedValuesFromObj(doc: TourDocImageRecord): any {
-        return BaseImageRecordFactory.getSanitizedValuesFromObj(doc);
-    }
+export class TourDocImageRecordFactory extends BaseImageRecordFactory {
+    public static instance = new TourDocImageRecordFactory();
 
     static createSanitized(values: {}): TourDocImageRecord {
-        const sanitizedValues = TourDocImageRecordFactory.getSanitizedValues(values);
-
+        const sanitizedValues = TourDocImageRecordFactory.instance.getSanitizedValues(values, {});
         return new TourDocImageRecord(sanitizedValues);
     }
 
     static cloneSanitized(doc: TourDocImageRecord): TourDocImageRecord {
-        const sanitizedValues = TourDocImageRecordFactory.getSanitizedValuesFromObj(doc);
-
+        const sanitizedValues = TourDocImageRecordFactory.instance.getSanitizedValuesFromObj(doc);
         return new TourDocImageRecord(sanitizedValues);
     }
 }

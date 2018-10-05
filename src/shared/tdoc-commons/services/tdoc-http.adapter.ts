@@ -36,7 +36,7 @@ export class TourDocHttpAdapter extends GenericSearchHttpAdapter<TourDocRecord, 
         return super.update(mapper, id, props, opts);
     }
 
-    getHttpEndpoint(method: string): string {
+    getHttpEndpoint(method: string, format?: string): string {
         const findMethods = ['find', 'findAll'];
         const updateMethods = ['create', 'destroy', 'update'];
         if (findMethods.indexOf(method.toLowerCase()) >= 0) {
@@ -47,6 +47,9 @@ export class TourDocHttpAdapter extends GenericSearchHttpAdapter<TourDocRecord, 
         }
         if (method.toLowerCase() === 'doactiontag') {
             return 'tdocaction';
+        }
+        if (method.toLowerCase() === 'export') {
+            return 'tdocexport/' + format;
         }
 
         return 'tdocsearch';

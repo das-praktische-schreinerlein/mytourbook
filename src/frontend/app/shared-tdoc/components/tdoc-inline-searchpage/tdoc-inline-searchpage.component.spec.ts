@@ -22,6 +22,8 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {TourDocAlbumService} from '../../services/tdoc-album.service';
+import {TourDocPlaylistService} from '../../services/tdoc-playlist.service';
+import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 
 describe('TourDocInlineSearchpageComponent', () => {
     let component: TourDocInlineSearchpageComponent;
@@ -49,7 +51,9 @@ describe('TourDocInlineSearchpageComponent', () => {
                 PageUtils,
                 TourDocSearchFormUtils,
                 TourDocActionTagService,
-                TourDocAlbumService
+                TourDocAlbumService,
+                TourDocPlaylistService,
+                CommonDocContentUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

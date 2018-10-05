@@ -12,6 +12,7 @@ import {AssetsServerModule} from './modules/assets-server.module';
 import {CacheConfig, DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {TourDocWriterServerModule} from './modules/tdoc-writer-server.module';
 import {VideoServerModule} from './modules/video-server.module';
+import {TourDocPlaylistServerModule} from './modules/tdoc-playlist-server.module';
 
 export interface ServerConfig {
     apiDataPrefix: string;
@@ -66,6 +67,7 @@ export class ServerModuleLoader {
             VideoServerModule.configureStoredVideoRoutes(app, serverConfig.apiPublicPrefix, serverConfig.backendConfig,
                 serverConfig.firewallConfig.routerErrorsConfigs['digifotos'].file, serverConfig.filePathErrorDocs);
         }
+        TourDocPlaylistServerModule.configureRoutes(app, serverConfig.apiDataPrefix, tdocDataService, serverConfig.backendConfig);
 
         ConfigureServerModule.configureDefaultErrorHandler(app);
     }

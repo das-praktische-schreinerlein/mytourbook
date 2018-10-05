@@ -1,10 +1,14 @@
 import {Mapper, Record} from 'js-data';
 import {TourDocRecord, TourDocRecordFactory} from '../model/records/tdoc-record';
-import {TourDocImageRecord} from '../model/records/tdocimage-record';
+import {TourDocImageRecord, TourDocImageRecordFactory} from '../model/records/tdocimage-record';
 import {MapperUtils} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
-import {TourDocVideoRecord} from '../model/records/tdocvideo-record';
+import {TourDocVideoRecord, TourDocVideoRecordFactory} from '../model/records/tdocvideo-record';
+import {TourDocDataTechRecordFactory} from '../model/records/tdocdatatech-record';
+import {TourDocRateTechRecordFactory} from '../model/records/tdocratetech-record';
+import {TourDocRatePersonalRecordFactory} from '../model/records/tdocratepers-record';
+import {TourDocDataInfoRecordFactory} from '../model/records/tdocdatainfo-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -212,7 +216,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
 
         // console.log('mapResponseDocument values:', values);
-        const record: TourDocRecord = <TourDocRecord>mapper.createRecord(values);
+        const record: TourDocRecord = <TourDocRecord>mapper.createRecord(
+            TourDocRecordFactory.instance.getSanitizedValues(values, {}));
 
         const imageField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_fav_url_txt')];
         let imageDocs = [];
@@ -257,7 +262,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
 
         if (dataTechSet) {
-            record.set('tdocdatatech', dataTechMapper.createRecord(dataTechValues));
+            record.set('tdocdatatech', dataTechMapper.createRecord(
+                TourDocDataTechRecordFactory.instance.getSanitizedValues(dataTechValues, {})));
         } else {
             record.set('tdocdatatech', undefined);
         }
@@ -279,7 +285,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
 
         if (rateTechSet) {
-            record.set('tdocratetech', rateTechMapper.createRecord(rateTechValues));
+            record.set('tdocratetech', rateTechMapper.createRecord(
+                TourDocRateTechRecordFactory.instance.getSanitizedValues(rateTechValues, {})));
         } else {
             record.set('tdocratetech', undefined);
         }
@@ -303,7 +310,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
 
         if (ratePersSet) {
-            record.set('tdocratepers', ratePersMapper.createRecord(ratePersValues));
+            record.set('tdocratepers', ratePersMapper.createRecord(
+                TourDocRatePersonalRecordFactory.instance.getSanitizedValues(ratePersValues, {})));
         } else {
             record.set('tdocratepers', undefined);
         }
@@ -322,7 +330,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
 
         if (dataInfoSet) {
-            record.set('tdocdatainfo', dataInfoMapper.createRecord(dataInfoValues));
+            record.set('tdocdatainfo', dataInfoMapper.createRecord(
+                TourDocDataInfoRecordFactory.instance.getSanitizedValues(dataInfoValues, {})));
         } else {
             record.set('tdocdatainfo', undefined);
         }
@@ -426,7 +435,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 imageValues['name'] = record.name;
                 imageValues['id'] = (id++).toString();
                 imageValues['fileName'] = imageDoc;
-                const imageRecord = imageMapper.createRecord(imageValues);
+                const imageRecord = imageMapper.createRecord(
+                    TourDocImageRecordFactory.instance.getSanitizedValues(imageValues, {}));
                 images.push(imageRecord);
             }
         }
@@ -463,7 +473,9 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 videoValues['name'] = record.name;
                 videoValues['id'] = (id++).toString();
                 videoValues['fileName'] = videoDoc;
-                const videoRecord = videoMapper.createRecord(videoValues);
+                const videoRecord = videoMapper.createRecord(
+                    TourDocVideoRecordFactory.instance.getSanitizedValues(videoValues, {})
+                );
                 videos.push(videoRecord);
             }
         }

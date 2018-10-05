@@ -21,24 +21,16 @@ export class TourDocVideoRecord extends BaseVideoRecord {
     }
 }
 
-export class TourDocVideoRecordFactory {
-    static getSanitizedValues(values: {}): any {
-        return BaseVideoRecordFactory.getSanitizedValues(values);
-    }
-
-    static getSanitizedValuesFromObj(doc: TourDocVideoRecord): any {
-        return BaseVideoRecordFactory.getSanitizedValuesFromObj(doc);
-    }
+export class TourDocVideoRecordFactory extends BaseVideoRecordFactory {
+    public static instance = new TourDocVideoRecordFactory();
 
     static createSanitized(values: {}): TourDocVideoRecord {
-        const sanitizedValues = TourDocVideoRecordFactory.getSanitizedValues(values);
-
+        const sanitizedValues = TourDocVideoRecordFactory.instance.getSanitizedValues(values, {});
         return new TourDocVideoRecord(sanitizedValues);
     }
 
     static cloneSanitized(doc: TourDocVideoRecord): TourDocVideoRecord {
-        const sanitizedValues = TourDocVideoRecordFactory.getSanitizedValuesFromObj(doc);
-
+        const sanitizedValues = TourDocVideoRecordFactory.instance.getSanitizedValuesFromObj(doc);
         return new TourDocVideoRecord(sanitizedValues);
     }
 }

@@ -570,7 +570,14 @@
     },
     "services": {
         "seo": {
-            "tdocIndexableTypes": ["ROUTE", "LOCATION", "NEWS"]
+            "tdocIndexableTypes": [
+                "ROUTE",
+                "LOCATION",
+                "NEWS"
+            ]
+        },
+        "serverItemExport": {
+            "maxAllowedM3UItems": 1000
         }
     }
 }

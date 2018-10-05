@@ -6,6 +6,7 @@
                 <div class="col-6">
                     <h5 class="fx-bg-type">{{label}}: {{ searchResult.recordCount }}</h5>
                     <a href="{{getToSearchUrl()}}" (click)="onToSearchPage($event)" *ngIf="searchLinkLabel !== undefined  && searchResult && searchResult.recordCount > 0" class="btn btn-action btn-sm float">{{searchLinkLabel}}</a>
+                    <a (click)="onM3UExport($event)" *ngIf="m3uExportAvailable" class="btn btn-action btn-sm float">{{m3uLinkLabel}}</a>
                 </div>
                 <div class="col-6">
                     <button *ngIf="!showResultList" class="btn btn-configure btn-sm float-right" (click)="showResultList = true">

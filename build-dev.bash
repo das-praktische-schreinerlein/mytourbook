@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WORKSPACE="/cygdrive/d/Projekte/"
+WORKSPACE="/cygdrive/f/Projekte/"
 MYCMSPROJECT="mytourbook_upgrade"
 
 echo "STEP: build commons"
@@ -8,7 +8,7 @@ cd ${WORKSPACE}mycms-commons
 mv _node_modules node_modules & mv node_modules/_@angular node_modules/@angular & mv node_modules/_rxjs node_modules/rxjs
 #npm prune || exit
 #npm install || exit
-#npm run build || exit
+npm run build || exit
 #npm link || exit
 
 echo "STEP: build frontend-commons"
@@ -18,7 +18,7 @@ mv _node_modules node_modules & mv node_modules/_@angular node_modules/@angular 
 #npm prune || exit
 #npm install || exit
 #npm link @dps/mycms-commons || exit
-#npm run build || exit
+npm run build || exit
 #npm link || exit
 
 echo "STEP: build server-commons"
@@ -28,7 +28,7 @@ mv _node_modules node_modules & mv node_modules/_@angular node_modules/@angular 
 #npm prune || exit
 #npm install || exit
 #npm link @dps/mycms-commons || exit
-#npm run build || exit
+npm run build || exit
 #npm link || exit
 
 echo "STEP: copy additional src and clear not used ts"
@@ -53,7 +53,7 @@ cd ${WORKSPACE}mycms-frontend-commons \
 echo "STEP: install node_modules"
 cd ${WORKSPACE}${MYCMSPROJECT}
 #npm prune || exit
-npm install || exit
+#npm install || exit
 #npm link @dps/mycms-commons || exit
 #npm link @dps/mycms-frontend-commons || exit
 #npm link @dps/mycms-server-commons || exit
@@ -66,14 +66,14 @@ npm run frontendserver-build-admin-dev-de || exit
 
 echo "STEP: backup redundant node_modules"
 cd ${WORKSPACE}mycms-commons
-#mv node_modules/@angular node_modules/_@angular & mv node_modules/rxjs node_modules/_rxjs
-#mv node_modules _node_modules
+mv node_modules/@angular node_modules/_@angular & mv node_modules/rxjs node_modules/_rxjs
+mv node_modules _node_modules
 cd ${WORKSPACE}mycms-frontend-commons
-#mv node_modules/@angular node_modules/_@angular & mv node_modules/rxjs node_modules/_rxjs
-#mv node_modules _node_modules
+mv node_modules/@angular node_modules/_@angular & mv node_modules/rxjs node_modules/_rxjs
+mv node_modules _node_modules
 cd ${WORKSPACE}mycms-server-commons
-#mv node_modules/@angular node_modules/_@angular & mv node_modules/rxjs node_modules/_rxjs
-#mv node_modules _node_modules
+mv node_modules/@angular node_modules/_@angular & mv node_modules/rxjs node_modules/_rxjs
+mv node_modules _node_modules
 
 echo "STEP: build frontend  -> there MUST NOT be the node_modules"
 cd ${WORKSPACE}${MYCMSPROJECT}

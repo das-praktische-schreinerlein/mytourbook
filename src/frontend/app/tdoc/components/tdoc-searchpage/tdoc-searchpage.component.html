@@ -24,8 +24,16 @@
                        (show)="onShowDoc($event)"></app-tdoc-list>
     </div>
     <div class="container">
-        <app-cdoc-list-footer [searchResult]="searchResult"
-                              (pageChange)="onPageChange($event, true)" ></app-cdoc-list-footer>
+        <div class="row">
+            <div class="col-sm-6">
+                <app-cdoc-list-footer [searchResult]="searchResult"
+                                      (pageChange)="onPageChange($event, true)" ></app-cdoc-list-footer>
+            </div>
+            <div class="col-sm-6">
+                <a (click)="onM3UExport($event)" *ngIf="m3uExportAvailable" class="btn btn-action btn-sm float-right"
+                   i18n="link text playlistexport|linktext for playlistexport@@link.searchresult.playlistexport">Playlist-Export</a>
+            </div>
+        </div>
         <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
     </div>
 

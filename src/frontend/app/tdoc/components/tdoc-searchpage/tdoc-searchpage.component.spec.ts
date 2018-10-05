@@ -27,6 +27,8 @@ import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/t
 import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
 import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.service';
+import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
+import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 
 describe('TourDocSearchpageComponent', () => {
     let component: TourDocSearchpageComponent;
@@ -60,7 +62,9 @@ describe('TourDocSearchpageComponent', () => {
                 LayoutService,
                 TourDocSearchFormUtils,
                 TourDocActionTagService,
-                TourDocAlbumService
+                TourDocAlbumService,
+                TourDocPlaylistService,
+                CommonDocContentUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

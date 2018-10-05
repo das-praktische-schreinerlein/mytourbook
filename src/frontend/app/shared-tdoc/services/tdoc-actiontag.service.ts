@@ -10,14 +10,16 @@ import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-rec
 import {TourDocSearchForm} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocAlbumService} from './tdoc-album.service';
+import {TourDocPlaylistService} from './tdoc-playlist.service';
 
 @Injectable()
 export class TourDocActionTagService extends CommonDocActionTagService<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
-    constructor(protected router: Router, protected cdocDataService: TourDocDataService,
-                protected cdocAlbumService: TourDocAlbumService,
-                protected appService: GenericAppService) {
-        super(router, cdocDataService, cdocAlbumService, appService);
+    constructor(router: Router, cdocDataService: TourDocDataService,
+                cdocPlaylistService: TourDocPlaylistService,
+                cdocAlbumService: TourDocAlbumService,
+                appService: GenericAppService) {
+        super(router, cdocDataService, cdocPlaylistService, cdocAlbumService, appService);
         this.configureComponent({});
     }
 

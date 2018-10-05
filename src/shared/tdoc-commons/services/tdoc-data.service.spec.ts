@@ -16,8 +16,8 @@ describe('TourDocDataService', () => {
         const datastore = new TourDocDataStore(new SearchParameterUtils(), new TourDocTeamFilterConfig());
         service = new TourDocDataService(datastore);
         service.setWritable(true);
-        tdoc1 = new TourDocRecord({desc: '', name: 'Testtdoc1', persons: '', id: '1'});
-        tdoc2 = new TourDocRecord({desc: '', name: 'Testtdoc2', persons: '', id: '2'});
+        tdoc1 = new TourDocRecord({desc: '', name: 'Testtdoc1', persons: '', id: '1', type: 'image', subtype: '5'});
+        tdoc2 = new TourDocRecord({desc: '', name: 'Testtdoc2', persons: '', id: '2', type: 'image', subtype: '5'});
     });
 
     it('should ...', done => {
@@ -163,7 +163,7 @@ describe('TourDocDataService', () => {
                 service.addMany([tdoc1, tdoc2]),
                 service.getAll(),
                 service.updateById('1', {
-                    name: 'new name'
+                    id: '1', name: 'new name', type: 'image', subtype: '5'
                 }),
                 service.getById('1')
             ).subscribe(
@@ -191,7 +191,7 @@ describe('TourDocDataService', () => {
                 service.addMany([tdoc1, tdoc2]),
                 service.getAll(),
                 service.updateById('26', {
-                    name: 'new name'
+                    id: '26', name: 'new name', type: 'image', subtype: '5'
                 }),
                 service.getById('26')
             ).subscribe(
