@@ -8,11 +8,14 @@
 - bumped dependency-versions
 - added m3u-Export
 - improvements on validation
+- versioning of asset-urls
 
 ### new features
-- frontend; added m3u-Export to albumpage
+- frontend: added m3u-Export to albumpage
 - frontend: added PlaylistService
 - frontend: added multiaction-header for lists
+- frontend: added version-snippets for asset-urls
+- frontendserver: remove versionsnippets for assets as fallback if file not found
 
 ### improvements
 - commons: improved validation
@@ -20,7 +23,7 @@
 - frontend: improved layout
 
 ### bug fixes
-- none
+- commons: fixed sql for sqlite3
  
 ### breaking changes
 - moved functionality to external mycms-modules

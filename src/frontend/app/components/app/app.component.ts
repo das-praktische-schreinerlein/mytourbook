@@ -43,7 +43,9 @@ export class AppComponent {
         }
 
         // load overrides
-        const url = this.platformService.getAssetsUrl(`./assets/locales/locale-${locale}-overrides.json`);
+        const url = this.platformService.getAssetsUrl(
+            `./assets/locales/locale-${locale}-overrides` + environment.assetsPathVersionSnippet + `.json` +
+            environment.assetsPathVersionSuffix);
         // console.log('load locale-override', url);
         this.http.request(url).toPromise()
             .then(function onDocsLoaded(res: any) {

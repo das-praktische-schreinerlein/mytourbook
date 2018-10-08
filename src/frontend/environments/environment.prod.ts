@@ -3,6 +3,8 @@ import {AppEnvironment} from './app-environment';
 
 export const environment: AppEnvironment = {
     production: true,
+    assetsPathVersionSnippet: '',
+    assetsPathVersionSuffix: '',
     backendApiBaseUrl: 'http://localhost:4102/api/v1/',
     tracksBaseUrl: 'http://localhost:4102/api/assets/trackstore/',
     audioBaseUrl: 'http://localhost:4102/api/static/audiostore/',

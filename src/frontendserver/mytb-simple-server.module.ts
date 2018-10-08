@@ -32,7 +32,13 @@ export class MytbSimpleServerModule {
 
     public configureStaticFileRoutes(): void {
         // Serve static files from /browser
-        this.app.get('/' + this.config.distProfile + '*.*', express.static(join(this.config.staticFolder, '')));
+        const matchingPath = '/' + this.config.distProfile + '*.*';
+        this.app.get(matchingPath, express.static(join(this.config.staticFolder, '')));
+        this.app.get(matchingPath, function(req, res, next) {
+            req.url = req.url.replace(/\/([^\/]+)\.[0-9a-z]+\.(css|js|jpg|png|gif|svg|json)$/, '/$1.$2');
+            next();
+        });
+        this.app.get(matchingPath, express.static(join(this.config.staticFolder, '')));
     }
 
     public configureServerRoutes(): void {

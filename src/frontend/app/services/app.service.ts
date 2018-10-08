@@ -78,7 +78,8 @@ export class AppService extends GenericAppService {
     initAppConfig(): Promise<any> {
         const me = this;
         return new Promise<boolean>((resolve, reject) => {
-            const url = me.platformService.getAssetsUrl(`./assets/config.json`);
+            const url = me.platformService.getAssetsUrl(
+                `./assets/config` + environment.assetsPathVersionSnippet + `.json` + environment.assetsPathVersionSuffix);
             // console.log('load config:', url);
             me.http.request(url).toPromise()
                 .then(function onConfigLoaded(res: any) {

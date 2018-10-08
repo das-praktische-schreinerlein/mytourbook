@@ -42,6 +42,7 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
 import {CookieLawModule} from 'angular2-cookie-law';
 import {TourDocActionTagService} from './shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocPlaylistService} from './shared-tdoc/services/tdoc-playlist.service';
+import {environment} from '../environments/environment';
 
 registerLocaleData(localeDe);
 
@@ -49,7 +50,7 @@ registerLocaleData(localeDe);
 export function createTranslateLoader(http: HttpClient, platformService: PlatformService): TranslateHttpLoader {
     const url = platformService.getAssetsUrl('./assets/locales/locale-');
     // console.log('use translate-baseul', url);
-    return new TranslateHttpLoader(http, url, '.json');
+    return new TranslateHttpLoader(http, url,  environment.assetsPathVersionSnippet + '.json' + environment.assetsPathVersionSuffix);
 }
 
 export function getAngulartics2Providers(): any {
