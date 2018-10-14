@@ -17,6 +17,7 @@ import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testi
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AppComponent', () => {
     beforeEach(() => {
@@ -25,7 +26,7 @@ describe('AppComponent', () => {
                 FormsModule,
                 NoopAnimationsModule,
                 TranslateModule.forRoot(),
-                HttpModule
+                HttpClientTestingModule
             ],
             declarations: [
                 AppComponent
@@ -36,7 +37,6 @@ describe('AppComponent', () => {
                 CommonRoutingService,
                 { provide: Router, useValue: new RouterStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
-                { provide: XHRBackend, useClass: MockBackend },
                 PlatformService,
                 PageUtils,
                 LayoutService

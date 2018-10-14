@@ -2,6 +2,27 @@
  
 # Versions
  
+## 3.0.0
+- upgraded packages to be angular5/6-compatible
+
+### new features
+- none
+
+### improvements
+- none
+
+### bug fixes
+- none
+ 
+### breaking changes
+- upgraded packages to be angular5/6-compatible
+- migrated packages (ngx-lightbox, ngx-toastr)
+- migrated usage of Http to use HttpClient
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+
+
 ## 2.0.0
 - changed namespace
 - moved functionality to external mycms-modules
