@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
@@ -7,7 +7,7 @@ import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angul
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import {DomSanitizer} from '@angular/platform-browser';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {TourDocDataCacheService} from '../../services/tdoc-datacache.service';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
@@ -147,9 +147,8 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
 
     constructor(sanitizer: DomSanitizer, fb: FormBuilder, searchFormUtils: SearchFormUtils,
                 private tdocSearchFormUtils: TourDocSearchFormUtils, searchFormConverter: TourDocSearchFormConverter,
-                tdocDataCacheService: TourDocDataCacheService, toastr: ToastsManager, vcr: ViewContainerRef,
-                cd: ChangeDetectorRef) {
-        super(sanitizer, fb, searchFormUtils, tdocSearchFormUtils, searchFormConverter, tdocDataCacheService, toastr, vcr, cd);
+                tdocDataCacheService: TourDocDataCacheService, toastr: ToastrService, cd: ChangeDetectorRef) {
+        super(sanitizer, fb, searchFormUtils, tdocSearchFormUtils, searchFormConverter, tdocDataCacheService, toastr, cd);
     }
 
     protected createDefaultSearchResult(): TourDocSearchResult {

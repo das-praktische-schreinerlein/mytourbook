@@ -10,9 +10,10 @@ import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../shared/tdoc-commons/services/tdoc-data.store';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {TourDocDataCacheService} from '../../services/tdoc-datacache.service';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
 describe('TourDocSearchformComponent', () => {
     let component: TourDocSearchformComponent;
@@ -23,7 +24,6 @@ describe('TourDocSearchformComponent', () => {
             declarations: [TourDocSearchformComponent],
             imports: [
                 ReactiveFormsModule,
-                ToastModule.forRoot(),
                 TranslateModule.forRoot()
             ],
             providers: [
@@ -34,7 +34,7 @@ describe('TourDocSearchformComponent', () => {
                 TourDocSearchFormConverter,
                 SearchFormUtils,
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
-                ToastsManager
+                { provide: ToastrService, useValue: new ToastrServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA]
         })

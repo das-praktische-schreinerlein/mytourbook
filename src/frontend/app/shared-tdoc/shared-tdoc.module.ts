@@ -9,14 +9,14 @@ import {TourDocListItemSmallComponent} from './components/tdoc-list-item-small/t
 import {TourDocListItemFlatComponent} from './components/tdoc-list-item-flat/tdoc-list-item-flat.component';
 import {AngularMapsModule} from '@dps/mycms-frontend-commons/dist/angular-maps/angular-maps.module';
 import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateModule} from '@ngx-translate/core';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {ToastModule} from 'ng2-toastr';
-import {LightboxModule} from 'angular2-lightbox';
+import {ToastrModule} from 'ngx-toastr';
+import {LightboxModule} from 'ngx-lightbox';
 import {TourDocProfileMapComponent} from './components/tdoc-profilemap/tdoc-profilemap.component';
 import {TourDocMapComponent} from './components/tdoc-map/tdoc-map.component';
 import {TourDocLinkedLocHierarchyComponent} from './components/tdoc-linked-loc-hierarchy/tdoc-linked-loc-hierarchy.component';
@@ -75,7 +75,7 @@ import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionhe
         TourDocMultiActionHeaderComponent
     ],
     imports: [
-        ToastModule,
+        ToastrModule,
         NgbModule,
         MultiselectDropdownModule,
         TranslateModule,
@@ -83,7 +83,7 @@ import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionhe
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpModule,
+        HttpClientModule,
         AngularCommonsModule,
         AngularMapsModule,
         FrontendCommonDocCommonsModule,

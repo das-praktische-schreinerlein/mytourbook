@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
@@ -46,12 +46,12 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
 
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService, errorResolver: ErrorResolver,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
-                cdocRoutingService: TourDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef, pageUtils: PageUtils,
+                cdocRoutingService: TourDocRoutingService, toastr: ToastrService, pageUtils: PageUtils,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService) {
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
-            toastr, vcr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
+            toastr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
             tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment);
     }
 

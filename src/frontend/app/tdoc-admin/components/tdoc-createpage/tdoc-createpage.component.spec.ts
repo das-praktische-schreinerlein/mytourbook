@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {TourDocCreatepageComponent} from './tdoc-createpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
@@ -30,6 +30,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
 describe('TourDocCreatepageComponent', () => {
     let component: TourDocCreatepageComponent;
@@ -40,7 +41,6 @@ describe('TourDocCreatepageComponent', () => {
             declarations: [TourDocCreatepageComponent, TourDocDateFormatPipe],
             imports: [
                 NgbModule.forRoot(),
-                ToastModule.forRoot(),
                 TranslateModule.forRoot(),
                 MarkdownModule.forRoot(),
                 NoopAnimationsModule
@@ -56,7 +56,7 @@ describe('TourDocCreatepageComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonDocRoutingService,
                 TourDocRoutingService,
-                ToastsManager,
+                { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
                 MarkdownService,
                 AngularMarkdownService,

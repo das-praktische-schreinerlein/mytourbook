@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Lightbox} from 'angular2-lightbox';
+import {Lightbox} from 'ngx-lightbox';
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocContentUtils} from './tdoc-contentutils.service';
 import {CommonDocLightBoxService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-lightbox.service';

@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocRecord, TourDocRecordFactory, TourDocRecordValidator} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {TourDocRecordSchema} from '../../../../shared/tdoc-commons/model/schemas/tdoc-record-schema';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {SchemaValidationError} from 'js-data';
 import {IMultiSelectOption, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
@@ -11,7 +11,10 @@ import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TrackStatistic, TrackStatisticService} from '@dps/mycms-frontend-commons/dist/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
-import {KeywordsState, StructuredKeywordState} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {
+    KeywordsState,
+    StructuredKeywordState
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
@@ -118,11 +121,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
     personTagSuggestions: string[] = [];
 
-    constructor(public fb: FormBuilder, protected toastr: ToastsManager, vcr: ViewContainerRef, protected cd: ChangeDetectorRef,
+    constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
                 protected searchFormUtils: SearchFormUtils, protected tdocDataService: TourDocDataService,
                 protected contentUtils: TourDocContentUtils) {
-        super(fb, toastr, vcr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
+        super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
     }
 
     setPersonsFound(persons: StructuredKeywordState[]) {

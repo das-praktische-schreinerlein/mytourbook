@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {TourDocSearchFormConverter} from '../shared-tdoc/services/tdoc-searchform-converter.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TourDocSearchFormUtils} from '../shared-tdoc/services/tdoc-searchform-utils.service';
 import {TourDocSearchFormResolver} from '../shared-tdoc/resolver/tdoc-searchform.resolver';
 import {TourDocRecordResolver} from '../shared-tdoc/resolver/tdoc-details.resolver';
-import {ToastModule} from 'ng2-toastr';
+import {ToastrModule} from 'ngx-toastr';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
@@ -38,8 +38,8 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
         TranslateModule,
         BrowserModule,
         NgbModule,
-        ToastModule,
-        HttpModule,
+        ToastrModule,
+        HttpClientModule,
         AngularCommonsModule,
         SharedTourDocModule,
         TourDocAdminRoutingModule,

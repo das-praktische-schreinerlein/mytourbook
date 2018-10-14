@@ -1,10 +1,10 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
@@ -29,11 +29,11 @@ export class TourDocInlineSearchpageComponent extends
 
     constructor(appService: GenericAppService, commonRoutingService: CommonRoutingService,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
-                cdocRoutingService: TourDocRoutingService, toastr: ToastsManager, vcr: ViewContainerRef,
+                cdocRoutingService: TourDocRoutingService, toastr: ToastrService,
                 cd: ChangeDetectorRef, elRef: ElementRef, pageUtils: PageUtils, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService) {
         super(appService, commonRoutingService, tdocDataService, searchFormConverter, cdocRoutingService,
-            toastr, vcr, cd, elRef, pageUtils, searchFormUtils, tdocSearchFormUtils,
+            toastr, cd, elRef, pageUtils, searchFormUtils, tdocSearchFormUtils,
             new CommonDocMultiActionManager(appService, actionService));
     }
 }

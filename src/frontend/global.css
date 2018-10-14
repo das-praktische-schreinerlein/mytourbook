@@ -1,6 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
 
 /*******************
+ * bootstrap4-alpha6 -> bootstrap4 overrides
+ *******************/
+.visible-print-block {
+    display: none;
+}
+.btn-secondary {
+    color: #292b2c;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.input-group {
+    align-items: center;
+}
+.form-control-sm {
+    height: auto;
+}
+
+ss-multiselect-dropdown, .ss-multiselect-dropdown, .ss-multiselect-dropdown-fullwidth {
+    flex: 1 1 auto;
+    width: 1px;
+}
+
+.row {
+}
+
+.card-block {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+/*******************
  * bootstrap overrides
  *******************/
 dl, ol, ul {

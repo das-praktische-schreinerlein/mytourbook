@@ -9,7 +9,7 @@ import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/servi
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
-import {Lightbox, LightboxConfig, LightboxEvent} from 'angular2-lightbox';
+import {Lightbox, LightboxConfig, LightboxEvent} from 'ngx-lightbox';
 import {TourDocLightBoxService} from '../../services/tdoc-lightbox.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';

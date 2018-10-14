@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {TourDocSearchpageComponent} from './components/tdoc-searchpage/tdoc-searchpage.component';
 import {TourDocSearchFormConverter} from '../shared-tdoc/services/tdoc-searchform-converter.service';
 import {TourDocShowpageComponent} from './components/tdoc-showpage/tdoc-showpage.component';
@@ -8,7 +8,7 @@ import {TourDocSearchFormUtils} from '../shared-tdoc/services/tdoc-searchform-ut
 import {TourDocSearchFormResolver} from '../shared-tdoc/resolver/tdoc-searchform.resolver';
 import {TourDocRecordResolver} from '../shared-tdoc/resolver/tdoc-details.resolver';
 import {TourDocRoutingModule} from './tdoc-routing.module';
-import {ToastModule} from 'ng2-toastr';
+import {ToastrModule} from 'ngx-toastr';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {SharedTourDocModule} from '../shared-tdoc/shared-tdoc.module';
@@ -45,8 +45,8 @@ import {TourDocRoutingService} from '../../../shared/tdoc-commons/services/tdoc-
         FormsModule,
         ReactiveFormsModule,
         NgbModule,
-        ToastModule,
-        HttpModule,
+        ToastrModule,
+        HttpClientModule,
         AngularCommonsModule,
         SharedTourDocModule,
         TourDocRoutingModule,

@@ -17,7 +17,7 @@ import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commo
 import {MarkdownService} from 'angular2-markdown';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
-import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
@@ -50,7 +50,7 @@ describe('TourDocListItemPageComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot(),
-                HttpModule]
+                HttpClientModule]
         })
             .compileComponents();
     }));

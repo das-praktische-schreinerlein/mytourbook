@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
@@ -44,11 +44,11 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     constructor(route: ActivatedRoute, pdocDataService: PDocDataService,
                 commonRoutingService: CommonRoutingService, private searchFormConverter: TourDocSearchFormConverter,
                 errorResolver: ErrorResolver, private tdocRoutingService: CommonDocRoutingService,
-                toastr: ToastsManager, vcr: ViewContainerRef, pageUtils: PageUtils,
+                toastr: ToastrService, pageUtils: PageUtils,
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, platformService: PlatformService,
                 layoutService: LayoutService, appService: GenericAppService) {
-        super(route, pdocDataService, commonRoutingService, errorResolver, toastr, vcr,
+        super(route, pdocDataService, commonRoutingService, errorResolver, toastr,
             pageUtils, angularMarkdownService, angularHtmlService, cd, trackingProvider, platformService,
             layoutService, appService);
     }

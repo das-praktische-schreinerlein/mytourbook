@@ -4,7 +4,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocSectionPageComponent} from './tdoc-section-page.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
@@ -26,6 +26,7 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
 describe('SectionPageComponent', () => {
     let component: TourDocSectionPageComponent;
@@ -36,7 +37,6 @@ describe('SectionPageComponent', () => {
             declarations: [TourDocSectionPageComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [
-                ToastModule.forRoot(),
                 TranslateModule.forRoot(),
                 MarkdownModule.forRoot()],
             providers: [
@@ -49,7 +49,7 @@ describe('SectionPageComponent', () => {
                 TourDocSearchFormConverter,
                 CommonDocRoutingService,
                 SearchParameterUtils,
-                ToastsManager,
+                { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
                 MarkdownService,
                 AngularMarkdownService,

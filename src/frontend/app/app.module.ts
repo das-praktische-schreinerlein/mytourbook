@@ -1,10 +1,9 @@
 import {NgModule} from '@angular/core';
-import {HttpModule} from '@angular/http';
 import {AppComponent} from './components/app/app.component';
 import {AppService} from './services/app.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NavbarComponent} from './components/navbar/navbar.component';
-import {ToastModule} from 'ng2-toastr';
+import {ToastrModule} from 'ngx-toastr';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {AppRoutingModule} from './app.router';
@@ -65,11 +64,10 @@ export function getAngulartics2Providers(): any {
     ],
     entryComponents: [TourDocActionTagsComponent],
     imports: [
-        HttpModule,
         HttpClientModule,
         NgbModule.forRoot(),
         BrowserModule.withServerTransition({appId: 'tdoc-app'}),
-        ToastModule.forRoot(),
+        ToastrModule.forRoot(),
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

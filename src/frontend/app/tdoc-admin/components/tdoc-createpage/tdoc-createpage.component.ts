@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
@@ -34,14 +34,14 @@ export class TourDocCreatepageComponent
     tracks: TourDocRecord[] = [];
 
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: TourDocRoutingService,
-                protected toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: TourDocContentUtils,
+                protected toastr: ToastrService, contentUtils: TourDocContentUtils,
                 protected errorResolver: ErrorResolver, protected pageUtils: PageUtils,
                 protected commonRoutingService: CommonRoutingService, protected angularMarkdownService: AngularMarkdownService,
                 protected angularHtmlService: AngularHtmlService, protected cd: ChangeDetectorRef,
                 protected trackingProvider: GenericTrackingService, protected appService: GenericAppService,
                 protected platformService: PlatformService, protected layoutService: LayoutService,
                 protected tdocDataService: TourDocDataService) {
-        super(route, cdocRoutingService, toastr, vcr, contentUtils, errorResolver, pageUtils, commonRoutingService, angularMarkdownService,
+        super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService, angularMarkdownService,
             angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment, tdocDataService);
     }
 

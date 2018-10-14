@@ -4,7 +4,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
@@ -32,6 +32,7 @@ import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlis
 import {CommonDocContentUtils} from '@dps//mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
 describe('TourDocAlbumpageComponent', () => {
     let component: TourDocAlbumpageComponent;
@@ -42,7 +43,6 @@ describe('TourDocAlbumpageComponent', () => {
             declarations: [TourDocAlbumpageComponent],
             imports: [
                 NgbModule.forRoot(),
-                ToastModule.forRoot(),
                 TranslateModule.forRoot(),
                 NoopAnimationsModule
             ],
@@ -57,7 +57,7 @@ describe('TourDocAlbumpageComponent', () => {
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 CommonDocRoutingService,
                 TourDocRoutingService,
-                ToastsManager,
+                { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
                 ErrorResolver,
                 PageUtils,

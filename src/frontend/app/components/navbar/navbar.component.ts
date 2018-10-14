@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
@@ -18,9 +18,8 @@ export class NavbarComponent implements OnInit {
     albumAllowed = false;
     public isExpanded = false;
 
-    constructor(private route: ActivatedRoute, private toastr: ToastsManager, vcr: ViewContainerRef, private appService: GenericAppService,
+    constructor(private route: ActivatedRoute, private toastr: ToastrService, private appService: GenericAppService,
                 private pdocDataService: PDocDataService, private pageUtils: PageUtils, private cd: ChangeDetectorRef) {
-        this.toastr.setRootViewContainerRef(vcr);
     }
 
     ngOnInit() {

@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
@@ -15,14 +15,13 @@ import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
-import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {Layout, LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {environment} from '../../../../environments/environment';
 import {
     CommonDocEditpageComponent,
     CommonDocEditpageComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editpage.component';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
-import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 
 @Component({
     selector: 'app-tdoc-editpage',
@@ -65,14 +64,14 @@ export class TourDocEditpageComponent
     };
 
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: TourDocRoutingService,
-                protected toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: TourDocContentUtils,
+                protected toastr: ToastrService, contentUtils: TourDocContentUtils,
                 protected errorResolver: ErrorResolver, protected pageUtils: PageUtils,
                 protected commonRoutingService: CommonRoutingService, protected angularMarkdownService: AngularMarkdownService,
                 protected angularHtmlService: AngularHtmlService, protected cd: ChangeDetectorRef,
                 protected trackingProvider: GenericTrackingService, protected appService: GenericAppService,
                 protected platformService: PlatformService, protected layoutService: LayoutService,
                 protected tdocDataService: TourDocDataService) {
-        super(route, cdocRoutingService, toastr, vcr, contentUtils, errorResolver, pageUtils, commonRoutingService, angularMarkdownService,
+        super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService, angularMarkdownService,
             angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment, tdocDataService);
     }
 

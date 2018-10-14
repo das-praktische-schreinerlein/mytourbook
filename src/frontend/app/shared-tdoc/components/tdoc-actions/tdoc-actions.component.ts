@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDynamicComponentService} from '../../services/tdoc-dynamic-components.service';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {
     CommonDocActionsComponent,
     CommonDocActionsComponentConfig
@@ -20,10 +20,10 @@ import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 })
 export class TourDocActionsComponent extends CommonDocActionsComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
     constructor(protected dynamicComponentService: TourDocDynamicComponentService,
-                protected toastr: ToastsManager, vcr: ViewContainerRef,
+                protected toastr: ToastrService,
                 protected cd: ChangeDetectorRef, protected appService: GenericAppService,
                 protected actionTagService: TourDocActionTagService) {
-        super(dynamicComponentService, toastr, vcr, cd, appService, actionTagService);
+        super(dynamicComponentService, toastr, cd, appService, actionTagService);
     }
 
     protected getComponentConfig(config: {}): CommonDocActionsComponentConfig {

@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../shared/tdoc-commons/services/tdoc-data.store';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule} from '@ngx-translate/core';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
@@ -24,6 +24,7 @@ import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {TourDocAlbumService} from '../../services/tdoc-album.service';
 import {TourDocPlaylistService} from '../../services/tdoc-playlist.service';
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
 describe('TourDocInlineSearchpageComponent', () => {
     let component: TourDocInlineSearchpageComponent;
@@ -32,7 +33,7 @@ describe('TourDocInlineSearchpageComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [TourDocInlineSearchpageComponent],
-            imports: [ToastModule.forRoot(),
+            imports: [
                 TranslateModule.forRoot()
             ],
             providers: [
@@ -47,7 +48,7 @@ describe('TourDocInlineSearchpageComponent', () => {
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 CommonDocRoutingService,
                 TourDocRoutingService,
-                ToastsManager,
+                { provide: ToastrService, useValue: new ToastrServiceStub() },
                 PageUtils,
                 TourDocSearchFormUtils,
                 TourDocActionTagService,

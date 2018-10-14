@@ -1,15 +1,15 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, LOCALE_ID, ViewContainerRef} from '@angular/core';
-import {ToastsManager} from 'ng2-toastr';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {Router} from '@angular/router';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {CommonRoutingService, RoutingState} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {environment} from '../../../environments/environment';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
     selector: 'app-root',
@@ -24,17 +24,15 @@ export class AppComponent {
     showLaw = false;
     cookieLawSeenName = environment.cookieLawSeenName;
 
-    constructor(private appService: GenericAppService, private toastr: ToastsManager, vcr: ViewContainerRef,
+    constructor(private appService: GenericAppService, private toastr: ToastrService,
                 translate: TranslateService, private router: Router, @Inject(LOCALE_ID) locale: string,
-                private http: Http, private commonRoutingService: CommonRoutingService, private cd: ChangeDetectorRef,
+                private http: HttpClient, private commonRoutingService: CommonRoutingService, private cd: ChangeDetectorRef,
                 private platformService: PlatformService, private pageUtils: PageUtils, private layoutService: LayoutService) {
         // this language will be used as a fallback when a translation isn't found in the current language
         translate.setDefaultLang(locale);
 
         // the lang to use, if the lang isn't available, it will use the current loader to get them
         translate.use(locale);
-
-        this.toastr.setRootViewContainerRef(vcr);
 
         this.showInitState();
 
@@ -47,9 +45,9 @@ export class AppComponent {
             `./assets/locales/locale-${locale}-overrides` + environment.assetsPathVersionSnippet + `.json` +
             environment.assetsPathVersionSuffix);
         // console.log('load locale-override', url);
-        this.http.request(url).toPromise()
+        this.http.get(url).toPromise()
             .then(function onDocsLoaded(res: any) {
-                const i18n: any[] = res.json();
+                const i18n: any[] = res;
                 translate.setTranslation(locale, i18n, true);
                 appService.initApp();
             }).catch(function onError(reason: any) {
@@ -91,8 +89,8 @@ export class AppComponent {
                 this.toastr.warning('<h4>Auweia</h4>\n' +
                     'Dieser Browser ist leider etwas "..." und wird die Seite wahrscheinlich nicht richtig darstellen können :-(<br />\n' +
                     'Am besten du probierst es mal mit dem neusten Chrome, Firefox, Edge oder Safari. Die sind getestet :-)', 'AuWaia',
-                    { positionClass: 'toast-top-full-width', toastLife: 99999999, showCloseButton: true, dismiss: 'click',
-                        enableHTML: true});
+                    { positionClass: 'toast-top-full-width', timeOut: 99999999, closeButton: true, tapToDismiss: true,
+                        enableHtml: true});
                 this.pageUtils.setGlobalStyle('.flg-browser-not-compatible { display: none !important; } ', 'browserCompatible');
                 break;
 

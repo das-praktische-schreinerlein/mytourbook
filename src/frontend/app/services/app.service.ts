@@ -1,6 +1,6 @@
 import {Inject, Injectable, LOCALE_ID} from '@angular/core';
 import {TourDocDataService} from '../../shared/tdoc-commons/services/tdoc-data.service';
-import {Http} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {TourDocDataStore} from '../../shared/tdoc-commons/services/tdoc-data.store';
 import {environment} from '../../environments/environment';
 import {AppState, GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
@@ -33,7 +33,7 @@ export class AppService extends GenericAppService {
 
     constructor(private tdocDataService: TourDocDataService, private tdocDataStore: TourDocDataStore,
                 private pdocDataService: PDocDataService, @Inject(LOCALE_ID) private locale: string,
-                private http: Http, private commonRoutingService: CommonRoutingService,
+                private http: HttpClient, private commonRoutingService: CommonRoutingService,
                 private backendHttpClient: MinimalHttpBackendClient, private platformService: PlatformService) {
         super();
     }
@@ -81,9 +81,9 @@ export class AppService extends GenericAppService {
             const url = me.platformService.getAssetsUrl(
                 `./assets/config` + environment.assetsPathVersionSnippet + `.json` + environment.assetsPathVersionSuffix);
             // console.log('load config:', url);
-            me.http.request(url).toPromise()
+            me.http.get(url).toPromise()
                 .then(function onConfigLoaded(res: any) {
-                    const config: {} = res.json();
+                    const config: {} = res;
                     // console.log('initially loaded config from assets', config);
                     me.appConfig.components = config['components'];
                     me.appConfig.services = config['services'];
@@ -135,18 +135,18 @@ export class AppService extends GenericAppService {
         this.pdocDataService.clearLocalStore();
         this.tdocDataService.clearLocalStore();
         return new Promise<boolean>((resolve, reject) => {
-            me.http.request('./assets/pdocs.json').toPromise()
+            me.http.get('./assets/pdocs.json').toPromise()
                 .then(function onDocsLoaded(res: any) {
-                    const docs: any[] = res.json().pdocs;
+                    const docs: any[] = res.pdocs;
                     me.pdocDataService.setWritable(true);
                     return me.pdocDataService.addMany(docs);
                 }).then(function onDocsAdded(records: BaseEntityRecord[]) {
                     // console.log('initially loaded pdocs from assets', records);
                     me.pdocDataService.setWritable(false);
 
-                    return me.http.request('./assets/tdocs.json').toPromise();
+                    return me.http.get('./assets/tdocs.json').toPromise();
                 }).then(function onDocsLoaded(res: any) {
-                    const docs: any[] = res.json().tdocs;
+                    const docs: any[] = res.tdocs;
                     me.tdocDataService.setWritable(true);
 
                     return me.tdocDataService.addMany(docs);

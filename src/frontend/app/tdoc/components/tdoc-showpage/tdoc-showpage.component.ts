@@ -1,7 +1,7 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {Layout, LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
@@ -73,13 +73,13 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     };
 
     constructor(route: ActivatedRoute, cdocRoutingService: TourDocRoutingService,
-                toastr: ToastsManager, vcr: ViewContainerRef, contentUtils: TourDocContentUtils,
+                toastr: ToastrService, contentUtils: TourDocContentUtils,
                 errorResolver: ErrorResolver, pageUtils: PageUtils, commonRoutingService: CommonRoutingService,
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, protected searchFormConverter: TourDocSearchFormConverter,
                 layoutService: LayoutService) {
-        super(route, cdocRoutingService, toastr, vcr, contentUtils, errorResolver, pageUtils, commonRoutingService,
+        super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService,
             angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment);
     }
 

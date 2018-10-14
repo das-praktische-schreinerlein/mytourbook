@@ -1,11 +1,11 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewContainerRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
-import {ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
@@ -40,12 +40,12 @@ export class TourDocAlbumpageComponent
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService,
                 errorResolver: ErrorResolver, cdocDataService: TourDocDataService,
                 searchFormConverter: TourDocSearchFormConverter, cdocRoutingService: TourDocRoutingService,
-                toastr: ToastsManager, vcr: ViewContainerRef, pageUtils: PageUtils, cd: ChangeDetectorRef,
+                toastr: ToastrService, pageUtils: PageUtils, cd: ChangeDetectorRef,
                 trackingProvider: GenericTrackingService, public fb: FormBuilder, cdocAlbumService: TourDocAlbumService,
                 appService: GenericAppService, platformService: PlatformService, layoutService: LayoutService,
                 searchFormUtils: SearchFormUtils, tdocSearchFormUtils: TourDocSearchFormUtils,
                 playlistService: TourDocPlaylistService, protected actionService: TourDocActionTagService) {
-        super(route, commonRoutingService, errorResolver, cdocDataService, searchFormConverter, cdocRoutingService, toastr, vcr,
+        super(route, commonRoutingService, errorResolver, cdocDataService, searchFormConverter, cdocRoutingService, toastr,
             pageUtils, cd, trackingProvider, fb, cdocAlbumService, appService, platformService, layoutService, searchFormUtils,
             tdocSearchFormUtils, playlistService, new CommonDocMultiActionManager(appService, actionService), environment);
     }

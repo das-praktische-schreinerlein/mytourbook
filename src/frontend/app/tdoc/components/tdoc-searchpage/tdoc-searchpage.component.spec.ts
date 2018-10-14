@@ -5,7 +5,7 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
@@ -29,6 +29,7 @@ import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-action
 import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.service';
 import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
 describe('TourDocSearchpageComponent', () => {
     let component: TourDocSearchpageComponent;
@@ -38,7 +39,6 @@ describe('TourDocSearchpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocSearchpageComponent],
             imports: [
-                ToastModule.forRoot(),
                 TranslateModule.forRoot()
             ],
             providers: [
@@ -51,7 +51,7 @@ describe('TourDocSearchpageComponent', () => {
                 { provide: SearchParameterUtils, useValue: new SearchParameterUtils() },
                 CommonDocRoutingService,
                 TourDocRoutingService,
-                ToastsManager,
+                { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
                 ErrorResolver,
                 PageUtils,

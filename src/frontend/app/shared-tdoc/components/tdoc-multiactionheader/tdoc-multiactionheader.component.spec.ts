@@ -4,7 +4,6 @@ import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
 import {TourDocMultiActionHeaderComponent} from './tdoc-multiactionheader.component';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
-import {ToastModule} from 'ng2-toastr';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
@@ -23,7 +22,6 @@ describe('TourDocMultiActionHeaderComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocMultiActionHeaderComponent],
             imports: [
-                ToastModule.forRoot()
             ],
             providers: [
                 { provide: Router, useValue: new RouterStub() },

@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {TourDocEditpageComponent} from './tdoc-editpage.component';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ActivatedRouteStub} from '@dps/mycms-frontend-commons/dist/testing/router-stubs';
@@ -29,6 +29,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
 describe('TourDocEditpageComponent', () => {
     let component: TourDocEditpageComponent;
@@ -39,7 +40,6 @@ describe('TourDocEditpageComponent', () => {
             declarations: [TourDocEditpageComponent, TourDocDateFormatPipe],
             imports: [
                 NgbModule.forRoot(),
-                ToastModule.forRoot(),
                 TranslateModule.forRoot(),
                 MarkdownModule.forRoot(),
                 NoopAnimationsModule
@@ -54,7 +54,7 @@ describe('TourDocEditpageComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonDocRoutingService,
                 TourDocRoutingService,
-                ToastsManager,
+                { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
                 MarkdownService,
                 AngularMarkdownService,

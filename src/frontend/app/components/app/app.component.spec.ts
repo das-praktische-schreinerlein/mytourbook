@@ -3,10 +3,10 @@ import {async, TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 import {FormsModule} from '@angular/forms';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {ToastModule, ToastsManager} from 'ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
-import {ToastsManagerStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {Router} from '@angular/router';
@@ -24,7 +24,6 @@ describe('AppComponent', () => {
             imports: [
                 FormsModule,
                 NoopAnimationsModule,
-                ToastModule.forRoot(),
                 TranslateModule.forRoot(),
                 HttpModule
             ],
@@ -33,10 +32,10 @@ describe('AppComponent', () => {
             ],
             providers: [
                 TranslateService,
-                {provide: GenericAppService, useValue: new AppServiceStub() },
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 CommonRoutingService,
                 { provide: Router, useValue: new RouterStub() },
-                {provide: ToastsManager, useValue: new ToastsManagerStub() },
+                { provide: ToastrService, useValue: new ToastrServiceStub() },
                 { provide: XHRBackend, useClass: MockBackend },
                 PlatformService,
                 PageUtils,

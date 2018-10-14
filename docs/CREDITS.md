@@ -12,9 +12,10 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
     - [bootstrap4](https://getbootstrap.com/)
 - ui-components
     - [angular-2-dropdown-multiselect](https://www.npmjs.com/package/angular2-dropdown-multiselect)
-    - [angular2-lightbox](https://www.npmjs.com/package/angular2-lightbox)
     - [angular2-markdown](https://www.npmjs.com/package/angular2-markdown)
-    - ng2-toastr
+    - [ngx-lightbox](https://www.npmjs.com/package/ngx-lightbox)
+    - [ngx-toastr](https://www.npmjs.com/package/ngx-toastr)
+    - [ngx-file-drop](https://www.npmjs.com/package/ngx-file-drop)
 - tracking
     - [angulartics2](https://www.npmjs.com/package/angulartics2)
 - maps
