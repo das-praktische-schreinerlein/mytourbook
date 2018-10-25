@@ -4,6 +4,7 @@
  
 ## 3.0.0
 - upgraded packages to be angular5/6-compatible
+- moved common layout-styles to commons
 
 ### new features
 - none
@@ -18,6 +19,7 @@
 - upgraded packages to be angular5/6-compatible
 - migrated packages (ngx-lightbox, ngx-toastr)
 - migrated usage of Http to use HttpClient
+- moved common layout-styles to commons
 
 ### known issues
 - frontend: IE till 11 not functional (can block rendering sometimes)

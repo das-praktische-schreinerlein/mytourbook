@@ -149,6 +149,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
                 private tdocSearchFormUtils: TourDocSearchFormUtils, searchFormConverter: TourDocSearchFormConverter,
                 tdocDataCacheService: TourDocDataCacheService, toastr: ToastrService, cd: ChangeDetectorRef) {
         super(sanitizer, fb, searchFormUtils, tdocSearchFormUtils, searchFormConverter, tdocDataCacheService, toastr, cd);
+        this.defaultSeLectSettings.dynamicTitleMaxItems = 2;
     }
 
     protected createDefaultSearchResult(): TourDocSearchResult {
