@@ -5,15 +5,18 @@
 ## 3.0.0
 - upgraded packages to be angular5/6-compatible
 - moved common layout-styles to commons
+- improved naming
+- fixed minor nav-bugs
 
 ### new features
 - none
 
 ### improvements
-- none
+- frontendserver: improved naming
 
 ### bug fixes
-- none
+- frontend: fixed nav-bar  
+- frontend: fixed trigger for rendering on navigation/layout-changes
  
 ### breaking changes
 - upgraded packages to be angular5/6-compatible

@@ -16,12 +16,12 @@ export interface ServerModuleConfig {
     redirectOnlyCached?: boolean;
 }
 
-export class MytbSimpleServerModule {
+export class SimpleFrontendServerModule {
     protected indexFile: string;
     private redirects = {};
 
     public static configureDefaultServer(app: express.Application, config: ServerModuleConfig) {
-        const mytbServerModule = new MytbSimpleServerModule(app, config);
+        const mytbServerModule = new SimpleFrontendServerModule(app, config);
         mytbServerModule.configureStaticFileRoutes();
         mytbServerModule.configureServerRoutes();
     }

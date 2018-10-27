@@ -8,10 +8,10 @@ import {FirewallConfig} from '@dps/mycms-server-commons/dist/server-commons/fire
 import {CacheConfig} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {ConfigureServerModule} from '@dps/mycms-server-commons/dist/server-commons/configure-server.module';
 import {FirewallModule} from '@dps/mycms-server-commons/dist/server-commons/firewall.module';
-import {MytbAngularUniversalModule} from './mytb-angular-universal.module';
+import {AngularUniversalFrontendServerModule} from './angular-universal-frontend-server.module';
 import * as fs from 'fs';
 import {DnsBLModule} from '@dps/mycms-server-commons/dist/server-commons/dnsbl.module';
-import {CacheModeType, ServerModuleConfig} from './mytb-simple-server.module';
+import {CacheModeType, ServerModuleConfig} from './simple-frontend-server.module';
 
 const minimist = require ('minimist');
 
@@ -64,7 +64,7 @@ const app = express();
 ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
 FirewallModule.configureFirewall(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
 DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePathErrorDocs);
-MytbAngularUniversalModule.configureDefaultServer(app, frontendConfig);
+AngularUniversalFrontendServerModule.configureDefaultServer(app, frontendConfig);
 ConfigureServerModule.configureDefaultErrorHandler(app);
 
 // Start up the Node server

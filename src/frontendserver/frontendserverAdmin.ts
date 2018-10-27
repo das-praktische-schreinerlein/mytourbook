@@ -7,8 +7,8 @@ import {join} from 'path';
 import {default as Axios} from 'axios';
 import {default as sitemaps} from 'sitemap-stream-parser';
 import * as fs from 'fs';
-import {MytbAngularUniversalModule} from './mytb-angular-universal.module';
-import {CacheModeType, ServerModuleConfig} from './mytb-simple-server.module';
+import {AngularUniversalFrontendServerModule} from './angular-universal-frontend-server.module';
+import {CacheModeType, ServerModuleConfig} from './simple-frontend-server.module';
 
 const minimist = require ('minimist');
 
@@ -47,7 +47,7 @@ const frontendConfig: ServerModuleConfig = {
 // Express server
 const app = express();
 const port = Math.floor(Math.random() * 10000 + 50000);
-MytbAngularUniversalModule.configureDefaultServer(app, frontendConfig);
+AngularUniversalFrontendServerModule.configureDefaultServer(app, frontendConfig);
 app.listen(port, function () {
     console.log('MyTB app listening on random port ' + port);
 });

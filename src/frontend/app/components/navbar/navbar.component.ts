@@ -28,6 +28,7 @@ export class NavbarComponent implements OnInit {
         this.appService.getAppState().subscribe(appState => {
             if (appState === AppState.Ready) {
                 this.config = this.appService.getAppConfig();
+                me.cd.markForCheck();
                 if (this.config && this.config['tdocMaxItemsPerAlbum'] > 0) {
                     this.albumAllowed = true;
                     return;
@@ -43,11 +44,12 @@ export class NavbarComponent implements OnInit {
                 me.sections = [];
                 this.pdocDataService.getById('menu', {forceLocalStore: true}).then(function onThemesFound(pdoc: PDocRecord) {
                     me.sections = me.getSubSections(pdoc);
+                    me.cd.markForCheck();
                 }).catch(function onNotFound(error) {
                     me.sections = [];
+                    me.cd.markForCheck();
                     console.error('show getSection failed:', error);
                 });
-                me.cd.markForCheck();
             },
             (error: { reason: any }) => {
                 me.sections = [];

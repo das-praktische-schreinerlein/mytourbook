@@ -7,11 +7,11 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as fs from 'fs';
-import {CacheModeType, MytbSimpleServerModule, ServerModuleConfig} from './mytb-simple-server.module';
+import {CacheModeType, SimpleFrontendServerModule, ServerModuleConfig} from './simple-frontend-server.module';
 
-export class MytbAngularUniversalModule extends MytbSimpleServerModule {
+export class AngularUniversalFrontendServerModule extends SimpleFrontendServerModule {
     public static configureDefaultServer(app: express.Application, config: ServerModuleConfig) {
-        const mytbAngularModule = new MytbAngularUniversalModule(app, config);
+        const mytbAngularModule = new AngularUniversalFrontendServerModule(app, config);
         if (config.cacheMode === CacheModeType.USE_CACHE) {
             mytbAngularModule.configureGlobals();
             mytbAngularModule.configureViewEngine();

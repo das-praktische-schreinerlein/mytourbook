@@ -23,9 +23,12 @@
                         <a class="nav-link mdl-navigation__link" routerLink="/sections/{{menuSection.id}}" routerLinkActive="active">{{menuSection.name}}</a>
                     </li>
                     <li class="nav-item dropdown" ngbDropdown>
-                        <a class="nav-link dropdown-toggle" ngbDropdownToggle id="navbarDropdownMenuLink{{menuSection.id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                        <a class="nav-link {{ getSubSections(menuSection).length > 0 ? 'dropdown-toggle' : ''}} " ngbDropdownToggle id="navbarDropdownMenuLink{{menuSection.id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 
-                        <ul class="dropdown-menu dropdown-menu-left" role="menu">
+                        <ul *ngIf="getSubSections(menuSection).length > 0" class="dropdown-menu dropdown-menu-left" role="menu" ngbDropdownMenu attr.aria-labelledby="navbarDropdownMenuLink{{menuSection.id}}">
+
+                            <li class="dropdown-item {{menuSection.type}}"><a class="nav-link mdl-navigation__link" title="{{menuSection.teaser}}" routerLink="/sections/{{menuSection.id}}/" routerLinkActive="active">{{menuSection.name}}</a></li>
+
                             <ng-container *ngFor="let section of getSubSections(menuSection)">
                                 <ng-container [ngSwitch]="section.type">
                                     <ng-container *ngSwitchCase="'SectionOverviewPage'">
