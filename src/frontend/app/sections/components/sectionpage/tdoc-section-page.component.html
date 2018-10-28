@@ -1,5 +1,5 @@
 <ng-template #contentContainer>
-    <div class="container content-container" *ngIf="(pdoc.descHtml !== undefined && pdoc.descHtml.length > 0) || (pdoc.descMd !== undefined && pdoc.descMd.length > 0)">
+    <div class="container content-container sectionpage-content-container" *ngIf="(pdoc.descHtml !== undefined && pdoc.descHtml.length > 0) || (pdoc.descMd !== undefined && pdoc.descMd.length > 0)">
         <img src="{{pdoc.image}}" width="170px" class="picture" style="float: left; margin: 0 15px 15px 0;" alt="{{pdoc.name}}" *ngIf="pdoc.image !== undefined && pdoc.image.length > 0">
         <div id="desc" class="section-desc section-desc-{{pdoc.id}}"></div>
         {{ renderDesc() }}
@@ -9,7 +9,7 @@
 
 <ng-template #searchHintContainer>
     <ng-container *ngIf="pdoc.flgShowSearch || pdoc.flgShowTopTen">
-        <div class="container content-container">
+        <div class="container content-container sectionpage-hint-content-container hidden-print">
             <ng-container *ngIf="pdoc.flgShowSearch">
                 <div class="hint_tosearch">
                     <a class="btn btn-action btn-sm" href="{{getToSearchUrl()}}"
@@ -30,7 +30,7 @@
 <ng-template #sectionsContainer>
     <ng-container *ngIf="sections.length > 0">
         <ng-container *ngFor="let section of sections">
-            <div class="container content-container">
+            <div class="container content-container sectionpage-sections-container">
                 <app-pdoc-list-item-flat class="app-pdoc-list-item"
                                          [record]="section"
                                          [layout]="Layout.FLAT"
@@ -86,7 +86,7 @@
 </ng-template>
 
 <ng-template #sidebarContainer>
-    <div>
+    <div class="sectionpage-sidebar-container">
         <div class="text-center">
             <a routerLink="/pages/start">
                 <img src="assets/images/banner-big.gif" width="200" class="picture-thumbnail align-top">
@@ -98,7 +98,7 @@
         </div>
     </div>
     <ng-container *ngIf="pdoc.flgShowTopTen && tdocSearchResult.recordCount > 0">
-        <div class="hidden-print">
+        <div class="hidden-print sectionpage-sidebar-tagcloud-container">
             <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
         </div>
     </ng-container>
@@ -106,7 +106,7 @@
 
 <ng-template #topTenContainer>
     <ng-container *ngIf="pdoc.flgShowTopTen">
-        <div class="container content-container">
+        <div class="container content-container sectionpage-topten-container">
             <h5><span class="fx-bg-name" i18n="heading shortSearch sectionPage|Heading to shortSearch sectionPage@@heading.sectionPage.shortSearch">Schnellsuche</span></h5>
             <div class="shortsearchform">
                 <app-tdoc-searchform [searchResult]="tdocSearchResult"
@@ -322,11 +322,11 @@
 <ng-container *ngIf="pdoc !== undefined">
     <ng-container [ngSwitch]="searchFormLayout">
         <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
-            <div class="container content-container" style="width: 25%; float: right">
+            <div class="container content-container sectionpage-stacked-sidebar-container" style="width: 25%; float: right">
                 <ng-container *ngTemplateOutlet="sidebarContainer"></ng-container>
             </div>
 
-            <div style="width: 73%; display: inline-block;">
+            <div class="sectionpage-stacked-left-content-container" style="width: 73%; display: inline-block;">
                 <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
                 <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
                 <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
