@@ -8,6 +8,7 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as fs from 'fs';
 import {CacheModeType, SimpleFrontendServerModule, ServerModuleConfig} from './simple-frontend-server.module';
+import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 
 export class AngularUniversalFrontendServerModule extends SimpleFrontendServerModule {
     public static configureDefaultServer(app: express.Application, config: ServerModuleConfig) {
@@ -77,7 +78,7 @@ export class AngularUniversalFrontendServerModule extends SimpleFrontendServerMo
                 if (me.config.cacheMode !== CacheModeType.NO_CACHE) {
                     res.status(201).send(html);
                     if (err) {
-                        console.error('error while getting url:' + res.url, err);
+                        console.error('error while getting url:' + LogUtils.sanitizeLogMsg(res.url), err);
                         return;
                     }
 
@@ -88,7 +89,7 @@ export class AngularUniversalFrontendServerModule extends SimpleFrontendServerMo
 
                 res.status(200).send(html);
                 if (err) {
-                    console.error('error while getting url:' + res.url, err);
+                    console.error('error while getting url:' + LogUtils.sanitizeLogMsg(res.url), err);
                     return;
                 }
             }

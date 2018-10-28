@@ -1,6 +1,7 @@
 import {join} from 'path';
 import * as express from 'express';
 import * as fs from 'fs';
+import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 
 export enum CacheModeType {
     NO_CACHE, USE_CACHE, CACHED_ONLY
@@ -69,7 +70,7 @@ export class SimpleFrontendServerModule {
                     const redirectUrl = me.redirects[fullUrl] || me.redirects[req.url];
                     if (redirectUrl) {
                         if (!me.config.redirectOnlyCached) {
-                            console.log('redirect:' + req.url, redirectUrl);
+                            console.log('redirect:' + LogUtils.sanitizeLogMsg(req.url), redirectUrl);
                             return me.sendRedirect(req, res, redirectUrl);
                         }
 
@@ -77,7 +78,7 @@ export class SimpleFrontendServerModule {
                         fs.exists(me.getCacheFilename(redirectFile), function (redirectExists: boolean) {
                             if (redirectExists) {
                                 // CACHED: use cached file
-                                console.log('redirect cache exists:' + req.url, redirectUrl);
+                                console.log('redirect cache exists:' + LogUtils.sanitizeLogMsg(req.url), redirectUrl);
                                 return me.sendRedirect(req, res, redirectUrl);
                             }
 
