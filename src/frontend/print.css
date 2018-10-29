@@ -9,6 +9,16 @@
         page-break-after: auto;
         page-break-inside: avoid;
     }
+
+    .searchpage-stacked-sidebar-container {
+        display: none;
+    }
+
+    .searchpage-stacked-right-content-container {
+        page-break-before: avoid;
+        page-break-inside: auto;
+        display: block !important;
+    }
 }
 
 @media screen {
