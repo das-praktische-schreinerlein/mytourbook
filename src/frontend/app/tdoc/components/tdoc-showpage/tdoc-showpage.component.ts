@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/co
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
-import {Layout, LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {Layout, LayoutService, LayoutSizeData} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
@@ -71,6 +71,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         'VIDEO': true,
         'NEWS': true
     };
+    private layoutSize: LayoutSizeData;
 
     constructor(route: ActivatedRoute, cdocRoutingService: TourDocRoutingService,
                 toastr: ToastrService, contentUtils: TourDocContentUtils,
@@ -141,8 +142,21 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     getFiltersForType(record: TourDocRecord, type: string): any {
         const minPerPage = isNumber(this.showResultListTrigger[type]) ? this.showResultListTrigger[type] : 0;
 
-        return (<TourDocContentUtils>this.contentUtils).getTourDocSubItemFiltersForType(record, type,
+        const filters = (<TourDocContentUtils>this.contentUtils).getTourDocSubItemFiltersForType(record, type,
             (this.pdoc ? this.pdoc.theme : undefined), minPerPage);
+        if (type === 'TOPIMAGE') {
+            if (this.layoutSize && this.layoutSize.width > 1200 && this.layoutSize.width < 1480) {
+                filters['perPage'] = 3;
+            }
+        }
+
+        return filters;
+    }
+
+    protected onResize(layoutSizeData: LayoutSizeData): void {
+        super.onResize(layoutSizeData);
+        this.layoutSize = layoutSizeData;
+        this.cd.markForCheck();
     }
 
     protected getComponentConfig(config: {}): CommonDocShowpageComponentConfig {

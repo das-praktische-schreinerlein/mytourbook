@@ -9,12 +9,7 @@
         page-break-after: auto;
         page-break-inside: avoid;
     }
-
-    .app-tdoc-list-item-big {
-        width: 275px !important;
-        min-width: 260px !important;
-        max-width: 290px !important;
-    }
 }
+
 @media screen {
 }

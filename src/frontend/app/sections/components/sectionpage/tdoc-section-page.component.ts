@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {ToastrService} from 'ngx-toastr';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
-import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {LayoutService, LayoutSizeData} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
@@ -40,6 +40,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         'VIDEO': true,
         'ALL': true
     };
+    private layoutSize: LayoutSizeData;
 
     constructor(route: ActivatedRoute, pdocDataService: PDocDataService,
                 commonRoutingService: CommonRoutingService, private searchFormConverter: TourDocSearchFormConverter,
@@ -61,6 +62,9 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         filters['theme'] = record.theme;
         if (type === 'IMAGE') {
             filters['perPage'] = 6;
+            if (this.layoutSize && this.layoutSize.width > 1300 && this.layoutSize.width < 1400) {
+                filters['perPage'] = 5;
+            }
         } else {
             filters['perPage'] = 5;
         }
@@ -149,6 +153,12 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
 
         this.commonRoutingService.navigateByUrl(url);
         return false;
+    }
+
+    protected onResize(layoutSizeData: LayoutSizeData): void {
+        super.onResize(layoutSizeData);
+        this.layoutSize = layoutSizeData;
+        this.cd.markForCheck();
     }
 
     protected configureProcessingOfResolvedData(config: {}): void {
