@@ -7,9 +7,10 @@
 - moved common layout-styles to commons
 - improved naming
 - fixed minor nav-bugs
+- added synced-preview to improve layouting
 
 ### new features
-- none
+- devtools: added synced-preview
 
 ### improvements
 - frontendserver: improved naming

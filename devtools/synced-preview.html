@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"><meta name="audience" content="alle">
+    <title>Synced-Preview</title>
+    <style>
+        body {
+            background: #8cacd3; /* Old browsers */
+            background: -moz-linear-gradient(top, #8cacd3 0%, #2989d8 50%, #468ec9 51%, #7db9e8 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8cacd3), color-stop(50%,#2989d8), color-stop(51%,#468ec9), color-stop(100%,#7db9e8)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top, #8cacd3 0%,#2989d8 50%,#468ec9 51%,#7db9e8 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, #8cacd3 0%,#2989d8 50%,#468ec9 51%,#7db9e8 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, #8cacd3 0%,#2989d8 50%,#468ec9 51%,#7db9e8 100%); /* IE10+ */
+            background: linear-gradient(to bottom, #8cacd3 0%,#2989d8 50%,#468ec9 51%,#7db9e8 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8cacd3', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+            overflow-y:scroll;
+            font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+        }
+        .box {
+            border: 2px solid #8CACD3;
+            border-radius: 10px;
+            padding: 3px;
+            background-color: white;
+            margin-top: 3px;
+            text-align: left;
+        }
+        .form-group {
+            display: flex;
+        }
+        label {
+        }
+        input {
+        }
+
+        .main {
+            width: 100%;
+        }
+        .candidates {
+            height: 90%;
+        }
+        .header .candidateWrapper {
+            width: 100%;
+            display: inline-block;
+        }
+        .candidates .candidateWrapper {
+            width: 100%;
+            max-width: 100%;
+            display: inline-block;
+            height: 98%;
+            overflow: hidden;
+        }
+        input[type=number] {
+            width: 60px;
+        }
+        input[type=url] {
+            flex: 2;
+        }
+        .candidates .candidateIframe {
+            width: 98%;
+            height: 98%;
+        }
+    </style>
+    <style>
+    </style>
+</head>
+
+<body>
+<div class="main" id="main">
+    <div class="header box" id="header">
+        <div>
+            <div class="form-group">
+                <label for="starturl">StartUrl</label>
+                <input type="url" id="starturl">
+                <button id="init">Init</button>
+            </div>
+        </div>
+        <div id="candidatesForm">
+        </div>
+    </div>
+    <div class="candidates" id="candidates">
+    </div>
+</div>
+
+<script>
+    var syncedPreviewController = {};
+    syncedPreviewController.config = {
+        'startUrl': 'http://localhost:4200/pages/start',
+        'master': {
+            'label': 'Master',
+            'baseUrl': 'http://localhost:4200/',
+            'width': 1200
+        },
+        'slaves': {
+            '1': {
+                'label': 'Slave 1',
+                'baseUrl': 'http://localhost:4200/',
+                'width': 800
+            },
+            '2': {
+                'label': 'Slave 2',
+                'baseUrl': 'http://localhost:4200/',
+                'width': 370
+            }
+        }
+    };
+
+    syncedPreviewController.init = function () {
+        syncedPreviewController.createUI();
+        syncedPreviewController.doResize();
+        syncedPreviewController.doStart();
+
+        document.getElementById("init").addEventListener("click", function () {
+            syncedPreviewController.doStart();
+        });
+
+        window.setInterval(function() {
+            syncedPreviewController.doSync();
+        }, 1000);
+
+        window.addEventListener('resize', function () {
+            syncedPreviewController.doResize();
+        })
+    };
+
+    syncedPreviewController.createUI = function () {
+        var candidates = 1;
+        document.getElementById('candidatesForm').innerHTML = '';
+        document.getElementById('candidates').innerHTML = '';
+
+        document.getElementById("starturl").value = syncedPreviewController.config.startUrl;
+        syncedPreviewController.createUIElements('master', syncedPreviewController.config.master);
+        for (var slaveId in syncedPreviewController.config.slaves) {
+            syncedPreviewController.createUIElements('slave' + slaveId, syncedPreviewController.config.slaves[slaveId]);
+            candidates = candidates + 1;
+        }
+
+        var sheet = document.styleSheets[document.styleSheets.length - 1];
+        sheet.insertRule('.header .candidateWrapper { width: ' + (100 / candidates - 1) + '%; max-width: ' + (100 / candidates - 1) + '%;}', 0);
+        sheet.insertRule('.candidates .candidateWrapper { width: ' + (100 / candidates - 1) + '%; max-width: ' + (100 / candidates - 1) + '%;}' , 0);
+    };
+
+    syncedPreviewController.createUIElements = function (name, config) {
+        document.getElementById('candidatesForm').innerHTML = document.getElementById('candidatesForm').innerHTML +
+            '<div class="candidateWrapper">\n' +
+            ' <div class="form-group">' +
+            '   <label for="baseurl' + name + '">BaseUrl ' + config.label + '</label>' +
+            '   <input type="url" id="baseurl' + name + '" value="' + config.baseUrl + '">' +
+            '</div>\n' +
+            '  <div class="form-group">' +
+            '    <label for="width' + name + '">Width px</label>' +
+            '    <input type="number" id="width' + name + '" value="' + config.width + '">' +
+            '  </div>\n' +
+            '</div>\n';
+        document.getElementById('candidates').innerHTML = document.getElementById('candidates').innerHTML +
+            '<div class="box candidateWrapper candidateWrapper' + name + '" id="candidateWrapper' + name + '">\n' +
+            '  <iframe id="iframe' + name + '" class="candidateIframe"></iframe>\n' +
+            '</div>\n';
+    };
+
+    syncedPreviewController.doStart = function () {
+        syncedPreviewController.startMaster();
+    };
+
+    syncedPreviewController.doSync = function () {
+        syncedPreviewController.resizeFrame('master');
+        for (var slaveId in syncedPreviewController.config.slaves) {
+            syncedPreviewController.resizeFrame('slave' + slaveId);
+            syncedPreviewController.syncSlave(slaveId);
+        }
+
+    };
+
+    syncedPreviewController.doResize = function () {
+        document.getElementById('candidates').style.height = (window.innerHeight - document.getElementById('header').clientHeight -10 ) + 'px';
+    };
+
+    syncedPreviewController.startMaster = function () {
+        document.getElementById('iframemaster').src = document.getElementById('starturl').value;
+    };
+
+    syncedPreviewController.syncSlave = function (nr) {
+        var masterUrl = document.getElementById('iframemaster').contentDocument.location.href;
+        var slaveUrl = masterUrl.replace(document.getElementById('baseurlmaster').value, document.getElementById('baseurlslave' + nr).value);
+        var iframe = document.getElementById('iframeslave' + nr);
+        if (iframe.src !== slaveUrl) {
+            iframe.src = slaveUrl;
+        }
+    };
+
+    syncedPreviewController.resizeFrame = function (candidateName) {
+        var candidateWidth = document.getElementById('candidateWrapper' + candidateName).clientWidth;
+        var expectedWidth = document.getElementById('width' + candidateName).value;
+        var iframe = document.getElementById('iframe' + candidateName);
+        var zoom = candidateWidth / expectedWidth;
+        iframe.style.width = (expectedWidth - 10) + 'px';
+        iframe.style.height = (document.getElementById('candidateWrapper' + candidateName).clientHeight / zoom - 10) + 'px';
+        iframe.style['transform'] = 'scale(' + zoom + ')';
+        iframe.style['transform-origin'] = '0 0';
+    };
+
+    syncedPreviewController.init();
+
+</script>
+</body>
+
+</html>
