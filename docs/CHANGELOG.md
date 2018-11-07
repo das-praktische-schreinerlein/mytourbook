@@ -7,10 +7,11 @@
 - moved common layout-styles to commons
 - improved naming
 - fixed minor nav-bugs
-- added synced-preview to improve layouting
+- use mycms-frontend-devtools
+
 
 ### new features
-- devtools: added synced-preview
+- devtools: added devtools (synced-preview...)
 
 ### improvements
 - frontendserver: improved naming
