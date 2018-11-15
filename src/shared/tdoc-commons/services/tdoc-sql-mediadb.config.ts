@@ -1490,7 +1490,8 @@ export class TourDocSqlMediadbConfig {
         'trip': {
             key: 'trip',
             tableName: 'trip',
-            selectFrom: 'trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id',
+            selectFrom: 'trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id' +
+                ' LEFT JOIN location ON location.l_id = trip.l_id',
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
@@ -1517,8 +1518,14 @@ export class TourDocSqlMediadbConfig {
                 '"TRIP" AS type',
                 'CONCAT("TRIP", "_", trip.tr_id) AS id',
                 'trip.tr_id',
+                'trip.l_id',
                 'trip.tr_name',
                 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc,"")) AS html',
+                'CAST(l_geo_latdeg AS CHAR(50)) AS t_gps_lat',
+                'CAST(l_geo_longdeg AS CHAR(50)) AS t_gps_lon',
+                'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS t_gps_loc',
+                'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
+                'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
                 'tr_datevon AS tr_dateshow',
                 'tr_datevon',
                 'tr_datebis',
@@ -1561,7 +1568,13 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    noFacet: true
+                    selectSql: 'SELECT COUNt(trip.l_id) AS count, l_name AS value,' +
+                        ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
+                        ' FROM location LEFT JOIN trip ON trip.l_id = location.l_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label ASC',
+                    filterField: 'l_name',
+                    action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
@@ -1602,6 +1615,12 @@ export class TourDocSqlMediadbConfig {
                 'forExport': 'tr_datevon ASC',
                 'relevance': 'tr_datevon DESC'
             },
+            spartialConfig: {
+                lat: 'l_geo_latdeg',
+                lon: 'l_geo_longdeg',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
+            },
             filterMapping: {
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
@@ -1612,11 +1631,14 @@ export class TourDocSqlMediadbConfig {
                 track_id_i: '"dummy"',
                 route_id_is: '"dummy"',
                 news_id_is: '"dummy"',
-                loc_lochirarchie_ids_txt: '"dummy"',
+                loc_id_i: 'trip.l_id',
+                loc_id_is: 'trip.l_id',
+                loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc,""))'
             },
             writeMapping: {
+                'trip.l_id': ':loc_id_i:',
                 'trip.tr_datevon': ':datestart_dt:',
                 'trip.tr_datebis': ':dateend_dt:',
                 'trip.tr_meta_shortdesc': ':desc_txt:',
@@ -1629,6 +1651,8 @@ export class TourDocSqlMediadbConfig {
                 id: 'id',
                 trip_id_i: 'tr_id',
                 trip_id_is: 'tr_id',
+                loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
                 data_tech_alt_asc_i: 'k_altitude_asc_sum',
                 data_tech_alt_desc_i: 'k_altitude_desc_sum',
                 data_tech_alt_min_i: 'k_altitude_min',
