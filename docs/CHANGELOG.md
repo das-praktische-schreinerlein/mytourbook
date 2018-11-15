@@ -9,9 +9,9 @@
 - fixed minor nav-bugs
 - use mycms-frontend-devtools
 
-
 ### new features
 - devtools: added devtools (synced-preview...)
+- model+frontend: added loc_id for trip and blocked for additional types
 
 ### improvements
 - frontendserver: improved naming
@@ -28,6 +28,7 @@
 
 ### known issues
 - frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
 
 
 ## 2.0.0
