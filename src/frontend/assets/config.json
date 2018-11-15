@@ -209,7 +209,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
                         }
                     ],
                     "configAvailability": [

@@ -1046,6 +1046,7 @@ export class TourDocSqlMediadbConfig {
                 't_desc_gebiet',
                 't_desc_talort',
                 't_desc_ziel',
+                't_gesperrt',
                 'ROUND((t_route_hm / 500))*500 AS altAscFacet',
                 'ROUND((t_ele_max / 500))*500 AS altMaxFacet',
                 'ROUND((t_route_m / 5))*5 AS distFacet',
@@ -1054,6 +1055,9 @@ export class TourDocSqlMediadbConfig {
             facetConfigs: {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
+                },
+                'blocked_is': {
+                    selectField: 't_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((t_route_hm / 500))*500',
@@ -1211,6 +1215,7 @@ export class TourDocSqlMediadbConfig {
                 'tour.l_id': ':loc_id_i:',
                 'tour.k_id': ':track_id_i:',
                 'tour.t_datevon': ':datestart_dt:',
+                'tour.t_gesperrt': ':blocked_i:',
                 'tour.t_datebis': ':dateend_dt:',
                 'tour.t_meta_shortdesc': ':desc_txt:',
 //                'tour.t_meta_shortdesc_md': ':desc_md_txt:',
@@ -1263,6 +1268,7 @@ export class TourDocSqlMediadbConfig {
                 desc_txt: 't_meta_shortdesc',
                 desc_md_txt: 't_meta_shortdesc_md',
                 desc_html_txt: 't_meta_shortdesc_html',
+                blocked_i: 't_gesperrt',
                 distance: 'geodist',
                 geo_lon_s: 't_gps_lon',
                 geo_lat_s: 't_gps_lat',
@@ -1345,6 +1351,7 @@ export class TourDocSqlMediadbConfig {
                 'l_parent_id',
                 'l_name',
                 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,"")) AS html',
+                'l_gesperrt',
                 'l_meta_shortdesc',
                 'l_meta_shortdesc AS l_meta_shortdesc_md',
                 'l_meta_shortdesc AS l_meta_shortdesc_html',
@@ -1356,6 +1363,9 @@ export class TourDocSqlMediadbConfig {
             facetConfigs: {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", location.l_typ)'
+                },
+                'blocked_is': {
+                    selectField: 'l_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     noFacet: true
@@ -1449,6 +1459,7 @@ export class TourDocSqlMediadbConfig {
                 'location.l_parent_id': ':loc_id_parent_i:',
                 //'location.l_meta_shortdesc_md': ':desc_md_txt:',
                 //'location.l_meta_shortdesc_html': ':desc_html_txt:',
+                'location.l_gesperrt': ':blocked_i:',
                 'location.l_geo_longdeg': ':geo_lon_s:',
                 'location.l_geo_latdeg': ':geo_lat_s:',
                 //'location.l_gps_loc': ':geo_loc_p:',
@@ -1463,6 +1474,7 @@ export class TourDocSqlMediadbConfig {
                 desc_txt: 'l_meta_shortdesc',
                 desc_md_txt: 'l_meta_shortdesc_md',
                 desc_html_txt: 'l_meta_shortdesc_html',
+                blocked_i: 'l_gesperrt',
                 distance: 'geodist',
                 geo_lon_s: 'l_geo_longdeg',
                 geo_lat_s: 'l_geo_latdeg',
@@ -1514,6 +1526,7 @@ export class TourDocSqlMediadbConfig {
                 'WEEK(tr_datevon) AS week',
                 'MONTH(tr_datevon) AS month',
                 'YEAR(tr_datevon) AS year',
+                'tr_gesperrt',
                 'SUM(k_altitude_asc) AS k_altitude_asc_sum',
                 'SUM(k_altitude_desc) AS k_altitude_desc_sum',
                 'MIN(k_altitude_min) AS k_altitude_min',
@@ -1525,6 +1538,9 @@ export class TourDocSqlMediadbConfig {
             facetConfigs: {
                 'actiontype_ss': {
                     noFacet: true
+                },
+                'blocked_is': {
+                    selectField: 'tr_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     noFacet: true
@@ -1604,6 +1620,7 @@ export class TourDocSqlMediadbConfig {
                 'trip.tr_datevon': ':datestart_dt:',
                 'trip.tr_datebis': ':dateend_dt:',
                 'trip.tr_meta_shortdesc': ':desc_txt:',
+                'trip.tr_gesperrt': ':blocked_i:',
 //                'trip.tr_meta_shortdesc_md': ':desc_md_txt:',
 //                'trip.tr_meta_shortdesc_html': ':desc_html_txt:',
                 'trip.tr_name': ':name_s:'
@@ -1621,6 +1638,7 @@ export class TourDocSqlMediadbConfig {
                 dateshow_dt: 'tr_dateshow',
                 datestart_dt: 'tr_datevon',
                 dateend_dt: 'tr_datebis',
+                blocked_i: 'tr_gesperrt',
                 desc_txt: 'tr_meta_shortdesc',
                 desc_md_txt: 'tr_meta_shortdesc_md',
                 desc_html_txt: 'tr_meta_shortdesc_html',
@@ -1657,12 +1675,16 @@ export class TourDocSqlMediadbConfig {
                 'WEEK(n_date) AS week',
                 'MONTH(n_date) AS month',
                 'YEAR(n_date) AS year',
+                'n_gesperrt',
                 'n_message',
                 'n_message AS n_message_md',
                 'n_message AS n_message_html'],
             facetConfigs: {
                 'actiontype_ss': {
                     noFacet: true
+                },
+                'blocked_is': {
+                    selectField: 'n_gesperrt'
                 },
                 'data_tech_alt_asc_facet_is': {
                     noFacet: true
@@ -1741,6 +1763,7 @@ export class TourDocSqlMediadbConfig {
                 'news.n_date': ':dateshow_dt:',
                 'news.n_datevon': ':datestart_dt:',
                 'news.n_datebis': ':dateend_dt:',
+                'news.n_gesperrt': ':blocked_i:',
                 'news.n_message': ':desc_txt:',
                 'news.n_message_md': ':desc_md_txt:',
                 'news.n_message_html': ':desc_html_txt:',
@@ -1754,6 +1777,7 @@ export class TourDocSqlMediadbConfig {
                 dateshow_dt: 'n_date',
                 datestart_dt: 'n_datevon',
                 dateend_dt: 'n_datebis',
+                blocked_i: 'n_gesperrt',
                 desc_txt: 'n_message',
                 desc_md_txt: 'n_message_md',
                 desc_html_txt: 'n_message_html',

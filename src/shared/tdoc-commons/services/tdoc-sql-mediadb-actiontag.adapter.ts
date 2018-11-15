@@ -278,6 +278,26 @@ export class TourDocSqlMediadbActionTagAdapter {
                 tableName = 'kategorie';
                 idName = 'k_id';
                 break;
+            case 'route':
+                fieldName = 't_gesperrt';
+                tableName = 'tour';
+                idName = 't_id';
+                break;
+            case 'location':
+                fieldName = 'l_gesperrt';
+                tableName = 'location';
+                idName = 'l_id';
+                break;
+            case 'trip':
+                fieldName = 'tr_gesperrt';
+                tableName = 'trip';
+                idName = 'tr_id';
+                break;
+            case 'news':
+                fieldName = 'n_gesperrt';
+                tableName = 'news';
+                idName = 'n_id';
+                break;
             default:
                 return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
         }
