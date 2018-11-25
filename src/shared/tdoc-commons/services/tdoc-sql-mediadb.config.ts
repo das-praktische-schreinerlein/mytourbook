@@ -13,13 +13,13 @@ export class TourDocSqlMediadbConfig {
                     from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
                           'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS k_keywords']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS k_keywords']
                 },
                 {
                     from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
                     'LEFT JOIN tour kt ON kategorie_tour.t_id=kt.t_id',
                     triggerParams: ['route_id_i', 'route_id_is'],
-                    groupByFields: ['GROUP_CONCAT(kt.t_id SEPARATOR ", ") AS k_kt_ids']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT kt.t_id ORDER BY kt.t_id SEPARATOR ", ") AS k_kt_ids']
                 },
                 {
                     from: ' ',
@@ -961,15 +961,15 @@ export class TourDocSqlMediadbConfig {
                     from: 'LEFT JOIN tour_keyword ON tour.t_id=tour_keyword.t_id ' +
                           'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS t_keywords']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS t_keywords']
                 },
                 {
                     from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ' +
                     'LEFT JOIN kategorie kt ON kategorie_tour.k_id=kt.k_id ' +
                     'LEFT JOIN kategorie ON tour.t_id=kategorie.t_id',
                     triggerParams: ['id', 'track_id_i', 'track_id_is'],
-                    groupByFields: ['GROUP_CONCAT(kategorie.k_id SEPARATOR ", ") AS t_k_ids',
-                        'GROUP_CONCAT(kt.k_id SEPARATOR ", ") AS t_kt_ids']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_k_ids',
+                        'GROUP_CONCAT(DISTINCT kt.k_id ORDER BY kt.k_id SEPARATOR ", ") AS t_kt_ids']
                 },
                 {
                     from: ' ',
@@ -1319,7 +1319,7 @@ export class TourDocSqlMediadbConfig {
                     from: 'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
                           'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS l_keywords']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 }
             ],
             groupbBySelectFieldListIgnore: ['l_keywords'],
@@ -1497,7 +1497,7 @@ export class TourDocSqlMediadbConfig {
                     from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
                     'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
-                    groupByFields: ['GROUP_CONCAT(keyword.kw_name SEPARATOR ", ") AS tr_keywords']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS tr_keywords']
                 }
             ],
             groupbBySelectFieldList: true,
@@ -1653,6 +1653,8 @@ export class TourDocSqlMediadbConfig {
                 trip_id_is: 'tr_id',
                 loc_id_i: 'l_id',
                 loc_id_is: 'l_id',
+                loc_lochirarchie_s: 'l_lochirarchietxt',
+                loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 data_tech_alt_asc_i: 'k_altitude_asc_sum',
                 data_tech_alt_desc_i: 'k_altitude_desc_sum',
                 data_tech_alt_min_i: 'k_altitude_min',
