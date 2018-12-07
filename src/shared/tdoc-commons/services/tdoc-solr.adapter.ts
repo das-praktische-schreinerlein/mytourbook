@@ -4,6 +4,7 @@ import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {SolrConfig} from '@dps/mycms-commons/dist/search-commons/services/solr-query.builder';
+import {Mapper} from 'js-data';
 
 export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
 
@@ -186,6 +187,24 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
         values['html_txt'] = [values.desc_txt, values.name_s, values.keywords_txt, values.type_s].join(' ');
 
         return values;
+    }
+
+    create(mapper: Mapper, record: any, opts?: any): Promise<TourDocRecord> {
+        opts = opts || {};
+        if (opts.realSource) {
+            record = opts.realSource;
+        }
+
+        return super.create(mapper, record, opts);
+    }
+
+    update(mapper: Mapper, id: string | number, record: any, opts?: any): Promise<TourDocRecord> {
+        opts = opts || {};
+        if (opts.realSource) {
+            record = opts.realSource;
+        }
+
+        return super.update(mapper, id, record, opts);
     }
 
     getHttpEndpoint(method: string): string {
