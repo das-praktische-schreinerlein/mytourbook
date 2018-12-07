@@ -8,10 +8,12 @@
 - improved naming
 - fixed minor nav-bugs
 - use mycms-frontend-devtools
+- improved build-process
 
 ### new features
 - devtools: added devtools (synced-preview...)
 - model+frontend: added loc_id for trip and blocked for additional types
+- build: improved build-process
 
 ### improvements
 - frontendserver: improved naming

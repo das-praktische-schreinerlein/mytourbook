@@ -1,0 +1,13 @@
+patch-package
+--- a/node_modules/js-data/dist/js-data.js
++++ b/node_modules/js-data/dist/js-data.js
+@@ -14168,7 +14168,8 @@ var props$1 = {
+             });
+           };
+         }
+-        Object.defineProperty(mapper.recordClass.prototype, localField, descriptor);
++          descriptor.configurable = true;
++          Object.defineProperty(mapper.recordClass.prototype, localField, descriptor);
+       }
+     });
+ 
