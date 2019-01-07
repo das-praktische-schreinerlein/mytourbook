@@ -98,9 +98,9 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         const realTracks = [];
         if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
             for (const record of searchresult.currentRecords) {
+                realTracks.push(record);
                 if (record.gpsTrackBasefile || record.geoLoc !== undefined
                     || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20)) {
-                    realTracks.push(record);
                     this.flgMapAvailable = true;
                     this.flgProfileMapAvailable = true;
 
