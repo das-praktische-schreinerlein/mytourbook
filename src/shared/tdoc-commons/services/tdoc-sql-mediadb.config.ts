@@ -141,7 +141,7 @@ export class TourDocSqlMediadbConfig {
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
                     filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.LIKEIN
+                    action: AdapterFilterActions.IN
                 },
                 'month_is': {
                     selectField: 'MONTH(k_datevon)',
@@ -472,7 +472,7 @@ export class TourDocSqlMediadbConfig {
                     ' GROUP BY GetTechName(l_name), location.l_id' +
                     ' ORDER BY label ASC',
                     filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.LIKEIN
+                    action: AdapterFilterActions.IN
                 },
                 'month_is': {
                     selectField: 'MONTH(i_date)',
@@ -787,7 +787,7 @@ export class TourDocSqlMediadbConfig {
                     ' GROUP BY GetTechName(l_name), location.l_id' +
                     ' ORDER BY label ASC',
                     filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.LIKEIN
+                    action: AdapterFilterActions.IN
                 },
                 'month_is': {
                     selectField: 'MONTH(v_date)',
@@ -1108,7 +1108,7 @@ export class TourDocSqlMediadbConfig {
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
                     filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.LIKEIN
+                    action: AdapterFilterActions.IN
                 },
                 'month_is': {
                     selectField: 'MONTH(t_datevon)',
@@ -1209,7 +1209,7 @@ export class TourDocSqlMediadbConfig {
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc,""), " ", _name)'
+                html: 'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc,""), " ", l_name)'
             },
             writeMapping: {
                 'tour.l_id': ':loc_id_i:',
@@ -1399,7 +1399,7 @@ export class TourDocSqlMediadbConfig {
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
                     filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.LIKEIN
+                    action: AdapterFilterActions.IN
                 },
                 'month_is': {
                     noFacet: true
@@ -1574,7 +1574,7 @@ export class TourDocSqlMediadbConfig {
                         ' GROUP BY value, label, id' +
                         ' ORDER BY label ASC',
                     filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.LIKEIN
+                    action: AdapterFilterActions.IN
                 },
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
