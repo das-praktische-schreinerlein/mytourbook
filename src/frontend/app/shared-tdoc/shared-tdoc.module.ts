@@ -41,6 +41,7 @@ import {TourDocKeywordsstateComponent} from './components/tdoc-keywordsstate/tdo
 import {TourDocVideoplayerComponent} from './components/tdoc-videoplayer/tdoc-videoplayer.component';
 import {TourDocPersontagsstateComponent} from './components/tdoc-persontagsstate/tdoc-persontagsstate.component';
 import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionheader/tdoc-multiactionheader.component';
+import {TourDocMapCodePipe} from './pipes/tdoc-mapcode.pipe';
 
 @NgModule({
     declarations: [
@@ -65,6 +66,7 @@ import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionhe
         TourDocRateTechComponent,
         TourDocDistanceComponent,
         TourDocDateFormatPipe,
+        TourDocMapCodePipe,
         TourDocActionsComponent,
         TourDocActionTagsComponent,
         TourDocPersonTagsComponent,
@@ -115,6 +117,7 @@ import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionhe
         TourDocRateTechComponent,
         TourDocDistanceComponent,
         TourDocDateFormatPipe,
+        TourDocMapCodePipe,
         TourDocActionsComponent,
         TourDocActionTagsComponent,
         TourDocPersonTagsComponent,

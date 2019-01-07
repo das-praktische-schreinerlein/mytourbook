@@ -9,8 +9,11 @@
                                [checked]="isMultiActionSelectedForRecord()"
                                (click)="onChangeMultiActionForRecord($event)">
                     </div>
-                    <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance></h5>
-                    <h5 class="listItem.currentRecord-type">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5 class="listItem.currentRecord-type" (click)="submitShowItemOnMap(listItem.currentRecord)">
+                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+                        <span>{{listItem.currentRecord.type | translate }}</span>
+                    </h5>
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail-big" width="100px"
                              [src]="listItem.thumbnailUrl"
@@ -42,7 +45,10 @@
                        [checked]="isMultiActionSelectedForRecord()"
                        (click)="onChangeMultiActionForRecord($event)">
             </div>
-            <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance></h5>
+            <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+                <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+                <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+            </h5>
             <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
             <div>
                 <div style="width: 100px; float: left">

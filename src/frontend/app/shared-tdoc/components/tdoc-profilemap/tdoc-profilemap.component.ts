@@ -5,6 +5,7 @@ import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 @Component({
     selector: 'app-tdoc-profilemap',
@@ -43,7 +44,7 @@ export class TourDocProfileMapComponent extends AbstractInlineComponent {
         const tmpList: MapElement[] = [];
         for (let i = 0; i < this.tdocs.length; i++) {
             const record =  this.tdocs[i];
-            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record, this.showImageTrackAndGeoPos)) {
+            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record, StringUtils.calcCharCodeForListIndex(i + 1), this.showImageTrackAndGeoPos)) {
                 tmpList.push(mapElement);
             }
         }

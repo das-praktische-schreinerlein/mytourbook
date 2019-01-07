@@ -111,7 +111,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['moreFilter'] = 'loc_parent_id_i:' + record.locId;
                 filters['sort'] = 'location';
             } else {
-                filters['moreFilter'] = 'loc_lochirarchie_ids_txt:' + record.locId;
+                filters['where'] = record.techName;
                 if (type === 'IMAGE') {
                     filters['perPage'] = 12;
                 }
@@ -206,12 +206,13 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         return filters;
     }
 
-    createMapElementForTourDoc(record: TourDocRecord, showImageTrackAndGeoPos: boolean): MapElement[] {
+    createMapElementForTourDoc(record: TourDocRecord, code: string, showImageTrackAndGeoPos: boolean): MapElement[] {
         const trackUrl = record.gpsTrackBasefile;
 
         const isImage = (record.type === 'IMAGE' || record.type === 'VIDEO');
-        const showTrack = (trackUrl !== undefined && trackUrl.length > 0 && (!isImage || showImageTrackAndGeoPos))
-            || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc !== null && record.gpsTrackSrc.length > 0);
+        const showTrack = ((trackUrl !== undefined && trackUrl.length > 0)
+                            || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc !== null && record.gpsTrackSrc.length > 0))
+                          && (!isImage || showImageTrackAndGeoPos);
         const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
             record.geoLat !== '0.0' && record.geoLon !== '0.0';
         const mapElements: MapElement[] = [];
@@ -225,10 +226,11 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             }
             const mapElement: MapElement = {
                 id: record.id,
+                code: code,
                 name: record.name,
                 trackUrl: storeUrl,
                 trackSrc: record.gpsTrackSrc,
-                popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
+                popupContent: '<b>' + '&#128204;' + code + ' ' + record.type + ': ' + record.name + '</b>',
                 type: record.type
             };
             mapElements.push(mapElement);
@@ -238,9 +240,10 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             const point = ele !== undefined ? new LatLng(+record.geoLat, +record.geoLon, +ele) : new LatLng(+record.geoLat, +record.geoLon);
             const mapElement: MapElement = {
                 id: record.id,
+                code: code,
                 name: record.type + ': ' + record.name,
                 point: point,
-                popupContent: '<b>' + record.type + ': ' + record.name + '</b>',
+                popupContent: '<b>' + '&#128204;' + code + ' ' + record.type + ': ' + record.name + '</b>',
                 type: record.type
             };
             mapElements.push(mapElement);

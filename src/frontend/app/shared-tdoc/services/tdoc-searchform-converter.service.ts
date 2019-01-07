@@ -268,9 +268,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.techDataDuration, 'hrt_techDataDuration', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.techRateOverall, 'hrt_techRateOverall', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.personalRateOverall, 'hrt_personalRateOverall',
-            undefined, true));
+            undefined, true, 'filter.tdocratepers.gesamt.'));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.personalRateDifficulty, 'hrt_personalRateDifficulty',
-            undefined, true));
+            undefined, true, 'label.tdocratepers.schwierigkeit.'));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.persons, 'hrt_persons', undefined, true));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.playlists, 'hrt_playlists', undefined, true));
 

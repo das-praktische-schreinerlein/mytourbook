@@ -21,7 +21,9 @@
                        [baseSearchUrl]="baseSearchUrl"
                        [layout]="layout"
                        [multiActionManager]="multiActionManager"
-                       (show)="onShowDoc($event)"></app-tdoc-list>
+                       [showItemMapFlag]="true"
+                       (show)="onShowDoc($event)"
+                       (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list>
     </div>
     <div class="container">
         <div class="row">
@@ -65,6 +67,7 @@
                       [height]="'300'"
                       [mapZoom]="mapZoom"
                       [tdocs]="searchResult.currentRecords"
+                      [currentTDocId]="currentMapTDocId"
                       (tdocClicked)="onMapTourDocClicked($event)"
                       (centerChanged)="onMapCenterChanged($event)"
                       (mapElementsFound)="onMapElementsFound($event)"

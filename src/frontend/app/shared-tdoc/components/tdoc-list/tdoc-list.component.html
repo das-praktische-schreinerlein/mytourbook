@@ -10,51 +10,67 @@
                                       (showImage)="onShowImage($event)"
                                       (playerStarted)="onPlayerStarted($event)"
                                       (playerStopped)="onPlayerStopped($event)"
-                                      *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-page>
+                                      *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-page>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.SMALL">
             <app-tdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-small"
                                 [record]="record"
+                                [idx]="idx"
+                                [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
                                 [layout]="layout"
                                 [short]="short"
+                                [showItemMapFlag]="showItemMapFlag"
                                 [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                 [multiActionManager]="multiActionManager"
                                 (show)="onShow($event)"
                                 (showImage)="onShowImage($event)"
-                                *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-small>
+                                (showItemOnMap)="onShowItemOnMap($event)"
+                                *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-small>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.FLAT">
             <app-tdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-flat"
                                       [record]="record"
+                                      [idx]="idx"
+                                      [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
                                       [layout]="layout"
                                       [short]="short"
+                                      [showItemMapFlag]="showItemMapFlag"
                                       [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                       [multiActionManager]="multiActionManager"
                                       (show)="onShow($event)"
                                       (showImage)="onShowImage($event)"
-                                      *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-flat>
+                                      (showItemOnMap)="onShowItemOnMap($event)"
+                                      *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-flat>
         </ng-container>
         <ng-container *ngSwitchCase="Layout.THIN">
             <app-tdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-thin"
                                      [record]="record"
+                                     [idx]="idx"
+                                     [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
                                      [layout]="layout"
                                      [short]="short"
+                                     [showItemMapFlag]="showItemMapFlag"
                                      [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                      [multiActionManager]="multiActionManager"
                                      (show)="onShow($event)"
                                      (showImage)="onShowImage($event)"
-                                     *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item-thin>
+                                     (showItemOnMap)="onShowItemOnMap($event)"
+                                     *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-thin>
         </ng-container>
         <ng-container *ngSwitchDefault>
             <app-tdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-big"
                                 [record]="record"
+                                [idx]="idx"
+                                [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
                                 [layout]="layout"
                                 [short]="short"
+                                [showItemMapFlag]="showItemMapFlag"
                                 [backToSearchUrl]="getBackToSearchUrl(searchResult)"
                                 [multiActionManager]="multiActionManager"
                                 (show)="onShow($event)"
                                 (showImage)="onShowImage($event)"
-                                *ngFor="let record of searchResult.currentRecords"></app-tdoc-list-item>
+                                (showItemOnMap)="onShowItemOnMap($event)"
+                                *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item>
         </ng-container>
     </ng-container>
 </div>

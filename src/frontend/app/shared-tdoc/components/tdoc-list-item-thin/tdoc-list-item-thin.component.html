@@ -8,6 +8,8 @@
                        [checked]="isMultiActionSelectedForRecord()"
                        (click)="onChangeMultiActionForRecord($event)">
             </div>
+            <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
+                  [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
             <ng-container [ngSwitch]="listItem.currentRecord.type">
                 <ng-container *ngSwitchCase="'IMAGE'">
@@ -52,6 +54,8 @@
                        [checked]="isMultiActionSelectedForRecord()"
                        (click)="onChangeMultiActionForRecord($event)">
             </div>
+            <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
+                  [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
             <ng-container [ngSwitch]="listItem.currentRecord.type">
                 <ng-container *ngSwitchCase="'IMAGE'">
@@ -94,6 +98,8 @@
                        [checked]="isMultiActionSelectedForRecord()"
                        (click)="onChangeMultiActionForRecord($event)">
             </div>
+            <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
+                  [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
             <ng-container [ngSwitch]="listItem.currentRecord.type">
                 <ng-container *ngSwitchCase="'IMAGE'">

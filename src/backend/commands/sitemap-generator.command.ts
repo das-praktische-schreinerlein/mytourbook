@@ -9,6 +9,7 @@ import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 export class SiteMapGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -24,9 +25,7 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
             fileBase: 'sitemap-tdoc-',
             showBaseUrl: generatorConfig.sitemapConfig.showBaseUrl + 'sections/start/show/',
             urlGenerator: function (config: SitemapConfig, doc: PDocRecord): string[] {
-                const name = (doc.name ? doc.name : 'name')
-                    .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
-                    .replace(/ +/g, ' ').replace(/ /g, '-').trim();
+                const name = StringUtils.generateTechnicalName(doc.name ? doc.name : 'name');
                 return [config.showBaseUrl + name + '/' + doc.id];
             }
         });

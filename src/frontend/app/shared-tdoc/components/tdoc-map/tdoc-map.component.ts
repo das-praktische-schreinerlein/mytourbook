@@ -6,6 +6,7 @@ import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 @Component({
     selector: 'app-tdoc-map',
@@ -15,6 +16,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 export class TourDocMapComponent extends AbstractInlineComponent {
     showLoadingSpinner = false;
     mapElements: MapElement[] = [];
+    centerOnMapElements: MapElement[] = undefined;
     mapElementsReverseMap = new Map<MapElement, TourDocRecord>();
 
     @Input()
@@ -25,6 +27,9 @@ export class TourDocMapComponent extends AbstractInlineComponent {
 
     @Input()
     public tdocs: TourDocRecord[];
+
+    @Input()
+    public currentTDocId?: string;
 
     @Input()
     public mapCenterPos: L.LatLng;
@@ -60,6 +65,7 @@ export class TourDocMapComponent extends AbstractInlineComponent {
 
     renderMap() {
         this.mapElementsReverseMap.clear();
+        this.centerOnMapElements = undefined;
         if (!this.tdocs) {
             this.mapElements = [];
             this.showLoadingSpinner = false;
@@ -70,7 +76,11 @@ export class TourDocMapComponent extends AbstractInlineComponent {
         for (let i = 0; i < this.tdocs.length; i++) {
             const record =  this.tdocs[i];
 
-            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record, this.showImageTrackAndGeoPos)) {
+            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record, StringUtils.calcCharCodeForListIndex(i + 1), this.showImageTrackAndGeoPos)) {
+                if (record.id === this.currentTDocId) {
+                    mapElement.color = 'red';
+                    this.centerOnMapElements = [mapElement];
+                }
                 this.mapElementsReverseMap.set(mapElement, record);
             }
         }

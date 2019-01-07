@@ -22,11 +22,14 @@
                 </small>
             </ng-container>
             <ng-container *ngIf="!short">
-                <h5><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance>
-                    <app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+                <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
                 <div>
                     <div>
-                        <h5>{{listItem.currentRecord.type | translate }}</h5>
+                        <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+                            <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+                            <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+                            <span>{{listItem.currentRecord.type | translate }}</span>
+                        </h5>
                         <h5>{{listItem.currentRecord.subtype | translate }}</h5>
                         <div class="picture-small" *ngIf="listItem.image">
                             <img class="picture-small" width="300px"
@@ -83,11 +86,14 @@
     <ng-container *ngSwitchDefault="">
         <div class="card-block" [ngClass]="listItem.styleClassFor">
             <a [name]="listItem.currentRecord.id"></a>
-            <h5><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance>
-                <app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+            <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
             <div>
                 <div style="width: 100px; float: left">
-                    <h5>{{listItem.currentRecord.type | translate }}</h5>
+                    <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+                        <span>{{listItem.currentRecord.type | translate }}</span>
+                    </h5>
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"

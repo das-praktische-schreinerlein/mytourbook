@@ -135,12 +135,12 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(kategorie.l_id) AS count, l_name AS value,' +
+                    selectSql: 'SELECT COUNT(kategorie.l_id) AS count, GetTechName(l_name) AS value,' +
                     ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
                     ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
-                    filterField: 'l_name',
+                    filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -465,13 +465,13 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(image.l_id) AS count, l_name AS value, location.l_id AS id,' +
+                    selectSql: 'SELECT COUNT(image.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
                     ' CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS label' +
                     ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
                     ' LEFT JOIN image ON kategorie.k_id=image.k_id ' +
-                    ' GROUP BY l_name, location.l_id' +
+                    ' GROUP BY GetTechName(l_name), location.l_id' +
                     ' ORDER BY label ASC',
-                    filterField: 'l_name',
+                    filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -780,13 +780,13 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(video.l_id) AS count, l_name AS value, location.l_id AS id,' +
+                    selectSql: 'SELECT COUNT(video.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
                     ' CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS label' +
                     ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
                     ' LEFT JOIN video ON kategorie.k_id=video.k_id ' +
-                    ' GROUP BY l_name, location.l_id' +
+                    ' GROUP BY GetTechName(l_name), location.l_id' +
                     ' ORDER BY label ASC',
-                    filterField: 'l_name',
+                    filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -1102,12 +1102,12 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(tour.l_id) AS count, l_name AS value,' +
+                    selectSql: 'SELECT COUNt(tour.l_id) AS count, GetTechName(l_name) AS value,' +
                     ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
                     ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                    filterField: 'l_name',
+                    filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -1393,12 +1393,12 @@ export class TourDocSqlMediadbConfig {
                 'loc_id_i': {
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value,' +
+                    selectSql: 'SELECT COUNT(*) AS count, GetTechName(l_name) AS value,' +
                     ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, l_id AS id' +
                     ' FROM location' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                    filterField: 'l_name',
+                    filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -1568,12 +1568,12 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(trip.l_id) AS count, l_name AS value,' +
+                    selectSql: 'SELECT COUNt(trip.l_id) AS count, GetTechName(l_name) AS value,' +
                         ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
                         ' FROM location LEFT JOIN trip ON trip.l_id = location.l_id ' +
                         ' GROUP BY value, label, id' +
                         ' ORDER BY label ASC',
-                    filterField: 'l_name',
+                    filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {

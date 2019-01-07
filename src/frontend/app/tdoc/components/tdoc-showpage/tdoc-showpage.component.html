@@ -87,7 +87,8 @@
                           [height]="'400px'"
                           [mapZoom]="'9'"
                           [tdocs]="tracks"
-                          [showImageTrackAndGeoPos]="'true'"
+                          [currentTDocId]="currentMapTDocId"
+                          [showImageTrackAndGeoPos]="false"
                           [mapCenterPos]="undefined"></app-tdoc-map>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = true" *ngIf="flgMapAvailable && !flgShowProfileMap">
@@ -99,7 +100,7 @@
         <div class="container content-container map-container" *ngIf="flgShowProfileMap">
             <app-tdoc-profilemap [mapId]="'showProfileMap'"
                                  [height]="'370px'"
-                                 [showImageTrackAndGeoPos]="'true'"
+                                 [showImageTrackAndGeoPos]="false"
                                  [tdocs]="tracks"></app-tdoc-profilemap>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && flgProfileMapAvailable">
@@ -130,6 +131,8 @@
                                             [loadFacets]="'actiontype_ss'"
                                             [showTimetable]="'true'"
                                             [loadTrack]="'true'"
+                                            [showItemMapFlag]="true"
+                                            (showItemOnMap)="onShowItemOnMap($event)"
                                             (searchResultFound)="onRouteTracksFound($event)"
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
@@ -191,7 +194,6 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
-                                            [showResultList]="showResultListTrigger.LOCATION"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
                                             [label]="'Bilder'"
@@ -204,7 +206,10 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
-                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                                            [showOnlyIfRecordsFound]="true"
+                                            (searchResultFound)="onTracksFound($event)"
+                                            [showItemMapFlag]="true"
+                                            (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
                                             [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.tdoc.VIDEO"
@@ -277,7 +282,10 @@
                                             [layout]="defaultSubImageLayout"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.IMAGE"
-                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                                            [showOnlyIfRecordsFound]="true"
+                                            (searchResultFound)="onTracksFound($event)"
+                                            [showItemMapFlag]="true"
+                                            (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
                                             [label]="'Videos'"
                                             i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.tdoc.VIDEO"
@@ -335,6 +343,7 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.NEWS"
                                             [label]="'News'"
@@ -382,6 +391,7 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.NEWS"
                                             [label]="'News'"
@@ -415,6 +425,8 @@
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [loadTrack]="'true'"
+                                            [showItemMapFlag]="true"
+                                            (showItemOnMap)="onShowItemOnMap($event)"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
@@ -482,6 +494,8 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [loadTrack]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.TRACK"
+                                            [showItemMapFlag]="true"
+                                            (showItemOnMap)="onShowItemOnMap($event)"
                                             (searchResultFound)="onTracksFound($event)"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"

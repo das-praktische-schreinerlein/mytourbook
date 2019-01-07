@@ -9,14 +9,20 @@
 - fixed minor nav-bugs
 - use mycms-frontend-devtools
 - improved build-process
+- improved maps
+- improved location-filtering
 
 ### new features
 - devtools: added devtools (synced-preview...)
 - model+frontend: added loc_id for trip and blocked for additional types
 - build: improved build-process
+- frontend: link and shortcode for listitems to center map on item
 
 ### improvements
 - frontendserver: improved naming
+- database: updated model-scripts
+- backend: improved link-normalisation
+- model+frontend-backend: use technical name for location-filter
 
 ### bug fixes
 - frontend: fixed nav-bar  
@@ -27,6 +33,7 @@
 - migrated packages (ngx-lightbox, ngx-toastr)
 - migrated usage of Http to use HttpClient
 - moved common layout-styles to commons
+- itemnames in links are now lowercase
 
 ### known issues
 - frontend: IE till 11 not functional (can block rendering sometimes)

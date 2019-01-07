@@ -25,6 +25,13 @@ body {
 }
 
 /**
+ * human readable filters
+ */
+div.humanReadableSearchFilter span.filterValue {
+    font-weight: bold;
+}
+
+/**
  * highlights high-rated items
  */
 .list-item-persrate-0 {

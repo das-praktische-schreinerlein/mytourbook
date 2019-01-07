@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
@@ -14,6 +14,7 @@ import {CommonDocMultiActionManager} from '@dps/mycms-frontend-commons/dist/fron
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 
 @Component({
     selector: 'app-tdoc-inline-searchpage',
@@ -23,6 +24,12 @@ import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 })
 export class TourDocInlineSearchpageComponent extends
     CommonDocInlineSearchpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
+
+    @Input()
+    public showItemMapFlag?: false;
+
+    @Output()
+    public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();
 
     @Input()
     public baseSearchUrl? = 'tdoc/';
@@ -35,5 +42,9 @@ export class TourDocInlineSearchpageComponent extends
         super(appService, commonRoutingService, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, cd, elRef, pageUtils, searchFormUtils, tdocSearchFormUtils,
             new CommonDocMultiActionManager(appService, actionService));
+    }
+
+    onShowItemOnMap(tdoc: TourDocRecord) {
+        this.showItemOnMap.emit(tdoc);
     }
 }

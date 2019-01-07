@@ -14,7 +14,8 @@ import {
     IdCsvValidationRule,
     NumberValidationRule,
     StringNumberValidationRule,
-    TextValidationRule
+    TextValidationRule,
+    NameValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {isArray} from 'util';
 import {
@@ -50,6 +51,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
     locHirarchie: string;
     locHirarchieIds: string;
     persons: string;
+    techName: string;
 }
 
 export class TourDocRecord extends CommonDocRecord implements TourDocRecordType {
@@ -81,6 +83,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         locHirarchie: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.TEXT, new HierarchyValidationRule(false)),
         locHirarchieIds: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         persons: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        techName: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
     };
 
     locId: number;
@@ -103,6 +106,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
     locHirarchie: string;
     locHirarchieIds: string;
     persons: string;
+    techName: string;
 
     static cloneToSerializeToJsonObj(baseRecord: TourDocRecord, anonymizeMedia?: boolean): {}  {
         const record  = {};
@@ -235,7 +239,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
     public static instance = new TourDocRecordValidator();
 
     isValid(doc: BaseEntityRecord, errFieldPrefix?: string): boolean {
-        console.error("errors", this.validate(doc, errFieldPrefix));
+        console.warn('TourDocRecordValidator: validation-errors', this.validate(doc, errFieldPrefix));
+        // TODO: validate subtype requitred for TRACK, ROUTE, LOCATION
         return this.validate(doc, errFieldPrefix).length === 0;
     }
 

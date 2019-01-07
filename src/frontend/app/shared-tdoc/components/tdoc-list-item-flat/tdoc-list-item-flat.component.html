@@ -24,8 +24,11 @@
                     </ng-container>
                 </div>
                 <div class="col-2 type layout-big">
-                    <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance></h5>
-                    <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+                        <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
+                    </h5>
                     <h5>{{listItem.currentRecord.subtype | translate }}</h5>
                     <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                     <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
@@ -53,8 +56,11 @@
                                [checked]="isMultiActionSelectedForRecord()"
                                (click)="onChangeMultiActionForRecord($event)">
                     </div>
-                    <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance></h5>
-                    <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+                        <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
+                    </h5>
                     <h5>{{listItem.currentRecord.subtype | translate }}</h5>
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="50px"
@@ -116,8 +122,11 @@
                                [checked]="isMultiActionSelectedForRecord()"
                                (click)="onChangeMultiActionForRecord($event)">
                     </div>
-                    <h5 *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance></h5>
-                    <h5 *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</h5>
+                    <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+                        <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
+                    </h5>
                     <h5>{{listItem.currentRecord.subtype | translate }}</h5>
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="50px"

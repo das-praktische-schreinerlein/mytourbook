@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-converter.service';
@@ -7,6 +7,7 @@ import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {CommonDocListComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-list/cdoc-list.component';
 import {CommonDocLightboxAlbumConfig} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-lightbox.service';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 
 @Component({
     selector: 'app-tdoc-list',
@@ -15,6 +16,12 @@ import {CommonDocLightboxAlbumConfig} from '@dps/mycms-frontend-commons/dist/fro
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
+    @Input()
+    public showItemMapFlag?: false;
+
+    @Output()
+    public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();
+
     @Output()
     public playerStarted: EventEmitter<TourDocRecord> = new EventEmitter();
 
@@ -48,6 +55,10 @@ export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, 
 
     onPlayerStopped(tdoc: TourDocRecord) {
         this.playerStopped.emit(tdoc);
+    }
+
+    onShowItemOnMap(tdoc: TourDocRecord) {
+        this.showItemOnMap.emit(tdoc);
     }
 
     getBackToSearchUrl(searchResult: TourDocSearchResult): string {

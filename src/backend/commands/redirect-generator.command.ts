@@ -8,6 +8,7 @@ import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/reco
 import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 export class RedirectGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -34,9 +35,7 @@ export class RedirectGeneratorCommand implements AbstractCommand {
                                 srcBaseUrl + 'sections/start/show/nocomment/' + doc.id];
                         },
                         redirectGenerator: function (config: RedirectConfig, doc: PDocRecord): string {
-                            const name = (doc.name ? doc.name : 'name')
-                                .replace(/[^-a-zA-Z0-9.+]+/g, ' ')
-                                .replace(/ +/g, ' ').replace(/ /g, '-').trim();
+                            const name = StringUtils.generateTechnicalName(doc.name ? doc.name : 'name');
                             return destBaseUrl + 'sections/start/show/' + name + '/' + doc.id;
                         }
                     };

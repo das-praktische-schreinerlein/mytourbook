@@ -47,9 +47,11 @@
         <div class="container" *ngIf="showResultList">
             <app-tdoc-list [searchResult]="searchResult"
                            [multiActionManager]="multiActionManager"
+                           [showItemMapFlag]="showItemMapFlag"
                            [layout]="layout"
                            [short]="short"
-                           (show)="onShowDoc($event)"></app-tdoc-list>
+                           (show)="onShowDoc($event)"
+                           (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list>
         </div>
         <div class="container" *ngIf="showResultList">
             <app-cdoc-list-footer [searchResult]="searchResult"

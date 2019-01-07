@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
@@ -36,6 +36,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     TourDocDataService> {
     tracks: TourDocRecord[] = [];
     tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
+    currentMapTDocId = undefined;
     flgShowMap = false;
     flgShowProfileMap = false;
     flgShowTopImages = true;
@@ -79,7 +80,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, protected searchFormConverter: TourDocSearchFormConverter,
-                layoutService: LayoutService) {
+                layoutService: LayoutService, protected elRef: ElementRef) {
         super(route, cdocRoutingService, toastr, contentUtils, errorResolver, pageUtils, commonRoutingService,
             angularMarkdownService, angularHtmlService, cd, trackingProvider, appService, platformService, layoutService, environment);
     }
@@ -107,6 +108,10 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                     this.calcShowMaps();
                 }
             }
+        }
+        if (this.record.gpsTrackBasefile || this.record.geoLoc !== undefined
+            || (this.record.gpsTrackSrc !== undefined && this.record.gpsTrackSrc.length > 20)) {
+            realTracks.push(this.record);
         }
         this.tracks = realTracks;
 
@@ -138,6 +143,17 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         return false;
     }
 
+    onShowItemOnMap(tdoc: TourDocRecord) {
+        this.currentMapTDocId = undefined;
+        if (tdoc) {
+            this.currentMapTDocId = tdoc.id;
+            const el = this.elRef.nativeElement.querySelector('#showMap');
+            if (el !== undefined && (typeof el.scrollIntoView === 'function')) {
+                el.scrollIntoView(true);
+            }
+            this.cd.markForCheck();
+        }
+    }
 
     getFiltersForType(record: TourDocRecord, type: string): any {
         const minPerPage = isNumber(this.showResultListTrigger[type]) ? this.showResultListTrigger[type] : 0;
@@ -175,13 +191,14 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         if (BeanUtils.getValue(config, 'components.tdoc-showpage.availableTabs') !== undefined) {
             me.availableTabs = BeanUtils.getValue(config, 'components.tdoc-showpage.availableTabs');
         }
-        if (isArray(BeanUtils.getValue(config, 'components.tdoc-showpage.allowedQueryParams'))) {
-            const allowedParams = BeanUtils.getValue(config, 'components.tdoc-showpage.allowedQueryParams');
+        const allowedParams = BeanUtils.getValue(config, 'components.tdoc-showpage.allowedQueryParams');
+        if (me.queryParamMap && isArray(allowedParams)) {
             for (const type in me.showResultListTrigger) {
                 const paramName = 'show' + type;
-                if (allowedParams.indexOf(paramName) >= 0 && me.queryParamMap && me.queryParamMap.get(paramName)) {
+                const param = me.queryParamMap.get(paramName);
+                if (allowedParams.indexOf(paramName) >= 0 && param) {
                     me.showResultListTrigger[type] =
-                        TourDocSearchForm.genericFields.perPage.validator.sanitize(me.queryParamMap.get(paramName));
+                        TourDocSearchForm.genericFields.perPage.validator.sanitize(param);
                 }
             }
         }

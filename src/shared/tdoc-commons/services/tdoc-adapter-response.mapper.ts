@@ -52,6 +52,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/,/g, ',,')
             .replace(/ /g, '_') : '');
         values['name_s'] = props.name;
+        values['techname_s'] = props.techName;
         values['persons_txt'] =
             (props.persons ? props.persons.split(', ').join(',,') : '');
         values['playlists_txt'] =
@@ -200,6 +201,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['keywords'] = newKeywordsArr.join(', ');
 
         values['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'name_s', undefined);
+        values['techName'] = values['name'] ? values['name'].replace(/[- \/()+;.]+/g, '_').toLowerCase() : '';
         values['persons'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'persons_txt', '')
             .split(',,').join(', ');
         values['playlists'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'playlists_txt', '')

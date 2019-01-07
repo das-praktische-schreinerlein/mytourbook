@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocRatePersonalRecord} from '../../../../shared/tdoc-commons/model/records/tdocratepers-record';
-import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
+import {MathUtils} from '@dps/mycms-commons/dist/commons/utils/math.utils';
 
 @Component({
     selector: 'app-tdoc-ratepers-difficulty',
@@ -19,12 +19,12 @@ export class TourDocRatePersonalDifficultyComponent extends AbstractInlineCompon
     @Input()
     public small? = false;
 
-    constructor(private contentUtils: TourDocContentUtils, protected cd: ChangeDetectorRef) {
+    constructor(protected cd: ChangeDetectorRef) {
         super(cd);
     }
 
     calcRate(rate: number): number {
-        return this.contentUtils.calcRate(rate, 5);
+        return MathUtils.calcRate(rate, 15, 5);
     }
 
     protected updateData(): void {

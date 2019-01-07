@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef} from '@angular/core';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
@@ -38,6 +38,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
     mapCenterPos: L.LatLng = undefined;
     mapZoom = 9;
     mapElements: MapElement[] = [];
+    currentMapTDocId = undefined;
     profileMapElements: MapElement[] = [];
     flgShowMap = false;
     flgShowProfileMap = false;
@@ -49,7 +50,8 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
                 cdocRoutingService: TourDocRoutingService, toastr: ToastrService, pageUtils: PageUtils,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
-                tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService) {
+                tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService,
+                protected elRef: ElementRef) {
         super(route, commonRoutingService, errorResolver, tdocDataService, searchFormConverter, cdocRoutingService,
             toastr, pageUtils, cd, trackingProvider, appService, platformService, layoutService, searchFormUtils,
             tdocSearchFormUtils, new CommonDocMultiActionManager(appService, actionService), environment);
@@ -61,6 +63,15 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
 
     onMapCenterChanged(newCenter: L.LatLng) {
         console.log("newCenter", newCenter);
+    }
+
+    onShowItemOnMap(tdoc: TourDocRecord) {
+        this.currentMapTDocId = undefined;
+        if (tdoc) {
+            this.currentMapTDocId = tdoc.id;
+            this.pageUtils.scrollToTopOfElement(this.elRef);
+            this.cd.markForCheck();
+        }
     }
 
     onMapElementsFound(mapElements: MapElement[]) {

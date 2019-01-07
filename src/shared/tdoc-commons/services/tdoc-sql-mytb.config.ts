@@ -108,11 +108,11 @@ export class TourDocSqlMytbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
-                    ' FROM kategorie_full INNER JOIN location ON kategorie_full.l_id = location.l_id ' +
+                    selectSql: 'SELECT COUNT(*) AS count, GetTechName(l_name) AS value, l_lochirarchietxt AS label' +
+                    ' FROM location LEFT JOIN kategorie_full ON kategorie_full.l_id = location.l_id ' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
-                    filterField: 'l_lochirarchietxt',
+                    filterField: 'GetTechName(l_lochirarchietxt)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -373,12 +373,12 @@ export class TourDocSqlMytbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNT(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
-                    ' FROM image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id ' +
-                    '   INNER JOIN location ON location.l_id = kategorie_full.l_id ' +
+                    selectSql: 'SELECT COUNT(*) AS count, GetTechName(l_name) AS value, l_lochirarchietxt AS label' +
+                    ' FROM location LEFT JOIN kategorie_full ON location.l_id = kategorie_full.l_id ' +
+                    ' LEFT JOIN image ON kategorie_full.k_id=image.k_id ' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
-                    filterField: 'l_lochirarchietxt',
+                    filterField: 'GetTechName(l_lochirarchietxt)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -624,11 +624,11 @@ export class TourDocSqlMytbConfig {
                     noFacet: true
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
-                    ' FROM tour INNER JOIN location ON tour.l_id = location.l_id ' +
+                    selectSql: 'SELECT COUNt(*) AS count, GetTechName(l_name) AS value, l_lochirarchietxt AS label' +
+                    ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
-                    filterField: 'l_lochirarchietxt',
+                    filterField: 'GetTechName(l_lochirarchietxt)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
@@ -854,11 +854,11 @@ export class TourDocSqlMytbConfig {
                 'loc_id_i': {
                 },
                 'loc_lochirarchie_txt': {
-                    selectSql: 'SELECT COUNt(*) AS count, l_name AS value, l_lochirarchietxt AS label' +
+                    selectSql: 'SELECT COUNt(*) AS count, GetTechName(l_name) AS value, l_lochirarchietxt AS label' +
                     ' FROM location' +
                     ' GROUP BY value, label' +
                     ' ORDER BY count DESC',
-                    filterField: 'l_lochirarchietxt',
+                    filterField: 'GetTechName(l_lochirarchietxt)',
                     action: AdapterFilterActions.LIKEIN
                 },
                 'month_is': {
