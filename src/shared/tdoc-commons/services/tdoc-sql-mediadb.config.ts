@@ -140,8 +140,8 @@ export class TourDocSqlMediadbConfig {
                     ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
-                    filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.IN
+                    filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                    action: AdapterFilterActions.LIKE
                 },
                 'month_is': {
                     selectField: 'MONTH(k_datevon)',
@@ -217,7 +217,7 @@ export class TourDocSqlMediadbConfig {
                 'dataTechDistAsc': 'k_distance ASC',
                 'forExport': 'k_datevon ASC',
                 'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
-                'location': 'l_name ASC',
+                'location': 'l_lochirarchietxt ASC',
                 'relevance': 'k_datevon DESC'
             },
             filterMapping: {
@@ -466,11 +466,11 @@ export class TourDocSqlMediadbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNT(image.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
-                    ' CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS label' +
-                    ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
-                    ' LEFT JOIN image ON kategorie.k_id=image.k_id ' +
+                    ' location.l_name AS label' +
+                    ' FROM location INNER JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                    ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
                     ' GROUP BY GetTechName(l_name), location.l_id' +
-                    ' ORDER BY label ASC',
+                    ' ORDER BY l_name ASC',
                     filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.IN
                 },
@@ -781,13 +781,13 @@ export class TourDocSqlMediadbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNT(video.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
-                    ' CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS label' +
+                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label' +
                     ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
                     ' LEFT JOIN video ON kategorie.k_id=video.k_id ' +
                     ' GROUP BY GetTechName(l_name), location.l_id' +
                     ' ORDER BY label ASC',
-                    filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.IN
+                    filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                    action: AdapterFilterActions.LIKE
                 },
                 'month_is': {
                     selectField: 'MONTH(v_date)',
@@ -1107,8 +1107,8 @@ export class TourDocSqlMediadbConfig {
                     ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                    filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.IN
+                    filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                    action: AdapterFilterActions.LIKE
                 },
                 'month_is': {
                     selectField: 'MONTH(t_datevon)',
@@ -1398,8 +1398,8 @@ export class TourDocSqlMediadbConfig {
                     ' FROM location' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label ASC',
-                    filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.IN
+                    filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                    action: AdapterFilterActions.LIKE
                 },
                 'month_is': {
                     noFacet: true
@@ -1437,7 +1437,7 @@ export class TourDocSqlMediadbConfig {
             sortMapping: {
                 'distance': 'geodist ASC',
                 'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC',
-                'location': 'l_name ASC',
+                'location': 'l_lochirarchietxt ASC',
                 'relevance': 'l_name ASC'
             },
             spartialConfig: {
@@ -1573,8 +1573,8 @@ export class TourDocSqlMediadbConfig {
                         ' FROM location LEFT JOIN trip ON trip.l_id = location.l_id ' +
                         ' GROUP BY value, label, id' +
                         ' ORDER BY label ASC',
-                    filterField: 'GetTechName(l_name)',
-                    action: AdapterFilterActions.IN
+                    filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                    action: AdapterFilterActions.LIKE
                 },
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
@@ -1613,6 +1613,7 @@ export class TourDocSqlMediadbConfig {
                 'date': 'tr_datevon DESC',
                 'dateAsc': 'tr_datevon ASC',
                 'forExport': 'tr_datevon ASC',
+                'location': 'l_lochirarchietxt ASC',
                 'relevance': 'tr_datevon DESC'
             },
             spartialConfig: {

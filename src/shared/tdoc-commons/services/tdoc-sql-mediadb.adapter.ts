@@ -103,6 +103,8 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
     protected transformToSqlDialect(sql: string): string {
         if (this.config.knexOpts.client !== 'mysql') {
             // dirty workaround because sqlite has no functions as mysql
+            sql = sql.replace(/GetTechName\(GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)\)/g,
+                'GetTechName(location.l_name)');
             sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/g,
                 '"T" || location.l_typ || "L" || location.l_parent_id || " -> " || location.l_name');
             sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/g,
