@@ -208,12 +208,19 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
 
     protected updateFormGroup(tdocSearchSearchResult: TourDocSearchResult): void {
         const values: TourDocSearchForm = tdocSearchSearchResult.searchForm;
+        let nearbyDistance = 10;
+        if (values.nearby) {
+            const arr = this.tdocSearchFormUtils.extractNearbyPos(values.nearby);
+            if (arr.length === 3) {
+                nearbyDistance = arr[2];
+            }
+        }
         this.searchFormGroup = this.fb.group({
             when: [(values.when ? values.when.split(/,/) : [])],
             what: [(values.what ? values.what.split(/,/) : [])],
             where: [(values.where ? values.where.split(/,/) : [])],
             nearbyAddress: values.nearbyAddress,
-            nearbyDistance: '10',
+            nearbyDistance: nearbyDistance,
             nearby: values.nearby,
             fulltext: values.fulltext,
             moreFilter: values.moreFilter,
