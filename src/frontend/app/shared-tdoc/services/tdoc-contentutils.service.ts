@@ -11,10 +11,12 @@ import {
     CommonDocContentUtilsConfig,
     CommonItemData
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {BaseObjectDetectionImageObjectRecord} from '../../../shared/tdoc-commons/model/records/baseobjectdetectionimageobject-record';
 import LatLng = L.LatLng;
 
 export interface TourDocItemData extends CommonItemData {
     tracks?: TourDocRecord[];
+    objects?: BaseObjectDetectionImageObjectRecord[];
     flgShowMap?: boolean;
     flgShowProfileMap?: boolean;
     flgMapAvailable?: boolean;
@@ -116,7 +118,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                     filters['perPage'] = 12;
                 }
             }
-        } else if (record.type === 'IMAGE') {
+        } else if (record.type === 'IMAGE' || record.type === 'ODIMGOBJECT') {
             if (type === 'TRACK' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
             } else if (type === 'TOPIMAGE') {
@@ -258,10 +260,15 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             itemData.flgShowMap = false;
             itemData.flgShowProfileMap = false;
             itemData.tracks = [];
+            itemData.objects = [];
             return false;
         }
 
         itemData.styleClassFor = this.getStyleClassForRecord(<TourDocRecord>itemData.currentRecord, layout);
+
+        if (itemData.currentRecord['tdocodimageobjects'] !== undefined && itemData.currentRecord['tdocodimageobjects'].length > 0) {
+            itemData.objects = itemData.currentRecord['tdocodimageobjects'];
+        }
 
         if (itemData.currentRecord['tdocimages'] !== undefined && itemData.currentRecord['tdocimages'].length > 0) {
             itemData.image = itemData.currentRecord['tdocimages'][0];

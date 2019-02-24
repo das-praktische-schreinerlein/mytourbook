@@ -320,4 +320,49 @@ export class TourDocSqlMediadbActionTagAdapter {
 
         return result;
     }
+
+    public executeActionTagObjectsState(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+        opts = opts || {};
+
+        if (!utils.isInteger(id)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' id not an integer');
+        }
+        if (actionTagForm.payload === undefined) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
+        }
+
+        let fieldName;
+        let tableName;
+        let idName;
+        switch (table) {
+            case 'odimgobject':
+                fieldName = 'io_state';
+                tableName = 'image_object';
+                idName = 'io_id';
+                break;
+            default:
+                return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
+        }
+        const value = actionTagForm.payload['state'];
+        if (!this.keywordValidationRule.isValid(value)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' state not valid');
+        }
+
+        let updateSql = 'UPDATE ' + tableName + ' SET ' + fieldName + '="' + value + '"' +
+            '  WHERE ' + idName + ' = "' + id + '"';
+        updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
+
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        const rawUpdate = sqlBuilder.raw(updateSql);
+        const result = new Promise((resolve, reject) => {
+            rawUpdate.then(function doneDelete(dbresults: any) {
+                return resolve(true);
+            }).catch(function errorPlaylist(reason) {
+                console.error('_doActionTag update ' + tableName + ' blocked failed:', reason);
+                return reject(reason);
+            });
+        });
+
+        return result;
+    }
 }

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {CommonDocListItemComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-list-item/cdoc-list-item.component';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
@@ -19,12 +19,31 @@ export class TourDocListItemComponent  extends CommonDocListItemComponent {
     @Input()
     public showItemMapFlag?: false;
 
+    @Input()
+    public showItemObjectsFlag?: false;
+
     @Output()
     public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();
+
+    @ViewChild('mainImage')
+    mainImage: ElementRef;
+    imageWidth = 0;
 
     constructor(contentUtils: TourDocContentUtils, cd: ChangeDetectorRef, layoutService: LayoutService) {
         super(contentUtils, cd, layoutService, );
         this.listLayoutName = 'default';
+    }
+
+    public submitShowItemOnMap(tdoc: TourDocRecord) {
+        this.showItemOnMap.emit(tdoc);
+        return false;
+    }
+
+    onResizeMainImage() {
+        if (this.mainImage && this.mainImage.nativeElement && this.mainImage.nativeElement['width']) {
+            this.imageWidth = this.mainImage.nativeElement['width'];
+            this.cd.markForCheck();
+        }
     }
 
     protected updateData() {
@@ -36,11 +55,6 @@ export class TourDocListItemComponent  extends CommonDocListItemComponent {
         }
         super.updateData();
         this.cd.markForCheck();
-    }
-
-    public submitShowItemOnMap(tdoc: TourDocRecord) {
-        this.showItemOnMap.emit(tdoc);
-        return false;
     }
 
 }

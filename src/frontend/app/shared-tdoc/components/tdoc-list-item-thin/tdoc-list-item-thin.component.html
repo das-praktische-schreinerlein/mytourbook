@@ -11,8 +11,8 @@
             <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
                   [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
-            <ng-container [ngSwitch]="listItem.currentRecord.type">
-                <ng-container *ngSwitchCase="'IMAGE'">
+            <ng-container [ngSwitch]="true">
+                <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'ODIMGOBJECT'">
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"
@@ -20,7 +20,7 @@
                              alt="{{listItem.image.name}}">
                     </ng-container>
                 </ng-container>
-                <ng-container *ngSwitchCase="'VIDEO'">
+                <ng-container *ngSwitchCase="listItem.currentRecord.type === 'VIDEO'">
                     <ng-container *ngIf="listItem.video">
                         <img class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"
@@ -42,7 +42,12 @@
             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
         </div>
         <div class="col-2 layout-big">
-            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+            <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+            </ng-container>
+            <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+            </ng-container>
         </div>
     </ng-container>
 
@@ -57,8 +62,8 @@
             <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
                   [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
-            <ng-container [ngSwitch]="listItem.currentRecord.type">
-                <ng-container *ngSwitchCase="'IMAGE'">
+            <ng-container [ngSwitch]="true">
+                <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'ODIMGOBJECT'">
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"
@@ -66,7 +71,7 @@
                              alt="{{listItem.image.name}}">
                     </ng-container>
                 </ng-container>
-                <ng-container *ngSwitchCase="'VIDEO'">
+                <ng-container *ngSwitchCase="listItem.currentRecord.type === 'VIDEO'">
                     <ng-container *ngIf="listItem.video">
                         <img class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"
@@ -86,7 +91,12 @@
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
         </div>
         <div class="col-4 layout-small">
-            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+            <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+            </ng-container>
+            <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+            </ng-container>
         </div>
     </ng-container>
 
@@ -101,17 +111,18 @@
             <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
                   [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
-            <ng-container [ngSwitch]="listItem.currentRecord.type">
-                <ng-container *ngSwitchCase="'IMAGE'">
+            <ng-container [ngSwitch]="true">
+                <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'ODIMGOBJECT'">
                     <ng-container *ngIf="listItem.image">
-                        <img class="picture-thumbnail" width="50px"
+                        <img #mainImage class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"
                              (click)="submitShowImage(listItem.currentRecord)"
-                             alt="{{listItem.image.name}}">
+                             alt="{{listItem.image.name}}"
+                             (resize)="onResizeMainImage(mainImage)"
+                             (load)="onResizeMainImage(mainImage)">
                     </ng-container>
                 </ng-container>
-                <ng-container *ngSwitchCase="'VIDEO'">
-                    video
+                <ng-container *ngSwitchCase="listItem.currentRecord.type === 'VIDEO'">
                     <ng-container *ngIf="listItem.video">
                         <img class="picture-thumbnail" width="50px"
                              [src]="listItem.thumbnailUrl"
@@ -131,7 +142,12 @@
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
         </div>
         <div class="col-4 layout-verysmall">
-            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+            <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+            </ng-container>
+            <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+            </ng-container>
         </div>
     </ng-container>
 </div>

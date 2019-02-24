@@ -1,0 +1,8 @@
+<div class="techvaluetable" *ngIf="objects !== undefined && objects.length > 0">
+    <ng-container *ngFor="let object of objects">
+        <div class="entry"
+            [ngClass]="'odimgobject-state-' + object.state">
+            <div class="label">{{object.name}}</div><div class="value">{{'odimgobject.state.' + object.state | translate }}</div>
+        </div>
+    </ng-container>
+</div>

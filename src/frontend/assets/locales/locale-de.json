@@ -17,6 +17,7 @@
     "APPNAME": "MyTourBook",
     "LOCATION": "Region",
     "IMAGE": "Foto",
+    "ODIMGOBJECT": "Objekt",
     "VIDEO": "Video",
     "TRACK": "Begehung",
     "TRIP": "Trip",
@@ -24,6 +25,7 @@
     "ROUTE": "Route",
     "location": "Region",
     "image": "Foto",
+    "odimgobject": "Objekt",
     "video": "Video",
     "track": "Begehung",
     "trip": "Trip",
@@ -284,5 +286,16 @@
     "label.tdocratetech.klettern": "Klettern",
     "label.tdocratetech.ks": "Klettersteig",
     "label.tdocratetech.overall": "Gesamt",
-    "label.tdocratetech.schneeschuh": "Schneeschuh"
+    "label.tdocratetech.schneeschuh": "Schneeschuh",
+    "odimgobject.state.UNKNOWN": "Unbekannt",
+    "odimgobject.state.OPEN": "Offen",
+    "odimgobject.state.ERROR": "Fehler",
+    "odimgobject.state.RUNNING_SUGGESTED,": "Vorschlag",
+    "odimgobject.state.RUNNING_MANUAL_APPROVED": "\u2714 OK",
+    "odimgobject.state.RUNNING_MANUAL_REJECTED": "\u2716 Falsch",
+    "odimgobject.state.RUNNING_MANUAL_CORRECTION_NEEDED": "\u270E zu korrigieren",
+    "odimgobject.state.RUNNING_MANUAL_CORRECTED": "\u271E Korrigiert",
+    "odimgobject.state.DONE_APPROVAL_PROCESSED": "\u2714 OK processiert",
+    "odimgobject.state.DONE_REJECTION_PROCESSED": "\u2716 Falsch prozessiert",
+    "odimgobject.state.DONE_CORRECTION_PROCESSED": "\u270E Korrektur prozessiert"
 }

@@ -1,5 +1,5 @@
 <ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="true">
-    <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+    <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO' || listItem.currentRecord.type === 'ODIMGOBJECT'">
         <div class="card-block card-block-image" [ngClass]="listItem.styleClassFor">
             <a [name]="listItem.currentRecord.id"></a>
             <div>
@@ -15,10 +15,17 @@
                         <span>{{listItem.currentRecord.type | translate }}</span>
                     </h5>
                     <ng-container *ngIf="listItem.image">
-                        <img class="picture-thumbnail-big" width="100px"
-                             [src]="listItem.thumbnailUrl"
-                             (click)="submitShowImage(listItem.currentRecord)"
-                             alt="{{listItem.image.name}}">
+                        <div class="picture-with-objects-container">
+                            <img #mainImage class="picture-thumbnail-big" width="100px"
+                                 [src]="listItem.thumbnailUrl"
+                                 (click)="submitShowImage(listItem.currentRecord)"
+                                 alt="{{listItem.image.name}}"
+                                 (resize)="onResizeMainImage()"
+                                 (load)="onResizeMainImage()">
+                            <app-tdoc-odobjectrectangles [objects]="listItem.objects"
+                                 [width]="imageWidth"
+                                 *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-tdoc-odobjectrectangles>
+                        </div>
                     </ng-container>
                     <ng-container *ngIf="listItem.video">
                         <app-tdoc-videoplayer *ngIf="listItem.video"
@@ -28,8 +35,13 @@
                                               (show)="submitShow(listItem.currentRecord)"></app-tdoc-videoplayer>
                     </ng-container>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord | tdocdate}}</h5></a>
-                    <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers >
-                    <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                        <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                    </ng-container>
+                    <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                        <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers >
+                        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    </ng-container>
                     <ng-container *ngIf="!short">
                         <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsSmall'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
                     </ng-container>

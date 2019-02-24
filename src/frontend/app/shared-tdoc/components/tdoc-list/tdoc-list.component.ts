@@ -19,6 +19,9 @@ export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, 
     @Input()
     public showItemMapFlag?: false;
 
+    @Input()
+    public showItemObjectsFlag?: false;
+
     @Output()
     public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();
 

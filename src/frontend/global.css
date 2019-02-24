@@ -10,6 +10,11 @@ body {
     background-attachment: fixed;
 }
 
+/** move to background: changes with new bootstrap?? **/
+.fullpage-background {
+    z-index: -1;
+}
+
 /*******************
  * Common Style Elements
  *******************/
@@ -50,6 +55,30 @@ div.humanReadableSearchFilter span.filterValue {
     border: 3px solid gold;
     border-color: gold !IMPORTANT;
     background: gold;
+}
+
+/**
+ * object-detection states
+ **/
+.odimgobject-state-UNKNOWN, .odimgobject-state-OPEN, .odimgobject-state-RUNNING_SUGGESTED {
+    color: blue;
+    border-color: blue;
+}
+.odimgobject-state-FALED {
+    color: red;
+    border-color: red;
+}
+.odimgobject-state-RUNNING_MANUAL_APPROVED, .odimgobject-state-DONE_APPROVAL_PROCESSED {
+    color: greenyellow;
+    border-color: greenyellow;
+}
+.odimgobject-state-RUNNING_MANUAL_CORRECTED, .odimgobject-state-DONE_CORRECTION_PROCESSED {
+    color: yellow;
+    border-color: yellow;
+}
+.odimgobject-state-RUNNING_MANUAL_REJECTED, .odimgobject-state-DONE_REJECTION_PROCESSED {
+    color: red;
+    border-color: red;
 }
 
 /**
@@ -122,6 +151,12 @@ div.leaflet-container {
     border-radius: 10px;
 }
 
+
+div.picture-with-objects-container {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
 /*******************
  * Cookie-law
  *******************/

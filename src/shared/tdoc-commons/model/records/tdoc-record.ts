@@ -29,6 +29,7 @@ import {TourDocImageRecord, TourDocImageRecordFactory, TourDocImageRecordValidat
 import {TourDocVideoRecord, TourDocVideoRecordFactory, TourDocVideoRecordValidator} from './tdocvideo-record';
 import {TourDocRatePersonalRecord, TourDocRatePersonalRecordFactory, TourDocRatePersonalRecordValidator} from './tdocratepers-record';
 import {TourDocRateTechRecord, TourDocRateTechRecordFactory, TourDocRateTechRecordValidator} from './tdocratetech-record';
+import {TourDocObjectDetectionImageObjectRecordFactory} from './tdocobjectdetectectionimageobject-record';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;
@@ -55,7 +56,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
 }
 
 export class TourDocRecord extends CommonDocRecord implements TourDocRecordType {
-    static tdocRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocimages', 'tdocvideos', 'tdocratepers', 'tdocratetech'];
+    static tdocRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocimages', 'tdocvideos', 'tdocratepers', 'tdocratetech', 'tdocodimageobjects'];
     static tdocValidationRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech'];
     static tdocFields = {
         locId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
@@ -67,6 +68,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         imageId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         videoId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
 
+        // TODO: DateValidationRule must check if Date or String with regexp
         datestart: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
         dateend: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.DATE, new DateValidationRule(false)),
 
@@ -191,7 +193,13 @@ export let TourDocRecordRelation: any = {
             foreignKey: 'tdoc_id',
             // reference to related objects in memory
             localField: 'tdocvideos'
-        }
+        },
+        tdocodimageobject: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocodimageobjects'
+        },
     }
 };
 
@@ -228,6 +236,8 @@ export class TourDocRecordFactory extends CommonDocRecordFactory {
                 return TourDocRatePersonalRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocratetech':
                 return TourDocRateTechRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocodimageobjects':
+                return TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(values, {});
             default:
                 return super.getSanitizedRelationValues(relation, values);
         }

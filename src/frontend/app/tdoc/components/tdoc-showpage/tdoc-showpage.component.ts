@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {ActivatedRoute} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
@@ -46,6 +46,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     defaultSubImageLayout = Layout.SMALL;
     showResultListTrigger: {
         IMAGE: boolean|number;
+        ODIMGOBJECT: boolean|number;
         VIDEO: boolean|number;
         LOCATION: boolean|number;
         NEWS: boolean|number;
@@ -55,6 +56,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRIP: boolean|number;
     } = {
         IMAGE: false,
+        ODIMGOBJECT: false,
         VIDEO: false,
         LOCATION: false,
         NEWS: false,
@@ -70,9 +72,15 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         'LOCATION': true,
         'TRIP': true,
         'VIDEO': true,
-        'NEWS': true
+        'NEWS': true,
+        'ODIMGOBJECT': true
     };
     private layoutSize: LayoutSizeData;
+    private showItemObjectsFlag = false;
+
+    @ViewChild('mainImage')
+    mainImage: ElementRef;
+    imageWidth = 600;
 
     constructor(route: ActivatedRoute, cdocRoutingService: TourDocRoutingService,
                 toastr: ToastrService, contentUtils: TourDocContentUtils,
@@ -151,6 +159,13 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             if (el !== undefined && (typeof el.scrollIntoView === 'function')) {
                 el.scrollIntoView(true);
             }
+            this.cd.markForCheck();
+        }
+    }
+
+    onResizeMainImage() {
+        if (this.mainImage.nativeElement['width']) {
+            this.imageWidth = this.mainImage.nativeElement['width'];
             this.cd.markForCheck();
         }
     }

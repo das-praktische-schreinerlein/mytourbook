@@ -2,6 +2,26 @@
  
 # Versions
  
+## 3.1.0
+- added new type+features for managing object-detection image-objects
+
+### new features
+- common: added new type+features for managing object-detection image-objects
+
+### improvements
+- none
+
+### bug fixes
+- none
+ 
+### breaking changes
+- none
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
+
+
 ## 3.0.0
 - upgraded packages to be angular5/6-compatible
 - moved common layout-styles to commons

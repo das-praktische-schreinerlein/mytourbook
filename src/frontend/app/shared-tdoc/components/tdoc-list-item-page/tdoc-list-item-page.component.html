@@ -1,16 +1,29 @@
 <ng-container *ngIf="listItem.currentRecord !== undefined" [ngSwitch]="listItem.currentRecord.type">
-    <ng-container [ngSwitch]="listItem.currentRecord.type" *ngIf="listItem.currentRecord !== undefined">
-        <ng-container *ngSwitchCase="'IMAGE'">
+    <ng-container [ngSwitch]="true" *ngIf="listItem.currentRecord !== undefined">
+        <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'ODIMGOBJECT'">
             <div class="container content-container image-content-container" *ngIf="listItem.currentRecord !== undefined">
                 <div style="color: #ccc"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></div>
                 <div class="image-container">
                     <ng-container *ngIf="listItem.image !== undefined">
-                        <img class="picture-big" [style.max-height]="maxImageHeight" [src]="listItem.previewUrl" alt="{{listItem.image.name}}">
+                        <div class="picture-with-objects-container"
+                             [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
+                            <img #mainImage class="picture-big" [style.max-height]="maxImageHeight"
+                                 [src]="listItem.previewUrl"
+                                 alt="{{listItem.image.name}}"
+                                 (resize)="onResizeMainImage()"
+                                 (load)="onResizeMainImage()">
+                            <app-tdoc-odobjectrectangles [objects]="listItem.objects"
+                                 [width]="imageWidth"
+                                 *ngIf="imageWidth > 0 && (showItemObjectsFlag || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-tdoc-odobjectrectangles>
+                        </div>
                     </ng-container>
                 </div>
                 <div style="color: #ccc">
                     <span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
                     <span>{{listItem.currentRecord | tdocdate}} {{listItem.currentRecord.name}}</span>
+                    <ng-container *ngIf="showItemObjectsFlag || listItem.currentRecord.type === 'ODIMGOBJECT'">
+                        <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                    </ng-container>
                     <button class="btn btn-configure btn-sm right"
                             (click)="imageShowMap = true; listItem.flgShowMap = listItem.flgMapAvailable && imageShowMap; listItem.flgShowProfileMap = listItem.flgProfileMapAvailable && true;"
                             *ngIf="(listItem.flgMapAvailable || listItem.flgProfileMapAvailable) && (!listItem.flgShowMap)">
@@ -24,7 +37,7 @@
                 </div>
             </div>
         </ng-container>
-        <ng-container *ngSwitchCase="'VIDEO'">
+        <ng-container *ngSwitchCase="listItem.currentRecord.type === 'VIDEO'">
             <div class="container content-container image-content-container" *ngIf="listItem.currentRecord !== undefined">
                 <div style="color: #ccc"><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></div>
                 <div class="image-container">

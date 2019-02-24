@@ -19,7 +19,7 @@ export class TourDocTeamFilterConfig {
 
 export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
 
-    static UPDATE_RELATION = ['tdocimage', 'tdocvideo', 'tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech'];
+    static UPDATE_RELATION = ['tdocimage', 'tdocvideo', 'tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech', 'tdocodimageobjects'];
     private validMoreNumberFilterNames = {
         id: true,
         track_id_i: true,

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {Layout} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
@@ -37,7 +37,11 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
         flgProfileMapAvailable: false
     };
     maxImageHeight = '0';
+    imageWidth = 600;
     imageShowMap = false;
+
+    @ViewChild('mainImage')
+    mainImage: ElementRef;
 
     @Input()
     public record: TourDocRecord;
@@ -50,6 +54,9 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
 
     @Input()
     public short? = false;
+
+    @Input()
+    public showItemObjectsFlag?: false;
 
     @Output()
     public show: EventEmitter<TourDocRecord> = new EventEmitter();
@@ -65,7 +72,8 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
 
     constructor(contentUtils: TourDocContentUtils, protected cd: ChangeDetectorRef, private platformService: PlatformService,
                 private angularMarkdownService: AngularMarkdownService, private angularHtmlService: AngularHtmlService,
-                private tdocDataService: TourDocDataService, private searchFormConverter: TourDocSearchFormConverter) {
+                private tdocDataService: TourDocDataService, private searchFormConverter: TourDocSearchFormConverter,
+                ) {
         super(cd);
         this.contentUtils = contentUtils;
     }
@@ -82,6 +90,13 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
         }
 
         return false;
+    }
+
+    onResizeMainImage() {
+        if (this.mainImage && this.mainImage.nativeElement && this.mainImage.nativeElement['width']) {
+            this.imageWidth = this.mainImage.nativeElement['width'];
+            this.cd.markForCheck();
+        }
     }
 
     onVideoStarted() {

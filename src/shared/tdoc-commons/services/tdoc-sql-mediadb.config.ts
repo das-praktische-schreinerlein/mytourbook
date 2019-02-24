@@ -365,6 +365,22 @@ export class TourDocSqlMediadbConfig {
                     parameterNames: ['id']
                 },
                 {
+                    profile: 'image_objects',
+                    sql: 'SELECT GROUP_CONCAT(distinct concat("ioId=", image_object.IO_ID, ":::key=", image_object.IO_OBJ_TYPE,' +
+                        ' ":::imgWidth=", image_object.IO_IMG_WIDTH,' +
+                        ' ":::imgHeight=", image_object.IO_IMG_HEIGHT,' +
+                        ' ":::objX=", image_object.IO_OBJ_X1,' +
+                        ' ":::objY=", image_object.IO_OBJ_Y1,' +
+                        ' ":::objWidth=", image_object.IO_OBJ_WIDTH,' +
+                        ' ":::objHeight=", image_object.IO_OBJ_HEIGHT,' +
+                        ' ":::name=", objects.o_name,' +
+                        ' ":::state=", image_object.IO_STATE) separator ";;") as i_objects ' +
+                        'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
+                        ' INNER JOIN objects ON image_object.io_obj_type=objects.o_key ' +
+                        'WHERE image.i_id in (:id)',
+                    parameterNames: ['id']
+                },
+                {
                     profile: 'keywords',
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM image INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
@@ -374,7 +390,7 @@ export class TourDocSqlMediadbConfig {
                     modes: ['full']
                 }
             ],
-            groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons'],
+            groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons', 'i_objects'],
             selectFieldList: [
                 '"IMAGE" AS type',
                 'k_type',
@@ -516,7 +532,7 @@ export class TourDocSqlMediadbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['image', 'video', 'track', 'route', 'location', 'trip', 'news'],
+                    constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news'],
                     filterField: '"image"',
                     selectLimit: 1
                 },
@@ -584,6 +600,328 @@ export class TourDocSqlMediadbConfig {
                 'image.i_meta_name': ':name_s:',
                 'image.i_dir': 'SUBSTRING(":i_fav_url_txt:", 1, CHARINDEX("/", ":i_fav_url_txt:") - 1)',
                 'image.i_file': 'SUBSTRING(":i_fav_url_txt:", CHARINDEX("/", ":i_fav_url_txt:"))'
+            },
+            fieldMapping: {
+                id: 'id',
+                image_id_i: 'i_id',
+                image_id_is: 'i_id',
+                loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
+                route_id_i: 't_id',
+                route_id_is: 't_id',
+                track_id_i: 'k_id',
+                track_id_is: 'k_id',
+                trip_id_i: 'tr_id',
+                trip_id_is: 'tr_id',
+                news_id_i: 'n_id',
+                news_id_is: 'n_id',
+                actiontype_s: 'actionType',
+                blocked_i: 'i_gesperrt',
+                data_tech_alt_asc_i: 'k_altitude_asc',
+                data_tech_alt_desc_i: 'k_altitude_desc',
+                data_tech_alt_min_i: 'i_gps_ele',
+                data_tech_alt_max_i: 'i_gps_ele',
+                data_tech_dist_f: 'k_distance',
+                data_tech_dur_f: 'dur',
+                dateshow_dt: 'i_date',
+                datestart_dt: 'i_date',
+                dateend_dt: 'i_date',
+                desc_txt: 'i_meta_shortdesc',
+                desc_md_txt: 'i_meta_shortdesc_md',
+                desc_html_txt: 'i_meta_shortdesc_html',
+                distance: 'geodist',
+                geo_lon_s: 'i_gps_lon',
+                geo_lat_s: 'i_gps_lat',
+                geo_loc_p: 'i_gps_loc',
+                i_fav_url_txt: 'i_fav_url_txt',
+                rate_pers_ausdauer_i: 'k_rate_ausdauer',
+                rate_pers_bildung_i: 'k_rate_bildung',
+                rate_pers_gesamt_i: 'i_rate',
+                rate_pers_kraft_i: 'k_rate_kraft',
+                rate_pers_mental_i: 'k_rate_mental',
+                rate_pers_motive_i: 'i_rate_motive',
+                rate_pers_schwierigkeit_i: 'k_rate_schwierigkeit',
+                rate_pers_wichtigkeit_i: 'i_rate_wichtigkeit',
+                gpstracks_basefile_s: 'k_gpstracks_basefile',
+                keywords_txt: 'i_keywords',
+                loc_lochirarchie_s: 'l_lochirarchietxt',
+                loc_lochirarchie_ids_s: 'l_lochirarchieids',
+                name_s: 'i_meta_name',
+                persons_txt: 'i_persons',
+                playlists_txt: 'i_playlists',
+                subtype_s: 'subtype',
+                type_s: 'type'
+            }
+        },
+        'odimgobject': {
+            key: 'odimgobject',
+            tableName: 'image_object',
+            selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key ' +
+                'LEFT JOIN kategorie ON kategorie.k_id=image.k_id ' +
+                'LEFT JOIN location ON location.l_id = kategorie.l_id ',
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
+                        'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
+                },
+                {
+                    from: 'LEFT JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
+                        'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
+                    triggerParams: ['id', 'playlists_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
+                }
+            ],
+            loadDetailData: [
+                {
+                    profile: 'image_playlist',
+                    sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists ' +
+                        'FROM image_object INNER JOIN image ON image_object.i_id=image.i_id' +
+                        ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
+                        ' INNER JOIN playlist on image_playlist.p_id=playlist.p_id ' +
+                        'WHERE image_object.io_id in (:id)',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'image_objects',
+                    sql: 'SELECT GROUP_CONCAT(distinct concat("ioId=", image_object.IO_ID,' +
+                        ' ":::key=", image_object.IO_OBJ_TYPE,' +
+                        ' ":::imgWidth=", image_object.IO_IMG_WIDTH,' +
+                        ' ":::imgHeight=", image_object.IO_IMG_HEIGHT,' +
+                        ' ":::objX=", image_object.IO_OBJ_X1,' +
+                        ' ":::objY=", image_object.IO_OBJ_Y1,' +
+                        ' ":::objWidth=", image_object.IO_OBJ_WIDTH,' +
+                        ' ":::objHeight=", image_object.IO_OBJ_HEIGHT,' +
+                        ' ":::name=", objects.o_name,' +
+                        ' ":::state=", image_object.IO_STATE) separator ";;") as i_objects ' +
+                        'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
+                        ' INNER JOIN objects ON image_object.io_obj_type=objects.o_key ' +
+                        'WHERE image_object.io_id in (:id)',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'keywords',
+                    sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
+                        'FROM image_object INNER JOIN image ON image_object.i_id=image.i_id' +
+                        ' INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
+                        ' INNER JOIN keyword on image_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE image_object.io_id in (:id)',
+                    parameterNames: ['id'],
+                    modes: ['full']
+                }
+            ],
+            groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists'],
+            selectFieldList: [
+                '"ODIMGOBJECT" AS type',
+                'k_type',
+                'CONCAT("ac_", kategorie.k_type) AS actiontype',
+                'CONCAT("ac_", kategorie.k_type) AS subtype',
+                'CONCAT("ODIMGOBJECT", "_", image_object.io_id) AS id',
+                // 'n_id',
+                'image.i_id',
+                'image.k_id',
+                'kategorie.t_id',
+                'kategorie.tr_id',
+                'kategorie.l_id',
+                'COALESCE(o_name, i_meta_name, k_name) AS i_meta_name',
+                'CONCAT(COALESCE(o_name,""), " ", l_name) AS html',
+                'i_gesperrt',
+                'i_date',
+                'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
+                'WEEK(i_date) AS week',
+                'MONTH(i_date) AS month',
+                'YEAR(i_date) AS year',
+                'k_gpstracks_basefile',
+                'i_meta_shortdesc',
+                'i_meta_shortdesc AS i_meta_shortdesc_md',
+                'i_meta_shortdesc AS i_meta_shortdesc_html',
+                'CAST(i_gps_lat AS CHAR(50)) AS i_gps_lat',
+                'CAST(i_gps_lon AS CHAR(50)) AS i_gps_lon',
+                'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',
+                'CONCAT("T", location.l_typ, "L", location.l_parent_id, " -> ", location.l_name) AS l_lochirarchietxt',
+                'CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50))) AS l_lochirarchieids',
+                'CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt',
+                'k_altitude_asc',
+                'k_altitude_desc',
+                'i_gps_ele',
+                'i_gps_ele',
+                'k_distance',
+                'k_rate_ausdauer',
+                'k_rate_bildung',
+                'i_rate',
+                'k_rate_kraft',
+                'k_rate_mental',
+                'i_rate_motive',
+                'k_rate_schwierigkeit',
+                'i_rate_wichtigkeit',
+                'ROUND((k_altitude_asc / 500))*500 AS altAscFacet',
+                'ROUND((i_gps_ele / 500))*500 AS altMaxFacet',
+                'ROUND((k_distance / 5))*5 AS distFacet',
+                'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
+                'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet',
+                'objects.o_name AS i_persons'],
+            facetConfigs: {
+                'actiontype_ss': {
+                    selectField: 'CONCAT("ac_", kategorie.k_type)',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                },
+                'blocked_is': {
+                    selectField: 'i_gesperrt',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id'
+                },
+                'data_tech_alt_asc_facet_is': {
+                    selectField: 'ROUND((k_altitude_asc / 500))*500',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                                'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                    orderBy: 'value asc'
+                },
+                'data_tech_alt_max_facet_is': {
+                    selectField: 'ROUND((i_gps_ele / 500))*500',
+                    orderBy: 'value asc',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id'
+                },
+                'data_tech_dist_facets_fs': {
+                    selectField: 'ROUND((k_distance / 5))*5',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                                'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                    orderBy: 'value asc'
+                },
+                'data_tech_dur_facet_fs': {
+                    selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                    orderBy: 'value asc'
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                        '  kw_name AS value ' +
+                        'FROM' +
+                        ' keyword' +
+                        ' WHERE kw_name like "KW_%"' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
+                    filterField: 'kw_name',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                    noFacet: true
+                },
+                'loc_lochirarchie_txt': {
+                    selectSql: 'SELECT COUNT(image.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
+                        ' location.l_name AS label' +
+                        ' FROM location INNER JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                        ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
+                        ' INNER JOIN image_object ON image_object.i_id=image.i_id' +
+                        ' GROUP BY GetTechName(l_name), location.l_id' +
+                        ' ORDER BY l_name ASC',
+                    filterField: 'GetTechName(l_name)',
+                    action: AdapterFilterActions.IN
+                },
+                'month_is': {
+                    selectField: 'MONTH(i_date)',
+                    orderBy: 'value asc',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ',
+                },
+                'persons_txt': {
+                    selectSql: 'SELECT COUNT(io_obj_type) AS count, ' +
+                        ' o_name AS value ' +
+                        'FROM' +
+                        ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'o_name',
+                    action: AdapterFilterActions.IN
+                },
+                'playlists_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                        '  p_name AS value ' +
+                        'FROM' +
+                        ' playlist' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
+                    filterField: 'p_name',
+                    action: AdapterFilterActions.IN
+                },
+                'rate_pers_gesamt_is': {
+                    selectField: 'i_rate',
+                    orderBy: 'value asc',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id'
+                },
+                'rate_pers_schwierigkeit_is': {
+                    selectField: 'k_rate_schwierigkeit',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                    orderBy: 'value asc'
+                },
+                'rate_tech_overall_ss': {
+                    noFacet: true
+                },
+                'subtype_ss': {
+                    selectField: 'CONCAT("ac_", kategorie.k_type)',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                    orderBy: 'value asc'
+                },
+                'type_txt': {
+                    constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news'],
+                    filterField: '"odimgobject"',
+                    selectLimit: 1
+                },
+                'week_is': {
+                    selectField: 'WEEK(i_date)',
+                    orderBy: 'value asc',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id'
+                },
+                'year_is': {
+                    selectField: 'YEAR(i_date)',
+                    orderBy: 'value asc',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id'
+                }
+            },
+            sortMapping: {
+                'date': 'i_date DESC, image.i_id DESC',
+                'dateAsc': 'i_date ASC, image.i_id ASC',
+                'distance': 'geodist ASC',
+                'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
+                'dataTechAltDesc': 'k_altitude_asc DESC',
+                'dataTechMaxDesc': 'i_gps_ele DESC',
+                'dataTechDistDesc': 'k_distance DESC',
+                'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC',
+                'dataTechAltAsc': 'k_altitude_asc ASC',
+                'dataTechMaxAsc': 'i_gps_ele ASC',
+                'dataTechDistAsc': 'k_distance ASC',
+                'forExport': 'i_date ASC, image.i_id ASC',
+                'ratePers': 'i_rate DESC, i_date DESC',
+                'location': 'l_lochirarchietxt ASC',
+                'relevance': 'i_date DESC'
+            },
+            spartialConfig: {
+                lat: 'i_gps_lat',
+                lon: 'i_gps_lon',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
+            },
+            filterMapping: {
+                id: 'image_object.io_id',
+                image_id_i: 'image.i_id',
+                image_id_is: 'image.i_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
+                route_id_i: 'kategorie.t_id',
+                route_id_is: 'kategorie.t_id',
+                track_id_i: 'image.k_id',
+                track_id_is: 'image.k_id',
+                news_id_is: '"dummy"',
+                loc_lochirarchie_ids_txt: 'location.l_id',
+                l_lochirarchietxt: 'location.l_name',
+                html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
+            },
+            writeMapping: {
+                'image_object.i_id': ':image_id_i:',
+                'image_object.i_rate': ':rate_pers_gesamt_i:'
             },
             fieldMapping: {
                 id: 'id',
@@ -1161,7 +1499,7 @@ export class TourDocSqlMediadbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['route', 'track', 'image', 'video', 'location', 'trip', 'news'],
+                    constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news'],
                     filterField: '"route"',
                     selectLimit: 1
                 },
@@ -1423,7 +1761,7 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['location', 'track', 'route', 'trip', 'image', 'video', 'news'],
+                    constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news'],
                     filterField: '"location"',
                     selectLimit: 1
                 },
@@ -1598,7 +1936,7 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news'],
                     filterField: '"trip"',
                     selectLimit: 1
                 },
@@ -1756,7 +2094,7 @@ export class TourDocSqlMediadbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'video', 'news'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news'],
                     filterField: '"news"',
                     selectLimit: 1
                 },

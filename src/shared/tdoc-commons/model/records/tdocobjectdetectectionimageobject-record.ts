@@ -1,0 +1,60 @@
+import {BaseImageRecordFactory, BaseImageRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
+import {BaseObjectDetectionImageObjectRecord} from './baseobjectdetectionimageobject-record';
+
+export class TourDocObjectDetectionImageObjectRecord extends BaseObjectDetectionImageObjectRecord {
+    tdoc_id: string;
+
+    toString() {
+        return 'TourDocObjectDetectionImageObjectRecord Record {\n' +
+            '  id: ' + this.id + ',\n' +
+            '  class: ' + this.detector + ',\n' +
+            '  key: ' + this.key + ',\n' +
+            '  pos: ' + this.objX + ',' + this.objY + '(' + this.objWidth + ',' + this.objHeight + ')\n' +
+            '}';
+    }
+}
+
+export class TourDocObjectDetectionImageObjectRecordFactory extends BaseImageRecordFactory {
+    public static instance = new TourDocObjectDetectionImageObjectRecordFactory();
+
+    static createSanitized(values: {}): TourDocObjectDetectionImageObjectRecord {
+        const sanitizedValues = TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(values, {});
+        return new TourDocObjectDetectionImageObjectRecord(sanitizedValues);
+    }
+
+    static cloneSanitized(doc: TourDocObjectDetectionImageObjectRecord): TourDocObjectDetectionImageObjectRecord {
+        const sanitizedValues = TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValuesFromObj(doc);
+        return new TourDocObjectDetectionImageObjectRecord(sanitizedValues);
+    }
+
+    getSanitizedValues(values: {}, result: {}): {} {
+        super.getSanitizedValues(values, result);
+        this.sanitizeFieldValues(values, TourDocObjectDetectionImageObjectRecord.objectDetectionImageObjectFields, result, '');
+        return result;
+    }
+}
+
+export class TourDocObjectDetectionImageObjectRecordValidator extends BaseImageRecordValidator {
+    public static instance = new TourDocObjectDetectionImageObjectRecordValidator();
+
+    validateMyFieldRules(values: {}, errors: string[], fieldPrefix?: string, errFieldPrefix?: string): boolean {
+        fieldPrefix = fieldPrefix !== undefined ? fieldPrefix : '';
+        errFieldPrefix = errFieldPrefix !== undefined ? errFieldPrefix : '';
+
+        const state = super.validateMyFieldRules(values, errors, fieldPrefix, errFieldPrefix);
+
+        return this.validateFieldRules(values, TourDocObjectDetectionImageObjectRecord.objectDetectionImageObjectFields, fieldPrefix,
+            errors, errFieldPrefix) && state;
+    }
+}
+
+export let TourDocObjectDetectionImageObjectRecordRelation: any = {
+    belongsTo: {
+        tdoc: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related object in memory
+            localField: 'tdoc'
+        }
+    }
+};

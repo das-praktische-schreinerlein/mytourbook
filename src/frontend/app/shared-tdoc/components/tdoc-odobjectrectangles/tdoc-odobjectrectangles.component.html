@@ -1,0 +1,9 @@
+<ng-container *ngFor="let object of objects">
+    <div class="objects-rectangle"
+         [ngClass]="'odimgobject-state-' + object.state"
+         [ngStyle]="{'top': (width / object.imgWidth * (object.objY || 0)) + 'px',
+                                                'left': (width / object.imgWidth * (object.objX || 0)) + 'px',
+                                                'width': (width / object.imgWidth * object.objWidth) + 'px',
+                                                'height': (width / object.imgWidth * object.objHeight) + 'px'}">{{object.name}}
+    </div>
+</ng-container>

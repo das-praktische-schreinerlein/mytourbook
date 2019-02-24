@@ -1,6 +1,9 @@
 .image-container {
     width: 100%;
 }
+.picture-with-objects-container {
+    width: 600px;
+}
 .tagcloud-container {
     max-width: 578px;
     display: inline-block

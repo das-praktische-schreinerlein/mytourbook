@@ -469,8 +469,97 @@
                             "expectedValues": [10]
                         }
                     ]
+                },
+                {
+                    "key": "odobjectstate_APPROVED",
+                    "type": "tag",
+                    "name": "APPROVED",
+                    "shortName": "&#x2714",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_APPROVED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_APPROVED", "DONE_APPROVAL_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "odobjectstate_REJECTED",
+                    "type": "tag",
+                    "name": "REJECTED",
+                    "shortName": "&#x2716",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_REJECTED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_REJECTED", "DONE_REJECTION_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "odobjectstate_CORRECTION_NEEDED",
+                    "type": "tag",
+                    "name": "CORRECTION NEEDED",
+                    "shortName": "&#x270E",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_CORRECTION_NEEDED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_CORRECTED", "RUNNING_MANUAL_CORRECTION_NEEDED","DONE_CORRECTION_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
                 }
-
             ]
         },
         "tdoc-multiactionheader": {
@@ -543,11 +632,13 @@
             "allowedQueryParams": [],
             "availableTabs": {
                 "IMAGE": true,
+                "ODIMGOBJECT": true,
                 "ROUTE": true,
                 "TRACK": true,
                 "LOCATION": true,
                 "TRIP": true,
-                "NEWS": true
+                "NEWS": true,
+                "VIDEO": true
             }
         },
         "tdoc-albumpage": {

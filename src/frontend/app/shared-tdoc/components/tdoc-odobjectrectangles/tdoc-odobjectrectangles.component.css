@@ -1,0 +1,6 @@
+div.objects-rectangle {
+    position: absolute;
+    border: 1px solid;
+    font-size: 10px;
+    overflow-x: visible;
+}

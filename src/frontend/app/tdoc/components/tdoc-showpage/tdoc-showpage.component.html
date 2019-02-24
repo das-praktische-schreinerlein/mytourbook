@@ -3,16 +3,26 @@
         <div class="card-block">
             <h6><app-tdoc-linked-loc-hierarchy [record]="record" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h6>
             <div>
-                <ng-container [ngSwitch]="record.type">
-                    <ng-container *ngSwitchCase="'IMAGE'">
+                <ng-container [ngSwitch]="true">
+                    <ng-container *ngSwitchCase="record.type === 'IMAGE' || record.type === 'ODIMGOBJECT'">
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
                             <div class="image-container">
                                 <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
-                                    <img class="picture-big" width="600px" [src]="contentUtils.getFullUrl(record.tdocimages[0])" alt="{{record.tdocimages[0].name}}">
+                                    <div class="picture-with-objects-container"
+                                         [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
+                                        <img #mainImage class="picture-big" width="600px"
+                                             [src]="contentUtils.getFullUrl(record.tdocimages[0])"
+                                             alt="{{record.tdocimages[0].name}}"
+                                             (resize)="onResizeMainImage()"
+                                             (load)="onResizeMainImage()">
+                                        <app-tdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
+                                             [width]="imageWidth"
+                                             *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-tdoc-odobjectrectangles>
+                                    </div>
                                 </ng-container>
                             </div>
                     </ng-container>
-                    <ng-container *ngSwitchCase="'VIDEO'">
+                    <ng-container *ngSwitchCase="record.type === 'VIDEO'">
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
                         <div class="image-container">
                             <ng-container *ngIf="record.tdocvideos !== undefined && record.tdocvideos.length > 0">
@@ -356,6 +366,72 @@
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'IMAGE'">
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
+                                            [label]="'Trip'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.tdoc.TRIP"
+                                            [params]="getFiltersForType(record, 'TRIP')"
+                                            [htmlId]="'TRIP'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
+                                            i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.tdoc.LOCATION"
+                                            [params]="getFiltersForType(record, 'LOCATION')"
+                                            [htmlId]="'LOCATION'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Route'"
+                                            i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.tdoc.ROUTE"
+                                            [params]="getFiltersForType(record, 'ROUTE')"
+                                            [htmlId]="'ROUTE'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.TRACK"
+                                            [label]="'Track'"
+                                            i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.tdoc.TRACK"
+                                            [params]="getFiltersForType(record, 'TRACK')"
+                                            [htmlId]="'TRACK'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTracksFound($event)"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.ODIMGOBJECT"
+                                            [label]="'Objects'"
+                                            i18n-label="label inline-searchpage ODIMGOBJECT|Label inline-searchpage ODIMGOBJECT@@linline-search.label.tdoc.ODIMGOBJECT"
+                                            [params]="getFiltersForType(record, 'ODIMGOBJECT')"
+                                            [htmlId]="'ODIMGOBJECT'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.BIG"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.NEWS"
+                                            [label]="'News'"
+                                            i18n-label="label inline-searchpage NEWS|Label inline-searchpage NEWS@@linline-search.label.tdoc.NEWS"
+                                            [params]="getFiltersForType(record, 'NEWS')"
+                                            [htmlId]="'NEWS'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.THIN"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+            </ng-container>
+            <ng-container *ngSwitchCase="'ODIMGOBJECT'">
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
+                                            [label]="'Image'"
+                                            i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.tdoc.IMAGE"
+                                            [params]="getFiltersForType(record, 'IMAGE')"
+                                            [htmlId]="'IMAGE'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.THIN"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trip'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.tdoc.TRIP"

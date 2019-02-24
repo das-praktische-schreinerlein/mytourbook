@@ -19,6 +19,11 @@ import {TourDocVideoRecordSchema} from '../model/schemas/tdocvideo-record-schema
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
+import {
+    TourDocObjectDetectionImageObjectRecord,
+    TourDocObjectDetectionImageObjectRecordRelation
+} from '../model/records/tdocobjectdetectectionimageobject-record';
+import {TourDocObjectDetectionImageObjectRecordSchema} from '../model/schemas/tdocobjectdetectionimageobject-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -56,6 +61,7 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
         this.dataStore.defineMapper('tdocvideo', TourDocVideoRecord, TourDocVideoRecordSchema, TourDocVideoRecordRelation);
         this.dataStore.defineMapper('tdocratepers', TourDocRatePersonalRecord, TourDocRatePersonalRecordSchema, TourDocRatePersonalRecordRelation);
         this.dataStore.defineMapper('tdocratetech', TourDocRateTechRecord, TourDocRateTechRecordSchema, TourDocRateTechRecordRelation);
+        this.dataStore.defineMapper('tdocodimageobject', TourDocObjectDetectionImageObjectRecord, TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {

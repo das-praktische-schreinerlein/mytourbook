@@ -35,7 +35,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'video', 'news'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'video', 'news', 'odimgobject'].map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
         facet = new Facet();
@@ -95,7 +95,6 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
             query.fields['v_dir'] = dir;
             query.fields['v_file'] = file;
         }
-
 
         return query;
     }
@@ -206,6 +205,8 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
             return this.actionTagAdapter.executeActionTagPlaylist(table, id, actionTagForm, opts);
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('objects_')) {
             return this.actionTagAdapter.executeActionTagObjects(table, id, actionTagForm, opts);
+        } else if ((table === 'odimgobject') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('odobjectstate_')) {
+            return this.actionTagAdapter.executeActionTagObjectsState(table, id, actionTagForm, opts);
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
             return this.actionTagAdapter.executeActionTagPersRate(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {

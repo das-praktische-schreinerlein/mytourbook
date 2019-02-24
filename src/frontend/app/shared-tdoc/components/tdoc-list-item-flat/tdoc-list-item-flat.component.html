@@ -11,10 +11,17 @@
                                (click)="onChangeMultiActionForRecord($event)">
                     </div>
                     <ng-container *ngIf="listItem.image">
-                        <img class="picture-thumbnail" width="50px"
-                             [src]="listItem.thumbnailUrl"
-                             (click)="submitShowImage(listItem.currentRecord)"
-                             alt="{{listItem.image.name}}">
+                        <div class="picture-with-objects-container">
+                            <img #mainImage class="picture-thumbnail" width="50px"
+                                 [src]="listItem.thumbnailUrl"
+                                 (click)="submitShowImage(listItem.currentRecord)"
+                                 alt="{{listItem.image.name}}"
+                                 (resize)="onResizeMainImage()"
+                                 (load)="onResizeMainImage()">
+                            <app-tdoc-odobjectrectangles [objects]="listItem.objects"
+                                 [width]="imageWidth"
+                                 *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-tdoc-odobjectrectangles>
+                        </div>
                     </ng-container>
                     <ng-container *ngIf="listItem.video">
                         <img class="picture-thumbnail" width="50px"
@@ -40,7 +47,12 @@
                     <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
                 </div>
                 <div class="col-2 ratetech layout-big">
-                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                    <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                        <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                    </ng-container>
+                    <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                    </ng-container>
                 </div>
                 <div class="col-3 location layout-big">
                     <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
@@ -99,7 +111,12 @@
                             <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <div class="row">
                                 <div class="col-4 location layout-small">
-                                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                                    <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                                        <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                                    </ng-container>
+                                    <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                                        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                                    </ng-container>
                                 </div>
                                 <div class="col-8 location layout-small">
                                     <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
@@ -157,10 +174,15 @@
                     <ng-container *ngSwitchDefault="">
                         <div class="col-9 location layout-verysmall">
                             <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
-                            <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                            <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                            <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                            <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                            <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                                <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                            </ng-container>
+                            <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                                <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                                <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                                <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+                                <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                            </ng-container>
                             <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
                             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
                         </div>

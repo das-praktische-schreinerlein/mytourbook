@@ -9,6 +9,10 @@ import {TourDocDataTechRecordFactory} from '../model/records/tdocdatatech-record
 import {TourDocRateTechRecordFactory} from '../model/records/tdocratetech-record';
 import {TourDocRatePersonalRecordFactory} from '../model/records/tdocratepers-record';
 import {TourDocDataInfoRecordFactory} from '../model/records/tdocdatainfo-record';
+import {
+    TourDocObjectDetectionImageObjectRecord,
+    TourDocObjectDetectionImageObjectRecordFactory
+} from '../model/records/tdocobjectdetectectionimageobject-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -370,6 +374,24 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 });
                 (<TourDocRecord>record).persons = imagePersons;
                 break;
+            case 'image_objects':
+                const imageObjects = [];
+                docs.forEach(doc => {
+                    if (doc['i_objects'] !== undefined && doc['i_objects'] !== null) {
+                        const recordSrcs = doc['i_objects'].split(';;');
+                        for (let i = 0; i < recordSrcs.length; i++) {
+                            const valuePairs = recordSrcs[i].split(':::');
+                            const imageObject = {};
+                            for (let j = 0; j < valuePairs.length; j++) {
+                                const value = valuePairs[j].split('=');
+                                imageObject[value[0]] = value[1];
+                            }
+                            imageObjects.push(imageObject);
+                        }
+                    }
+                });
+                this.mapObjectDetectionImageObjectDocToAdapterDocument(mapper, <TourDocRecord>record, imageObjects);
+                break;
             case 'video':
                 const videoUrls = [];
                 docs.forEach(doc => {
@@ -411,24 +433,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         const imageMapper = mapper['datastore']._mappers['tdocimage'];
         const images: TourDocImageRecord[] = [];
         if (imageDocs !== undefined) {
-            let id = 1;
-            if (record.type === 'TRACK') {
-                id = Number(record.trackId);
-            } else if (record.type === 'ROUTE') {
-                id = Number(record.routeId);
-            } else if (record.type === 'LOCATION') {
-                id = Number(record.locId);
-            } else if (record.type === 'IMAGE') {
-                id = Number(record.imageId);
-            } else if (record.type === 'VIDEO') {
-                id = Number(record.videoId);
-            } else if (record.type === 'TRIP') {
-                id = Number(record.tripId);
-            } else if (record.type === 'NEWS') {
-                id = Number(record.newsId);
-            }
-            id = id * 1000000;
-
+            let id = this.extractUniqueId(record);
             for (const imageDoc of imageDocs) {
                 if (imageDoc === undefined || imageDoc === null) {
                     continue;
@@ -449,24 +454,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         const videoMapper = mapper['datastore']._mappers['tdocvideo'];
         const videos: TourDocImageRecord[] = [];
         if (videoDocs !== undefined) {
-            let id = 1;
-            if (record.type === 'TRACK') {
-                id = Number(record.trackId);
-            } else if (record.type === 'ROUTE') {
-                id = Number(record.routeId);
-            } else if (record.type === 'LOCATION') {
-                id = Number(record.locId);
-            } else if (record.type === 'IMAGE') {
-                id = Number(record.imageId);
-            } else if (record.type === 'VIDEO') {
-                id = Number(record.videoId);
-            } else if (record.type === 'TRIP') {
-                id = Number(record.tripId);
-            } else if (record.type === 'NEWS') {
-                id = Number(record.newsId);
-            }
-            id = id * 1000000;
-
+            let id = this.extractUniqueId(record);
             for (const videoDoc of videoDocs) {
                 if (videoDoc === undefined || videoDoc === null) {
                     continue;
@@ -482,6 +470,49 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             }
         }
         record.set('tdocvideos', videos);
+    }
+
+    private mapObjectDetectionImageObjectDocToAdapterDocument(mapper: Mapper, record: TourDocRecord, objectDocs: any[]) {
+        const objectMapper = mapper['datastore']._mappers['tdocodimageobject'];
+        const objects: TourDocObjectDetectionImageObjectRecord[] = [];
+        if (objectDocs !== undefined) {
+            let id = this.extractUniqueId(record);
+            for (const objectDoc of objectDocs) {
+                if (objectDoc === undefined || objectDoc === null) {
+                    continue;
+                }
+                const objectValues = objectDoc;
+                objectValues['id'] = (id++).toString();
+                const objectRecord = objectMapper.createRecord(
+                    TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(objectValues, {}));
+                objects.push(objectRecord);
+            }
+        }
+        record.set('tdocodimageobjects', objects);
+    }
+
+    private extractUniqueId(record: TourDocRecord): number {
+        let id = 1;
+        if (record.type === 'TRACK') {
+            id = Number(record.trackId);
+        } else if (record.type === 'ROUTE') {
+            id = Number(record.routeId);
+        } else if (record.type === 'LOCATION') {
+            id = Number(record.locId);
+        } else if (record.type === 'IMAGE') {
+            id = Number(record.imageId);
+        } else if (record.type === 'VIDEO') {
+            id = Number(record.videoId);
+        } else if (record.type === 'TRIP') {
+            id = Number(record.tripId);
+        } else if (record.type === 'NEWS') {
+            id = Number(record.newsId);
+        } else if (record.type === 'ODIMGOBJECT') {
+            id = Number(record.id.replace(/.*_/, ''));
+        }
+        id = id * 1000000;
+
+        return id;
     }
 }
 
