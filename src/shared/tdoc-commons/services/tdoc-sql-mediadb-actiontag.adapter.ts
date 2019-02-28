@@ -8,6 +8,7 @@ export class TourDocSqlMediadbActionTagAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
     private rateValidationRule = new NumberValidationRule(true, 0, 15, 0);
+    private precisionValidationRule = new NumberValidationRule(true, 0, 1, 1);
     private config: any;
     private knex: any;
     private sqlQueryBuilder: SqlQueryBuilder;
@@ -119,8 +120,17 @@ export class TourDocSqlMediadbActionTagAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
         }
         const objectKey = actionTagForm.payload['objectkey'];
+        const precision = actionTagForm.payload['precision'] || 1;
+        const detector = actionTagForm.payload['detector'] || 'playlist';
+
         if (!this.keywordValidationRule.isValid(objectKey)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' objectkey not valid');
+        }
+        if (!this.keywordValidationRule.isValid(detector)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' detector not valid');
+        }
+        if (!this.precisionValidationRule.isValid(precision)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' precision not valid');
         }
 
         const objectKeys = StringUtils.uniqueKeywords(objectKey);
@@ -129,18 +139,24 @@ export class TourDocSqlMediadbActionTagAdapter {
         let joinTableName;
         let idName;
         let typeName;
+        let detectorName;
+        let precisionName;
         switch (table) {
             case 'image':
                 baseTableName = 'image';
                 joinTableName = 'image_object';
                 idName = 'i_id';
                 typeName = 'io_obj_type';
+                precisionName = 'io_precision';
+                detectorName = 'io_detector';
                 break;
             case 'video':
                 baseTableName = 'video';
                 joinTableName = 'video_object';
                 idName = 'v_id';
                 typeName = 'vo_obj_type';
+                precisionName = 'vo_precision';
+                detectorName = 'vo_detector';
                 break;
             default:
                 return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
@@ -149,9 +165,10 @@ export class TourDocSqlMediadbActionTagAdapter {
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
             'WHERE ' + joinTableName + '.' + typeName + ' IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKeys.join('", "') + '"))' +
             ' AND ' + idName + ' = "' + id + '"';
-        const insertSql = 'INSERT INTO ' + joinTableName + ' (' + typeName + ', ' + idName + ')' +
-            ' SELECT objects.o_key AS ' + typeName + ', "' + id + '" AS ' + idName + ' FROM objects WHERE o_name = ("' + objectKeys.join('", "') + '")';
-
+        const insertSql = 'INSERT INTO ' + joinTableName + ' (' + typeName + ', ' + idName + ', ' + precisionName + ', ' + detectorName + ')' +
+            ' SELECT objects.o_key AS ' + typeName + ', "' + id + '" AS ' + idName +
+                    ', "' + precision + '" AS ' + precisionName + ', "' + detector + '" AS ' + detectorName +
+            ' FROM objects WHERE o_name = ("' + objectKeys.join('", "') + '")';
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
         const result = new Promise((resolve, reject) => {

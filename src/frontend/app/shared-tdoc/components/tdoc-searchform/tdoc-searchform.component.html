@@ -13,6 +13,9 @@
             <div class="col-sm-12">
                 Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter" (click)="updateFormState(true);"></div>
                 <ng-container *ngIf="!short">
+                    <button *ngIf="!showObjectDetection && showObjectDetectionAvailable" class="btn btn-configure btn-sm float-right" (click)="showObjectDetection = true; updateFormState();">
+                        <span i18n="button show ObjectDetectionDataform|Buttontext to show ObjectDetectiondataform@@button.searchform.show.ObjectDetectiondataform">"Objekterkennung" filtern</span>
+                        <span>&#x21D3;</span></button>
                     <button *ngIf="!showMeta && showMetaAvailable" class="btn btn-configure btn-sm float-right" (click)="showMeta = true; updateFormState();">
                         <span i18n="button show MetaDataform|Buttontext to show Metadataform@@button.searchform.show.Metadataform">"Metadaten" filtern</span>
                         <span>&#x21D3;</span></button>
@@ -374,6 +377,70 @@
                                                  [settings]="settingsSelectTechDataAscent"
                                                  [texts]="textsSelectTechDataAscent"
                                                  formControlName="techDataAscent"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="hidden-print" *ngIf="showObjectDetection && showObjectDetectionAvailable">
+            <legend i18n="objectDetection label|Label for fieldset: objectDetection@@label.searchform.tdoc.legend.objectDetection">&#x2315; Objekterkennung</legend>
+            <div class="row">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectObjectDetectionDetector.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('objectDetectionDetector').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="objectDetectionDetector label|Label for filter: objectDetectionDetector@@label.searchform.tdoc.objectDetectionDetector">Detector:</label>
+                    <ng-container *ngIf="optionsSelectObjectDetectionDetector.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectObjectDetectionDetector"
+                                                 [settings]="settingsSelectObjectDetectionDetector"
+                                                 [texts]="textsSelectObjectDetectionDetector"
+                                                 formControlName="objectDetectionDetector"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectObjectDetectionState.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('objectDetectionState').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="objectDetectionState label|Label for filter: objectDetectionState@@label.searchform.tdoc.objectDetectionState">Status:</label>
+                    <ng-container *ngIf="optionsSelectObjectDetectionState.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectObjectDetectionState"
+                                                 [settings]="settingsSelectObjectDetectionState"
+                                                 [texts]="textsSelectObjectDetectionState"
+                                                 formControlName="objectDetectionState"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
+                    <button class="btn btn-configure btn-sm" (click)="showObjectDetection = false; updateFormState();">
+                        <span i18n="button hide ObjectDetectionform|Buttontext to hide ObjectDetectionform@@button.searchform.hide.ObjectDetectionform">ausblenden</span>
+                        <span>&#x21D1;</span></button>
+                </div>
+            </div>
+            <div class="row">
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectObjectDetectionKey.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('objectDetectionKey').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="objectDetectionKey label|Label for filter: objectDetectionKey@@label.searchform.tdoc.objectDetectionKey">Objekt:</label>
+                    <ng-container *ngIf="optionsSelectObjectDetectionKey.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectObjectDetectionKey"
+                                                 [settings]="settingsSelectObjectDetectionKey"
+                                                 [texts]="textsSelectObjectDetectionKey"
+                                                 formControlName="objectDetectionKey"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectObjectDetectionPrecision.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('objectDetectionPrecision').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="objectDetectionPrecision label|Label for filter: objectDetectionPrecision@@label.searchform.tdoc.objectDetectionPrecision">Genauigkeit:</label>
+                    <ng-container *ngIf="optionsSelectObjectDetectionPrecision.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectObjectDetectionPrecision"
+                                                 [settings]="settingsSelectObjectDetectionPrecision"
+                                                 [texts]="textsSelectObjectDetectionPrecision"
+                                                 formControlName="objectDetectionPrecision"
                                                  ngDefaultControl
                                                  class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
                                                  (onAdded)="onChangeSelect()"

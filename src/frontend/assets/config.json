@@ -292,7 +292,9 @@
                     "name": "Person Micha",
                     "shortName": "Mi",
                     "payload": {
-                        "objectkey": "Playlist_Micha"
+                        "objectkey": "Playlist_Micha",
+                        "detector": "Playlist",
+                        "precision": "1"
                     },
                     "showFilter": [
                         {

@@ -147,6 +147,18 @@ export class TourDocSqlMediadbConfig {
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -343,7 +355,7 @@ export class TourDocSqlMediadbConfig {
                 {
                     from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id ' +
                     'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
-                    triggerParams: ['id', 'persons_txt'],
+                    triggerParams: ['id', 'persons_txt', 'odstates_ss', 'odprecision_is', 'odkeys_txt', 'oddetectors_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons']
                 }
             ],
@@ -494,11 +506,52 @@ export class TourDocSqlMediadbConfig {
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
                 },
+                'oddetectors_txt': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
+                        ' io_detector AS value ' +
+                        'FROM' +
+                        ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'io_detector',
+                    action: AdapterFilterActions.IN
+                },
+                'odkeys_txt': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
+                        ' io_obj_type AS value ' +
+                        'FROM' +
+                        ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'io_obj_type',
+                    action: AdapterFilterActions.IN
+                },
+                'odprecision_is': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
+                        ' ROUND(io_precision, 1)*100 AS value ' +
+                        'FROM' +
+                        ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'ROUND(io_precision, 1)*100',
+                    action: AdapterFilterActions.IN
+                },
+                'odstates_ss': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
+                        ' io_state AS value ' +
+                        'FROM' +
+                        ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'io_state',
+                    action: AdapterFilterActions.IN
+                },
                 'persons_txt': {
-                    selectSql: 'SELECT COUNT(io_obj_type) AS count, ' +
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
                     ' o_name AS value ' +
                     'FROM' +
                     ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
+                    ' INNER JOIN image ON image_object.i_id=image.i_id ' +
                     ' GROUP BY value' +
                     ' ORDER BY value',
                     filterField: 'o_name',
@@ -825,8 +878,48 @@ export class TourDocSqlMediadbConfig {
                     orderBy: 'value asc',
                     selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ',
                 },
+                'oddetectors_txt': {
+                    selectSql: 'SELECT COUNT(io_id) AS count, ' +
+                        ' io_detector AS value ' +
+                        'FROM' +
+                        ' image_object' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'io_detector',
+                    action: AdapterFilterActions.IN
+                },
+                'odkeys_txt': {
+                    selectSql: 'SELECT COUNT(io_id) AS count, ' +
+                        ' io_obj_type AS value ' +
+                        'FROM' +
+                        ' image_object' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'io_obj_type',
+                    action: AdapterFilterActions.IN
+                },
+                'odprecision_is': {
+                    selectSql: 'SELECT COUNT(ROUND(io_precision, 1)*100) AS count, ' +
+                        ' ROUND(io_precision, 1)*100 AS value ' +
+                        'FROM' +
+                        ' image_object' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'ROUND(io_precision, 1)*100',
+                    action: AdapterFilterActions.IN
+                },
+                'odstates_ss': {
+                    selectSql: 'SELECT COUNT(io_id) AS count, ' +
+                        ' io_state AS value ' +
+                        'FROM' +
+                        ' image_object' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'io_state',
+                    action: AdapterFilterActions.IN
+                },
                 'persons_txt': {
-                    selectSql: 'SELECT COUNT(io_obj_type) AS count, ' +
+                    selectSql: 'SELECT COUNT(io_id) AS count, ' +
                         ' o_name AS value ' +
                         'FROM' +
                         ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
@@ -894,6 +987,7 @@ export class TourDocSqlMediadbConfig {
                 'dataTechMaxAsc': 'i_gps_ele ASC',
                 'dataTechDistAsc': 'k_distance ASC',
                 'forExport': 'i_date ASC, image.i_id ASC',
+                'odState': 'io_stat ASC, image.i_id ASC',
                 'ratePers': 'i_rate DESC, i_date DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'
@@ -1130,6 +1224,18 @@ export class TourDocSqlMediadbConfig {
                 'month_is': {
                     selectField: 'MONTH(v_date)',
                     orderBy: 'value asc'
+                },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
                 },
                 'persons_txt': {
                     selectSql: 'SELECT COUNT(vo_obj_type) AS count, ' +
@@ -1452,6 +1558,18 @@ export class TourDocSqlMediadbConfig {
                     selectField: 'MONTH(t_datevon)',
                     orderBy: 'value asc'
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -1742,6 +1860,18 @@ export class TourDocSqlMediadbConfig {
                 'month_is': {
                     noFacet: true
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -1917,6 +2047,18 @@ export class TourDocSqlMediadbConfig {
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -2074,6 +2216,18 @@ export class TourDocSqlMediadbConfig {
                 },
                 'month_is': {
                     selectField: 'MONTH(n_date)'
+                },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
                 },
                 'persons_txt': {
                     noFacet: true

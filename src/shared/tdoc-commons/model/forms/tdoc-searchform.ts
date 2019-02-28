@@ -26,6 +26,10 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         personalRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         personalRateDifficulty: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         actiontype: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        objectDetectionDetector: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        objectDetectionKey: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        objectDetectionPrecision: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        objectDetectionState: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         persons: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
     };
 
@@ -41,6 +45,10 @@ export class TourDocSearchForm extends CommonDocSearchForm {
     personalRateOverall: string;
     personalRateDifficulty: string;
     actiontype: string;
+    objectDetectionDetector: string;
+    objectDetectionKey: string;
+    objectDetectionPrecision: string;
+    objectDetectionState: string;
     persons: string;
 
     constructor(values: {}) {
@@ -57,6 +65,10 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         this.personalRateOverall = values['personalRateOverall'] || '';
         this.personalRateDifficulty = values['personalRateDifficulty'] || '';
         this.actiontype = values['actiontype'] || '';
+        this.objectDetectionDetector = values['objectDetectionDetector'] || '';
+        this.objectDetectionKey = values['objectDetectionKey'] || '';
+        this.objectDetectionPrecision = values['objectDetectionPrecision'] || '';
+        this.objectDetectionState = values['objectDetectionState'] || '';
         this.persons = values['persons'] || '';
     }
 
@@ -97,6 +109,10 @@ export class TourDocSearchFormFactory {
         sanitizedValues.personalRateDifficulty = TourDocSearchForm.tdocFields.personalRateDifficulty.validator.sanitize(
             values['personalRateDifficulty']) || '';
         sanitizedValues.actiontype = TourDocSearchForm.tdocFields.actiontype.validator.sanitize(values['actiontype']) || '';
+        sanitizedValues.objectDetectionDetector = TourDocSearchForm.tdocFields.objectDetectionDetector.validator.sanitize(values['objectDetectionDetector']) || '';
+        sanitizedValues.objectDetectionKey = TourDocSearchForm.tdocFields.objectDetectionKey.validator.sanitize(values['objectDetectionKey']) || '';
+        sanitizedValues.objectDetectionPrecision = TourDocSearchForm.tdocFields.objectDetectionPrecision.validator.sanitize(values['objectDetectionPrecision']) || '';
+        sanitizedValues.objectDetectionState = TourDocSearchForm.tdocFields.objectDetectionState.validator.sanitize(values['objectDetectionState']) || '';
         sanitizedValues.persons = TourDocSearchForm.tdocFields.persons.validator.sanitize(values['persons']) || '';
 
         return sanitizedValues;
@@ -134,6 +150,10 @@ export class TourDocSearchFormValidator {
         state = TourDocSearchForm.tdocFields.personalRateOverall.validator.isValid(values['personalRateOverall']) && state;
         state = TourDocSearchForm.tdocFields.personalRateDifficulty.validator.isValid(values['personalRateDifficulty']) && state;
         state = TourDocSearchForm.tdocFields.actiontype.validator.isValid(values['actiontype']) && state;
+        state = TourDocSearchForm.tdocFields.objectDetectionDetector.validator.isValid(values['objectDetectionDetector']) && state;
+        state = TourDocSearchForm.tdocFields.objectDetectionKey.validator.isValid(values['objectDetectionKey']) && state;
+        state = TourDocSearchForm.tdocFields.objectDetectionPrecision.validator.isValid(values['objectDetectionPrecision']) && state;
+        state = TourDocSearchForm.tdocFields.objectDetectionState.validator.isValid(values['objectDetectionState']) && state;
         state = TourDocSearchForm.tdocFields.persons.validator.isValid(values['persons']) && state;
 
         return state;

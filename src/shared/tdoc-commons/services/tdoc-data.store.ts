@@ -132,10 +132,35 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                 'in': searchForm.persons.split(/,/)
             };
         }
-        if (searchForm.playlists !== undefined && searchForm.playlists.length > 0) {
+        if (searchForm.persons !== undefined && searchForm.persons.length > 0) {
             filter = filter || {};
-            filter['playlists_txt'] = {
-                'in': searchForm.playlists.split(/,/)
+            filter['persons_txt'] = {
+                'in': searchForm.persons.split(/,/)
+            };
+        }
+        if (searchForm.objectDetectionDetector !== undefined && searchForm.objectDetectionDetector.length > 0) {
+            filter = filter || {};
+            filter['oddetectors_txt'] = {
+                'in': searchForm.objectDetectionDetector.split(/,/)
+            };
+        }
+        if (searchForm.objectDetectionKey !== undefined && searchForm.objectDetectionKey.length > 0) {
+            filter = filter || {};
+            filter['odkeys_txt'] = {
+                'in': searchForm.objectDetectionKey.split(/,/)
+            };
+        }
+        if (searchForm.objectDetectionPrecision !== undefined && searchForm.objectDetectionPrecision.length > 0) {
+            filter = filter || {};
+            filter['odprecision_is'] = {
+                'in': searchForm.objectDetectionPrecision.split(/,/)
+            };
+        } else {
+        }
+        if (searchForm.objectDetectionState !== undefined && searchForm.objectDetectionState.length > 0) {
+            filter = filter || {};
+            filter['odstates_ss'] = {
+                'in': searchForm.objectDetectionState.split(/,/)
             };
         }
         if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {

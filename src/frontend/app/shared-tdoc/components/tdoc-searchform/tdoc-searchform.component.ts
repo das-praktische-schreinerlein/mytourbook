@@ -36,6 +36,10 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     public optionsSelectPersonalRateOverall: IMultiSelectOption[] = [];
     public optionsSelectPersonalRateDifficulty: IMultiSelectOption[] = [];
     public optionsSelectPersons: IMultiSelectOption[] = [];
+    public optionsSelectObjectDetectionDetector: IMultiSelectOption[] = [];
+    public optionsSelectObjectDetectionKey: IMultiSelectOption[] = [];
+    public optionsSelectObjectDetectionPrecision: IMultiSelectOption[] = [];
+    public optionsSelectObjectDetectionState: IMultiSelectOption[] = [];
 
     public settingsSelectWhen = this.defaultSeLectSettings;
     public settingsSelectWhere: IMultiSelectSettings =
@@ -56,6 +60,10 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     public settingsSelectPersonalRateOverall = this.defaultSeLectSettings;
     public settingsSelectPersonalRateDifficulty = this.defaultSeLectSettings;
     public settingsSelectPersons = this.defaultSeLectSettings;
+    public settingsSelectObjectDetectionDetector = this.defaultSeLectSettings;
+    public settingsSelectObjectDetectionKey = this.defaultSeLectSettings;
+    public settingsSelectObjectDetectionPrecision = this.defaultSeLectSettings;
+    public settingsSelectObjectDetectionState = this.defaultSeLectSettings;
 
     public textsSelectWhen: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
@@ -135,9 +143,41 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'Alle'};
+    public textsSelectObjectDetectionState: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Status ausgewählt',
+        checkedPlural: 'Status ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
+    public textsSelectObjectDetectionDetector: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Detector ausgewählt',
+        checkedPlural: 'Detector ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
+    public textsSelectObjectDetectionKey: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Objekt ausgewählt',
+        checkedPlural: 'Objekt ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
+    public textsSelectObjectDetectionPrecision: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Genauigkeit ausgewählt',
+        checkedPlural: 'Genauigkeit ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
 
     public showWhereAvailable = true;
     public showWhenAvailable = true;
+    public showObjectDetectionAvailable = true;
+
+    @Input()
+    public showObjectDetection? = this.showForm;
 
     @Input()
     public showWhere? = this.showForm;
@@ -175,6 +215,10 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             personalRateDifficulty: [],
             playlists: [],
             persons: [],
+            objectDetectionDetector: [],
+            objectDetectionKey: [],
+            objectDetectionPrecision: [],
+            objectDetectionState: [],
             actionType: [],
             type: [],
             sort: '',
@@ -233,6 +277,10 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             personalRateOverall: [(values.personalRateOverall ? values.personalRateOverall.split(/,/) : [])],
             personalRateDifficulty: [(values.personalRateDifficulty ? values.personalRateDifficulty.split(/,/) : [])],
             persons: [(values.persons ? values.persons.split(/,/) : [])],
+            objectDetectionDetector: [(values.objectDetectionDetector ? values.objectDetectionDetector.split(/,/) : [])],
+            objectDetectionKey: [(values.objectDetectionKey ? values.objectDetectionKey.split(/,/) : [])],
+            objectDetectionPrecision: [(values.objectDetectionPrecision ? values.objectDetectionPrecision.split(/,/) : [])],
+            objectDetectionState: [(values.objectDetectionState ? values.objectDetectionState.split(/,/) : [])],
             playlists: [(values.playlists ? values.playlists.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]
         });
@@ -285,7 +333,14 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             this.tdocSearchFormUtils.getPersonalRateDifficultyValues(tdocSearchSearchResult), true, [], true);
         this.optionsSelectPersons = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getPersonValues(tdocSearchSearchResult), true, [], true);
-
+        this.optionsSelectObjectDetectionDetector = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getObjectDetectionDetectorValues(tdocSearchSearchResult), true, [], true);
+        this.optionsSelectObjectDetectionKey = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getObjectDetectionKeyValues(tdocSearchSearchResult), true, [], false);
+        this.optionsSelectObjectDetectionPrecision = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getObjectDetectionPrecisionValues(tdocSearchSearchResult), true, [], false);
+        this.optionsSelectObjectDetectionState = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getObjectDetectionStateValues(tdocSearchSearchResult), true, [], true);
         const values: TourDocSearchForm = tdocSearchSearchResult.searchForm;
         const [lat, lon, dist] = this.tdocSearchFormUtils.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
@@ -307,6 +362,9 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             this.optionsSelectTechDataAscent.length > 0);
         this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0 || this.optionsSelectPersons.length > 0 ||
             this.optionsSelectPersonalRateDifficulty.length > 0 || this.optionsSelectPersonalRateOverall.length > 0);
+        this.showObjectDetectionAvailable = (this.optionsSelectObjectDetectionDetector.length > 0 ||
+            this.optionsSelectObjectDetectionKey.length > 0 || this.optionsSelectObjectDetectionPrecision.length > 0 ||
+            this.optionsSelectObjectDetectionState.length > 0);
     }
 
     protected beforeDoSearchPrepareValues(values: any) {
@@ -318,10 +376,10 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     updateFormState(state?: boolean): void {
         if (state !== undefined) {
             this.showForm = this.showDetails = this.showFulltext = this.showMeta = this.showSpecialFilter = this.showWhat = this.showWhen
-                = this.showWhere = state;
+                = this.showWhere = this.showObjectDetection = state;
         } else {
             this.showForm = this.showDetails || this.showFulltext || this.showMeta || this.showSpecialFilter || this.showWhat
-                || this.showWhen || this.showWhere;
+                || this.showWhen || this.showWhere || this.showObjectDetection;
         }
 
         this.changedShowForm.emit(this.showForm);

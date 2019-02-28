@@ -48,6 +48,22 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
          return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_dur_facet_fs', '', '');
     }
 
+    getObjectDetectionDetectorValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'oddetectors_txt', '', '');
+    }
+
+    getObjectDetectionKeyValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'odkeys_txt', '', '');
+    }
+
+    getObjectDetectionPrecisionValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'odprecision_is', '', '');
+    }
+
+    getObjectDetectionStateValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'odstates_ss', '', 'label.odimgobject.state.');
+    }
+
     getPersonValues(searchResult: TourDocSearchResult): any[] {
          return this.searchFormUtils.getFacetValues(searchResult, 'persons_txt', '', '');
     }

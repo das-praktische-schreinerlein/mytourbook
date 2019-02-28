@@ -58,6 +58,10 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         moreFilterMap.set('techRateOverall', searchForm.techRateOverall);
         moreFilterMap.set('personalRateDifficulty', searchForm.personalRateDifficulty);
         moreFilterMap.set('personalRateOverall', searchForm.personalRateOverall);
+        moreFilterMap.set('objectDetectionDetector', searchForm.objectDetectionDetector);
+        moreFilterMap.set('objectDetectionKey', searchForm.objectDetectionKey);
+        moreFilterMap.set('objectDetectionPrecision', searchForm.objectDetectionPrecision);
+        moreFilterMap.set('objectDetectionState', searchForm.objectDetectionState);
         let moreFilter = this.searchParameterUtils.joinParamsToOneRouteParameter(moreFilterMap, this.splitter);
         if (moreFilter !== undefined && moreFilter.length > 0) {
             if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
@@ -125,7 +129,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
             ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:',
-                'personalRateOverall:', 'personalRateDifficulty:']);
+                'personalRateOverall:', 'personalRateDifficulty:',
+                'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:', 'objectDetectionState:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
             moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
@@ -148,17 +153,23 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         const personalRateDifficulty: string = (moreFilterValues.has('personalRateDifficulty:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('personalRateDifficulty:'), 'personalRateDifficulty:',
                 ',') : '');
+        const objectDetectionDetector: string = (moreFilterValues.has('objectDetectionDetector:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('objectDetectionDetector:'), 'objectDetectionDetector:',
+                ',') : '');
+        const objectDetectionKey: string = (moreFilterValues.has('objectDetectionKey:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('objectDetectionKey:'), 'objectDetectionKey:',
+                ',') : '');
+        const objectDetectionPrecision: string = (moreFilterValues.has('objectDetectionPrecision:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('objectDetectionPrecision:'), 'objectDetectionPrecision:',
+                ',') : '');
+        const objectDetectionState: string = (moreFilterValues.has('objectDetectionState:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('objectDetectionState:'), 'objectDetectionState:',
+                ',') : '');
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
             ['action:', 'keyword:', 'playlists:', 'persons:']);
-        let whatFilter = '';
-        if (whatFilterValues.has('unknown')) {
-            whatFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('unknown'), '', ',');
-        }
-        whatFilter = whatFilter.replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
         const what: string = (whatFilterValues.has('keyword:') ?
-            this.searchParameterUtils.joinValuesAndReplacePrefix(
-                whatFilterValues.get('keyword:'), 'keyword:', ',') : '');
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('keyword:'), 'keyword:', ',') : '');
         const actiontype: string = (whatFilterValues.has('action:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('action:'), 'action:', ',') : '');
         const playlists: string = (whatFilterValues.has('playlists:') ?
@@ -223,6 +234,18 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.techDataAltitudeMax = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataAltitudeMax, /^ungefiltert$/, ''),
             defaults['techDataAltitudeMax'], '');
+        searchForm.objectDetectionDetector = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(objectDetectionDetector, /^ungefiltert$/, ''),
+            defaults['objectDetectionDetector'], '');
+        searchForm.objectDetectionKey = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(objectDetectionKey, /^ungefiltert$/, ''),
+            defaults['objectDetectionKey'], '');
+        searchForm.objectDetectionPrecision = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(objectDetectionPrecision, /^ungefiltert$/, ''),
+            defaults['objectDetectionPrecision'], '');
+        searchForm.objectDetectionState = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(objectDetectionState, /^ungefiltert$/, ''),
+            defaults['objectDetectionState'], '');
         searchForm.sort = this.searchParameterUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
         searchForm.type = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '').toLowerCase();
@@ -271,7 +294,16 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             undefined, true, 'filter.tdocratepers.gesamt.'));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.personalRateDifficulty, 'hrt_personalRateDifficulty',
             undefined, true, 'label.tdocratepers.schwierigkeit.'));
-        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.persons, 'hrt_persons', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.personalRateDifficulty, 'hrt_personalRateDifficulty',
+            undefined, true, 'label.tdocratepers.schwierigkeit.'));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionDetector, 'hrt_objectDetectionDetector',
+            undefined, false, ''));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionKey, 'hrt_objectDetectionKey',
+            undefined, false, ''));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionPrecision, 'hrt_objectDetectionPrecision',
+            undefined, false, ''));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionState, 'hrt_objectDetectionState',
+            undefined, true, 'label.odimgobject.state.'));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.playlists, 'hrt_playlists', undefined, true));
 
         return res;
