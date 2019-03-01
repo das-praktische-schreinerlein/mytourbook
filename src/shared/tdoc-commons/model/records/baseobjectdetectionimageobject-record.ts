@@ -17,7 +17,7 @@ export interface BaseObjectDetectionImageObjectRecordType extends BaseImageRecor
     key: string;
     keySuggestion: string;
     keyCorrection: string;
-    state: string;
+    state: BaseObjectDetectionState;
     imgWidth: number;
     imgHeight: number;
     objX: number;
@@ -45,7 +45,7 @@ export class BaseObjectDetectionImageObjectRecord extends BaseImageRecord implem
     key: string;
     keySuggestion: string;
     keyCorrection: string;
-    state: string;
+    state: BaseObjectDetectionState;
     imgWidth: number;
     imgHeight: number;
     objX: number;
