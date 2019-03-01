@@ -1,5 +1,5 @@
 import {BaseImageRecordFactory, BaseImageRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
-import {BaseObjectDetectionImageObjectRecord} from './baseobjectdetectionimageobject-record';
+import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
 
 export class TourDocObjectDetectionImageObjectRecord extends BaseObjectDetectionImageObjectRecord {
     tdoc_id: string;

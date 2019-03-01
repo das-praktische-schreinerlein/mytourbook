@@ -18,9 +18,9 @@
                                  alt="{{listItem.image.name}}"
                                  (resize)="onResizeMainImage()"
                                  (load)="onResizeMainImage()">
-                            <app-tdoc-odobjectrectangles [objects]="listItem.objects"
+                            <app-cdoc-odobjectrectangles [objects]="listItem.objects"
                                  [width]="imageWidth"
-                                 *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-tdoc-odobjectrectangles>
+                                 *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
                         </div>
                     </ng-container>
                     <ng-container *ngIf="listItem.video">
@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-2 ratetech layout-big">
                     <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                        <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
                     </ng-container>
                     <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                         <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
@@ -112,7 +112,7 @@
                             <div class="row">
                                 <div class="col-4 location layout-small">
                                     <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                                        <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
                                     </ng-container>
                                     <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                                         <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
@@ -175,7 +175,7 @@
                         <div class="col-9 location layout-verysmall">
                             <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                                <app-tdoc-odobjectdetails [objects]="listItem.objects"></app-tdoc-odobjectdetails>
+                                <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
                             </ng-container>
                             <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >

@@ -11,7 +11,7 @@ import {
     CommonDocContentUtilsConfig,
     CommonItemData
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
-import {BaseObjectDetectionImageObjectRecord} from '../../../shared/tdoc-commons/model/records/baseobjectdetectionimageobject-record';
+import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
 import LatLng = L.LatLng;
 
 export interface TourDocItemData extends CommonItemData {

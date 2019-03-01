@@ -15,9 +15,9 @@
                                              alt="{{record.tdocimages[0].name}}"
                                              (resize)="onResizeMainImage()"
                                              (load)="onResizeMainImage()">
-                                        <app-tdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
+                                        <app-cdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
                                              [width]="imageWidth"
-                                             *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-tdoc-odobjectrectangles>
+                                             *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>
                                     </div>
                                 </ng-container>
                             </div>
