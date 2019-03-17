@@ -92,35 +92,24 @@ export class ObjectDetectionManagerModule {
         }
     }
 
-    public sendObjectDetectionRequestsToQueue(detector: string, maxPerRun: number): Promise<any> {
+    public sendObjectDetectionRequestsToQueue(detectors: string, maxPerRun: number): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const basePath = this.backendConfig['apiRoutePicturesStaticDir'] + '/pics_full';
             const me = this;
             this.requestQueueWorker.start();
 
-            return this.readImageDataToDetect(detector, maxPerRun).then(imageRequestDataList => {
-                const detectionRequests: ObjectDetectionRequestType[] = [];
-                for (const imageDataRequest of imageRequestDataList) {
-                    detectionRequests.push(me.mapImageDataToObjectDetectionRequest(detector, imageDataRequest, basePath));
-                }
-
-                const detectionRequestPromises = [];
-                for (const detectionRequest of detectionRequests) {
-                    detectionRequestPromises.push(function () {
-                        return me.sendObjectDetectionRequestToQueue(detectionRequest).then(value => {
-                            return me.createObjectDetectionRequestInDatabase(detectionRequest);
-                        });
-                    });
-                }
-
-                return Promise_serial(detectionRequestPromises, {parallelize: 1}).then(arrayOfResults => {
-                    console.log('DONE - queued objectDetectionRequests');
-                    return resolve('DONE - queued objectDetectionRequests');
-                }).catch(reason => {
-                    console.error('ERROR - cant queue objectDetectionRequests', reason);
-                    return reject(reason);
+            const detectionRequestPromises = [];
+            for (const detector of detectors.split(',')) {
+                detectionRequestPromises.push(function () {
+                    return me.processObjectDetectionRequestForDetector(detector, maxPerRun, basePath);
                 });
+            }
+
+            return Promise_serial(detectionRequestPromises, {parallelize: 1}).then(arrayOfResults => {
+                console.log('DONE - queued objectDetectionRequests');
+                return resolve('DONE - queued objectDetectionRequests');
             }).catch(reason => {
+                console.error('ERROR - cant queue objectDetectionRequests', reason);
                 return reject(reason);
             });
         });
@@ -175,6 +164,33 @@ export class ObjectDetectionManagerModule {
 
             console.log('RUNNING - started response worker');
             this.responseQueueWorker.start();
+        });
+    }
+
+    protected processObjectDetectionRequestForDetector(detector: string, maxPerRun: number, basePath: string): Promise<any> {
+        const me = this;
+        return this.readImageDataToDetect(detector, maxPerRun).then(imageRequestDataList => {
+            const detectionRequests: ObjectDetectionRequestType[] = [];
+            for (const imageDataRequest of imageRequestDataList) {
+                detectionRequests.push(me.mapImageDataToObjectDetectionRequest(detector, imageDataRequest, basePath));
+            }
+
+            const detectionRequestPromises = [];
+            for (const detectionRequest of detectionRequests) {
+                detectionRequestPromises.push(function () {
+                    return me.sendObjectDetectionRequestToQueue(detectionRequest).then(value => {
+                        return me.createObjectDetectionRequestInDatabase(detectionRequest);
+                    });
+                });
+            }
+
+            return Promise_serial(detectionRequestPromises, {parallelize: 1}).then(arrayOfResults => {
+                return utils.resolve('DONE - queued objectDetectionRequests');
+            }).catch(reason => {
+                return utils.reject(reason);
+            });
+        }).catch(reason => {
+            return utils.reject(reason);
         });
     }
 
@@ -337,8 +353,8 @@ export class ObjectDetectionManagerModule {
                 stateName = 'io_state';
                 detectorName = 'io_detector';
                 detailFields = ['io_obj_type', 'io_img_width', 'io_img_height',
-                            'io_obj_x1', 'io_obj_y1', 'io_obj_width', 'io_obj_height',
-                            'io_precision'];
+                    'io_obj_x1', 'io_obj_y1', 'io_obj_width', 'io_obj_height',
+                    'io_precision'];
                 break;
             case 'video':
                 baseTableName = 'video';
@@ -364,6 +380,8 @@ export class ObjectDetectionManagerModule {
             ' SELECT "Default", "Default", "Default" FROM dual ' +
             '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="Default" AND o_key="Default")';
 
+        // TODO if nothing found - insert dummyKey and delete all imageobject with dummyKey with i_id < me
+
         const detectionResultPromises = [];
         for (const detectionResult of detectionResponse.results) {
             detectionResultPromises.push(function () {
@@ -372,12 +390,12 @@ export class ObjectDetectionManagerModule {
                     detectionResult.objWidth, detectionResult.objHeight, detectionResult.objWidth, detectionResult.objHeight,
                     detectionResult.precision];
                 const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
-                '   SELECT "' + detectionResult.detector + '",' +
-                '          "' + keySuggestion + '",' +
-                '          (select MAX(o_id) as newId FROM objects WHERE o_name="Default") as o_id from dual ' +
-                '   WHERE NOT EXISTS (' +
-                '      SELECT 1 FROM objects_key WHERE ok_detector="' + detectionResult.detector + '" ' +
-                '                                      AND ok_key="' + keySuggestion + '")';
+                    '   SELECT "' + detectionResult.detector + '",' +
+                    '          "' + keySuggestion + '",' +
+                    '          (select MAX(o_id) as newId FROM objects WHERE o_name="Default") as o_id from dual ' +
+                    '   WHERE NOT EXISTS (' +
+                    '      SELECT 1 FROM objects_key WHERE ok_detector="' + detectionResult.detector + '" ' +
+                    '                                      AND ok_key="' + keySuggestion + '")';
                 const insertImageObject = 'INSERT INTO ' + joinTableName + ' (' +
                     idName + ', ' + stateName + ', ' + detectorName + ', ' + detailFields.join(', ') + ')' +
                     ' VALUES ("' + id + '",' +
@@ -388,7 +406,7 @@ export class ObjectDetectionManagerModule {
                     return sqlBuilder.raw(insertObjectKeySql).then(function doneInsert(dbresults: any) {
                         return sqlBuilder.raw(insertImageObject);
                     }).then(function doneInsert(dbresults: any) {
-                            return resolve(true);
+                        return resolve(true);
                     }).catch(function errorPlaylist(reason) {
                         console.error('detectionRequest delete/insert ' + joinTableName + ' failed:', reason);
                         return reject(reason);
