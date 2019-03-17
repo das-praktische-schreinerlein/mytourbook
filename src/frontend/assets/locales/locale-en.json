@@ -296,7 +296,7 @@
     "label.odimgobject.state.UNKNOWN": "unknown",
     "label.odimgobject.state.OPEN": "open",
     "label.odimgobject.state.ERROR": "error",
-    "label.odimgobject.state.RUNNING_SUGGESTED,": "suggested",
+    "label.odimgobject.state.RUNNING_SUGGESTED": "suggested",
     "label.odimgobject.state.RUNNING_MANUAL_APPROVED": "\u2714 approved",
     "label.odimgobject.state.RUNNING_MANUAL_REJECTED": "\u2716 rejected",
     "label.odimgobject.state.RUNNING_MANUAL_CORRECTION_NEEDED": "\u270E correction needed",

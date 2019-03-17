@@ -6,6 +6,7 @@ import {utils} from 'js-data';
 import {MediaManagerCommand} from './commands/media-manager.command';
 import {TourDocExporterCommand} from './commands/tdoc-exporter.command';
 import {RedirectGeneratorCommand} from './commands/redirect-generator.command';
+import {ObjectDetectionManagerCommand} from './commands/objectdetector.command';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -23,6 +24,7 @@ const tdocLoader = new TourDocLoaderCommand();
 const tdocExporter = new TourDocExporterCommand();
 const imageManager = new MediaManagerCommand();
 const redirectGenerator = new RedirectGeneratorCommand();
+const objectDetectionManager = new ObjectDetectionManagerCommand();
 
 let promise: Promise<any>;
 switch (argv['command']) {
@@ -46,6 +48,9 @@ switch (argv['command']) {
         break;
     case 'mediaManager':
         promise = imageManager.process(argv);
+        break;
+    case 'objectDetectionManager':
+        promise = objectDetectionManager.process(argv);
         break;
     default:
         console.error('unknown command:', argv);

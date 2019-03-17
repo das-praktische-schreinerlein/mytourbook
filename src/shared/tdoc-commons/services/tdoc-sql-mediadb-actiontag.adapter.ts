@@ -3,6 +3,7 @@ import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/di
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
+import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 
 export class TourDocSqlMediadbActionTagAdapter {
 
@@ -139,6 +140,7 @@ export class TourDocSqlMediadbActionTagAdapter {
         let joinTableName;
         let idName;
         let typeName;
+        let stateName;
         let detectorName;
         let precisionName;
         switch (table) {
@@ -148,6 +150,7 @@ export class TourDocSqlMediadbActionTagAdapter {
                 idName = 'i_id';
                 typeName = 'io_obj_type';
                 precisionName = 'io_precision';
+                stateName = 'io_state';
                 detectorName = 'io_detector';
                 break;
             case 'video':
@@ -156,6 +159,7 @@ export class TourDocSqlMediadbActionTagAdapter {
                 idName = 'v_id';
                 typeName = 'vo_obj_type';
                 precisionName = 'vo_precision';
+                stateName = 'vo_state';
                 detectorName = 'vo_detector';
                 break;
             default:
@@ -166,8 +170,11 @@ export class TourDocSqlMediadbActionTagAdapter {
             'WHERE ' + joinTableName + '.' + typeName + ' IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKeys.join('", "') + '"))' +
             ' AND ' + idName + ' = "' + id + '"';
         const insertSql = 'INSERT INTO ' + joinTableName + ' (' + typeName + ', ' + idName + ', ' + precisionName + ', ' + detectorName + ')' +
-            ' SELECT objects.o_key AS ' + typeName + ', "' + id + '" AS ' + idName +
-                    ', "' + precision + '" AS ' + precisionName + ', "' + detector + '" AS ' + detectorName +
+            ' SELECT objects.o_key AS ' + typeName + ',' +
+            ' "' + id + '" AS ' + idName + ',' +
+            ' "' + precision + '" AS ' + precisionName + ',' +
+            ' "' + detector + '" AS ' + detectorName + ',' +
+            ' "' + ObjectDetectionState.DONE_APPROVAL_PROCESSED + '" AS ' + stateName +
             ' FROM objects WHERE o_name = ("' + objectKeys.join('", "') + '")';
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);

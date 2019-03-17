@@ -106,6 +106,7 @@
     "readdirp": "~2.1.0",
     "redis": "~2.8.0",
     "request-ip": "~2.1.1",
+    "rsmq-worker": "~0.5.2",
     "rxjs": "~5.5.2",
     "sitemap-stream-parser": "~1.4.0",
     "sqlite3": "~4.0.2",
