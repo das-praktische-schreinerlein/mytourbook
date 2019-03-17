@@ -387,7 +387,7 @@ export class ObjectDetectionManagerModule {
             detectionResultPromises.push(function () {
                 const keySuggestion = detectionResult.keySuggestion.split(',')[0].trim().replace(/[^a-zA-Z0-9]/g, '_');
                 const detailValues = [keySuggestion, detectionResult.imgWidth, detectionResult.imgHeight,
-                    detectionResult.objWidth, detectionResult.objHeight, detectionResult.objWidth, detectionResult.objHeight,
+                    detectionResult.objX, detectionResult.objY, detectionResult.objWidth, detectionResult.objHeight,
                     detectionResult.precision];
                 const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
                     '   SELECT "' + detectionResult.detector + '",' +
