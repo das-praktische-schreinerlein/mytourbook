@@ -354,6 +354,8 @@ export class ObjectDetectionManagerModule {
                 return utils.reject('detectionResponse ' + detectionResponse + ' table not valid');
         }
 
+        // TODO: sanitize detectors and other values
+
         const me = this;
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
             'WHERE ' + joinTableName + '.' + detectorName + ' IN ("' + detectionResponse.request.detectors.join('", "') + '") ' +
@@ -365,17 +367,17 @@ export class ObjectDetectionManagerModule {
         const detectionResultPromises = [];
         for (const detectionResult of detectionResponse.results) {
             detectionResultPromises.push(function () {
-                const detailValues = [detectionResult.keySuggestion, detectionResult.imgWidth, detectionResult.imgHeight,
+                const keySuggestion = detectionResult.keySuggestion.split(',')[0].trim().replace(/[^a-zA-Z0-9]/g, '_');
+                const detailValues = [keySuggestion, detectionResult.imgWidth, detectionResult.imgHeight,
                     detectionResult.objWidth, detectionResult.objHeight, detectionResult.objWidth, detectionResult.objHeight,
                     detectionResult.precision];
-
                 const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
                 '   SELECT "' + detectionResult.detector + '",' +
-                '          "' + detectionResult.keySuggestion + '",' +
+                '          "' + keySuggestion + '",' +
                 '          (select MAX(o_id) as newId FROM objects WHERE o_name="Default") as o_id from dual ' +
                 '   WHERE NOT EXISTS (' +
                 '      SELECT 1 FROM objects_key WHERE ok_detector="' + detectionResult.detector + '" ' +
-                '                                      AND ok_key="' + detectionResult.keySuggestion + '")';
+                '                                      AND ok_key="' + keySuggestion + '")';
                 const insertImageObject = 'INSERT INTO ' + joinTableName + ' (' +
                     idName + ', ' + stateName + ', ' + detectorName + ', ' + detailFields.join(', ') + ')' +
                     ' VALUES ("' + id + '",' +
