@@ -58,7 +58,9 @@ switch (argv['command']) {
 }
 
 promise.then(value => {
+    console.log('DONE - command finished:', value);
     process.exit(0);
 }).catch(reason => {
+    console.error('ERROR - command failed:', reason);
     process.exit(-1);
 });

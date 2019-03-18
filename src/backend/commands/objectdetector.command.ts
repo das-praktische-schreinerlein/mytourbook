@@ -20,10 +20,6 @@ export class ObjectDetectionManagerCommand implements AbstractCommand {
         switch (action) {
             case 'sendQueueRequests':
                 const detector = argv['detector'];
-                if (!detector) {
-                    console.error('unknown detector:', argv);
-                    return utils.reject('unknown detector');
-                }
                 const maxPerRun = argv['maxPerRun'] ? parseInt(argv['maxPerRun'], 10) : defaultMaxPerRun;
 
                 try {
@@ -31,7 +27,6 @@ export class ObjectDetectionManagerCommand implements AbstractCommand {
                 } catch (err) {
                     return utils.reject(err);
                 }
-                console.log('start detection with detector:' + detector + ' maxPerRun:' + maxPerRun);
                 promise = objectDetectionManager.sendObjectDetectionRequestsToQueue(detector, maxPerRun || defaultMaxPerRun);
 
                 break;

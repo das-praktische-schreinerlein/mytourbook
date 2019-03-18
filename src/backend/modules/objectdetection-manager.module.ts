@@ -12,6 +12,8 @@ import * as RSMQWorker from 'rsmq-worker';
 import {SelectQueryData, SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import * as Promise_serial from 'promise-serial';
 import {utils} from 'js-data';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
+import {MapperUtils} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
 interface RequestImageDataType {
     id: string;
@@ -19,11 +21,13 @@ interface RequestImageDataType {
     fileName: string;
     fileDir: string;
     filePath: string;
+    detectors: [string];
 }
 export class ObjectDetectionManagerModule {
     private dataService: TourDocDataService;
     private backendConfig: {};
     private sqlQueryBuilder: SqlQueryBuilder;
+    private mapperUtils: MapperUtils;
     private requestQueueName = 'mycms-objectdetector-request';
     private requestQueueWorker: RSMQWorker;
     private responseQueueName = 'mycms-objectdetector-response';
@@ -36,6 +40,7 @@ export class ObjectDetectionManagerModule {
         this.dataService = dataService;
         this.backendConfig = backendConfig;
         this.sqlQueryBuilder = new SqlQueryBuilder();
+        this.mapperUtils = new MapperUtils();
     }
 
     public configureModule(flgRequest: boolean, flgResponse: boolean, flgError: boolean) {
@@ -92,20 +97,40 @@ export class ObjectDetectionManagerModule {
         }
     }
 
-    public sendObjectDetectionRequestsToQueue(detectors: string, maxPerRun: number): Promise<any> {
+    public sendObjectDetectionRequestsToQueue(requestedDetectors: string, maxPerRun: number): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const basePath = this.backendConfig['apiRoutePicturesStaticDir'] + '/pics_full';
             const me = this;
             this.requestQueueWorker.start();
 
-            const detectionRequestPromises = [];
-            for (const detector of detectors.split(',')) {
-                detectionRequestPromises.push(function () {
-                    return me.processObjectDetectionRequestForDetector(detector, maxPerRun, basePath);
-                });
+            let detectors = [];
+            const availableDetectors: string[] = BeanUtils.getValue(this.backendConfig, 'objectDetectionConfig.availableDetectors');
+            if (!availableDetectors || availableDetectors.length < 1) {
+                return reject('no available detector configured in backendConfig');
             }
 
-            return Promise_serial(detectionRequestPromises, {parallelize: 1}).then(arrayOfResults => {
+            if (requestedDetectors) {
+                for (const detectorName of requestedDetectors.split(',')) {
+                    if (availableDetectors.indexOf(detectorName) >= 0) {
+                        detectors.push(detectorName);
+                    } else {
+                        return reject('unknown detector:' + detectorName);
+                    }
+                }
+
+            }
+
+            if (detectors.length < 1) {
+                const defaultDetectors: string[] = BeanUtils.getValue(this.backendConfig, 'objectDetectionConfig.defaultDetectors');
+                if (!defaultDetectors || defaultDetectors.length < 1) {
+                    return reject('no default detectors configured in backendConfig');
+                }
+
+                detectors = defaultDetectors;
+            }
+
+            console.log('start detection with detector:' + detectors + ' maxPerRun:' + maxPerRun);
+            return me.processObjectDetectionRequestForDetector(detectors, maxPerRun, basePath).then(value => {
                 console.log('DONE - queued objectDetectionRequests');
                 return resolve('DONE - queued objectDetectionRequests');
             }).catch(reason => {
@@ -167,12 +192,12 @@ export class ObjectDetectionManagerModule {
         });
     }
 
-    protected processObjectDetectionRequestForDetector(detector: string, maxPerRun: number, basePath: string): Promise<any> {
+    protected processObjectDetectionRequestForDetector(detectors: string[], maxPerRun: number, basePath: string): Promise<any> {
         const me = this;
-        return this.readImageDataToDetect(detector, maxPerRun).then(imageRequestDataList => {
+        return this.readImageDataToDetect(detectors, maxPerRun).then(imageRequestDataList => {
             const detectionRequests: ObjectDetectionRequestType[] = [];
             for (const imageDataRequest of imageRequestDataList) {
-                detectionRequests.push(me.mapImageDataToObjectDetectionRequest(detector, imageDataRequest, basePath));
+                detectionRequests.push(me.mapImageDataToObjectDetectionRequest(imageDataRequest, basePath));
             }
 
             const detectionRequestPromises = [];
@@ -194,46 +219,95 @@ export class ObjectDetectionManagerModule {
         });
     }
 
-    protected readImageDataToDetect(detector: string, maxPerRun: number): Promise<RequestImageDataType[]> {
+    protected readImageDataToDetect(detectors: string[], maxPerRun: number): Promise<RequestImageDataType[]> {
+        const detectorFilterNames = detectors.map(detector => {
+            return this.mapperUtils.escapeAdapterValue(detector);
+        });
         const maxIdSqlQuery: SelectQueryData = {
-            fields: ['COALESCE(MAX(i_id), 0) as maxid'],
+            fields: ['io_detector', 'COALESCE(MAX(i_id), 0) as maxid'],
             from: 'image_object',
-            where: ['io_detector="' + detector + '"'],
+            where: ['io_detector in ("' + detectorFilterNames.join('", "') + '")'],
             sort: undefined,
-            limit: maxPerRun,
+            limit: undefined,
             offset: 0,
             tableConfig: undefined,
-            groupByFields: undefined,
+            groupByFields: ['io_detector'],
             having: undefined
         };
         const sqlBuilder = this.knex;
         const rawSelectMaxId = sqlBuilder.raw(this.sqlQueryBuilder.selectQueryTransformToSql(maxIdSqlQuery));
         const me = this;
         const result = new Promise<RequestImageDataType[]>((resolve, reject) => {
-            rawSelectMaxId.then(function doneDelete(maxIdResult: any) {
-                const idSqlQuery: SelectQueryData = {
-                    fields: ['CONCAT("IMAGE", "_", image.i_id) AS id',
-                        'i_id',
-                        'CONCAT(image.i_dir, "/", image.i_file) AS filePath',
-                        'i_dir as fileDir',
-                        'i_file as fileName'],
-                    from: 'image',
-                    where: ['i_id > ' + maxIdResult[0][0]['maxid']],
-                    sort: ['i_id ASC'],
-                    limit: maxPerRun,
-                    offset: 0,
-                    tableConfig: undefined,
-                    groupByFields: undefined,
-                    having: undefined
-                };
-                return sqlBuilder.raw(me.sqlQueryBuilder.selectQueryTransformToSql(idSqlQuery));
-            }).then(function doneInsert(dbResults: any) {
-                const ids: RequestImageDataType[] = [];
-                for (const record of dbResults[0]) {
-                    ids.push(record);
+            return rawSelectMaxId.then(function doneDelete(maxIdResults: any) {
+                const maxIds = {};
+                for (const detector of detectorFilterNames) {
+                    maxIds[detector] = {
+                        'maxid': 0,
+                        'io_detector': detector
+                    };
                 }
-                return resolve(ids);
-            }).catch(function errorPlaylist(reason) {
+                for (const maxIdResult of maxIdResults[0]) {
+                    maxIds[maxIdResult['io_detector']] = {
+                        'maxid': maxIdResult['maxid'],
+                        'io_detector': maxIdResult['io_detector']
+                    };
+                }
+
+                const idSqlQueryPromises = [];
+                for (const detector of Object.keys(maxIds)) {
+                    const maxId = maxIds[detector];
+                    const idSqlQuery: SelectQueryData = {
+                        fields: ['CONCAT("IMAGE", "_", image.i_id) AS id',
+                            'i_id',
+                            'CONCAT(image.i_dir, "/", image.i_file) AS filePath',
+                            'i_dir as fileDir',
+                            'i_file as fileName',
+                            '"' + me.mapperUtils.escapeAdapterValue(maxId['io_detector']) + '" as detector'],
+                        from: 'image',
+                        where: ['i_id > ' + maxId['maxid']],
+                        sort: ['i_id ASC'],
+                        limit: maxPerRun,
+                        offset: 0,
+                        tableConfig: undefined,
+                        groupByFields: undefined,
+                        having: undefined
+                    };
+                    const sql = me.sqlQueryBuilder.selectQueryTransformToSql(idSqlQuery);
+                    idSqlQueryPromises.push(function () {
+                        return sqlBuilder.raw(sql);
+                    });
+                }
+
+                return Promise_serial(idSqlQueryPromises, {parallelize: 1}).then(arrayOfResults => {
+                    const records = {};
+                    for (let i = 0; i < arrayOfResults.length; i++) {
+                        const dbResults = arrayOfResults[i];
+                        for (const record of dbResults[0]) {
+                            if (records[record['id']]) {
+                                records[record['id']]['detectors'].push(record['detector']);
+                            } else {
+                                records[record['id']] = <RequestImageDataType>{
+                                    id: record['id'],
+                                    fileDir: record['fileDir'],
+                                    fileName: record['fileName'],
+                                    filePath: record['filePath'],
+                                    detectors: [record['detector']]
+                                };
+                            }
+                        }
+                    }
+
+                    const imageRequests: RequestImageDataType[] = [];
+                    const ids = Object.keys(records).sort();
+                    for (let i = 0; i < maxPerRun && i < ids.length; i++) {
+                        imageRequests.push(records[ids[i]]);
+                    }
+
+                    return resolve(imageRequests);
+                }).catch(reason => {
+                    return reject(reason);
+                });
+            }).catch(function errorFunction(reason) {
                 console.error('readImageIdsForDetection failed:', reason);
                 return reject(reason);
             });
@@ -243,10 +317,10 @@ export class ObjectDetectionManagerModule {
 
     }
 
-    protected mapImageDataToObjectDetectionRequest(detector: string, image: RequestImageDataType,
+    protected mapImageDataToObjectDetectionRequest(image: RequestImageDataType,
                                                    basePath: string): ObjectDetectionRequestType {
         return <ObjectDetectionRequest> {
-            detectors: [detector],
+            detectors: image.detectors,
             fileName: basePath + '/' + image.filePath,
             imgHeight: undefined,
             imgWidth: undefined,
@@ -268,10 +342,12 @@ export class ObjectDetectionManagerModule {
             me.requestQueueWorker.send( JSON.stringify(detectionRequest), 0, function (err) {
                 if (err) {
                     console.error('ERROR - cant send request to queue:', me.requestQueueName, detectionRequest);
+                    detectionRequest = undefined;
                     return rmsqReject('ERROR - cant send request to queue:' + me.requestQueueName);
                 }
 
                 console.debug('DONE - send request to queue:', me.requestQueueName, detectionRequest);
+                detectionRequest = undefined;
                 return rmsqResolve('DONE - send request to queue:' + me.requestQueueName);
             });
         });
@@ -281,50 +357,70 @@ export class ObjectDetectionManagerModule {
         let id;
         let baseTableName;
         let joinTableName;
-        let idName;
-        let stateName;
-        let detectorName;
+        let idFieldName;
+        let stateFieldName;
+        let detectorFieldName;
         let table = undefined;
         if (detectionRequest.refId.startsWith('IMAGE_')) {
             table = 'image';
-            id = detectionRequest.refId.replace('IMAGE_', '');
+            id = this.mapperUtils.escapeAdapterValue(detectionRequest.refId.replace('IMAGE_', ''));
         }
 
         switch (table) {
             case 'image':
                 baseTableName = 'image';
                 joinTableName = 'image_object';
-                idName = 'i_id';
-                stateName = 'io_state';
-                detectorName = 'io_detector';
+                idFieldName = 'i_id';
+                stateFieldName = 'io_state';
+                detectorFieldName = 'io_detector';
                 break;
             case 'video':
                 baseTableName = 'video';
                 joinTableName = 'video_object';
-                idName = 'v_id';
-                stateName = 'vo_state';
-                detectorName = 'vo_detector';
+                idFieldName = 'v_id';
+                stateFieldName = 'vo_state';
+                detectorFieldName = 'vo_detector';
                 break;
             default:
-                return utils.reject('detectionRequest ' + detectionRequest + ' table not valid');
+                return utils.reject('detectionReuest table not valid: ' + LogUtils.sanitizeLogMsg(detectionRequest.refId));
         }
 
+        const detectorFilterValues = detectionRequest.detectors.map(detector => {
+            return this.mapperUtils.escapeAdapterValue(detector);
+        });
         const me = this;
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
-            'WHERE ' + joinTableName + '.' + detectorName + ' IN ("' + detectionRequest.detectors.join('", "') + '") ' +
-            ' AND ' + idName + ' = "' + id + '"';
-        const insertSql = 'INSERT INTO ' + joinTableName + ' (' + idName + ', ' + stateName + ', ' + detectorName + ')' +
-            ' VALUES ("' + id + '",' +
-            ' "' + detectionRequest.state + '",' +
-            ' "' + detectionRequest.detectors[0] + '")';
+            'WHERE ' + joinTableName + '.' + detectorFieldName + ' IN ("' + detectorFilterValues.join('", "') + '") ' +
+            ' AND ' + idFieldName + ' = "' + id + '"';
         const sqlBuilder = this.knex;
         const rawDelete = sqlBuilder.raw(deleteSql);
+        const detectionRequestPromises = [];
+        for (const detector of detectorFilterValues) {
+            const insertSql = 'INSERT INTO ' + joinTableName + ' (' + idFieldName + ', ' + stateFieldName + ', ' + detectorFieldName + ')' +
+                ' VALUES ("' + id + '",' +
+                ' "' + me.mapperUtils.escapeAdapterValue(detectionRequest.state) + '",' +
+                ' "' + detector + '")';
+            detectionRequestPromises.push(function () {
+                return new Promise((resolve, reject) => {
+                    return sqlBuilder.raw(insertSql).then(function doneInsert(dbresults: any) {
+                        return sqlBuilder.raw(insertSql);
+                    }).then(function doneInsert(dbresults: any) {
+                        return resolve(true);
+                    }).catch(function errorFunction(reason) {
+                        console.error('detectionRequest delete/insert ' + joinTableName + ' failed:', reason);
+                        return reject(reason);
+                    });
+                });
+            });
+        }
+
         return new Promise((resolve, reject) => {
             return rawDelete.then(function doneDelete(dbresults: any) {
-                return sqlBuilder.raw(insertSql);
-            }).then(function doneInsert(dbresults: any) {
-                return resolve(true);
-            }).catch(function errorPlaylist(reason) {
+                return Promise_serial(detectionRequestPromises, {parallelize: 1});
+            }).then(arrayOfResults => {
+                console.log('DONE - saved detectionRequest to database');
+                return resolve('DONE - saved detectionRequest to database');
+            }).catch(function errorFunction(reason) {
                 console.error('detectionRequest delete/insert ' + joinTableName + ' failed:', reason);
                 return reject(reason);
             });
@@ -335,83 +431,117 @@ export class ObjectDetectionManagerModule {
         let id;
         let baseTableName;
         let joinTableName;
-        let idName;
-        let stateName;
-        let detectorName;
-        let detailFields = [];
+        let idFieldName;
+        let stateFieldName;
+        let detectorFieldName;
+        let detailFieldNames = [];
         let table = undefined;
         if (detectionResponse.request.refId.startsWith('IMAGE_')) {
             table = 'image';
-            id = detectionResponse.request.refId.replace('IMAGE_', '');
+            id = this.mapperUtils.escapeAdapterValue(detectionResponse.request.refId.replace('IMAGE_', ''));
         }
 
         switch (table) {
             case 'image':
                 baseTableName = 'image';
                 joinTableName = 'image_object';
-                idName = 'i_id';
-                stateName = 'io_state';
-                detectorName = 'io_detector';
-                detailFields = ['io_obj_type', 'io_img_width', 'io_img_height',
+                idFieldName = 'i_id';
+                stateFieldName = 'io_state';
+                detectorFieldName = 'io_detector';
+                detailFieldNames = ['io_obj_type', 'io_img_width', 'io_img_height',
                     'io_obj_x1', 'io_obj_y1', 'io_obj_width', 'io_obj_height',
                     'io_precision'];
                 break;
             case 'video':
                 baseTableName = 'video';
                 joinTableName = 'video_object';
-                idName = 'v_id';
-                stateName = 'vo_state';
-                detectorName = 'vo_detector';
-                detailFields = ['vo_obj_type', 'vo_img_width', 'vo_img_height',
+                idFieldName = 'v_id';
+                stateFieldName = 'vo_state';
+                detectorFieldName = 'vo_detector';
+                detailFieldNames = ['vo_obj_type', 'vo_img_width', 'vo_img_height',
                     'vo_obj_x1', 'vo_obj_y1', 'vo_obj_width', 'vo_obj_height',
                     'vo_precision'];
                 break;
             default:
-                return utils.reject('detectionResponse ' + detectionResponse + ' table not valid');
+                return utils.reject('detectionResponse table not valid: ' + LogUtils.sanitizeLogMsg(detectionResponse.request.refId));
         }
 
-        // TODO: sanitize detectors and other values
-
+        const detectorFilterValues = detectionResponse.request.detectors.map(detector => {
+            return this.mapperUtils.escapeAdapterValue(detector);
+        });
+        const noSuggestionDetectorNames = [].concat(detectorFilterValues);
         const me = this;
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
-            'WHERE ' + joinTableName + '.' + detectorName + ' IN ("' + detectionResponse.request.detectors.join('", "') + '") ' +
-            ' AND ' + idName + ' = "' + id + '"';
+            'WHERE ' + joinTableName + '.' + detectorFieldName + ' IN ("' + detectorFilterValues.join('", "') + '") ' +
+            ' AND ' + idFieldName + ' = "' + id + '"';
         const insertObjectSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key)' +
             ' SELECT "Default", "Default", "Default" FROM dual ' +
             '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="Default" AND o_key="Default")';
 
-        // TODO if nothing found - insert dummyKey and delete all imageobject with dummyKey with i_id < me
-
         const detectionResultPromises = [];
-        for (const detectionResult of detectionResponse.results) {
-            detectionResultPromises.push(function () {
-                const keySuggestion = detectionResult.keySuggestion.split(',')[0].trim().replace(/[^a-zA-Z0-9]/g, '_');
-                const detailValues = [keySuggestion, detectionResult.imgWidth, detectionResult.imgHeight,
-                    detectionResult.objX, detectionResult.objY, detectionResult.objWidth, detectionResult.objHeight,
-                    detectionResult.precision];
-                const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
-                    '   SELECT "' + detectionResult.detector + '",' +
-                    '          "' + keySuggestion + '",' +
-                    '          (select MAX(o_id) as newId FROM objects WHERE o_name="Default") as o_id from dual ' +
-                    '   WHERE NOT EXISTS (' +
-                    '      SELECT 1 FROM objects_key WHERE ok_detector="' + detectionResult.detector + '" ' +
-                    '                                      AND ok_key="' + keySuggestion + '")';
-                const insertImageObject = 'INSERT INTO ' + joinTableName + ' (' +
-                    idName + ', ' + stateName + ', ' + detectorName + ', ' + detailFields.join(', ') + ')' +
-                    ' VALUES ("' + id + '",' +
-                    ' "' + detectionResult.state + '",' +
-                    ' "' + detectionResult.detector + '", "' + detailValues.join('", "') + '")';
-                const sqlBuilder = me.knex;
-                return new Promise((resolve, reject) => {
-                    return sqlBuilder.raw(insertObjectKeySql).then(function doneInsert(dbresults: any) {
-                        return sqlBuilder.raw(insertImageObject);
-                    }).then(function doneInsert(dbresults: any) {
-                        return resolve(true);
-                    }).catch(function errorPlaylist(reason) {
-                        console.error('detectionRequest delete/insert ' + joinTableName + ' failed:', reason);
-                        return reject(reason);
+        if (detectionResponse.results && detectionResponse.results.length > 0) {
+            for (const detectionResult of detectionResponse.results) {
+                const detector = me.mapperUtils.escapeAdapterValue(detectionResult.detector);
+                if (noSuggestionDetectorNames.indexOf(detector) > 0) {
+                    noSuggestionDetectorNames.splice(noSuggestionDetectorNames.indexOf(detector), 1);
+                }
+
+                detectionResultPromises.push(function () {
+                    const keySuggestion = me.mapperUtils.escapeAdapterValue(
+                        detectionResult.keySuggestion.split(',')[0]
+                            .trim()
+                            .replace(/[^a-zA-Z0-9]/g, '_'));
+                    const detailValues = [keySuggestion, detectionResult.imgWidth, detectionResult.imgHeight,
+                        detectionResult.objX, detectionResult.objY, detectionResult.objWidth, detectionResult.objHeight,
+                        detectionResult.precision]
+                        .map(value => {
+                            return me.mapperUtils.escapeAdapterValue(value);
+                        });
+
+                    const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
+                        '   SELECT "' + detector + '",' +
+                        '          "' + keySuggestion + '",' +
+                        '          (select MAX(o_id) as newId FROM objects WHERE o_name="Default") as o_id from dual ' +
+                        '   WHERE NOT EXISTS (' +
+                        '      SELECT 1 FROM objects_key WHERE ok_detector="' + detector + '" ' +
+                        '                                      AND ok_key="' + keySuggestion + '")';
+                    const insertImageObject = 'INSERT INTO ' + joinTableName + ' (' +
+                        idFieldName + ', ' + stateFieldName + ', ' + detectorFieldName + ', ' + detailFieldNames.join(', ') + ')' +
+                        ' VALUES ("' + id + '",' +
+                        ' "' + me.mapperUtils.escapeAdapterValue(detectionResult.state) + '",' +
+                        ' "' + detector + '", "' + detailValues.join('", "') + '")';
+
+                    const sqlBuilder = me.knex;
+                    return new Promise((resolve, reject) => {
+                        return sqlBuilder.raw(insertObjectKeySql).then(function doneInsert(dbresults: any) {
+                            return sqlBuilder.raw(insertImageObject);
+                        }).then(function doneInsert(dbresults: any) {
+                            return resolve(true);
+                        }).catch(function errorFunction(reason) {
+                            console.error('detectionRequest delete/insert ' + joinTableName + ' failed:', reason);
+                            return reject(reason);
+                        });
                     });
                 });
+            }
+        }
+
+        for (const detector of noSuggestionDetectorNames) {
+            detectionResultPromises.push(function () {
+                const sqlBuilder = me.knex;
+                const deleteDummySql = 'DELETE FROM ' + joinTableName + ' ' +
+                    'WHERE ' + joinTableName + '.' + detectorFieldName + ' IN ("' + detectorFilterValues.join('", "') + '") ' +
+                    ' AND ' + stateFieldName + ' = "' + ObjectDetectionState.RUNNING_NO_SUGGESTION + '"';
+                return sqlBuilder.raw(deleteDummySql);
+            });
+            detectionResultPromises.push(function () {
+                const sqlBuilder = me.knex;
+                const insertImageObject = 'INSERT INTO ' + joinTableName + ' (' +
+                    idFieldName + ', ' + stateFieldName + ', ' + detectorFieldName + ')' +
+                    ' VALUES ("' + id + '",' +
+                    ' "' + ObjectDetectionState.RUNNING_NO_SUGGESTION + '",' +
+                    ' "' + detector + '")';
+                return sqlBuilder.raw(insertImageObject);
             });
         }
 
@@ -419,13 +549,11 @@ export class ObjectDetectionManagerModule {
         const rawDelete = sqlBuilder.raw(deleteSql);
         return new Promise((resolve, reject) => {
             return rawDelete.then(function doneDelete(dbresults: any) {
-                return insertObjectSql;
-            }).then(function doneInsert(dbresults: any) {
-                return Promise_serial(detectionResultPromises, {parallelize: 1}).then(arrayOfResults => {
-                    console.log('DONE - saved response to database');
-                    return resolve('DONE - saved response to database');
-                });
-            }).catch(function errorPlaylist(reason) {
+                return Promise_serial(detectionResultPromises, {parallelize: 1});
+            }).then(arrayOfResults => {
+                console.log('DONE - saved response to database');
+                return resolve('DONE - saved response to database');
+            }).catch(function errorFunction(reason) {
                 console.error('ERROR - cant save response to database', reason, detectionResponse);
                 return reject(reason);
             });
