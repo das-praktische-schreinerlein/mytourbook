@@ -52,10 +52,15 @@ export class ObjectDetectionManagerModule {
             client: sqlConfig['client'],
             connection: sqlConfig['connection']
         });
+        const queueConfig = BeanUtils.getValue(this.backendConfig, 'objectDetectionConfig.redisQueue');
+        if (queueConfig === undefined) {
+            throw new Error('config for objectDetectionConfig.redisQueue not exists');
+        }
 
-        const rsmqOptions = {host: '127.0.0.1', port: 6379, ns: 'rsmq'};
+        const rsmqOptions = {host: queueConfig['host'], port: queueConfig['port'], ns: queueConfig['ns'],
+            options: { password: queueConfig['pass'], db: queueConfig['db']}};
         if (flgRequest) {
-            this.requestQueueName = 'mycms-objectdetector-request';
+            this.requestQueueName = queueConfig['requestQueue'];
             this.requestQueueWorker = new RSMQWorker(this.requestQueueName, rsmqOptions);
             this.requestQueueWorker.on('error', function (err, msg) {
                 console.error('ERROR - while reading request', err, msg.id, msg);
@@ -69,7 +74,7 @@ export class ObjectDetectionManagerModule {
         }
 
         if (flgResponse) {
-            this.responseQueueName = 'mycms-objectdetector-response';
+            this.responseQueueName = queueConfig['responseQueue'];
             this.responseQueueWorker = new RSMQWorker(this.responseQueueName, rsmqOptions);
             this.responseQueueWorker.on('error', function (err, msg) {
                 console.error('ERROR - while reading response', err, msg.id, msg);
@@ -83,7 +88,7 @@ export class ObjectDetectionManagerModule {
         }
 
         if (flgError) {
-            this.errorQueueName = 'mycms-objectdetector-error';
+            this.errorQueueName = queueConfig['errorQueue'];
             this.errorQueueWorker = new RSMQWorker(this.errorQueueName, rsmqOptions);
             this.errorQueueWorker.on('error', function (err, msg) {
                 console.error('ERROR - while reading error', err, msg.id, msg);

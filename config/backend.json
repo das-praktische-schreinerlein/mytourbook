@@ -64,6 +64,35 @@
         "solrCoreTourDocReadUsername": "mytbread",
         "solrCoreTourDocReadPassword": "SolrRocks"
     },
+    "objectDetectionConfig": {
+        "redisQueue": {
+            "host": "localhost",
+            "port": "6379",
+            "pass": "blablub",
+            "db": "",
+            "ns": "rsmq",
+            "requestQueue": "mycms-objectdetector-request",
+            "responseQueue": "mycms-objectdetector-response",
+            "errorQueue": "mycms-objectdetector-error"
+        },
+        "availableDetectors": [
+            "tfjs_cocossd_mobilenet_v1",
+            "tfjs_cocossd_mobilenet_v2",
+            "tfjs_cocossd_lite_mobilenet_v2",
+            "tfjs_mobilenet_v1",
+            "tfjs_posenet",
+            "faceapi",
+            "picasafile"
+        ],
+        "defaultDetectors": [
+            "tfjs_cocossd_mobilenet_v1",
+            "tfjs_cocossd_mobilenet_v2",
+            "tfjs_cocossd_lite_mobilenet_v2",
+            "tfjs_mobilenet_v1",
+            "faceapi",
+            "picasafile"
+        ]
+    },
     "cacheConfig": {
         "cacheRedisUrl": "redis://localhost:6379/",
         "cacheRedisPass": "blablub",
