@@ -37,18 +37,20 @@
         <div class="col-6 layout-big">
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
         </div>
-        <div class="col-2 layout-big">
-            <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-            <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
-        </div>
-        <div class="col-2 layout-big">
-            <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+        <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+            <div class="col-4 layout-big">
                 <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
-            </ng-container>
-            <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+            </div>
+        </ng-container>
+        <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+            <div class="col-2 layout-big">
+                <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+            </div>
+            <div class="col-2 layout-big">
                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-            </ng-container>
-        </div>
+            </div>
+        </ng-container>
     </ng-container>
 
     <ng-container *ngIf="layoutSize === LayoutSize.SMALL">

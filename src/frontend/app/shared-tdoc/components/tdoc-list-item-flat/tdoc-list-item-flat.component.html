@@ -37,22 +37,22 @@
                         <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
                     </h5>
                     <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                    <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                    <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                    <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                    <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                        <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                        <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+                        <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                    </ng-container>
                 </div>
                 <div class="col-4 layout-big">
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+                    <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                    </ng-container>
                     <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
                     <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
                 </div>
                 <div class="col-2 ratetech layout-big">
-                    <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
-                    </ng-container>
-                    <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
-                        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                    </ng-container>
+                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
                 </div>
                 <div class="col-3 location layout-big">
                     <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
@@ -111,17 +111,17 @@
                             <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <div class="row">
                                 <div class="col-4 location layout-small">
+                                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                                </div>
+                                <div class="col-8 location layout-small">
                                     <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
                                         <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
                                     </ng-container>
                                     <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
-                                        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                                        <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                                        <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+                                        <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
                                     </ng-container>
-                                </div>
-                                <div class="col-8 location layout-small">
-                                    <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                                    <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                                    <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
                                     <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
                                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
                                 </div>

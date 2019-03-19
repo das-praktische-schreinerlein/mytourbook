@@ -64,6 +64,14 @@
                 <app-tdoc-keywords [record]="record"></app-tdoc-keywords>
                 <app-tdoc-persontags [record]="record"></app-tdoc-persontags>
                 <app-tdoc-datameta [record]="record"></app-tdoc-datameta>
+                <app-cdoc-odobjectdetails [objects]="record.tdocodimageobjects"
+                                          *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectdetails>
+                <div style="display: inline-block" *ngIf="!(showItemObjectsFlag || record.type === 'ODIMGOBJECT') && record.tdocodimageobjects && record.tdocodimageobjects.length > 0">
+                    <button (click)="showItemObjectsFlag = true;" class="btn configure btn-sm">
+                        <span i18n="link showImageObjects tdoc|Linktext show ImageObjects tdoc@@a.show.tdoc.showImageObjects">erkannte Objekte hervorheben</span>
+                        <span class="btn-action-icon">&#x21D3;</span>
+                    </button>
+                </div>
             </div>
             <br clear="all" />
         </div>
@@ -409,6 +417,7 @@
                                             [params]="getFiltersForType(record, 'ODIMGOBJECT')"
                                             [htmlId]="'ODIMGOBJECT'"
                                             [showForm]="false"
+                                            [showLayout]="true"
                                             [showResultList]="true"
                                             [layout]="Layout.BIG"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>

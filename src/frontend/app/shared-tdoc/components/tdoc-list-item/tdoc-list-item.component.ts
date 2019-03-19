@@ -4,7 +4,6 @@ import {CommonDocListItemComponent} from '@dps/mycms-frontend-commons/dist/front
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 
 @Component({
     selector: 'app-tdoc-list-item',
