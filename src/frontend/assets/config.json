@@ -659,6 +659,10 @@
                 "TRIP": true,
                 "ALL": true
             }
+        },
+        "cdoc-odobjectdetails": {
+            "defaultShowKeyAsTooltip": true,
+            "defaultFilterForNameToShowNameAndKey": ["/bla/" ,"/Defa.*/", "Default"]
         }
     },
     "services": {

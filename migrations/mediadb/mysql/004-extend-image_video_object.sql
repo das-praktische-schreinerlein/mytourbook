@@ -9,7 +9,7 @@ ALTER TABLE video_object ADD COLUMN vo_precision FLOAT DEFAULT 1;
 ALTER TABLE video_object ADD COLUMN vo_detector VARCHAR(50) DEFAULT 'UNKNOWN';
 
 /* #############
-# added objects_key to manage diffrent key for one object
+# added objects_key to manage different key for one object
 ############# */
 ALTER TABLE objects MODIFY o_id INT AUTO_INCREMENT;
 DROP TABLE IF EXISTS objects_key;
@@ -31,3 +31,7 @@ UPDATE objects_key toupdate,
 SET toupdate.o_id=grouped.newId
 WHERE toupdate.o_id=grouped.o_id and toupdate.ok_key=grouped.ok_key and toupdate.ok_detector=grouped.ok_detector and newId is not null;
 
+delete from objects where O_KEY like '%haarcascade_%';
+delete from image_object where IO_OBJ_TYPE like '%haarcascade_%';
+update image_object set image_object.io_state='RUNNING_SUGGESTED' where image_object.io_detector like 'picasafile';
+update image_object set image_object.io_state='RUNNING_MANUAL_APPROVED' where IO_OBJ_TYPE like 'picasa' or IO_OBJ_TYPE like '%Playlist%';

@@ -202,7 +202,7 @@ export class TourDocSqlMediadbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image', 'video', 'location', 'trip', 'news'],
+                    constValues: ['track', 'route', 'image', 'odimgobject', 'video', 'location', 'trip', 'news'],
                     filterField: '"track"',
                     selectLimit: 1
                 },
@@ -380,6 +380,7 @@ export class TourDocSqlMediadbConfig {
                 {
                     profile: 'image_objects',
                     sql: 'SELECT GROUP_CONCAT(distinct concat("ioId=", image_object.io_id, ":::key=", image_object.io_obj_type,' +
+                        ' ":::detector=", image_object.io_detector,' +
                         ' ":::imgWidth=", image_object.io_img_width,' +
                         ' ":::imgHeight=", image_object.io_img_height,' +
                         ' ":::objX=", image_object.io_obj_x1,' +
@@ -744,6 +745,7 @@ export class TourDocSqlMediadbConfig {
                     profile: 'image_objects',
                     sql: 'SELECT GROUP_CONCAT(distinct concat("ioId=", image_object.io_id,' +
                         ' ":::key=", image_object.io_obj_type,' +
+                        ' ":::detector=", image_object.io_detector,' +
                         ' ":::imgWidth=", image_object.io_img_width,' +
                         ' ":::imgHeight=", image_object.io_img_height,' +
                         ' ":::objX=", image_object.io_obj_x1,' +
@@ -1280,7 +1282,7 @@ export class TourDocSqlMediadbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image'],
+                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject'],
                     filterField: '"video"',
                     selectLimit: 1
                 },

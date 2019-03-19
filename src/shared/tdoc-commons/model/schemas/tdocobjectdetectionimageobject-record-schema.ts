@@ -24,6 +24,7 @@ export const TourDocObjectDetectionImageObjectRecordSchema = new Schema({
         objY: {type: 'number'},
         objWidth: {type: 'number'},
         objHeight: {type: 'number'},
+        precision: {type: 'number'},
         tdoc_id: {type: 'string', indexed: true}
     }
 });

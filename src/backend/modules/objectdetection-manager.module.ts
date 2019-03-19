@@ -226,7 +226,7 @@ export class ObjectDetectionManagerModule {
 
     protected readImageDataToDetect(detectors: string[], maxPerRun: number): Promise<RequestImageDataType[]> {
         const detectorFilterNames = detectors.map(detector => {
-            return this.mapperUtils.escapeAdapterValue(detector);
+            return this.sqlQueryBuilder.sanitizeSqlFilterValue(detector);
         });
         const maxIdSqlQuery: SelectQueryData = {
             fields: ['io_detector', 'COALESCE(MAX(i_id), 0) as maxid'],
@@ -267,7 +267,7 @@ export class ObjectDetectionManagerModule {
                             'CONCAT(image.i_dir, "/", image.i_file) AS filePath',
                             'i_dir as fileDir',
                             'i_file as fileName',
-                            '"' + me.mapperUtils.escapeAdapterValue(maxId['io_detector']) + '" as detector'],
+                            '"' + me.sqlQueryBuilder.sanitizeSqlFilterValue(maxId['io_detector']) + '" as detector'],
                         from: 'image',
                         where: ['i_id > ' + maxId['maxid']],
                         sort: ['i_id ASC'],
@@ -368,7 +368,7 @@ export class ObjectDetectionManagerModule {
         let table = undefined;
         if (detectionRequest.refId.startsWith('IMAGE_')) {
             table = 'image';
-            id = this.mapperUtils.escapeAdapterValue(detectionRequest.refId.replace('IMAGE_', ''));
+            id = this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionRequest.refId.replace('IMAGE_', ''));
         }
 
         switch (table) {
@@ -391,7 +391,7 @@ export class ObjectDetectionManagerModule {
         }
 
         const detectorFilterValues = detectionRequest.detectors.map(detector => {
-            return this.mapperUtils.escapeAdapterValue(detector);
+            return this.sqlQueryBuilder.sanitizeSqlFilterValue(detector);
         });
         const me = this;
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
@@ -403,7 +403,7 @@ export class ObjectDetectionManagerModule {
         for (const detector of detectorFilterValues) {
             const insertSql = 'INSERT INTO ' + joinTableName + ' (' + idFieldName + ', ' + stateFieldName + ', ' + detectorFieldName + ')' +
                 ' VALUES ("' + id + '",' +
-                ' "' + me.mapperUtils.escapeAdapterValue(detectionRequest.state) + '",' +
+                ' "' + me.sqlQueryBuilder.sanitizeSqlFilterValue(detectionRequest.state) + '",' +
                 ' "' + detector + '")';
             detectionRequestPromises.push(function () {
                 return new Promise((resolve, reject) => {
@@ -443,7 +443,7 @@ export class ObjectDetectionManagerModule {
         let table = undefined;
         if (detectionResponse.request.refId.startsWith('IMAGE_')) {
             table = 'image';
-            id = this.mapperUtils.escapeAdapterValue(detectionResponse.request.refId.replace('IMAGE_', ''));
+            id = this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionResponse.request.refId.replace('IMAGE_', ''));
         }
 
         switch (table) {
@@ -472,7 +472,7 @@ export class ObjectDetectionManagerModule {
         }
 
         const detectorFilterValues = detectionResponse.request.detectors.map(detector => {
-            return this.mapperUtils.escapeAdapterValue(detector);
+            return this.sqlQueryBuilder.sanitizeSqlFilterValue(detector);
         });
         const noSuggestionDetectorNames = [].concat(detectorFilterValues);
         const me = this;
@@ -486,13 +486,13 @@ export class ObjectDetectionManagerModule {
         const detectionResultPromises = [];
         if (detectionResponse.results && detectionResponse.results.length > 0) {
             for (const detectionResult of detectionResponse.results) {
-                const detector = me.mapperUtils.escapeAdapterValue(detectionResult.detector);
+                const detector = me.sqlQueryBuilder.sanitizeSqlFilterValue(detectionResult.detector);
                 if (noSuggestionDetectorNames.indexOf(detector) > 0) {
                     noSuggestionDetectorNames.splice(noSuggestionDetectorNames.indexOf(detector), 1);
                 }
 
                 detectionResultPromises.push(function () {
-                    const keySuggestion = me.mapperUtils.escapeAdapterValue(
+                    const keySuggestion = me.sqlQueryBuilder.sanitizeSqlFilterValue(
                         detectionResult.keySuggestion.split(',')[0]
                             .trim()
                             .replace(/[^a-zA-Z0-9]/g, '_'));
@@ -500,7 +500,7 @@ export class ObjectDetectionManagerModule {
                         detectionResult.objX, detectionResult.objY, detectionResult.objWidth, detectionResult.objHeight,
                         detectionResult.precision]
                         .map(value => {
-                            return me.mapperUtils.escapeAdapterValue(value);
+                            return me.sqlQueryBuilder.sanitizeSqlFilterValue(value);
                         });
 
                     const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
@@ -513,7 +513,7 @@ export class ObjectDetectionManagerModule {
                     const insertImageObject = 'INSERT INTO ' + joinTableName + ' (' +
                         idFieldName + ', ' + stateFieldName + ', ' + detectorFieldName + ', ' + detailFieldNames.join(', ') + ')' +
                         ' VALUES ("' + id + '",' +
-                        ' "' + me.mapperUtils.escapeAdapterValue(detectionResult.state) + '",' +
+                        ' "' + me.sqlQueryBuilder.sanitizeSqlFilterValue(detectionResult.state) + '",' +
                         ' "' + detector + '", "' + detailValues.join('", "') + '")';
 
                     const sqlBuilder = me.knex;
