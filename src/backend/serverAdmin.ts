@@ -13,9 +13,11 @@ const argv = minimist(process.argv.slice(2));
 // disable debug-logging
 const debug = argv['debug'] || false;
 if (!debug) {
+    console.log = function() {};
+}
+if (!debug || debug === true || parseInt(debug, 10) < 1) {
     console.trace = function() {};
     console.debug = function() {};
-    console.log = function() {};
 }
 
 const cacheInitializer = new CacheInitializerCommand();

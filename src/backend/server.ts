@@ -27,9 +27,11 @@ ServerModuleLoader.loadModules(app, serverConfig);
 app.listen(serverConfig.backendConfig['port'], function () {
     console.log('MyTB app listening on port ' + serverConfig.backendConfig['port']);
     if (!debug) {
+        console.log = function() {};
+    }
+    if (!debug || debug === true || parseInt(debug, 10) < 1) {
         console.trace = function() {};
         console.debug = function() {};
-        console.log = function() {};
     }
 });
 
