@@ -89,9 +89,9 @@ export class TourDocSqlMediadbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
         const result = new Promise((resolve, reject) => {
-            rawDelete.then(function doneDelete(dbresults: any) {
+            rawDelete.then(dbresults => {
                 if (actionTagForm.payload.set) {
-                    return sqlBuilder.raw(insertSql).then(function doneInsert() {
+                    return sqlBuilder.raw(insertSql).then(dbResult => {
                         return sqlBuilder.raw(updateSql);
                     }).catch(function errorPlaylist(reason) {
                         console.error('_doActionTag update ' + baseTableName + ' failed:', reason);
@@ -100,7 +100,7 @@ export class TourDocSqlMediadbActionTagAdapter {
                 }
 
                 return resolve(true);
-            }).then(function doneInsert(dbresults: any) {
+            }).then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag delete/insert ' + joinTableName + ' failed:', reason);
@@ -179,13 +179,13 @@ export class TourDocSqlMediadbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
         const result = new Promise((resolve, reject) => {
-            rawDelete.then(function doneDelete(dbresults: any) {
+            rawDelete.then(dbresults => {
                 if (actionTagForm.payload.set) {
                     return sqlBuilder.raw(insertSql);
                 }
 
                 return resolve(true);
-            }).then(function doneInsert(dbresults: any) {
+            }).then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag delete/insert ' + joinTableName + ' failed:', reason);
@@ -262,7 +262,7 @@ export class TourDocSqlMediadbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawUpdate = sqlBuilder.raw(updateSql);
         const result = new Promise((resolve, reject) => {
-            rawUpdate.then(function doneDelete(dbresults: any) {
+            rawUpdate.then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag update ' + baseTableName + ' persRate failed:', reason);
@@ -334,7 +334,7 @@ export class TourDocSqlMediadbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawUpdate = sqlBuilder.raw(updateSql);
         const result = new Promise((resolve, reject) => {
-            rawUpdate.then(function doneDelete(dbresults: any) {
+            rawUpdate.then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag update ' + tableName + ' blocked failed:', reason);
@@ -379,7 +379,7 @@ export class TourDocSqlMediadbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawUpdate = sqlBuilder.raw(updateSql);
         const result = new Promise((resolve, reject) => {
-            rawUpdate.then(function doneDelete(dbresults: any) {
+            rawUpdate.then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag update ' + tableName + ' blocked failed:', reason);

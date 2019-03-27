@@ -391,7 +391,7 @@ export abstract class CommonQueuedObjectDetectionService {
         }
 
         return new Promise((resolve, reject) => {
-            return this.dataStore.deleteOldDetectionRequests(detectionRequest).then(function doneDelete(dbresults: any) {
+            return this.dataStore.deleteOldDetectionRequests(detectionRequest).then(dbresults => {
                 return Promise_serial(detectionRequestPromises, {parallelize: 1});
             }).then(arrayOfResults => {
                 console.log('DONE - saved detectionRequest to database');
@@ -433,9 +433,9 @@ export abstract class CommonQueuedObjectDetectionService {
         }
 
         return new Promise((resolve, reject) => {
-            return me.dataStore.createDefaultObject().then(function insertDelete(dbresults: any) {
+            return me.dataStore.createDefaultObject().then(dbresults => {
                 return me.dataStore.deleteOldDetectionRequests(detectionResponse.request);
-            }).then(function doneDelete(dbresults: any) {
+            }).then(dbresults => {
                 return Promise_serial(detectionResultPromises, {parallelize: 1});
             }).then(arrayOfResults => {
                 console.log('DONE - saved response to database');

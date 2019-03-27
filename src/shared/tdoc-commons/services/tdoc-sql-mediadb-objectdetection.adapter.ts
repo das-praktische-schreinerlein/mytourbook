@@ -25,7 +25,8 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
         this.sqlQueryBuilder = sqlQueryBuilder;
     }
 
-    public readMaxIdAlreadyDetectedPerDetector(entityType: string, detectorFilterNames: string[]): Promise<ObjectDetectionMaxIdPerDetectorType[]> {
+    public readMaxIdAlreadyDetectedPerDetector(entityType: string,
+                                               detectorFilterNames: string[]): Promise<ObjectDetectionMaxIdPerDetectorType[]> {
         let sqlQuery: SelectQueryData;
         switch (entityType.toUpperCase()) {
             case 'IMAGE':
@@ -58,8 +59,11 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
                 return utils.reject('unknown entityType: ' + LogUtils.sanitizeLogMsg(entityType));
         }
 
-        return this.knex.raw(this.sqlQueryBuilder.selectQueryTransformToSql(sqlQuery)).then(value => {
-            return utils.resolve(value[0]);
+        return this.knex.raw(
+            this.transformToSqlDialect(this.sqlQueryBuilder.selectQueryTransformToSql(sqlQuery))).then(value => {
+            return utils.resolve(this.sqlQueryBuilder.extractDbResult(value, this.knex.client['config']['client']));
+        }).catch(reason => {
+            return utils.reject(reason);
         });
     }
 
@@ -107,8 +111,11 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
                 return utils.reject('unknown entityType: ' + LogUtils.sanitizeLogMsg(entityType));
         }
 
-        return this.knex.raw(this.sqlQueryBuilder.selectQueryTransformToSql(sqlQuery)).then(value => {
-            return utils.resolve(value[0]);
+        return this.knex.raw(
+            this.transformToSqlDialect(this.sqlQueryBuilder.selectQueryTransformToSql(sqlQuery))).then(value => {
+            return utils.resolve(this.sqlQueryBuilder.extractDbResult(value, this.knex.client['config']['client']));
+        }).catch(reason => {
+            return utils.reject(reason);
         });
     }
 
@@ -165,7 +172,7 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
             ' IN ("' + detectorFilterValues.join('", "') + '") ' +
             ' AND ' + tableConfig.idFieldName + ' = "' + tableConfig.id + '"';
         const sqlBuilder = this.knex;
-        return sqlBuilder.raw(deleteSql);
+        return sqlBuilder.raw(this.transformToSqlDialect(deleteSql));
     }
 
     public createDetectionRequest(detectionRequest: ObjectDetectionRequestType, detector: string): Promise<any> {
@@ -181,9 +188,7 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
             ' "' + this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionRequest.state) + '",' +
             ' "' + detector + '")';
         return new Promise((resolve, reject) => {
-            return sqlBuilder.raw(insertSql).then(function doneInsert(dbresults: any) {
-                return sqlBuilder.raw(insertSql);
-            }).then(function doneInsert(dbresults: any) {
+            return sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(dbresults => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
@@ -198,9 +203,9 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
             ' SELECT "Default", "Default", "Default" FROM dual ' +
             '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="Default" AND o_key="Default")';
         return new Promise((resolve, reject) => {
-            return sqlBuilder.raw(insertObjectSql).then(function doneInsert(dbresults: any) {
-                return sqlBuilder.raw(insertObjectSql);
-            }).then(function doneInsert(dbresults: any) {
+            return sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql)).then(dbresults => {
+                return sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql));
+            }).then(dbresults => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest insert default-object failed:', reason);
@@ -224,7 +229,7 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
         const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
             '   SELECT "' + detector + '",' +
             '          "' + keySuggestion + '",' +
-            '          (select MAX(o_id) as newId FROM objects WHERE o_name="Default") as o_id from dual ' +
+            '          (SELECT MAX(o_id) AS newId FROM objects WHERE o_name="Default") AS o_id FROM dual ' +
             '   WHERE NOT EXISTS (' +
             '      SELECT 1 FROM objects_key WHERE ok_detector="' + detector + '" ' +
             '                                      AND ok_key="' + keySuggestion + '")';
@@ -236,9 +241,9 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
             ' "' + detector + '", "' + detailValues.join('", "') + '")';
         const sqlBuilder = this.knex;
         return new Promise((resolve, reject) => {
-            return sqlBuilder.raw(insertObjectKeySql).then(function doneInsert(dbresults: any) {
-                return sqlBuilder.raw(insertImageObject);
-            }).then(function doneInsert(dbresults: any) {
+            return sqlBuilder.raw(this.transformToSqlDialect(insertObjectKeySql)).then(dbresults => {
+                return sqlBuilder.raw(this.transformToSqlDialect(insertImageObject));
+            }).then(dbresults => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
@@ -258,8 +263,16 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
             ' VALUES ("' + tableConfig.id + '",' +
             ' "' + ObjectDetectionState.RUNNING_NO_SUGGESTION + '",' +
             ' "' + detector + '")';
-        return sqlBuilder.raw(deleteDummySql).then(function doneDelete(dbresults: any) {
-            return sqlBuilder.raw(insertImageObject);
+        return sqlBuilder.raw(this.transformToSqlDialect(deleteDummySql)).then(dbresults => {
+            return sqlBuilder.raw(this.transformToSqlDialect(insertImageObject));
         });
+    }
+
+    protected transformToSqlDialect(sql: string): string {
+        const client = this.knex.client['config']['client'];
+        if (client === 'sqlite3') {
+            sql = sql.replace(/ FROM dual /g, ' ');
+        }
+        return this.sqlQueryBuilder.transformToSqlDialect(sql, client);
     }
 }

@@ -101,11 +101,11 @@ export class TourDocSqlMediadbKeywordAdapter {
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {
-            sqlBuilder.raw(deleteNotUsedKeywordSql).then(function doneDelete(dbresults: any) {
+            sqlBuilder.raw(deleteNotUsedKeywordSql).then(dbresults => {
                 return sqlBuilder.raw(insertNewKeywordsSql);
-            }).then(function doneInsert(insertResults: any) {
+            }).then(insertResults => {
                 return sqlBuilder.raw(insertNewKeywordJoinSql);
-            }).then(function doneInsert(insertResults: any) {
+            }).then(insertResults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('setGenericKeywords insert ' + joinTable + ' failed:', reason);

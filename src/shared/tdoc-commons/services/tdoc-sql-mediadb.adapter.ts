@@ -132,7 +132,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 const promises = [];
                 promises.push(this.keywordsAdapter.setTrackKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(function doneSearch() {
+                return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:', reason);
@@ -144,7 +144,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 const promises = [];
                 promises.push(this.keywordsAdapter.setImageKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(function doneSearch() {
+                return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:', reason);
@@ -156,7 +156,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 const promises = [];
                 promises.push(this.keywordsAdapter.setVideoKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(function doneSearch() {
+                return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:', reason);
@@ -168,7 +168,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 const promises = [];
                 promises.push(this.keywordsAdapter.setRouteKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(function doneSearch() {
+                return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:', reason);
@@ -180,7 +180,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 const promises = [];
                 promises.push(this.keywordsAdapter.setLocationKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(function doneSearch() {
+                return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('_facets failed:', reason);
