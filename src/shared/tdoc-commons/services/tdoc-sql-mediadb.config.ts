@@ -1020,6 +1020,7 @@ export class TourDocSqlMediadbConfig {
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
             },
+            // TODO: for import
             writeMapping: {
                 'image_object.i_id': ':image_id_i:',
                 'image_object.i_rate': ':rate_pers_gesamt_i:'

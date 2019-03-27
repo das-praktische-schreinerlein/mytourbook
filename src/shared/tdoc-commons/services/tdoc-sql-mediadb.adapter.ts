@@ -6,7 +6,7 @@ import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {TableConfig, WriteQueryData} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
-import {Mapper, Record, utils} from 'js-data';
+import {Mapper, utils} from 'js-data';
 import {TourDocImageRecord} from '../model/records/tdocimage-record';
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {TourDocSqlMediadbActionTagAdapter} from './tdoc-sql-mediadb-actiontag.adapter';
