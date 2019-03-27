@@ -60,7 +60,8 @@ export class TourDocDataServiceModule {
                     this.odDataStores.set(profile, TourDocDataServiceModule.createObjectDetectionDataStoreMediadbSql(backendConfig));
                     break;
                 default:
-                    throw new Error('configured tdocDataStoreAdapter not exist:' + backendConfig['tdocDataStoreAdapter']);
+                    throw new Error('configured tdocDataStoreAdapter not exist as ObjectDetectionDataStore:'
+                        + backendConfig['tdocDataStoreAdapter']);
             }
         }
 
