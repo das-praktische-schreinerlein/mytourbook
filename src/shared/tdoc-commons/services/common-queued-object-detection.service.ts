@@ -62,9 +62,11 @@ export interface ObjectDetectionDataStore {
 
     getObjectDetectionConfiguration(input: ObjectDetectionRequestType): ObjectDetectionSqlTableConfiguration;
 
-    deleteOldDetectionRequests(detectionRequest: ObjectDetectionRequestType): Promise<any>;
+    deleteOldDetectionRequests(detectionRequest: ObjectDetectionRequestType, onlyNotSucceeded: boolean): Promise<any>;
 
     createDetectionRequest(detectionRequest: ObjectDetectionRequestType, detector: string): Promise<any>;
+
+    createDetectionError(detectionResponse: ObjectDetectionResponseType, detector: string): Promise<any>;
 
     createDefaultObject(): Promise<any>;
 
@@ -191,7 +193,7 @@ export abstract class CommonQueuedObjectDetectionService {
         const me = this;
         return new Promise<any>((resolve, reject) => {
             this.responseQueueWorker.on('message', function (msg, next, id) {
-                console.debug('RUNNING - processing message:', id, msg);
+                console.debug('RUNNING - processing response message:', id, msg);
 
                 let response: ObjectDetectionResponseType;
                 try {
@@ -229,13 +231,43 @@ export abstract class CommonQueuedObjectDetectionService {
                     });
                 } else {
                     console.warn('WARNING - got no result for: ', msg);
+                    return next(new Error('WARNING - got no result for: ' + id));
+                }
+            });
+
+            this.errorQueueWorker.on('message', function (msg, next, id) {
+                console.debug('RUNNING - processing error message:', id, msg);
+
+                let response: ObjectDetectionResponseType;
+                try {
+                    response = JSON.parse(msg);
+                } catch (error) {
+                    console.warn('ERROR - parsing error message', msg, error);
+                    return next(error);
                 }
 
-                return next();
+                if (response && response.request) {
+                    return me.createObjectDetectionErrorInDatastore(response).then(value => {
+                        me.errorQueueWorker.del(id, err => {
+                            if (err) {
+                                console.error('ERROR - while deleting error', err, msg);
+                                return next(new Error(err));
+                            }
+                        });
+
+                        return next();
+                    }).catch(reason => {
+                        return next(reason);
+                    });
+                } else {
+                    console.warn('WARNING - got no error for: ', msg);
+                    return next(new Error('WARNING - got no error for: ' + id));
+                }
             });
 
             console.log('RUNNING - started response worker');
             this.responseQueueWorker.start();
+            this.errorQueueWorker.start();
         });
     }
 
@@ -373,6 +405,36 @@ export abstract class CommonQueuedObjectDetectionService {
         };
     }
 
+    protected createObjectDetectionErrorInDatastore(detectionResponse: ObjectDetectionResponseType): Promise<any> {
+        const tableConfig = this.dataStore.getObjectDetectionConfiguration(detectionResponse.request);
+        if (!tableConfig) {
+            return utils.reject('detectionError table not valid: ' + LogUtils.sanitizeLogMsg(detectionResponse.request.refId));
+        }
+
+        const me = this;
+        const detectionErrorPromises = [];
+        const detectorFilterValues = detectionResponse.request.detectors.map(detector => {
+            return this.sqlQueryBuilder.sanitizeSqlFilterValue(detector);
+        });
+        for (const detector of detectorFilterValues) {
+            detectionErrorPromises.push(function () {
+                return me.dataStore.createDetectionError(detectionResponse, detector);
+            });
+        }
+
+        return new Promise((resolve, reject) => {
+            return this.dataStore.deleteOldDetectionRequests(detectionResponse.request, true).then(dbresults => {
+                return Promise_serial(detectionErrorPromises, {parallelize: 1});
+            }).then(arrayOfResults => {
+                console.log('DONE - saved detectionError to database');
+                return resolve('DONE - saved detectionError to database');
+            }).catch(function errorFunction(reason) {
+                console.error('detectionError delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
+                return reject(reason);
+            });
+        });
+    }
+
     protected createObjectDetectionRequestInDatastore(detectionRequest: ObjectDetectionRequestType): Promise<any> {
         const tableConfig = this.dataStore.getObjectDetectionConfiguration(detectionRequest);
         if (!tableConfig) {
@@ -391,7 +453,7 @@ export abstract class CommonQueuedObjectDetectionService {
         }
 
         return new Promise((resolve, reject) => {
-            return this.dataStore.deleteOldDetectionRequests(detectionRequest).then(dbresults => {
+            return this.dataStore.deleteOldDetectionRequests(detectionRequest, false).then(dbresults => {
                 return Promise_serial(detectionRequestPromises, {parallelize: 1});
             }).then(arrayOfResults => {
                 console.log('DONE - saved detectionRequest to database');
@@ -434,7 +496,7 @@ export abstract class CommonQueuedObjectDetectionService {
 
         return new Promise((resolve, reject) => {
             return me.dataStore.createDefaultObject().then(dbresults => {
-                return me.dataStore.deleteOldDetectionRequests(detectionResponse.request);
+                return me.dataStore.deleteOldDetectionRequests(detectionResponse.request, false);
             }).then(dbresults => {
                 return Promise_serial(detectionResultPromises, {parallelize: 1});
             }).then(arrayOfResults => {

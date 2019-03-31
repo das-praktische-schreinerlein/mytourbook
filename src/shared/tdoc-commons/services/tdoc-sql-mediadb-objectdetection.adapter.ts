@@ -4,6 +4,8 @@ import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 import {
     ObjectDetectionDetectedObjectType,
     ObjectDetectionRequestType,
+    ObjectDetectionResponseCode,
+    ObjectDetectionResponseType,
     ObjectDetectionState
 } from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 import {
@@ -80,7 +82,8 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
                         'i_file as fileName',
                         '"' + this.sqlQueryBuilder.sanitizeSqlFilterValue(detector) + '" as detector'],
                     from: 'image',
-                    where: ['i_id > ' + maxIdAlreadyDetected],
+                    where: ['i_id > ' + maxIdAlreadyDetected
+                        + ' OR i_id IN (SELECT i_id FROM image_object WHERE io_state in ("' + ObjectDetectionState.RETRY + '"))'],
                     sort: ['i_id ASC'],
                     limit: maxPerRun,
                     offset: 0,
@@ -98,7 +101,8 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
                         'v_file as fileName',
                         '"' + this.sqlQueryBuilder.sanitizeSqlFilterValue(detector) + '" as detector'],
                     from: 'video',
-                    where: ['v_id > ' + maxIdAlreadyDetected],
+                    where: ['v_id > ' + maxIdAlreadyDetected
+                    + ' OR v_id IN (SELECT v_id FROM video_object WHERE vo_state in ("' + ObjectDetectionState.RETRY + '"))'],
                     sort: ['v_id ASC'],
                     limit: maxPerRun,
                     offset: 0,
@@ -158,7 +162,7 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
         }
     }
 
-    public deleteOldDetectionRequests(detectionRequest: ObjectDetectionRequestType): Promise<any> {
+    public deleteOldDetectionRequests(detectionRequest: ObjectDetectionRequestType, onlyNotSucceeded: boolean): Promise<any> {
         const tableConfig = this.getObjectDetectionConfiguration(detectionRequest);
         if (!tableConfig) {
             return utils.reject('detectionRequest table not valid: ' + LogUtils.sanitizeLogMsg(detectionRequest.refId));
@@ -167,10 +171,13 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
         const detectorFilterValues = detectionRequest.detectors.map(detector => {
             return this.sqlQueryBuilder.sanitizeSqlFilterValue(detector);
         });
+        const onlyNotSucceededStates = [ObjectDetectionState.ERROR, ObjectDetectionState.OPEN, ObjectDetectionState.RETRY,
+            ObjectDetectionState.UNKNOWN];
         const deleteSql = 'DELETE FROM ' + tableConfig.joinTableName + ' ' +
             'WHERE ' + tableConfig.joinTableName + '.' + tableConfig.detectorFieldName +
             ' IN ("' + detectorFilterValues.join('", "') + '") ' +
-            ' AND ' + tableConfig.idFieldName + ' = "' + tableConfig.id + '"';
+            ' AND ' + tableConfig.idFieldName + ' = "' + tableConfig.id + '"' +
+            (onlyNotSucceeded ? ' AND ' + tableConfig.stateFieldName + ' IN ("' + onlyNotSucceededStates.join('", "') + '")' : '');
         const sqlBuilder = this.knex;
         return sqlBuilder.raw(this.transformToSqlDialect(deleteSql));
     }
@@ -192,6 +199,32 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
+                return reject(reason);
+            });
+        });
+    }
+
+    public createDetectionError(detectionResponse: ObjectDetectionResponseType, detector: string): Promise<any> {
+        const tableConfig = this.getObjectDetectionConfiguration(detectionResponse.request);
+        if (!tableConfig) {
+            return utils.reject('detectionError table not valid: ' + LogUtils.sanitizeLogMsg(detectionResponse.request.refId));
+        }
+
+        const sqlBuilder = this.knex;
+        const newState = detectionResponse.responseCode === undefined
+        || detectionResponse.responseCode === ObjectDetectionResponseCode.NONRECOVERABLE_ERROR
+            ? ObjectDetectionState.ERROR
+            : ObjectDetectionState.RETRY;
+        const insertSql = 'INSERT INTO ' + tableConfig.joinTableName +
+            ' (' + tableConfig.idFieldName + ', ' + tableConfig.stateFieldName + ', ' + tableConfig.detectorFieldName + ')' +
+            ' VALUES ("' + tableConfig.id + '",' +
+            ' "' + this.sqlQueryBuilder.sanitizeSqlFilterValue(newState) + '",' +
+            ' "' + detector + '")';
+        return new Promise((resolve, reject) => {
+            return sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(dbresults => {
+                return resolve(true);
+            }).catch(function errorFunction(reason) {
+                console.error('detectionError delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
                 return reject(reason);
             });
         });
