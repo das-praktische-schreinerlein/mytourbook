@@ -60,41 +60,55 @@ div.humanReadableSearchFilter span.filterValue {
 /**
  * object-detection states
  **/
-.odimgobject-state-UNKNOWN, .odimgobject-state-OPEN, .odimgobject-state-RUNNING_SUGGESTED {
+.odimgobject-state-UNKNOWN, .odimgobject-state-OPEN, .bg-odimgobject-state-RETRY {
     color: dodgerblue;
     border-color: dodgerblue;
 }
 .odimgobject-state-FAILED, .odimgobject-state-ERROR {
-    color: #f08a24;
-    border-color: #f08a24;
+    color: #f0d1de;
+    border-color: #f0d1de;
+}
+.odimgobject-state-RUNNING_SUGGESTED {
+    color: #ff1521;
+    border-color: #ff1521;
 }
 .odimgobject-state-RUNNING_MANUAL_APPROVED, .odimgobject-state-DONE_APPROVAL_PROCESSED, .odimgobject-state-RUNNING_NO_SUGGESTION {
     color: yellowgreen;
     border-color: yellowgreen;
 }
-.odimgobject-state-RUNNING_MANUAL_CORRECTED, .odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED, .odimgobject-state-DONE_CORRECTION_PROCESSED {
+.odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED {
+    color: #f08a24;
+    border-color: #f08a24;
+}
+.odimgobject-state-RUNNING_MANUAL_CORRECTED, .odimgobject-state-DONE_CORRECTION_PROCESSED {
     color: khaki;
     border-color: khaki;
 }
 .odimgobject-state-RUNNING_MANUAL_REJECTED, .odimgobject-state-DONE_REJECTION_PROCESSED {
-    color: #f08a24;
-    border-color: #f08a24;
+    color: #bfccd3;
+    border-color: #bfccd3;
 }
 
-.bg-odimgobject-state-UNKNOWN, .bg-odimgobject-state-OPEN, .bg-odimgobject-state-RUNNING_SUGGESTED {
+.bg-odimgobject-state-UNKNOWN, .bg-odimgobject-state-OPEN, .bg-odimgobject-state-RETRY {
     background: dodgerblue;
 }
+.bg-odimgobject-state-RUNNING_SUGGESTED {
+    background: #ff1521;
+}
 .bg-odimgobject-state-FAILED, .bg-odimgobject-state-ERROR {
-    background: #f08a24;
+    background: #f0d1de;
 }
 .bg-odimgobject-state-RUNNING_MANUAL_APPROVED, .bg-odimgobject-state-DONE_APPROVAL_PROCESSED, .bg-odimgobject-state-RUNNING_NO_SUGGESTION {
     background: yellowgreen;
 }
-.bg-odimgobject-state-RUNNING_MANUAL_CORRECTED, .bg-odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED, .bg-odimgobject-state-DONE_CORRECTION_PROCESSED {
+.bg-odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED {
+    background: #f08a24;
+}
+.bg-odimgobject-state-RUNNING_MANUAL_CORRECTED, .bg-odimgobject-state-DONE_CORRECTION_PROCESSED {
     background: khaki;
 }
 .bg-odimgobject-state-RUNNING_MANUAL_REJECTED, .bg-odimgobject-state-DONE_REJECTION_PROCESSED {
-    background: #f08a24;
+    background: #bfccd3;
 }
 
 /**
