@@ -41,7 +41,7 @@ export class ObjectDetectionManagerCommand implements AbstractCommand {
                 break;
             case 'receiveQueueResponses':
                 try {
-                    objectDetectionManager.configureModule(false, true, false);
+                    objectDetectionManager.configureModule(false, true, true);
                 } catch (err) {
                     return utils.reject(err);
                 }
