@@ -561,6 +561,36 @@
                             "expectedValues": [true]
                         }
                     ]
+                },
+                {
+                    "key": "odobjectstate_DETAIL_NEEDED",
+                    "type": "tag",
+                    "name": "DETAIL NEEDED",
+                    "shortName": "&#x2315",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_DETAIL_NEEDED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_DETAILED", "RUNNING_MANUAL_DETAIL_NEEDED","DONE_DETAIL_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
                 }
             ]
         },

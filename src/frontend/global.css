@@ -76,11 +76,12 @@ div.humanReadableSearchFilter span.filterValue {
     color: yellowgreen;
     border-color: yellowgreen;
 }
-.odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED {
+.odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED, .odimgobject-state-RUNNING_MANUAL_DETAIL_NEEDED {
     color: #f08a24;
     border-color: #f08a24;
 }
-.odimgobject-state-RUNNING_MANUAL_CORRECTED, .odimgobject-state-DONE_CORRECTION_PROCESSED {
+.odimgobject-state-RUNNING_MANUAL_CORRECTED, .odimgobject-state-DONE_CORRECTION_PROCESSED,
+.odimgobject-state-RUNNING_MANUAL_DETAILED, .odimgobject-state-DONE_DETAIL_PROCESSED {
     color: khaki;
     border-color: khaki;
 }
@@ -101,10 +102,11 @@ div.humanReadableSearchFilter span.filterValue {
 .bg-odimgobject-state-RUNNING_MANUAL_APPROVED, .bg-odimgobject-state-DONE_APPROVAL_PROCESSED, .bg-odimgobject-state-RUNNING_NO_SUGGESTION {
     background: yellowgreen;
 }
-.bg-odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED {
+.bg-odimgobject-state-RUNNING_MANUAL_CORRECTION_NEEDED, .bg-odimgobject-state-RUNNING_MANUAL_DETAIL_NEEDED {
     background: #f08a24;
 }
-.bg-odimgobject-state-RUNNING_MANUAL_CORRECTED, .bg-odimgobject-state-DONE_CORRECTION_PROCESSED {
+.bg-odimgobject-state-RUNNING_MANUAL_CORRECTED, .bg-odimgobject-state-DONE_CORRECTION_PROCESSED,
+.bg-odimgobject-state-RUNNING_MANUAL_DETAILED, .bg-odimgobject-state-DONE_DETAIL_PROCESSED {
     background: khaki;
 }
 .bg-odimgobject-state-RUNNING_MANUAL_REJECTED, .bg-odimgobject-state-DONE_REJECTION_PROCESSED {
