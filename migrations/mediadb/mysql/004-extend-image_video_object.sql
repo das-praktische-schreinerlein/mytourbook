@@ -7,6 +7,10 @@ ALTER TABLE image_object ADD COLUMN io_detector VARCHAR(50) DEFAULT 'UNKNOWN';
 ALTER TABLE video_object ADD COLUMN vo_state VARCHAR(50) DEFAULT 'UNKNOWN';
 ALTER TABLE video_object ADD COLUMN vo_precision FLOAT DEFAULT 1;
 ALTER TABLE video_object ADD COLUMN vo_detector VARCHAR(50) DEFAULT 'UNKNOWN';
+CREATE INDEX idx_io__io_state ON image_object (io_state);
+CREATE INDEX idx_io__io_detector ON image_object (io_detector);
+CREATE INDEX idx_vo__vo_state ON video_object (vo_state);
+CREATE INDEX idx_vo__vo_detector ON video_object (vo_detector);
 
 /* #############
 # auto increment objects
@@ -37,5 +41,14 @@ WHERE toupdate.o_id=grouped.o_id and toupdate.ok_key=grouped.ok_key and toupdate
 
 delete from objects where O_KEY like '%haarcascade_%';
 delete from image_object where IO_OBJ_TYPE like '%haarcascade_%';
+
+update image_object set io_detector='picasa' where IO_OBJ_TYPE like '%picasa%';
+update image_object set io_detector='playlist' where IO_OBJ_TYPE like '%Playlist%';
+update image_object set image_object.io_precision=1 where IO_OBJ_TYPE like '%picasa%' or IO_OBJ_TYPE like '%Playlist%';
+update video_object set vo_detector='picasa' where VO_OBJ_TYPE like '%picasa%';
+update video_object set vo_detector='playlist' where VO_OBJ_TYPE like '%Playlist%';
+update video_object set video_object.vo_precision=1 where VO_OBJ_TYPE like '%picasa%' or VO_OBJ_TYPE like '%Playlist%';
+update video_object set video_object.vo_precision=rand()*0.5 where not (VO_OBJ_TYPE like '%picasa%' or VO_OBJ_TYPE like '%Playlist%');
+
 update image_object set image_object.io_state='RUNNING_SUGGESTED' where image_object.io_detector like 'picasafile';
-update image_object set image_object.io_state='RUNNING_MANUAL_APPROVED' where IO_OBJ_TYPE like 'picasa' or IO_OBJ_TYPE like '%Playlist%';
+update image_object set image_object.io_state='RUNNING_MANUAL_APPROVED' where io_detector like 'picasa' or IO_OBJ_TYPE like '%Playlist%';
