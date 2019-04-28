@@ -42,6 +42,7 @@ import {TourDocVideoplayerComponent} from './components/tdoc-videoplayer/tdoc-vi
 import {TourDocPersontagsstateComponent} from './components/tdoc-persontagsstate/tdoc-persontagsstate.component';
 import {TourDocMultiActionHeaderComponent} from './components/tdoc-multiactionheader/tdoc-multiactionheader.component';
 import {TourDocMapCodePipe} from './pipes/tdoc-mapcode.pipe';
+import {TourDocDashboardSearchColumnComponent} from './components/tdoc-dashboard-searchcolumn/tdoc-dashboard-searchcolumn.component';
 
 @NgModule({
     declarations: [
@@ -74,7 +75,8 @@ import {TourDocMapCodePipe} from './pipes/tdoc-mapcode.pipe';
         TourDocKeywordsstateComponent,
         TourDocVideoplayerComponent,
         TourDocPersontagsstateComponent,
-        TourDocMultiActionHeaderComponent
+        TourDocMultiActionHeaderComponent,
+        TourDocDashboardSearchColumnComponent
     ],
     imports: [
         ToastrModule,
@@ -125,7 +127,8 @@ import {TourDocMapCodePipe} from './pipes/tdoc-mapcode.pipe';
         TourDocKeywordsstateComponent,
         TourDocVideoplayerComponent,
         TourDocPersontagsstateComponent,
-        TourDocMultiActionHeaderComponent
+        TourDocMultiActionHeaderComponent,
+        TourDocDashboardSearchColumnComponent
     ]
 })
 export class SharedTourDocModule {}

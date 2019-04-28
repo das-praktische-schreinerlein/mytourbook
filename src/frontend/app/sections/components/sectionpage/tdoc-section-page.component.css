@@ -11,3 +11,17 @@ p {
 div.app-pdoc-list {
     padding: 5px;
 }
+
+table.table-dashboard {
+    width: 100%;
+}
+table.table-dashboard, table.table-dashboard th, table.table-dashboard td {
+    border: lightgray solid 1px;
+    text-align: center;
+}
+table.table-dashboard th {
+    background: #dee9ef;
+}
+table.table-dashboard th:first-child, table.table-dashboard td:first-child {
+    width: 250px;
+}

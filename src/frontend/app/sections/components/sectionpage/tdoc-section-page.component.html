@@ -104,6 +104,348 @@
     </ng-container>
 </ng-template>
 
+<ng-template #dashBoard>
+    <ng-container *ngIf="objectKeys(availableToDoDashboardRows).length > 0 && objectKeys(availableDashboardColumns).length > 0">
+        <h5><span class="fx-bg-type" i18n="heading dashboardToDo-results sectionPage|Heading to dashboardToDo-results sectionPage@@heading.sectionPage.dashboardToDoResults">Dashboard ToDos</span></h5>
+        <table class="table-dashboard table-dashboard-todo">
+            <tr>
+                <th i18n="tableheading dashboardToDoColumn-profile sectionPage|Tableheading to dashboardToDoColumn-profile sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Profil</th>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <th *ngIf="availableDashboardColumns[type]">{{type | translate}}</th>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableToDoDashboardRows['unrated']">
+                <td i18n="tableheading dashboardToDoColumn-unrated sectionPage|Tableheading to dashboardToDoColumn-unrated sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Noch nicht bewerted</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'unrated', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'LOCATION' && type != 'TRIP'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableToDoDashboardRows['objectDetectionCorrectionNeeded']">
+                <td i18n="tableheading dashboardToDoColumn-objectDetectionCorrectionNeeded sectionPage|Tableheading to dashboardToDoColumn-objectDetectionCorrectionNeeded sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Bilderkennung Korrigieren</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'objectDetectionCorrectionNeeded', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type == 'ODIMGOBJECT' || type == 'IMAGE'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableToDoDashboardRows['objectDetectionDetailNeeded']">
+                <td i18n="tableheading dashboardToDoColumn-objectDetectionDetailNeeded sectionPage|Tableheading to dashboardToDoColumn-objectDetectionDetailNeeded sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Bilderkennung Detailieren</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'objectDetectionDetailNeeded', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type == 'ODIMGOBJECT' || type == 'IMAGE'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableToDoDashboardRows['objectDetectionSuggested']">
+                <td i18n="tableheading dashboardToDoColumn-objectDetectionSuggested sectionPage|Tableheading to dashboardToDoColumn-objectDetectionSuggested sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Bilderkennung Vorgeschlagen</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'objectDetectionSuggested', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type == 'ODIMGOBJECT' || type == 'IMAGE'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableToDoDashboardRows['objectDetectionError']">
+                <td i18n="tableheading dashboardToDoColumn-objectDetectionError sectionPage|Tableheading to dashboardToDoColumn-objectDetectionError sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Bilderkennung Fehler</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'objectDetectionError', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type == 'ODIMGOBJECT' || type == 'IMAGE'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableToDoDashboardRows['objectDetectionOpen']">
+                <td i18n="tableheading dashboardToDoColumn-objectDetectionOpen sectionPage|Tableheading to dashboardToDoColumn-objectDetectionOpen sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Bilderkennung Offen</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'objectDetectionOpen', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type == 'ODIMGOBJECT' || type == 'IMAGE'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+        </table>
+    </ng-container>
+
+    <ng-container *ngIf="objectKeys(availableDoneDashboardRows).length > 0 && objectKeys(availableDashboardColumns).length > 0">
+        <h5><span class="fx-bg-type" i18n="heading dashboardDone-results sectionPage|Heading to dashboardDone-results sectionPage@@heading.sectionPage.dashboardDoneResults">Dashboard Erledigt</span></h5>
+        <table class="table-dashboard table-dashboard-done">
+            <tr>
+                <th i18n="tableheading dashboardDoneColumn-profile sectionPage|Tableheading to dashboardDoneColumn-profile sectionPage@@tableheading.sectionPage.dashboardDoneColumnProfile">Profil</th>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <th *ngIf="availableDashboardColumns[type]">{{type | translate}}</th>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableDoneDashboardRows['rated']">
+                <td i18n="tableheading dashboardDoneColumn-rated sectionPage|Tableheading to dashboardDoneColumn-rated sectionPage@@tableheading.sectionPage.dashboardDoneColumnProfile">Bewertet</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'rated', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'LOCATION' && type != 'TRIP'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableDoneDashboardRows['objectDetectionDone']">
+                <td i18n="tableheading dashboardDoneColumn-objectDetectionDone sectionPage|Tableheading to dashboardDoneColumn-objectDetectionDone sectionPage@@tableheading.sectionPage.dashboardDoneColumnProfile">Bilderkennung abgeschlossen</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'objectDetectionDone', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type == 'ODIMGOBJECT' || type == 'IMAGE'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+        </table>
+    </ng-container>
+</ng-template>
+
+<ng-template #bestMatching>
+    <h5><span class="fx-bg-type" i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</span></h5>
+    <ngb-tabset>
+        <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Routen'"
+                                            i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.tdoc.ROUTE"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.tdoc.ROUTE"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'ROUTE', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenRouteResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Regionen" *ngIf="availableTabs.LOCATION">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Regionen'"
+                                            i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.tdoc.LOCATION"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page LOCATION|SearchLinkLabel section-page LOCATION@@linline-search.searchLinkLabel.tdoc.LOCATION"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'LOCATION', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Bilder'"
+                                            i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.tdoc.IMAGE"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page IMAGE|SearchLinkLabel section-page IMAGE@@linline-search.searchLinkLabel.tdoc.IMAGE"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'IMAGE', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.SMALL"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Tracks'"
+                                            i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.tdoc.TRACK"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page TRACK|SearchLinkLabel section-page TRACK@@linline-search.searchLinkLabel.tdoc.TRACK"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'TRACK', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Trips" *ngIf="availableTabs.TRIP">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Trips'"
+                                            i18n-label="label section-page TRIP|Label section-page TRIP@@linline-search.label.tdoc.TRIP"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page TRIP|SearchLinkLabel section-page TRIP@@linline-search.searchLinkLabel.tdoc.TRIP"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'TRIP', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Videos'"
+                                            i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.tdoc.VIDEO"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page VIDEO|SearchLinkLabel section-page VIDEO@@linline-search.searchLinkLabel.tdoc.VIDEO"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'VIDEO', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.SMALL"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Alles'"
+                                            i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.tdoc.ALL"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page ALL|SearchLinkLabel section-page ALL@@linline-search.searchLinkLabel.tdoc.ALL"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, '', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</ng-template>
+
+<ng-template #favorites>
+    <h5><span class="fx-bg-type" i18n="heading favorite-results sectionPage|Heading to favorite-results sectionPage@@heading.sectionPage.favoriteResults">Favorites</span></h5>
+    <ngb-tabset>
+        <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Bilder'"
+                                            i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.tdoc.IMAGE"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page IMAGE|SearchLinkLabel section-page IMAGE@@linline-search.searchLinkLabel.tdoc.IMAGE"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'IMAGE', 'ratePers')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.SMALL"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Routen'"
+                                            i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.tdoc.ROUTE"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.tdoc.ROUTE"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'ROUTE', 'ratePers')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Tracks'"
+                                            i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.tdoc.TRACK"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page TRACK|SearchLinkLabel section-page TRACK@@linline-search.searchLinkLabel.tdoc.TRACK"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'TRACK', 'ratePers')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Videos'"
+                                            i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.tdoc.VIDEO"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page VIDEO|SearchLinkLabel section-page VIDEO@@linline-search.searchLinkLabel.tdoc.VIDEO"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, 'VIDEO', 'ratePers')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.SMALL"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Alles'"
+                                            i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.tdoc.ALL"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page ALL|SearchLinkLabel section-page ALL@@linline-search.searchLinkLabel.tdoc.ALL"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType(pdoc, '', 'ratePers')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</ng-template>
+
 <ng-template #topTenContainer>
     <ng-container *ngIf="pdoc.flgShowTopTen">
         <div class="container content-container sectionpage-topten-container">
@@ -113,206 +455,12 @@
                                      [short]="'true'"
                                      [showForm]="true"
                                      (search)="onSearchDoc($event)"></app-tdoc-searchform>
-
             </div>
-            <h5><span class="fx-bg-type" i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</span></h5>
-            <ngb-tabset>
-                <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Routen'"
-                                                    i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.tdoc.ROUTE"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.tdoc.ROUTE"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'ROUTE', 'relevance')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenRouteResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Regionen" *ngIf="availableTabs.LOCATION">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Regionen'"
-                                                    i18n-label="label section-page LOCATION|Label section-page LOCATION@@linline-search.label.tdoc.LOCATION"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page LOCATION|SearchLinkLabel section-page LOCATION@@linline-search.searchLinkLabel.tdoc.LOCATION"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'LOCATION', 'relevance')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Bilder'"
-                                                    i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.tdoc.IMAGE"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page IMAGE|SearchLinkLabel section-page IMAGE@@linline-search.searchLinkLabel.tdoc.IMAGE"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'IMAGE', 'relevance')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.SMALL"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Tracks'"
-                                                    i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.tdoc.TRACK"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page TRACK|SearchLinkLabel section-page TRACK@@linline-search.searchLinkLabel.tdoc.TRACK"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'TRACK', 'relevance')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Trips" *ngIf="availableTabs.TRIP">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Trips'"
-                                                    i18n-label="label section-page TRIP|Label section-page TRIP@@linline-search.label.tdoc.TRIP"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page TRIP|SearchLinkLabel section-page TRIP@@linline-search.searchLinkLabel.tdoc.TRIP"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'TRIP', 'relevance')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Videos'"
-                                                    i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.tdoc.VIDEO"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page VIDEO|SearchLinkLabel section-page VIDEO@@linline-search.searchLinkLabel.tdoc.VIDEO"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'VIDEO', 'relevance')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.SMALL"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Alles'"
-                                                    i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.tdoc.ALL"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page ALL|SearchLinkLabel section-page ALL@@linline-search.searchLinkLabel.tdoc.ALL"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, '', 'relevance')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
-            <h5><span class="fx-bg-type" i18n="heading favorite-results sectionPage|Heading to favorite-results sectionPage@@heading.sectionPage.favoriteResults">Favorites</span></h5>
-            <ngb-tabset>
-                <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Bilder'"
-                                                    i18n-label="label section-page IMAGE|Label section-page IMAGE@@linline-search.label.tdoc.IMAGE"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page IMAGE|SearchLinkLabel section-page IMAGE@@linline-search.searchLinkLabel.tdoc.IMAGE"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'IMAGE', 'ratePers')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.SMALL"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Routen'"
-                                                    i18n-label="label section-page ROUTE|Label section-page ROUTE@@linline-search.label.tdoc.ROUTE"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.tdoc.ROUTE"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'ROUTE', 'ratePers')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Tracks'"
-                                                    i18n-label="label section-page TRACK|Label section-page TRACK@@linline-search.label.tdoc.TRACK"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page TRACK|SearchLinkLabel section-page TRACK@@linline-search.searchLinkLabel.tdoc.TRACK"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'TRACK', 'ratePers')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Videos'"
-                                                    i18n-label="label section-page VIDEO|Label section-page VIDEO@@linline-search.label.tdoc.VIDEO"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page VIDEO|SearchLinkLabel section-page VIDEO@@linline-search.searchLinkLabel.tdoc.VIDEO"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, 'VIDEO', 'ratePers')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.SMALL"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
-                    <ng-template ngbTabContent>
-                        <app-tdoc-inline-searchpage [label]="'Alles'"
-                                                    i18n-label="label section-page ALL|Label section-page ALL@@linline-search.label.tdoc.ALL"
-                                                    [searchLinkLabel]="'Durchsuchen'"
-                                                    i18n-searchLinkLabel="searchLinkLabel section-page ALL|SearchLinkLabel section-page ALL@@linline-search.searchLinkLabel.tdoc.ALL"
-                                                    [baseSearchUrl]="baseSearchUrl"
-                                                    [params]="getFiltersForType(pdoc, '', 'ratePers')"
-                                                    [showForm]="false"
-                                                    [showResultList]="true"
-                                                    [loadFacets]="true"
-                                                    [layout]="Layout.FLAT"
-                                                    (searchResultFound)="onTopTenResultFound($event)"
-                                                    [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
+
+            <ng-container *ngTemplateOutlet="bestMatching"></ng-container>
+            <ng-container *ngTemplateOutlet="favorites"></ng-container>
+            <ng-container *ngTemplateOutlet="dashBoard"></ng-container>
+
             <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
         </div>
     </ng-container>

@@ -10,6 +10,10 @@ body {
     background-attachment: fixed;
 }
 
+h5 {
+    margin-top: 5px;
+}
+
 /** move to background: changes with new bootstrap?? **/
 .fullpage-background {
     z-index: -1;

@@ -28,6 +28,7 @@ import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pd
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocSectionPageComponent extends SectionPageComponent {
+    objectKeys = Object.keys;
     tdocSearchForm: TourDocSearchForm = new TourDocSearchForm({});
     tdocSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
     routeSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
@@ -39,6 +40,25 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         'TRIP': true,
         'VIDEO': true,
         'ALL': true
+    };
+    availableDashboardColumns = {
+        'ODIMGOBJECT': true,
+        'IMAGE': true,
+        'VIDEO': true,
+        'TRACK': true,
+        'ROUTE': true
+    };
+    availableToDoDashboardRows = {
+        'unrated': true,
+        'objectDetectionCorrectionNeeded': true,
+        'objectDetectionDetailNeeded': true,
+        'objectDetectionSuggested': true,
+        'objectDetectionError': true,
+        'objectDetectionOpen': true
+    };
+    availableDoneDashboardRows = {
+        'rated': true,
+        'objectDetectionDone': true
     };
     private layoutSize: LayoutSizeData;
 
@@ -87,6 +107,53 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         filters['nearBy'] = this.tdocSearchForm.nearby;
         filters['nearbyAddress'] = this.tdocSearchForm.nearbyAddress;
         filters['fulltext'] = this.tdocSearchForm.fulltext;
+
+        return filters;
+    }
+
+    getDashboardFiltersForType(record: PDocRecord, profile: string, type: string, sort?: string): any {
+        const filters = this.getFiltersForType(record, type, sort);
+        switch (profile) {
+            case 'unrated':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'personalRateOverall:null,0';
+                break;
+            case 'rated':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
+                break;
+            case 'objectDetectionOpen':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'objectDetectionState:OPEN';
+                break;
+            case 'objectDetectionToDo':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED,RUNNING_MANUAL_DETAIL_NEEDED,' +
+                    'RUNNING_SUGGESTED';
+                break;
+            case 'objectDetectionDetailNeeded':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'objectDetectionState:RUNNING_MANUAL_DETAIL_NEEDED';
+                break;
+            case 'objectDetectionCorrectionNeeded':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED';
+                break;
+            case 'objectDetectionSuggested':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'objectDetectionState:RUNNING_SUGGESTED';
+                break;
+            case 'objectDetectionError':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'objectDetectionState:ERROR';
+                break;
+            case 'objectDetectionDone':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = 'objectDetectionState:RUNNING_NO_SUGGESTION,' +
+                    'RUNNING_MANUAL_APPROVED,RUNNING_MANUAL_REJECTED,RUNNING_MANUAL_DETAILED,' +
+                    'DONE_APPROVAL_PROCESSED,DONE_REJECTION_PROCESSED,DONE_CORRECTION_PROCESSED,DONE_DETAIL_PROCESSED';
+                break;
+        }
 
         return filters;
     }
@@ -164,6 +231,15 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     protected configureProcessingOfResolvedData(config: {}): void {
         if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableTabs') !== undefined) {
             this.availableTabs = BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableTabs');
+        }
+        if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableDashboardColumns') !== undefined) {
+            this.availableDashboardColumns = BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableDashboardColumns');
+        }
+        if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableToDoDashboardRows') !== undefined) {
+            this.availableToDoDashboardRows = BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableToDoDashboardRows');
+        }
+        if (BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableDoneDashboardRows') !== undefined) {
+            this.availableDoneDashboardRows = BeanUtils.getValue(config, 'components.pdoc-sectionpage.availableDoneDashboardRows');
         }
     }
 
