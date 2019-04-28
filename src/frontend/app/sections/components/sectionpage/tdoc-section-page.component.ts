@@ -49,16 +49,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         'ROUTE': true
     };
     availableToDoDashboardRows = {
-        'unrated': true,
-        'objectDetectionCorrectionNeeded': true,
-        'objectDetectionDetailNeeded': true,
-        'objectDetectionSuggested': true,
-        'objectDetectionError': true,
-        'objectDetectionOpen': true
     };
     availableDoneDashboardRows = {
-        'rated': true,
-        'objectDetectionDone': true
     };
     private layoutSize: LayoutSizeData;
 

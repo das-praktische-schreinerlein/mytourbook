@@ -688,6 +688,18 @@
                 "LOCATION": true,
                 "TRIP": true,
                 "ALL": true
+            },
+            "availableToDoDashboardRows": {
+                "unrated": true,
+                "objectDetectionCorrectionNeeded": true,
+                "objectDetectionDetailNeeded": true,
+                "objectDetectionSuggested": true,
+                "objectDetectionError": true,
+                "objectDetectionOpen": true
+            },
+            "availableDoneDashboardRows": {
+                "rated": true,
+                "objectDetectionDone": true
             }
         },
         "cdoc-odobjectdetails": {
