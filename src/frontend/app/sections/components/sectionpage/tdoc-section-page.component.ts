@@ -21,6 +21,29 @@ import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {environment} from '../../../../environments/environment';
 import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/sectionpage/section-page.component';
 
+export interface TourDocSectionPageComponentAvailableTabs {
+    IMAGE?: boolean;
+    ODIMGOBJECT?: boolean;
+    VIDEO?: boolean;
+    LOCATION?: boolean;
+    NEWS?: boolean;
+    ROUTE?: boolean;
+    TRACK?: boolean;
+    TRIP?: boolean;
+    ALL?: boolean;
+}
+
+export interface TourDocSectionPageComponentDashboardRows {
+    unrated?: boolean;
+    objectDetectionCorrectionNeeded?: boolean;
+    objectDetectionDetailNeeded?: boolean;
+    objectDetectionSuggested?: boolean;
+    objectDetectionError?: boolean;
+    objectDetectionOpen?: boolean;
+    rated?: boolean;
+    objectDetectionDone?: boolean;
+}
+
 @Component({
     selector: 'app-tdoc-sectionpage',
     templateUrl: './tdoc-section-page.component.html',
@@ -32,25 +55,25 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     tdocSearchForm: TourDocSearchForm = new TourDocSearchForm({});
     tdocSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
     routeSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
-    availableTabs = {
-        'IMAGE': true,
-        'ROUTE': true,
-        'TRACK': true,
-        'LOCATION': true,
-        'TRIP': true,
-        'VIDEO': true,
-        'ALL': true
+    availableTabs: TourDocSectionPageComponentAvailableTabs = {
+        IMAGE: true,
+        ROUTE: true,
+        TRACK: true,
+        LOCATION: true,
+        TRIP: true,
+        VIDEO: true,
+        ALL: true
     };
-    availableDashboardColumns = {
-        'ODIMGOBJECT': true,
-        'IMAGE': true,
-        'VIDEO': true,
-        'TRACK': true,
-        'ROUTE': true
+    availableDashboardColumns: TourDocSectionPageComponentAvailableTabs = {
+        ODIMGOBJECT: true,
+        IMAGE: true,
+        VIDEO: true,
+        TRACK: true,
+        ROUTE: true
     };
-    availableToDoDashboardRows = {
+    availableToDoDashboardRows: TourDocSectionPageComponentDashboardRows = {
     };
-    availableDoneDashboardRows = {
+    availableDoneDashboardRows: TourDocSectionPageComponentDashboardRows = {
     };
     private layoutSize: LayoutSizeData;
 

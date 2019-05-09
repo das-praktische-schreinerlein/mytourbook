@@ -56,11 +56,11 @@ delete from image_object where IO_OBJ_TYPE like '%haarcascade_%';
 
 update image_object set io_detector='picasa' where IO_OBJ_TYPE like '%picasa%';
 update image_object set io_detector='playlist' where IO_OBJ_TYPE like '%Playlist%';
-update image_object set image_object.io_precision=1 where IO_OBJ_TYPE like '%picasa%' or IO_OBJ_TYPE like '%Playlist%';
+update image_object set io_precision=1 where IO_OBJ_TYPE like '%picasa%' or IO_OBJ_TYPE like '%Playlist%';
 update video_object set vo_detector='picasa' where VO_OBJ_TYPE like '%picasa%';
 update video_object set vo_detector='playlist' where VO_OBJ_TYPE like '%Playlist%';
-update video_object set video_object.vo_precision=1 where VO_OBJ_TYPE like '%picasa%' or VO_OBJ_TYPE like '%Playlist%';
-update video_object set video_object.vo_precision=rand()*0.5 where not (VO_OBJ_TYPE like '%picasa%' or VO_OBJ_TYPE like '%Playlist%');
+update video_object set vo_precision=1 where VO_OBJ_TYPE like '%picasa%' or VO_OBJ_TYPE like '%Playlist%';
+update video_object set vo_precision=0.5 where not (VO_OBJ_TYPE like '%picasa%' or VO_OBJ_TYPE like '%Playlist%');
 
-update image_object set image_object.io_state='RUNNING_SUGGESTED' where image_object.io_detector like 'picasafile';
-update image_object set image_object.io_state='RUNNING_MANUAL_APPROVED' where io_detector like 'picasa' or IO_OBJ_TYPE like '%Playlist%';
+update image_object set io_state='RUNNING_SUGGESTED' where image_object.io_detector like 'picasafile';
+update image_object set io_state='RUNNING_MANUAL_APPROVED' where io_detector like 'picasa' or IO_OBJ_TYPE like '%Playlist%';

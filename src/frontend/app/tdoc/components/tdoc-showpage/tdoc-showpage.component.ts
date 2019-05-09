@@ -25,6 +25,7 @@ import {
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-showpage.component';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {environment} from '../../../../environments/environment';
+import {TourDocSectionPageComponentAvailableTabs} from '../../../sections/components/sectionpage/tdoc-section-page.component';
 
 @Component({
     selector: 'app-tdoc-showpage',
@@ -45,15 +46,15 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     flgTopImagesAvailable = false;
     defaultSubImageLayout = Layout.SMALL;
     showResultListTrigger: {
-        IMAGE: boolean|number;
-        ODIMGOBJECT: boolean|number;
-        VIDEO: boolean|number;
-        LOCATION: boolean|number;
-        NEWS: boolean|number;
-        ROUTE: boolean|number;
-        TOPIMAGE: boolean|number;
-        TRACK: boolean|number;
-        TRIP: boolean|number;
+        IMAGE?: boolean|number;
+        ODIMGOBJECT?: boolean|number;
+        VIDEO?: boolean|number;
+        LOCATION?: boolean|number;
+        NEWS?: boolean|number;
+        ROUTE?: boolean|number;
+        TOPIMAGE?: boolean|number;
+        TRACK?: boolean|number;
+        TRIP?: boolean|number;
     } = {
         IMAGE: false,
         ODIMGOBJECT: false,
@@ -65,15 +66,15 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRACK: false,
         TRIP: false
     };
-    availableTabs = {
-        'IMAGE': true,
-        'ROUTE': true,
-        'TRACK': true,
-        'LOCATION': true,
-        'TRIP': true,
-        'VIDEO': true,
-        'NEWS': true,
-        'ODIMGOBJECT': true
+    availableTabs: TourDocSectionPageComponentAvailableTabs = {
+        IMAGE: true,
+        ROUTE: true,
+        TRACK: true,
+        LOCATION: true,
+        TRIP: true,
+        VIDEO: true,
+        NEWS: true,
+        ODIMGOBJECT: true
     };
     private layoutSize: LayoutSizeData;
     private showItemObjectsFlag = false;

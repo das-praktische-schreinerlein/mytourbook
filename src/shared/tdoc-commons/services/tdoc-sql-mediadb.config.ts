@@ -379,7 +379,7 @@ export class TourDocSqlMediadbConfig {
                 },
                 {
                     profile: 'image_objects',
-                    sql: 'SELECT GROUP_CONCAT(distinct concat("ioId=", image_object.io_id, ":::key=", image_object.io_obj_type,' +
+                    sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", image_object.io_id, ":::key=", image_object.io_obj_type,' +
                         ' ":::detector=", image_object.io_detector,' +
                         ' ":::imgWidth=", image_object.io_img_width,' +
                         ' ":::imgHeight=", image_object.io_img_height,' +
@@ -389,7 +389,7 @@ export class TourDocSqlMediadbConfig {
                         ' ":::objHeight=", image_object.io_obj_height,' +
                         ' ":::name=", objects.o_name,' +
                         ' ":::precision=", image_object.io_precision,' +
-                        ' ":::state=", image_object.io_state) separator ";;") as i_objects ' +
+                        ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objects ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
                         ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
@@ -743,7 +743,7 @@ export class TourDocSqlMediadbConfig {
                 },
                 {
                     profile: 'image_objects',
-                    sql: 'SELECT GROUP_CONCAT(distinct concat("ioId=", image_object.io_id,' +
+                    sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", image_object.io_id,' +
                         ' ":::key=", image_object.io_obj_type,' +
                         ' ":::detector=", image_object.io_detector,' +
                         ' ":::imgWidth=", image_object.io_img_width,' +
@@ -754,7 +754,7 @@ export class TourDocSqlMediadbConfig {
                         ' ":::objHeight=", image_object.io_obj_height,' +
                         ' ":::name=", objects.o_name,' +
                         ' ":::precision=", image_object.io_precision,' +
-                        ' ":::state=", image_object.io_state) separator ";;") as i_objects ' +
+                        ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objects ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
                         ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
