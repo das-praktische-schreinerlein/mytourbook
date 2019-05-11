@@ -114,6 +114,20 @@
                     <th *ngIf="availableDashboardColumns[type]">{{type | translate}}</th>
                 </ng-container>
             </tr>
+            <tr *ngIf="availableToDoDashboardRows['noSubType']">
+                <td i18n="tableheading dashboardToDoColumn-noSubType sectionPage|Tableheading to dashboardToDoColumn-noSubType sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Ohne Typzuordnung</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'noSubType', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'IMAGE' && type != 'VIDEO' && type != 'TRIP'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
             <tr *ngIf="availableToDoDashboardRows['unrated']">
                 <td i18n="tableheading dashboardToDoColumn-unrated sectionPage|Tableheading to dashboardToDoColumn-unrated sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Noch nicht bewerted</td>
                 <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">

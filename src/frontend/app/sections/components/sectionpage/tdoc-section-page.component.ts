@@ -34,6 +34,7 @@ export interface TourDocSectionPageComponentAvailableTabs {
 }
 
 export interface TourDocSectionPageComponentDashboardRows {
+    noSubType?: boolean;
     unrated?: boolean;
     objectDetectionCorrectionNeeded?: boolean;
     objectDetectionDetailNeeded?: boolean;
@@ -69,7 +70,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         IMAGE: true,
         VIDEO: true,
         TRACK: true,
-        ROUTE: true
+        ROUTE: true,
+        LOCATION: true
     };
     availableToDoDashboardRows: TourDocSectionPageComponentDashboardRows = {
     };
@@ -129,42 +131,46 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     getDashboardFiltersForType(record: PDocRecord, profile: string, type: string, sort?: string): any {
         const filters = this.getFiltersForType(record, type, sort);
         switch (profile) {
+            case 'noSubType':
+                filters['what'] = filters['what'] ? filters['what'] + ';' : '';
+                filters['what'] += 'action:null,ac_';
+                break;
             case 'unrated':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'personalRateOverall:null,0';
+                filters['moreFilter'] += 'personalRateOverall:null,0';
                 break;
             case 'rated':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
+                filters['moreFilter'] += 'personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
                 break;
             case 'objectDetectionOpen':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'objectDetectionState:OPEN';
+                filters['moreFilter'] += 'objectDetectionState:OPEN';
                 break;
             case 'objectDetectionToDo':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED,RUNNING_MANUAL_DETAIL_NEEDED,' +
+                filters['moreFilter'] += 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED,RUNNING_MANUAL_DETAIL_NEEDED,' +
                     'RUNNING_SUGGESTED';
                 break;
             case 'objectDetectionDetailNeeded':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'objectDetectionState:RUNNING_MANUAL_DETAIL_NEEDED';
+                filters['moreFilter'] += 'objectDetectionState:RUNNING_MANUAL_DETAIL_NEEDED';
                 break;
             case 'objectDetectionCorrectionNeeded':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED';
+                filters['moreFilter'] += 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED';
                 break;
             case 'objectDetectionSuggested':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'objectDetectionState:RUNNING_SUGGESTED';
+                filters['moreFilter'] += 'objectDetectionState:RUNNING_SUGGESTED';
                 break;
             case 'objectDetectionError':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'objectDetectionState:ERROR';
+                filters['moreFilter'] += 'objectDetectionState:ERROR';
                 break;
             case 'objectDetectionDone':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] = 'objectDetectionState:RUNNING_NO_SUGGESTION,' +
+                filters['moreFilter'] += 'objectDetectionState:RUNNING_NO_SUGGESTION,' +
                     'RUNNING_MANUAL_APPROVED,RUNNING_MANUAL_REJECTED,RUNNING_MANUAL_DETAILED,' +
                     'DONE_APPROVAL_PROCESSED,DONE_REJECTION_PROCESSED,DONE_CORRECTION_PROCESSED,DONE_DETAIL_PROCESSED';
                 break;

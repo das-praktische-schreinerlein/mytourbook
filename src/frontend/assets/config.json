@@ -690,6 +690,7 @@
                 "ALL": true
             },
             "availableToDoDashboardRows": {
+                "noSubType": true,
                 "unrated": true,
                 "objectDetectionCorrectionNeeded": true,
                 "objectDetectionDetailNeeded": true,
