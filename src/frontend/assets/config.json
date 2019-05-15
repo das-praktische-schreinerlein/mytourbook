@@ -574,7 +574,7 @@
                         {
                             "property": "tdocodimageobjects[0].state",
                             "command": "CSVIN",
-                            "expectedValues": ["RUNNING_MANUAL_DETAILED", "RUNNING_MANUAL_DETAIL_NEEDED","DONE_DETAIL_PROCESSED"]
+                            "expectedValues": ["RUNNING_MANUAL_DETAILED", "RUNNING_MANUAL_DETAIL_NEEDED", "DONE_DETAIL_PROCESSED"]
                         }
                     ],
                     "recordAvailability": [
@@ -583,6 +583,39 @@
                             "command": "CSVIN",
                             "expectedValues": ["ODIMGOBJECT", "odimgobject"]
                         }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "objectkeyedit",
+                    "type": "objectkeyedit",
+                    "name": "ObjectKeyEdit",
+                    "shortName": "&#x1f589",
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        },
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_CORRECTION_NEEDED", "RUNNING_MANUAL_DETAIL_NEEDED"]
+                        }
+
                     ],
                     "configAvailability": [
                         {

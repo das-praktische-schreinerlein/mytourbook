@@ -126,10 +126,10 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                 'in': searchForm.actiontype.split(/,/)
             };
         }
-        if (searchForm.persons !== undefined && searchForm.persons.length > 0) {
+        if (searchForm.playlists !== undefined && searchForm.playlists.length > 0) {
             filter = filter || {};
-            filter['persons_txt'] = {
-                'in': searchForm.persons.split(/,/)
+            filter['playlists_txt'] = {
+                'in': searchForm.playlists.split(/,/)
             };
         }
         if (searchForm.persons !== undefined && searchForm.persons.length > 0) {

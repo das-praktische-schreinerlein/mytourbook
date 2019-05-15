@@ -522,11 +522,13 @@ export class TourDocSqlMediadbConfig {
                 },
                 'odkeys_txt': {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
-                        ' io_obj_type AS value ' +
+                        ' io_obj_type AS value, CONCAT(o_name, " | " , io_obj_type) as label ' +
                         'FROM' +
                         ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
-                        ' ORDER BY value',
+                        ' ORDER BY label, value',
                     filterField: 'io_obj_type',
                     action: AdapterFilterActions.IN
                 },
@@ -897,11 +899,12 @@ export class TourDocSqlMediadbConfig {
                 },
                 'odkeys_txt': {
                     selectSql: 'SELECT COUNT(io_id) AS count, ' +
-                        ' io_obj_type AS value ' +
+                        ' io_obj_type AS value, CONCAT(o_name, " | " , io_obj_type) as label ' +
                         'FROM' +
-                        ' image_object' +
+                        ' image_object LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
-                        ' ORDER BY value',
+                        ' ORDER BY label, value',
                     filterField: 'io_obj_type',
                     action: AdapterFilterActions.IN
                 },

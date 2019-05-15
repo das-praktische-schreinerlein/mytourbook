@@ -6,21 +6,21 @@
                 <ng-container [ngSwitch]="true">
                     <ng-container *ngSwitchCase="record.type === 'IMAGE' || record.type === 'ODIMGOBJECT'">
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
-                            <div class="image-container">
-                                <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
-                                    <div class="picture-with-objects-container"
-                                         [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
-                                        <img #mainImage class="picture-big" width="600px"
-                                             [src]="contentUtils.getFullUrl(record.tdocimages[0])"
-                                             alt="{{record.tdocimages[0].name}}"
-                                             (resize)="onResizeMainImage()"
-                                             (load)="onResizeMainImage()">
-                                        <app-cdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
-                                             [width]="imageWidth"
-                                             *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>
-                                    </div>
-                                </ng-container>
-                            </div>
+                        <div class="image-container">
+                            <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
+                                <div class="picture-with-objects-container"
+                                     [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
+                                    <img #mainImage class="picture-big" width="600px"
+                                         [src]="contentUtils.getFullUrl(record.tdocimages[0])"
+                                         alt="{{record.tdocimages[0].name}}"
+                                         (resize)="onResizeMainImage()"
+                                         (load)="onResizeMainImage()">
+                                    <app-cdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
+                                         [width]="imageWidth"
+                                         *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>
+                                </div>
+                            </ng-container>
+                        </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="record.type === 'VIDEO'">
                         <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>

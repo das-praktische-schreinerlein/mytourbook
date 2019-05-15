@@ -382,11 +382,123 @@ export class TourDocSqlMediadbActionTagAdapter {
             rawUpdate.then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
-                console.error('_doActionTag update ' + tableName + ' blocked failed:', reason);
+                console.error('_doActionTag update ' + tableName + ' odobjectstate failed:', reason);
                 return reject(reason);
             });
         });
 
         return result;
+    }
+
+    public executeActionTagObjectsKey(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+        opts = opts || {};
+
+        if (!utils.isInteger(id)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' id not an integer');
+        }
+        if (actionTagForm.payload === undefined) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
+        }
+
+        let codeFieldName;
+        let tableName;
+        let idName;
+        switch (table) {
+            case 'odimgobject':
+                codeFieldName = 'io_obj_type';
+                tableName = 'image_object';
+                idName = 'io_id';
+                break;
+            default:
+                return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
+        }
+        const detector = actionTagForm.payload['detector'];
+        if (!this.keywordValidationRule.isValid(detector)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' detector not valid');
+        }
+        const objectkey = actionTagForm.payload['objectkey'];
+        if (!this.keywordValidationRule.isValid(objectkey)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' objectkey not valid');
+        }
+        const objectname = actionTagForm.payload['objectname'];
+        if (!this.keywordValidationRule.isValid(objectname)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' objectname not valid');
+        }
+        const objecttype = actionTagForm.payload['objecttype'];
+        if (!this.keywordValidationRule.isValid(objecttype)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' objecttype not valid');
+        }
+        const action = actionTagForm.payload['action'];
+        if (!this.keywordValidationRule.isValid(action)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' action not valid');
+        }
+
+        let insertObjectNameSql = '';
+        let deleteObjectKeySql = '';
+        let insertObjectKeySql = '';
+        if (action === 'changeObjectKeyForRecord') {
+            // NOOP
+        } else if (action === 'changeObjectLabelForObjectKey'
+            || action === 'createNewObjectKeyAndObjectLabel'
+            || action === 'createObjectLabelForObjectKey') {
+            // update object_key (remove+insert)
+            deleteObjectKeySql = 'DELETE FROM objects_key WHERE ok_detector="' + detector + '" ' +
+                '                                      AND ok_key="' + objectkey + '"';
+            insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
+                '   SELECT "' + detector + '",' +
+                '          "' + objectkey + '",' +
+                '          (SELECT MAX(o_id) AS newId FROM objects WHERE o_name="' + objectname + '") AS o_id FROM dual ' +
+                '   WHERE NOT EXISTS (' +
+                '      SELECT 1 FROM objects_key WHERE ok_detector="' + detector + '" ' +
+                '                                      AND ok_key="' + objectkey + '")';
+
+            // insert object_name if not exists
+            if (action === 'createNewObjectKeyAndObjectLabel' || action === 'createObjectLabelForObjectKey') {
+                insertObjectNameSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key)' +
+                    ' SELECT "' + objectname + '", "' + objectname + '", "' + objectname + '" FROM dual ' +
+                    '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="' + objectname + '" AND o_key="' + objectname + '")';
+            }
+        } else {
+            return utils.reject('actiontag ' + actionTagForm.key + ' action unknown');
+        }
+
+        let updateImageObjectObjectKeySql = 'UPDATE ' + tableName + ' SET ' + codeFieldName + '="' + objectkey + '"' +
+            '  WHERE ' + idName + ' = "' + id + '"';
+        updateImageObjectObjectKeySql = this.sqlQueryBuilder.transformToSqlDialect(updateImageObjectObjectKeySql,
+            this.config.knexOpts.client);
+        if (insertObjectNameSql) {
+            insertObjectNameSql = this.sqlQueryBuilder.transformToSqlDialect(insertObjectNameSql, this.config.knexOpts.client);
+        }
+        if (deleteObjectKeySql) {
+            deleteObjectKeySql = this.sqlQueryBuilder.transformToSqlDialect(deleteObjectKeySql, this.config.knexOpts.client);
+        }
+        if (insertObjectKeySql) {
+            insertObjectKeySql = this.sqlQueryBuilder.transformToSqlDialect(insertObjectKeySql, this.config.knexOpts.client);
+        }
+
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        return new Promise((resolve, reject) => {
+            return sqlBuilder.raw(updateImageObjectObjectKeySql).then(dbresults => {
+                if (insertObjectNameSql) {
+                    return sqlBuilder.raw(insertObjectNameSql);
+                }
+                return resolve(true);
+            }).then(dbresults => {
+                if (deleteObjectKeySql) {
+                    return sqlBuilder.raw(deleteObjectKeySql);
+                }
+                return resolve(true);
+            }).then(dbresults => {
+                if (insertObjectKeySql) {
+                    return sqlBuilder.raw(insertObjectKeySql);
+                }
+                return resolve(true);
+            }).then(dbresults => {
+                return resolve(true);
+            }).catch(function errorPlaylist(reason) {
+                console.error('_doActionTag update ' + tableName + ' odobjectkey failed:', reason);
+                return reject(reason);
+            });
+        });
     }
 }

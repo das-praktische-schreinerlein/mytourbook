@@ -135,7 +135,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('_facets failed:', reason);
+                    console.error('setTrackKeywords failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -147,7 +147,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('_facets failed:', reason);
+                    console.error('setImageKeywords failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -159,7 +159,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('_facets failed:', reason);
+                    console.error('setVideoKeywords failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -171,7 +171,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('_facets failed:', reason);
+                    console.error('setRouteKeywords failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -183,7 +183,7 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
                 return Promise.all(promises).then(dbresults => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('_facets failed:', reason);
+                    console.error('setLocationKeywords failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -207,6 +207,8 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
             return this.actionTagAdapter.executeActionTagObjects(table, id, actionTagForm, opts);
         } else if ((table === 'odimgobject') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('odobjectstate_')) {
             return this.actionTagAdapter.executeActionTagObjectsState(table, id, actionTagForm, opts);
+        } else if ((table === 'odimgobject') && actionTagForm.type === 'objectkeyedit' && actionTagForm.key.startsWith('objectkeyedit')) {
+            return this.actionTagAdapter.executeActionTagObjectsKey(table, id, actionTagForm, opts);
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
             return this.actionTagAdapter.executeActionTagPersRate(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {

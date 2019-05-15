@@ -1,0 +1,135 @@
+{{updateData()}}
+<div class="modal-header">
+    <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
+    <button type="button" class="close" aria-label="Close" (click)="cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+    <form [formGroup]="changeObjectKeyForRecordFormGroup" class="form-control-sm" (ngSubmit)="submitChangeObjectKeyForRecord($event)" *ngIf="record !== undefined">
+        <fieldset>
+            <legend i18n="changeObjectKeyForRecord label|Label for fieldset: changeObjectKeyForRecord@@label.editform.tdoc.legend.changeObjectKeyForRecord">&#x2315; Falsches Objekt: ein anderes Object auswählen</legend>
+            <div class="row">
+                <div class="col-sm-6 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectkey@@label.editform.tdoc.objectkey">Code:</label>
+                    <ss-multiselect-dropdown [options]="optionsSelectObjectDetectionKey"
+                                             [settings]="settingsSelectObjectDetectionKey"
+                                             [texts]="textsSelectObjectDetectionKey"
+                                             formControlName="objectkey"
+                                             ngDefaultControl
+                                             required="required"
+                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <button type="submit" (click)="submitChangeObjectKeyForRecord($event)" class="btn btn-action btn-sm"
+                            i18n="button changeObjectKeyForRecord tdoc|Buttontext to changeObjectKeyForRecord tdoc@@button.form.tdoc.changeObjectKeyForRecord">Anderes Objekt zuordnen</button>
+                    <button type="button" (click)="cancel()" class="btn btn-action btn-sm">Abbrechen</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <form [formGroup]="changeObjectLabelForObjectKeyFormGroup" class="form-control-sm" (ngSubmit)="submitChangeObjectLabelForObjectKey($event)" *ngIf="record !== undefined">
+        <fieldset>
+            <legend i18n="objectKey changeObjectLabelForObjectKey|Label for fieldset: changeObjectLabelForObjectKey@@label.editform.tdoc.legend.changeObjectLabelForObjectKey">&#x2315; Falsches Objekt: für ALLE Vorkommen des Code ein anderes Objekt zuordnen</legend>
+            <div class="row">
+                <div class="col-sm-6 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectkey@@label.editform.tdoc.objectkey">Code:</label>
+                    <input formControlName="objectkey" required="required" class="form-control" disabled type="text" placeholder="objectkey"
+                           i18n-placeholder="key placeholder|Placeholder for objectkey@@placeholder.form.tdoc.objectkey">
+                </div>
+                <div class="col-sm-6 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectkey@@label.editform.tdoc.objectkey">Objekt:</label>
+                    <ss-multiselect-dropdown [options]="optionsSelectObjectDetectionName"
+                                             [settings]="settingsSelectObjectDetectionName"
+                                             [texts]="textsSelectObjectDetectionName"
+                                             formControlName="objectname"
+                                             ngDefaultControl
+                                             required="required"
+                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <button type="submit" (click)="submitChangeObjectLabelForObjectKey($event)"
+                            class="btn btn-action btn-sm"
+                            i18n="button changeObjectLabelForObjectKey tdoc|Buttontext to changeObjectLabelForObjectKey tdoc@@button.form.tdoc.changeObjectLabelForObjectKey">Alle neu zuordnen</button>
+                    <button type="button" (click)="cancel()" class="btn btn-action btn-sm">Abbrechen</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <form [formGroup]="createObjectLabelForObjectKeyFormGroup" class="form-control-sm" (ngSubmit)="submitCreateObjectLabelForObjectKey($event)" *ngIf="record !== undefined">
+        <fieldset>
+            <legend i18n="objectKey createObjectLabelForObjectKey|Label for fieldset: createObjectLabelForObjectKey@@label.editform.tdoc.legend.createObjectLabelForObjectKey">&#x2315; Falsches Objekt: für ALLE Vorkommen des Code ein anderes Objekt erzeugen</legend>
+            <div class="row">
+                <div class="col-sm-4 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectkey@@label.editform.tdoc.objectkey">Code:</label>
+                    <input formControlName="objectkey" required="required" class="form-control" disabled type="text" placeholder="objectkey"
+                           i18n-placeholder="key placeholder|Placeholder for objectkey@@placeholder.form.tdoc.objectkey">
+                </div>
+                <div class="col-sm-4 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectname@@label.editform.tdoc.objectname">Objekt:</label>
+                    <input formControlName="objectname" required="required" class="form-control" type="text" placeholder="objectname"
+                           i18n-placeholder="name placeholder|Placeholder for objectname@@placeholder.form.tdoc.objectname">
+                </div>
+                <div class="col-sm-4 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objecttype@@label.editform.tdoc.objecttype">Typ:</label>
+                    <input formControlName="objecttype" required="required" class="form-control" type="text" placeholder="objecttype"
+                           i18n-placeholder="type placeholder|Placeholder for objecttype@@placeholder.form.tdoc.objecttype">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <button type="submit" (click)="submitCreateObjectLabelForObjectKey($event)"
+                            class="btn btn-action btn-sm"
+                            i18n="button createObjectLabelForObjectKey tdoc|Buttontext to createObjectLabelForObjectKey tdoc@@button.form.tdoc.createObjectLabelForObjectKey">Alle neu zuordnen</button>
+                    <button type="button" (click)="cancel()" class="btn btn-action btn-sm">Abbrechen</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <form [formGroup]="createNewObjectKeyAndObjectLabelFormGroup" class="form-control-sm" (ngSubmit)="submitCreateNewObjectKeyAndObjectLabel($event)" *ngIf="record !== undefined">
+        <fieldset>
+            <legend i18n="createNewObjectKey label|Label for fieldset: createNewObjectKey@@label.editform.tdoc.legend.createNewObjectKey">&#x2315; Falsches Objekt: ein neues Objekt zuordnen</legend>
+            <div class="row">
+                <div class="col-sm-4 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectkey@@label.editform.tdoc.objectkey">Code:</label>
+                    <input formControlName="objectkey" required="required" class="form-control" type="text" placeholder="objectkey"
+                           i18n-placeholder="key placeholder|Placeholder for objectkey@@placeholder.form.tdoc.objectkey">
+                </div>
+                <div class="col-sm-4 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectname@@label.editform.tdoc.objectname">Objekt:</label>
+                    <input formControlName="objectname" required="required" class="form-control" type="text" placeholder="objectname"
+                           i18n-placeholder="name placeholder|Placeholder for objectname@@placeholder.form.tdoc.objectname">
+                </div>
+                <div class="col-sm-4 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objecttype@@label.editform.tdoc.objecttype">Typ:</label>
+                    <input formControlName="objecttype" required="required" class="form-control" type="text" placeholder="objecttype"
+                           i18n-placeholder="type placeholder|Placeholder for objecttype@@placeholder.form.tdoc.objecttype">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <button type="submit" (click)="submitCreateNewObjectKeyAndObjectLabel($event)" class="btn btn-action btn-sm"
+                            i18n="button createNewObjectKey tdoc|Buttontext to createNewObjectKey tdoc@@button.form.tdoc.createNewObjectKey">Neu anlegen</button>
+                    <button type="button" (click)="cancel()" class="btn btn-action btn-sm">Abbrechen</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

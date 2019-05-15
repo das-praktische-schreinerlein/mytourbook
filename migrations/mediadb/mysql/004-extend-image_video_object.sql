@@ -52,3 +52,8 @@ update video_object set video_object.vo_precision=rand()*0.5 where not (VO_OBJ_T
 
 update image_object set image_object.io_state='RUNNING_SUGGESTED' where image_object.io_detector like 'picasafile';
 update image_object set image_object.io_state='RUNNING_MANUAL_APPROVED' where io_detector like 'picasa' or IO_OBJ_TYPE like '%Playlist%';
+
+/* #############
+# add index to objects_key
+############# */
+CREATE INDEX idx_objects_O_KEY_DETECTOR_pk ON objects_key (ok_detector, ok_key);

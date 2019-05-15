@@ -42,6 +42,7 @@ import {CookieLawModule} from 'angular2-cookie-law';
 import {TourDocActionTagService} from './shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocPlaylistService} from './shared-tdoc/services/tdoc-playlist.service';
 import {environment} from '../environments/environment';
+import {TourDocObjectDetectionObjectKeyEditFormComponent} from './shared-tdoc/components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
 
 registerLocaleData(localeDe);
 
@@ -62,7 +63,7 @@ export function getAngulartics2Providers(): any {
         NavbarComponent,
         ErrorPageComponent
     ],
-    entryComponents: [TourDocActionTagsComponent],
+    entryComponents: [TourDocActionTagsComponent, TourDocObjectDetectionObjectKeyEditFormComponent],
     imports: [
         HttpClientModule,
         NgbModule.forRoot(),
