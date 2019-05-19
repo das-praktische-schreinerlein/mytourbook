@@ -232,9 +232,9 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
 
     public createDefaultObject(): Promise<any> {
         const sqlBuilder = this.knex;
-        const insertObjectSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key)' +
-            ' SELECT "Default", "Default", "Default" FROM dual ' +
-            '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="Default" AND o_key="Default")';
+        const insertObjectSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)' +
+            ' SELECT "Default", "Default", "Default", "Default" FROM dual ' +
+            '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_key="Default")';
         return new Promise((resolve, reject) => {
             return sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql)).then(dbresults => {
                 return sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql));
@@ -262,7 +262,7 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
         const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
             '   SELECT "' + detector + '",' +
             '          "' + keySuggestion + '",' +
-            '          (SELECT MAX(o_id) AS newId FROM objects WHERE o_name="Default") AS o_id FROM dual ' +
+            '          (SELECT MAX(o_id) AS newId FROM objects WHERE o_key="Default") AS o_id FROM dual ' +
             '   WHERE NOT EXISTS (' +
             '      SELECT 1 FROM objects_key WHERE ok_detector="' + detector + '" ' +
             '                                      AND ok_key="' + keySuggestion + '")';

@@ -70,3 +70,8 @@ update image_object set io_state='RUNNING_MANUAL_APPROVED' where io_detector lik
 ############# */
 CREATE INDEX idx_objects_O_KEY_DETECTOR_pk ON objects_key (ok_detector, ok_key);
 
+/* #############
+# add object.type
+############# */
+ALTER TABLE objects ADD COLUMN o_category VARCHAR(50) DEFAULT 'Default';
+CREATE INDEX idx_objects_O_CATEGORY ON objects (o_category);

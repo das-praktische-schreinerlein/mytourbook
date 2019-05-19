@@ -388,6 +388,7 @@ export class TourDocSqlMediadbConfig {
                         ' ":::objWidth=", image_object.io_obj_width,' +
                         ' ":::objHeight=", image_object.io_obj_height,' +
                         ' ":::name=", objects.o_name,' +
+                        ' ":::category=", objects.o_category,' +
                         ' ":::precision=", image_object.io_precision,' +
                         ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objects ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
@@ -522,11 +523,37 @@ export class TourDocSqlMediadbConfig {
                 },
                 'odkeys_txt': {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
-                        ' io_obj_type AS value, CONCAT(o_name, " | " , io_obj_type) as label ' +
+                        ' io_obj_type AS value, CONCAT(o_name, " | "  , o_category, " | " , io_obj_type) as label ' +
                         'FROM' +
                         ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
                         ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY label, value',
+                    filterField: 'io_obj_type',
+                    action: AdapterFilterActions.IN
+                },
+                'odkeys_all_txt': {
+                    ignoreIfNotExplicitNamed: false,
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
+                        ' ok_key AS value, CONCAT(o_name, " | " , o_category, " | " , ok_key) as label ' +
+                        'FROM' +
+                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' LEFT JOIN image ON image_object.i_id=image.i_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY label, value',
+                    filterField: 'io_obj_type',
+                    action: AdapterFilterActions.IN
+                },
+                'odcategory_all_txt': {
+                    ignoreIfNotExplicitNamed: false,
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
+                        ' o_category AS value, o_category as label ' +
+                        'FROM' +
+                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' LEFT JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
                     filterField: 'io_obj_type',
@@ -755,6 +782,7 @@ export class TourDocSqlMediadbConfig {
                         ' ":::objWidth=", image_object.io_obj_width,' +
                         ' ":::objHeight=", image_object.io_obj_height,' +
                         ' ":::name=", objects.o_name,' +
+                        ' ":::category=", objects.o_category,' +
                         ' ":::precision=", image_object.io_precision,' +
                         ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objects ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
@@ -899,9 +927,33 @@ export class TourDocSqlMediadbConfig {
                 },
                 'odkeys_txt': {
                     selectSql: 'SELECT COUNT(io_id) AS count, ' +
-                        ' io_obj_type AS value, CONCAT(o_name, " | " , io_obj_type) as label ' +
+                        ' io_obj_type AS value, CONCAT(o_name, " | " , o_category, " | " , io_obj_type) as label ' +
                         'FROM' +
                         ' image_object LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY label, value',
+                    filterField: 'io_obj_type',
+                    action: AdapterFilterActions.IN
+                },
+                'odkeys_all_txt': {
+                    ignoreIfNotExplicitNamed: false,
+                    selectSql: 'SELECT COUNT(io_id) AS count, ' +
+                        ' ok_key AS value, CONCAT(o_name, " | " , o_category, " | " , ok_key) as label ' +
+                        'FROM' +
+                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY label, value',
+                    filterField: 'io_obj_type',
+                    action: AdapterFilterActions.IN
+                },
+                'odcategory_all_txt': {
+                    ignoreIfNotExplicitNamed: false,
+                    selectSql: 'SELECT COUNT(io_id) AS count, ' +
+                        ' o_category AS value, o_category as label ' +
+                        'FROM' +
+                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',

@@ -13,6 +13,7 @@ export const TourDocObjectDetectionImageObjectRecordSchema = new Schema({
         descHtml: {type: 'string'},
         fileName: {type: 'string'},
         name: {type: 'string'},
+        category: {type: 'string'},
         detector: {type: 'string'},
         key: {type: 'string'},
         keySuggestion: {type: 'string'},

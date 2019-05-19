@@ -18,7 +18,7 @@ export interface TourDocObjectDetectionObjectKeyEditFormResultType {
     detector: string;
     objectkey: string;
     objectname: string;
-    objecttype: string;
+    objectcategory: string;
 }
 
 @Component({
@@ -44,12 +44,10 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
     public createObjectLabelForObjectKeyFormGroup: FormGroup = this.fb.group({
         objectkey: '',
         objectname: '',
-        objecttype: ''
-    });
-    public createNewObjectKeyAndObjectLabelFormGroup: FormGroup = this.fb.group({
-        objectkey: '',
-        objectname: '',
-        objecttype: ''
+        objectcategory: '',
+        objectnameselect: '',
+        objectcategoryselect: '',
+        objectaction: ''
     });
     public optionsSelectObjectDetectionKey: IMultiSelectOption[] = [];
     public settingsSelectObjectDetectionKey: IMultiSelectSettings =
@@ -70,9 +68,9 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
     public optionsSelectObjectDetectionName: IMultiSelectOption[] = [];
     public settingsSelectObjectDetectionName = this.settingsSelectObjectDetectionKey;
     public textsSelectObjectDetectionName = this.textsSelectObjectDetectionKey;
-    public optionsSelectObjectDetectionType: IMultiSelectOption[] = [];
-    public settingsSelectObjectDetectionType = this.settingsSelectObjectDetectionType;
-    public textsSelectObjectDetectionType = this.textsSelectObjectDetectionType;
+    public optionsSelectObjectDetectionCategory: IMultiSelectOption[] = [];
+    public settingsSelectObjectDetectionCategory = this.settingsSelectObjectDetectionKey;
+    public textsSelectObjectDetectionCategory = this.textsSelectObjectDetectionKey;
 
     @Input()
     public record: TourDocRecord;
@@ -101,11 +99,27 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
     }
 
     submitCreateObjectLabelForObjectKey(event: Event): boolean {
-        return this.submitCommonForm('createObjectLabelForObjectKey', this.createObjectLabelForObjectKeyFormGroup);
+        return this.submitCommonForm(
+            this.createObjectLabelForObjectKeyFormGroup.getRawValue()['objectaction'], this.createObjectLabelForObjectKeyFormGroup);
     }
 
-    submitCreateNewObjectKeyAndObjectLabel(event: Event): boolean {
-        return this.submitCommonForm('createNewObjectKeyAndObjectLabel', this.createNewObjectKeyAndObjectLabelFormGroup);
+    updateFormCreateObjectLabelForObjectKey(event: Event, field: string): boolean {
+        const values = this.createObjectLabelForObjectKeyFormGroup.getRawValue()[field];
+        const value = Array.isArray(values)
+            ? (values.length > 0 ? values[0] : undefined)
+            : values;
+        switch (field) {
+            case 'objectnameselect':
+                if (value) {
+                    this.createObjectLabelForObjectKeyFormGroup.patchValue({objectname: value});
+                }
+                return;
+            case 'objectcategoryselect':
+                if (value) {
+                    this.createObjectLabelForObjectKeyFormGroup.patchValue({objectcategory: value});
+                }
+                return;
+        }
     }
 
     public updateData(): void {
@@ -118,8 +132,8 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
 
         this.changeObjectKeyForRecordFormGroup.patchValue({objectkey: '' });
         this.changeObjectLabelForObjectKeyFormGroup.patchValue({objectkey: '', objectname: ''});
-        this.createObjectLabelForObjectKeyFormGroup.patchValue({objectkey: '', objectname: '', objecttype: ''  });
-        this.createNewObjectKeyAndObjectLabelFormGroup.patchValue({objectkey: '', objectname: '', objecttype: ''  });
+        this.createObjectLabelForObjectKeyFormGroup.patchValue({objectkey: '', objectname: '', objectcategory: '',
+            objectaction: 'createObjectLabelForObjectKey'  });
         this.optionsSelectObjectDetectionKey = [];
         if (this.record === undefined) {
             return;
@@ -138,11 +152,10 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
             this.createObjectLabelForObjectKeyFormGroup.patchValue({
                 objectkey: this.record['tdocodimageobjects'][0]['key'],
                 objectname: this.record['tdocodimageobjects'][0]['name'],
-                objecttype: this.record['tdocodimageobjects'][0]['type'] });
-            this.createNewObjectKeyAndObjectLabelFormGroup.patchValue({
-                objectkey: this.record['tdocodimageobjects'][0]['key'],
-                objectname: this.record['tdocodimageobjects'][0]['name'],
-                objecttype: this.record['tdocodimageobjects'][0]['type'] });
+                objectcategory: this.record['tdocodimageobjects'][0]['category'],
+                objectnameselect: '',
+                objectcategoryselect: ''
+            });
         }
     }
 
@@ -159,7 +172,7 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
 
         this.tdocDataService.search(searchForm,
             {
-                showFacets: ['odkeys_txt'],
+                showFacets: ['odkeys_all_txt', 'odcategory_all_txt'],
                 loadTrack: false,
                 showForm: false
             }).then(function doneSearch(tdocSearchResult) {
@@ -172,19 +185,19 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
                 // console.log('update searchResult', cdocSearchResult);
             }
 
-            const keyValues = me.tdocSearchFormUtils.getObjectDetectionKeyValues(tdocSearchResult);
+            const keyValues = me.searchFormUtils.getFacetValues(tdocSearchResult, 'odkeys_all_txt', '', '');
             me.optionsSelectObjectDetectionKey = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 keyValues, true, [], false);
             me.optionsSelectObjectDetectionName = [];
-            me.optionsSelectObjectDetectionType = [];
+            me.optionsSelectObjectDetectionCategory = [];
             keyValues.map(function (value) {
                 let name: string = value[1];
-                let type = 'Default';
+                let category = 'Default';
                 if (value.length >= 5 && value[4] !== undefined) {
                     const parts = value[4].split(' | ');
                     name = parts[0];
                     if (parts.length > 2) {
-                        type = parts[1];
+                        category = parts[1];
                     }
                 }
                 const label = value[0] + name;
@@ -194,9 +207,9 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
                     me.existingObjectNames[name] = name;
                     me.optionsSelectObjectDetectionName.push({id: name, name: label});
                 }
-                if (me.existingObjectTypes[type] === undefined) {
-                    me.existingObjectTypes[type] = type;
-                    me.optionsSelectObjectDetectionType.push({id: type, name: type});
+                if (me.existingObjectTypes[category] === undefined) {
+                    me.existingObjectTypes[category] = category;
+                    me.optionsSelectObjectDetectionCategory.push({id: category, name: category});
                 }
             });
 
@@ -214,27 +227,34 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
         const values = formGroup.getRawValue();
         const objectkey = Array.isArray(values['objectkey']) ? values['objectkey'][0] : values['objectkey'];
         const objectname = Array.isArray(values['objectname']) ? values['objectname'][0] : values['objectname'];
-        const objecttype = Array.isArray(values['objecttype']) ? values['objecttype'][0] : values['objecttype'];
+        const objectcategory = Array.isArray(values['objectcategory']) ? values['objectcategory'][0] : values['objectcategory'];
 
-        if (action === 'changeObjectKeyForRecord') {
-            if (this.existingObjectKeys[objectkey] === undefined) {
+        switch (action) {
+            case 'changeObjectKeyForRecord':
+                if (this.existingObjectKeys[objectkey] === undefined) {
+                    return false;
+                }
+                break;
+            case 'changeObjectLabelForObjectKey':
+                if (this.existingObjectKeys[objectkey] === undefined) {
+                    return false;
+                }
+                if (this.existingObjectNames[objectname] === undefined) {
+                    return false;
+                }
+                break;
+            case 'createObjectLabelForObjectKey':
+                if (this.existingObjectKeys[objectkey] === undefined) {
+                    return false;
+                }
+                if (this.existingObjectNames[objectname] !== undefined) {
+                    return false;
+                }
+                break;
+            case 'createNewObjectKeyAndObjectLabel':
+                break;
+            default:
                 return false;
-            }
-        } else if (action === 'changeObjectLabelForObjectKey') {
-            if (this.existingObjectKeys[objectkey] === undefined) {
-                return false;
-            }
-            if (this.existingObjectNames[objectname] === undefined) {
-                return false;
-            }
-        } else if (action === 'createObjectLabelForObjectKey') {
-            if (this.existingObjectKeys[objectkey] === undefined) {
-                return false;
-            }
-            if (this.existingObjectNames[objectname] !== undefined) {
-                return false;
-            }
-        } else if (action === 'createNewObjectKeyAndObjectLabel') {
         }
 
         this.resultObservable.next({
@@ -242,7 +262,7 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
             detector: this.record['tdocodimageobjects'][0]['detector'],
             objectkey: objectkey,
             objectname: objectname,
-            objecttype: objecttype});
+            objectcategory: objectcategory});
         this.activeModal.close('Save click');
 
         return false;

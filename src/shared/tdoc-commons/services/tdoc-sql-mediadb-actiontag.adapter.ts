@@ -424,9 +424,9 @@ export class TourDocSqlMediadbActionTagAdapter {
         if (!this.keywordValidationRule.isValid(objectname)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' objectname not valid');
         }
-        const objecttype = actionTagForm.payload['objecttype'];
-        if (!this.keywordValidationRule.isValid(objecttype)) {
-            return utils.reject('actiontag ' + actionTagForm.key + ' objecttype not valid');
+        const objectcategory = actionTagForm.payload['objectcategory'];
+        if (!this.keywordValidationRule.isValid(objectcategory)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' objectcategory not valid');
         }
         const action = actionTagForm.payload['action'];
         if (!this.keywordValidationRule.isValid(action)) {
@@ -454,9 +454,9 @@ export class TourDocSqlMediadbActionTagAdapter {
 
             // insert object_name if not exists
             if (action === 'createNewObjectKeyAndObjectLabel' || action === 'createObjectLabelForObjectKey') {
-                insertObjectNameSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key)' +
-                    ' SELECT "' + objectname + '", "' + objectname + '", "' + objectname + '" FROM dual ' +
-                    '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="' + objectname + '" AND o_key="' + objectname + '")';
+                insertObjectNameSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)' +
+                    ' SELECT "' + objectname + '", "' + objectname + '", "' + objectname + '", "' + objectcategory + '" FROM dual ' +
+                    '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="' + objectname + '")';
             }
         } else {
             return utils.reject('actiontag ' + actionTagForm.key + ' action unknown');

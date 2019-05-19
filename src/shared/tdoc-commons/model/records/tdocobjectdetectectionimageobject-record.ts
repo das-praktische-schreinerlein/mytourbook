@@ -7,7 +7,8 @@ export class TourDocObjectDetectionImageObjectRecord extends BaseObjectDetection
     toString() {
         return 'TourDocObjectDetectionImageObjectRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
-            '  class: ' + this.detector + ',\n' +
+            '  detector: ' + this.detector + ',\n' +
+            '  category: ' + this.category + ',\n' +
             '  key: ' + this.key + ',\n' +
             '  pos: ' + this.objX + ',' + this.objY + '(' + this.objWidth + ',' + this.objHeight + ')\n' +
             '}';
