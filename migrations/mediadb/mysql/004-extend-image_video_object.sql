@@ -63,3 +63,29 @@ CREATE INDEX idx_objects_O_KEY_DETECTOR_pk ON objects_key (ok_detector, ok_key);
 ############# */
 ALTER TABLE objects ADD COLUMN o_category VARCHAR(50) DEFAULT 'Default';
 CREATE INDEX idx_objects_O_CATEGORY ON objects (o_category);
+
+/* #############
+# clean objects
+############# */
+update objects set o_name = regexp_replace(regexp_replace(regexp_replace(o_key, '^faces_picasaobj_RealName\\[(.*?)\\].*$', '\\1'), '\\.', '_'), ',', '.') where O_KEY like '%faces_picasaobj_RealName%';
+update objects set o_key = regexp_replace(o_key, '^faces_picasaobj_.*PicasaId\\[(.*)\\]$', 'faces_\\1') where O_KEY like '%PicasaId%';
+update objects_key set ok_key = regexp_replace(ok_key, '^faces_picasaobj_.*PicasaId\\[(.*)\\]$', 'faces_\\1') where ok_key like '%PicasaId%';
+update image_object set IO_OBJ_TYPE = regexp_replace(IO_OBJ_TYPE, '^faces_picasaobj_.*PicasaId\\[(.*)\\]$', 'faces_\\1') where IO_OBJ_TYPE like '%PicasaId%';
+update video_object set VO_OBJ_TYPE = regexp_replace(VO_OBJ_TYPE, '^faces_picasaobj_.*PicasaId\\[(.*)\\]$', 'faces_\\1') where VO_OBJ_TYPE like '%PicasaId%';
+delete from objects_key where o_id not in (select o_id from objects) and ok_detector in ('picasa');
+UPDATE objects_key set o_id=(select min(o_id) from objects where ok_key=o_key) where o_id in (select o_id from objects where ok_key=o_key);
+update objects set o_category='Person' where objects.O_KEY like '%faces%' or objects.O_KEY like '%Playlist_%';
+
+/* #############
+# insert default-objects
+# source '../../installer/db/mysql/mediadb/xxxx-insert_default-objects.sql';
+############# */
+
+
+/* #############
+# insert copies
+############# */
+INSERT INTO objects_key(ok_detector, ok_key, o_id) SELECT 'tfjs_cocossd_mobilenet_v1', ok_key, o_id FROM objects_key WHERE ok_detector='tfjs_cocossd_lite_mobilenet_v2' and ok_key not in (select ok_key from objects_key where ok_detector = 'tfjs_cocossd_mobilenet_v1');
+INSERT INTO objects_key(ok_detector, ok_key, o_id) SELECT 'tfjs_cocossd_mobilenet_v2', ok_key, o_id FROM objects_key WHERE ok_detector='tfjs_cocossd_lite_mobilenet_v2' and ok_key not in (select ok_key from objects_key where ok_detector = 'tfjs_cocossd_mobilenet_v2');
+INSERT INTO objects_key(ok_detector, ok_key, o_id) SELECT 'tfjs_mobilenet_v1', ok_key, o_id FROM objects_key WHERE ok_detector='tfjs_cocossd_lite_mobilenet_v2' and ok_key not in (select ok_key from objects_key where ok_detector = 'tfjs_mobilenet_v1');
+
