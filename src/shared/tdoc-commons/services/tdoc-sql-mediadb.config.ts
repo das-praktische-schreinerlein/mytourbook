@@ -2,6 +2,7 @@ import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-q
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
 export class TourDocSqlMediadbConfig {
+    public static personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
     public static tableConfigs = {
         'track': {
             key: 'track',
@@ -585,6 +586,7 @@ export class TourDocSqlMediadbConfig {
                     'FROM' +
                     ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
                     ' INNER JOIN image ON image_object.i_id=image.i_id ' +
+                    ' WHERE objects.o_category in ("' + TourDocSqlMediadbConfig.personCategories.join('", "') + '")' +
                     ' GROUP BY value' +
                     ' ORDER BY value',
                     filterField: 'o_name',
@@ -985,6 +987,7 @@ export class TourDocSqlMediadbConfig {
                         ' o_name AS value ' +
                         'FROM' +
                         ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
+                        ' WHERE objects.o_category in ("' + TourDocSqlMediadbConfig.personCategories.join('", "') + '")' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
                     filterField: 'o_name',
@@ -1305,6 +1308,7 @@ export class TourDocSqlMediadbConfig {
                     ' o_name AS value ' +
                     'FROM' +
                     ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
+                    ' WHERE objects.o_category in ("' + TourDocSqlMediadbConfig.personCategories.join('", "') + '")' +
                     ' GROUP BY value' +
                     ' ORDER BY value',
                     filterField: 'o_name',

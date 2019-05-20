@@ -262,7 +262,7 @@ export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionD
         const insertObjectKeySql = 'INSERT INTO objects_key(ok_detector, ok_key, o_id) ' +
             '   SELECT "' + detector + '",' +
             '          "' + keySuggestion + '",' +
-            '          (SELECT MAX(o_id) AS newId FROM objects WHERE o_key="Default") AS o_id FROM dual ' +
+            '          (SELECT MAX(o_id) AS newId FROM objects WHERE o_key="Default" OR o_key="' + keySuggestion + '") AS o_id FROM dual ' +
             '   WHERE NOT EXISTS (' +
             '      SELECT 1 FROM objects_key WHERE ok_detector="' + detector + '" ' +
             '                                      AND ok_key="' + keySuggestion + '")';
