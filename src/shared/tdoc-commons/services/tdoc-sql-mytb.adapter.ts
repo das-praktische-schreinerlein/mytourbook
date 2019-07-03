@@ -3,7 +3,7 @@ import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {GenericSqlAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-sql.adapter';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {FacetCacheUsageConfigurations, TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {TourDocSqlMytbConfig} from './tdoc-sql-mytb.config';
@@ -11,8 +11,13 @@ import {TourDocSqlMytbConfig} from './tdoc-sql-mytb.config';
 export class TourDocSqlMytbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private tableConfig: TourDocSqlMytbConfig = new TourDocSqlMytbConfig();
 
-    constructor(config: any) {
-        super(config, new TourDocAdapterResponseMapper(config));
+    constructor(config: any, facetCacheUsageConfiguration: FacetCacheUsageConfigurations) {
+        super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfiguration);
+        this.extendTableConfigs();
+    }
+
+    protected extendTableConfigs() {
+        this.sqlQueryBuilder.extendTableConfigs(TourDocSqlMytbConfig.tableConfigs);
     }
 
     protected getTableConfig(params: AdapterQuery): TableConfig {

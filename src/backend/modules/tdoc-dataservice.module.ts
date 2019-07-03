@@ -12,7 +12,7 @@ import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsj
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-queued-object-detection.service';
 import {TourDocSqlMediadbObjectDetectionAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mediadb-objectdetection.adapter';
-import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {FacetCacheUsageConfigurations, SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 
 export interface SqlConnectionConfig {
     client: 'sqlite3' | 'mysql';
@@ -126,7 +126,8 @@ export class TourDocDataServiceModule {
             },
             mapperConfig: backendConfig['mapperConfig']
         };
-        const adapter = new TourDocSqlMediadbAdapter(options);
+        const adapter = new TourDocSqlMediadbAdapter(options,
+            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMediadbAdapter']['facetCacheUsage']);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;
@@ -154,7 +155,8 @@ export class TourDocDataServiceModule {
             },
             mapperConfig: backendConfig['mapperConfig']
         };
-        const adapter = new TourDocSqlMytbAdapter(options);
+        const adapter = new TourDocSqlMytbAdapter(options,
+            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMytbAdapter']['facetCacheUsage']);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;

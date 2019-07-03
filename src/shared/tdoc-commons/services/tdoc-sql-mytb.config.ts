@@ -1,8 +1,8 @@
-import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
 export class TourDocSqlMytbConfig {
-    public static tableConfigs = {
+    public static tableConfigs: TableConfigs = {
         'track': {
             key: 'track',
             tableName: 'kategorie_full',

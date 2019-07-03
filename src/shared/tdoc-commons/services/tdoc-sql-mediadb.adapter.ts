@@ -3,7 +3,11 @@ import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {GenericSqlAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-sql.adapter';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
-import {TableConfig, WriteQueryData} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {
+    FacetCacheUsageConfigurations,
+    TableConfig,
+    WriteQueryData
+} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {Mapper, utils} from 'js-data';
@@ -18,10 +22,15 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
     private keywordsAdapter: TourDocSqlMediadbKeywordAdapter;
     private tableConfig: TourDocSqlMediadbConfig = new TourDocSqlMediadbConfig();
 
-    constructor(config: any) {
-        super(config, new TourDocAdapterResponseMapper(config));
+    constructor(config: any, facetCacheUsageConfiguration: FacetCacheUsageConfigurations) {
+        super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfiguration);
         this.actionTagAdapter = new TourDocSqlMediadbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
         this.keywordsAdapter = new TourDocSqlMediadbKeywordAdapter(config, this.knex, this.sqlQueryBuilder);
+        this.extendTableConfigs();
+    }
+
+    protected extendTableConfigs() {
+        this.sqlQueryBuilder.extendTableConfigs(TourDocSqlMediadbConfig.tableConfigs);
     }
 
     protected getTableConfig(params: AdapterQuery): TableConfig {

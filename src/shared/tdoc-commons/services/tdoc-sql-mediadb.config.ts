@@ -1,9 +1,9 @@
-import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
 export class TourDocSqlMediadbConfig {
     public static personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
-    public static tableConfigs = {
+    public static tableConfigs: TableConfigs = {
         'track': {
             key: 'track',
             tableName: 'kategorie',
@@ -858,7 +858,7 @@ export class TourDocSqlMediadbConfig {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)',
                     selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
-                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id'
                 },
                 'blocked_is': {
                     selectField: 'i_gesperrt',
