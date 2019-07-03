@@ -331,12 +331,16 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             this.tdocSearchFormUtils.getPersonalRateOverallValues(tdocSearchSearchResult), true, [], true);
         this.optionsSelectPersonalRateDifficulty = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getPersonalRateDifficultyValues(tdocSearchSearchResult), true, [], true);
-        this.optionsSelectPersons = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.tdocSearchFormUtils.getPersonValues(tdocSearchSearchResult), true, [], true);
+        this.optionsSelectPersons = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.tdocSearchFormUtils.getPersonValues(tdocSearchSearchResult), true, [], true),
+            rawValues['persons']);
         this.optionsSelectObjectDetectionDetector = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getObjectDetectionDetectorValues(tdocSearchSearchResult), true, [], true);
-        this.optionsSelectObjectDetectionKey = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
-            this.tdocSearchFormUtils.getObjectDetectionKeyValues(tdocSearchSearchResult), true, [], false);
+        this.optionsSelectObjectDetectionKey = this.searchFormUtils.moveSelectedToTop(
+            this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                this.tdocSearchFormUtils.getObjectDetectionKeyValues(tdocSearchSearchResult), true, [], false),
+            rawValues['objectDetectionKey']);
         this.optionsSelectObjectDetectionPrecision = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getObjectDetectionPrecisionValues(tdocSearchSearchResult), true, [], false);
         this.optionsSelectObjectDetectionState = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
