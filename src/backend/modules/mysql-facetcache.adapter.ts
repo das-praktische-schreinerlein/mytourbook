@@ -84,7 +84,10 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     }
 
     public generateRemoveFacetCacheConfigSql(configuration: CommonFacetCacheConfiguration): string[] {
-        return ['DELETE FROM facetcacheconfig WHERE fcc_key IN ("' + configuration.longKey + '")'];
+        return ['IF EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = "facetcacheconfig") ' +
+        ' THEN ' +
+        '   DELETE IGNORE FROM facetcacheconfig WHERE fcc_key IN ("' + configuration.longKey + '");' +
+        ' END IF'];
     }
 
     public generateUpdateFacetsCacheSql(configurations: CommonFacetCacheConfiguration[]): string[] {
@@ -111,7 +114,7 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     public generateDeleteFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[] {
         const sqls: string[] = [];
         const longKey = configuration.longKey;
-        sqls.push('DELETE from facetcache where fc_key in ("' + longKey + '")');
+        sqls.push('DELETE IGNORE from facetcache where fc_key in ("' + longKey + '")');
 
         return sqls;
     }
