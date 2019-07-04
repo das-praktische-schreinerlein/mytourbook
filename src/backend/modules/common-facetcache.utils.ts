@@ -68,7 +68,7 @@ export class CommonFacetCacheUtils {
             return;
         }
 
-        const config: CommonFacetCacheConfiguration = {
+        return {
             valueType: facetConfig.valueType,
             longKey: FacetUtils.generateFacetCacheKey(tableConfig.key, facetKey),
             facetSql: facetConfig.selectSql,
@@ -78,7 +78,5 @@ export class CommonFacetCacheUtils {
             name: FacetUtils.generateFacetCacheKey(tableConfig.key, facetKey),
             shortKey: facetKey
         };
-
-        return config;
     }
 }

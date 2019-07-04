@@ -161,7 +161,6 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
 
     public generateDropFacetViewSql(configuration: CommonFacetCacheConfiguration): string[] {
         const longKey = configuration.longKey;
-        const facetSql = configuration.facetSql;
         const sqls: string[] = [];
         sqls.push('DROP VIEW IF EXISTS fc_live_' + longKey);
         sqls.push('DROP VIEW IF EXISTS fc_cached_' + longKey);

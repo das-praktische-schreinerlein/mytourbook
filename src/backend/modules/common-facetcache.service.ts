@@ -18,9 +18,9 @@ export class CommonFacetCacheService {
     }
 
     public createDatabaseRequirements(): Promise<boolean> {
-        return this.createFacetCacheTables().then(value => {
+        return this.createFacetCacheTables().then(() => {
             return this.createFacetCacheTriggerFunctions();
-        }).then(value => {
+        }).then(() => {
             return this.createFacetCacheUpdateCheckFunctions();
         });
     }
@@ -32,9 +32,9 @@ export class CommonFacetCacheService {
     }
 
     public dropDatabaseRequirements(): Promise<boolean> {
-        return this.dropFacetCacheUpdateCheckFunctions().then(value => {
+        return this.dropFacetCacheUpdateCheckFunctions().then(() => {
             return this.dropFacetCacheTriggerFunctions();
-        }).then(value => {
+        }).then(() => {
             return this.dropFacetCacheTables();
         });
     }
@@ -46,11 +46,11 @@ export class CommonFacetCacheService {
     }
 
     public createAndStartDatabaseManagedFacets(): Promise<boolean> {
-        return this.createFacetsViews().then(value => {
+        return this.createFacetsViews().then(() => {
             return this.createFacetsCacheConfigs();
-        }).then(value => {
+        }).then(() => {
             return this.createFacetsTriggers();
-        }).then(value => {
+        }).then(() => {
             return this.createFacetsUpdateSchedules();
         });
     }
@@ -63,11 +63,11 @@ export class CommonFacetCacheService {
     }
 
     public stopAndDropDatabaseManagedFacets(): Promise<boolean> {
-        return this.dropFacetsUpdateSchedules().then(value => {
+        return this.dropFacetsUpdateSchedules().then(() => {
             return this.dropFacetsTriggers();
-        }).then(value => {
+        }).then(() => {
             return this.removeFacetsCacheConfigs();
-        }).then(value => {
+        }).then(() => {
             return this.dropFacetsViews();
         });
     }
@@ -80,21 +80,21 @@ export class CommonFacetCacheService {
     }
 
     public createAndStartServerManagedFacets(): Promise<boolean> {
-        return this.createFacetsViews().then(value => {
+        return this.createFacetsViews().then(() => {
             return this.createFacetsCacheConfigs();
-        }).then(value => {
+        }).then(() => {
             return this.createFacetsTriggers();
-        }).then(value => {
+        }).then(() => {
             return this.createFacetsUpdateSchedules();
         });
     }
 
     public stopAndDropServerManagedFacets(): Promise<boolean> {
-        return this.dropFacetsUpdateSchedules().then(value => {
+        return this.dropFacetsUpdateSchedules().then(() => {
             return this.dropFacetsTriggers();
-        }).then(value => {
+        }).then(() => {
             return this.removeFacetsCacheConfigs();
-        }).then(value => {
+        }).then(() => {
             return this.dropFacetsViews();
         });
     }
@@ -141,7 +141,7 @@ export class CommonFacetCacheService {
                 });
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
                 return resolve(true);
             }).catch(reason => {
                 return reject(reason);
@@ -159,7 +159,7 @@ export class CommonFacetCacheService {
                 });
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
                 return resolve(true);
             }).catch(reason => {
                 return reject(reason);
@@ -177,7 +177,7 @@ export class CommonFacetCacheService {
                 });
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
                 return resolve(true);
             }).catch(reason => {
                 return reject(reason);
@@ -195,7 +195,7 @@ export class CommonFacetCacheService {
                 });
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
                 return resolve(true);
             }).catch(reason => {
                 return reject(reason);
@@ -213,7 +213,7 @@ export class CommonFacetCacheService {
                 });
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
                 return resolve(true);
             }).catch(reason => {
                 return reject(reason);
@@ -231,7 +231,7 @@ export class CommonFacetCacheService {
                 });
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
                 return resolve(true);
             }).catch(reason => {
                 return reject(reason);
@@ -389,7 +389,7 @@ export class CommonFacetCacheService {
                 });
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
                 return resolve(true);
             }).catch(reason => {
                 return reject(reason);

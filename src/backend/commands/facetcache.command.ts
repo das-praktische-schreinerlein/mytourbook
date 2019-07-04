@@ -18,47 +18,111 @@ export class FacetCacheManagerCommand implements AbstractCommand {
 
         let promise: Promise<any>;
         switch (action) {
-            case 'prepareAll':
+            case 'prepareAndStartDatabaseManagedFacets':
                 try {
-                    promise = facetCacheManager.dropAllFacets().then(value => {
-                        return facetCacheManager.dropAllDatabaseRequirements();
-                    }).then(value => {
-                        return facetCacheManager.createAllDatabaseRequirements();
-                    }).then(value => {
-                        return facetCacheManager.createAllFacets();
+                    promise = facetCacheManager.stopAndDropDatabaseManagedFacets().then(() => {
+                        return facetCacheManager.dropDatabaseRequirements();
+                    }).then(() => {
+                        return facetCacheManager.createDatabaseRequirements();
+                    }).then(() => {
+                        return facetCacheManager.createAndStartDatabaseManagedFacets();
+                    }).then(() => {
+                        // clear facetcache-database
+                        process.on('SIGTERM', () => {
+                            console.error('closing cache server: removing database');
+                            return this.clearFacetCacheOnShutdown(facetCacheManager);
+                        });
+
+                        // wait till sighup
+                        return new Promise<boolean>(() => {});
                     });
                 } catch (err) {
-                    return utils.reject(err);
+                    // cleaning database
+                    return this.clearFacetCacheOnShutdown(facetCacheManager).then(() => {
+                        return utils.reject(err);
+                    }).catch(reason => {
+                        console.error('error while closing cachsever', reason);
+                        return utils.reject(err);
+                    });
                 }
 
                 break;
-            case 'dropAllDatabaseRequirements':
+            case 'dropDatabaseRequirements':
                 try {
-                    promise = facetCacheManager.dropAllDatabaseRequirements();
+                    promise = facetCacheManager.dropDatabaseRequirements();
                 } catch (err) {
                     return utils.reject(err);
                 }
 
                 break;
-            case 'createAllDatabaseRequirements':
+            case 'createDatabaseRequirements':
                 try {
-                    promise = facetCacheManager.createAllDatabaseRequirements();
+                    promise = facetCacheManager.createDatabaseRequirements();
                 } catch (err) {
                     return utils.reject(err);
                 }
 
                 break;
-            case 'dropAllFacets':
+            case 'showCreateDatabaseRequirementsSql':
                 try {
-                    promise = facetCacheManager.dropAllFacets();
+                    console.log(facetCacheManager.showCreateDatabaseRequirements());
+                    promise = utils.resolve(true);
                 } catch (err) {
                     return utils.reject(err);
                 }
 
                 break;
-            case 'createAllFacets':
+            case 'showDropDatabaseRequirementsSql':
                 try {
-                    promise = facetCacheManager.createAllFacets();
+                    console.log(facetCacheManager.showDropDatabaseRequirements());
+                    promise = utils.resolve(true);
+                } catch (err) {
+                    return utils.reject(err);
+                }
+
+                break;
+            case 'stopAndDropDatabaseManagedFacets':
+                try {
+                    promise = facetCacheManager.stopAndDropDatabaseManagedFacets();
+                } catch (err) {
+                    return utils.reject(err);
+                }
+
+                break;
+            case 'showStopAndDropDatabaseManagedFacets':
+                try {
+                    console.log(facetCacheManager.showStopAndDropDatabaseManagedFacets());
+                    promise = utils.resolve(true);
+                } catch (err) {
+                    return utils.reject(err);
+                }
+
+                break;
+            case 'createAndStartDatabaseManagedFacets':
+                try {
+                    promise = facetCacheManager.createAndStartDatabaseManagedFacets().then(() => {
+                        // clear facetcache-database
+                        process.on('SIGTERM', () => {
+                            console.error('closing cache server: removing facets');
+                            return this.clearFacetsOnShutdown(facetCacheManager);
+                        });
+
+                        // wait till sighup
+                        return new Promise<boolean>(() => {});
+                    });
+                } catch (err) {
+                    return this.clearFacetsOnShutdown(facetCacheManager).then(() => {
+                        return utils.reject(err);
+                    }).catch(reason => {
+                        console.error('error while closing cacheserver', reason);
+                        return utils.reject(err);
+                    });
+                }
+                break;
+            case 'showCreateAndStartDatabaseManagedFacets':
+                try {
+                    console.log(facetCacheManager.showCreateAndStartDatabaseManagedFacets());
+                    promise = utils.resolve(true);
                 } catch (err) {
                     return utils.reject(err);
                 }
@@ -86,6 +150,24 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         }
 
         return promise;
+    }
+
+    protected clearFacetCacheOnShutdown(facetCacheManager: CommonFacetCacheService): Promise<any> {
+        try {
+            return this.clearFacetsOnShutdown(facetCacheManager).then(() => {
+                return facetCacheManager.dropDatabaseRequirements();
+            });
+        } catch (err) {
+            return utils.reject(err);
+        }
+    }
+
+    protected clearFacetsOnShutdown(facetCacheManager: CommonFacetCacheService): Promise<any> {
+        try {
+            return facetCacheManager.stopAndDropDatabaseManagedFacets();
+        } catch (err) {
+            return utils.reject(err);
+        }
     }
 
     protected configureCommonFacetCacheService(argv: string[]): CommonFacetCacheService {
