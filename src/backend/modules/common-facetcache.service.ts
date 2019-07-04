@@ -1,40 +1,20 @@
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import * as Promise_serial from 'promise-serial';
-import * as fs from 'fs';
 import {utils} from 'js-data';
-
-export interface CommonFacetCacheConfiguration {
-    longKey: string;
-    shortKey: string;
-    name: string;
-    facetSql: string;
-    withLabel: boolean;
-    valueType: 'string' | 'number' | 'date';
-    triggerTables: string[];
-}
-export interface CommonFacetCacheServiceConfiguration {
-    datastore: {
-        createTablesScriptPath: string;
-    };
-    startUp: {
-        checkDatastore: boolean;
-        prepareDatastore: boolean;
-        clearDatastore: boolean;
-        prepareTrigger: boolean;
-        prepareFacetViews: boolean;
-    };
-    facets: CommonFacetCacheConfiguration[];
-}
+import {CommonFacetCacheConfiguration, CommonFacetCacheServiceConfiguration} from './common-facetcache.utils';
+import {CommonFacetCacheAdapter} from './common-facetcache.adapter';
 
 export class CommonFacetCacheService {
     protected knex: any;
     protected sqlQueryBuilder: SqlQueryBuilder;
     protected configuration: CommonFacetCacheServiceConfiguration;
+    protected adapter: CommonFacetCacheAdapter;
 
-    public constructor(configuration: CommonFacetCacheServiceConfiguration, knex: any) {
+    public constructor(configuration: CommonFacetCacheServiceConfiguration, knex: any, adapter: CommonFacetCacheAdapter) {
         this.sqlQueryBuilder = new SqlQueryBuilder();
         this.configuration = configuration;
         this.knex = knex;
+        this.adapter = adapter;
     }
 
     public checkDatastore(): Promise<boolean> {
@@ -80,27 +60,27 @@ export class CommonFacetCacheService {
     }
 
     public dropFacetCacheTables(): Promise<boolean> {
-        return this.executeSqlFileOnScriptPath('drop-facetcache-tables.sql', ';');
+        return this.executeSqls(this.adapter.generateDropFacetCacheTables());
     }
 
     public createFacetCacheTables(): Promise<boolean> {
-        return this.executeSqlFileOnScriptPath('create-facetcache-tables.sql', ';');
+        return this.executeSqls(this.adapter.generateCreateFacetCacheTables());
     }
 
     public createFacetCacheTriggerFunctions(): Promise<boolean> {
-        return this.executeSqlFileOnScriptPath('create-facetcache-trigger-functions.sql', '$$');
+        return this.executeSqls(this.adapter.generateCreateFacetCacheTriggerFunctions());
     }
 
     public dropFacetCacheTriggerFunctions(): Promise<boolean> {
-        return this.executeSqlFileOnScriptPath('drop-facetcache-trigger-functions.sql', '$$');
+        return this.executeSqls(this.adapter.generateDropFacetCacheTriggerFunctions());
     }
 
     public createFacetCacheUpdateCheckFunctions(): Promise<boolean> {
-        return this.executeSqlFileOnScriptPath('create-facetcache-updatecheck-functions.sql', '$$');
+        return this.executeSqls(this.adapter.generateCreateFacetCacheUpdateCheckFunctions());
     }
 
     public dropFacetCacheUpdateCheckFunctions(): Promise<boolean> {
-        return this.executeSqlFileOnScriptPath('drop-facetcache-updatecheck-functions.sql', '$$');
+        return this.executeSqls(this.adapter.generateDropFacetCacheUpdateCheckFunctions());
     }
 
     public dropFacetsTriggers(): Promise<boolean> {
@@ -235,10 +215,10 @@ export class CommonFacetCacheService {
         for (const table in tables) {
             const triggerSqls = [];
             for (const facetKey of tables[table]) {
-                triggerSqls.push(this.generateFacetTriggerCallSql(facetKey));
+                triggerSqls.push(this.adapter.generateFacetTriggerCallSql(facetKey));
             }
 
-            sqls = sqls.concat(this.generateCreateTableTriggerSql(table, triggerSqls.join('\n')));
+            sqls = sqls.concat(this.adapter.generateCreateTableTriggerSql(table, triggerSqls.join('\n')));
         }
 
         return sqls;
@@ -258,57 +238,8 @@ export class CommonFacetCacheService {
 
         let sqls: string[] = [];
         for (const table in tables) {
-            sqls = sqls.concat(this.generateDropTableTriggerSql(table));
+            sqls = sqls.concat(this.adapter.generateDropTableTriggerSql(table));
         }
-
-        return sqls;
-    }
-
-    public generateCreateTableTriggerSql(table: string, triggerSql: string): string[] {
-        const sqls: string[] = [];
-        sqls.push('CREATE TRIGGER trigger_aft_upd_' + table + ' AFTER UPDATE ON ' + table + ' FOR EACH ROW\n' +
-            'BEGIN\n' + triggerSql + 'END');
-        sqls.push('CREATE TRIGGER trigger_aft_ins_' + table + ' AFTER INSERT ON ' + table + ' FOR EACH ROW\n' +
-            'BEGIN\n' + triggerSql + 'END');
-        sqls.push('CREATE TRIGGER trigger_aft_del_' + table + ' AFTER DELETE ON '+ table + ' FOR EACH ROW\n' +
-            'BEGIN\n' + triggerSql + 'END');
-
-        return sqls;
-    }
-
-    public generateDropTableTriggerSql(table: string): string[] {
-        const sqls: string[] = [];
-        sqls.push('DROP TRIGGER IF EXISTS trigger_aft_upd_' + table);
-        sqls.push('DROP TRIGGER IF EXISTS trigger_aft_ins_' + table);
-        sqls.push('DROP TRIGGER IF EXISTS trigger_aft_del_' + table);
-
-        return sqls;
-    }
-
-    public generateCreateUpdateScheduleSql(facetKey: string, updateSql: string): string[] {
-        const sqls: string[] = [];
-        sqls.push('CREATE EVENT event_update_' + facetKey +
-            ' ON SCHEDULE EVERY 1 MINUTE' +
-            ' ON COMPLETION NOT PRESERVE ENABLE' +
-            ' DO ' +
-            '   BEGIN ' +
-            '     CALL CheckFacetCacheUpdateTriggerTableAndExceuteSql("' + facetKey + '", \'' + updateSql + '\');' +
-            '   END'
-        );
-
-        return sqls;
-    }
-
-    public generateDropUpdateScheduleSql(facetKey: string): string[] {
-        const sqls: string[] = [];
-        sqls.push('DROP EVENT IF EXISTS event_update_' + facetKey);
-
-        return sqls;
-    }
-
-    public generateFacetTriggerCallSql(facetKey: string): string[] {
-        const sqls: string[] = [];
-        sqls.push('CALL InsertFacetCacheUpdateTriggerTableEntry(\'' + facetKey + '\');');
 
         return sqls;
     }
@@ -316,55 +247,26 @@ export class CommonFacetCacheService {
     public generateCreateFacetCacheConfigsSql(configurations: CommonFacetCacheConfiguration[]): string[] {
         let sqls: string[] = [];
         for (const configuration of configurations) {
-            sqls = sqls.concat(this.generateCreateFacetCacheConfigSql(configuration));
+            sqls = sqls.concat(this.adapter.generateCreateFacetCacheConfigSql(configuration));
         }
 
         return sqls;
-    }
-
-    public generateCreateFacetCacheConfigSql(configuration: CommonFacetCacheConfiguration): string[] {
-        return ['INSERT INTO facetcacheconfig (fcc_usecache, fcc_key) VALUES (1, "' + configuration.longKey + '")',
-        'INSERT INTO facetcacheupdatetrigger (ft_key)' +
-        '        SELECT "' + configuration.longKey + '" from dual' +
-        '            WHERE NOT EXISTS (SELECT 1 FROM facetcacheupdatetrigger WHERE ft_key="' + configuration.longKey + '");'];
     }
 
     public generateRemoveFacetCacheConfigsSql(configurations: CommonFacetCacheConfiguration[]): string[] {
         let sqls: string[] = [];
         for (const configuration of configurations) {
-            sqls = sqls.concat(this.generateRemoveFacetCacheConfigSql(configuration));
+            sqls = sqls.concat(this.adapter.generateRemoveFacetCacheConfigSql(configuration));
         }
 
         return sqls;
-    }
-
-    public generateRemoveFacetCacheConfigSql(configuration: CommonFacetCacheConfiguration): string[] {
-        return ['DELETE FROM facetcacheconfig WHERE fcc_key IN ("' + configuration.longKey + '")'];
     }
 
     public generateUpdateFacetsCacheSql(configurations: CommonFacetCacheConfiguration[]): string[] {
         let sqls: string[] = [];
         for (const configuration of configurations) {
-            sqls = sqls.concat(this.generateUpdateFacetCacheSql(configuration));
+            sqls = sqls.concat(this.adapter.generateUpdateFacetCacheSql(configuration));
         }
-
-        return sqls;
-    }
-
-    public generateUpdateFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[] {
-        const sqls: string[] = [];
-        const longKey = configuration.longKey;
-        sqls.push('INSERT INTO facetcache (fc_key, fc_recid, fc_order, fc_count, fc_value_' + configuration.valueType + ', fc_label)' +
-            ' SELECT "' + longKey + '" AS fc_key, null AS fc_recid, @CURROW AS fc_order, count, value ' +
-            (configuration.withLabel === true ? ', label ' : ' ') + ' FROM fc_live_' + longKey);
-
-        return sqls;
-    }
-
-    public generateDeleteFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[] {
-        const sqls: string[] = [];
-        const longKey = configuration.longKey;
-        sqls.push('DELETE from facetcache where fc_key in ("' + longKey + '")');
 
         return sqls;
     }
@@ -372,27 +274,8 @@ export class CommonFacetCacheService {
     public generateCreateFacetViewsSql(configurations: CommonFacetCacheConfiguration[]): string[] {
         let sqls: string[] = [];
         for (const configuration of configurations) {
-            sqls = sqls.concat(this.generateCreateFacetViewSql(configuration));
+            sqls = sqls.concat(this.adapter.generateCreateFacetViewSql(configuration));
         }
-
-        return sqls;
-    }
-
-    public generateCreateFacetViewSql(configuration: CommonFacetCacheConfiguration): string[] {
-        const longKey = configuration.longKey;
-        const facetSql = configuration.facetSql;
-        const sqls: string[] = [];
-        sqls.push('CREATE VIEW fc_live_' + longKey + ' AS ' + facetSql);
-        sqls.push('CREATE VIEW fc_cached_' + longKey + ' AS' +
-            ' SELECT fc_count AS count, fc_label AS label, fc_value_' + configuration.valueType + ' AS value' +
-            ' FROM facetcache WHERE fc_key in ("' + longKey + '") ORDER BY fc_order');
-        sqls.push('CREATE VIEW fc_real_' + longKey + ' AS ' +
-            '   (SELECT * FROM fc_live_' + longKey +
-            '       WHERE NOT EXISTS (SELECT 1 FROM facetcacheconfig WHERE fcc_key IN ("' + longKey + '") AND fcc_usecache <> 0))' +
-            ' UNION ' +
-            '   (SELECT * FROM fc_cached_' + longKey +
-            '       WHERE EXISTS (SELECT 1 FROM facetcacheconfig WHERE fcc_key IN ("' + longKey + '") AND fcc_usecache <> 0))'
-        );
 
         return sqls;
     }
@@ -400,52 +283,36 @@ export class CommonFacetCacheService {
     public generateDropFacetViewsSql(configurations: CommonFacetCacheConfiguration[]): string[] {
         let sqls: string[] = [];
         for (const configuration of configurations) {
-            sqls = sqls.concat(this.generateDropFacetViewSql(configuration));
+            sqls = sqls.concat(this.adapter.generateDropFacetViewSql(configuration));
         }
 
         return sqls;
     }
 
-    public generateDropFacetViewSql(configuration: CommonFacetCacheConfiguration): string[] {
-        const longKey = configuration.longKey;
-        const facetSql = configuration.facetSql;
-        const sqls: string[] = [];
-        sqls.push('DROP VIEW IF EXISTS fc_live_' + longKey);
-        sqls.push('DROP VIEW IF EXISTS fc_cached_' + longKey);
-        sqls.push('DROP VIEW IF EXISTS fc_real_' + longKey);
-
-        return sqls;
-    }
-
     protected createFacetView(configuration: CommonFacetCacheConfiguration): Promise<boolean> {
-        return this.executeSqls(this.generateCreateFacetViewSql(configuration));
+        return this.executeSqls(this.adapter.generateCreateFacetViewSql(configuration));
     }
 
     protected dropFacetView(configuration: CommonFacetCacheConfiguration): Promise<boolean> {
-        return this.executeSqls(this.generateDropFacetViewSql(configuration));
+        return this.executeSqls(this.adapter.generateDropFacetViewSql(configuration));
     }
 
     protected createFacetCacheConfig(configuration: CommonFacetCacheConfiguration): Promise<boolean> {
-        return this.executeSqls(this.generateCreateFacetCacheConfigSql(configuration));
+        return this.executeSqls(this.adapter.generateCreateFacetCacheConfigSql(configuration));
     }
 
     protected removeFacetCacheConfig(configuration: CommonFacetCacheConfiguration): Promise<boolean> {
-        return this.executeSqls(this.generateRemoveFacetCacheConfigSql(configuration));
+        return this.executeSqls(this.adapter.generateRemoveFacetCacheConfigSql(configuration));
     }
 
     protected createFacetUpdateSchedule(configuration: CommonFacetCacheConfiguration): Promise<boolean> {
         return this.executeSqls(
-            this.generateCreateUpdateScheduleSql(configuration.longKey,
-                this.generateUpdateFacetCacheSql(configuration).join(';')));
+            this.adapter.generateCreateUpdateScheduleSql(configuration.longKey,
+                this.adapter.generateUpdateFacetCacheSql(configuration).join(';')));
     }
 
     protected dropFacetUpdateSchedule(configuration: CommonFacetCacheConfiguration): Promise<boolean> {
-        return this.executeSqls(this.generateDropUpdateScheduleSql(configuration.longKey));
-    }
-
-    protected executeSqlFileOnScriptPath(sqlFile: string, splitter: string): Promise<boolean> {
-        return this.executeSqls(
-            fs.readFileSync(this.configuration.datastore.createTablesScriptPath + '/' + sqlFile, {encoding: 'utf8'}).split(splitter));
+        return this.executeSqls(this.adapter.generateDropUpdateScheduleSql(configuration.longKey));
     }
 
     protected executeSqls(sqls: string[]): Promise<boolean> {
@@ -459,11 +326,7 @@ export class CommonFacetCacheService {
                     if (sql === undefined || sql.trim() === '') {
                         return utils.resolve(true);
                     }
-/**
-                    return new Promise<boolean>(resolve1 => {
-                        return resolve1(true);
-                    });
-**/
+
                     return sqlBuilder.raw(me.transformToSqlDialect(sql));
                 });
             }

@@ -1,23 +1,15 @@
 import * as fs from 'fs';
 import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {utils} from 'js-data';
-import {
-    CommonFacetCacheConfiguration,
-    CommonFacetCacheService,
-    CommonFacetCacheServiceConfiguration
-} from '../shared/tdoc-commons/services/common-facetcache.service';
+import {CommonFacetCacheService} from '../modules/common-facetcache.service';
 import * as knex from 'knex';
 import {SqlConnectionConfig} from '../modules/tdoc-dataservice.module';
-import {
-    FacetCacheUsageConfigurations,
-    SqlQueryBuilder,
-    TableConfig,
-    TableConfigs
-} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {SqlQueryBuilder, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {ServerConfig} from '../server-module.loader';
-import {FacetUtils} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {TourDocSqlMediadbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.config';
 import {TourDocSqlMytbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytb.config';
+import {CommonFacetCacheServiceConfiguration, CommonFacetCacheUtils} from '../modules/common-facetcache.utils';
+import {CommonMysqlFacetCacheAdapter} from '../modules/mysql-facetcache.adapter';
 
 export class FacetCacheManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -109,14 +101,9 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         };
 
         const sqlQueryBuilder = new SqlQueryBuilder();
-        const facetConfig: CommonFacetCacheServiceConfiguration = serverConfig.backendConfig['facetCacheConfig'];
-        if (facetConfig === undefined) {
-            throw new Error('config for facetCacheConfig not exists');
-        }
-
         let tableConfigs: TableConfigs;
-        const adapaterName = backendConfig['tdocDataStoreAdapter'];
-        switch (adapaterName) {
+        const adapterName = backendConfig['tdocDataStoreAdapter'];
+        switch (adapterName) {
             case 'TourDocSqlMediadbAdapter':
                 tableConfigs = TourDocSqlMediadbConfig.tableConfigs;
                 break;
@@ -124,49 +111,26 @@ export class FacetCacheManagerCommand implements AbstractCommand {
                 tableConfigs = TourDocSqlMytbConfig.tableConfigs;
                 break;
             default:
-                throw new Error('tdocDataStoreAdapter not exists: ' + adapaterName);
+                throw new Error('tdocDataStoreAdapter not exists: ' + adapterName);
+        }
+
+        const facetConfig: CommonFacetCacheServiceConfiguration = backendConfig[adapterName]['facetCacheConfig'];
+        if (facetConfig === undefined) {
+            throw new Error('config for facetCacheConfig not exists');
         }
 
         sqlQueryBuilder.extendTableConfigs(tableConfigs);
-        facetConfig.facets = this.createCommonFacetCacheConfigurations(tableConfigs,
-            backendConfig[adapaterName]['facetCacheUsage']);
+        facetConfig.facets = CommonFacetCacheUtils.createCommonFacetCacheConfigurations(tableConfigs,
+            backendConfig[adapterName]['facetCacheUsage']);
         console.log('create facets:', facetConfig);
 
-        return new CommonFacetCacheService(facetConfig, this.createKnex(serverConfig.backendConfig));
-    }
-
-    protected createCommonFacetCacheConfigurations(tableConfigs: TableConfigs, facetCacheConfig: FacetCacheUsageConfigurations):
-        CommonFacetCacheConfiguration[] {
-        const configs: CommonFacetCacheConfiguration[] = [];
-        for (const tableKey in facetCacheConfig) {
-            const tableConfig: TableConfig = tableConfigs[tableKey];
-            if (tableConfig === undefined) {
-                throw new Error('tableConfig not exists: ' + tableKey);
-            }
-
-            for (const facetKey of facetCacheConfig[tableKey].facetKeys) {
-                const facetConfig = tableConfig.facetConfigs[facetKey];
-                if (facetConfig === undefined) {
-                    throw new Error('facetConfig not exists: ' + tableKey + ' facet:' + facetKey);
-                }
-                if (facetConfig.selectSql === undefined) {
-                    continue;
-                }
-
-                const config: CommonFacetCacheConfiguration = {
-                    valueType: facetConfig.valueType,
-                    longKey: FacetUtils.generateFacetCacheKey(tableKey, facetKey),
-                    facetSql: facetConfig.selectSql,
-                    triggerTables: facetConfig.triggerTables,
-                    withLabel: facetConfig.withLabelField,
-                    name: FacetUtils.generateFacetCacheKey(tableKey, facetKey),
-                    shortKey: facetKey
-                };
-                configs.push(config);
-            }
+        const connection = this.createKnex(serverConfig.backendConfig);
+        const client = connection.client['config']['client'];
+        if (client !== 'mysql') {
+            throw new Error('other clients than mysql are not supoort');
         }
 
-        return configs;
+        return new CommonFacetCacheService(facetConfig, connection, new CommonMysqlFacetCacheAdapter(facetConfig.datastore.scriptPath));
     }
 
     protected createKnex(backendConfig: {}): any {
