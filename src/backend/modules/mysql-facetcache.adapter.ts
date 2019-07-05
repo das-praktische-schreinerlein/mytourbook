@@ -9,6 +9,10 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
         this.sqlScriptPath = sqlScriptPath;
     }
 
+    public supportsDatabaseManagedUpdate(): boolean {
+        return true;
+    }
+
     public generateCreateTableTriggerSql(table: string, triggerSql: string): string[] {
         const sqls: string[] = [];
         sqls.push('CREATE TRIGGER trigger_aft_upd_' + table + ' AFTER UPDATE ON ' + table + ' FOR EACH ROW\n' +

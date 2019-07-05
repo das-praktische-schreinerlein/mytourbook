@@ -46,6 +46,10 @@ export class CommonFacetCacheService {
     }
 
     public createAndStartDatabaseManagedFacets(): Promise<boolean> {
+        if (!this.adapter.supportsDatabaseManagedUpdate) {
+            throw new Error('adapter doesnt support database-managed-facetcache');
+        }
+
         return this.createFacetsViews().then(() => {
             return this.createFacetsCacheConfigs();
         }).then(() => {
@@ -56,6 +60,10 @@ export class CommonFacetCacheService {
     }
 
     public showCreateAndStartDatabaseManagedFacets(): string[] {
+        if (!this.adapter.supportsDatabaseManagedUpdate) {
+            throw new Error('adapter doesnt support database-managed-facetcache');
+        }
+
         return this.generateCreateFacetViewsSql(this.configuration.facets)
             .concat(this.generateCreateFacetCacheConfigsSql(this.configuration.facets))
             .concat(this.generateCreateFacetTriggerSql())
@@ -63,6 +71,10 @@ export class CommonFacetCacheService {
     }
 
     public stopAndDropDatabaseManagedFacets(): Promise<boolean> {
+        if (!this.adapter.supportsDatabaseManagedUpdate) {
+            throw new Error('adapter doesnt support database-managed-facetcache');
+        }
+
         return this.dropFacetsUpdateSchedules().then(() => {
             return this.dropFacetsTriggers();
         }).then(() => {
@@ -73,6 +85,10 @@ export class CommonFacetCacheService {
     }
 
     public showStopAndDropDatabaseManagedFacets(): string[] {
+        if (!this.adapter.supportsDatabaseManagedUpdate) {
+            throw new Error('adapter doesnt support database-managed-facetcache');
+        }
+
         return this.generateDropUpdateSchedulesFacetsCacheSql(this.configuration.facets)
             .concat(this.generateDropFacetTriggerSql())
             .concat(this.generateRemoveFacetCacheConfigsSql(this.configuration.facets))
@@ -118,14 +134,13 @@ export class CommonFacetCacheService {
                         }
 
                         console.error('facetupdatetrigger found: ' + triggerName, new Date());
-                        sqls = sqls.concat(me.adapter.generateDeleteFacetCacheUpdateTriggerSql(facet))
-                            .concat(me.adapter.generateUpdateFacetCacheSql(facet));
+                        sqls = sqls.concat(me.generateDeleteAndUpdateFacetCacheSql(facet));
                     }
 
                     console.error('DO update facets:', sqls);
 
                     return me.executeSqls(sqls);
-                }).then(function doneSearch(dbresults: any) {
+                }).then(function doneSearch() {
                     console.error('DONE update facets:', new Date());
                     setTimeout(callback, me.configuration.checkInterval * 60 * 1000);
                     return utils.resolve(true);
@@ -362,13 +377,9 @@ export class CommonFacetCacheService {
         return sqls;
     }
 
-    public generateUpdateFacetsCacheSql(configurations: CommonFacetCacheConfiguration[]): string[] {
-        let sqls: string[] = [];
-        for (const configuration of configurations) {
-            sqls = sqls.concat(this.adapter.generateUpdateFacetCacheSql(configuration));
-        }
-
-        return sqls;
+    public generateDeleteAndUpdateFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[] {
+        return this.adapter.generateDeleteFacetCacheUpdateTriggerSql(configuration)
+            .concat(this.adapter.generateUpdateFacetCacheSql(configuration));
     }
 
     public generateCreateUpdateSchedulesFacetsCacheSql(configurations: CommonFacetCacheConfiguration[]): string[] {

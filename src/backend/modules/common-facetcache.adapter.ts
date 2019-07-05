@@ -1,6 +1,7 @@
 import {CommonFacetCacheConfiguration} from './common-facetcache.utils';
 
 export interface CommonFacetCacheAdapter {
+    supportsDatabaseManagedUpdate(): boolean;
 
     generateDropFacetCacheTables(): string[];
 
