@@ -179,7 +179,7 @@ export abstract class CommonQueuedObjectDetectionService {
 
             console.log('start detection for ' + LogUtils.sanitizeLogMsg(entityType)
                 + ' with detector:' + detectors + ' maxPerRun:' + maxPerRun);
-            return me.processObjectDetectionRequestForDetector(entityType, detectors, maxPerRun, basePath).then(value => {
+            return me.processObjectDetectionRequestForDetector(entityType, detectors, maxPerRun, basePath).then(() => {
                 console.log('DONE - queued objectDetectionRequests');
                 return resolve('DONE - queued objectDetectionRequests');
             }).catch(reason => {
@@ -191,7 +191,7 @@ export abstract class CommonQueuedObjectDetectionService {
 
     public receiveObjectDetectionsFromQueue(): Promise<any> {
         const me = this;
-        return new Promise<any>((resolve, reject) => {
+        return new Promise<any>(() => {
             this.responseQueueWorker.on('message', function (msg, next, id) {
                 console.debug('RUNNING - processing response message:', id, msg);
 
@@ -205,7 +205,6 @@ export abstract class CommonQueuedObjectDetectionService {
 
                 if (response && response.results) {
                     const detectedObjects = response.results;
-                    const imageId = response.request.refId;
                     // delete all image_object for image with this detector
                     for (let i = 0; i < detectedObjects.length; i++) {
                         // insert new image_object with image_object.i_id = detectedObj.id
@@ -217,7 +216,7 @@ export abstract class CommonQueuedObjectDetectionService {
                             detectedObjects[i].objHeight].join(','), ']' +
                             ' dim:[', [detectedObjects[i].imgWidth, detectedObjects[i].imgHeight].join(','), ']');
                     }
-                    return me.createObjectDetectionResultsInDatastore(response).then(value => {
+                    return me.createObjectDetectionResultsInDatastore(response).then(() => {
                         me.responseQueueWorker.del(id, err => {
                             if (err) {
                                 console.error('ERROR - while deleting response', err, msg);
@@ -247,7 +246,7 @@ export abstract class CommonQueuedObjectDetectionService {
                 }
 
                 if (response && response.request) {
-                    return me.createObjectDetectionErrorInDatastore(response).then(value => {
+                    return me.createObjectDetectionErrorInDatastore(response).then(() => {
                         me.errorQueueWorker.del(id, err => {
                             if (err) {
                                 console.error('ERROR - while deleting error', err, msg);
@@ -291,13 +290,13 @@ export abstract class CommonQueuedObjectDetectionService {
             const detectionRequestPromises = [];
             for (const detectionRequest of detectionRequests) {
                 detectionRequestPromises.push(function () {
-                    return me.sendObjectDetectionRequestToQueue(detectionRequest).then(value => {
+                    return me.sendObjectDetectionRequestToQueue(detectionRequest).then(() => {
                         return me.createObjectDetectionRequestInDatastore(detectionRequest);
                     });
                 });
             }
 
-            return Promise_serial(detectionRequestPromises, {parallelize: 1}).then(arrayOfResults => {
+            return Promise_serial(detectionRequestPromises, {parallelize: 1}).then(() => {
                 return utils.resolve('DONE - queued objectDetectionRequests');
             }).catch(reason => {
                 return utils.reject(reason);
@@ -423,9 +422,9 @@ export abstract class CommonQueuedObjectDetectionService {
         }
 
         return new Promise((resolve, reject) => {
-            return this.dataStore.deleteOldDetectionRequests(detectionResponse.request, true).then(dbresults => {
+            return this.dataStore.deleteOldDetectionRequests(detectionResponse.request, true).then(() => {
                 return Promise_serial(detectionErrorPromises, {parallelize: 1});
-            }).then(arrayOfResults => {
+            }).then(() => {
                 console.log('DONE - saved detectionError to database');
                 return resolve('DONE - saved detectionError to database');
             }).catch(function errorFunction(reason) {
@@ -453,9 +452,9 @@ export abstract class CommonQueuedObjectDetectionService {
         }
 
         return new Promise((resolve, reject) => {
-            return this.dataStore.deleteOldDetectionRequests(detectionRequest, false).then(dbresults => {
+            return this.dataStore.deleteOldDetectionRequests(detectionRequest, false).then(() => {
                 return Promise_serial(detectionRequestPromises, {parallelize: 1});
-            }).then(arrayOfResults => {
+            }).then(() => {
                 console.log('DONE - saved detectionRequest to database');
                 return resolve('DONE - saved detectionRequest to database');
             }).catch(function errorFunction(reason) {
@@ -495,11 +494,11 @@ export abstract class CommonQueuedObjectDetectionService {
         }
 
         return new Promise((resolve, reject) => {
-            return me.dataStore.createDefaultObject().then(dbresults => {
+            return me.dataStore.createDefaultObject().then(() => {
                 return me.dataStore.deleteOldDetectionRequests(detectionResponse.request, false);
-            }).then(dbresults => {
+            }).then(() => {
                 return Promise_serial(detectionResultPromises, {parallelize: 1});
-            }).then(arrayOfResults => {
+            }).then(() => {
                 console.log('DONE - saved response to database');
                 return resolve('DONE - saved response to database');
             }).catch(function errorFunction(reason) {

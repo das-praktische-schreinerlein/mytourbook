@@ -1,4 +1,3 @@
-import {Router} from 'js-data-express';
 import express from 'express';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocServerModule} from './tdoc-server.module';

@@ -1,7 +1,7 @@
 import {PDocSearchResult} from '@dps/mycms-commons/dist/pdoc-commons/model/container/pdoc-searchresult';
 import {PDocSearchForm} from '@dps/mycms-commons/dist/pdoc-commons/model/forms/pdoc-searchform';
 import {PDocDataService} from '@dps/mycms-commons/dist/pdoc-commons/services/pdoc-data.service';
-import {arser, Router} from 'js-data-express';
+import {Router} from 'js-data-express';
 import express from 'express';
 
 export class PDocServerModule {

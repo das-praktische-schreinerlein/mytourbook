@@ -1,7 +1,6 @@
 import {TourDocSearchResult} from '../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocSearchForm, TourDocSearchFormValidator} from '../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
-import {Router} from 'js-data-express';
 import express from 'express';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 import {DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
