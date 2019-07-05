@@ -15,13 +15,6 @@ export interface CommonFacetCacheServiceConfiguration {
     datastore: {
         scriptPath: string;
     };
-    startUp: {
-        checkDatastore: boolean;
-        prepareDatastore: boolean;
-        clearDatastore: boolean;
-        prepareTrigger: boolean;
-        prepareFacetViews: boolean;
-    };
     facets: CommonFacetCacheConfiguration[];
     checkInterval: number;
 }
