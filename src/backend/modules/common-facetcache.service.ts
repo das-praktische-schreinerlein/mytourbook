@@ -85,18 +85,78 @@ export class CommonFacetCacheService {
         }).then(() => {
             return this.createFacetsTriggers();
         }).then(() => {
-            return this.createFacetsUpdateSchedules();
+            return this.startServerManagedFacets();
         });
     }
 
-    public stopAndDropServerManagedFacets(): Promise<boolean> {
-        return this.dropFacetsUpdateSchedules().then(() => {
-            return this.dropFacetsTriggers();
-        }).then(() => {
+    public startServerManagedFacets(): Promise<boolean> {
+        const me = this;
+        const facets: { [key: string]: CommonFacetCacheConfiguration } = {};
+        for (const facet of me.configuration.facets) {
+            facets[facet.longKey] = facet;
+        }
+
+        return new Promise<boolean>((resolve, reject) => {
+            const callback = function() {
+                const sqlBuilder = me.knex;
+                const sql = me.adapter.generateSelectFacetCacheUpdateTriggerSql();
+                const raw = sqlBuilder.raw(sql);
+                raw.then(function doneSearch(dbresults: any) {
+                    const response = me.sqlQueryBuilder.extractDbResult(dbresults, me.knex.client['config']['client']);
+                    if (response.length < 1) {
+                        console.error('no facetupdatetrigger found', new Date());
+                        return utils.resolve(true);
+                    }
+
+                    let sqls = [];
+                    for (const record of response) {
+                        const triggerName = record['ft_key'];
+                        const facet = facets[triggerName];
+                        if (!facet) {
+                            console.error('unknown facetupdatetrigger found: ' + triggerName, new Date());
+                            continue;
+                        }
+
+                        console.error('facetupdatetrigger found: ' + triggerName, new Date());
+                        sqls = sqls.concat(me.adapter.generateDeleteFacetCacheUpdateTriggerSql(facet))
+                            .concat(me.adapter.generateUpdateFacetCacheSql(facet));
+                    }
+
+                    console.error('DO update facets:', sqls);
+
+                    return me.executeSqls(sqls);
+                }).then(function doneSearch(dbresults: any) {
+                    console.error('DONE update facets:', new Date());
+                    setTimeout(callback, me.configuration.checkInterval * 60 * 1000);
+                    return utils.resolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('updateFacets failed:', reason);
+                    return reject(reason);
+                });
+            };
+
+            callback();
+        });
+    }
+
+    public showCreateServerManagedFacets(): string[] {
+        return this.generateCreateFacetViewsSql(this.configuration.facets)
+            .concat(this.generateCreateFacetCacheConfigsSql(this.configuration.facets))
+            .concat(this.generateCreateFacetTriggerSql());
+    }
+
+    public dropServerManagedFacets(): Promise<boolean> {
+        return this.dropFacetsTriggers().then(() => {
             return this.removeFacetsCacheConfigs();
         }).then(() => {
             return this.dropFacetsViews();
         });
+    }
+
+    public showDropServerManagedFacets(): string[] {
+        return this.generateDropFacetTriggerSql()
+            .concat(this.generateRemoveFacetCacheConfigsSql(this.configuration.facets))
+            .concat(this.generateDropFacetViewsSql(this.configuration.facets));
     }
 
     public dropFacetCacheTables(): Promise<boolean> {
@@ -315,7 +375,7 @@ export class CommonFacetCacheService {
         let sqls: string[] = [];
         for (const configuration of configurations) {
             sqls = sqls.concat(this.adapter.generateCreateUpdateScheduleSql(configuration.longKey,
-                this.adapter.generateUpdateFacetCacheSql(configuration).join(';')));
+                this.adapter.generateUpdateFacetCacheSql(configuration).join(';'), this.configuration.checkInterval));
         }
 
         return sqls;
@@ -367,7 +427,7 @@ export class CommonFacetCacheService {
     protected createFacetUpdateSchedule(configuration: CommonFacetCacheConfiguration): Promise<boolean> {
         return this.executeSqls(
             this.adapter.generateCreateUpdateScheduleSql(configuration.longKey,
-                this.adapter.generateUpdateFacetCacheSql(configuration).join(';')));
+                this.adapter.generateUpdateFacetCacheSql(configuration).join(';'), this.configuration.checkInterval));
     }
 
     protected dropFacetUpdateSchedule(configuration: CommonFacetCacheConfiguration): Promise<boolean> {

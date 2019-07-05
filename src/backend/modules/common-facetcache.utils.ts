@@ -23,6 +23,7 @@ export interface CommonFacetCacheServiceConfiguration {
         prepareFacetViews: boolean;
     };
     facets: CommonFacetCacheConfiguration[];
+    checkInterval: number;
 }
 
 export class CommonFacetCacheUtils {

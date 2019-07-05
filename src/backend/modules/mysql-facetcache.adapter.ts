@@ -30,10 +30,10 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
         return sqls;
     }
 
-    public generateCreateUpdateScheduleSql(facetKey: string, updateSql: string): string[] {
+    public generateCreateUpdateScheduleSql(facetKey: string, updateSql: string, checkInterval: number): string[] {
         const sqls: string[] = [];
         sqls.push('CREATE EVENT event_update_' + facetKey +
-            ' ON SCHEDULE EVERY 1 MINUTE' +
+            ' ON SCHEDULE EVERY ' + checkInterval + ' MINUTE' +
             ' ON COMPLETION NOT PRESERVE ENABLE' +
             ' DO ' +
             '   BEGIN ' +
@@ -102,8 +102,12 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     public generateUpdateFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[] {
         const sqls: string[] = [];
         const longKey = configuration.longKey;
-        sqls.push('INSERT INTO facetcache (fc_key, fc_recid, fc_order, fc_count, fc_value_' + configuration.valueType + ', fc_label)' +
-            ' SELECT "' + longKey + '" AS fc_key, null AS fc_recid, @CURROW AS fc_order, count, value ' +
+        sqls.push('INSERT INTO facetcache (fc_key, fc_order, fc_count,' +
+            '   fc_value_' + configuration.valueType +
+            (configuration.withLabel === true ? ', fc_label' : '') +
+            (configuration.withId === true ? ', fc_recid ' : ' ') +
+            '   )' +
+            ' SELECT "' + longKey + '" AS fc_key, @CURROW AS fc_order, count, value ' +
             (configuration.withLabel === true ? ', label ' : ' ') +
             (configuration.withId === true ? ', id ' : ' ') +
             ' FROM fc_live_' + longKey);
@@ -115,6 +119,18 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
         const sqls: string[] = [];
         const longKey = configuration.longKey;
         sqls.push('DELETE IGNORE from facetcache where fc_key in ("' + longKey + '")');
+
+        return sqls;
+    }
+
+    public generateSelectFacetCacheUpdateTriggerSql(): string {
+        return 'SELECT ft_key from facetcacheupdatetrigger';
+    }
+
+    public generateDeleteFacetCacheUpdateTriggerSql(configuration: CommonFacetCacheConfiguration): string[] {
+        const sqls: string[] = [];
+        const longKey = configuration.longKey;
+        sqls.push('DELETE IGNORE from facetcacheupdatetrigger where ft_key in ("' + longKey + '")');
 
         return sqls;
     }
@@ -135,8 +151,8 @@ export class CommonMysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
         sqls.push('CREATE VIEW fc_live_' + longKey + ' AS ' + facetSql);
         sqls.push('CREATE VIEW fc_cached_' + longKey + ' AS' +
             ' SELECT fc_count AS count, ' +
-            (configuration.withLabel ? 'fc_label AS label, ' : '') +
-            (configuration.withId ? 'fc_recid AS id, ' : '') +
+            (configuration.withLabel === true ? 'fc_label AS label, ' : '') +
+            (configuration.withId === true ? 'fc_recid AS id, ' : '') +
             '    fc_value_' + configuration.valueType + ' AS value' +
             ' FROM facetcache WHERE fc_key in ("' + longKey + '") ORDER BY fc_order');
         sqls.push('CREATE VIEW fc_real_' + longKey + ' AS ' +

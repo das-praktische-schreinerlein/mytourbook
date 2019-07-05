@@ -18,7 +18,7 @@ export interface CommonFacetCacheAdapter {
 
     generateDropTableTriggerSql(table: string): string[];
 
-    generateCreateUpdateScheduleSql(facetKey: string, updateSql: string): string[];
+    generateCreateUpdateScheduleSql(facetKey: string, updateSql: string, checkInterval: number): string[];
 
     generateDropUpdateScheduleSql(facetKey: string): string[];
 
@@ -31,6 +31,10 @@ export interface CommonFacetCacheAdapter {
     generateUpdateFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[];
 
     generateDeleteFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[];
+
+    generateSelectFacetCacheUpdateTriggerSql(): string;
+
+    generateDeleteFacetCacheUpdateTriggerSql(configuration: CommonFacetCacheConfiguration): string[];
 
     generateCreateFacetViewSql(configuration: CommonFacetCacheConfiguration): string[];
 

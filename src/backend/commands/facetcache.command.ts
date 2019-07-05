@@ -29,7 +29,7 @@ export class FacetCacheManagerCommand implements AbstractCommand {
                     }).then(() => {
                         // clear facetcache-database
                         process.on('SIGTERM', () => {
-                            console.error('closing cache server: removing database');
+                            console.error('closing cache server: removing database-requirements');
                             return this.clearFacetCacheOnShutdown(facetCacheManager);
                         });
 
@@ -41,7 +41,36 @@ export class FacetCacheManagerCommand implements AbstractCommand {
                     return this.clearFacetCacheOnShutdown(facetCacheManager).then(() => {
                         return utils.reject(err);
                     }).catch(reason => {
-                        console.error('error while closing cachsever', reason);
+                        console.error('error while closing cachserver', reason);
+                        return utils.reject(err);
+                    });
+                }
+
+                break;
+            case 'prepareAndStartServerManagedFacets':
+                try {
+                    promise = facetCacheManager.dropServerManagedFacets().then(() => {
+                        return facetCacheManager.dropDatabaseRequirements();
+                    }).then(() => {
+                        return facetCacheManager.createDatabaseRequirements();
+                    }).then(() => {
+                        return facetCacheManager.createAndStartServerManagedFacets();
+                    }).then(() => {
+                        // clear facetcache-database
+                        process.on('SIGTERM', () => {
+                            console.error('closing cache server: removing database-requirements');
+                            return this.clearFacetCacheOnShutdown(facetCacheManager);
+                        });
+
+                        // wait till sighup
+                        return new Promise<boolean>(() => {});
+                    });
+                } catch (err) {
+                    // cleaning database
+                    return this.clearFacetCacheOnShutdown(facetCacheManager).then(() => {
+                        return utils.reject(err);
+                    }).catch(reason => {
+                        console.error('error while closing cachserver', reason);
                         return utils.reject(err);
                     });
                 }
@@ -122,6 +151,63 @@ export class FacetCacheManagerCommand implements AbstractCommand {
             case 'showCreateAndStartDatabaseManagedFacets':
                 try {
                     console.log(facetCacheManager.showCreateAndStartDatabaseManagedFacets());
+                    promise = utils.resolve(true);
+                } catch (err) {
+                    return utils.reject(err);
+                }
+
+                break;
+
+
+
+            case 'dropServerManagedFacets':
+                try {
+                    promise = facetCacheManager.dropServerManagedFacets();
+                } catch (err) {
+                    return utils.reject(err);
+                }
+
+                break;
+            case 'showDropDatabaseManagedFacets':
+                try {
+                    console.log(facetCacheManager.showDropServerManagedFacets());
+                    promise = utils.resolve(true);
+                } catch (err) {
+                    return utils.reject(err);
+                }
+
+                break;
+            case 'createAndStartServerManagedFacets':
+                try {
+                    promise = facetCacheManager.createAndStartServerManagedFacets().then(() => {
+                        // clear facetcache-database
+                        process.on('SIGTERM', () => {
+                            console.error('closing cache server: removing facets');
+                            return this.clearFacetsOnShutdown(facetCacheManager);
+                        });
+
+                        // wait till sighup
+                        return new Promise<boolean>(() => {});
+                    });
+                } catch (err) {
+                    return this.clearFacetsOnShutdown(facetCacheManager).then(() => {
+                        return utils.reject(err);
+                    }).catch(reason => {
+                        console.error('error while closing cacheserver', reason);
+                        return utils.reject(err);
+                    });
+                }
+                break;
+            case 'startServerManagedFacets':
+                try {
+                    promise = facetCacheManager.startServerManagedFacets();
+                } catch (err) {
+                    return utils.reject(err);
+                }
+                break;
+            case 'showCreateServerManagedFacets':
+                try {
+                    console.log(facetCacheManager.showCreateServerManagedFacets());
                     promise = utils.resolve(true);
                 } catch (err) {
                     return utils.reject(err);
