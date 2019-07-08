@@ -1,14 +1,14 @@
 import * as fs from 'fs';
 import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {utils} from 'js-data';
-import {CommonFacetCacheService} from '../modules/common-facetcache.service';
+import {FacetcacheService} from '../modules/facetcache.service';
 import * as knex from 'knex';
 import {SqlConnectionConfig} from '../modules/tdoc-dataservice.module';
 import {SqlQueryBuilder, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {ServerConfig} from '../server-module.loader';
 import {TourDocSqlMediadbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.config';
 import {TourDocSqlMytbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytb.config';
-import {CommonFacetCacheServiceConfiguration, CommonFacetCacheUtils} from '../modules/common-facetcache.utils';
+import {FacetCacheServiceConfiguration, FacetcacheUtils} from '../modules/facetcache.utils';
 import {MysqlFacetCacheAdapter} from '../modules/mysql-facetcache.adapter';
 import {Sqlite3FacetCacheAdapter} from '../modules/sqlite3-facetcache.adapter';
 
@@ -239,7 +239,7 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         return promise;
     }
 
-    protected clearFacetCacheOnShutdown(facetCacheManager: CommonFacetCacheService): Promise<any> {
+    protected clearFacetCacheOnShutdown(facetCacheManager: FacetcacheService): Promise<any> {
         try {
             return this.clearFacetsOnShutdown(facetCacheManager).then(() => {
                 return facetCacheManager.dropDatabaseRequirements();
@@ -249,7 +249,7 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         }
     }
 
-    protected clearFacetsOnShutdown(facetCacheManager: CommonFacetCacheService): Promise<any> {
+    protected clearFacetsOnShutdown(facetCacheManager: FacetcacheService): Promise<any> {
         try {
             return facetCacheManager.stopAndDropDatabaseManagedFacets();
         } catch (err) {
@@ -257,7 +257,7 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         }
     }
 
-    protected configureCommonFacetCacheService(argv: string[]): CommonFacetCacheService {
+    protected configureCommonFacetCacheService(argv: string[]): FacetcacheService {
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' }));
         const serverConfig: ServerConfig = {
@@ -283,13 +283,13 @@ export class FacetCacheManagerCommand implements AbstractCommand {
                 throw new Error('tdocDataStoreAdapter not exists: ' + adapterName);
         }
 
-        const facetConfig: CommonFacetCacheServiceConfiguration = backendConfig[adapterName]['facetCacheConfig'];
+        const facetConfig: FacetCacheServiceConfiguration = backendConfig[adapterName]['facetCacheConfig'];
         if (facetConfig === undefined) {
             throw new Error('config for facetCacheConfig not exists');
         }
 
         sqlQueryBuilder.extendTableConfigs(tableConfigs);
-        facetConfig.facets = CommonFacetCacheUtils.createCommonFacetCacheConfigurations(tableConfigs,
+        facetConfig.facets = FacetcacheUtils.createCommonFacetCacheConfigurations(tableConfigs,
             backendConfig[adapterName]['facetCacheUsage']);
         console.log('create facets:', facetConfig);
 
@@ -297,10 +297,10 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         const client = connection.client['config']['client'];
         switch (client) {
             case 'mysql':
-                return new CommonFacetCacheService(facetConfig, connection,
+                return new FacetcacheService(facetConfig, connection,
                     new MysqlFacetCacheAdapter(facetConfig.datastore.scriptPath));
             case 'sqlite3':
-                return new CommonFacetCacheService(facetConfig, connection,
+                return new FacetcacheService(facetConfig, connection,
                     new Sqlite3FacetCacheAdapter(facetConfig.datastore.scriptPath));
             default:
                 throw new Error('other clients than mysql are not supported');

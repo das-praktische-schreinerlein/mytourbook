@@ -1,7 +1,7 @@
 import {FacetCacheUsageConfigurations, TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {FacetUtils} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 
-export interface CommonFacetCacheConfiguration {
+export interface FacetCacheConfiguration {
     longKey: string;
     shortKey: string;
     name: string;
@@ -11,19 +11,20 @@ export interface CommonFacetCacheConfiguration {
     valueType: 'string' | 'number' | 'date';
     triggerTables: string[];
 }
-export interface CommonFacetCacheServiceConfiguration {
+
+export interface FacetCacheServiceConfiguration {
     datastore: {
         scriptPath: string;
     };
-    facets: CommonFacetCacheConfiguration[];
+    facets: FacetCacheConfiguration[];
     checkInterval: number;
 }
 
-export class CommonFacetCacheUtils {
+export class FacetcacheUtils {
     public static createCommonFacetCacheConfigurations(tableConfigs: TableConfigs,
                                                        facetCacheUsageConfigurations: FacetCacheUsageConfigurations):
-        CommonFacetCacheConfiguration[] {
-        const configs: CommonFacetCacheConfiguration[] = [];
+        FacetCacheConfiguration[] {
+        const configs: FacetCacheConfiguration[] = [];
 
         if (facetCacheUsageConfigurations.active !== true) {
             return configs;
@@ -36,7 +37,7 @@ export class CommonFacetCacheUtils {
             }
 
             for (const facetKey in tableConfig.facetConfigs) {
-                const config = CommonFacetCacheUtils.createCommonFacetCacheConfiguration(tableConfig, facetKey,
+                const config = FacetcacheUtils.createCommonFacetCacheConfiguration(tableConfig, facetKey,
                     facetCacheUsageConfigurations);
                 if (config !== undefined) {
                     configs.push(config);
@@ -49,7 +50,7 @@ export class CommonFacetCacheUtils {
 
     public static createCommonFacetCacheConfiguration(tableConfig: TableConfig, facetKey: string,
                                                       facetCacheUsageConfigurations: FacetCacheUsageConfigurations):
-        CommonFacetCacheConfiguration {
+        FacetCacheConfiguration {
         let found = false;
         for (const pattern of facetCacheUsageConfigurations.entities[tableConfig.key].facetKeyPatterns) {
             if (facetKey.match(new RegExp(pattern))) {

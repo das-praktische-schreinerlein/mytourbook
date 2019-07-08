@@ -7,6 +7,7 @@ import {FacetCacheUsageConfigurations, TableConfig} from '@dps/mycms-commons/dis
 import {AdapterQuery} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {TourDocSqlMytbConfig} from './tdoc-sql-mytb.config';
+import {TourDocSqlUtils} from './tdoc-sql.utils';
 
 export class TourDocSqlMytbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private tableConfig: TourDocSqlMytbConfig = new TourDocSqlMytbConfig();
@@ -70,15 +71,7 @@ export class TourDocSqlMytbAdapter extends GenericSqlAdapter<TourDocRecord, Tour
 
     protected transformToSqlDialect(sql: string): string {
         if (this.config.knexOpts.client !== 'mysql') {
-            // dirty workaround because sqlite has no functions as mysql
-            sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/g,
-                '"T" || location.l_typ || "L" || location.l_parent_id || " -> " || location.l_name');
-            sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/g,
-                'CAST(location.l_parent_id AS CHAR(50)) || "," || CAST(location.l_id AS CHAR(50))');
-            sql = sql.replace('CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50)))',
-                'CAST(location.l_parent_id AS CHAR(50)) || "," || CAST(location.l_id AS CHAR(50))');
-            sql = sql.replace(/GetTechName\(([a-zA-Z0-9_.]+)\)/g,
-                'REPLACE(REPLACE(LOWER($1), " ", "_"), "/", "_")');
+            sql = TourDocSqlUtils.transformToSqliteDialect(sql);
         }
 
         return super.transformToSqlDialect(sql);

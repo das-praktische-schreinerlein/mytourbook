@@ -1,6 +1,6 @@
-import {CommonFacetCacheConfiguration} from './common-facetcache.utils';
+import {FacetCacheConfiguration} from './facetcache.utils';
 
-export interface CommonFacetCacheAdapter {
+export interface FacetCacheAdapter {
     supportsDatabaseManagedUpdate(): boolean;
 
     generateDropFacetCacheTables(): string[];
@@ -25,19 +25,19 @@ export interface CommonFacetCacheAdapter {
 
     generateFacetTriggerCallSql(facetKey: string): string[];
 
-    generateCreateFacetCacheConfigSql(configuration: CommonFacetCacheConfiguration): string[];
+    generateCreateFacetCacheConfigSql(configuration: FacetCacheConfiguration): string[];
 
-    generateRemoveFacetCacheConfigSql(configuration: CommonFacetCacheConfiguration): string[];
+    generateRemoveFacetCacheConfigSql(configuration: FacetCacheConfiguration): string[];
 
-    generateUpdateFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[];
+    generateUpdateFacetCacheSql(configuration: FacetCacheConfiguration): string[];
 
-    generateDeleteFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[];
+    generateDeleteFacetCacheSql(configuration: FacetCacheConfiguration): string[];
 
     generateSelectFacetCacheUpdateTriggerSql(): string;
 
-    generateDeleteFacetCacheUpdateTriggerSql(configuration: CommonFacetCacheConfiguration): string[];
+    generateDeleteFacetCacheUpdateTriggerSql(configuration: FacetCacheConfiguration): string[];
 
-    generateCreateFacetViewSql(configuration: CommonFacetCacheConfiguration): string[];
+    generateCreateFacetViewSql(configuration: FacetCacheConfiguration): string[];
 
-    generateDropFacetViewSql(configuration: CommonFacetCacheConfiguration): string[];
+    generateDropFacetViewSql(configuration: FacetCacheConfiguration): string[];
 }
