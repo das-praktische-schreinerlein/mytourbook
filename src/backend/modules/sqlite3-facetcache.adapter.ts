@@ -2,7 +2,7 @@ import {CommonFacetCacheConfiguration} from './common-facetcache.utils';
 import {CommonFacetCacheAdapter} from './common-facetcache.adapter';
 import * as fs from 'fs';
 
-export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
+export class Sqlite3FacetCacheAdapter implements CommonFacetCacheAdapter {
     protected sqlScriptPath: string;
 
     constructor(sqlScriptPath: string) {
@@ -10,7 +10,7 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     }
 
     public supportsDatabaseManagedUpdate(): boolean {
-        return true;
+        return false;
     }
 
     public generateCreateTableTriggerSql(table: string, triggerSql: string): string[] {
@@ -35,31 +35,17 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     }
 
     public generateCreateUpdateScheduleSql(facetKey: string, updateSql: string, checkInterval: number): string[] {
-        const sqls: string[] = [];
-        sqls.push('CREATE EVENT event_update_' + facetKey +
-            ' ON SCHEDULE EVERY ' + checkInterval + ' MINUTE' +
-            ' ON COMPLETION NOT PRESERVE ENABLE' +
-            ' DO ' +
-            '   BEGIN ' +
-            '     CALL CheckFacetCacheUpdateTriggerTableAndExceuteSql("' + facetKey + '", \'' + updateSql + '\');' +
-            '   END'
-        );
-
-        return sqls;
+        return [];
     }
 
     public generateDropUpdateScheduleSql(facetKey: string): string[] {
-        const sqls: string[] = [];
-        sqls.push('DROP EVENT IF EXISTS event_update_' + facetKey);
-
-        return sqls;
+        return [];
     }
 
     public generateFacetTriggerCallSql(facetKey: string): string[] {
-        const sqls: string[] = [];
-        sqls.push('CALL InsertFacetCacheUpdateTriggerTableEntry(\'' + facetKey + '\');');
-
-        return sqls;
+        return ['INSERT INTO facetcacheupdatetrigger (ft_key)' +
+        '        SELECT triggername' +
+        '            WHERE NOT EXISTS (SELECT 1 FROM facetcacheupdatetrigger WHERE ft_key="' + facetKey + '");'];
     }
 
     public generateCreateFacetCacheConfigsSql(configurations: CommonFacetCacheConfiguration[]): string[] {
@@ -73,9 +59,9 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
 
     public generateCreateFacetCacheConfigSql(configuration: CommonFacetCacheConfiguration): string[] {
         return ['INSERT INTO facetcacheconfig (fcc_usecache, fcc_key) VALUES (1, "' + configuration.longKey + '")',
-        'INSERT INTO facetcacheupdatetrigger (ft_key)' +
-        '        SELECT "' + configuration.longKey + '" from dual' +
-        '            WHERE NOT EXISTS (SELECT 1 FROM facetcacheupdatetrigger WHERE ft_key="' + configuration.longKey + '");'];
+            'INSERT INTO facetcacheupdatetrigger (ft_key)' +
+            '        SELECT "' + configuration.longKey + '"' +
+            '            WHERE NOT EXISTS (SELECT 1 FROM facetcacheupdatetrigger WHERE ft_key="' + configuration.longKey + '");'];
     }
 
     public generateRemoveFacetCacheConfigsSql(configurations: CommonFacetCacheConfiguration[]): string[] {
@@ -88,10 +74,7 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     }
 
     public generateRemoveFacetCacheConfigSql(configuration: CommonFacetCacheConfiguration): string[] {
-        return ['IF EXISTS (SELECT * FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = "facetcacheconfig") ' +
-        ' THEN ' +
-        '   DELETE IGNORE FROM facetcacheconfig WHERE fcc_key IN ("' + configuration.longKey + '");' +
-        ' END IF'];
+        return []; //['DELETE FROM facetcacheconfig WHERE fcc_key IN ("' + configuration.longKey + '")'];
     }
 
     public generateUpdateFacetsCacheSql(configurations: CommonFacetCacheConfiguration[]): string[] {
@@ -122,7 +105,7 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     public generateDeleteFacetCacheSql(configuration: CommonFacetCacheConfiguration): string[] {
         const sqls: string[] = [];
         const longKey = configuration.longKey;
-        sqls.push('DELETE IGNORE from facetcache where fc_key in ("' + longKey + '")');
+        sqls.push('DELETE from facetcache where fc_key in ("' + longKey + '")');
 
         return sqls;
     }
@@ -134,7 +117,7 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     public generateDeleteFacetCacheUpdateTriggerSql(configuration: CommonFacetCacheConfiguration): string[] {
         const sqls: string[] = [];
         const longKey = configuration.longKey;
-        sqls.push('DELETE IGNORE from facetcacheupdatetrigger where ft_key in ("' + longKey + '")');
+        sqls.push('DELETE from facetcacheupdatetrigger where ft_key in ("' + longKey + '")');
 
         return sqls;
     }
@@ -194,11 +177,11 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     }
 
     generateCreateFacetCacheTriggerFunctions(): string[] {
-        return this.extractSqlFileOnScriptPath('create-facetcache-trigger-functions.sql', '$$');
+        return [];
     }
 
     generateCreateFacetCacheUpdateCheckFunctions(): string[] {
-        return this.extractSqlFileOnScriptPath('create-facetcache-updatecheck-functions.sql', '$$');
+        return [];
     }
 
     generateDropFacetCacheTables(): string[] {
@@ -206,11 +189,11 @@ export class MysqlFacetCacheAdapter implements CommonFacetCacheAdapter {
     }
 
     generateDropFacetCacheTriggerFunctions(): string[] {
-        return this.extractSqlFileOnScriptPath('drop-facetcache-trigger-functions.sql', '$$');
+        return [];
     }
 
     generateDropFacetCacheUpdateCheckFunctions(): string[] {
-        return this.extractSqlFileOnScriptPath('drop-facetcache-updatecheck-functions.sql', '$$');
+        return [];
     }
 
     protected extractSqlFileOnScriptPath(sqlFile: string, splitter: string): string[] {

@@ -20,17 +20,24 @@ export interface CommonFacetCacheServiceConfiguration {
 }
 
 export class CommonFacetCacheUtils {
-    public static createCommonFacetCacheConfigurations(tableConfigs: TableConfigs, facetCacheConfig: FacetCacheUsageConfigurations):
+    public static createCommonFacetCacheConfigurations(tableConfigs: TableConfigs,
+                                                       facetCacheUsageConfigurations: FacetCacheUsageConfigurations):
         CommonFacetCacheConfiguration[] {
         const configs: CommonFacetCacheConfiguration[] = [];
-        for (const tableKey in facetCacheConfig) {
+
+        if (facetCacheUsageConfigurations.active !== true) {
+            return configs;
+        }
+
+        for (const tableKey in facetCacheUsageConfigurations.entities) {
             const tableConfig: TableConfig = tableConfigs[tableKey];
             if (tableConfig === undefined) {
                 throw new Error('tableConfig not exists: ' + tableKey);
             }
 
             for (const facetKey in tableConfig.facetConfigs) {
-                const config = CommonFacetCacheUtils.createCommonFacetCacheConfiguration(tableConfig, facetKey, facetCacheConfig);
+                const config = CommonFacetCacheUtils.createCommonFacetCacheConfiguration(tableConfig, facetKey,
+                    facetCacheUsageConfigurations);
                 if (config !== undefined) {
                     configs.push(config);
                 }
@@ -41,10 +48,10 @@ export class CommonFacetCacheUtils {
     }
 
     public static createCommonFacetCacheConfiguration(tableConfig: TableConfig, facetKey: string,
-                                                       facetCacheConfig: FacetCacheUsageConfigurations):
+                                                      facetCacheUsageConfigurations: FacetCacheUsageConfigurations):
         CommonFacetCacheConfiguration {
         let found = false;
-        for (const pattern of facetCacheConfig[tableConfig.key].facetKeyPatterns) {
+        for (const pattern of facetCacheUsageConfigurations.entities[tableConfig.key].facetKeyPatterns) {
             if (facetKey.match(new RegExp(pattern))) {
                 found = true;
                 break;

@@ -11,8 +11,8 @@ import {TourDocSqlMytbConfig} from './tdoc-sql-mytb.config';
 export class TourDocSqlMytbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private tableConfig: TourDocSqlMytbConfig = new TourDocSqlMytbConfig();
 
-    constructor(config: any, facetCacheUsageConfiguration: FacetCacheUsageConfigurations) {
-        super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfiguration);
+    constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
+        super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);
         this.extendTableConfigs();
     }
 

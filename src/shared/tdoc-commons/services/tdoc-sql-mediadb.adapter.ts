@@ -22,8 +22,8 @@ export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, T
     private keywordsAdapter: TourDocSqlMediadbKeywordAdapter;
     private tableConfig: TourDocSqlMediadbConfig = new TourDocSqlMediadbConfig();
 
-    constructor(config: any, facetCacheUsageConfiguration: FacetCacheUsageConfigurations) {
-        super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfiguration);
+    constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
+        super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);
         this.actionTagAdapter = new TourDocSqlMediadbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
         this.keywordsAdapter = new TourDocSqlMediadbKeywordAdapter(config, this.knex, this.sqlQueryBuilder);
         this.extendTableConfigs();

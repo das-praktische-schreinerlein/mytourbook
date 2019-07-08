@@ -9,7 +9,8 @@ import {ServerConfig} from '../server-module.loader';
 import {TourDocSqlMediadbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.config';
 import {TourDocSqlMytbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytb.config';
 import {CommonFacetCacheServiceConfiguration, CommonFacetCacheUtils} from '../modules/common-facetcache.utils';
-import {CommonMysqlFacetCacheAdapter} from '../modules/mysql-facetcache.adapter';
+import {MysqlFacetCacheAdapter} from '../modules/mysql-facetcache.adapter';
+import {Sqlite3FacetCacheAdapter} from '../modules/sqlite3-facetcache.adapter';
 
 export class FacetCacheManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -294,11 +295,16 @@ export class FacetCacheManagerCommand implements AbstractCommand {
 
         const connection = this.createKnex(serverConfig.backendConfig);
         const client = connection.client['config']['client'];
-        if (client !== 'mysql') {
-            throw new Error('other clients than mysql are not supoort');
+        switch (client) {
+            case 'mysql':
+                return new CommonFacetCacheService(facetConfig, connection,
+                    new MysqlFacetCacheAdapter(facetConfig.datastore.scriptPath));
+            case 'sqlite3':
+                return new CommonFacetCacheService(facetConfig, connection,
+                    new Sqlite3FacetCacheAdapter(facetConfig.datastore.scriptPath));
+            default:
+                throw new Error('other clients than mysql are not supported');
         }
-
-        return new CommonFacetCacheService(facetConfig, connection, new CommonMysqlFacetCacheAdapter(facetConfig.datastore.scriptPath));
     }
 
     protected createKnex(backendConfig: {}): any {
