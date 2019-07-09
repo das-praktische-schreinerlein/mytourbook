@@ -43,6 +43,25 @@
             "database": "testmediadb",
             "port": "3306",
             "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
+        },
+        "facetCacheUsage": {
+            "active": true,
+            "entities": {
+                "odimgobject": {
+                    "facetKeyPatterns": [".*"]
+                },
+                "image": {
+                    "facetKeyPatterns": [".*"]
+                }
+            }
+        },
+        "facetCacheConfig": {
+            "datastore": {
+                "scriptPath": "installer/db/sqlite/facetcache"
+            },
+            "facets": [
+            ],
+            "checkInterval": 2
         }
     },
     "TourDocItemsJsAdapter": {
