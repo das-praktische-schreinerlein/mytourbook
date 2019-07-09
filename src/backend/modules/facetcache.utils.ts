@@ -13,6 +13,7 @@ export interface FacetCacheConfiguration {
     facetSql: string;
     withLabel: boolean;
     withId: boolean;
+    orderBy: string;
     valueType: 'string' | 'number' | 'date';
     triggerTables: string[];
 }
@@ -75,7 +76,7 @@ export class FacetCacheUtils {
             return;
         }
 
-        const sql = facetConfig.selectSql || sqlQueryBuilder.generateFacetSqlFromSelectField(tableConfig.tableName, facetConfig);
+        const sql = facetConfig.selectSql || sqlQueryBuilder.generateFacetSqlForSelectField(tableConfig.tableName, facetConfig);
         if (sql === undefined) {
             return;
         }
@@ -87,6 +88,9 @@ export class FacetCacheUtils {
             triggerTables: facetConfig.triggerTables,
             withLabel: facetConfig.withLabelField,
             withId: facetConfig.withIdField,
+            orderBy: facetConfig.orderBy !== undefined
+                ? facetConfig.orderBy
+                : sqlQueryBuilder.generateFacetSqlSortForSelectField(facetConfig),
             name: FacetUtils.generateFacetCacheKey(tableConfig.key, facetKey),
             shortKey: facetKey
         };

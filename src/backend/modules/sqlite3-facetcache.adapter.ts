@@ -99,7 +99,9 @@ export class Sqlite3FacetCacheAdapter implements FacetCacheAdapter {
             (configuration.withId === true ? ', fc_recid ' : ' ') +
             '   )' +
             ' SELECT "' + longKey + '" AS fc_key,' +
-            '   ROW_NUMBER() OVER(ORDER BY ' + (configuration.withLabel === true ? 'label, ' : '') + ' value)  AS fc_order,' +
+            '   ROW_NUMBER() OVER(ORDER BY ' + (configuration.orderBy === undefined
+                ? (configuration.withLabel === true ? 'label, ' : '') + ' value'
+                : configuration.orderBy) + ') AS fc_order,' +
             ' count, value ' +
             (configuration.withLabel === true ? ', label ' : ' ') +
             (configuration.withId === true ? ', id ' : ' ') +
