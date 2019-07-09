@@ -94,6 +94,10 @@ export class MysqlFacetCacheAdapter implements FacetCacheAdapter {
         ' END IF'];
     }
 
+    public generateSelectTrueIfTableFacetCacheConfigExistsSql(): string {
+        return this.generateSelectTrueIfTableExistsSql('facetcacheconfig');
+    }
+
     public generateUpdateFacetsCacheSql(configurations: FacetCacheConfiguration[]): string[] {
         let sqls: string[] = [];
         for (const configuration of configurations) {
@@ -111,10 +115,10 @@ export class MysqlFacetCacheAdapter implements FacetCacheAdapter {
             (configuration.withLabel === true ? ', fc_label' : '') +
             (configuration.withId === true ? ', fc_recid ' : ' ') +
             '   )' +
-            ' SELECT "' + longKey + '" AS fc_key, @CURROW AS fc_order, count, value ' +
+            ' SELECT "' + longKey + '" AS fc_key, @i:=@i+1 AS fc_order, count, value ' +
             (configuration.withLabel === true ? ', label ' : ' ') +
             (configuration.withId === true ? ', id ' : ' ') +
-            ' FROM fc_live_' + longKey);
+            ' FROM fc_live_' + longKey + ', (SELECT @i:=0) AS temp');
 
         return sqls;
     }
@@ -189,28 +193,32 @@ export class MysqlFacetCacheAdapter implements FacetCacheAdapter {
         return sqls;
     }
 
-    generateCreateFacetCacheTables(): string[] {
+    public generateCreateFacetCacheTables(): string[] {
         return this.extractSqlFileOnScriptPath('create-facetcache-tables.sql', ';');
     }
 
-    generateCreateFacetCacheTriggerFunctions(): string[] {
+    public generateCreateFacetCacheTriggerFunctions(): string[] {
         return this.extractSqlFileOnScriptPath('create-facetcache-trigger-functions.sql', '$$');
     }
 
-    generateCreateFacetCacheUpdateCheckFunctions(): string[] {
+    public generateCreateFacetCacheUpdateCheckFunctions(): string[] {
         return this.extractSqlFileOnScriptPath('create-facetcache-updatecheck-functions.sql', '$$');
     }
 
-    generateDropFacetCacheTables(): string[] {
+    public generateDropFacetCacheTables(): string[] {
         return this.extractSqlFileOnScriptPath('drop-facetcache-tables.sql', ';');
     }
 
-    generateDropFacetCacheTriggerFunctions(): string[] {
+    public generateDropFacetCacheTriggerFunctions(): string[] {
         return this.extractSqlFileOnScriptPath('drop-facetcache-trigger-functions.sql', '$$');
     }
 
-    generateDropFacetCacheUpdateCheckFunctions(): string[] {
+    public generateDropFacetCacheUpdateCheckFunctions(): string[] {
         return this.extractSqlFileOnScriptPath('drop-facetcache-updatecheck-functions.sql', '$$');
+    }
+
+    public generateSelectTrueIfTableExistsSql(table): string {
+        return 'SELECT "true" FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name="' + table + '"';
     }
 
     protected extractSqlFileOnScriptPath(sqlFile: string, splitter: string): string[] {

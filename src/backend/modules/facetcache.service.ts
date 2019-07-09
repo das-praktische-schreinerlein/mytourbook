@@ -208,19 +208,29 @@ export class FacetcacheService {
     }
 
     public removeFacetsCacheConfigs(): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            const promises = [];
-            const me = this;
-            for (const configuration of this.configuration.facets) {
-                promises.push(function () {
-                    return me.removeFacetCacheConfig(configuration);
-                });
+        const sqlBuilder = this.knex;
+        const sql = this.transformToSqlDialect(this.adapter.generateSelectTrueIfTableFacetCacheConfigExistsSql());
+        const me = this;
+        return sqlBuilder.raw(sql).then(dbresult => {
+            const response = me.sqlQueryBuilder.extractDbResult(dbresult, me.knex.client['config']['client']);
+            if (response.length < 1) {
+                console.error('facetcacheconfig not exists', new Date());
+                return utils.resolve(true);
             }
 
-            return Promise_serial(promises, {parallelize: 1}).then(() => {
-                return resolve(true);
-            }).catch(reason => {
-                return reject(reason);
+            return new Promise<boolean>((resolve, reject) => {
+                const promises = [];
+                for (const configuration of me.configuration.facets) {
+                    promises.push(function () {
+                        return me.removeFacetCacheConfig(configuration);
+                    });
+                }
+
+                return Promise_serial(promises, {parallelize: 1}).then(() => {
+                    return resolve(true);
+                }).catch(reason => {
+                    return reject(reason);
+                });
             });
         });
     }

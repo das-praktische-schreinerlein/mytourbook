@@ -74,7 +74,11 @@ export class Sqlite3FacetCacheAdapter implements FacetCacheAdapter {
     }
 
     public generateRemoveFacetCacheConfigSql(configuration: FacetCacheConfiguration): string[] {
-        return []; //TODO ['DELETE FROM facetcacheconfig WHERE fcc_key IN ("' + configuration.longKey + '")'];
+        return ['DELETE FROM facetcacheconfig WHERE fcc_key IN ("' + configuration.longKey + '")'];
+    }
+
+    public generateSelectTrueIfTableFacetCacheConfigExistsSql(): string {
+        return this.generateSelectTrueIfTableExistsSql('facetcacheconfig');
     }
 
     public generateUpdateFacetsCacheSql(configurations: FacetCacheConfiguration[]): string[] {
@@ -94,7 +98,9 @@ export class Sqlite3FacetCacheAdapter implements FacetCacheAdapter {
             (configuration.withLabel === true ? ', fc_label' : '') +
             (configuration.withId === true ? ', fc_recid ' : ' ') +
             '   )' +
-            ' SELECT "' + longKey + '" AS fc_key, @CURROW AS fc_order, count, value ' +
+            ' SELECT "' + longKey + '" AS fc_key,' +
+            '   ROW_NUMBER() OVER(ORDER BY ' + (configuration.withLabel === true ? 'label, ' : '') + ' value)  AS fc_order,' +
+            ' count, value ' +
             (configuration.withLabel === true ? ', label ' : ' ') +
             (configuration.withId === true ? ', id ' : ' ') +
             ' FROM fc_live_' + longKey);
@@ -172,28 +178,32 @@ export class Sqlite3FacetCacheAdapter implements FacetCacheAdapter {
         return sqls;
     }
 
-    generateCreateFacetCacheTables(): string[] {
+    public generateCreateFacetCacheTables(): string[] {
         return this.extractSqlFileOnScriptPath('create-facetcache-tables.sql', ';');
     }
 
-    generateCreateFacetCacheTriggerFunctions(): string[] {
+    public generateCreateFacetCacheTriggerFunctions(): string[] {
         return [];
     }
 
-    generateCreateFacetCacheUpdateCheckFunctions(): string[] {
+    public generateCreateFacetCacheUpdateCheckFunctions(): string[] {
         return [];
     }
 
-    generateDropFacetCacheTables(): string[] {
+    public generateDropFacetCacheTables(): string[] {
         return this.extractSqlFileOnScriptPath('drop-facetcache-tables.sql', ';');
     }
 
-    generateDropFacetCacheTriggerFunctions(): string[] {
+    public generateDropFacetCacheTriggerFunctions(): string[] {
         return [];
     }
 
-    generateDropFacetCacheUpdateCheckFunctions(): string[] {
+    public generateDropFacetCacheUpdateCheckFunctions(): string[] {
         return [];
+    }
+
+    public generateSelectTrueIfTableExistsSql(table): string {
+        return 'SELECT "true" FROM sqlite_master WHERE type="table" AND name="' + table + '"';
     }
 
     protected extractSqlFileOnScriptPath(sqlFile: string, splitter: string): string[] {

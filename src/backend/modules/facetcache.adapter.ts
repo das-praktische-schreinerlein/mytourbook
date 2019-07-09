@@ -40,4 +40,8 @@ export interface FacetCacheAdapter {
     generateCreateFacetViewSql(configuration: FacetCacheConfiguration): string[];
 
     generateDropFacetViewSql(configuration: FacetCacheConfiguration): string[];
+
+    generateSelectTrueIfTableFacetCacheConfigExistsSql(): string;
+
+    generateSelectTrueIfTableExistsSql(table): string;
 }
