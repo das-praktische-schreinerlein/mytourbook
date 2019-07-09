@@ -8,7 +8,7 @@ import {SqlQueryBuilder, TableConfigs} from '@dps/mycms-commons/dist/search-comm
 import {ServerConfig} from '../server-module.loader';
 import {TourDocSqlMediadbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.config';
 import {TourDocSqlMytbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytb.config';
-import {FacetCacheServiceConfiguration, FacetcacheUtils} from '../modules/facetcache.utils';
+import {FacetCacheServiceConfiguration, FacetCacheUtils} from '../modules/facetcache.utils';
 import {MysqlFacetCacheAdapter} from '../modules/mysql-facetcache.adapter';
 import {Sqlite3FacetCacheAdapter} from '../modules/sqlite3-facetcache.adapter';
 
@@ -289,7 +289,7 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         }
 
         sqlQueryBuilder.extendTableConfigs(tableConfigs);
-        facetConfig.facets = FacetcacheUtils.createCommonFacetCacheConfigurations(tableConfigs,
+        facetConfig.facets = FacetCacheUtils.createCommonFacetCacheConfigurations(sqlQueryBuilder, tableConfigs,
             backendConfig[adapterName]['facetCacheUsage']);
         console.log('create facets:', facetConfig);
 

@@ -1,4 +1,9 @@
-import {FacetCacheUsageConfigurations, TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {
+    FacetCacheUsageConfigurations,
+    SqlQueryBuilder,
+    TableConfig,
+    TableConfigs
+} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {FacetUtils} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 
 export interface FacetCacheConfiguration {
@@ -20,8 +25,8 @@ export interface FacetCacheServiceConfiguration {
     checkInterval: number;
 }
 
-export class FacetcacheUtils {
-    public static createCommonFacetCacheConfigurations(tableConfigs: TableConfigs,
+export class FacetCacheUtils {
+    public static createCommonFacetCacheConfigurations(sqlQueryBuilder: SqlQueryBuilder, tableConfigs: TableConfigs,
                                                        facetCacheUsageConfigurations: FacetCacheUsageConfigurations):
         FacetCacheConfiguration[] {
         const configs: FacetCacheConfiguration[] = [];
@@ -37,7 +42,7 @@ export class FacetcacheUtils {
             }
 
             for (const facetKey in tableConfig.facetConfigs) {
-                const config = FacetcacheUtils.createCommonFacetCacheConfiguration(tableConfig, facetKey,
+                const config = FacetCacheUtils.createCommonFacetCacheConfiguration(sqlQueryBuilder, tableConfig, facetKey,
                     facetCacheUsageConfigurations);
                 if (config !== undefined) {
                     configs.push(config);
@@ -48,7 +53,7 @@ export class FacetcacheUtils {
         return configs;
     }
 
-    public static createCommonFacetCacheConfiguration(tableConfig: TableConfig, facetKey: string,
+    public static createCommonFacetCacheConfiguration(sqlQueryBuilder: SqlQueryBuilder, tableConfig: TableConfig, facetKey: string,
                                                       facetCacheUsageConfigurations: FacetCacheUsageConfigurations):
         FacetCacheConfiguration {
         let found = false;
@@ -66,14 +71,19 @@ export class FacetcacheUtils {
         if (facetConfig === undefined) {
             throw new Error('facetConfig not exists: ' + tableConfig.key + ' facet:' + facetKey);
         }
-        if (facetConfig.selectSql === undefined) {
+        if (facetConfig.cache === undefined || facetConfig.cache.cachedSelectSql === undefined) {
+            return;
+        }
+
+        const sql = facetConfig.selectSql || sqlQueryBuilder.generateFacetSqlFromSelectField(tableConfig.tableName, facetConfig);
+        if (sql === undefined) {
             return;
         }
 
         return {
             valueType: facetConfig.valueType,
             longKey: FacetUtils.generateFacetCacheKey(tableConfig.key, facetKey),
-            facetSql: facetConfig.selectSql,
+            facetSql: sql,
             triggerTables: facetConfig.triggerTables,
             withLabel: facetConfig.withLabelField,
             withId: facetConfig.withIdField,
