@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {TourDocRecord, TourDocRecordFactory, TourDocRecordValidator} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {TourDocRecordSchema} from '../../../../shared/tdoc-commons/model/schemas/tdoc-record-schema';
@@ -21,12 +21,14 @@ import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/contain
 import {isArray} from 'util';
 import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {
     CommonDocEditformComponent,
     CommonDocEditformComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
+import {DOCUMENT} from '@angular/common';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -119,12 +121,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     trackRecords: TourDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
+    trackSegmentStatistics: TrackStatistic[] = [];
     personTagSuggestions: string[] = [];
 
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
                 protected searchFormUtils: SearchFormUtils, protected tdocDataService: TourDocDataService,
-                protected contentUtils: TourDocContentUtils) {
+                protected contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document) {
         super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
     }
 
@@ -213,9 +216,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
 
     updateMap(): boolean {
-        if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
-            this.editFormGroup.getRawValue()['gpsTrackSrc'].length > 0) {
-            let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        if (track !== undefined && track !== null && track.length > 0) {
             track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
             this.trackRecords = [TourDocRecordFactory.createSanitized({
                 id: 'TMP' + (new Date()).getTime(),
@@ -236,9 +238,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             } else {
                 this.trackStatistic = this.trackStatisticService.emptyStatistic();
             }
+            this.trackSegmentStatistics = this.generateTrackSegmentStatistics(track);
         } else {
             this.trackRecords = [];
             this.trackStatistic = this.trackStatisticService.emptyStatistic();
+            this.trackSegmentStatistics = [];
         }
 
         this.cd.markForCheck();
@@ -246,10 +250,67 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
+    generateTrackSegmentStatistics(track: string): TrackStatistic[] {
+        if (track === undefined || track === null || track.length <= 0) {
+            return [];
+        }
+
+        const geoElements = this.gpxParser.parse(track, {});
+        const trackStatistics = [];
+        if (geoElements !== undefined && geoElements.length > 0) {
+            for (const geoElement of geoElements) {
+               trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+            }
+
+            return trackStatistics;
+        } else {
+            return [];
+        }
+    }
+
+    deleteTrackSegment(delSegIdx: number): boolean {
+        const track: string = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        if (track !== undefined && track !== null && track.length > 0) {
+            const lastPos = StringUtils.findNeedle(track, '<trkseg>', delSegIdx);
+            let newTrack = track;
+            if (lastPos >= 0) {
+                newTrack = track.substring(0, lastPos - 1);
+                const endPos = track.indexOf('</trkseg>', lastPos);
+                if (endPos >= 0) {
+                    newTrack += track.substring(endPos + '</trkseg>'.length, track.length);
+                }
+            }
+
+            this.editFormGroup.patchValue({gpsTrackSrc: newTrack });
+        }
+
+        this.updateMap();
+
+        return this.jumpToTrackSegment(0);
+    }
+
+    jumpToTrackSegment(delSegIdx: number): boolean {
+        const track: string = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        if (track !== undefined && track !== null && track.length > 0) {
+            const lastPos = StringUtils.findNeedle(track, '<trkseg>', delSegIdx);
+            if (lastPos >= 0) {
+                const element = this.document.getElementById('gpsTrackSrc');
+                if (!element) {
+                    return false;
+                }
+
+                element.focus();
+                this.setSelectionRangeOnInput(element, lastPos, lastPos);
+            }
+
+        }
+
+        return false;
+    }
+
     fixMap(): boolean {
-        if (this.editFormGroup.getRawValue()['gpsTrackSrc'] !== undefined && this.editFormGroup.getRawValue()['gpsTrackSrc'] !== null &&
-            this.editFormGroup.getRawValue()['gpsTrackSrc'].length > 0) {
-            let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        if (track !== undefined && track !== null && track.length > 0) {
             track = GeoGpxParser.fixXml(track);
             track = GeoGpxParser.fixXmlExtended(track);
             track = GeoGpxParser.reformatXml(track);
@@ -475,4 +536,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
         return true;
     }
+
+    protected setSelectionRangeOnInput(input: HTMLInputElement|HTMLTextAreaElement, selectionStart: number, selectionEnd: number) {
+        if (input.setSelectionRange) {
+            input.focus();
+            input.setSelectionRange(selectionStart, selectionEnd);
+        }
+    }
+
 }

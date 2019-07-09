@@ -7,3 +7,12 @@ textarea:focus {
     min-height: 300px;
     max-height: 1000px;
 }
+
+textarea.nowrap {
+    white-space: pre;
+    overflow: auto;
+}
+
+table.trackSegmentStatistics td, table.trackSegmentStatistics th {
+    border: 1px solid black;
+}
