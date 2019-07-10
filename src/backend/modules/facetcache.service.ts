@@ -50,6 +50,10 @@ export class FacetcacheService {
         if (!this.adapter.supportsDatabaseManagedUpdate) {
             throw new Error('adapter doesnt support database-managed-facetcache');
         }
+        if (this.configuration.facets.length <= 0) {
+            console.error('dont start facetcache: no facets defined');
+            return utils.resolve(false);
+        }
 
         return this.createFacetsViews().then(() => {
             return this.createFacetsCacheConfigs();
@@ -97,6 +101,11 @@ export class FacetcacheService {
     }
 
     public createAndStartServerManagedFacets(): Promise<boolean> {
+        if (this.configuration.facets.length <= 0) {
+            console.error('dont start facetcache: no facets defined');
+            return utils.resolve(false);
+        }
+
         return this.createFacetsViews().then(() => {
             return this.createFacetsCacheConfigs();
         }).then(() => {
@@ -107,6 +116,11 @@ export class FacetcacheService {
     }
 
     public startServerManagedFacets(): Promise<boolean> {
+        if (this.configuration.facets.length <= 0) {
+            console.error('dont start facetcache: no facets defined');
+            return utils.resolve(false);
+        }
+
         const me = this;
         const facets: { [key: string]: FacetCacheConfiguration } = {};
         for (const facet of me.configuration.facets) {
