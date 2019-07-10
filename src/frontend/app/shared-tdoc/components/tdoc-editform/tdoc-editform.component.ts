@@ -292,6 +292,27 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return this.jumpToTrackSegment(0);
     }
 
+    mergeTrackSegment(mergeSegIdx: number): boolean {
+        const track: string = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        if (track !== undefined && track !== null && track.length > 0 && mergeSegIdx > 0) {
+            const lastPos = StringUtils.findNeedle(track, '</trkseg>', mergeSegIdx - 1);
+            let newTrack = track;
+            if (lastPos >= 0) {
+                newTrack = track.substring(0, lastPos - 1);
+                const endPos = track.indexOf('<trkseg>', lastPos);
+                if (endPos >= 0) {
+                    newTrack += track.substring(endPos + '<trkseg>'.length, track.length);
+                }
+            }
+
+            this.editFormGroup.patchValue({gpsTrackSrc: newTrack });
+        }
+
+        this.updateMap();
+
+        return this.jumpToTrackSegment(0);
+    }
+
     jumpToTrackSegment(delSegIdx: number): boolean {
         const track: string = this.editFormGroup.getRawValue()['gpsTrackSrc'];
         if (track !== undefined && track !== null && track.length > 0) {
