@@ -29,6 +29,7 @@ import {
     CommonDocEditformComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 import {DOCUMENT} from '@angular/common';
+import {GeoElementType} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -259,7 +260,9 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         const trackStatistics = [];
         if (geoElements !== undefined && geoElements.length > 0) {
             for (const geoElement of geoElements) {
-               trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                if (geoElement.type === GeoElementType.TRACK) {
+                    trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                }
             }
 
             return trackStatistics;
