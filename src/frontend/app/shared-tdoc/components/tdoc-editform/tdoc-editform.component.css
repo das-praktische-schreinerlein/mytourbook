@@ -16,3 +16,7 @@ textarea.nowrap {
 table.trackSegmentStatistics td, table.trackSegmentStatistics th {
     border: 1px solid black;
 }
+
+.trackhint {
+    background: lightyellow;
+}

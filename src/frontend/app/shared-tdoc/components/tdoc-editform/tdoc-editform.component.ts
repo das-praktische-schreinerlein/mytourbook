@@ -287,9 +287,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.editFormGroup.patchValue({gpsTrackSrc: newTrack });
         }
 
-        this.updateMap();
-
-        return this.jumpToTrackSegment(0);
+        return this.updateMap();
     }
 
     mergeTrackSegment(mergeSegIdx: number): boolean {
@@ -308,9 +306,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.editFormGroup.patchValue({gpsTrackSrc: newTrack });
         }
 
-        this.updateMap();
-
-        return this.jumpToTrackSegment(0);
+        return this.updateMap();
     }
 
     jumpToTrackSegment(delSegIdx: number): boolean {

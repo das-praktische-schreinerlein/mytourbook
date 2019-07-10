@@ -227,14 +227,21 @@
                     <tr *ngFor="let trackSegmentStatistic of trackSegmentStatistics; let idx = index;">
                         <td>{{trackSegmentStatistic.dateStart | date:'medium'}}</td>
                         <td>{{trackSegmentStatistic.dateEnd | date:'medium'}}</td>
-                        <td>{{trackSegmentStatistic.dist}}km</td>
+                        <td [ngClass]="trackSegmentStatistics[idx].dist > 60 ? 'trackhint' : ''">{{trackSegmentStatistic.dist}}km</td>
                         <td>{{trackSegmentStatistic.duration}}h</td>
                         <td>{{trackSegmentStatistic.altStart}}m</td>
                         <td>{{trackSegmentStatistic.altEnd}}m</td>
                         <td>
-                            <button (click)="jumpToTrackSegment(idx)" i18n="jumpToTrackSegment label|Label for button: jumpToTrackSegment@@label.editform.tdoc.jumpToTrackSegment">Focus</button>
-                            <button (click)="deleteTrackSegment(idx)" i18n="deleteTrackSegment label|Label for button: deleteTrackSegment@@label.editform.tdoc.deleteTrackSegment">Delete</button>
-                            <button *ngIf="idx > 0" (click)="mergeTrackSegment(idx)" i18n="mergeTrackSegment label|Label for button: mergeTrackSegment@@label.editform.tdoc.mergeTrackSegment">Merge</button>
+                            <button (click)="jumpToTrackSegment(idx)" class="btn btn-sm"
+                                    [ngClass]="trackSegmentStatistics[idx].dist > 60 ? 'btn-action' : ''">
+                                <span i18n="jumpToTrackSegment label|Label for button: jumpToTrackSegment@@label.editform.tdoc.jumpToTrackSegment">Focus</span>
+                            </button>
+                            <button (click)="deleteTrackSegment(idx)" class="btn btn-sm"
+                                    i18n="deleteTrackSegment label|Label for button: deleteTrackSegment@@label.editform.tdoc.deleteTrackSegment">Delete</button>
+                            <button *ngIf="idx > 0" (click)="mergeTrackSegment(idx)" class="btn btn-sm"
+                                    [ngClass]="(trackSegmentStatistics[idx].dateStart.getTime() - trackSegmentStatistics[idx-1].dateEnd.getTime()) < 10*60*1000 ? 'btn-action' : ''">
+                                <span i18n="mergeTrackSegment label|Label for button: mergeTrackSegment@@label.editform.tdoc.mergeTrackSegment">Merge</span>
+                            </button>
                         </td>
                     </tr>
                     </tbody>
