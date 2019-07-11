@@ -23,13 +23,14 @@ import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
 import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
-import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
+import {DefaultTrackColors, TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {
     CommonDocEditformComponent,
     CommonDocEditformComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 import {DOCUMENT} from '@angular/common';
 import {GeoElementType} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
+import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -120,8 +121,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         defaultTitle: '--',
         allSelected: 'alles'};
 
+    trackColors = new DefaultTrackColors();
     trackRecords: TourDocRecord[] = [];
+    editTrackRecords: TourDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
+    renderedMapElements: MapElement[] = [];
     trackSegmentStatistics: TrackStatistic[] = [];
     personTagSuggestions: string[] = [];
 
@@ -239,35 +243,75 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             } else {
                 this.trackStatistic = this.trackStatisticService.emptyStatistic();
             }
-            this.trackSegmentStatistics = this.generateTrackSegmentStatistics(track);
         } else {
             this.trackRecords = [];
             this.trackStatistic = this.trackStatisticService.emptyStatistic();
-            this.trackSegmentStatistics = [];
         }
 
+        this.generateTrackSegments(track);
+        this.renderedMapElements = [];
         this.cd.markForCheck();
 
         return false;
     }
 
-    generateTrackSegmentStatistics(track: string): TrackStatistic[] {
+    generateTrackSegments(track: string): void {
         if (track === undefined || track === null || track.length <= 0) {
-            return [];
+            this.trackSegmentStatistics = [];
+            this.editTrackRecords = [];
         }
 
         const geoElements = this.gpxParser.parse(track, {});
-        const trackStatistics = [];
         if (geoElements !== undefined && geoElements.length > 0) {
+            const trackStatistics = [];
+            const editTrackRecords = [];
             for (const geoElement of geoElements) {
-                if (geoElement.type === GeoElementType.TRACK) {
-                    trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                let trackSrc = '';
+                switch (geoElement.type) {
+                    case GeoElementType.TRACK:
+                        trackSrc = '<trk><trkseg>';
+                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                        trackSrc += geoElement.points.map(value => {
+                            return '<trkpt lat="' + value.lat + '" lon="' + value.lng + '"><ele>' + value.alt + '</ele></trkpt>';
+                        }).join('\n');
+                        trackSrc += '</trkseg></trk>';
+                        break;
+                    case GeoElementType.ROUTE:
+                        trackSrc = '<rte>';
+                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                        trackSrc += geoElement.points.map(value => {
+                            return '<rtept lat="' + value.lat + '" lon="' + value.lng + '"><ele>' + value.alt + '</ele></rtept>';
+                        }).join('\n');
+                        trackSrc += '</rte>';
+                        break;
+                    case GeoElementType.WAYPOINT:
+                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                        trackSrc += geoElement.points.map(value => {
+                            return '<wpt lat="' + value.lat + '" lon="' + value.lng + '"></wpt>';
+                        }).join('\n');
+                        break;
                 }
+
+                trackSrc = GeoGpxParser.fixXml(trackSrc);
+                trackSrc = GeoGpxParser.fixXmlExtended(trackSrc);
+                trackSrc = GeoGpxParser.reformatXml(trackSrc);
+                editTrackRecords.push(TourDocRecordFactory.createSanitized({
+                    id: 'TMP' + (new Date()).getTime(),
+                    gpsTrackSrc: trackSrc,
+                    gpsTrackBaseFile: 'tmp.gpx',
+                    name: geoElement.name,
+                    type: this.record.type,
+                    datestart: new Date().toISOString(),
+                    dateend: new Date().toISOString(),
+                    dateshow: this.editFormGroup.getRawValue()['dateshow']
+                }));
             }
 
-            return trackStatistics;
+            this.editTrackRecords = editTrackRecords;
+            this.trackSegmentStatistics = trackStatistics;
         } else {
-            return [];
+            this.trackSegmentStatistics = [];
+            this.editTrackRecords = [];
         }
     }
 
@@ -338,6 +382,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         }
 
         return this.updateMap();
+    }
+
+    setMapElementsRendered(mapElements: MapElement[]): void {
+        this.renderedMapElements = [].concat(mapElements);
+        this.cd.markForCheck();
     }
 
     protected validateSchema(record: TourDocRecord): SchemaValidationError[] {
@@ -472,14 +521,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
-            return {
-                dateshow: [DateUtils.dateToLocalISOString(record.dateshow)],
-                datestart: [DateUtils.dateToLocalISOString(record.datestart)],
-                dateend: [DateUtils.dateToLocalISOString(record.dateend)],
-                locIdParent: [record.locIdParent],
-                gpsTrackSrc: [record.gpsTrackSrc]
-            };
-        }
+        return {
+            dateshow: [DateUtils.dateToLocalISOString(record.dateshow)],
+            datestart: [DateUtils.dateToLocalISOString(record.datestart)],
+            dateend: [DateUtils.dateToLocalISOString(record.dateend)],
+            locIdParent: [record.locIdParent],
+            gpsTrackSrc: [record.gpsTrackSrc]
+        };
+    }
 
     protected postProcessFormValueConfig(record: TourDocRecord, formValueConfig: {}): void {
         if (formValueConfig['subtype'] && formValueConfig['subtype'].length > 0 && formValueConfig['subtype'][0]) {

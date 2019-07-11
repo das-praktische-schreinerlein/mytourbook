@@ -23,6 +23,47 @@ export interface TourDocItemData extends CommonItemData {
     flgProfileMapAvailable?: boolean;
 }
 
+export class Circular {
+    protected arr: any[];
+    protected currentIndex: number;
+
+    constructor(arr: any[], startIndex?: number) {
+        this.arr = arr;
+        this.currentIndex = startIndex || 0;
+    }
+
+    public next() {
+        const  i = this.currentIndex, arr = this.arr;
+        this.currentIndex = i < arr.length - 1 ? i + 1 : 0;
+
+        return this.current();
+    }
+
+    public prev() {
+        const i = this.currentIndex, arr = this.arr;
+        this.currentIndex = i > 0 ? i - 1 : arr.length - 1;
+
+        return this.current();
+    }
+
+    public current() {
+        return this.arr[this.currentIndex];
+    }
+}
+
+export class TrackColors extends Circular {
+    constructor(arr: string[], startIndex?: number) {
+        super(arr, startIndex);
+    }
+}
+
+export class DefaultTrackColors extends TrackColors {
+    protected static colors = ['blue', 'green', 'red', 'yellow', 'darkgreen'];
+    constructor(startIndex?: number) {
+        super(DefaultTrackColors.colors, startIndex);
+    }
+}
+
 @Injectable()
 export class TourDocContentUtils extends CommonDocContentUtils {
     constructor(sanitizer: DomSanitizer, cdocRoutingService: CommonDocRoutingService, appService: GenericAppService) {
@@ -208,13 +249,14 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         return filters;
     }
 
-    createMapElementForTourDoc(record: TourDocRecord, code: string, showImageTrackAndGeoPos: boolean): MapElement[] {
+    createMapElementForTourDoc(record: TourDocRecord, code: string, showImageTrackAndGeoPos: boolean,
+                               trackColors?: TrackColors): MapElement[] {
         const trackUrl = record.gpsTrackBasefile;
 
         const isImage = (record.type === 'IMAGE' || record.type === 'VIDEO');
         const showTrack = ((trackUrl !== undefined && trackUrl.length > 0)
-                            || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc !== null && record.gpsTrackSrc.length > 0))
-                          && (!isImage || showImageTrackAndGeoPos);
+            || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc !== null && record.gpsTrackSrc.length > 0))
+            && (!isImage || showImageTrackAndGeoPos);
         const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
             record.geoLat !== '0.0' && record.geoLon !== '0.0';
         const mapElements: MapElement[] = [];
@@ -230,6 +272,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 id: record.id,
                 code: code,
                 name: record.name,
+                color: trackColors !== undefined ? trackColors.next() : undefined,
                 trackUrl: storeUrl,
                 trackSrc: record.gpsTrackSrc,
                 popupContent: '<b>' + '&#128204;' + code + ' ' + record.type + ': ' + record.name + '</b>',

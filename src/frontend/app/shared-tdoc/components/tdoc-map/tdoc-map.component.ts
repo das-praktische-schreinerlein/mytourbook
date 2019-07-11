@@ -4,7 +4,7 @@ import 'leaflet';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
-import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
+import {TourDocContentUtils, TrackColors} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
@@ -40,6 +40,9 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     @Input()
     public showImageTrackAndGeoPos? = false;
 
+    @Input()
+    public trackColors?: TrackColors;
+
     @Output()
     public centerChanged: EventEmitter<L.LatLng> = new EventEmitter();
 
@@ -72,11 +75,12 @@ export class TourDocMapComponent extends AbstractInlineComponent {
             return;
         }
 
-        this.showLoadingSpinner = (this.tdocs.length > 0 ? true : false);
+        this.showLoadingSpinner = (this.tdocs.length > 0);
         for (let i = 0; i < this.tdocs.length; i++) {
             const record =  this.tdocs[i];
 
-            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record, StringUtils.calcCharCodeForListIndex(i + 1), this.showImageTrackAndGeoPos)) {
+            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record,
+                    StringUtils.calcCharCodeForListIndex(i + 1), this.showImageTrackAndGeoPos, this.trackColors)) {
                 if (record.id === this.currentTDocId) {
                     mapElement.color = 'red';
                     this.centerOnMapElements = [mapElement];

@@ -215,6 +215,7 @@
                 <label class="col-xs-3 col-form-label mr-2" i18n="trackSegmentStatistics label|Label for field: trackSegmentStatistics@@label.editform.tdoc.trackSegmentStatistics">Tracksegmente:</label>
                 <table class="trackSegmentStatistics">
                     <tr>
+                        <th i18n="trackSegments.color label|Label for field: trackSegments.color@@label.editform.tdoc.trackSegments.color"> </th>
                         <th i18n="trackSegmentStatistics.dateStart label|Label for field: trackSegmentStatistics.dateStart@@label.editform.tdoc.trackSegmentStatistics.dateStart">Von</th>
                         <th i18n="trackSegmentStatistics.dateEnd label|Label for field: trackSegmentStatistics.dateEnd@@label.editform.tdoc.trackSegmentStatistics.dateEnd">Bis</th>
                         <th i18n="trackSegmentStatistics.dist label|Label for field: trackSegmentStatistics.dist@@label.editform.tdoc.trackSegmentStatistics.dist">Länge</th>
@@ -225,6 +226,7 @@
                     </tr>
                     <tbody>
                     <tr *ngFor="let trackSegmentStatistic of trackSegmentStatistics; let idx = index;">
+                        <td [ngStyle]="{ background: (renderedMapElements.length > idx ? renderedMapElements[idx].color : '')}">&nbsp;</td>
                         <td>{{trackSegmentStatistic.dateStart | date:'medium'}}</td>
                         <td>{{trackSegmentStatistic.dateEnd | date:'medium'}}</td>
                         <td [ngClass]="trackSegmentStatistics[idx].dist > 60 ? 'trackhint' : ''">{{trackSegmentStatistic.dist}}km</td>
@@ -238,7 +240,8 @@
                             </button>
                             <button (click)="deleteTrackSegment(idx)" class="btn btn-sm"
                                     i18n="deleteTrackSegment label|Label for button: deleteTrackSegment@@label.editform.tdoc.deleteTrackSegment">Delete</button>
-                            <button *ngIf="idx > 0" (click)="mergeTrackSegment(idx)" class="btn btn-sm"
+                            <button *ngIf="idx > 0 && trackSegmentStatistics[idx].dateStart && trackSegmentStatistics[idx-1].dateEnd"
+                                    (click)="mergeTrackSegment(idx)" class="btn btn-sm"
                                     [ngClass]="(trackSegmentStatistics[idx].dateStart.getTime() - trackSegmentStatistics[idx-1].dateEnd.getTime()) < 10*60*1000 ? 'btn-action' : ''">
                                 <span i18n="mergeTrackSegment label|Label for button: mergeTrackSegment@@label.editform.tdoc.mergeTrackSegment">Merge</span>
                             </button>
@@ -255,7 +258,9 @@
                     <app-tdoc-map [mapId]="'showMap'"
                                   [height]="'400px'"
                                   [mapZoom]="'9'"
-                                  [tdocs]="trackRecords"
+                                  [tdocs]="editTrackRecords"
+                                  (mapElementsFound)="setMapElementsRendered($event)"
+                                  [trackColors]="trackColors"
                                   [showImageTrackAndGeoPos]="'true'"
                                   [mapCenterPos]="undefined"></app-tdoc-map>
                 </div>
@@ -263,7 +268,7 @@
                     <app-tdoc-profilemap [mapId]="'showProfileMap'"
                                          [height]="'400px'"
                                          [showImageTrackAndGeoPos]="'true'"
-                                         [tdocs]="trackRecords"></app-tdoc-profilemap>
+                                         [tdocs]="editTrackRecords"></app-tdoc-profilemap>
                 </div>
             </div>
         </ng-container>
