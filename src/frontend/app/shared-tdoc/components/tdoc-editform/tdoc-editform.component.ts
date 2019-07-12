@@ -121,12 +121,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         defaultTitle: '--',
         allSelected: 'alles'};
 
-    trackColors = new DefaultTrackColors();
     trackRecords: TourDocRecord[] = [];
-    editTrackRecords: TourDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
-    renderedMapElements: MapElement[] = [];
-    trackSegmentStatistics: TrackStatistic[] = [];
     personTagSuggestions: string[] = [];
 
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
@@ -184,41 +180,10 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         this.setValue('name', name);
     }
 
-    gpxDropped(event: UploadEvent) {
-        const me = this;
-        for (const droppedFile of event.files) {
-            if (droppedFile.fileEntry.isFile) {
-                const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-                fileEntry.file((file: File) => {
-                    const reader = new FileReader();
-                    const maxLength = (<GpsTrackValidationRule>TourDocRecord.tdocFields.gpsTrackSrc.validator).getMaxLength();
-                    if (file.size > maxLength) {
-                        me.toastr.warning('Die GPX-Datei darf höchstes ' + maxLength / 1000000 + 'MB sein.', 'Oje!');
-                        return;
-                    }
-                    if (!file.name.toLowerCase().endsWith('.gpx')) {
-                        me.toastr.warning('Es dürfen nur .gpx Dateien geladen werden.', 'Oje!');
-                        return;
-                    }
-
-                    reader.onload = (function(theFile) {
-                        return function(e) {
-                            // Render thumbnail.
-                            const track = e.target.result;
-                            me.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
-                            return me.updateMap();
-                        };
-                    })(file);
-
-                    // Read in the file as a data URL.
-                    reader.readAsText(file);
-                });
-
-                return;
-            }
-        }
+    updateGpsTrackSrc(gpsTrackSrc: string): void {
+        this.setValue('gpsTrackSrc', gpsTrackSrc);
+        this.updateMap();
     }
-
 
     updateMap(): boolean {
         let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
@@ -248,145 +213,9 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             this.trackStatistic = this.trackStatisticService.emptyStatistic();
         }
 
-        this.generateTrackSegments(track);
-        this.renderedMapElements = [];
         this.cd.markForCheck();
 
         return false;
-    }
-
-    generateTrackSegments(track: string): void {
-        if (track === undefined || track === null || track.length <= 0) {
-            this.trackSegmentStatistics = [];
-            this.editTrackRecords = [];
-        }
-
-        const geoElements = this.gpxParser.parse(track, {});
-        if (geoElements !== undefined && geoElements.length > 0) {
-            const trackStatistics = [];
-            const editTrackRecords = [];
-            for (const geoElement of geoElements) {
-                let trackSrc = '';
-                switch (geoElement.type) {
-                    case GeoElementType.TRACK:
-                        trackSrc = '<trk><trkseg>';
-                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
-                        trackSrc += geoElement.points.map(value => {
-                            return '<trkpt lat="' + value.lat + '" lon="' + value.lng + '"><ele>' + value.alt + '</ele></trkpt>';
-                        }).join('\n');
-                        trackSrc += '</trkseg></trk>';
-                        break;
-                    case GeoElementType.ROUTE:
-                        trackSrc = '<rte>';
-                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
-                        trackSrc += geoElement.points.map(value => {
-                            return '<rtept lat="' + value.lat + '" lon="' + value.lng + '"><ele>' + value.alt + '</ele></rtept>';
-                        }).join('\n');
-                        trackSrc += '</rte>';
-                        break;
-                    case GeoElementType.WAYPOINT:
-                        trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
-                        trackSrc += geoElement.points.map(value => {
-                            return '<wpt lat="' + value.lat + '" lon="' + value.lng + '"></wpt>';
-                        }).join('\n');
-                        break;
-                }
-
-                trackSrc = GeoGpxParser.fixXml(trackSrc);
-                trackSrc = GeoGpxParser.fixXmlExtended(trackSrc);
-                trackSrc = GeoGpxParser.reformatXml(trackSrc);
-                editTrackRecords.push(TourDocRecordFactory.createSanitized({
-                    id: 'TMP' + (new Date()).getTime(),
-                    gpsTrackSrc: trackSrc,
-                    gpsTrackBaseFile: 'tmp.gpx',
-                    name: geoElement.name,
-                    type: this.record.type,
-                    datestart: new Date().toISOString(),
-                    dateend: new Date().toISOString(),
-                    dateshow: this.editFormGroup.getRawValue()['dateshow']
-                }));
-            }
-
-            this.editTrackRecords = editTrackRecords;
-            this.trackSegmentStatistics = trackStatistics;
-        } else {
-            this.trackSegmentStatistics = [];
-            this.editTrackRecords = [];
-        }
-    }
-
-    deleteTrackSegment(delSegIdx: number): boolean {
-        const track: string = this.editFormGroup.getRawValue()['gpsTrackSrc'];
-        if (track !== undefined && track !== null && track.length > 0) {
-            const lastPos = StringUtils.findNeedle(track, '<trkseg>', delSegIdx);
-            let newTrack = track;
-            if (lastPos >= 0) {
-                newTrack = track.substring(0, lastPos - 1);
-                const endPos = track.indexOf('</trkseg>', lastPos);
-                if (endPos >= 0) {
-                    newTrack += track.substring(endPos + '</trkseg>'.length, track.length);
-                }
-            }
-
-            this.editFormGroup.patchValue({gpsTrackSrc: newTrack });
-        }
-
-        return this.updateMap();
-    }
-
-    mergeTrackSegment(mergeSegIdx: number): boolean {
-        const track: string = this.editFormGroup.getRawValue()['gpsTrackSrc'];
-        if (track !== undefined && track !== null && track.length > 0 && mergeSegIdx > 0) {
-            const lastPos = StringUtils.findNeedle(track, '</trkseg>', mergeSegIdx - 1);
-            let newTrack = track;
-            if (lastPos >= 0) {
-                newTrack = track.substring(0, lastPos - 1);
-                const endPos = track.indexOf('<trkseg>', lastPos);
-                if (endPos >= 0) {
-                    newTrack += track.substring(endPos + '<trkseg>'.length, track.length);
-                }
-            }
-
-            this.editFormGroup.patchValue({gpsTrackSrc: newTrack });
-        }
-
-        return this.updateMap();
-    }
-
-    jumpToTrackSegment(delSegIdx: number): boolean {
-        const track: string = this.editFormGroup.getRawValue()['gpsTrackSrc'];
-        if (track !== undefined && track !== null && track.length > 0) {
-            const lastPos = StringUtils.findNeedle(track, '<trkseg>', delSegIdx);
-            if (lastPos >= 0) {
-                const element = this.document.getElementById('gpsTrackSrc');
-                if (!element) {
-                    return false;
-                }
-
-                element.focus();
-                this.setSelectionRangeOnInput(element, lastPos, lastPos);
-            }
-
-        }
-
-        return false;
-    }
-
-    fixMap(): boolean {
-        let track = this.editFormGroup.getRawValue()['gpsTrackSrc'];
-        if (track !== undefined && track !== null && track.length > 0) {
-            track = GeoGpxParser.fixXml(track);
-            track = GeoGpxParser.fixXmlExtended(track);
-            track = GeoGpxParser.reformatXml(track);
-            this.editFormGroup.patchValue({gpsTrackSrc: track });
-        }
-
-        return this.updateMap();
-    }
-
-    setMapElementsRendered(mapElements: MapElement[]): void {
-        this.renderedMapElements = [].concat(mapElements);
-        this.cd.markForCheck();
     }
 
     protected validateSchema(record: TourDocRecord): SchemaValidationError[] {

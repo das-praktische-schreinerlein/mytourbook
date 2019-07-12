@@ -1,0 +1,28 @@
+:host {
+    width: 100%;
+}
+
+textarea:focus {
+    height:60vh;
+    min-height: 300px;
+    max-height: 1000px;
+}
+
+textarea#gpxSrc {
+    height:30vh;
+    font-family: courier;
+    font-size: x-small;
+}
+
+textarea.nowrap {
+    white-space: pre;
+    overflow: auto;
+}
+
+table.trackSegmentStatistics td, table.trackSegmentStatistics th {
+    border: 1px solid black;
+}
+
+.trackhint {
+    background: lightyellow;
+}

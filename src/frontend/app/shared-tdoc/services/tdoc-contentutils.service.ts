@@ -32,22 +32,26 @@ export class Circular {
         this.currentIndex = startIndex || 0;
     }
 
-    public next() {
+    public next(): any {
         const  i = this.currentIndex, arr = this.arr;
         this.currentIndex = i < arr.length - 1 ? i + 1 : 0;
 
         return this.current();
     }
 
-    public prev() {
+    public prev(): any {
         const i = this.currentIndex, arr = this.arr;
         this.currentIndex = i > 0 ? i - 1 : arr.length - 1;
 
         return this.current();
     }
 
-    public current() {
+    public current(): any {
         return this.arr[this.currentIndex];
+    }
+
+    public setCurrent(idx: number): void {
+        this.currentIndex = idx;
     }
 }
 
@@ -309,6 +313,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
 
         itemData.styleClassFor = this.getStyleClassForRecord(<TourDocRecord>itemData.currentRecord, layout);
 
+        // TODO: check
         if (itemData.currentRecord['tdocodimageobjects'] !== undefined && itemData.currentRecord['tdocodimageobjects'].length > 0) {
             itemData.objects = itemData.currentRecord['tdocodimageobjects'];
         }
