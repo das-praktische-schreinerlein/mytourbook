@@ -420,14 +420,6 @@ export class TourDocSqlMediadbActionTagAdapter {
         if (!this.keywordValidationRule.isValid(objectkey)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' objectkey not valid');
         }
-        const objectname = actionTagForm.payload['objectname'];
-        if (!this.keywordValidationRule.isValid(objectname)) {
-            return utils.reject('actiontag ' + actionTagForm.key + ' objectname not valid');
-        }
-        const objectcategory = actionTagForm.payload['objectcategory'];
-        if (!this.keywordValidationRule.isValid(objectcategory)) {
-            return utils.reject('actiontag ' + actionTagForm.key + ' objectcategory not valid');
-        }
         const action = actionTagForm.payload['action'];
         if (!this.keywordValidationRule.isValid(action)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' action not valid');
@@ -441,6 +433,11 @@ export class TourDocSqlMediadbActionTagAdapter {
         } else if (action === 'changeObjectLabelForObjectKey'
             || action === 'createNewObjectKeyAndObjectLabel'
             || action === 'createObjectLabelForObjectKey') {
+            const objectname = actionTagForm.payload['objectname'];
+            if (!this.keywordValidationRule.isValid(objectname)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' objectname not valid');
+            }
+
             // update object_key (remove+insert)
             deleteObjectKeySql = 'DELETE FROM objects_key WHERE ok_detector="' + detector + '" ' +
                 '                                      AND ok_key="' + objectkey + '"';
@@ -454,6 +451,10 @@ export class TourDocSqlMediadbActionTagAdapter {
 
             // insert object_name if not exists
             if (action === 'createNewObjectKeyAndObjectLabel' || action === 'createObjectLabelForObjectKey') {
+                const objectcategory = actionTagForm.payload['objectcategory'];
+                if (!this.keywordValidationRule.isValid(objectcategory)) {
+                    return utils.reject('actiontag ' + actionTagForm.key + ' objectcategory not valid');
+                }
                 insertObjectNameSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)' +
                     ' SELECT "' + objectname + '", "' + objectname + '", "' + objectname + '", "' + objectcategory + '" FROM dual ' +
                     '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="' + objectname + '")';
