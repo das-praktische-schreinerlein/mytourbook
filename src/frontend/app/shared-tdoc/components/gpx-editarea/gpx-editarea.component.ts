@@ -72,8 +72,8 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                         return function(e) {
                             // Render thumbnail.
                             const track = e.target.result;
-                            me.editGpxFormGroup.patchValue({gpxSrc: GeoGpxParser.reformatXml(track) });
-                            return me.updateMap();
+                            me.setValue('gpxSrc', GeoGpxParser.reformatXml(track));
+                            return me.updateGpsTrack();
                         };
                     })(file);
 
@@ -101,7 +101,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 dateend: new Date().toISOString(),
                 dateshow: new Date().toISOString()
             })];
-            this.editGpxFormGroup.patchValue({gpxSrc: GeoGpxParser.reformatXml(track) });
+            this.setValue('gpxSrc', GeoGpxParser.reformatXml(track));
 
             const statTrack = track.replace(/<\/trkseg>[ ]*<trkseg>/g, '').replace(/<\/rte>.*?<rtept /g, '<rtept ');
             const geoElements = this.gpxParser.parse(statTrack, {});
@@ -134,8 +134,10 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
             const editTrackRecords = [];
             for (const geoElement of geoElements) {
                 let trackSrc = '';
+                let type = 'TRACK';
                 switch (geoElement.type) {
                     case GeoElementType.TRACK:
+                        type = 'TRACK';
                         trackSrc = '<trk><trkseg>';
                         trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
                         trackSrc += geoElement.points.map(value => {
@@ -144,6 +146,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                         trackSrc += '</trkseg></trk>';
                         break;
                     case GeoElementType.ROUTE:
+                        type = 'ROUTE';
                         trackSrc = '<rte>';
                         trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
                         trackSrc += geoElement.points.map(value => {
@@ -152,6 +155,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                         trackSrc += '</rte>';
                         break;
                     case GeoElementType.WAYPOINT:
+                        type = 'LOCATION';
                         trackStatistics.push(this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
                         trackSrc += geoElement.points.map(value => {
                             return '<wpt lat="' + value.lat + '" lon="' + value.lng + '"></wpt>';
@@ -167,7 +171,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                     gpsTrackSrc: trackSrc,
                     gpsTrackBaseFile: 'tmp.gpx',
                     name: geoElement.name || new Date().toISOString(),
-                    type: this.type,
+                    type: type,
                     datestart: new Date().toISOString(),
                     dateend: new Date().toISOString(),
                     dateshow: new Date().toISOString()
@@ -195,10 +199,10 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 }
             }
 
-            this.editGpxFormGroup.patchValue({gpxSrc: newTrack });
+            this.setValue('gpxSrc', newTrack);
         }
 
-        return this.updateMap();
+        return this.updateGpsTrack();
     }
 
     mergeTrackSegment(mergeSegIdx: number): boolean {
@@ -214,10 +218,10 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 }
             }
 
-            this.editGpxFormGroup.patchValue({gpxSrc: newTrack });
+            this.setValue('gpxSrc', newTrack);
         }
 
-        return this.updateMap();
+        return this.updateGpsTrack();
     }
 
     jumpToTrackSegment(delSegIdx: number): boolean {
@@ -245,10 +249,10 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
             track = GeoGpxParser.fixXml(track);
             track = GeoGpxParser.fixXmlExtended(track);
             track = GeoGpxParser.reformatXml(track);
-            this.editGpxFormGroup.patchValue({gpxSrc: track });
+            this.setValue('gpxSrc', track);
         }
 
-        return this.updateMap();
+        return this.updateGpsTrack();
     }
 
     setMapElementsRendered(mapElements: MapElement[]): void {
