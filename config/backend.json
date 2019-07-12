@@ -45,7 +45,7 @@
             "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
         },
         "facetCacheUsage": {
-            "active": true,
+            "active": false,
             "entities": {
                 "odimgobject": {
                     "facetKeyPatterns": [".*"]
@@ -57,7 +57,7 @@
         },
         "facetCacheConfig": {
             "datastore": {
-                "scriptPath": "installer/db/sqlite/facetcache"
+                "scriptPath": "installer/db/mysql/facetcache"
             },
             "facets": [
             ],
