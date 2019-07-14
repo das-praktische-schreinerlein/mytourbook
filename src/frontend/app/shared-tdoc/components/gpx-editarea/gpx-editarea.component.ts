@@ -24,11 +24,11 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
 export class GpxEditAreaComponent extends AbstractInlineComponent {
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
+    private lastGpx = '';
 
     trackColors = new DefaultTrackColors();
     trackRecords: TourDocRecord[] = [];
     editTrackRecords: TourDocRecord[] = [];
-    trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
     renderedMapElements: MapElement[] = [];
     trackSegmentStatistics: TrackStatistic[] = [];
 
@@ -74,13 +74,12 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
 
                     reader.onload = (function(theFile) {
                         return function(e) {
-                            // Render thumbnail.
                             let track = e.target.result;
                             // TODO: check checkbox to replace or merge gpx
                             if (me.editGpxFormGroup.getRawValue()['mergeNewTracks'] === true) {
-                                track = me.mergeGpx(me.editGpxFormGroup.getRawValue()['gpxSrc'], track);
+                                track = me.mergeGpx(me.getCurrentGpx(), track);
                             }
-                            me.setValue('gpxSrc', GeoGpxParser.reformatXml(track));
+                            me.setCurrentGpx(GeoGpxParser.reformatXml(track));
                             return me.updateGpsTrack();
                         };
                     })(file);
@@ -95,7 +94,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     updateMap(): boolean {
-        let track = this.editGpxFormGroup.getRawValue()['gpxSrc'];
+        let track = this.getCurrentGpx();
         this.trackColors.setCurrent(0);
         if (track !== undefined && track !== null && track.length > 0) {
             track = track.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
@@ -109,18 +108,9 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
                 dateend: new Date().toISOString(),
                 dateshow: new Date().toISOString()
             })];
-            this.setValue('gpxSrc', GeoGpxParser.reformatXml(track));
-
-            const statTrack = track.replace(/<\/trkseg>[ ]*<trkseg>/g, '').replace(/<\/rte>.*?<rtept /g, '<rtept ');
-            const geoElements = this.gpxParser.parse(statTrack, {});
-            if (geoElements !== undefined && geoElements.length > 0) {
-                this.trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElements[0]);
-            } else {
-                this.trackStatistic = this.trackStatisticService.emptyStatistic();
-            }
+            this.setCurrentGpx(GeoGpxParser.reformatXml(track));
         } else {
             this.trackRecords = [];
-            this.trackStatistic = this.trackStatisticService.emptyStatistic();
         }
 
         this.generateTrackSegments(track);
@@ -195,21 +185,21 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     deleteTrackSegment(delSegIdx: number): boolean {
-        this.setValue('gpxSrc',
-            this.deleteGpxTrackSegment(this.editGpxFormGroup.getRawValue()['gpxSrc'], delSegIdx));
+        this.setCurrentGpx(
+            this.deleteGpxTrackSegment(this.getCurrentGpx(), delSegIdx));
 
         return this.updateGpsTrack();
     }
 
     mergeTrackSegment(mergeSegIdx: number): boolean {
-        this.setValue('gpxSrc',
-            this.mergeGpxTrackSegment(this.editGpxFormGroup.getRawValue()['gpxSrc'], mergeSegIdx));
+        this.setCurrentGpx(
+            this.mergeGpxTrackSegment(this.getCurrentGpx(), mergeSegIdx));
 
         return this.updateGpsTrack();
     }
 
     jumpToTrackSegment(delSegIdx: number): boolean {
-        const track: string = this.editGpxFormGroup.getRawValue()['gpxSrc'];
+        const track: string = this.getCurrentGpx();
         if (track !== undefined && track !== null && track.length > 0) {
             const lastPos = StringUtils.findNeedle(track, '<trkseg>', delSegIdx);
             if (lastPos >= 0) {
@@ -228,12 +218,12 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     fixMap(): boolean {
-        let track = this.editGpxFormGroup.getRawValue()['gpxSrc'];
+        let track = this.getCurrentGpx();
         if (track !== undefined && track !== null && track.length > 0) {
             track = GeoGpxParser.fixXml(track);
             track = GeoGpxParser.fixXmlExtended(track);
             track = GeoGpxParser.reformatXml(track);
-            this.setValue('gpxSrc', track);
+            this.setCurrentGpx(track);
         }
 
         return this.updateGpsTrack();
@@ -245,6 +235,11 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     updateGpsTrack(): boolean {
+        if (this.lastGpx === this.getCurrentGpx()) {
+            return false;
+        }
+
+        this.lastGpx = this.getCurrentGpx();
         const values = this.editGpxFormGroup.getRawValue();
         this.prepareSubmitValues(values);
         this.save.emit(values['gpxSrc']);
@@ -350,7 +345,8 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
     }
 
     protected updateFormComponents(): void {
-        this.setValue('gpxSrc', this.gpxSrc);
+        this.setCurrentGpx(this.gpxSrc);
+        this.lastGpx = this.getCurrentGpx();
         this.updateMap();
     }
 
@@ -365,9 +361,13 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
         this.updateFormComponents();
     }
 
-    protected setValue(field: string, value: any): void {
+    protected setCurrentGpx(value: any): void {
         const config = {};
-        config[field] = value;
+        config['gpxSrc'] = value;
         this.editGpxFormGroup.patchValue(config);
+    }
+
+    protected getCurrentGpx(): string {
+        return this.editGpxFormGroup.getRawValue()['gpxSrc'];
     }
 }
