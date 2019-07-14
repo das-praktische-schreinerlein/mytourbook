@@ -267,7 +267,7 @@ export class GpxEditAreaComponent extends AbstractInlineComponent {
             }
         }
 
-        return track;
+        return newTrack;
     }
 
     protected mergeGpxTrackSegment(track: string, mergeSegIdx: number): string {
