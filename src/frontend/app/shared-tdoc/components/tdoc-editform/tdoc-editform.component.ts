@@ -19,18 +19,13 @@ import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generi
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {isArray} from 'util';
-import {FileSystemFileEntry, UploadEvent} from 'ngx-file-drop';
-import {GpsTrackValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
-import {DefaultTrackColors, TourDocContentUtils} from '../../services/tdoc-contentutils.service';
+import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {
     CommonDocEditformComponent,
     CommonDocEditformComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 import {DOCUMENT} from '@angular/common';
-import {GeoElementType} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geo.parser';
-import {MapElement} from '@dps/mycms-frontend-commons/dist/angular-maps/services/leaflet-geo.plugin';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -200,13 +195,15 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 dateshow: this.editFormGroup.getRawValue()['dateshow']
             })];
             this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
-
-            const statTrack = track.replace(/<\/trkseg>[ ]*<trkseg>/g, '')
-                    .replace(/<\/trk>.*?<trkseg /g, '<trkseg ')
-                    .replace(/<\/rte>.*?<rtept /g, '<rtept ');
+            const statTrack = track;
             const geoElements = this.gpxParser.parse(statTrack, {});
             if (geoElements !== undefined && geoElements.length > 0) {
-                this.trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElements[0]);
+                let trackStatistic = undefined;
+                for (const geoElement of geoElements) {
+                    trackStatistic = this.trackStatisticService.mergeStatistics(
+                        trackStatistic, this.trackStatisticService.trackStatisticsForGeoElement(geoElement));
+                }
+                this.trackStatistic = trackStatistic;
             } else {
                 this.trackStatistic = this.trackStatisticService.emptyStatistic();
             }
