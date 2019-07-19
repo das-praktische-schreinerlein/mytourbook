@@ -18,31 +18,38 @@
     <ng-container *ngIf="trackSegmentStatistics.length > 0">
         <div class="row">
             <div class="col-sm-12 form-inline input-group input-group-sm">
-                <label class="col-xs-3 col-form-label mr-2" i18n="trackSegmentStatistics label|Label for field: trackSegmentStatistics@@label.editform.tdoc.trackSegmentStatistics">Tracksegmente:</label>
+                <label class="col-xs-3 col-form-label mr-2" i18n="trackSegmentStatistics label|Label for field: trackSegmentStatistics@@label.editform.tdoc.trackSegmentStatistics">Segmente:</label>
                 <table class="trackSegmentStatistics">
                     <tr>
                         <th i18n="trackSegments.color label|Label for field: trackSegments.color@@label.editform.tdoc.trackSegments.color"> </th>
-                        <th i18n="trackSegmentStatistics.dateStart label|Label for field: trackSegmentStatistics.dateStart@@label.editform.tdoc.trackSegmentStatistics.dateStart">Von</th>
-                        <th i18n="trackSegmentStatistics.dateEnd label|Label for field: trackSegmentStatistics.dateEnd@@label.editform.tdoc.trackSegmentStatistics.dateEnd">Bis</th>
-                        <th i18n="trackSegmentStatistics.dist label|Label for field: trackSegmentStatistics.dist@@label.editform.tdoc.trackSegmentStatistics.dist">Länge</th>
+                        <th i18n="trackSegmentStatistics.date label|Label for field: trackSegmentStatistics.date@@label.editform.tdoc.trackSegmentStatistics.date">Datum</th>
                         <th i18n="trackSegmentStatistics.duration label|Label for field: trackSegmentStatistics.duration@@label.editform.tdoc.trackSegmentStatistics.duration">Dauer</th>
-                        <th i18n="trackSegmentStatistics.altStart label|Label for field: trackSegmentStatistics.altStart@@label.editform.tdoc.trackSegmentStatistics.altStart">Starthöhe</th>
-                        <th i18n="trackSegmentStatistics.altEnd label|Label for field: trackSegmentStatistics.altEnd@@label.editform.tdoc.trackSegmentStatistics.altEnd">Zielhöhe</th>
+                        <th i18n="trackSegmentStatistics.dist label|Label for field: trackSegmentStatistics.dist@@label.editform.tdoc.trackSegmentStatistics.dist">Länge</th>
+                        <th i18n="trackSegmentStatistics.velocity label|Label for field: trackSegmentStatistics.velocity@@label.editform.tdoc.trackSegmentStatistics.velocity"> </th>
+                        <th i18n="trackSegmentStatistics.alt label|Label for field: trackSegmentStatistics.alt@@label.editform.tdoc.trackSegmentStatistics.alt">Höhe</th>
+                        <th i18n="trackSegmentStatistics.altDiff label|Label for field: trackSegmentStatistics.altDiff@@label.editform.tdoc.trackSegmentStatistics.altDiff">Höhenunterschied</th>
+                        <th i18n="trackSegmentStatistics.altVelocity label|Label for field: trackSegmentStatistics.altVelocity@@label.editform.tdoc.trackSegmentStatistics.altVelocity"> </th>
                         <th i18n="trackSegmentStatistics.actions label|Label for field: trackSegmentStatistics.actions@@label.editform.tdoc.trackSegmentStatistics.actions"> </th>
                     </tr>
                     <tbody>
                     <tr *ngFor="let trackSegmentStatistic of trackSegmentStatistics; let idx = index;">
                         <td [ngStyle]="{ background: (renderedMapElements.length > idx ? renderedMapElements[idx].color : '')}">&nbsp;</td>
-                        <td>{{trackSegmentStatistic.dateStart | date:'medium'}}</td>
-                        <td>{{trackSegmentStatistic.dateEnd | date:'medium'}}</td>
-                        <td [ngClass]="trackSegmentStatistics[idx].dist > 60 ? 'trackhint' : ''">{{trackSegmentStatistic.dist}}km</td>
-                        <td>{{trackSegmentStatistic.duration}}h</td>
-                        <td>{{trackSegmentStatistic.altStart}}m</td>
-                        <td>{{trackSegmentStatistic.altEnd}}m</td>
+                        <td *ngIf="trackSegmentStatistic.dateStart !== undefined && trackSegmentStatistic.dateEnd !== undefined && trackSegmentStatistic.dateStart.toDateString() === trackSegmentStatistic.dateEnd.toDateString()">
+                            {{trackSegmentStatistic.dateStart | date:'shortDate'}}&nbsp;{{trackSegmentStatistic.dateStart | date:'mediumTime'}}&nbsp;-&nbsp;{{trackSegmentStatistic.dateEnd | date:'mediumTime'}}
+                        </td>
+                        <td *ngIf="!(trackSegmentStatistic.dateStart !== undefined && trackSegmentStatistic.dateEnd !== undefined && trackSegmentStatistic.dateStart.toDateString() === trackSegmentStatistic.dateEnd.toDateString())">
+                                {{trackSegmentStatistic.dateStart | date:'medium'}}&nbsp;-&nbsp;{{trackSegmentStatistic.dateEnd | date:'medium'}}
+                        </td>
+                        <td [ngClass]="trackSegmentStatistics[idx].duration  === 0 ? 'trackhint' : ''">{{trackSegmentStatistic.duration}}h</td>
+                        <td>{{trackSegmentStatistic.dist}}km</td>
+                        <td [ngClass]="trackSegmentStatistics[idx].velocity > 10 ? 'trackhint' : ''">{{trackSegmentStatistic.velocity | number:'1.0-1' }}km/h</td>
+                        <td>{{trackSegmentStatistic.altStart}}&nbsp;-&gt;&nbsp;{{trackSegmentStatistic.altEnd}}m</td>
+                        <td>&#x2197;{{trackSegmentStatistic.altAsc}}&nbsp;/&nbsp;&#x2198;{{trackSegmentStatistic.altDesc}}Hm</td>
+                        <td [ngClass]="trackSegmentStatistics[idx].altAscVelocity > 800 || trackSegmentStatistics[idx].altDescVelocity > 1500 ? 'trackhint' : ''">&#x2197;{{trackSegmentStatistic.altAscVelocity }}&nbsp;&#x2198;{{trackSegmentStatistic.altDescVelocity }}&nbsp;m/h </td>
                         <td>
                             <button (click)="jumpToTrackSegment(idx)" class="btn btn-sm"
                                     *ngIf="renderedMapElements.length > idx && renderedMapElements[idx].type === 'TRACK'"
-                                    [ngClass]="trackSegmentStatistics[idx].dist > 60 ? 'btn-action' : ''">
+                                    [ngClass]="trackSegmentStatistics[idx].duration  === 0 || trackSegmentStatistics[idx].velocity > 10 || trackSegmentStatistics[idx].altAscVelocity > 800 || trackSegmentStatistics[idx].altDescVelocity > 1500 ? 'btn-action' : ''">
                                 <span i18n="jumpToTrackSegment label|Label for button: jumpToTrackSegment@@label.editform.tdoc.jumpToTrackSegment">Focus</span>
                             </button>
                             <button (click)="deleteTrackSegment(idx)" class="btn btn-sm"

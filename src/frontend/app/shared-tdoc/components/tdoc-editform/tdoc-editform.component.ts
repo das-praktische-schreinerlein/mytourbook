@@ -201,7 +201,9 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             })];
             this.editFormGroup.patchValue({gpsTrackSrc: GeoGpxParser.reformatXml(track) });
 
-            const statTrack = track.replace(/<\/trkseg>[ ]*<trkseg>/g, '').replace(/<\/rte>.*?<rtept /g, '<rtept ');
+            const statTrack = track.replace(/<\/trkseg>[ ]*<trkseg>/g, '')
+                    .replace(/<\/trk>.*?<trkseg /g, '<trkseg ')
+                    .replace(/<\/rte>.*?<rtept /g, '<rtept ');
             const geoElements = this.gpxParser.parse(statTrack, {});
             if (geoElements !== undefined && geoElements.length > 0) {
                 this.trackStatistic = this.trackStatisticService.trackStatisticsForGeoElement(geoElements[0]);
