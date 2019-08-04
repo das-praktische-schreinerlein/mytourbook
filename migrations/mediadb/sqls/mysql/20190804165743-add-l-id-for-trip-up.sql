@@ -1,7 +1,7 @@
 /* #############
 # add l_id to trip
 ############# */
-ALTER TABLE trip ADD COLUMN l_id int(11) DEFAULT NULL;
+ALTER TABLE trip ADD COLUMN IF NOT EXISTS l_id int(11) DEFAULT NULL;
 ALTER TABLE trip ADD CONSTRAINT trip_ibfk_1 FOREIGN KEY (l_id) REFERENCES location (l_id);
 UPDATE trip toupdate,
   (SELECT tr_id, MIN(l_id) AS l_id

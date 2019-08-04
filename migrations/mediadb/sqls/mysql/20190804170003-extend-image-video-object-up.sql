@@ -1,16 +1,16 @@
 /* #############
 # add io_state to image_object
 ############# */
-ALTER TABLE image_object ADD COLUMN io_state VARCHAR(50) DEFAULT 'UNKNOWN';
-ALTER TABLE image_object ADD COLUMN io_precision FLOAT DEFAULT 1;
-ALTER TABLE image_object ADD COLUMN io_detector VARCHAR(50) DEFAULT 'UNKNOWN';
-ALTER TABLE video_object ADD COLUMN vo_state VARCHAR(50) DEFAULT 'UNKNOWN';
-ALTER TABLE video_object ADD COLUMN vo_precision FLOAT DEFAULT 1;
-ALTER TABLE video_object ADD COLUMN vo_detector VARCHAR(50) DEFAULT 'UNKNOWN';
-CREATE INDEX idx_io__io_state ON image_object (io_state);
-CREATE INDEX idx_io__io_detector ON image_object (io_detector);
-CREATE INDEX idx_vo__vo_state ON video_object (vo_state);
-CREATE INDEX idx_vo__vo_detector ON video_object (vo_detector);
+ALTER TABLE image_object ADD COLUMN IF NOT EXISTS io_state VARCHAR(50) DEFAULT 'UNKNOWN';
+ALTER TABLE image_object ADD COLUMN IF NOT EXISTS io_precision FLOAT DEFAULT 1;
+ALTER TABLE image_object ADD COLUMN IF NOT EXISTS io_detector VARCHAR(50) DEFAULT 'UNKNOWN';
+ALTER TABLE video_object ADD COLUMN IF NOT EXISTS vo_state VARCHAR(50) DEFAULT 'UNKNOWN';
+ALTER TABLE video_object ADD COLUMN IF NOT EXISTS vo_precision FLOAT DEFAULT 1;
+ALTER TABLE video_object ADD COLUMN IF NOT EXISTS vo_detector VARCHAR(50) DEFAULT 'UNKNOWN';
+CREATE INDEX IF NOT EXISTS  idx_io__io_state ON image_object (io_state);
+CREATE INDEX IF NOT EXISTS  idx_io__io_detector ON image_object (io_detector);
+CREATE INDEX IF NOT EXISTS  idx_vo__vo_state ON video_object (vo_state);
+CREATE INDEX IF NOT EXISTS  idx_vo__vo_detector ON video_object (vo_detector);
 
 /* #############
 # auto increment objects
@@ -56,13 +56,13 @@ update image_object set image_object.io_state='RUNNING_MANUAL_APPROVED' where io
 /* #############
 # add index to objects_key
 ############# */
-CREATE INDEX idx_objects_O_KEY_DETECTOR_pk ON objects_key (ok_detector, ok_key);
+CREATE INDEX IF NOT EXISTS idx_objects_O_KEY_DETECTOR_pk ON objects_key (ok_detector, ok_key);
 
 /* #############
 # add object.type
 ############# */
-ALTER TABLE objects ADD COLUMN o_category VARCHAR(50) DEFAULT 'Default';
-CREATE INDEX idx_objects_O_CATEGORY ON objects (o_category);
+ALTER TABLE objects ADD COLUMN IF NOT EXISTS o_category VARCHAR(50) DEFAULT 'Default';
+CREATE INDEX IF NOT EXISTS idx_objects_O_CATEGORY ON objects (o_category);
 
 /* #############
 # clean objects
