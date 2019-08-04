@@ -1,0 +1,28 @@
+{
+    "mediadb_sqlite3": {
+        "driver": "sqlite3",
+        "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
+    },
+    "mediadb_mysql": {
+        "driver": "mysql",
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "testmediadb",
+        "port": "3306",
+        "multipleStatements": true
+    },
+    "mytb_sqlite3": {
+        "driver": "sqlite3",
+        "filename": "D:/Bilder/mytbbase/test/mytb.sqlite"
+    },
+    "mytb_mysql": {
+        "driver": "mysql",
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "mytb",
+        "port": "3306",
+        "multipleStatements": true
+    }
+}
