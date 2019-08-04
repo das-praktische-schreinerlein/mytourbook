@@ -66,6 +66,18 @@ The configuration-file to configure the backend-api-server.
     }
 }
 ```
+- if you want to allow playlists
+```json
+{
+    "playlistExportAudioBaseUrl": "http://localhost:4100/api/static/audios/",
+    "playlistExportImageBaseUrl": "http://localhost:4100/api/static/picturestore/",
+    "playlistExportVideoBaseUrl": "http://localhost:4100/api/static/videos/",
+    "playlistExportUseAudioAssetStoreUrls": false,
+    "playlistExportUseImageAssetStoreUrls": true,
+    "playlistExportUseVideoAssetStoreUrls": false,
+    "playlistExportMaxM3uRecordAllowed": 1000
+}
+```
 - if you use a rediscache
 ```json
 {
@@ -75,6 +87,40 @@ The configuration-file to configure the backend-api-server.
         "cacheRedisDB": "2"
     }
 }    
+```
+- if you use object-detection
+```json
+{
+    "objectDetectionConfig": {
+        "redisQueue": {
+            "host": "localhost",
+            "port": "6379",
+            "pass": "blablub",
+            "db": "",
+            "ns": "rsmq",
+            "requestQueue": "mycms-objectdetector-request",
+            "responseQueue": "mycms-objectdetector-response",
+            "errorQueue": "mycms-objectdetector-error"
+        },
+        "availableDetectors": [
+            "tfjs_cocossd_mobilenet_v1",
+            "tfjs_cocossd_mobilenet_v2",
+            "tfjs_cocossd_lite_mobilenet_v2",
+            "tfjs_mobilenet_v1",
+            "tfjs_posenet",
+            "faceapi",
+            "picasafile"
+        ],
+        "defaultDetectors": [
+            "tfjs_cocossd_mobilenet_v1",
+            "tfjs_cocossd_mobilenet_v2",
+            "tfjs_cocossd_lite_mobilenet_v2",
+            "tfjs_mobilenet_v1",
+            "faceapi",
+            "picasafile"
+        ]
+    }
+}
 ```
 
 ### Frontendserver: config/frontend.json
