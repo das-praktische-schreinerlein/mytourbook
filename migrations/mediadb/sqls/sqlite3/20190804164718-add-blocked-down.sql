@@ -1,7 +1,4 @@
 /* #############
-# add columns for blocked
+# cant delete columns on sqlite3
 ############# */
-ALTER TABLE tour DROP COLUMN t_gesperrt;
-ALTER TABLE location DROP COLUMN l_gesperrt;
-ALTER TABLE trip DROP COLUMN tr_gesperrt;
-ALTER TABLE news DROP COLUMN n_gesperrt;
+select 1

@@ -1,6 +1,4 @@
-/*
-#############
-# drop l_id to trip
-#############
-*/
-ALTER TABLE trip DROP COLUMN l_id;
+/* #############
+# cant delete columns on sqlite3
+############# */
+select 1
