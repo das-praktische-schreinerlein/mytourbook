@@ -11,7 +11,11 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
 - ui-framework
     - [bootstrap4](https://getbootstrap.com/)
 - ui-components
+    - [@ng-bootstrap/ng-bootstrap](https://www.npmjs.com/package/@ng-bootstrap/ng-bootstrap)
+    - [@ngx-translate/core](https://www.npmjs.com/package/@ngx-translate/core)
+    - [@ngx-translate/http-loader](https://www.npmjs.com/package/@ngx-translate/http-loader)
     - [angular-2-dropdown-multiselect](https://www.npmjs.com/package/angular2-dropdown-multiselect)
+    - [angular2-cookie-law](https://www.npmjs.com/package/angular2-cookie-law)
     - [angular2-markdown](https://www.npmjs.com/package/angular2-markdown)
     - [ngx-lightbox](https://www.npmjs.com/package/ngx-lightbox)
     - [ngx-toastr](https://www.npmjs.com/package/ngx-toastr)
@@ -27,7 +31,6 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
     - [js-data](https://www.npmjs.com/package/js-data)
     - [js-data-http](https://www.npmjs.com/package/js-data-http)
 - tools
-    - [axios](https://www.npmjs.com/package/axios)
     - [core-js](https://www.npmjs.com/package/core-js)
     - [jquery](https://www.npmjs.com/package/jquery)
     - [rxjs](https://www.npmjs.com/package/rxjs)
@@ -58,8 +61,10 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
     - [sitemap](https://www.npmjs.com/package/sitemap)
     - [sitemap-stream-parser](https://www.npmjs.com/package/sitemap-stream-parser)
 - tools
+    - [axios](https://www.npmjs.com/package/axios)
     - [deep-equal](https://www.npmjs.com/package/deep-equal)
     - [html-to-text](https://www.npmjs.com/package/html-to-text)
+    - [rsmq-worker](https://www.npmjs.com/package/rsmq-worker)
     - [rxjs](https://www.npmjs.com/package/rxjs)
     - [validator](https://www.npmjs.com/package/validator)
 - cli
@@ -79,12 +84,23 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
     - [angular-cli](https://cli.angular.io/)
 - documentation
     - [@compodoc/compodoc](https://www.npmjs.com/package/@compodoc/compodoc)
+- build-tools
+    - [codelyzer](https://www.npmjs.com/package/codelyzer)
+    - [cross-os](https://www.npmjs.com/package/cross-os)
+    - [db-migrate](https://www.npmjs.com/package/db-migrate)
+    - [enhanced-resolve](https://www.npmjs.com/package/enhanced-resolve)
+    - [mkdirp](https://www.npmjs.com/package/mkdirp)
+    - [patch-package](https://www.npmjs.com/package/patch-package)
+    - [del-cli](https://www.npmjs.com/package/del-cli)
+    - [redis-dump](https://www.npmjs.com/package/redis-dump)
+    - [symlink-dir](https://www.npmjs.com/package/symlink-dir)
+    - [tslint](https://www.npmjs.com/package/tslint)
 - compiler
     - [@types](https://www.npmjs.com/search?q=%40Types)
     - [babel-core](https://www.npmjs.com/package/babel-core)
     - [babel-loader](https://www.npmjs.com/package/babel-loader)
     - [ts-node](https://www.npmjs.com/package/ts-node)
-    - [tslint](https://www.npmjs.com/package/tslint)
+    - [ts-loader](https://www.npmjs.com/package/ts-loader)
     - [typescript](https://www.npmjs.com/package/typescript)
 - testing
     - [jasmine-core](https://www.npmjs.com/package/jasmine-core)
@@ -97,3 +113,85 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
     - [karma-jasmine-html-reporter](https://www.npmjs.com/package/karma-jasmine-html-reporter)
     - [karma-phantomjs-launcher](https://www.npmjs.com/package/karma-phantomjs-launcher)
     - [protractor](https://www.npmjs.com/package/protractor)
+
+## basics imported from commons-frontend
+- web-framework
+    - [angular5](https://angular.io/)
+- ui-framework
+    - [bootstrap4](https://getbootstrap.com/)
+- ui-components
+    - [@ng-bootstrap/ng-bootstrap](https://www.npmjs.com/package/@ng-bootstrap/ng-bootstrap)
+    - [@ngx-translate/core](https://www.npmjs.com/package/@ngx-translate/core)
+    - [@ngx-translate/http-loader](https://www.npmjs.com/package/@ngx-translate/http-loader)
+    - [angular-2-dropdown-multiselect](https://www.npmjs.com/package/angular2-dropdown-multiselect)
+    - [angular2-cookie-law](https://www.npmjs.com/package/angular2-cookie-law)
+    - [angular2-markdown](https://www.npmjs.com/package/angular2-markdown)
+    - [ngx-lightbox](https://www.npmjs.com/package/ngx-lightbox)
+    - [ngx-toastr](https://www.npmjs.com/package/ngx-toastr)
+    - [ngx-file-drop](https://www.npmjs.com/package/ngx-file-drop)
+- tracking
+    - [angulartics2](https://www.npmjs.com/package/angulartics2)
+- maps
+    - [leaflet](https://www.npmjs.com/package/leaflet)
+    - [leaflet.markercluster](https://www.npmjs.com/package/leaflet.markercluster)
+    - [vis](https://www.npmjs.com/package/vis)
+- data-framework
+    - [js-data](https://www.npmjs.com/package/js-data)
+- tools
+    - [deep-equal](https://www.npmjs.com/package/deep-equal)
+    - [detect-browser](https://www.npmjs.com/package/detect-browser)
+    - [jquery](https://www.npmjs.com/package/jquery)
+    - [promise-serial](https://www.npmjs.com/package/promise-serial)
+    - [rxjs](https://www.npmjs.com/package/rxjs)
+
+## basics imported from backend
+- server
+    - [body-parser](https://www.npmjs.com/package/body-parser)
+    - [compression](https://www.npmjs.com/package/compression)
+    - [cors](https://www.npmjs.com/package/cors)
+    - [domino](https://www.npmjs.com/package/domino)
+    - [express](https://www.npmjs.com/package/express)
+    - [http-proxy-middleware](https://www.npmjs.com/package/http-proxy-middleware)
+- security
+    - [@risingstack/protect](https://www.npmjs.com/package/@risingstack/protect)
+    - [express-ipfilter](https://www.npmjs.com/package/express-ipfilter)
+    - [helmet](https://www.npmjs.com/package/helmet)
+    - [honeypot](https://www.npmjs.com/package/honeypot)
+    - [request-ip](https://www.npmjs.com/package/request-ip)
+- data-framework
+    - [js-data](https://www.npmjs.com/package/js-data)
+    - [js-data-express](https://www.npmjs.com/package/js-data-express)
+- storage-adapter
+    - [redis](https://www.npmjs.com/package/redis)
+- media
+    - [fast-exif](https://www.npmjs.com/package/fast-exif)
+    - [fluent-ffmpeg](https://www.npmjs.com/package/fluent-ffmpeg)
+    - [jimp](https://www.npmjs.com/package/jimp)
+    - [music-metadata](https://www.npmjs.com/package/music-metadata)
+    - [vid-streamer](https://www.npmjs.com/package/vid-streamer)
+- sitemap
+    - [sitemap](https://www.npmjs.com/package/sitemap)
+    - [sitemap-stream-parser](https://www.npmjs.com/package/sitemap-stream-parser)
+- tools
+    - [core-js](https://www.npmjs.com/package/core-js)
+    - [fs-extra](https://www.npmjs.com/package/fs-extra)
+    - [rxjs](https://www.npmjs.com/package/rxjs)
+    - [validator](https://www.npmjs.com/package/validator)
+    - [xregexp](https://www.npmjs.com/package/xregexp)
+- cli
+    - [minimist](https://www.npmjs.com/package/minimist)
+
+## basics imported from commons
+- data-framework
+    - [js-data](https://www.npmjs.com/package/js-data)
+    - [js-data-http](https://www.npmjs.com/package/js-data-http)
+    - [js-data-sql](https://www.npmjs.com/package/js-data-sql)
+- maps
+    - [geo-coder](https://www.npmjs.com/package/geo-coder)
+- storage-adapter
+    - [itemsjs](https://www.npmjs.com/package/itemsjs)
+    - [knex](https://www.npmjs.com/package/knex)
+- tools
+    - [promise-serial](https://www.npmjs.com/package/promise-serial)
+    - [rxjs](https://www.npmjs.com/package/rxjs)
+    - [xregexp](https://www.npmjs.com/package/xregexp)

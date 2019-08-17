@@ -4,12 +4,19 @@
  
 ## 3.1.0
 - added new type+features for managing object-detection image-objects
+- improved trackmanagement and added dashboard
+- improved performance by adding facetcaching
+- improved installation by using database-migrations
 
 ### new features
 - common: added new type+features for managing object-detection image-objects
+- frontend: added dashboard for data-management
+- backend: added facetcaching for database
 
 ### improvements
-- none
+- frontend: improved trackmanagement
+- installation: added database-migrations
+- common: improved code-quality (types, promises, unused code, relicts...)
 
 ### bug fixes
 - none
