@@ -1,23 +1,25 @@
 # Data-Management
 
+# TODO - check docu
+
 ## initialize environment (once)
 
 ### create and initialize database
 - create mediadb the master-database (mysql)
-```
+```bash
 mysql
 source installer/db/mysql/mediadb/step1_create-db.sql
 source installer/db/mysql/mediadb/step3_import-data.sql
 source installer/db/mysql/mediadb/step2_create-user.sql
 ```
 - create mytb the export-database (mysql)
-```
+```bash
 mysql
 source installer/db/mysql/mytb/step1_create-db.sql
 source installer/db/mysql/mytb/step2_create-user.sql
 ``` 
 - create image-sym-links as admin
-```
+```bash
 d:
 cd \Bilder\mytbbase\import
 mklink /J link_pics_x600 pics_full
@@ -46,16 +48,16 @@ exit
 
 ### prepare import-folder
 - create image-import-folder
-```cmd
+```bash
 mkdir D:\Bilder\digifotos\import-2014-08
 ```
 - copy images to import-folder and group in subfolder by date
-```
+```bash
 bash
 devtools/copyImagesToDateFolder.sh import-2014-08 import-READY/ import-2014-08
 ```
 - autorotate images in import-folder
-```
+```bash
 cmd
 devtools\autorotateImagesInFolder.bat D:\Bilder\digifotos\import-READY\import-2014-08
 ```
@@ -64,19 +66,19 @@ devtools\autorotateImagesInFolder.bat D:\Bilder\digifotos\import-READY\import-20
 ### image-import into mediadb
 - copy images/videos in to 'pics_full' and 'video_full' folder
 - convert videos: avi/mov... to mp4
-```
+```bash
 d:
 cd d:\Projekte\mytourbook 
 node dist\backend\serverAdmin.js --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir D:\Bilder\mytbbase\import\video_full\ --outputDir D:\Bilder\mytbbase\import\video_full\ --debug true
 ``` 
 - rotate mp4-videos
-```
+```bash
 d:
 cd d:\Projekte\mytourbook 
 node dist\backend\serverAdmin.js --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile D:\Bilder\mytbbase\import\video_full\import-2015-05_20150410-bad-brambach\CIMG6228.MOV.MP4
 ``` 
 - generate json-import-file
-```cmd
+```bash
 d:
 cd d:\Projekte\mytourbook 
 node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\pics_full\ --debug true > D:\Bilder\mytbbase\import\mediadb-import-images.json 
@@ -87,21 +89,21 @@ node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager 
     - execute *installer/db/sqlite/mediadb/step1_import-data.sql*
     - execute *installer/db/sqlite/mediadb/step2_pepare-data.sql*
 - load data
-```
+```bash
 d:
 cd d:\Projekte\mytourbook 
 node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-images.json
 node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-videos.json
 ```
 - read image-dates and scale images
-```
+```bash
 d:
 cd d:\Projekte\mytourbook 
 rem node dist/backend/serverAdmin.js --command imageManager --action readImageDates -c config/backendt.json
 node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.json
 ```
 - scale videos
-```
+```bash
 d:
 cd d:\Projekte\mytourbook 
 node dist\backend\serverAdmin.js --command mediaManager --action generateVideoScreenshotFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --outputDir D:\Bilder\mytbbase\import\\video_screenshot\ --debug true

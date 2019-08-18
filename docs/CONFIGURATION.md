@@ -1,6 +1,26 @@
 # Configure MyTourBook
 
+# TODO - check docu
+
 ## Backend
+
+### environment
+- configure windows vars in devtools/configure-environment.cmd
+```bash
+set DIGIFOTOS_BASEDIR=D:\Bilder\digifotos\
+set VIDEOS_BASEDIR=D:\Bilder\Videos\
+set MYTB_IMPORT_MEDIADIR=D:\Bilder\mytbbase\
+set DEVTOOLS=F:\Projekte\mytb_mat_local\mytourbook\devtools\
+set MYTB=F:\Projekte\mytb_mat_local\mytourbook\
+```   
+- configure unix vars in devtools/configure-environment.bash
+```bash
+DIGIFOTOS_BASEDIR=/cygdrive/d/Bilder/digifotos/
+VIDEOS_BASEDIR=/cygdrive/d/Bilder/Videos/
+MYTB_IMPORT_MEDIADIR=/cygdrive/d/Bilder/mytbbase/
+DEVTOOLS=/cygdrive/f/Projekte/mytb_mat_local/mytourbook/devtools/
+MYTB=/cygdrive/f/Projekte/mytb_mat_local/mytourbook/
+```
 
 ### API-Server Config: config/backend.json
 The configuration-file to configure the backend-api-server.

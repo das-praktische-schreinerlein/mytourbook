@@ -1,9 +1,11 @@
 # Install MyTourBook
 
+# TODO - check docu
+
 ## prepare-dev
 
 ### prepare src-directory
-```
+```bash
 npm prune && npm install
 ``` 
 
@@ -29,7 +31,7 @@ rm dictionary.txt dictionary.txt.bak
     - file on server.solr/security.json
 - with [Basic-Athentfication[https://cwiki.apache.org/confluence/display/solr/Basic+Authentication+Plugin]
     - solr-6.6.0/server/solr/security.json
-```
+```json
 {
   "authentication":{
     "blockUnknown":true,
@@ -64,7 +66,7 @@ rm dictionary.txt dictionary.txt.bak
 
 ### install redis
 - make redis
-```
+```bash
 wget http://download.redis.io/redis-stable.tar.gz
 tar xvzf redis-stable.tar.gz
 cd redis-stable
@@ -72,13 +74,13 @@ make
 make install
 ```
 - dirs
-```
+```bash
 mkdir /etc/redis/
 mkdir /var/redis/
 mkdir /var/redis/6379
 ```
 - configure redis
-```
+```bash
 cp redis.conf /etc/redis/6379.conf
 vi /etc/redis/6379.conf
 
@@ -130,7 +132,7 @@ Run `npm build-prod-de` or `npm build-prod-en` for the prod-versions in `dist/`.
 
 ## Deploy prod
 Stop backend via startscript
-```
+```bash
 /etc/init.d/mytb start
 /etc/init.d/mytb-frontend start
 ```
@@ -146,7 +148,7 @@ error_docs
 ```
 
 Copy files on server to `$APPDIR`
-```
+```bash
 cd $APPDIR
 rm -fr dist
 mv $IMPORTDIR/dist $APPDIR
@@ -162,7 +164,7 @@ mv $IMPORTDIR/package.json $APPDIR
 ```
 
 Install packages
-```
+```bash
 cd $APPDIR
 npm install 
 ```
@@ -170,7 +172,7 @@ npm install
 Set permissions and rights für `$APPDIR`
 
 Start backend via startscript
-```
+```bash
 /etc/init.d/mytb start
 /etc/init.d/mytb start-frontend
 ```
