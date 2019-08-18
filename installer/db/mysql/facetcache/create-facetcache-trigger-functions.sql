@@ -1,7 +1,8 @@
 /*################
  # create trigger to insert updatetrigger for facetcache
  #################*/
-CREATE PROCEDURE  `InsertFacetCacheUpdateTriggerTableEntry` (triggername CHAR(255))
+DROP PROCEDURE IF EXISTS InsertFacetCacheUpdateTriggerTableEntry $$
+CREATE PROCEDURE `InsertFacetCacheUpdateTriggerTableEntry` (triggername CHAR(255))
 DETERMINISTIC
 BEGIN
     INSERT INTO facetcacheupdatetrigger (ft_key)

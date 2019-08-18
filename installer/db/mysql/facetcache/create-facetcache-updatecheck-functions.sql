@@ -1,7 +1,8 @@
 /*################
- # create trigger to insert updatetrigger for facetcache
+ # create triggercheck to insert updatetrigger for facetcache
  #################*/
-CREATE PROCEDURE  `CheckFacetCacheUpdateTriggerTableAndExceuteSql` (triggername CHAR(255), triggeredsql TEXT)
+DROP PROCEDURE IF EXISTS CheckFacetCacheUpdateTriggerTableAndExceuteSql $$
+CREATE PROCEDURE `CheckFacetCacheUpdateTriggerTableAndExceuteSql` (triggername CHAR(255), triggeredsql TEXT)
     DETERMINISTIC
     BEGIN
           DECLARE triggercount INT;

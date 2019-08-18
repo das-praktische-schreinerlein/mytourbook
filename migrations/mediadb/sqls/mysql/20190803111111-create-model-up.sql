@@ -1,111 +1,24 @@
+-- ------------------------------------
+-- create model
+-- ------------------------------------
+
+SET FOREIGN_KEY_CHECKS = 0;
+
 --
 -- system-tables
 --
-DROP TABLE IF EXISTS appids;
-CREATE TABLE appids (
+CREATE TABLE IF NOT EXISTS appids (
   ai_table char(255) COLLATE latin1_general_ci NOT NULL DEFAULT '',
   ai_curid int(11) DEFAULT '0',
   PRIMARY KEY (ai_table),
   KEY idx_ai__ai_table (ai_table)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-
---
--- functions
---
-DELIMITER $$
-DROP FUNCTION IF EXISTS `GetLocationIdAncestry` $$
-CREATE FUNCTION `GetLocationIdAncestry` (GivenID INT, pJoiner CHAR(20)) RETURNS VARCHAR(2000)
-DETERMINISTIC
-BEGIN
-    DECLARE path VARCHAR(2000);
-    DECLARE joiner CHAR(20);
-    DECLARE id INT;
-
-    SET id = GivenID;
-    SET path = concat('', id);
-    SET joiner = '';
-
-    WHILE id > 0 DO
-        SELECT IFNULL(l_parent_id,-1) INTO id FROM
-        (SELECT l_parent_id FROM location WHERE l_id = id) A;
-        IF id > 0 THEN
-            SET joiner = pJoiner;
-            SET path = CONCAT(id, joiner, path);
-        END IF;
-    END WHILE;
-    RETURN path;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-DROP FUNCTION IF EXISTS `GetLocationNameAncestry` $$
-CREATE FUNCTION `GetLocationNameAncestry` (GivenID INT, defaultName CHAR(200), pJoiner CHAR(20)) RETURNS VARCHAR(2000)
-DETERMINISTIC
-BEGIN
-    DECLARE path VARCHAR(2000);
-    DECLARE name VARCHAR(100);
-    DECLARE joiner CHAR(20);
-    DECLARE id INT;
-
-    SET id = GivenID;
-    SET path = '';
-    SET joiner = '';
-    SET name = '';
-
-    WHILE id > 0 DO
-        SELECT l_name INTO name FROM
-        (SELECT l_name FROM location WHERE l_id = id) A;
-        IF id > 0 THEN
-            SET path = CONCAT(name, joiner, ' ', path);
-            SET joiner = pJoiner;
-        END IF;
-        SELECT IFNULL(l_parent_id,-1) INTO id FROM
-        (SELECT l_parent_id FROM location WHERE l_id = id) A;
-    END WHILE;
-    RETURN path;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-DROP FUNCTION IF EXISTS `GetLocationChildIds` $$
-  CREATE FUNCTION GetLocationChildIds(GivenID INT) RETURNS VARCHAR(2000)
-  DETERMINISTIC
-  BEGIN
-    DECLARE subIds VARCHAR(2000);
-    DECLARE Ids  VARCHAR(2000);
-    SET subIds = '';
-    SET SESSION group_concat_max_len = 20000000;
-
-      SELECT GROUP_CONCAT(Level SEPARATOR ',,') into subIds FROM (
-         SELECT @Ids := (
-             SELECT GROUP_CONCAT(l_id SEPARATOR ',,')
-             FROM location
-             WHERE FIND_IN_SET(l_parent_id, @Ids)
-         ) Level
-         FROM location
-         JOIN (SELECT @Ids := GivenID) temp1
-      ) temp2;
-
-
-    RETURN subIds;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-DROP FUNCTION IF EXISTS `GetTechName` $$
-  CREATE FUNCTION GetTechName(pName TEXT) RETURNS VARCHAR(2000)
-  DETERMINISTIC
-  BEGIN
-    RETURN LOWER(REGEXP_REPLACE(pName, '[- /()+;.]', '_'));
-END $$
-DELIMITER ;
 
 --
 -- configuration-tables
 --
-DROP TABLE IF EXISTS keyword;
-CREATE TABLE keyword (
+CREATE TABLE IF NOT EXISTS keyword (
   kw_id int(11) NOT NULL AUTO_INCREMENT,
   kw_meta_desc text COLLATE latin1_general_ci,
   kw_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -119,10 +32,9 @@ CREATE TABLE keyword (
   KEY idx_kw__kw_name (kw_name),
   KEY idx_kw__kw_name_pl (kw_name_pl),
   CONSTRAINT keyword_ibfk_1 FOREIGN KEY (kw_parent_id) REFERENCES keyword (kw_id)
-) ENGINE=InnoDB AUTO_INCREMENT=2895 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS objects;
-CREATE TABLE objects (
+CREATE TABLE IF NOT EXISTS objects (
   o_id int(11) NOT NULL,
   o_picasa_key varchar(50) COLLATE latin1_general_ci NOT NULL,
   o_name varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
@@ -130,10 +42,9 @@ CREATE TABLE objects (
   o_key varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (o_id),
   UNIQUE KEY objects_o_key_pk (o_key)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS person;
-CREATE TABLE person (
+CREATE TABLE IF NOT EXISTS person (
   pn_id int(11) NOT NULL AUTO_INCREMENT,
   pn_comment text COLLATE latin1_general_ci,
   pn_email_extern varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -151,32 +62,29 @@ CREATE TABLE person (
   pn_flag_export int(11) DEFAULT NULL,
   PRIMARY KEY (pn_id),
   KEY idx_pn__pn_id (pn_id)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS playlist;
-CREATE TABLE playlist (
+CREATE TABLE IF NOT EXISTS playlist (
   p_id int(11) NOT NULL AUTO_INCREMENT,
   p_meta_desc text COLLATE latin1_general_ci,
   p_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (p_id),
   KEY idx_p__p_id (p_id)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS rates;
-CREATE TABLE rates (
+CREATE TABLE IF NOT EXISTS rates (
   r_id int(11) NOT NULL,
   r_fieldname varchar(80) COLLATE latin1_general_ci DEFAULT NULL,
   r_fieldvalue int(11) DEFAULT NULL,
   r_grade varchar(80) COLLATE latin1_general_ci DEFAULT NULL,
   r_grade_desc varchar(80) COLLATE latin1_general_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 
 --
 -- news-data
 --
-DROP TABLE IF EXISTS news;
-CREATE TABLE news (
+CREATE TABLE IF NOT EXISTS news (
   n_id int(11) NOT NULL AUTO_INCREMENT,
   w_id int(11) NOT NULL DEFAULT '0',
   n_date datetime DEFAULT NULL,
@@ -190,13 +98,12 @@ CREATE TABLE news (
   PRIMARY KEY (n_id),
   KEY idx_n__n_id (n_id),
   KEY idx_n__w_id (w_id)
-) ENGINE=MyISAM AUTO_INCREMENT=176 DEFAULT CHARSET=latin1
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
 -- trip-data
 --
-DROP TABLE IF EXISTS trip;
-CREATE TABLE trip (
+CREATE TABLE IF NOT EXISTS trip (
   tr_id int(11) NOT NULL AUTO_INCREMENT,
   i_id int(11) DEFAULT NULL,
   tr_datebis datetime DEFAULT NULL,
@@ -213,14 +120,13 @@ CREATE TABLE trip (
   KEY idx_tr__tr_id (tr_id),
   KEY idx_tr__i_id (i_id),
   CONSTRAINT trip_ibfk_1 FOREIGN KEY (i_id) REFERENCES image (i_id)
-) ENGINE=InnoDB AUTO_INCREMENT=477 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 
 --
 -- location-data
 --
-DROP TABLE IF EXISTS location;
-CREATE TABLE location (
+CREATE TABLE IF NOT EXISTS location (
   l_id int(11) NOT NULL AUTO_INCREMENT,
   l_meta_desc text COLLATE latin1_general_ci,
   l_meta_shortdesc text COLLATE latin1_general_ci,
@@ -245,10 +151,9 @@ CREATE TABLE location (
   KEY idx_l__m_id (m_id),
   CONSTRAINT location_ibfk_1 FOREIGN KEY (l_parent_id) REFERENCES location (l_id),
   CONSTRAINT location_ibfk_2 FOREIGN KEY (m_id) REFERENCES map (m_id)
-) ENGINE=InnoDB AUTO_INCREMENT=1708 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS location_keyword;
-CREATE TABLE location_keyword (
+CREATE TABLE IF NOT EXISTS location_keyword (
   lk_id int(11) NOT NULL AUTO_INCREMENT,
   l_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -258,14 +163,13 @@ CREATE TABLE location_keyword (
   KEY idx_lk__kw_id (kw_id),
   CONSTRAINT location_keyword_ibfk_1 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE,
   CONSTRAINT location_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=218 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 
 --
 -- tour-data
 --
-DROP TABLE IF EXISTS tour;
-CREATE TABLE tour (
+CREATE TABLE IF NOT EXISTS tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
   l_id int(11),
   t_meta_desc text COLLATE latin1_general_ci,
@@ -339,10 +243,9 @@ CREATE TABLE tour (
   KEY k_id (k_id),
   CONSTRAINT tour_ibfk_1 FOREIGN KEY (l_id) REFERENCES location (l_id),
   CONSTRAINT tour_ibfk_2 FOREIGN KEY (k_id) REFERENCES kategorie (k_id)
-) ENGINE=InnoDB AUTO_INCREMENT=2885 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS tour_keyword;
-CREATE TABLE tour_keyword (
+CREATE TABLE IF NOT EXISTS tour_keyword (
   tk_id int(11) NOT NULL AUTO_INCREMENT,
   t_id int(11) NOT NULL,
   kw_id int(11) NOT NULL,
@@ -352,10 +255,9 @@ CREATE TABLE tour_keyword (
   KEY idx_tk__kw_id (kw_id),
   CONSTRAINT tour_keyword_ibfk_1 FOREIGN KEY (t_id) REFERENCES tour (t_id) ON DELETE CASCADE,
   CONSTRAINT tour_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=66026 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS tourpoint;
-CREATE TABLE tourpoint (
+CREATE TABLE IF NOT EXISTS tourpoint (
   tp_id int(11) NOT NULL AUTO_INCREMENT,
   t_id int(11) DEFAULT NULL,
   l_id int(11) NOT NULL DEFAULT '1',
@@ -372,13 +274,12 @@ CREATE TABLE tourpoint (
   KEY idx_tp__l_id (l_id),
   CONSTRAINT tourpoint_ibfk_1 FOREIGN KEY (t_id) REFERENCES tour (t_id) ON DELETE CASCADE,
   CONSTRAINT tourpoint_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4465227 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- track-data
 --
-DROP TABLE IF EXISTS kategorie;
-CREATE TABLE kategorie (
+CREATE TABLE IF NOT EXISTS kategorie (
   k_id int(11) NOT NULL AUTO_INCREMENT,
   parent_k_id int(11) DEFAULT NULL,
   k_extref varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -434,10 +335,9 @@ CREATE TABLE kategorie (
   CONSTRAINT kategorie_ibfk_1 FOREIGN KEY (t_id) REFERENCES tour (t_id),
   CONSTRAINT kategorie_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id),
   CONSTRAINT kategorie_ibfk_3 FOREIGN KEY (tr_id) REFERENCES trip (tr_id)
-) ENGINE=InnoDB AUTO_INCREMENT=2294 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS kategorie_keyword;
-CREATE TABLE kategorie_keyword (
+CREATE TABLE IF NOT EXISTS kategorie_keyword (
   kk_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -447,10 +347,9 @@ CREATE TABLE kategorie_keyword (
   KEY idx_kk__kw_id (kw_id),
   CONSTRAINT kategorie_keyword_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
   CONSTRAINT kategorie_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=135928 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS kategorie_person;
-CREATE TABLE kategorie_person (
+CREATE TABLE IF NOT EXISTS kategorie_person (
   kpn_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11) DEFAULT NULL,
   pn_id int(11) DEFAULT NULL,
@@ -460,10 +359,9 @@ CREATE TABLE kategorie_person (
   KEY idx_kpn__pn_id (pn_id),
   CONSTRAINT kategorie_person_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
   CONSTRAINT kategorie_person_ibfk_2 FOREIGN KEY (pn_id) REFERENCES person (pn_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=239843 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS kategorie_tour;
-CREATE TABLE kategorie_tour (
+CREATE TABLE IF NOT EXISTS kategorie_tour (
   kt_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11) NOT NULL,
   t_id int(11) NOT NULL,
@@ -474,10 +372,9 @@ CREATE TABLE kategorie_tour (
   KEY idx_kt__t_id (t_id),
   CONSTRAINT kategorie_tour_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
   CONSTRAINT kategorie_tour_ibfk_2 FOREIGN KEY (t_id) REFERENCES tour (t_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=389 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS kategorie_tourpoint;
-CREATE TABLE kategorie_tourpoint (
+CREATE TABLE IF NOT EXISTS kategorie_tourpoint (
   ktp_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11) DEFAULT NULL,
   l_id int(11) NOT NULL DEFAULT '1',
@@ -495,13 +392,12 @@ CREATE TABLE kategorie_tourpoint (
   KEY idx_ktp__ktp_date (ktp_date),
   CONSTRAINT kategorie_tourpoint_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
   CONSTRAINT kategorie_tourpoint_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4261739 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- image-data
 --
-DROP TABLE IF EXISTS image;
-CREATE TABLE image (
+CREATE TABLE IF NOT EXISTS image (
   i_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11),
   i_date datetime DEFAULT NULL,
@@ -533,10 +429,9 @@ CREATE TABLE image (
   KEY idx_i__i_gps_lat (i_gps_lat),
   CONSTRAINT image_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id),
   CONSTRAINT image_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id)
-) ENGINE=InnoDB AUTO_INCREMENT=143361 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS image_keyword;
-CREATE TABLE image_keyword (
+CREATE TABLE IF NOT EXISTS image_keyword (
   ik_id int(11) NOT NULL AUTO_INCREMENT,
   i_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -546,10 +441,9 @@ CREATE TABLE image_keyword (
   KEY idx_ik__kw_id (kw_id),
   CONSTRAINT image_keyword_ibfk_1 FOREIGN KEY (i_id) REFERENCES image (i_id) ON DELETE CASCADE,
   CONSTRAINT image_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2995274 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS image_object;
-CREATE TABLE image_object (
+CREATE TABLE IF NOT EXISTS image_object (
   io_id int(11) NOT NULL AUTO_INCREMENT,
   i_id int(11) NOT NULL,
   io_img_width int(11) DEFAULT NULL,
@@ -569,10 +463,9 @@ CREATE TABLE image_object (
   KEY idx_io__i_id (i_id),
   KEY io_obj_type (io_obj_type),
   CONSTRAINT image_object_ibfk_1 FOREIGN KEY (i_id) REFERENCES image (i_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=201777 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS image_playlist;
-CREATE TABLE image_playlist (
+CREATE TABLE IF NOT EXISTS image_playlist (
   ip_id int(11) NOT NULL AUTO_INCREMENT,
   i_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
@@ -583,13 +476,12 @@ CREATE TABLE image_playlist (
   KEY idx_ik__p_id (p_id),
   CONSTRAINT image_playlist_ibfk_1 FOREIGN KEY (i_id) REFERENCES image (i_id) ON DELETE CASCADE,
   CONSTRAINT image_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=74925 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- video-data
 --
-DROP TABLE IF EXISTS video;
-CREATE TABLE video (
+CREATE TABLE IF NOT EXISTS video (
   v_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11),
   v_date datetime DEFAULT NULL,
@@ -621,10 +513,9 @@ CREATE TABLE video (
   KEY idx_v__v_gps_lat (v_gps_lat),
   CONSTRAINT video_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id),
   CONSTRAINT video_ibfk_2 FOREIGN KEY (l_id) REFERENCES location (l_id)
-) ENGINE=InnoDB AUTO_INCREMENT=143361 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS video_keyword;
-CREATE TABLE video_keyword (
+CREATE TABLE IF NOT EXISTS video_keyword (
   vk_id int(11) NOT NULL AUTO_INCREMENT,
   v_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -634,10 +525,9 @@ CREATE TABLE video_keyword (
   KEY idx_vk__kw_id (kw_id),
   CONSTRAINT video_keyword_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
   CONSTRAINT video_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2995274 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS video_object;
-CREATE TABLE video_object (
+CREATE TABLE IF NOT EXISTS video_object (
   vo_id int(11) NOT NULL AUTO_INCREMENT,
   v_id int(11) NOT NULL,
   vo_img_width int(11) DEFAULT NULL,
@@ -657,10 +547,9 @@ CREATE TABLE video_object (
   KEY idx_vo__v_id (v_id),
   KEY vo_obj_type (vo_obj_type),
   CONSTRAINT video_object_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=201777 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS video_playlist;
-CREATE TABLE video_playlist (
+CREATE TABLE IF NOT EXISTS video_playlist (
   vp_id int(11) NOT NULL AUTO_INCREMENT,
   v_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
@@ -671,13 +560,12 @@ CREATE TABLE video_playlist (
   KEY idx_vk__p_id (p_id),
   CONSTRAINT video_playlist_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
   CONSTRAINT video_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=74925 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- info-data
 --
-DROP TABLE IF EXISTS info;
-CREATE TABLE info (
+CREATE TABLE IF NOT EXISTS info (
   if_id int(11) NOT NULL AUTO_INCREMENT,
   kw_id int(11) DEFAULT NULL,
   if_url varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -689,10 +577,9 @@ CREATE TABLE info (
   KEY idx_if__if_id (if_id),
   KEY idx_if__kw_id (kw_id),
   CONSTRAINT info_ibfk_1 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id)
-) ENGINE=InnoDB AUTO_INCREMENT=157 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
-DROP TABLE IF EXISTS info_keyword;
-CREATE TABLE info_keyword (
+CREATE TABLE IF NOT EXISTS info_keyword (
   ifkw_id int(11) NOT NULL AUTO_INCREMENT,
   if_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -702,5 +589,6 @@ CREATE TABLE info_keyword (
   KEY idx_ifkw__kw_id (kw_id),
   CONSTRAINT info_keyword_ibfk_1 FOREIGN KEY (if_id) REFERENCES info (if_id) ON DELETE CASCADE,
   CONSTRAINT info_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=674 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
+SET FOREIGN_KEY_CHECKS = 1;

@@ -1,3 +1,7 @@
+-- ------------------------------------
+-- create model
+-- ------------------------------------
+
 --
 -- functions
 --
@@ -57,7 +61,7 @@ DELIMITER ;
 
 DELIMITER $$
 DROP FUNCTION IF EXISTS `GetLocationChildIds` $$
-  CREATE FUNCTION GetLocationChildIds(GivenID INT) RETURNS VARCHAR(2000)
+CREATE FUNCTION GetLocationChildIds(GivenID INT) RETURNS VARCHAR(2000)
   DETERMINISTIC
   BEGIN
     DECLARE subIds VARCHAR(2000);
@@ -119,7 +123,7 @@ CREATE TABLE news (
   PRIMARY KEY (n_id),
   KEY idx_n__n_id (n_id),
   KEY idx_n__w_id (w_id)
-) ENGINE=MyISAM AUTO_INCREMENT=176 DEFAULT CHARSET=latin1
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1
 
 --
 -- trip-data
@@ -145,7 +149,7 @@ CREATE TABLE trip (
   PRIMARY KEY (tr_id),
   KEY idx_tr__tr_id (tr_id),
   KEY idx_tr__i_id (i_id)
-) ENGINE=InnoDB AUTO_INCREMENT=477 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 --
 -- location-data
@@ -243,7 +247,7 @@ CREATE TABLE tour (
   KEY idx_t__l_id (l_id),
   KEY t_gps_lat (t_gps_lat),
   KEY t_gps_lon (t_gps_lon)
-) ENGINE=MyISAM AUTO_INCREMENT=2885 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 --
 -- track-data
@@ -303,7 +307,7 @@ CREATE TABLE kategorie_full (
   KEY k_type (k_type),
   KEY k_datevon (k_datevon),
   KEY k_datebis (k_datebis)
-) ENGINE=MyISAM AUTO_INCREMENT=2268 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 --
 -- image-data
@@ -340,7 +344,7 @@ CREATE TABLE image (
   KEY i_rate (i_rate),
   KEY i_rate_motive (i_rate_motive),
   KEY i_rate_wichtigkeit (i_rate_wichtigkeit)
-) ENGINE=MyISAM AUTO_INCREMENT=141161 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
 --
 -- video-data
@@ -376,5 +380,5 @@ CREATE TABLE video (
   KEY v_rate (v_rate),
   KEY v_rate_motive (v_rate_motive),
   KEY v_rate_wichtigkeit (v_rate_wichtigkeit)
-) ENGINE=MyISAM AUTO_INCREMENT=141161 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 
