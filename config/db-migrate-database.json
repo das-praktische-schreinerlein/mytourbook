@@ -3,6 +3,10 @@
         "driver": "sqlite3",
         "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
     },
+    "mediadb_import_sqlite3": {
+        "driver": "sqlite3",
+        "filename": "D:/Bilder/mytbbase/test/mediadb_import.sqlite"
+    },
     "mediadb_mysql": {
         "driver": "mysql",
         "host": "localhost",
