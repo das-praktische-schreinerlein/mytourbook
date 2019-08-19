@@ -31,23 +31,24 @@ exports.up = function(db) {
     });
   })
   .then(function(data) {
-      return function() {
-          return new Promise < boolean > ((resolve, reject) => {
-              const promises = [];
-              for (const sql of data.split('$$')) {
-                  if (sql === undefined || sql.trim() === '') {
-                      continue;
-                  }
-                  promises.push(db.runSql(sql));
+      return new Promise((resolve, reject) => {
+          const promises = [];
+          for (const sql of data.split('$$')) {
+              if (sql === undefined || sql.trim() === '') {
+                  console.error("skip sql" + sql);
+                  continue;
               }
+              console.error("run sql" + sql);
+              promises.push(db.runSql(sql));
+          }
 
-              return Promise.all(promises).then(() => {
-                  return resolve(true);
-              }).catch(reason => {
-                  return reject(reason);
-              });
+
+          return Promise.all(promises).then(values => {
+              return resolve(values[0]);
+          }).catch(reason => {
+              return reject(reason);
           });
-      };
+      });
   });
 };
 
