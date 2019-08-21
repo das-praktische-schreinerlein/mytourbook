@@ -1,7 +1,7 @@
 import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
-export class TourDocSqlMytbConfig {
+export class TourDocSqlMediaExportDbConfig {
     public static tableConfigs: TableConfigs = {
         'track': {
             key: 'track',
@@ -118,6 +118,18 @@ export class TourDocSqlMytbConfig {
                 'month_is': {
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
+                },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
                 },
                 'persons_txt': {
                     noFacet: true
@@ -385,6 +397,18 @@ export class TourDocSqlMytbConfig {
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -635,6 +659,18 @@ export class TourDocSqlMytbConfig {
                     selectField: 'MONTH(t_datevon)',
                     orderBy: 'value asc'
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -864,6 +900,18 @@ export class TourDocSqlMytbConfig {
                 'month_is': {
                     noFacet: true
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -1015,6 +1063,18 @@ export class TourDocSqlMytbConfig {
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -1163,6 +1223,18 @@ export class TourDocSqlMytbConfig {
                 'month_is': {
                     selectField: 'MONTH(n_date)'
                 },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
                 'persons_txt': {
                     noFacet: true
                 },
@@ -1234,7 +1306,7 @@ export class TourDocSqlMytbConfig {
     };
 
     public getTableConfigForTableKey(table: string): TableConfig {
-        return TourDocSqlMytbConfig.tableConfigs[table];
+        return TourDocSqlMediaExportDbConfig.tableConfigs[table];
     }
 }
 

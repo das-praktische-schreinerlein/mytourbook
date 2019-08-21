@@ -1,8 +1,11 @@
+-- ------------------------------------
+-- create mediadb-model
+-- ------------------------------------
+
 -----------------
 --- system-tables
 -----------------
-DROP TABLE IF EXISTS appids;
-CREATE TABLE appids (
+CREATE TABLE IF NOT EXISTS appids (
   ai_table char(255)  NOT NULL DEFAULT '',
   ai_curid int(11) DEFAULT '0'
 );
@@ -10,8 +13,7 @@ CREATE TABLE appids (
 -----------------
 --- configuration-tables
 -----------------
-DROP TABLE IF EXISTS keyword;
-CREATE TABLE keyword (
+CREATE TABLE IF NOT EXISTS keyword (
   kw_id integer PRIMARY KEY,
   kw_meta_desc text,
   kw_name varchar(255)  DEFAULT NULL,
@@ -22,8 +24,7 @@ CREATE TABLE keyword (
   CONSTRAINT keyword_ibfk_1 FOREIGN KEY (kw_parent_id) REFERENCES keyword (kw_id)
 );
 
-DROP TABLE IF EXISTS objects;
-CREATE TABLE objects (
+CREATE TABLE IF NOT EXISTS objects (
     O_ID int NOT NULL PRIMARY KEY,
     O_PICASA_KEY varchar(50) NOT NULL,
     O_NAME varchar(100) NULL,
@@ -32,8 +33,7 @@ CREATE TABLE objects (
     CONSTRAINT objects_O_KEY_pk UNIQUE (O_KEY)
 );
 
-DROP TABLE IF EXISTS person;
-CREATE TABLE person (
+CREATE TABLE IF NOT EXISTS person (
   pn_id integer PRIMARY KEY,
   pn_comment text,
   pn_email_extern varchar(255)  DEFAULT NULL,
@@ -51,15 +51,13 @@ CREATE TABLE person (
   pn_flag_export int(11) DEFAULT NULL
 );
 
-DROP TABLE IF EXISTS playlist;
-CREATE TABLE playlist (
+CREATE TABLE IF NOT EXISTS playlist (
   p_id integer PRIMARY KEY,
   p_meta_desc text,
   p_name varchar(255)  DEFAULT NULL
 );
 
-DROP TABLE IF EXISTS rates;
-CREATE TABLE rates (
+CREATE TABLE IF NOT EXISTS rates (
   r_id integer PRIMARY KEY,
   r_fieldname varchar(80)  DEFAULT NULL,
   r_fieldvalue int(11) DEFAULT NULL,
@@ -70,8 +68,7 @@ CREATE TABLE rates (
 -----------------
 --- news-data
 -----------------
-DROP TABLE IF EXISTS news;
-CREATE TABLE news (
+CREATE TABLE IF NOT EXISTS news (
     n_id integer PRIMARY KEY,
     w_id int DEFAULT '0',
     n_date datetime DEFAULT NULL,
@@ -87,8 +84,7 @@ CREATE TABLE news (
 -----------------
 --- trip-data
 -----------------
-DROP TABLE IF EXISTS trip;
-CREATE TABLE trip (
+CREATE TABLE IF NOT EXISTS trip (
   tr_id integer PRIMARY KEY,
   i_id int(11) DEFAULT NULL,
   tr_datebis datetime DEFAULT NULL,
@@ -106,8 +102,7 @@ CREATE TABLE trip (
 -----------------
 --- location-data
 -----------------
-DROP TABLE IF EXISTS location;
-CREATE TABLE location (
+CREATE TABLE IF NOT EXISTS location (
   l_id integer PRIMARY KEY,
   l_meta_desc text,
   l_meta_shortdesc text,
@@ -128,8 +123,7 @@ CREATE TABLE location (
   CONSTRAINT location_ibfk_1 FOREIGN KEY (l_parent_id) REFERENCES location (l_id)
 );
 
-DROP TABLE IF EXISTS location_keyword;
-CREATE TABLE location_keyword (
+CREATE TABLE IF NOT EXISTS location_keyword (
   lk_id integer PRIMARY KEY,
   l_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -140,8 +134,7 @@ CREATE TABLE location_keyword (
 -----------------
 --- tour-data
 -----------------
-DROP TABLE IF EXISTS tour;
-CREATE TABLE tour (
+CREATE TABLE IF NOT EXISTS tour (
   t_id integer PRIMARY KEY,
   l_id int(11) DEFAULT NULL,
   t_meta_desc text,
@@ -211,8 +204,7 @@ CREATE TABLE tour (
   t_state_all int(11) DEFAULT '0'
 );
 
-DROP TABLE IF EXISTS tour_keyword;
-CREATE TABLE tour_keyword (
+CREATE TABLE IF NOT EXISTS tour_keyword (
   tk_id integer PRIMARY KEY,
   t_id int(11) NOT NULL,
   kw_id int(11) NOT NULL,
@@ -220,8 +212,7 @@ CREATE TABLE tour_keyword (
   CONSTRAINT tour_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS tourpoint;
-CREATE TABLE tourpoint (
+CREATE TABLE IF NOT EXISTS tourpoint (
   tp_id integer PRIMARY KEY,
   t_id int(11) DEFAULT NULL,
   l_id int(11) DEFAULT NULL,
@@ -239,8 +230,7 @@ CREATE TABLE tourpoint (
 -----------------
 --- track-data
 -----------------
-DROP TABLE IF EXISTS kategorie;
-CREATE TABLE kategorie (
+CREATE TABLE IF NOT EXISTS kategorie (
   k_id integer PRIMARY KEY,
   parent_k_id int(11) DEFAULT NULL,
   k_extref varchar(255)  DEFAULT NULL,
@@ -291,8 +281,7 @@ CREATE TABLE kategorie (
 ---  CONSTRAINT kategorie_ibfk_3 FOREIGN KEY (TR_ID) REFERENCES trip (TR_ID)
 );
 
-DROP TABLE IF EXISTS kategorie_keyword;
-CREATE TABLE kategorie_keyword (
+CREATE TABLE IF NOT EXISTS kategorie_keyword (
   kk_id integer PRIMARY KEY,
   k_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -300,8 +289,7 @@ CREATE TABLE kategorie_keyword (
   CONSTRAINT kategorie_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS kategorie_person;
-CREATE TABLE kategorie_person (
+CREATE TABLE IF NOT EXISTS kategorie_person (
   kpn_id integer PRIMARY KEY,
   k_id int(11) DEFAULT NULL,
   pn_id int(11) DEFAULT NULL,
@@ -309,8 +297,7 @@ CREATE TABLE kategorie_person (
   CONSTRAINT kategorie_person_ibfk_2 FOREIGN KEY (pn_id) REFERENCES person (pn_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS kategorie_tour;
-CREATE TABLE kategorie_tour (
+CREATE TABLE IF NOT EXISTS kategorie_tour (
   kt_id integer PRIMARY KEY,
   k_id int(11) NOT NULL,
   t_id int(11) NOT NULL,
@@ -319,8 +306,7 @@ CREATE TABLE kategorie_tour (
   CONSTRAINT kategorie_tour_ibfk_2 FOREIGN KEY (t_id) REFERENCES tour (t_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS kategorie_tourpoint;
-CREATE TABLE kategorie_tourpoint (
+CREATE TABLE IF NOT EXISTS kategorie_tourpoint (
   ktp_id integer PRIMARY KEY,
   k_id int(11) DEFAULT NULL,
   l_id int(11) DEFAULT NULL,
@@ -338,8 +324,7 @@ CREATE TABLE kategorie_tourpoint (
 -----------------
 --- image-data
 -----------------
-DROP TABLE IF EXISTS image;
-CREATE TABLE image (
+CREATE TABLE IF NOT EXISTS image (
   i_id integer PRIMARY KEY,
   k_id int(11) DEFAULT NULL,
   i_date datetime DEFAULT NULL,
@@ -364,8 +349,7 @@ CREATE TABLE image (
   CONSTRAINT image_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id)
 );
 
-DROP TABLE IF EXISTS image_keyword;
-CREATE TABLE image_keyword (
+CREATE TABLE IF NOT EXISTS image_keyword (
   ik_id integer PRIMARY KEY,
   i_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -373,8 +357,7 @@ CREATE TABLE image_keyword (
   CONSTRAINT image_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS image_object;
-CREATE TABLE image_object (
+CREATE TABLE IF NOT EXISTS image_object (
   io_id integer PRIMARY KEY,
   i_id int(11) NOT NULL,
   io_img_width int(11) DEFAULT NULL,
@@ -392,8 +375,7 @@ CREATE TABLE image_object (
   CONSTRAINT image_object_ibfk_1 FOREIGN KEY (i_id) REFERENCES image (i_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS image_playlist;
-CREATE TABLE image_playlist (
+CREATE TABLE IF NOT EXISTS image_playlist (
   ip_id integer PRIMARY KEY,
   i_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
@@ -406,8 +388,7 @@ CREATE TABLE image_playlist (
 -----------------
 --- video-data
 -----------------
-DROP TABLE IF EXISTS video;
-CREATE TABLE video (
+CREATE TABLE IF NOT EXISTS video (
   v_id integer PRIMARY KEY,
   k_id int(11) DEFAULT NULL,
   v_date datetime DEFAULT NULL,
@@ -432,8 +413,7 @@ CREATE TABLE video (
   CONSTRAINT video_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id)
 );
 
-DROP TABLE IF EXISTS video_keyword;
-CREATE TABLE video_keyword (
+CREATE TABLE IF NOT EXISTS video_keyword (
   vk_id integer PRIMARY KEY,
   v_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',
@@ -441,8 +421,7 @@ CREATE TABLE video_keyword (
   CONSTRAINT video_keyword_ibfk_2 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS video_object;
-CREATE TABLE video_object (
+CREATE TABLE IF NOT EXISTS video_object (
   vo_id integer PRIMARY KEY,
   v_id int(11) NOT NULL,
   vo_img_width int(11) DEFAULT NULL,
@@ -460,8 +439,7 @@ CREATE TABLE video_object (
   CONSTRAINT video_object_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE
 );
 
-DROP TABLE IF EXISTS video_playlist;
-CREATE TABLE video_playlist (
+CREATE TABLE IF NOT EXISTS video_playlist (
   vp_id integer PRIMARY KEY,
   v_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
@@ -473,8 +451,7 @@ CREATE TABLE video_playlist (
 -----------------
 --- info-data
 -----------------
-DROP TABLE IF EXISTS info;
-CREATE TABLE info (
+CREATE TABLE IF NOT EXISTS info (
   if_id integer PRIMARY KEY,
   kw_id int(11) DEFAULT NULL,
   if_url varchar(255)  DEFAULT NULL,
@@ -485,8 +462,7 @@ CREATE TABLE info (
   CONSTRAINT info_ibfk_1 FOREIGN KEY (kw_id) REFERENCES keyword (kw_id)
 );
 
-DROP TABLE IF EXISTS info_keyword;
-CREATE TABLE info_keyword (
+CREATE TABLE IF NOT EXISTS info_keyword (
   ifkw_id integer PRIMARY KEY,
   if_id int(11) NOT NULL DEFAULT '0',
   kw_id int(11) NOT NULL DEFAULT '0',

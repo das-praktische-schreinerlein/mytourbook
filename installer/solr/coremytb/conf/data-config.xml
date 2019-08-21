@@ -1,9 +1,9 @@
 <dataConfig>
     <dataSource type="JdbcDataSource"
                 driver="com.mysql.jdbc.Driver"
-                url="jdbc:mysql://mysqldb:3306/mytb"
-                user="mytb"
-                password="mytb"/>
+                url="jdbc:mysql://mysqldb:3306/mediaexportdb"
+                user="mediaexportdb"
+                password="mediaexportdb"/>
     <document>
         <entity name="track"
                 pk="id"

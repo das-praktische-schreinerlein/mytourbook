@@ -133,7 +133,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         switch (profile) {
             case 'noSubType':
                 filters['what'] = filters['what'] ? filters['what'] + ';' : '';
-                filters['what'] += 'action:null,ac_';
+                filters['what'] += 'action:null,ac_,ac_null,ac_0';
                 break;
             case 'unrated':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';

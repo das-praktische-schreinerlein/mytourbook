@@ -6,11 +6,11 @@
     "apiRouteTracks": "/tracks/",
     "apiRoutePictures": "/pictures/",
     "apiRouteVideos": "/videos/",
-    "apiRouteTracksStaticDir": "F:/playground/mytb-test/mytbmediabase/tracks",
+    "apiRouteTracksStaticDir": "F:/playground/mytb-test/mytbbase/import/tracks/",
     "apiRouteTracksStaticEnabled": true,
-    "apiRoutePicturesStaticDir": "F:/playground/mytb-test/mytbmediabase/",
+    "apiRoutePicturesStaticDir": "F:/playground/mytb-test/mytbbase/import/",
     "apiRoutePicturesStaticEnabled": true,
-    "apiRouteVideosStaticDir": "F:/playground/mytb-test/mytbmediabase/",
+    "apiRouteVideosStaticDir": "F:/playground/mytb-test/mytbbase/import/",
     "apiRouteVideosStaticEnabled": true,
     "apiRouteStoredTracks": "/trackstore/",
     "apiRouteStoredPictures": "/picturestore/",
@@ -32,14 +32,9 @@
         "replaceKeywordPatterns": []
     },
     "TourDocSqlMediadbAdapter": {
-        "client": "mysql",
+        "client": "sqlite3",
         "connection": {
-            "host": "localhost",
-            "user": "root",
-            "password": "",
-            "database": "testmediadb",
-            "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mediadb_import.sqlite"
+            "filename": "F:/playground/mytb-test/mytbbase/import/mediadb_import.sqlite"
         },
         "facetCacheUsage": {
             "active": true,
@@ -54,31 +49,12 @@
         },
         "facetCacheConfig": {
             "datastore": {
-                "scriptPath": "installer/db/mysql/facetcache"
+                "scriptPath": "installer/db/sqlite/facetcache"
             },
             "facets": [
             ],
             "checkInterval": 2
         }
-    },
-    "TourDocItemsJsAdapter": {
-        "dataFile": "D:/Bilder/mytbbase/test/mytb.json"
-    },
-    "TourDocSqlMediaExportDbAdapter": {
-        "client": "mysql",
-        "connection": {
-            "host": "localhost",
-            "user": "root",
-            "password": "",
-            "database": "mediaexportdb",
-            "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mediaexportdb.sqlite"
-        }
-    },
-    "TourDocSolrAdapter": {
-        "solrCoreTourDoc": "http://localhost:8983/solr/mytbdev/",
-        "solrCoreTourDocReadUsername": "mytbread",
-        "solrCoreTourDocReadPassword": "SolrRocks"
     },
     "objectDetectionConfig": {
         "redisQueue": {

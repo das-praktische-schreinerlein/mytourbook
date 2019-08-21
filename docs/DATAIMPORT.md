@@ -12,11 +12,11 @@ source installer/db/mysql/mediadb/step1_create-db.sql
 source installer/db/mysql/mediadb/step3_import-data.sql
 source installer/db/mysql/mediadb/step2_create-user.sql
 ```
-- create mytb the export-database (mysql)
+- create mediaexportdb the export-database (mysql)
 ```bash
 mysql
-source installer/db/mysql/mytb/step1_create-db.sql
-source installer/db/mysql/mytb/step2_create-user.sql
+source installer/db/mysql/mediaexportdb/init_01_create-database.sql
+source installer/db/mysql/mediaexportdb/init_2_create-user.sql
 ``` 
 - create image-sym-links as admin
 ```bash
@@ -118,13 +118,14 @@ node dist\backend\serverAdmin.js --command mediaManager --action scaleVideosFrom
 - [create trips](http://localhost:4002/mytbdev/de/tdocadmin/create/TRIP)
 
 ### export to solr
-- import from mediadb to mytb
+- import from mediadb to mediaexportdb
 ```
-mysql mytb
-source installer/db/mysql/mytb/step3_import-data.sql
-source installer/db/mysql/mytb/step4_import-data-from-mediadb.sql;
+mysql mediaexportdb
+use mediaexportdb
+source installer/db/mysql/mediaexportdb/import_01_create-model.sql
+source installer/db/mysql/mediaexportdb/import_02_import-data-from-mediadb.sql;
 ```
-- import from mytb to solr
+- import from mediaexportdb to solr
 ```
 curl "http://localhost:8983/solr/mytbdev/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true"
 ```

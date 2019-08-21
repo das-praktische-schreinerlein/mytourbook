@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import * as knex from 'knex';
 import {HttpAdapter} from 'js-data-http';
 import {TourDocSqlMediadbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.adapter';
-import {TourDocSqlMytbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytb.adapter';
+import {TourDocSqlMediaExportDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mediaexportdb.adapter';
 import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsjs.adapter';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-queued-object-detection.service';
@@ -39,8 +39,8 @@ export class TourDocDataServiceModule {
                 case 'TourDocSqlMediadbAdapter':
                     this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMediadbSql(backendConfig));
                     break;
-                case 'TourDocSqlMytbAdapter':
-                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMytbSql(backendConfig));
+                case 'TourDocSqlMediaExportDbAdapter':
+                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMediaExportDbSql(backendConfig));
                     break;
                 case 'TourDocItemsJsAdapter':
                     this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceItemsJs(backendConfig));
@@ -133,7 +133,7 @@ export class TourDocDataServiceModule {
         return dataService;
     }
 
-    private static createDataServiceMytbSql(backendConfig: {}): TourDocDataService {
+    private static createDataServiceMediaExportDbSql(backendConfig: {}): TourDocDataService {
         // configure store
         const filterConfig: TourDocTeamFilterConfig = new TourDocTeamFilterConfig();
         const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
@@ -144,9 +144,9 @@ export class TourDocDataServiceModule {
         const dataService: TourDocDataService = new TourDocDataService(dataStore);
 
         // configure adapter
-        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbAdapter'];
+        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMediaExportDbAdapter'];
         if (sqlConfig === undefined) {
-            throw new Error('config for TourDocSqlMytbAdapter not exists');
+            throw new Error('config for TourDocSqlMediaExportDbAdapter not exists');
         }
         const options = {
             knexOpts: {
@@ -155,8 +155,8 @@ export class TourDocDataServiceModule {
             },
             mapperConfig: backendConfig['mapperConfig']
         };
-        const adapter = new TourDocSqlMytbAdapter(options,
-            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMytbAdapter']['facetCacheUsage']);
+        const adapter = new TourDocSqlMediaExportDbAdapter(options,
+            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMediaExportDbAdapter']['facetCacheUsage']);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;
