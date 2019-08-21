@@ -404,6 +404,7 @@ export class FacetcacheService {
 
     public generateDeleteAndUpdateFacetCacheSql(configuration: FacetCacheConfiguration): string[] {
         return this.adapter.generateDeleteFacetCacheUpdateTriggerSql(configuration)
+            .concat(this.adapter.generateDeleteFacetCacheSql(configuration))
             .concat(this.adapter.generateUpdateFacetCacheSql(configuration));
     }
 
