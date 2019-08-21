@@ -7,7 +7,7 @@ import {SqlConnectionConfig} from '../modules/tdoc-dataservice.module';
 import {SqlQueryBuilder, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {ServerConfig} from '../server-module.loader';
 import {TourDocSqlMediadbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.config';
-import {TourDocSqlMytbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytb.config';
+import {TourDocSqlMediaExportDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediaexportdb.config';
 import {FacetCacheServiceConfiguration, FacetCacheUtils} from '../modules/facetcache.utils';
 import {MysqlFacetCacheAdapter} from '../modules/mysql-facetcache.adapter';
 import {Sqlite3FacetCacheAdapter} from '../modules/sqlite3-facetcache.adapter';
@@ -276,8 +276,8 @@ export class FacetCacheManagerCommand implements AbstractCommand {
             case 'TourDocSqlMediadbAdapter':
                 tableConfigs = TourDocSqlMediadbConfig.tableConfigs;
                 break;
-            case 'TourDocSqlMytbAdapter':
-                tableConfigs = TourDocSqlMytbConfig.tableConfigs;
+            case 'TourDocSqlMediaExportDbAdapter':
+                tableConfigs = TourDocSqlMediaExportDbConfig.tableConfigs;
                 break;
             default:
                 throw new Error('tdocDataStoreAdapter not exists: ' + adapterName);

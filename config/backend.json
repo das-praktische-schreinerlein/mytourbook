@@ -37,7 +37,7 @@
             "host": "localhost",
             "user": "root",
             "password": "",
-            "database": "testmediadb2",
+            "database": "testmediadb",
             "port": "3306",
             "filename": "D:/Bilder/mytbbase/test/mediadb_import.sqlite"
         },
@@ -64,15 +64,15 @@
     "TourDocItemsJsAdapter": {
         "dataFile": "D:/Bilder/mytbbase/test/mytb.json"
     },
-    "TourDocSqlMytbAdapter": {
-        "client": "sqlite3",
+    "TourDocSqlMediaExportDbAdapter": {
+        "client": "mysql",
         "connection": {
             "host": "localhost",
             "user": "root",
             "password": "",
-            "database": "mytb",
+            "database": "mediaexportdb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mytb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mediaexportdb.sqlite"
         }
     },
     "TourDocSolrAdapter": {

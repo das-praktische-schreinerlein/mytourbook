@@ -32,15 +32,15 @@ The configuration-file to configure the backend-api-server.
             "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
         }
     },
-    "TourDocSqlMytbAdapter": {
+    "TourDocSqlMediaExportDbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
             "user": "mytbuser",
             "password": "blablum",
-            "database": "mytb",
+            "database": "mediaexportdb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mytb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mediaexportdb.sqlite"
         }
     },
     "TourDocSolrAdapter": {

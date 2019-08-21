@@ -12,20 +12,20 @@
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "testmediadb2",
+        "database": "testmediadb",
         "port": "3306",
         "multipleStatements": true
     },
-    "mytb_sqlite3": {
+    "mediaexportdb_sqlite3": {
         "driver": "sqlite3",
-        "filename": "D:/Bilder/mytbbase/test/mytb.sqlite"
+        "filename": "D:/Bilder/mytbbase/test/mediaexportdb.sqlite"
     },
-    "mytb_mysql": {
+    "mediaexportdb_mysql": {
         "driver": "mysql",
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "mytb",
+        "database": "mediaexportdb",
         "port": "3306",
         "multipleStatements": true
     }

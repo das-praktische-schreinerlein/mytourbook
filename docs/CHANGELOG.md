@@ -2,7 +2,7 @@
  
 # Versions
  
-## 3.1.0
+## 4.0.0
 - added new type+features for managing object-detection image-objects
 - improved trackmanagement and added dashboard
 - improved performance by adding facetcaching
@@ -22,7 +22,8 @@
 - none
  
 ### breaking changes
-- none
+- backend: renamed TourDocSqlMytbAdapter to TourDocSqlMediaExportDbAdapter
+- datastore: renamed database mediadb to testmediadb and mytb to mediaexportdb
 
 ### known issues
 - frontend: IE till 11 not functional (can block rendering sometimes)
