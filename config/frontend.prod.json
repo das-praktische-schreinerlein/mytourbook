@@ -1,0 +1,6 @@
+{
+    "port": 4003,
+    "cacheFolder": "cache/mytb/",
+    "redirectFileJson": "config/redirects.prod.json",
+    "redirectOnlyCached": false
+}

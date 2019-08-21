@@ -5,14 +5,14 @@
     },
     "mediadb_import_sqlite3": {
         "driver": "sqlite3",
-        "filename": "D:/Bilder/mytbbase/test/mediadb_import.sqlite"
+        "filename": "F:/playground/mytb-test/mytbbase/import/mediadb_import.sqlite"
     },
     "mediadb_mysql": {
         "driver": "mysql",
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "testmediadb",
+        "database": "testmediadb2",
         "port": "3306",
         "multipleStatements": true
     },

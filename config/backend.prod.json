@@ -1,0 +1,46 @@
+{
+    "filePathPDocJson": "config/pdocs.json",
+    "filePathThemeFilterJson": "config/themeFilterConfig.json",
+    "apiVideoServerEnabled": false,
+    "apiAnonymizeMedia": true,
+    "apiRouteTracks": "/tracks/",
+    "apiRoutePictures": "/pictures/",
+    "apiRouteVideos": "/videos/",
+    "apiRouteTracksStaticDir": "F:/playground/mytb-test/Bilder/mytbexport/",
+    "apiRouteTracksStaticEnabled": true,
+    "apiRoutePicturesStaticDir": "F:/playground/mytb-test/Bilder/mytbexport/",
+    "apiRoutePicturesStaticEnabled": true,
+    "apiRouteVideosStaticDir": "F:/playground/mytb-test/Bilder/mytbexport/",
+    "apiRouteVideosStaticEnabled": true,
+    "apiRouteStoredTracks": "/trackstore/",
+    "apiRouteStoredPictures": "/picturestore/",
+    "apiRouteStoredPicturesResolutionPrefix": "pics_",
+    "apiRouteStoredVideos": "/videostore/",
+    "apiRouteStoredVideosResolutionPrefix": "vid_",
+    "playlistExportAudioBaseUrl": "http://localhost:4102/api/static/audios/",
+    "playlistExportImageBaseUrl": "http://localhost:4102/api/static/pictures/",
+    "playlistExportVideoBaseUrl": "http://localhost:4102/api/static/videos/",
+    "playlistExportUseAudioAssetStoreUrls": false,
+    "playlistExportUseImageAssetStoreUrls": true,
+    "playlistExportUseVideoAssetStoreUrls": false,
+    "playlistExportMaxM3uRecordAllowed": 10000,
+    "imageMagicAppPath": "D:\\ProgrammeShared\\ImageMagick-7.0.7-Q16\\",
+    "tdocDataStoreAdapter": "TourDocSolrAdapter",
+    "tdocWritable": false,
+    "mapperConfig": {
+        "allowedKeywordPatterns": ["KW_.*", "Harry", "Booga", "Buddy", "Micha"],
+        "replaceKeywordPatterns": []
+    },
+    "TourDocSolrAdapter": {
+        "solrCoreTourDoc": "http://localhost:8983/solr/mytb/",
+        "solrCoreTourDocReadUsername": "mytbread",
+        "solrCoreTourDocReadPassword": "SolrRocks"
+    },
+    "cacheConfig": {
+        "cacheRedisUrl": "redis://localhost:6379/",
+        "cacheRedisPass": "blablub",
+        "cacheRedisDB": "2"
+    },
+    "port": 4102,
+    "corsOrigin": true
+}
