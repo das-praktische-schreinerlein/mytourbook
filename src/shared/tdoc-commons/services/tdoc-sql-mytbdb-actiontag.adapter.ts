@@ -5,7 +5,7 @@ import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/s
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 
-export class TourDocSqlMediadbActionTagAdapter {
+export class TourDocSqlMytbDbActionTagAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
     private rateValidationRule = new NumberValidationRule(true, 0, 15, 0);

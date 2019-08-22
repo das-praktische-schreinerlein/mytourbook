@@ -86,7 +86,7 @@ update objects set o_category='Person' where objects.O_KEY like '%faces%' or obj
 
 /* #############
 # insert default-objects
-# source '../../installer/db/mysql/mediadb/xxxx-insert_default-objects.sql';
+# source '../../installer/db/mysql/mytbdb/xxxx-insert_default-objects.sql';
 ############# */
 
 

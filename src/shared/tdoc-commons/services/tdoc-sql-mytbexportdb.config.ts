@@ -1,7 +1,7 @@
 import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
-export class TourDocSqlMediaExportDbConfig {
+export class TourDocSqlMytbExportDbConfig {
     public static tableConfigs: TableConfigs = {
         'track': {
             key: 'track',
@@ -1306,7 +1306,7 @@ export class TourDocSqlMediaExportDbConfig {
     };
 
     public getTableConfigForTableKey(table: string): TableConfig {
-        return TourDocSqlMediaExportDbConfig.tableConfigs[table];
+        return TourDocSqlMytbExportDbConfig.tableConfigs[table];
     }
 }
 

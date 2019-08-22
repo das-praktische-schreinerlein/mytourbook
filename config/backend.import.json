@@ -25,16 +25,16 @@
     "playlistExportUseVideoAssetStoreUrls": false,
     "playlistExportMaxM3uRecordAllowed": 10000,
     "imageMagicAppPath": "D:\\ProgrammeShared\\ImageMagick-7.0.7-Q16\\",
-    "tdocDataStoreAdapter": "TourDocSqlMediadbAdapter",
+    "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
     "tdocWritable": true,
     "mapperConfig": {
         "allowedKeywordPatterns": ["KW_.*", "Harry", "Booga", "Buddy", "Micha"],
         "replaceKeywordPatterns": []
     },
-    "TourDocSqlMediadbAdapter": {
+    "TourDocSqlMytbDbAdapter": {
         "client": "sqlite3",
         "connection": {
-            "filename": "F:/playground/mytb-test/mytbbase/import/mediadb_import.sqlite"
+            "filename": "F:/playground/mytb-test/mytbbase/import/mytbdb_import.sqlite"
         },
         "facetCacheUsage": {
             "active": true,

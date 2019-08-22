@@ -21,26 +21,26 @@ The configuration-file to configure the backend-api-server.
 ```json
 {
     "tdocDataStoreAdapter": "TourDocSolrAdapter",
-    "TourDocSqlMediadbAdapter": {
+    "TourDocSqlMytbDbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
             "user": "mytbuser",
             "password": "blablum",
-            "database": "testmediadb",
+            "database": "testmytbdb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mytbdb.sqlite"
         }
     },
-    "TourDocSqlMediaExportDbAdapter": {
+    "TourDocSqlMytbExportDbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
             "user": "mytbuser",
             "password": "blablum",
-            "database": "mediaexportdb",
+            "database": "mytbexportdb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mediaexportdb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mytbexportdb.sqlite"
         }
     },
     "TourDocSolrAdapter": {

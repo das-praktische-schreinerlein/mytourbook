@@ -1,4 +1,3 @@
-import {Router} from 'js-data-express';
 import {Mapper, utils} from 'js-data';
 import {TourDocImageRecord} from '../shared/tdoc-commons/model/records/tdocimage-record';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
@@ -60,7 +59,7 @@ export class TourDocMediaManagerModule {
             const myDate = new Date();
             myDate.setHours(exifDate.getUTCHours(), exifDate.getUTCMinutes(), exifDate.getUTCSeconds(), exifDate.getUTCMilliseconds());
             myDate.setFullYear(exifDate.getUTCFullYear(), exifDate.getUTCMonth(), exifDate.getUTCDate());
-            tdoc.datestart = tdoc.dateshow = tdoc.dateend = myDate;
+            // TODO tdoc.datestart = tdoc.dateshow = tdoc.dateend = DateUtils.dateToLocalISOString(myDate);
             return me.dataService.updateById(tdoc.id, tdoc);
         });
     }
@@ -244,7 +243,7 @@ export class TourDocMediaManagerModule {
                         promises = promises.concat(cb(tdoc));
                     }
 
-                    return Promise.all(promises).then(value => {
+                    return Promise.all(promises).then(() => {
                         searchForm.pageNum++;
 
                         if (searchForm.pageNum < (searchResult.recordCount / searchForm.perPage + 1)) {

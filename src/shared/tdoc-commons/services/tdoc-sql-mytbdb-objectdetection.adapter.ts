@@ -15,7 +15,7 @@ import {
     RequestImageDataType
 } from './common-queued-object-detection.service';
 
-export class TourDocSqlMediadbObjectDetectionAdapter implements ObjectDetectionDataStore {
+export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDataStore {
 
     private config: any;
     private knex: any;

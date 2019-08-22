@@ -6,8 +6,8 @@ import * as knex from 'knex';
 import {SqlConnectionConfig} from '../modules/tdoc-dataservice.module';
 import {SqlQueryBuilder, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {ServerConfig} from '../server-module.loader';
-import {TourDocSqlMediadbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.config';
-import {TourDocSqlMediaExportDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mediaexportdb.config';
+import {TourDocSqlMytbDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb.config';
+import {TourDocSqlMytbExportDbConfig} from '../shared/tdoc-commons/services/tdoc-sql-mytbexportdb.config';
 import {FacetCacheServiceConfiguration, FacetCacheUtils} from '../modules/facetcache.utils';
 import {MysqlFacetCacheAdapter} from '../modules/mysql-facetcache.adapter';
 import {Sqlite3FacetCacheAdapter} from '../modules/sqlite3-facetcache.adapter';
@@ -273,11 +273,11 @@ export class FacetCacheManagerCommand implements AbstractCommand {
         let tableConfigs: TableConfigs;
         const adapterName = backendConfig['tdocDataStoreAdapter'];
         switch (adapterName) {
-            case 'TourDocSqlMediadbAdapter':
-                tableConfigs = TourDocSqlMediadbConfig.tableConfigs;
+            case 'TourDocSqlMytbDbAdapter':
+                tableConfigs = TourDocSqlMytbDbConfig.tableConfigs;
                 break;
-            case 'TourDocSqlMediaExportDbAdapter':
-                tableConfigs = TourDocSqlMediaExportDbConfig.tableConfigs;
+            case 'TourDocSqlMytbExportDbAdapter':
+                tableConfigs = TourDocSqlMytbExportDbConfig.tableConfigs;
                 break;
             default:
                 throw new Error('tdocDataStoreAdapter not exists: ' + adapterName);

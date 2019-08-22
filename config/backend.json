@@ -25,21 +25,21 @@
     "playlistExportUseVideoAssetStoreUrls": false,
     "playlistExportMaxM3uRecordAllowed": 10000,
     "imageMagicAppPath": "D:\\ProgrammeShared\\ImageMagick-7.0.7-Q16\\",
-    "tdocDataStoreAdapter": "TourDocSqlMediadbAdapter",
+    "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
     "tdocWritable": true,
     "mapperConfig": {
         "allowedKeywordPatterns": ["KW_.*", "Harry", "Booga", "Buddy", "Micha"],
         "replaceKeywordPatterns": []
     },
-    "TourDocSqlMediadbAdapter": {
+    "TourDocSqlMytbDbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
             "user": "root",
             "password": "",
-            "database": "testmediadb",
+            "database": "testmytbdb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mediadb_import.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mytbdb_import.sqlite"
         },
         "facetCacheUsage": {
             "active": true,
@@ -64,15 +64,15 @@
     "TourDocItemsJsAdapter": {
         "dataFile": "D:/Bilder/mytbbase/test/mytb.json"
     },
-    "TourDocSqlMediaExportDbAdapter": {
+    "TourDocSqlMytbExportDbAdapter": {
         "client": "mysql",
         "connection": {
             "host": "localhost",
             "user": "root",
             "password": "",
-            "database": "mediaexportdb",
+            "database": "mytbexportdb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mediaexportdb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mytbexportdb.sqlite"
         }
     },
     "TourDocSolrAdapter": {
