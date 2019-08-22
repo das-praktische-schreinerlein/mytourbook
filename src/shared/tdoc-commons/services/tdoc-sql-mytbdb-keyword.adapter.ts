@@ -3,7 +3,7 @@ import {KeywordValidationRule} from '@dps/mycms-commons/dist/search-commons/mode
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
-export class TourDocSqlMediadbKeywordAdapter {
+export class TourDocSqlMytbDbKeywordAdapter {
 
     private config: any;
     private knex: any;

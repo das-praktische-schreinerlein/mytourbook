@@ -5,18 +5,18 @@
 ## initialize environment (once)
 
 ### create and initialize database
-- create mediadb the master-database (mysql)
+- create mytbdb the master-database (mysql)
 ```bash
 mysql
-source installer/db/mysql/mediadb/step1_create-db.sql
-source installer/db/mysql/mediadb/step3_import-data.sql
-source installer/db/mysql/mediadb/step2_create-user.sql
+source installer/db/mysql/mytbdb/step1_create-db.sql
+source installer/db/mysql/mytbdb/step3_import-data.sql
+source installer/db/mysql/mytbdb/step2_create-user.sql
 ```
-- create mediaexportdb the export-database (mysql)
+- create mytbexportdb the export-database (mysql)
 ```bash
 mysql
-source installer/db/mysql/mediaexportdb/init_01_create-database.sql
-source installer/db/mysql/mediaexportdb/init_2_create-user.sql
+source installer/db/mysql/mytbexportdb/init_01_create-database.sql
+source installer/db/mysql/mytbexportdb/init_2_create-user.sql
 ``` 
 - create image-sym-links as admin
 ```bash
@@ -36,7 +36,7 @@ exit
 ### configure local environments
 
 ### develop 
-- configure a ```backend.json``` with another port and SqlMediadb
+- configure a ```backend.json``` with another port and SqlMytbDb
 - configure ```src/frontend/environments/environment.ts``` to use this as backend-url 
 
 ### beta
@@ -63,7 +63,7 @@ devtools\autorotateImagesInFolder.bat D:\Bilder\digifotos\import-READY\import-20
 ```
 - manually add location to folder-names 
 
-### image-import into mediadb
+### image-import into mytbdb
 - copy images/videos in to 'pics_full' and 'video_full' folder
 - convert videos: avi/mov... to mp4
 ```bash
@@ -81,19 +81,19 @@ node dist\backend\serverAdmin.js --command mediaManager --action rotateVideo  --
 ```bash
 d:
 cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\pics_full\ --debug true > D:\Bilder\mytbbase\import\mediadb-import-images.json 
-node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --debug true > D:\Bilder\mytbbase\import\mediadb-import-videos.json 
+node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\pics_full\ --debug true > D:\Bilder\mytbbase\import\mytbdb-import-images.json 
+node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --debug true > D:\Bilder\mytbbase\import\mytbdb-import-videos.json 
 ```
 - manually fix json-import-file (locationnames...)
 - create sqlite database
-    - execute *installer/db/sqlite/mediadb/step1_import-data.sql*
-    - execute *installer/db/sqlite/mediadb/step2_pepare-data.sql*
+    - execute *installer/db/sqlite/mytbdb/step1_import-data.sql*
+    - execute *installer/db/sqlite/mytbdb/step2_pepare-data.sql*
 - load data
 ```bash
 d:
 cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-images.json
-node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mediadb-import-videos.json
+node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mytbdb-import-images.json
+node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mytbdb-import-videos.json
 ```
 - read image-dates and scale images
 ```bash
@@ -118,15 +118,15 @@ node dist\backend\serverAdmin.js --command mediaManager --action scaleVideosFrom
 - [create trips](http://localhost:4002/mytbdev/de/tdocadmin/create/TRIP)
 
 ### export to solr
-- import from mediadb to mediaexportdb
+- import from mytbdb to mytbexportdb
+```bash
+mysql mytbexportdb
+use mytbexportdb
+source installer/db/mysql/mytbexportdb/import_01_create-model.sql
+source installer/db/mysql/mytbexportdb/import_02_import-data-from-mytbdb.sql;
 ```
-mysql mediaexportdb
-use mediaexportdb
-source installer/db/mysql/mediaexportdb/import_01_create-model.sql
-source installer/db/mysql/mediaexportdb/import_02_import-data-from-mediadb.sql;
-```
-- import from mediaexportdb to solr
-```
+- import from mytbexportdb to solr
+```bash
 curl "http://localhost:8983/solr/mytbdev/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true"
 ```
 

@@ -13,25 +13,25 @@ import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/contai
 import {Mapper, utils} from 'js-data';
 import {TourDocImageRecord} from '../model/records/tdocimage-record';
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
-import {TourDocSqlMediadbActionTagAdapter} from './tdoc-sql-mediadb-actiontag.adapter';
-import {TourDocSqlMediadbKeywordAdapter} from './tdoc-sql-mediadb-keyword.adapter';
-import {TourDocSqlMediadbConfig} from './tdoc-sql-mediadb.config';
+import {TourDocSqlMytbDbActionTagAdapter} from './tdoc-sql-mytbdb-actiontag.adapter';
+import {TourDocSqlMytbDbKeywordAdapter} from './tdoc-sql-mytbdb-keyword.adapter';
+import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
 
-export class TourDocSqlMediadbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
-    private actionTagAdapter: TourDocSqlMediadbActionTagAdapter;
-    private keywordsAdapter: TourDocSqlMediadbKeywordAdapter;
-    private tableConfig: TourDocSqlMediadbConfig = new TourDocSqlMediadbConfig();
+export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
+    private actionTagAdapter: TourDocSqlMytbDbActionTagAdapter;
+    private keywordsAdapter: TourDocSqlMytbDbKeywordAdapter;
+    private tableConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
     constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
         super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);
-        this.actionTagAdapter = new TourDocSqlMediadbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
-        this.keywordsAdapter = new TourDocSqlMediadbKeywordAdapter(config, this.knex, this.sqlQueryBuilder);
+        this.actionTagAdapter = new TourDocSqlMytbDbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
+        this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.sqlQueryBuilder);
         this.extendTableConfigs();
     }
 
     protected extendTableConfigs() {
-        this.sqlQueryBuilder.extendTableConfigs(TourDocSqlMediadbConfig.tableConfigs);
+        this.sqlQueryBuilder.extendTableConfigs(TourDocSqlMytbDbConfig.tableConfigs);
     }
 
     protected getTableConfig(params: AdapterQuery): TableConfig {

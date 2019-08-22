@@ -1,31 +1,31 @@
 {
-    "mediadb_sqlite3": {
+    "mytbdb_sqlite3": {
         "driver": "sqlite3",
-        "filename": "D:/Bilder/mytbbase/test/mediadb.sqlite"
+        "filename": "D:/Bilder/mytbbase/test/mytbdb.sqlite"
     },
-    "mediadb_import_sqlite3": {
+    "mytbdb_import_sqlite3": {
         "driver": "sqlite3",
-        "filename": "F:/playground/mytb-test/mytbbase/import/mediadb_import.sqlite"
+        "filename": "F:/playground/mytb-test/mytbbase/import/mytbdb_import.sqlite"
     },
-    "mediadb_mysql": {
+    "mytbdb_mysql": {
         "driver": "mysql",
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "testmediadb",
+        "database": "testmytbdb",
         "port": "3306",
         "multipleStatements": true
     },
-    "mediaexportdb_sqlite3": {
+    "mytbexportdb_sqlite3": {
         "driver": "sqlite3",
-        "filename": "D:/Bilder/mytbbase/test/mediaexportdb.sqlite"
+        "filename": "D:/Bilder/mytbbase/test/mytbexportdb.sqlite"
     },
-    "mediaexportdb_mysql": {
+    "mytbexportdb_mysql": {
         "driver": "mysql",
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "mediaexportdb",
+        "database": "mytbexportdb",
         "port": "3306",
         "multipleStatements": true
     }

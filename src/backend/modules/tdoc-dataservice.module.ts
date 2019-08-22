@@ -6,12 +6,12 @@ import axios from 'axios';
 import * as fs from 'fs';
 import * as knex from 'knex';
 import {HttpAdapter} from 'js-data-http';
-import {TourDocSqlMediadbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mediadb.adapter';
-import {TourDocSqlMediaExportDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mediaexportdb.adapter';
+import {TourDocSqlMytbDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb.adapter';
+import {TourDocSqlMytbExportDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbexportdb.adapter';
 import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsjs.adapter';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-queued-object-detection.service';
-import {TourDocSqlMediadbObjectDetectionAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mediadb-objectdetection.adapter';
+import {TourDocSqlMytbDbObjectDetectionAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection.adapter';
 import {FacetCacheUsageConfigurations, SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 
 export interface SqlConnectionConfig {
@@ -36,11 +36,11 @@ export class TourDocDataServiceModule {
                 case 'TourDocSolrAdapter':
                     this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceSolr(backendConfig));
                     break;
-                case 'TourDocSqlMediadbAdapter':
-                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMediadbSql(backendConfig));
+                case 'TourDocSqlMytbDbAdapter':
+                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMytbDbSql(backendConfig));
                     break;
-                case 'TourDocSqlMediaExportDbAdapter':
-                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMediaExportDbSql(backendConfig));
+                case 'TourDocSqlMytbExportDbAdapter':
+                    this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceMytbExportDbSql(backendConfig));
                     break;
                 case 'TourDocItemsJsAdapter':
                     this.dataServices.set(profile, TourDocDataServiceModule.createDataServiceItemsJs(backendConfig));
@@ -56,8 +56,8 @@ export class TourDocDataServiceModule {
     public static getObjectDetectionDataStore(profile: string, backendConfig: {}): ObjectDetectionDataStore {
         if (!this.odDataStores.has(profile)) {
             switch (backendConfig['tdocDataStoreAdapter']) {
-                case 'TourDocSqlMediadbAdapter':
-                    this.odDataStores.set(profile, TourDocDataServiceModule.createObjectDetectionDataStoreMediadbSql(backendConfig));
+                case 'TourDocSqlMytbDbAdapter':
+                    this.odDataStores.set(profile, TourDocDataServiceModule.createObjectDetectionDataStoreMytbDbSql(backendConfig));
                     break;
                 default:
                     throw new Error('configured tdocDataStoreAdapter not exist as ObjectDetectionDataStore:'
@@ -104,7 +104,7 @@ export class TourDocDataServiceModule {
         return dataService;
     }
 
-    private static createDataServiceMediadbSql(backendConfig: {}): TourDocDataService {
+    private static createDataServiceMytbDbSql(backendConfig: {}): TourDocDataService {
         // configure store
         const filterConfig: TourDocTeamFilterConfig = new TourDocTeamFilterConfig();
         const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
@@ -115,9 +115,9 @@ export class TourDocDataServiceModule {
         const dataService: TourDocDataService = new TourDocDataService(dataStore);
 
         // configure adapter
-        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMediadbAdapter'];
+        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbDbAdapter'];
         if (sqlConfig === undefined) {
-            throw new Error('config for TourDocSqlMediadbAdapter not exists');
+            throw new Error('config for TourDocSqlMytbDbAdapter not exists');
         }
         const options = {
             knexOpts: {
@@ -126,14 +126,14 @@ export class TourDocDataServiceModule {
             },
             mapperConfig: backendConfig['mapperConfig']
         };
-        const adapter = new TourDocSqlMediadbAdapter(options,
-            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMediadbAdapter']['facetCacheUsage']);
+        const adapter = new TourDocSqlMytbDbAdapter(options,
+            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMytbDbAdapter']['facetCacheUsage']);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;
     }
 
-    private static createDataServiceMediaExportDbSql(backendConfig: {}): TourDocDataService {
+    private static createDataServiceMytbExportDbSql(backendConfig: {}): TourDocDataService {
         // configure store
         const filterConfig: TourDocTeamFilterConfig = new TourDocTeamFilterConfig();
         const themeFilters: any[] = JSON.parse(fs.readFileSync(backendConfig['filePathThemeFilterJson'], { encoding: 'utf8' }));
@@ -144,9 +144,9 @@ export class TourDocDataServiceModule {
         const dataService: TourDocDataService = new TourDocDataService(dataStore);
 
         // configure adapter
-        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMediaExportDbAdapter'];
+        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbExportDbAdapter'];
         if (sqlConfig === undefined) {
-            throw new Error('config for TourDocSqlMediaExportDbAdapter not exists');
+            throw new Error('config for TourDocSqlMytbExportDbAdapter not exists');
         }
         const options = {
             knexOpts: {
@@ -155,8 +155,8 @@ export class TourDocDataServiceModule {
             },
             mapperConfig: backendConfig['mapperConfig']
         };
-        const adapter = new TourDocSqlMediaExportDbAdapter(options,
-            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMediaExportDbAdapter']['facetCacheUsage']);
+        const adapter = new TourDocSqlMytbExportDbAdapter(options,
+            <FacetCacheUsageConfigurations>backendConfig['TourDocSqlMytbExportDbAdapter']['facetCacheUsage']);
         dataStore.setAdapter('http', adapter, '', {});
 
         return dataService;
@@ -185,11 +185,11 @@ export class TourDocDataServiceModule {
         return dataService;
     }
 
-    private static createObjectDetectionDataStoreMediadbSql(backendConfig: {}): ObjectDetectionDataStore {
+    private static createObjectDetectionDataStoreMytbDbSql(backendConfig: {}): ObjectDetectionDataStore {
         // configure adapter
-        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMediadbAdapter'];
+        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbDbAdapter'];
         if (sqlConfig === undefined) {
-            throw new Error('config for TourDocSqlMediadbAdapter not exists');
+            throw new Error('config for TourDocSqlMytbDbAdapter not exists');
         }
         const options = {
             knexOpts: {
@@ -198,7 +198,7 @@ export class TourDocDataServiceModule {
             }
         };
         const odDataStore: ObjectDetectionDataStore =
-            new TourDocSqlMediadbObjectDetectionAdapter(options, knex(options.knexOpts), new SqlQueryBuilder());
+            new TourDocSqlMytbDbObjectDetectionAdapter(options, knex(options.knexOpts), new SqlQueryBuilder());
 
         return odDataStore;
     }

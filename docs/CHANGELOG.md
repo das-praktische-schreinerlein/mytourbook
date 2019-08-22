@@ -22,8 +22,8 @@
 - none
  
 ### breaking changes
-- backend: renamed TourDocSqlMytbAdapter to TourDocSqlMediaExportDbAdapter
-- datastore: renamed database mediadb to testmediadb and mytb to mediaexportdb
+- backend: renamed TourDocSqlMytbAdapter to TourDocSqlMytbExportDbAdapter, TourDocSqlMediadbAdapter to TourDocSqlMytbDbAdapter
+- datastore: renamed database mediadb to testmytbdb and mytb to mytbexportdb
 
 ### known issues
 - frontend: IE till 11 not functional (can block rendering sometimes)

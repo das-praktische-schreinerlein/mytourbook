@@ -1,18 +1,18 @@
 # Develop MyTourBook
 
 ## add database-migrations
-- create new migration-files for mediadb driver: sqlite
+- create new migration-files for mytbdb driver: sqlite
 ```bash
-db-migrate create add-blocked --sql-file --migrations-dir migrations\mediadb --config config\db-migrate-database.json --env mediadb_sqlite3
+db-migrate create add-blocked --sql-file --migrations-dir migrations\mytbdb --config config\db-migrate-database.json --env mytbdb_sqlite3
 ```
-- compare with migrations/mediadb/20190804164718-add-blocked.js and add driver to path
+- compare with migrations/mytbdb/20190804164718-add-blocked.js and add driver to path
 - move sql-files to specific folder: mysql|sqlite3
 - copy sql-files to the other folder: mysql|sqlite3
 - add sql to sql-files
 - do migration
 ```bash
-db-migrate up --migrations-dir migrations\mediadb --config config\db-migrate-database.json --env mediadb_sqlite3
-db-migrate down --migrations-dir migrations\mediadb --config config\db-migrate-database.json --env mediadb_sqlite3
+db-migrate up --migrations-dir migrations\mytbdb --config config\db-migrate-database.json --env mytbdb_sqlite3
+db-migrate down --migrations-dir migrations\mytbdb --config config\db-migrate-database.json --env mytbdb_sqlite3
 ```
 - insert migrations manually if scripts dont pass but model is ready 
 ```sql
