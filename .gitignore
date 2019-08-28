@@ -38,6 +38,8 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
+
+# project
 /installer/docker/mysqldb/docker-entrypoint-initdb.d/*
 /installer/docker/solr/cores/*
 /documentation/
@@ -48,3 +50,24 @@ Thumbs.db
 /src/backend/shared-node
 /src/out-tsc
 /cache/
+!/overrides/.gitkeep
+!/overrides/after-build/.gitkeep
+overrides/after-build/config/*
+!/overrides/after-build/config/.gitkeep
+overrides/after-build/dist/mytbdev/de/*
+overrides/after-build/dist/mytbdev/en/*
+!/overrides/after-build/dist/mytbdev/de/.gitkeep
+!/overrides/after-build/dist/mytbdev/en/.gitkeep
+overrides/after-build/dist/mytbbeta/de/*
+overrides/after-build/dist/mytbbeta/en/*
+!/overrides/after-build/dist/mytbbeta/de/.gitkeep
+!/overrides/after-build/dist/mytbbeta/en/.gitkeep
+overrides/after-build/dist/mytb/de/*
+overrides/after-build/dist/mytb/en/*
+!/overrides/after-build/dist/mytb/de/.gitkeep
+!/overrides/after-build/dist/mytb/en/.gitkeep
+!/overrides/before-build/.gitkeep
+/overrides/before-build/installer/*
+!/overrides/before-build/installer/.gitkeep
+/overrides/before-build/sbin/*
+!/overrides/before-build/sbin/.gitkeep
