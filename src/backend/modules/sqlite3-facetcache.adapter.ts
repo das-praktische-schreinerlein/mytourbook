@@ -44,7 +44,7 @@ export class Sqlite3FacetCacheAdapter implements FacetCacheAdapter {
 
     public generateFacetTriggerCallSql(facetKey: string): string[] {
         return ['INSERT INTO facetcacheupdatetrigger (ft_key)' +
-        '        SELECT triggername' +
+        '        SELECT "' + facetKey + '"' +
         '            WHERE NOT EXISTS (SELECT 1 FROM facetcacheupdatetrigger WHERE ft_key="' + facetKey + '");'];
     }
 

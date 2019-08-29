@@ -17,6 +17,8 @@
 - frontend: improved trackmanagement
 - installation: added database-migrations
 - common: improved code-quality (types, promises, unused code, relicts...)
+- development: improved build-process with overrides
+- added import-scripts for automatic import
 
 ### bug fixes
 - none
