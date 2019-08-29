@@ -7,14 +7,13 @@
 ### create and initialize database
 - create mytbdb the master-database (mysql)
 ```bash
-mysql
-source installer/db/mysql/mytbdb/step1_create-db.sql
-source installer/db/mysql/mytbdb/step3_import-data.sql
-source installer/db/mysql/mytbdb/step2_create-user.sql
+mysql -u root -p 
+source installer/db/mysql/mytbdb/init_01_create-database.sql
+source installer/db/mysql/mytbdb/init_2_create-user.sql
 ```
 - create mytbexportdb the export-database (mysql)
 ```bash
-mysql
+mysql -u root -p 
 source installer/db/mysql/mytbexportdb/init_01_create-database.sql
 source installer/db/mysql/mytbexportdb/init_2_create-user.sql
 ``` 
