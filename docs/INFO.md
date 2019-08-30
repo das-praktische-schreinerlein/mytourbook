@@ -1,7 +1,5 @@
 # What is MyTourBook
 
-# TODO - check docu
-
 MyTourBook is a portal with a bunch of different page types and features:
 
 - starting with sectionpage for different content-sections as Startpage, RegionPage.... ![Sectionpage](images/sectionpage-x400.png)
