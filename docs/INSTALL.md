@@ -1,7 +1,5 @@
 # Install MyTourBook
 
-# TODO - check docu
-
 ## prepare-dev
 
 ### prepare src-directory
@@ -110,7 +108,7 @@ dir /var/redis/6379
 stop-writes-on-bgsave-error no
 ```
 - startscript
-```
+```bash
 cp utils/redis_init_script /etc/init.d/redis_6379
 sudo update-rc.d redis_6379 defaults
 ```

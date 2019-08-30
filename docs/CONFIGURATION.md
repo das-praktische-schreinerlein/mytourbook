@@ -1,25 +1,33 @@
 # Configure MyTourBook
 
-# TODO - check docu
+- if you want to get save override the configuration-file in overrides-directory.
 
 ## Backend
 
 ### environment
-- configure windows vars in devtools/configure-environment.cmd
+- configure windows vars in sbin/configure-environment.cmd
 ```bash
-set DIGIFOTOS_BASEDIR=D:\Bilder\digifotos\
-set VIDEOS_BASEDIR=D:\Bilder\Videos\
-set MYTB_IMPORT_MEDIADIR=D:\Bilder\mytbbase\
-set DEVTOOLS=F:\Projekte\mytb_mat_local\mytourbook\devtools\
-set MYTB=F:\Projekte\mytb_mat_local\mytourbook\
+set DIGIFOTOS_BASEDIR=F:\playground\mytb-test\Bilder\digifotos\
+set VIDEOS_BASEDIR=F:\playground\mytb-test\Bilder\Videos\
+set MYTB_IMPORT_MEDIADIR=F:\playground\mytb-test\mytbbase\
+set MYTB_MEDIADIR=F:\playground\mytb-test\mytbmediabase\
+set MYTBTOOLS=F:\Projekte\mytourbook_upgrade\sbin\
+set MYTB=F:\Projekte\mytourbook_upgrade\
 ```   
-- configure unix vars in devtools/configure-environment.bash
+- configure unix vars in sbin/configure-environment.bash
 ```bash
-DIGIFOTOS_BASEDIR=/cygdrive/d/Bilder/digifotos/
-VIDEOS_BASEDIR=/cygdrive/d/Bilder/Videos/
-MYTB_IMPORT_MEDIADIR=/cygdrive/d/Bilder/mytbbase/
-DEVTOOLS=/cygdrive/f/Projekte/mytb_mat_local/mytourbook/devtools/
-MYTB=/cygdrive/f/Projekte/mytb_mat_local/mytourbook/
+DIGIFOTOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/digifotos/
+VIDEOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/Videos/
+MYTB_IMPORT_MEDIADIR=/cygdrive/f/playground/mytb-test/mytbbase/
+MYTB_MEDIADIR=/cygdrive/f/playground/mytb-test/mytbmediabase/
+MYTBTOOLS=/cygdrive/f/Projekte/mytourbook_upgrade/sbin/
+MYTB=/cygdrive/f/Projekte/mytourbook_upgrade/
+W_DIGIFOTOS_BASEDIR="F:\\playground\\mytb-test\\Bilder\\digifotos\\"
+W_VIDEOS_BASEDIR="F:\\playground\\mytb-test\\Bilder\\Videos\\"
+W_MYTB_IMPORT_MEDIADIR="F:\\playground\\mytb-test\\mytbbase\\"
+W_MYTB_MEDIADIR="F:\\playground\\mytb-test\\mytbmediabase\\"
+W_MYTBTOOLS="F:\\Projekte\\mytourbook_upgrade\\sbin\\"
+W_MYTB="F:\\Projekte\\mytourbook_upgrade\\"
 ```
 
 ### API-Server Config: config/backend.json
@@ -50,6 +58,25 @@ The configuration-file to configure the backend-api-server.
             "database": "testmytbdb",
             "port": "3306",
             "filename": "D:/Bilder/mytbbase/test/mytbdb.sqlite"
+        },
+        "facetCacheUsage": {
+            "active": true,
+            "entities": {
+                "odimgobject": {
+                    "facetKeyPatterns": [".*"]
+                },
+                "image": {
+                    "facetKeyPatterns": [".*"]
+                }
+            }
+        },
+        "facetCacheConfig": {
+            "datastore": {
+                "scriptPath": "installer/db/mysql/facetcache"
+            },
+            "facets": [
+            ],
+            "checkInterval": 2
         }
     },
     "TourDocSqlMytbExportDbAdapter": {
