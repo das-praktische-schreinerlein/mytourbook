@@ -1,122 +1,75 @@
 # Data-Management
 
-# TODO - check docu
-
 ## initialize environment (once)
 
-### create and initialize database
+### create production database
 - create mytbdb the master-database (mysql)
 ```bash
+bash
 mysql -u root -p 
 source installer/db/mysql/mytbdb/init_01_create-database.sql
 source installer/db/mysql/mytbdb/init_2_create-user.sql
 ```
 - create mytbexportdb the export-database (mysql)
 ```bash
+bash
 mysql -u root -p 
 source installer/db/mysql/mytbexportdb/init_01_create-database.sql
 source installer/db/mysql/mytbexportdb/init_2_create-user.sql
 ``` 
-- create image-sym-links as admin
-```bash
-d:
-cd \Bilder\mytbbase\import
-mklink /J link_pics_x600 pics_full
-mklink /J link_pics_x100 pics_full
-mkdir pics_x600
-mkdir pics_x100
-mklink /J link_video_x600 video_full
-mkdir video_screenshot
-mkdir video_thumbnail
-mkdir video_x600
-exit
-```
 
 ### configure local environments
-
-### develop 
-- configure a ```backend.json``` with another port and SqlMytbDb
+- copy orig from config and configure a ```backend.import.json``` and ```backend.json``` with another port and SqlMytbDb in ```overrides/after-build/config```
 - configure ```src/frontend/environments/environment.ts``` to use this as backend-url 
 
-### beta
-- configure a second ```backend.beta.json``` with another port and Solr with ```http://localhost:8983/solr/mytbdev``` as backend
-- configure ```src/frontend/environments/environment.beta.ts``` to use this as backend-url 
+## import tracks to import-database 
 
-## do imageimport (several times) 
-- preparation and import of media (images, videos) in an separate import-database
-
-### prepare import-folder
-- create image-import-folder
-```bash
-mkdir D:\Bilder\digifotos\import-2014-08
-```
-- copy images to import-folder and group in subfolder by date
+### do import
 ```bash
 bash
-devtools/copyImagesToDateFolder.sh import-2014-08 import-READY/ import-2014-08
+cd sbin
+./prepare-tracks-for-import-database.sh
+./import-tracks-to-import-database.sh
 ```
-- autorotate images in import-folder
-```bash
-cmd
-devtools\autorotateImagesInFolder.bat D:\Bilder\digifotos\import-READY\import-2014-08
-```
-- manually add location to folder-names 
 
-### image-import into mytbdb
-- copy images/videos in to 'pics_full' and 'video_full' folder
-- convert videos: avi/mov... to mp4
-```bash
-d:
-cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir D:\Bilder\mytbbase\import\video_full\ --outputDir D:\Bilder\mytbbase\import\video_full\ --debug true
-``` 
-- rotate mp4-videos
-```bash
-d:
-cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile D:\Bilder\mytbbase\import\video_full\import-2015-05_20150410-bad-brambach\CIMG6228.MOV.MP4
-``` 
-- generate json-import-file
-```bash
-d:
-cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\pics_full\ --debug true > D:\Bilder\mytbbase\import\mytbdb-import-images.json 
-node dist\backend\serverAdmin.js -c config\backend.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --debug true > D:\Bilder\mytbbase\import\mytbdb-import-videos.json 
-```
-- manually fix json-import-file (locationnames...)
-- create sqlite database
-    - execute *installer/db/sqlite/mytbdb/step1_import-data.sql*
-    - execute *installer/db/sqlite/mytbdb/step2_pepare-data.sql*
-- load data
-```bash
-d:
-cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mytbdb-import-images.json
-node dist\backend\serverAdmin.js --debug --command loadTourDoc  -c config\backend.json -f D:\Bilder\mytbbase\import\mytbdb-import-videos.json
-```
-- read image-dates and scale images
-```bash
-d:
-cd d:\Projekte\mytourbook 
-rem node dist/backend/serverAdmin.js --command imageManager --action readImageDates -c config/backendt.json
-node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.json
-```
-- scale videos
-```bash
-d:
-cd d:\Projekte\mytourbook 
-node dist\backend\serverAdmin.js --command mediaManager --action generateVideoScreenshotFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --outputDir D:\Bilder\mytbbase\import\\video_screenshot\ --debug true
-node dist\backend\serverAdmin.js --command mediaManager --action generateVideoPreviewFromMediaDir --importDir D:\Bilder\mytbbase\import\video_full\ --outputDir D:\Bilder\mytbbase\import\video_thumbnail\ --debug true
-node dist\backend\serverAdmin.js --command mediaManager --action scaleVideosFromMediaDirToMP4 --importDir D:\Bilder\mytbbase\import\video_full\ --outputDir D:\Bilder\mytbbase\import\video_x600\ --debug true
-```
-### do data-management....
-- [manage locations](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/location/10/1)
-- [manage tracks](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
-- [checkout images as favorites to export](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
-- [create routes from tracks](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
+### data-management: basics 
+- [locations](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/location/10/1)
 - [create trips](http://localhost:4002/mytbdev/de/tdocadmin/create/TRIP)
 
-### export to solr
+### data-management: tracks 
+- [manage track: type/persons/GPS-tracks/date](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
+  - HINT: use gpx-traclfiles from garmin archive-folder
+- [generate and change tracknames](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
+- [manage rating/keywords](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
+- OPTIONAL - fix track-data if needed
+  - connect to database (via gui or cli and run script manually)
+  - [SQL mytbdb: fix trackdates in sqlite-database](installer/db/sqlite/mytbdb/fix-trackdates-by-imagedates.sql)
+  - [SQL mytbdb: delete kategorie which are not used](installer/db/sqlite/mytbdb/delete-tracks-unused.sql)
+
+### data-management: image-rating
+- [select favorite images](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
+- [identify persons](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
+- [rate favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
+- [add additonal playlists for favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
+- [block private images from favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
+
+## import tracks from import-database to produrction-database 
+
+### do import
+```bash
+./import-tracks-to-production-database.sh
+./fix-data-in-production-database.sh
+```
+
+### data-management: touren/location
+- [tracks: assing existing routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/date/track/50/1)
+- [manage location: sublocations of ImportXXX...](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/Import/egal/date/location/10/1)
+- [create new routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/ratePers/track/50/1)
+- assign additional tracks to new routes
+- [assign multi-route-tracks in legacy-system](http://localhost:8080/mediadb2/admin/Kategorie_TourEdit.do?CURTABLE=KATEGORIE&CURPAGE=popupshowkategorietouren&CURID=2316)
+- [SQL mytbdb mysql: route set minDate](installer/db/mysql/mytbdb/update-tour-min-dates.sql)
+
+## export to solr
 - import from mytbdb to mytbexportdb
 ```bash
 mysql mytbexportdb
