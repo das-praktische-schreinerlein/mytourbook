@@ -9,6 +9,7 @@ import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/mode
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
 import {CommonDocTransportModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-transport.module';
 import {utils} from 'js-data';
+import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 
 export class TourDocExporterCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -21,7 +22,7 @@ export class TourDocExporterCommand implements AbstractCommand {
             readOnly: false
         };
 
-        const dataFileName = argv['f'] || argv['file'];
+        const dataFileName = TourDocFileUtils.normalizeCygwinPath(argv['f'] || argv['file']);
         if (dataFileName === undefined) {
             console.error('option --file expected');
             return;

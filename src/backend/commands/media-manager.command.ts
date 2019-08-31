@@ -8,9 +8,13 @@ import * as os from 'os';
 import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
 import {CommonMediaManagerCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-media-manager.command';
 import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
+import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 
 export class MediaManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
+        argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);
+        argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
+
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
         const searchForm = new TourDocSearchForm({ type: 'image', sort: 'dateAsc'});

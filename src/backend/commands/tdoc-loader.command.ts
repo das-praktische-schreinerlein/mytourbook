@@ -20,7 +20,7 @@ export class TourDocLoaderCommand implements AbstractCommand {
             readOnly: false
         };
 
-        const dataFileName = argv['f'] || argv['file'];
+        const dataFileName = TourDocFileUtils.normalizeCygwinPath(argv['f'] || argv['file']);
         if (dataFileName === undefined) {
             console.error('option --file expected');
             return;
