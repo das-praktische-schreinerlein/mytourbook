@@ -71,3 +71,5 @@ overrides/after-build/dist/mytb/en/*
 !/overrides/before-build/installer/.gitkeep
 /overrides/before-build/sbin/*
 !/overrides/before-build/sbin/.gitkeep
+/overrides/before-build/src/*
+!/overrides/before-build/src/.gitkeep
