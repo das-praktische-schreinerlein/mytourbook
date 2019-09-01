@@ -362,6 +362,7 @@ CREATE TABLE video (
   v_dir char(255) COLLATE latin1_general_ci DEFAULT NULL,
   v_file char(255) COLLATE latin1_general_ci DEFAULT NULL,
   v_keywords text COLLATE latin1_general_ci,
+  v_persons mediumtext COLLATE latin1_general_ci,
   v_gps_lat float DEFAULT NULL,
   v_gps_lon float DEFAULT NULL,
   v_gps_ele float DEFAULT NULL,

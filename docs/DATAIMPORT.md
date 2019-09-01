@@ -8,14 +8,14 @@
 bash
 mysql -u root -p 
 source installer/db/mysql/mytbdb/init_01_create-database.sql
-source installer/db/mysql/mytbdb/init_2_create-user.sql
+source installer/db/mysql/mytbdb/init_02_create-user.sql
 ```
 - create mytbexportdb the export-database (mysql)
 ```bash
 bash
 mysql -u root -p 
 source installer/db/mysql/mytbexportdb/init_01_create-database.sql
-source installer/db/mysql/mytbexportdb/init_2_create-user.sql
+source installer/db/mysql/mytbexportdb/init_02_create-user.sql
 ``` 
 
 ### configure local environments
@@ -69,16 +69,30 @@ cd sbin
 - [assign multi-route-tracks in legacy-system](http://localhost:8080/mediadb2/admin/Kategorie_TourEdit.do?CURTABLE=KATEGORIE&CURPAGE=popupshowkategorietouren&CURID=2316)
 - [SQL mytbdb mysql: route set minDate](installer/db/mysql/mytbdb/update-tour-min-dates.sql)
 
-## export to solr
-- import from mytbdb to mytbexportdb
+## export to beta-solr
+- import from mytbdb to mytbexportbetadb
 ```bash
-mysql mytbexportdb
-use mytbexportdb
+mysql -u testmytbexportbetadb -p testmytbexportbetadb
+use testmytbexportbetadb
 source installer/db/mysql/mytbexportdb/import_01_create-model.sql
-source installer/db/mysql/mytbexportdb/import_02_import-data-from-mytbdb.sql;
+source installer/db/mysql/mytbexportdb/import_02_import-data-from-mytbdb-to-mytbexportbetadb.sql;
+exit;
 ```
-- import from mytbexportdb to solr
+- manually run sql-scripts to manipulate data
+- import from mytbexportbetadb to beta-solr
 ```bash
-curl "http://localhost:8983/solr/mytbdev/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true"
+curl "http://localhost:8983/solr/coremytbbeta/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true&verbose=true"
 ```
 
+## export to prod-solr
+- import from mytbexportbetadb to mytbexportproddb
+```bash
+mysql -u testmytbexportproddb -p testmytbexportproddb
+use testmytbexportproddb
+source installer/db/mysql/mytbexportdb/import_03_import-data-from-mytbexportbetadb-to-mytbexportproddb.sql;
+```
+- manually run sql-scripts to manipulate data
+- import from mytbexportbetadb to beta-solr
+```bash
+curl "http://localhost:8983/solr/coremytbprod/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true&verbose=true"
+```

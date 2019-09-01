@@ -13,7 +13,7 @@ npm prune && npm install
 - install solr 6.6.0 [Download](http://mirror.netcologne.de/apache.org/lucene/solr/6.6.0/)
 - add mysql-downloader
     - solr-6.6.0/contrib/dataimporthandler/libmysql-connector-java-5.1.40-bin.jar
-- add core from mytb
+- add cores from mytb
 - download [hunspell-language-files](https://github.com/elastic/hunspell/tree/master/dicts/de_DE) and put them as *lang/hunspell_de_DE.dic* and *lang/hunspell_de_DE.aff* into core-config
 - download [grman dictionary](https://netix.dl.sourceforge.net/project/germandict/german.7z) and put as *lang/dictionary_de.txt* into core-config
 - or use hunspell-dictionary

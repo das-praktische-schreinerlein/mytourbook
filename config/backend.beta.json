@@ -32,14 +32,22 @@
         "replaceKeywordPatterns": []
     },
     "TourDocSolrAdapter": {
-        "solrCoreTourDoc": "http://localhost:8983/solr/mytbbeta/",
+        "solrCoreTourDoc": "http://localhost:8983/solr/coremytbbeta/",
         "solrCoreTourDocReadUsername": "mytbread",
         "solrCoreTourDocReadPassword": "SolrRocks"
     },
+    "TourDocSqlMytbExportDbAdapter": {
+        "client": "mysql",
+        "connection": {
+            "host": "localhost",
+            "user": "root",
+            "password": "",
+            "database": "testmytbexportbetadb",
+            "port": "3306",
+            "filename": "D:/Bilder/mytbbase/test/mytbexportdbbeta.sqlite"
+        }
+    },
     "cacheConfig": {
-        "cacheRedisUrl": "redis://localhost:6379/",
-        "cacheRedisPass": "blablub",
-        "cacheRedisDB": "2"
     },
     "port": 4101,
     "corsOrigin": true

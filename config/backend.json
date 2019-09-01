@@ -70,13 +70,13 @@
             "host": "localhost",
             "user": "root",
             "password": "",
-            "database": "mytbexportdb",
+            "database": "mytbexportbetadb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mytbexportdb.sqlite"
+            "filename": "D:/Bilder/mytbbase/test/mytbexportbetadb.sqlite"
         }
     },
     "TourDocSolrAdapter": {
-        "solrCoreTourDoc": "http://localhost:8983/solr/mytbdev/",
+        "solrCoreTourDoc": "http://localhost:8983/solr/coremytbbeta/",
         "solrCoreTourDocReadUsername": "mytbread",
         "solrCoreTourDocReadPassword": "SolrRocks"
     },
