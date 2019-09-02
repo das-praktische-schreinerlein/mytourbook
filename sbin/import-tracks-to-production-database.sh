@@ -40,9 +40,11 @@ cd ${MYTB}
 node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
 cd $CWD
 
-echo "YOUR TODO: [SQL mediadb mysql: update appIds after check](overrides/installer/db/mysql/mediadb/update-appis.sql)"
+echo "YOUR TODO: update appIds after check"
+echo "   mysql"
+echo "    source installer/db/mysql/mytbdb/update-appis.sql"
 echo "YOUR TODO: copy or move images/video-folder from MYTB_IMPORT_MEDIADIR to MYTB_PROD_MEDIADIR"
-echo "OPEN: Can we proceed the next steps?"
+echo "OPEN: Did you run your todos? Can we proceed the next steps?"
 select yn in "Yes"; do
     case $yn in
         Yes ) break;;

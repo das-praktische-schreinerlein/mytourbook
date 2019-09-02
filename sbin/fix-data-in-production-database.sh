@@ -19,18 +19,26 @@ select yn in "Yes"; do
 done
 
 
-echo "YOUR TODO: [SQL mediadb mysql: set gesperrt=0 if null](overrides/installer/db/mysql/mediadb/fix-track_image-blocked-default.sql)"
-echo "YOUR TODO: [SQL mediadb mysql: set route to OFFEN](overrides/installer/db/mysql/mediadb/fix-tracks-without-route.sql)"
-echo "YOUR TODO: [SQL mediadb mysql: fix trackdates from image in mysql-database](overrides/installer/db/mysql/mediadb/fix-trackdates-by-imagedates.sql)"
-echo "YOUR TODO: [SQL mediadb mysql: fix gps-timecorrector for imported tracks!!!!!!](overrides/installer/db/mysql/mediadb/fix-gpx-timecorrector.sql)"
+echo "YOUR TODO: run fixtures on mysql"
+echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"
+echo "   mysql"
+echo "    source installer/db/mysql/mytbdb/fixture-fix-imagedates.sql"
+echo "    source installer/db/mysql/mytbdb/fixture-fix-track_image-blocked-default.sql"
+echo "    source installer/db/mysql/mytbdb/fixture-fix-tracks-without-route.sql"
+echo "    source installer/db/mysql/mytbdb/fixture-fix-trackdates-by-imagedates.sql"
+echo "    source installer/db/mysql/mytbdb/fixture-fix-gpx-timecorrector.sql)"
 echo "YOUR TODO: generate gpx-track-files d:/webs/www.michas-ausflugstipps.de/libexec/gentracks.bat"
-echo "YOUR TODO: [SQL mediadb mysql: fix trackdates from gps](overrides/installer/db/mysql/mediadb/fix-trackdates-by-gpstrackpoints.sql)"
-echo "YOUR TODO: [SQL mediadb mysql: extract imagegps](overrides/installer/db/mysql/mediadb/update-imagecoor-by-gpstrackpoints.sql)"
+echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"
+echo "   mysql"
+echo "    source installer/db/mysql/mytbdb/fixture-fix-trackdates-by-gpstrackpoints.sql"
+echo "YOUR TODO: fix image/video-coordinates (via gui or cli and run script manually)"
+echo "   mysql"
+echo "    source installer/db/mysql/mytbdb/fixture-update-imagecoor-by-gpstrackpoints.sql"
+echo "    source installer/db/mysql/mytbdb/fixture-update-videocoor-by-gpstrackpoints.sql"
 echo "YOUR TODO: index images: F:/projekte/mediadb2/libexec/doindeximages.bat"
-
 echo "YOUR TODO: run picasa on image-folder"
 echo "YOUR TODO: start [mycms-objectdetector](https://github.com/das-praktische-schreinerlein/mycms-objectdetector)"
-echo "OPEN: Can we proceed the next steps?"
+echo "OPEN: Did you run your steps? Can we proceed the next steps?"
 select yn in "Yes"; do
     case $yn in
         Yes ) break;;

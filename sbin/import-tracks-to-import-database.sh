@@ -56,8 +56,12 @@ node dist/backend/serverAdmin.js --command mediaManager --action generateVideoPr
 node dist/backend/serverAdmin.js --command mediaManager --action scaleVideosFromMediaDirToMP4 --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_x600/ --debug true
 cd $CWD
 
-echo "OPTIONAL YOUR TODO: fix image-date if needed (via gui or cli and run script manually overrides/installer/db/sqlite/mediadb/fix-imagedates.sql)"
-echo "OPEN: Can we proceed the next steps?"
+echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"
+echo "   sqlitecli"
+echo "    source installer/db/sqlite/mytbdb/fixture-fix-imagedates.sql"
+echo "    source installer/db/sqlite/mytbdb/fixture-fix-trackdates-by-imagedates.sql"
+echo "    source installer/db/sqlite/mytbdb/fixture-delete-tracks-unused.sql"
+echo "OPEN: Did you run the sql-fixtures? Can we proceed the next steps?"
 select yn in "Yes"; do
     case $yn in
         Yes ) break;;
