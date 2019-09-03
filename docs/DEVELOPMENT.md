@@ -10,7 +10,7 @@ npm install && npm prune && ./build-dev.bash
 
 Run to build and start the backend. Navigate to [api](http://localhost:4100/api/v1/de/pdoc/) to get the pdocs.
 ```bash
-npm backend-build-and-serve-dev
+npm run backend-build-and-serve-dev
 ```
 
 Run for a dev server. Navigate to [startpage](http://localhost:4200/).
