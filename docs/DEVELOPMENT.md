@@ -1,5 +1,19 @@
 # Develop MyTourBook
 
+## Development server
+Run initially `npm install && npm prune && ./build-dev.bash` to copy overrides into project. 
+
+Run `npm backend-build-and-serve-dev` to build and start the backend. Navigate to `http://localhost:4100/api/v1/de/pdoc/` to get the pdocs.
+
+Run `npm start` for a dev server. Navigate to `http://localhost:4200/`.
+
+## Running unit tests
+Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+## Running end-to-end tests
+Run `npm e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Before running the tests make sure you are serving the app via `npm start`.
+
 ## add database-migrations
 - create new migration-files for mytbdb driver: sqlite
 ```bash

@@ -113,20 +113,14 @@ cp utils/redis_init_script /etc/init.d/redis_6379
 sudo update-rc.d redis_6379 defaults
 ```
 
-## Development server
-Run `npm backend-build-serve` to build and start the backend. Navigate to `http://localhost:4100/api/v1/de/pdoc/` to get the pdocs.
+## Build dev
+Run `./build-dev.bash` for the dev-versions in `dist/`.
 
-Run `npm start` for a dev server. Navigate to `http://localhost:4200/`.
-
-## Running unit tests
-Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-Run `npm e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `npm start`.
+## Build beta
+Run `./build-beta.bash` for the beta-versions in `dist/`.
 
 ## Build prod
-Run `npm build-prod-de` or `npm build-prod-en` for the prod-versions in `dist/`. 
+Run `./build-prod.bash` for the prod-versions in `dist/`. 
 
 ## Deploy prod
 Stop backend via startscript
