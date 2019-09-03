@@ -114,13 +114,25 @@ sudo update-rc.d redis_6379 defaults
 ```
 
 ## Build dev
-Run `./build-dev.bash` for the dev-versions in `dist/`.
+Run for the dev-versions in `dist/`.
+```bash
+bash
+./build-dev.bash
+```
 
 ## Build beta
-Run `./build-beta.bash` for the beta-versions in `dist/`.
+Run for the beta-versions in `dist/`.
+```bash
+bash
+./build-beta.bash
+```
 
 ## Build prod
-Run `./build-prod.bash` for the prod-versions in `dist/`. 
+Run for the prod-versions in `dist/`. 
+```bash
+bash
+./build-prod.bash
+```
 
 ## Deploy prod
 Stop backend via startscript
