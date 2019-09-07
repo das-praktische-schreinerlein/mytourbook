@@ -362,7 +362,7 @@ export class TourDocSqlMytbDbConfig {
                     from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id ' +
                         'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
                     triggerParams: ['id', 'odstates_ss', 'odprecision_is', 'odkeys_txt', 'oddetectors_txt'],
-                    groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS i_allobjects']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_allobjects']
                 },
                 {
                     from: 'LEFT JOIN image_object image_object_persons ON image.i_id=image_object_persons.i_id ' +
