@@ -57,6 +57,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/ /g, '_') : '');
         values['name_s'] = props.name;
         values['techname_s'] = props.techName;
+        values['objects_txt'] =
+            (props.objects ? props.objects.split(', ').join(',,') : '');
         values['persons_txt'] =
             (props.persons ? props.persons.split(', ').join(',,') : '');
         values['playlists_txt'] =
@@ -206,6 +208,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
         values['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'name_s', undefined);
         values['techName'] = values['name'] ? values['name'].replace(/[- \/()+;.]+/g, '_').toLowerCase() : '';
+        values['objects'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'objects_txt', '')
+            .split(',,').join(', ');
         values['persons'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'persons_txt', '')
             .split(',,').join(', ');
         values['playlists'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'playlists_txt', '')
@@ -357,28 +361,37 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 this.mapImageDocsToAdapterDocument(mapper, <TourDocRecord>record, imageUrls);
                 break;
             case 'image_playlist':
-                let imagePlaylist = '';
+                const imagePlaylists = [];
                 docs.forEach(doc => {
                     if (doc['i_playlists'] !== undefined && doc['i_playlists'] !== null) {
-                        imagePlaylist = doc['i_playlists'];
+                        imagePlaylists.push(doc['i_playlists']);
                     }
                 });
-                (<TourDocRecord>record).playlists = imagePlaylist;
+                (<TourDocRecord>record).playlists = imagePlaylists.join(', ');
                 break;
             case 'image_persons':
-                let imagePersons = '';
+                const imagePersons = [];
                 docs.forEach(doc => {
                     if (doc['i_persons'] !== undefined && doc['i_persons'] !== null) {
-                        imagePersons = doc['i_persons'];
+                        imagePersons.push(doc['i_persons']);
                     }
                 });
-                (<TourDocRecord>record).persons = imagePersons;
+                (<TourDocRecord>record).persons = imagePersons.join((', '));
                 break;
             case 'image_objects':
                 const imageObjects = [];
                 docs.forEach(doc => {
                     if (doc['i_objects'] !== undefined && doc['i_objects'] !== null) {
-                        const recordSrcs = doc['i_objects'].split(';;');
+                        imageObjects.push(doc['i_objects']);
+                    }
+                });
+                (<TourDocRecord>record).objects = imageObjects.join(', ');
+                break;
+            case 'image_objectdetections':
+                const imageObjectDetections = [];
+                docs.forEach(doc => {
+                    if (doc['i_objectdetections'] !== undefined && doc['i_objectdetections'] !== null) {
+                        const recordSrcs = doc['i_objectdetections'].split(';;');
                         for (let i = 0; i < recordSrcs.length; i++) {
                             const valuePairs = recordSrcs[i].split(':::');
                             const imageObject = {};
@@ -386,11 +399,11 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                                 const value = valuePairs[j].split('=');
                                 imageObject[value[0]] = value[1];
                             }
-                            imageObjects.push(imageObject);
+                            imageObjectDetections.push(imageObject);
                         }
                     }
                 });
-                this.mapObjectDetectionImageObjectDocToAdapterDocument(mapper, <TourDocRecord>record, imageObjects);
+                this.mapObjectDetectionImageObjectDocToAdapterDocument(mapper, <TourDocRecord>record, imageObjectDetections);
                 break;
             case 'video':
                 const videoUrls = [];
@@ -409,13 +422,22 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 (<TourDocRecord>record).playlists = videoPlaylist;
                 break;
             case 'video_persons':
-                let videoPersons = '';
+                const videoPersons = [];
                 docs.forEach(doc => {
                     if (doc['v_persons'] !== undefined && doc['v_persons'] !== null) {
-                        videoPersons = doc['v_persons'];
+                        videoPersons.push(doc['v_persons']);
                     }
                 });
-                (<TourDocRecord>record).persons = videoPersons;
+                (<TourDocRecord>record).persons = videoPersons.join(', ');
+                break;
+            case 'video_objects':
+                const videoObjects = [];
+                docs.forEach(doc => {
+                    if (doc['v_objects'] !== undefined && doc['v_objects'] !== null) {
+                        videoObjects.push(doc['v_objects']);
+                    }
+                });
+                (<TourDocRecord>record).objects = videoObjects.join(', ');
                 break;
             case 'keywords':
                 let keywords = '';

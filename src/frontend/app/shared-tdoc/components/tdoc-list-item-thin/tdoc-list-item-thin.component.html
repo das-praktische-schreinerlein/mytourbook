@@ -39,7 +39,7 @@
         </div>
         <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
             <div class="col-4 layout-big">
-                <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
             </div>
         </ng-container>
         <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
@@ -94,7 +94,7 @@
         </div>
         <div class="col-4 layout-small">
             <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
             </ng-container>
             <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
@@ -145,7 +145,7 @@
         </div>
         <div class="col-4 layout-verysmall">
             <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
             </ng-container>
             <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >

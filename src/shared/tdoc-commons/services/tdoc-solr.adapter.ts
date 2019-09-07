@@ -21,7 +21,7 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
-            'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt'],
+            'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt'],
         facetConfigs: {
             'actiontype_ss': {
                 'f.actiontype_ss.facet.limit': '-1',
@@ -54,9 +54,9 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
                 'f.month_is.facet.limit': '-1',
                 'f.month_is.facet.sort': 'index'
             },
-            'persons_txt': {
-                'f.persons_txt.limit': '-1',
-                'f.persons_txt.facet.sort': 'index'
+            'objects_txt': {
+                'f.objects_txt.limit': '-1',
+                'f.objects_txt.facet.sort': 'index'
             },
             'oddetectors_txt': {
                 noFacet: true
@@ -69,6 +69,10 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             },
             'odstates_ss': {
                 noFacet: true
+            },
+            'persons_txt': {
+                'f.persons_txt.limit': '-1',
+                'f.persons_txt.facet.sort': 'index'
             },
             'playlists_txt': {
             },
@@ -190,6 +194,7 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
                 .replace(/,/g, ',,')
                 .replace(/ /g, '_') : ''),
             name_s: props.name,
+            objects_txt: (props.objects ? props.objects.split(', ').join(',,') : ''),
             persons_txt: (props.persons ? props.persons.split(', ').join(',,') : ''),
             playlists_txt: (props.playlists ? props.playlists.split(', ').join(',,') : ''),
             type_s: props.type,

@@ -119,6 +119,9 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
                 },
+                'objects_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -397,6 +400,9 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
                 },
+                'objects_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -659,6 +665,9 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'MONTH(t_datevon)',
                     orderBy: 'value asc'
                 },
+                'objects_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -900,6 +909,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'month_is': {
                     noFacet: true
                 },
+                'objects_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -1063,6 +1075,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
+                'objects_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -1222,6 +1237,9 @@ export class TourDocSqlMytbExportDbConfig {
                 },
                 'month_is': {
                     selectField: 'MONTH(n_date)'
+                },
+                'objects_txt': {
+                    noFacet: true
                 },
                 'oddetectors_txt': {
                     noFacet: true

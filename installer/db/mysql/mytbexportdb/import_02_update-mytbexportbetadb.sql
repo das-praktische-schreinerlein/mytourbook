@@ -9,6 +9,7 @@ SET
                            '<p>', COALESCE(k_meta_shortdesc, ''), '</p>\n',
                            '<label>tags</label><span>', COALESCE(k_keywords, ''), '</span>\n',
                            '<label>persons</label><span>', COALESCE(k_persons, ''), '</span>\n',
+                           '<label>objects</label><span>', COALESCE(k_objects, ''), '</span>\n',
                            '<label>k_distance</label><span>', COALESCE(k_distance, ''), '</span>\n',
                            '<label>k_altitude_asc</label><span>', COALESCE(k_altitude_asc, ''), '</span>\n',
                            '<label>k_altitude_desc</label><span>', COALESCE(k_altitude_desc, ''), '</span>\n',
@@ -28,7 +29,7 @@ WHERE toupdate.k_id=grouped.k_id;
 
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id, tour.t_name
-  FROM kategorie_full INNER JOIN mediadb.tour ON kategorie_full.t_id=tour.t_id
+  FROM kategorie_full INNER JOIN testmytbdb.tour ON kategorie_full.t_id=tour.t_id
   GROUP BY kategorie_full.k_id) grouped
 SET
     toupdate.k_html=CONCAT(COALESCE(k_html, ''), '<label>tour</label><span>k_type_', COALESCE(t_name, ''), '</span>\n')
@@ -36,7 +37,7 @@ WHERE toupdate.k_id=grouped.k_id;
 
 UPDATE kategorie_full toupdate,
   (SELECT mjoin.k_id AS k_id, GROUP_CONCAT(CAST(tour.t_name AS char(200)) SEPARATOR  '</li><li>') AS t_names
-   FROM mediadb.kategorie_tour mjoin INNER JOIN mediadb.tour ON mjoin.t_id = tour.t_id
+   FROM testmytbdb.kategorie_tour mjoin INNER JOIN testmytbdb.tour ON mjoin.t_id = tour.t_id
    GROUP BY mjoin.k_id) grouped
 SET toupdate.k_html=CONCAT(COALESCE(k_html, ''), '<label>tour</label><ul><li>', COALESCE(grouped.t_names, ''), '</li></ul>\n')
 WHERE toupdate.k_id=grouped.k_id;

@@ -36,6 +36,7 @@ export const TourDocRecordSchema = new Schema({
         locHirarchie: {type: 'string'},
         locHirarchieIds: {type: 'string'},
         name: {type: 'string', minLength: 1, maxLength: 255},
+        objects: {type: 'string'},
         persons: {type: 'string'},
         playlists: {type: 'string'},
         subtype: {type: 'string'},

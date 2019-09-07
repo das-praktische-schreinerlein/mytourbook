@@ -51,6 +51,19 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             };
             actionTagForms.push(actionTagForm);
         }
+        for (let object of (origTdocRecord.objects ? origTdocRecord.objects.split(',') : [])) {
+            object = object.trim();
+            const actionTagForm: ActionTagForm =  {
+                type: 'tag',
+                recordId: newTdocRecord.id,
+                key: 'objects_' + object,
+                payload: {
+                    objectkey: object,
+                    set: true
+                }
+            };
+            actionTagForms.push(actionTagForm);
+        }
     }
 
     protected defineDatastoreMapper(): void {

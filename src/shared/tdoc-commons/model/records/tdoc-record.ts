@@ -51,6 +51,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
     gpsTrackBasefile: string;
     locHirarchie: string;
     locHirarchieIds: string;
+    objects: string;
     persons: string;
     techName: string;
 }
@@ -84,6 +85,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
 
         locHirarchie: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.TEXT, new HierarchyValidationRule(false)),
         locHirarchieIds: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        objects: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         persons: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         techName: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
     };
@@ -107,6 +109,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
     gpsTrackBasefile: string;
     locHirarchie: string;
     locHirarchieIds: string;
+    objects: string;
     persons: string;
     techName: string;
 

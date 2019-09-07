@@ -22,7 +22,7 @@
                                  alt="{{listItem.image.name}}"
                                  (resize)="onResizeMainImage()"
                                  (load)="onResizeMainImage()">
-                            <app-cdoc-odobjectrectangles [objects]="listItem.objects"
+                            <app-cdoc-odobjectrectangles [objects]="listItem.objectdetections"
                                  [width]="imageWidth"
                                  *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
                         </div>
@@ -36,7 +36,7 @@
                     </ng-container>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="image-date">{{listItem.currentRecord | tdocdate}}</h5></a>
                     <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                        <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                     </ng-container>
                     <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                         <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers >

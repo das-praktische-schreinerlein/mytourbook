@@ -3,6 +3,8 @@ import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/servi
 
 export class TourDocSqlMytbDbConfig {
     public static personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
+    public static detectionOkStates = ['RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
+        'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'];
     public static tableConfigs: TableConfigs = {
         'track': {
             key: 'track',
@@ -147,6 +149,9 @@ export class TourDocSqlMytbDbConfig {
                 'month_is': {
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
+                },
+                'objects_txt': {
+                    noFacet: true
                 },
                 'oddetectors_txt': {
                     noFacet: true
@@ -355,9 +360,27 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id ' +
-                    'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
-                    triggerParams: ['id', 'persons_txt', 'odstates_ss', 'odprecision_is', 'odkeys_txt', 'oddetectors_txt'],
-                    groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons']
+                        'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
+                    triggerParams: ['id', 'odstates_ss', 'odprecision_is', 'odkeys_txt', 'oddetectors_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS i_allobjects']
+                },
+                {
+                    from: 'LEFT JOIN image_object image_object_persons ON image.i_id=image_object_persons.i_id ' +
+                    'LEFT JOIN objects persons ON image_object_persons.io_obj_type=persons.o_key' +
+                        ' AND LOWER(persons.o_category) LIKE "person"' +
+                        ' AND (image_object_persons.io_precision = 1' +
+                        '      OR image_object_persons.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
+                    triggerParams: ['id', 'persons_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS i_persons']
+                },
+                {
+                    from: 'LEFT JOIN image_object image_object_objects ON image.i_id=image_object_objects.i_id ' +
+                        'LEFT JOIN objects realobjects ON image_object_objects.io_obj_type=realobjects.o_key' +
+                        ' AND LOWER(realobjects.o_category) NOT LIKE "person"' +
+                        ' AND (image_object_objects.io_precision = 1' +
+                        '      OR image_object_objects.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
+                    triggerParams: ['id', 'objects_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT realobjects.o_name ORDER BY realobjects.o_name SEPARATOR ", ") AS i_objects']
                 }
             ],
             loadDetailData: [
@@ -373,13 +396,30 @@ export class TourDocSqlMytbDbConfig {
                     profile: 'image_persons',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons ' +
                     'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
-                    ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                    ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                    ' AND image_object.io_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
+                    ' AND LOWER(o_category) LIKE "person"' +
+                    ' AND (image_object.io_precision = 1' +
+                    '      OR image_object.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
                     'WHERE image.i_id in (:id)',
                     parameterNames: ['id']
                 },
                 {
                     profile: 'image_objects',
+                    sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_objects ' +
+                        'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
+                        ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        ' AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' AND LOWER(o_category) NOT LIKE "person"' +
+                        ' AND (image_object.io_precision = 1' +
+                        '      OR image_object.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
+                        'WHERE image.i_id in (:id)',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'image_objectdetections',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", image_object.io_id, ":::key=", image_object.io_obj_type,' +
                         ' ":::detector=", image_object.io_detector,' +
                         ' ":::imgWidth=", image_object.io_img_width,' +
@@ -391,7 +431,7 @@ export class TourDocSqlMytbDbConfig {
                         ' ":::name=", objects.o_name,' +
                         ' ":::category=", objects.o_category,' +
                         ' ":::precision=", image_object.io_precision,' +
-                        ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objects ' +
+                        ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objectdetections ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
                         ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
@@ -408,7 +448,7 @@ export class TourDocSqlMytbDbConfig {
                     modes: ['full']
                 }
             ],
-            groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons', 'i_objects'],
+            groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons', 'i_objects', 'i_objectdetections'],
             selectFieldList: [
                 '"IMAGE" AS type',
                 'k_type',
@@ -512,6 +552,18 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
                 },
+                'objects_txt': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
+                        ' o_name AS value ' +
+                        'FROM' +
+                        ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
+                        ' INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' WHERE objects.o_category NOT IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'realobjects.o_name',
+                    action: AdapterFilterActions.IN
+                },
                 'oddetectors_txt': {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
                         ' io_detector AS value ' +
@@ -519,7 +571,7 @@ export class TourDocSqlMytbDbConfig {
                         ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
-                    filterField: 'io_detector',
+                    filterField: 'image_object.io_detector',
                     action: AdapterFilterActions.IN
                 },
                 'odkeys_txt': {
@@ -531,7 +583,7 @@ export class TourDocSqlMytbDbConfig {
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
-                    filterField: 'io_obj_type',
+                    filterField: 'image_object.io_obj_type',
                     action: AdapterFilterActions.IN
                 },
                 'odkeys_all_txt': {
@@ -544,7 +596,7 @@ export class TourDocSqlMytbDbConfig {
                         ' LEFT JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
-                    filterField: 'io_obj_type',
+                    filterField: 'image_object.io_obj_type',
                     action: AdapterFilterActions.IN
                 },
                 'odcategory_all_txt': {
@@ -557,7 +609,7 @@ export class TourDocSqlMytbDbConfig {
                         ' LEFT JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
-                    filterField: 'io_obj_type',
+                    filterField: 'image_object.io_obj_type',
                     action: AdapterFilterActions.IN
                 },
                 'odprecision_is': {
@@ -567,7 +619,7 @@ export class TourDocSqlMytbDbConfig {
                         ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
-                    filterField: 'ROUND(io_precision, 1)*100',
+                    filterField: 'ROUND(image_object.io_precision, 1)*100',
                     action: AdapterFilterActions.IN
                 },
                 'odstates_ss': {
@@ -577,7 +629,7 @@ export class TourDocSqlMytbDbConfig {
                         ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
-                    filterField: 'io_state',
+                    filterField: 'image_object.io_state',
                     action: AdapterFilterActions.IN
                 },
                 'persons_txt': {
@@ -586,10 +638,10 @@ export class TourDocSqlMytbDbConfig {
                     'FROM' +
                     ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
                     ' INNER JOIN image ON image_object.i_id=image.i_id ' +
-                    ' WHERE objects.o_category in ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                    ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
                     ' GROUP BY value' +
                     ' ORDER BY value',
-                    filterField: 'o_name',
+                    filterField: 'persons.o_name',
                     action: AdapterFilterActions.IN
                 },
                 'playlists_txt': {
@@ -736,6 +788,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'i_meta_name',
                 persons_txt: 'i_persons',
+                objects_txt: 'i_objects',
                 playlists_txt: 'i_playlists',
                 subtype_s: 'subtype',
                 type_s: 'type'
@@ -745,7 +798,8 @@ export class TourDocSqlMytbDbConfig {
             key: 'odimgobject',
             tableName: 'image_object',
             selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
-                'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key ' +
+                'LEFT JOIN objects persons ON image_object.io_obj_type=persons.o_key AND LOWER(persons.o_category) LIKE "person" ' +
+                'LEFT JOIN objects realobjects ON image_object.io_obj_type=realobjects.o_key AND LOWER(realobjects.o_category) NOT LIKE "person" ' +
                 'LEFT JOIN kategorie ON kategorie.k_id=image.k_id ' +
                 'LEFT JOIN location ON location.l_id = kategorie.l_id ',
             optionalGroupBy: [
@@ -773,7 +827,7 @@ export class TourDocSqlMytbDbConfig {
                     parameterNames: ['id']
                 },
                 {
-                    profile: 'image_objects',
+                    profile: 'image_objectdetections',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT CONCAT("ioId=", image_object.io_id,' +
                         ' ":::key=", image_object.io_obj_type,' +
                         ' ":::detector=", image_object.io_detector,' +
@@ -786,7 +840,7 @@ export class TourDocSqlMytbDbConfig {
                         ' ":::name=", objects.o_name,' +
                         ' ":::category=", objects.o_category,' +
                         ' ":::precision=", image_object.io_precision,' +
-                        ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objects ' +
+                        ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objectdetections ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
                         ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
@@ -817,8 +871,8 @@ export class TourDocSqlMytbDbConfig {
                 'kategorie.t_id',
                 'kategorie.tr_id',
                 'kategorie.l_id',
-                'COALESCE(o_name, i_meta_name, k_name) AS i_meta_name',
-                'CONCAT(COALESCE(o_name,""), " ", l_name) AS html',
+                'COALESCE(persons.o_name, realobjects.o_name, i_meta_name, k_name) AS i_meta_name',
+                'CONCAT(COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""), " ", l_name) AS html',
                 'i_gesperrt',
                 'i_date',
                 'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -853,7 +907,8 @@ export class TourDocSqlMytbDbConfig {
                 'ROUND((k_distance / 5))*5 AS distFacet',
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet',
-                'objects.o_name AS i_persons'],
+                'persons.o_name AS i_persons',
+                'realobjects.o_name AS i_objects'],
             facetConfigs: {
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)',
@@ -916,6 +971,17 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc',
                     selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ',
+                },
+                'objects_txt': {
+                    selectSql: 'SELECT COUNT(io_id) AS count, ' +
+                        ' o_name AS value ' +
+                        'FROM' +
+                        ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
+                        ' WHERE objects.o_category NOT IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'realobjects.o_name',
+                    action: AdapterFilterActions.IN
                 },
                 'oddetectors_txt': {
                     selectSql: 'SELECT COUNT(io_id) AS count, ' +
@@ -987,10 +1053,10 @@ export class TourDocSqlMytbDbConfig {
                         ' o_name AS value ' +
                         'FROM' +
                         ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
-                        ' WHERE objects.o_category in ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                        ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
-                    filterField: 'o_name',
+                    filterField: 'persons.o_name',
                     action: AdapterFilterActions.IN
                 },
                 'playlists_txt': {
@@ -1130,6 +1196,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'i_meta_name',
                 persons_txt: 'i_persons',
+                objects_txt: 'i_objects',
                 playlists_txt: 'i_playlists',
                 subtype_s: 'subtype',
                 type_s: 'type'
@@ -1155,9 +1222,15 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'LEFT JOIN video_object ON video.v_id=video_object.v_id ' +
-                    'LEFT JOIN objects ON video_object.vo_obj_type=objects.o_key',
+                    'LEFT JOIN objects persons ON video_object.vo_obj_type=persons.o_key AND LOWER(persons.o_category) LIKE "person" ',
                     triggerParams: ['id', 'persons_txt'],
-                    groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_persons']
+                    groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS v_persons']
+                },
+                {
+                    from: 'LEFT JOIN video_object ON video.v_id=video_object.v_id ' +
+                        'LEFT JOIN objects realobjects ON video_object.vo_obj_type=realobjects.o_key AND LOWER(realobjects.o_category) NOT LIKE "person"',
+                    triggerParams: ['id', 'objects_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT realobjects.o_name ORDER BY realobjects.o_name SEPARATOR ", ") AS v_objects']
                 }
             ],
             loadDetailData: [
@@ -1173,8 +1246,16 @@ export class TourDocSqlMytbDbConfig {
                     profile: 'video_persons',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_persons ' +
                     'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
-                    ' INNER JOIN objects ON video_object.vo_obj_type=objects.o_key ' +
+                    ' INNER JOIN objects ON video_object.vo_obj_type=objects.o_key AND LOWER(o_category) LIKE "person" ' +
                     'WHERE video.v_id in (:id)',
+                    parameterNames: ['id']
+                },
+                {
+                    profile: 'video_objects',
+                    sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_objects ' +
+                        'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
+                        ' INNER JOIN objects ON video_object.vo_obj_type=objects.o_key AND LOWER(o_category) NOT LIKE "person" ' +
+                        'WHERE video.v_id in (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -1187,7 +1268,7 @@ export class TourDocSqlMytbDbConfig {
                     modes: ['full']
                 }
             ],
-            groupbBySelectFieldListIgnore: ['v_keywords', 'v_playlists', 'v_persons'],
+            groupbBySelectFieldListIgnore: ['v_keywords', 'v_playlists', 'v_persons', 'v_objects'],
             selectFieldList: [
                 '"VIDEO" AS type',
                 'k_type',
@@ -1291,6 +1372,17 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'MONTH(v_date)',
                     orderBy: 'value asc'
                 },
+                'objects_txt': {
+                    selectSql: 'SELECT COUNT(vo_obj_type) AS count, ' +
+                        ' o_name AS value ' +
+                        'FROM' +
+                        ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
+                        ' WHERE objects.o_category NOT IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'realobjects.o_name',
+                    action: AdapterFilterActions.IN
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -1308,10 +1400,10 @@ export class TourDocSqlMytbDbConfig {
                     ' o_name AS value ' +
                     'FROM' +
                     ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
-                    ' WHERE objects.o_category in ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                    ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
                     ' GROUP BY value' +
                     ' ORDER BY value',
-                    filterField: 'o_name',
+                    filterField: 'persons.o_name',
                     action: AdapterFilterActions.IN
                 },
                 'playlists_txt': {
@@ -1458,6 +1550,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 name_s: 'v_meta_name',
                 persons_txt: 'v_persons',
+                objects_txt: 'v_objects',
                 playlists_txt: 'v_playlists',
                 subtype_s: 'subtype',
                 type_s: 'type'
@@ -1624,6 +1717,9 @@ export class TourDocSqlMytbDbConfig {
                 'month_is': {
                     selectField: 'MONTH(t_datevon)',
                     orderBy: 'value asc'
+                },
+                'objects_txt': {
+                    noFacet: true
                 },
                 'oddetectors_txt': {
                     noFacet: true
@@ -1927,6 +2023,9 @@ export class TourDocSqlMytbDbConfig {
                 'month_is': {
                     noFacet: true
                 },
+                'objects_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -2114,6 +2213,9 @@ export class TourDocSqlMytbDbConfig {
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
+                'objects_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -2283,6 +2385,9 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'month_is': {
                     selectField: 'MONTH(n_date)'
+                },
+                'objects_txt': {
+                    noFacet: true
                 },
                 'oddetectors_txt': {
                     noFacet: true

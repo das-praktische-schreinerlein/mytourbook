@@ -16,7 +16,7 @@ import LatLng = L.LatLng;
 
 export interface TourDocItemData extends CommonItemData {
     tracks?: TourDocRecord[];
-    objects?: BaseObjectDetectionImageObjectRecord[];
+    objectdetections?: BaseObjectDetectionImageObjectRecord[];
     flgShowMap?: boolean;
     flgShowProfileMap?: boolean;
     flgMapAvailable?: boolean;
@@ -307,7 +307,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             itemData.flgShowMap = false;
             itemData.flgShowProfileMap = false;
             itemData.tracks = [];
-            itemData.objects = [];
+            itemData.objectdetections = [];
             return false;
         }
 
@@ -315,7 +315,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
 
         // TODO: check
         if (itemData.currentRecord['tdocodimageobjects'] !== undefined && itemData.currentRecord['tdocodimageobjects'].length > 0) {
-            itemData.objects = itemData.currentRecord['tdocodimageobjects'];
+            itemData.objectdetections = itemData.currentRecord['tdocodimageobjects'];
         }
 
         if (itemData.currentRecord['tdocimages'] !== undefined && itemData.currentRecord['tdocimages'].length > 0) {

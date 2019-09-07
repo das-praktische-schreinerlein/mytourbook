@@ -37,8 +37,9 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         loc_parent_id_i: true
     };
     private validMoreInFilterNames = {
-        playlists_txt: true,
-        persons_txt: true
+        objects_txt: true,
+        persons_txt: true,
+        playlists_txt: true
     };
 
     constructor(private searchParameterUtils: SearchParameterUtils, private teamFilterConfig: TourDocTeamFilterConfig) {

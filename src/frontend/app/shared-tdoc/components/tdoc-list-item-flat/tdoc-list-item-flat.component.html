@@ -18,7 +18,7 @@
                                  alt="{{listItem.image.name}}"
                                  (resize)="onResizeMainImage()"
                                  (load)="onResizeMainImage()">
-                            <app-cdoc-odobjectrectangles [objects]="listItem.objects"
+                            <app-cdoc-odobjectrectangles [objects]="listItem.objectdetections"
                                  [width]="imageWidth"
                                  *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
                         </div>
@@ -46,7 +46,7 @@
                 <div class="col-4 layout-big">
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
                     <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                        <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                     </ng-container>
                     <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
                     <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="col-8 location layout-small">
                                     <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                                        <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                                     </ng-container>
                                     <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                                         <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
@@ -175,7 +175,7 @@
                         <div class="col-9 location layout-verysmall">
                             <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
                             <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                                <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                                <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                             </ng-container>
                             <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >

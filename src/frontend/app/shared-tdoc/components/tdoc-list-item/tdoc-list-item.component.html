@@ -38,7 +38,7 @@
                                  alt="{{listItem.image.name}}"
                                  (resize)="onResizeMainImage()"
                                  (load)="onResizeMainImage()">
-                            <app-cdoc-odobjectrectangles [objects]="listItem.objects"
+                            <app-cdoc-odobjectrectangles [objects]="listItem.objectdetections"
                                  [width]="imageWidth"
                                  *ngIf="imageWidth > 0 && (showItemObjectsFlag || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
                         </div>
@@ -48,7 +48,7 @@
                                               [width]="300" [forceWidth]="300" [styleClass]="'picture-small'"
                                               (show)="submitShow(listItem.currentRecord)"></app-tdoc-videoplayer>
 
-                        <app-cdoc-odobjectdetails [objects]="listItem.objects"
+                        <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"
                                                      *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'"></app-cdoc-odobjectdetails>
                     </div>
                     <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
@@ -67,7 +67,7 @@
                         </ngb-panel>
                         <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.tdoc.title">
                             <ng-template ngbPanelContent>
-                                <app-cdoc-odobjectdetails [objects]="listItem.objects"
+                                <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"
                                                              *ngIf="(showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE')"></app-cdoc-odobjectdetails>
                                 <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
                                 <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>

@@ -19,7 +19,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
-            'playlists_txt', 'persons_txt',
+            'objects_txt', 'playlists_txt', 'persons_txt',
             'actiontype_ss', 'subtype_s', 'i_fav_url_txt'],
         aggregations: {
             'actiontype_ss': {
@@ -37,6 +37,8 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
             'month_is': {
             },
             'loc_lochirarchie_txt': {},
+            'objects_txt': {
+            },
             'persons_txt': {
             },
             'playlists_txt': {
@@ -154,6 +156,7 @@ export class TourDocItemsJsAdapter extends GenericItemsJsAdapter<TourDocRecord, 
                 .replace(/,/g, ',,')
                 .replace(/ /g, '_') : ''),
             name_s: props.name,
+            objects_txt: (props.objects ? props.objects.split(', ').join(',,') : ''),
             persons_txt: (props.persons ? props.persons.split(', ').join(',,') : ''),
             playlists_txt: (props.playlists ? props.playlists.split(', ').join(',,') : ''),
             type_s: props.type,

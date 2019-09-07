@@ -12,7 +12,7 @@
                                  alt="{{listItem.image.name}}"
                                  (resize)="onResizeMainImage()"
                                  (load)="onResizeMainImage()">
-                            <app-cdoc-odobjectrectangles [objects]="listItem.objects"
+                            <app-cdoc-odobjectrectangles [objects]="listItem.objectdetections"
                                  [width]="imageWidth"
                                  *ngIf="imageWidth > 0 && (showItemObjectsFlag || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
                         </div>
@@ -22,7 +22,7 @@
                     <span>{{listItem.currentRecord.type | translate }} {{listItem.currentRecord.subtype | translate }}</span>
                     <span>{{listItem.currentRecord | tdocdate}} {{listItem.currentRecord.name}}</span>
                     <ng-container *ngIf="showItemObjectsFlag || listItem.currentRecord.type === 'ODIMGOBJECT'">
-                        <app-cdoc-odobjectdetails [objects]="listItem.objects"></app-cdoc-odobjectdetails>
+                        <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                     </ng-container>
                     <button class="btn btn-configure btn-sm right"
                             (click)="imageShowMap = true; listItem.flgShowMap = listItem.flgMapAvailable && imageShowMap; listItem.flgShowProfileMap = listItem.flgProfileMapAvailable && true;"

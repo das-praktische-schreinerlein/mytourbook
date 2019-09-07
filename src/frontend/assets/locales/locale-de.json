@@ -186,6 +186,7 @@
     "hrt_objectDetectionKey":  "Bilderkennung Objekt:",
     "hrt_objectDetectionPrecision": "Bilderkennung Genauigkeit:",
     "hrt_objectDetectionState": "Bilderkennung Status:",
+    "hrt_objects": "Objekte:",
     "hrt_persons": "Personen:",
     "hrt_playlists": "Playlisten:",
     "hrt_techDataAltitudeMax": "max Höhe:",
