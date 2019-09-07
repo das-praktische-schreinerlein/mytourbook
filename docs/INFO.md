@@ -10,4 +10,4 @@ MyTourBook is a portal with a bunch of different page types and features:
 - possibility to present the searchresults as diashow ![diashow](images/searchpage-page-x400.png)
 - a startpage with dashboard for internal data-management.... ![startpage](images/startpage-x400.png)
 - a listpage with detected-objects internal data-management.... ![object-detections](images/object-detection-x400.png)
-- a editor-page for internal data-management.... ![editor-page](images/object-detection-x400.png)
+- a editor-page for internal data-management.... ![editor-page](images/editorpage-x400.png)
