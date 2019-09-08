@@ -89,6 +89,7 @@ curl "http://localhost:8983/solr/coremytbbeta/dataimport?command=full-import&cle
 ```bash
 mysql -u testmytbexportproddb -p testmytbexportproddb
 use testmytbexportproddb
+source installer/db/mysql/mytbexportdb/import_01_create-model.sql
 source installer/db/mysql/mytbexportdb/import_03_import-data-from-mytbexportbetadb-to-mytbexportproddb.sql;
 ```
 - manually run sql-scripts to manipulate data

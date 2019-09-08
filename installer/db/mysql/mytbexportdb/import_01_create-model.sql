@@ -132,6 +132,7 @@ DROP TABLE IF EXISTS trip;
 CREATE TABLE trip (
   tr_id int(11) NOT NULL AUTO_INCREMENT,
   i_id int(11) DEFAULT NULL,
+  l_id int(11) DEFAULT NULL,
   tr_datebis datetime DEFAULT NULL,
   tr_datevon datetime DEFAULT NULL,
   tr_geo_poly text COLLATE latin1_general_ci,
@@ -148,6 +149,7 @@ CREATE TABLE trip (
   tr_dateshow date DEFAULT NULL,
   PRIMARY KEY (tr_id),
   KEY idx_tr__tr_id (tr_id),
+  KEY idx_tr__l_id (l_id),
   KEY idx_tr__i_id (i_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
