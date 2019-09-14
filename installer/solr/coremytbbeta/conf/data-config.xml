@@ -84,8 +84,6 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
-                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='tour'
                     query="select t_id from tour where find_in_set(t_id, '${track.k_t_ids}') > 0"
@@ -98,8 +96,8 @@
 
         <entity name="route"
                 pk="id"
-                query="select 'ROUTE' as type, concat('ac_', tour.t_typ) as actiontype, concat('ac_', tour.t_typ) as subtype, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, t_dateshow, t_datevon as datesort, t_datevon, DATE_FORMAT (t_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, t_gpstracks_basefile, t_keywords, t_meta_shortdesc_md, t_meta_shortdesc_html, t_meta_shortdesc_html as t_meta_shortdesc_html2, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur, `T_RATE` as overall, `T_RATE_KS` as ks, `T_RATE_FIRN` as firn, `T_RATE_GLETSCHER` as gletscher, `T_RATE_KLETTERN` as klettern, `T_RATE_BERGTOUR` as bergtour, `T_RATE_SCHNEESCHUH` as schneeschuh, `T_RATE_AUSDAUER` as ausdauer, `T_RATE_BILDUNG` as bildung, `T_RATE_GESAMT` as gesamt, `T_RATE_KRAFT` as kraft, `T_RATE_MENTAL` as mental, `T_RATE_MOTIVE` as motive, `T_RATE_SCHWIERIGKEIT` as schwierigkeit, `T_RATE_WICHTIGKEIT` as wichtigkeit, round((T_ROUTE_HM / 500))*500 as altAscFacet, round((T_ELE_MAX / 500))*500 as altMaxFacet, round((T_ROUTE_M / 5))*5 as distFacet, ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1) as durFacet, T_DESC_FUEHRER_FULL as guides, T_DESC_GEBIET as region, T_DESC_TALORT as baseloc, T_DESC_ZIEL as destloc from tour, location where tour.l_id = location.l_id order by t_datevon, t_id"
-                deltaImportQuery="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, t_dateshow, t_datevon as datesort, t_datevon, DATE_FORMAT (t_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, t_gpstracks_basefile, t_keywords, t_meta_shortdesc_md, t_meta_shortdesc_html, t_meta_shortdesc_html as t_meta_shortdesc_html2, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur, `T_RATE` as overall, `T_RATE_KS` as ks, `T_RATE_FIRN` as firn, `T_RATE_GLETSCHER` as gletscher, `T_RATE_KLETTERN` as klettern, `T_RATE_BERGTOUR` as bergtour, `T_RATE_SCHNEESCHUH` as schneeschuh, `T_RATE_AUSDAUER` as ausdauer, `T_RATE_BILDUNG` as bildung, `T_RATE_GESAMT` as gesamt, `T_RATE_KRAFT` as kraft, `T_RATE_MENTAL` as mental, `T_RATE_MOTIVE` as motive, `T_RATE_SCHWIERIGKEIT` as schwierigkeit, `T_RATE_WICHTIGKEIT` as wichtigkeit, round((T_ROUTE_HM / 500))*500 as altAscFacet, round((T_ELE_MAX / 500))*500 as altMaxFacet, round((T_ROUTE_M / 5))*5 as distFacet, ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1) as durFacet, T_DESC_FUEHRER_FULL as guides, T_DESC_GEBIET as region, T_DESC_TALORT as baseloc, T_DESC_ZIEL as destloc from tour, location where tour.l_id = location.l_id and tour.t_id='${dih.delta.id}'"
+                query="select 'ROUTE' as type, concat('ac_', tour.t_typ) as actiontype, concat('ac_', tour.t_typ) as subtype, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, t_dateshow, t_datevon as datesort, t_datevon, DATE_FORMAT (t_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, t_gpstracks_basefile, t_keywords, t_persons, t_objects, t_meta_shortdesc_md, t_meta_shortdesc_html, t_meta_shortdesc_html as t_meta_shortdesc_html2, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur, `T_RATE` as overall, `T_RATE_KS` as ks, `T_RATE_FIRN` as firn, `T_RATE_GLETSCHER` as gletscher, `T_RATE_KLETTERN` as klettern, `T_RATE_BERGTOUR` as bergtour, `T_RATE_SCHNEESCHUH` as schneeschuh, `T_RATE_AUSDAUER` as ausdauer, `T_RATE_BILDUNG` as bildung, `T_RATE_GESAMT` as gesamt, `T_RATE_KRAFT` as kraft, `T_RATE_MENTAL` as mental, `T_RATE_MOTIVE` as motive, `T_RATE_SCHWIERIGKEIT` as schwierigkeit, `T_RATE_WICHTIGKEIT` as wichtigkeit, round((T_ROUTE_HM / 500))*500 as altAscFacet, round((T_ELE_MAX / 500))*500 as altMaxFacet, round((T_ROUTE_M / 5))*5 as distFacet, ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1) as durFacet, T_DESC_FUEHRER_FULL as guides, T_DESC_GEBIET as region, T_DESC_TALORT as baseloc, T_DESC_ZIEL as destloc from tour, location where tour.l_id = location.l_id order by t_datevon, t_id"
+                deltaImportQuery="select 'ROUTE' as type, concat('ROUTE', '_', tour.t_id) as id, tour.k_id, tour.t_id, tour.l_id, t_name, t_html_list, concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, t_dateshow, t_datevon as datesort, t_datevon, DATE_FORMAT (t_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, t_gpstracks_basefile, t_keywords, t_persons, t_objects, t_meta_shortdesc_md, t_meta_shortdesc_html, t_meta_shortdesc_html as t_meta_shortdesc_html2, t_rate_gesamt, t_gps_lat, t_gps_lon, concat(t_gps_lat, ',', t_gps_lon) as t_gps_loc, l_lochirarchietxt, l_lochirarchieids, t_k_ids, `T_ELE_MAX` as altMax, `T_ROUTE_HM` as altAsc, `T_ROUTE_M` as dist, `T_ROUTE_DAUER` as dur, `T_RATE` as overall, `T_RATE_KS` as ks, `T_RATE_FIRN` as firn, `T_RATE_GLETSCHER` as gletscher, `T_RATE_KLETTERN` as klettern, `T_RATE_BERGTOUR` as bergtour, `T_RATE_SCHNEESCHUH` as schneeschuh, `T_RATE_AUSDAUER` as ausdauer, `T_RATE_BILDUNG` as bildung, `T_RATE_GESAMT` as gesamt, `T_RATE_KRAFT` as kraft, `T_RATE_MENTAL` as mental, `T_RATE_MOTIVE` as motive, `T_RATE_SCHWIERIGKEIT` as schwierigkeit, `T_RATE_WICHTIGKEIT` as wichtigkeit, round((T_ROUTE_HM / 500))*500 as altAscFacet, round((T_ELE_MAX / 500))*500 as altMaxFacet, round((T_ROUTE_M / 5))*5 as distFacet, ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1) as durFacet, T_DESC_FUEHRER_FULL as guides, T_DESC_GEBIET as region, T_DESC_TALORT as baseloc, T_DESC_ZIEL as destloc from tour, location where tour.l_id = location.l_id and tour.t_id='${dih.delta.id}'"
                 deltaQuery="SELECT T_id from tour order by t_datevon, t_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -117,6 +115,8 @@
             <field column="t_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="t_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="t_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+            <field column="t_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="dateonly" name="dateonly_s" />
             <field column="t_datevon" name="date_dt" />
@@ -175,8 +175,6 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
-                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='bericht'
                     query="select k_id, tr_id, n_id, k_dateshow, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, year(k_datevon) as year, k_persons, k_objects from kategorie_full where k_id in (${route.t_k_ids} 0) or k_id in (${route.k_id}) or find_in_set(${route.t_id}, k_t_ids) > 0 order by k_datevon asc"
@@ -190,15 +188,13 @@
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
                 <field column="year" name="year_is" />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
         </entity>
 
         <entity name="location"
                 pk="id"
-                query="select 'LOCATION' as type, concat('loc_', location.l_typ) as subtype, concat('LOCATION', '_', l_id) as id, l_id, l_parent_id, l_name, l_html, l_meta_shortdesc_md, l_meta_shortdesc_html, l_meta_shortdesc_html as l_meta_shortdesc_html2, concat(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_lochirarchieids, l_katids, l_tids, l_keywords from location order by l_typ asc, l_name"
-                deltaImportQuery="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_name, l_html, l_meta_shortdesc_md, l_meta_shortdesc_html, l_meta_shortdesc_html as l_meta_shortdesc_html2, concat(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_lochirarchieids, l_katids, l_tids, l_keywords from location WHERE l_id='${dih.delta.id}'"
+                query="select 'LOCATION' as type, concat('loc_', location.l_typ) as subtype, concat('LOCATION', '_', l_id) as id, l_id, l_parent_id, l_name, l_html, l_meta_shortdesc_md, l_meta_shortdesc_html, l_meta_shortdesc_html as l_meta_shortdesc_html2, concat(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_lochirarchieids, l_katids, l_tids, l_keywords, l_persons, l_objects from location order by l_typ asc, l_name"
+                deltaImportQuery="select 'LOCATION' as type, concat('LOCATION', '_', l_id) as id, l_id, l_name, l_html, l_meta_shortdesc_md, l_meta_shortdesc_html, l_meta_shortdesc_html as l_meta_shortdesc_html2, concat(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) as html, l_gps_lat, l_gps_lon, concat(l_gps_lat, ',', l_gps_lon) as l_gps_loc, l_lochirarchietxt, l_lochirarchieids, l_katids, l_tids, l_keywords, l_persons, l_objects from location WHERE l_id='${dih.delta.id}'"
                 deltaQuery="SELECT l_id from location order by l_typ asc, l_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -213,6 +209,8 @@
             <field column="l_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="l_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="l_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="l_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+            <field column="l_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="l_gps_lat" name="geo_lat_s" />
             <field column="l_gps_lon" name="geo_lon_s" />
             <field column="l_gps_loc" name="geo_loc_p" type="location" />
@@ -234,8 +232,6 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
-                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
 
             <entity name='tour'
@@ -257,8 +253,6 @@
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
                 <field column="year" name="year_is" />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
 
         </entity>
@@ -385,8 +379,8 @@
 
         <entity name="trip"
                 pk="id"
-                query="select distinct trip.tr_id, 'TRIP' as type, concat('TRIP', '_', trip.tr_id) as id, trip.l_id, tr_dateshow, tr_datevon as datesort, tr_datevon, DATE_FORMAT (tr_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon))/3600 as dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html as tr_meta_shortdesc_html2, concat(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) as html, tr_keywords, l_lochirarchietxt, l_lochirarchieids, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from trip inner join kategorie_full on trip.tr_id=kategorie_full.tr_id left join location on trip.l_id=location.l_id group by trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html2, html, tr_keywords, l_lochirarchietxt, l_lochirarchieids order by tr_datevon"
-                deltaImportQuery="select distinct trip.tr_id, 'TRIP' as type, concat('TRIP', '_', trip.tr_id) as id, trip.l_id, tr_dateshow, tr_datevon as datesort, tr_datevon, DATE_FORMAT (tr_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon))/3600 as dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html as tr_meta_shortdesc_html2, concat(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) as html, tr_keywords, l_lochirarchietxt, l_lochirarchieids, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from trip inner join kategorie_full on trip.tr_id=kategorie_full.tr_id left join location on trip.l_id=location.l_id where trip.tr_id='${dih.delta.id}' group by trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html2, html, tr_keywords, l_lochirarchietxt, l_lochirarchieids order by tr_datevon"
+                query="select distinct trip.tr_id, 'TRIP' as type, concat('TRIP', '_', trip.tr_id) as id, trip.l_id, tr_dateshow, tr_datevon as datesort, tr_datevon, DATE_FORMAT (tr_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon))/3600 as dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html as tr_meta_shortdesc_html2, concat(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) as html, tr_keywords, tr_persons, tr_objects, l_lochirarchietxt, l_lochirarchieids, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from trip inner join kategorie_full on trip.tr_id=kategorie_full.tr_id left join location on trip.l_id=location.l_id group by trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html2, html, tr_keywords, l_lochirarchietxt, l_lochirarchieids order by tr_datevon"
+                deltaImportQuery="select distinct trip.tr_id, 'TRIP' as type, concat('TRIP', '_', trip.tr_id) as id, trip.l_id, tr_dateshow, tr_datevon as datesort, tr_datevon, DATE_FORMAT (tr_datevon, GET_FORMAT(DATE, 'ISO')) as dateonly, TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon))/3600 as dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html as tr_meta_shortdesc_html2, concat(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) as html, tr_keywords, tr_persons, tr_objects, l_lochirarchietxt, l_lochirarchieids, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from trip inner join kategorie_full on trip.tr_id=kategorie_full.tr_id left join location on trip.l_id=location.l_id where trip.tr_id='${dih.delta.id}' group by trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md, tr_meta_shortdesc_html, tr_meta_shortdesc_html2, html, tr_keywords, l_lochirarchietxt, l_lochirarchieids order by tr_datevon"
                 deltaQuery="SELECT tr_id from trip where tr_id in (select tr_id from kategorie_full) order by tr_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -401,6 +395,8 @@
             <field column="tr_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="tr_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="tr_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+            <field column="tr_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="tr_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
             <field column="tr_datevon" name="date_dt" />
@@ -447,8 +443,6 @@
             >
                 <field column="l_id" name="loc_id_i"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_datevon" name="date_dts" />
                 <field column="n_id" name="news_id_i"/>
                 <field column="n_id" name="news_id_is"/>
@@ -466,8 +460,8 @@
 
         <entity name="news"
                 pk="id"
-                query="select distinct  news.n_id, 'NEWS' as type, concat('NEWS', '_', news.n_id) as id, n_date, n_date as dateshow, DATE_FORMAT (n_date, GET_FORMAT(DATE, 'ISO')) as dateonly, n_headline, n_message_md, n_message_html, n_message_html as n_message_html2, concat(n_headline, ' ', n_keywords, ' ', n_message_html) as html, n_keywords, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from news left join kategorie_full on news.n_id=kategorie_full.n_id group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2, html, n_keywords order by n_date"
-                deltaImportQuery="select distinct  news.n_id, 'NEWS' as type, concat('NEWS', '_', news.n_id) as id, n_date, n_date as dateshow, DATE_FORMAT (n_date, GET_FORMAT(DATE, 'ISO')) as dateonly, n_headline, n_message_md, n_message_html, n_message_html as n_message_html2, concat(n_headline, ' ', n_keywords, ' ', n_message_html) as html, n_keywords, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from news left join kategorie_full on news.n_id=kategorie_full.n_id  WHERE news.n_id='${dih.delta.id}' group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2, html, n_keywords"
+                query="select distinct  news.n_id, 'NEWS' as type, concat('NEWS', '_', news.n_id) as id, n_date, n_date as dateshow, DATE_FORMAT (n_date, GET_FORMAT(DATE, 'ISO')) as dateonly, n_headline, n_message_md, n_message_html, n_message_html as n_message_html2, concat(n_headline, ' ', n_keywords, ' ', n_message_html) as html, n_keywords, n_persons, n_objects, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from news left join kategorie_full on news.n_id=kategorie_full.n_id group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2, html, n_keywords order by n_date"
+                deltaImportQuery="select distinct  news.n_id, 'NEWS' as type, concat('NEWS', '_', news.n_id) as id, n_date, n_date as dateshow, DATE_FORMAT (n_date, GET_FORMAT(DATE, 'ISO')) as dateonly, n_headline, n_message_md, n_message_html, n_message_html as n_message_html2, concat(n_headline, ' ', n_keywords, ' ', n_message_html) as html, n_keywords, n_persons, n_objects, sum(K_ALTITUDE_ASC) as altAsc, sum(K_ALTITUDE_DESC) as altDesc, max(K_ALTITUDE_MAX) as altMax, max(round((K_ALTITUDE_MAX / 500))*500) as altMaxFacet, min(K_ALTITUDE_MIN) as altMin, min(round((K_ALTITUDE_MIN / 500))*500) as altMinFacet, sum(K_DISTANCE) as dist from news left join kategorie_full on news.n_id=kategorie_full.n_id  WHERE news.n_id='${dih.delta.id}' group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2, html, n_keywords"
                 deltaQuery="SELECT n_id from trip order by n_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -482,6 +476,8 @@
             <field column="n_message_html2" name="desc_html_txt" />
             <field column="html" name="html_txt" />
             <field column="n_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="n_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+            <field column="n_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="n_date" name="dateshow_dt" />
             <field column="n_date" name="datesort_dt" />
             <field column="n_date" name="date_dt" />
@@ -522,8 +518,6 @@
             >
                 <field column="l_id" name="loc_id_i"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />

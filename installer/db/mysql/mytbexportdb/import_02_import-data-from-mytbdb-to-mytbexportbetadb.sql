@@ -4,11 +4,13 @@
 INSERT INTO location (l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ)
      SELECT l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ FROM testmytbdb.location;
 
-UPDATE location SET l_lochirarchietxt=GetLocationNameAncestry(location.l_id, location.l_name, " -> "), l_lochirarchieids=GetLocationIdAncestry(location.l_id, ",");
+UPDATE location SET l_lochirarchietxt=GetLocationNameAncestry(location.l_id, location.l_name, ' -> '), l_lochirarchieids=GetLocationIdAncestry(location.l_id, ',');
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, 'OFFEN -> ', '');
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, ' -> ', ',,');
-UPDATE location SET l_lochirarchieids=REPLACE(l_lochirarchieids, '1,', '');
+UPDATE location SET l_lochirarchietxt=TRIM(l_lochirarchietxt);
+UPDATE location SET l_lochirarchieids=REGEXP_REPLACE(l_lochirarchieids, '^1,', '');
 UPDATE location SET l_lochirarchieids=REPLACE(l_lochirarchieids, ',', ',,');
+UPDATE location SET l_lochirarchieids=TRIM(l_lochirarchieids);
 
 -- calc keywords
 UPDATE location toupdate,
@@ -116,7 +118,7 @@ INSERT into tour (t_id, l_id, k_id, t_datevon, t_name, t_desc_gefahren, t_desc_f
 
 -- calc keywords
 UPDATE tour toupdate,
- (SELECT tour.t_id AS t_id, GROUP_CONCAT(mk.kw_name SEPARATOR ",") AS t_keywords
+ (SELECT tour.t_id AS t_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS t_keywords
   FROM tour LEFT JOIN testmytbdb.tour_keyword mjoin ON tour.t_id=mjoin.t_id LEFT JOIN testmytbdb.keyword mk ON mjoin.kw_id=mk.kw_id
    GROUP BY tour.t_id) grouped
 SET toupdate.t_keywords=grouped.t_keywords
@@ -153,7 +155,7 @@ INSERT into image (i_id, k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_g
 
 -- calc keywords
 UPDATE image toupdate,
-    (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ",") AS i_keywords, image.i_id AS i_id
+    (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS i_keywords, image.i_id AS i_id
      FROM image LEFT JOIN testmytbdb.image_keyword mjoin ON image.i_id=mjoin.i_id LEFT JOIN testmytbdb.keyword mk ON mjoin.kw_id=mk.kw_id
      GROUP BY image.i_id) grouped
 SET toupdate.i_keywords=grouped.i_keywords
@@ -161,11 +163,11 @@ WHERE toupdate.i_id=grouped.i_id;
 
 -- image calc persons
 UPDATE image toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ",") AS i_persons, image.i_id AS i_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS i_persons, image.i_id AS i_id
      FROM image INNER JOIN testmytbdb.image_object ON image.i_id=testmytbdb.image_object.i_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.image_object.io_obj_type=objects_key.ok_key AND testmytbdb.image_object.io_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) LIKE "person"
+     WHERE LOWER(o_category) LIKE 'person'
         AND (testmytbdb.image_object.io_precision = 1
              OR testmytbdb.image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -175,11 +177,11 @@ WHERE toupdate.i_id=grouped.i_id;
 
 -- image calc objects
 UPDATE image toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ",") AS i_objects, image.i_id AS i_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS i_objects, image.i_id AS i_id
      FROM image INNER JOIN testmytbdb.image_object ON image.i_id=testmytbdb.image_object.i_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.image_object.io_obj_type=objects_key.ok_key AND testmytbdb.image_object.io_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) NOT LIKE "person"
+     WHERE LOWER(o_category) NOT LIKE 'person'
         AND (testmytbdb.image_object.io_precision = 1
              OR testmytbdb.image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -187,7 +189,7 @@ UPDATE image toupdate,
 SET toupdate.i_objects=grouped.i_objects
 WHERE toupdate.i_id=grouped.i_id;
 
--- calc desc+dates+coords
+-- image calc desc+dates+coords
 UPDATE image toupdate,
  (SELECT image.i_id, kategorie_full.k_id, kategorie_full.t_id, k_name, kategorie_full.k_meta_shortdesc, location.l_lochirarchietxt
   FROM image INNER JOIN kategorie_full ON image.k_Id=kategorie_full.k_id INNER JOIN location ON kategorie_full.l_id=location.l_id
@@ -213,7 +215,7 @@ INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_g
 
 -- calc keywords
 UPDATE video toupdate,
-    (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ",") AS v_keywords, video.v_id AS v_id
+    (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS v_keywords, video.v_id AS v_id
      FROM video LEFT JOIN testmytbdb.video_keyword mjoin ON video.v_id=mjoin.v_id LEFT JOIN testmytbdb.keyword mk ON mjoin.kw_id=mk.kw_id
      GROUP BY video.v_id) grouped
 SET toupdate.v_keywords=grouped.v_keywords
@@ -221,11 +223,11 @@ WHERE toupdate.v_id=grouped.v_id;
 
 -- video calc persons
 UPDATE video toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ",") AS v_persons, video.v_id AS v_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_persons, video.v_id AS v_id
      FROM video INNER JOIN testmytbdb.video_object ON video.v_id=testmytbdb.video_object.v_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.video_object.vo_obj_type=objects_key.ok_key AND testmytbdb.video_object.vo_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) LIKE "person"
+     WHERE LOWER(o_category) LIKE 'person'
         AND (testmytbdb.video_object.vo_precision = 1
              OR testmytbdb.video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -233,12 +235,13 @@ UPDATE video toupdate,
 SET toupdate.v_persons=grouped.v_persons
 WHERE toupdate.v_id=grouped.v_id;
 
+-- video calc objects
 UPDATE video toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ",") AS v_objects, video.v_id AS v_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_objects, video.v_id AS v_id
      FROM video INNER JOIN testmytbdb.video_object ON video.v_id=testmytbdb.video_object.v_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.video_object.vo_obj_type=objects_key.ok_key AND testmytbdb.video_object.vo_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) NOT LIKE "person"
+     WHERE LOWER(o_category) NOT LIKE 'person'
         AND (testmytbdb.video_object.vo_precision = 1
              OR testmytbdb.video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -246,7 +249,7 @@ UPDATE video toupdate,
 SET toupdate.v_objects=grouped.v_objects
 WHERE toupdate.v_id=grouped.v_id;
 
--- calc desc+dates+coords
+-- video calc desc+dates+coords
 UPDATE video toupdate,
  (SELECT video.v_id, kategorie_full.k_id, kategorie_full.t_id, k_name, kategorie_full.k_meta_shortdesc, location.l_lochirarchietxt
   FROM video INNER JOIN kategorie_full ON video.k_Id=kategorie_full.k_id INNER JOIN location ON kategorie_full.l_id=location.l_id
@@ -429,9 +432,11 @@ UPDATE tour toupdate,
    GROUP BY mjoin.t_id) grouped
 SET toupdate.t_k_ids=CONCAT(COALESCE(t_k_ids, ''), ',,', COALESCE(grouped.k_ids, ''))
 WHERE toupdate.t_id=grouped.t_id;
+
+
 UPDATE tour SET t_k_ids=REGEXP_REPLACE(REGEXP_REPLACE(t_k_ids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE tour SET t_k_ids=CONCAT(t_k_ids, ',');
-UPDATE tour SET k_id=0 where k_id is null;
+UPDATE tour SET k_id=0 WHERE K_ID IS NULL;
 UPDATE tour SET t_k_ids=REGEXP_REPLACE(REGEXP_REPLACE(t_k_ids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 
@@ -447,7 +452,8 @@ WHERE toupdate.k_id=grouped.k_id;
 UPDATE kategorie_full SET k_t_ids=REGEXP_REPLACE(REGEXP_REPLACE(k_t_ids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE kategorie_full SET k_t_ids_full=COALESCE(k_t_ids, '');
 
------------- update trackdata
+--
+-- update trackdata
 -- track calc keywords-persons
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id AS k_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS k_persons
@@ -460,11 +466,11 @@ WHERE toupdate.k_id=grouped.k_id;
 
 -- track calc image-persons
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons, image.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ', ') AS i_persons, image.k_id AS k_id
      FROM image INNER JOIN testmytbdb.image_object ON image.i_id=testmytbdb.image_object.i_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.image_object.io_obj_type=objects_key.ok_key AND testmytbdb.image_object.io_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) LIKE "person"
+     WHERE LOWER(o_category) LIKE 'person'
         AND (testmytbdb.image_object.io_precision = 1
              OR testmytbdb.image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -475,11 +481,11 @@ WHERE toupdate.k_id=grouped.k_id;
 
 -- track calc video-persons
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ",") AS v_persons, video.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_persons, video.k_id AS k_id
      FROM video INNER JOIN testmytbdb.video_object ON video.v_id=testmytbdb.video_object.v_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.video_object.vo_obj_type=objects_key.ok_key AND testmytbdb.video_object.vo_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) LIKE "person"
+     WHERE LOWER(o_category) LIKE 'person'
         AND (testmytbdb.video_object.vo_precision = 1
              OR testmytbdb.video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -490,11 +496,11 @@ WHERE toupdate.k_id=grouped.k_id;
 
 -- track calc image-objects
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_objects, image.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ', ') AS i_objects, image.k_id AS k_id
      FROM image INNER JOIN testmytbdb.image_object ON image.i_id=testmytbdb.image_object.i_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.image_object.io_obj_type=objects_key.ok_key AND testmytbdb.image_object.io_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) NOT LIKE "person"
+     WHERE LOWER(o_category) NOT LIKE 'person'
         AND (testmytbdb.image_object.io_precision = 1
              OR testmytbdb.image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -505,11 +511,11 @@ WHERE toupdate.k_id=grouped.k_id;
 
 -- track calc video-objects
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ",") AS v_objects, video.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_objects, video.k_id AS k_id
      FROM video INNER JOIN testmytbdb.video_object ON video.v_id=testmytbdb.video_object.v_id
         INNER JOIN testmytbdb.objects_key ON testmytbdb.video_object.vo_obj_type=objects_key.ok_key AND testmytbdb.video_object.vo_detector=testmytbdb.objects_key.ok_detector
         INNER JOIN testmytbdb.objects ON testmytbdb.objects_key.o_id=objects.o_id
-     WHERE LOWER(o_category) NOT LIKE "person"
+     WHERE LOWER(o_category) NOT LIKE 'person'
         AND (testmytbdb.video_object.vo_precision = 1
              OR testmytbdb.video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
@@ -517,4 +523,3 @@ UPDATE kategorie_full toupdate,
 SET toupdate.k_objects=CONCAT(COALESCE(toupdate.k_objects, ''), ',',
                               COALESCE(grouped.v_objects, ''), '')
 WHERE toupdate.k_id=grouped.k_id;
-

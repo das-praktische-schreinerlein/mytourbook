@@ -26,7 +26,7 @@ BEGIN
             SET path = CONCAT(id, joiner, path);
         END IF;
     END WHILE;
-    RETURN path;
+    RETURN TRIM(path);
 END $$
 DELIMITER ;
 
@@ -55,7 +55,7 @@ BEGIN
         SELECT IFNULL(l_parent_id,-1) INTO id FROM
         (SELECT l_parent_id FROM location WHERE l_id = id) A;
     END WHILE;
-    RETURN path;
+    RETURN TRIM(path);
 END $$
 DELIMITER ;
 
@@ -89,9 +89,30 @@ DROP FUNCTION IF EXISTS `GetTechName` $$
   CREATE FUNCTION GetTechName(pName TEXT) RETURNS VARCHAR(2000)
   DETERMINISTIC
   BEGIN
-    RETURN LOWER(REGEXP_REPLACE(pName, '[- /()+;.]', '_'));
+    RETURN TRIM(LOWER(REGEXP_REPLACE(pName, '[- /()+;.]', '_')));
 END $$
 DELIMITER ;
+
+
+--
+-- a helper table of about 4k consecutive ints
+--
+DROP TABLE IF EXISTS numbers;
+CREATE TABLE numbers (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    thing int null
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+insert numbers (thing) values (null),(null),(null),(null),(null),(null),(null),(null),(null);
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
+insert numbers (thing) select thing from numbers;
 
 --
 -- configuration-tables
@@ -120,6 +141,8 @@ CREATE TABLE news (
   n_message_md text,
   n_message_html text,
   n_keywords text,
+  n_persons text,
+  n_objects text,
   PRIMARY KEY (n_id),
   KEY idx_n__n_id (n_id),
   KEY idx_n__w_id (w_id)
@@ -146,6 +169,8 @@ CREATE TABLE trip (
   tr_meta_shortdesc_md text COLLATE latin1_general_ci,
   tr_meta_shortdesc_html text COLLATE latin1_general_ci,
   tr_keywords text COLLATE latin1_general_ci,
+  tr_persons text COLLATE latin1_general_ci,
+  tr_objects text COLLATE latin1_general_ci,
   tr_dateshow date DEFAULT NULL,
   PRIMARY KEY (tr_id),
   KEY idx_tr__tr_id (tr_id),
@@ -176,6 +201,8 @@ CREATE TABLE location (
   l_meta_shortdesc_md text COLLATE latin1_general_ci,
   l_meta_shortdesc_html text COLLATE latin1_general_ci,
   l_keywords text COLLATE latin1_general_ci,
+  l_persons text COLLATE latin1_general_ci,
+  l_objects text COLLATE latin1_general_ci,
   KEY l_id (l_id),
   KEY l_gps_lat (l_gps_lat),
   KEY l_gps_lon (l_gps_lon)
@@ -200,6 +227,8 @@ CREATE TABLE tour (
   t_desc_ziel varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   t_meta_shortdesc mediumtext COLLATE latin1_general_ci,
   t_keywords text COLLATE latin1_general_ci,
+  t_persons text COLLATE latin1_general_ci,
+  t_objects text COLLATE latin1_general_ci,
   t_ele_max double DEFAULT NULL,
   t_gps_lat float DEFAULT NULL,
   t_gps_lon float DEFAULT NULL,
