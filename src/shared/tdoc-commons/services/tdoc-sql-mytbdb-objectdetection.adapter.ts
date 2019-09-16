@@ -129,6 +129,9 @@ export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDa
         if (input.refId.startsWith('IMAGE_')) {
             table = 'image';
             id = this.sqlQueryBuilder.sanitizeSqlFilterValue(input.refId.replace('IMAGE_', ''));
+        } else if (input.refId.startsWith('VIDEO_')) {
+            table = 'video';
+            id = this.sqlQueryBuilder.sanitizeSqlFilterValue(input.refId.replace('VIDEO_', ''));
         }
         switch (table) {
             case 'image':

@@ -182,6 +182,7 @@
     "hrt_route_id_i": "Spezialfilter Route:",
     "hrt_route_id_is": "Spezialfilter Route:",
     "hrt_loc_parent_id_i": "Spezialfilter Region:",
+    "hrt_objectDetectionCategory":  "Bilderkennung Objektkategorie:",
     "hrt_objectDetectionDetector":  "Bilderkennung Detektor:",
     "hrt_objectDetectionKey":  "Bilderkennung Objekt:",
     "hrt_objectDetectionPrecision": "Bilderkennung Genauigkeit:",

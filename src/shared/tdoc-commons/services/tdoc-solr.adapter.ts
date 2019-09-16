@@ -58,6 +58,9 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
                 'f.objects_txt.limit': '-1',
                 'f.objects_txt.facet.sort': 'index'
             },
+            'odcats_txt': {
+                noFacet: true
+            },
             'oddetectors_txt': {
                 noFacet: true
             },

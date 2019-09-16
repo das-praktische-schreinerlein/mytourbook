@@ -153,6 +153,9 @@ export class TourDocSqlMytbDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -361,7 +364,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id ' +
                         'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
-                    triggerParams: ['id', 'odstates_ss', 'odprecision_is', 'odkeys_txt', 'oddetectors_txt'],
+                    triggerParams: ['id', 'odstates_ss', 'odprecision_is', 'odcats_txt', 'odkeys_txt', 'oddetectors_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_allobjects']
                 },
                 {
@@ -564,6 +567,17 @@ export class TourDocSqlMytbDbConfig {
                     filterField: 'realobjects.o_name',
                     action: AdapterFilterActions.IN
                 },
+                'odcats_txt': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, o_category AS value ' +
+                        'FROM' +
+                        ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'objects.o_category',
+                    action: AdapterFilterActions.IN
+                },
                 'oddetectors_txt': {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
                         ' io_detector AS value ' +
@@ -609,7 +623,7 @@ export class TourDocSqlMytbDbConfig {
                         ' LEFT JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
-                    filterField: 'image_object.io_obj_type',
+                    filterField: 'objects.o_category',
                     action: AdapterFilterActions.IN
                 },
                 'odprecision_is': {
@@ -983,6 +997,16 @@ export class TourDocSqlMytbDbConfig {
                     filterField: 'realobjects.o_name',
                     action: AdapterFilterActions.IN
                 },
+                'odcats_txt': {
+                    selectSql: 'SELECT COUNT(io_id) AS count, o_category AS value ' +
+                        'FROM' +
+                        ' image_object LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
+                    filterField: 'realobjects.o_category',
+                    action: AdapterFilterActions.IN
+                },
                 'oddetectors_txt': {
                     selectSql: 'SELECT COUNT(io_id) AS count, ' +
                         ' io_detector AS value ' +
@@ -1025,7 +1049,7 @@ export class TourDocSqlMytbDbConfig {
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
-                    filterField: 'io_obj_type',
+                    filterField: 'realobjects.o_category',
                     action: AdapterFilterActions.IN
                 },
                 'odprecision_is': {
@@ -1383,6 +1407,9 @@ export class TourDocSqlMytbDbConfig {
                     filterField: 'realobjects.o_name',
                     action: AdapterFilterActions.IN
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -1721,6 +1748,9 @@ export class TourDocSqlMytbDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -2026,6 +2056,9 @@ export class TourDocSqlMytbDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -2216,6 +2249,9 @@ export class TourDocSqlMytbDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -2387,6 +2423,9 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'MONTH(n_date)'
                 },
                 'objects_txt': {
+                    noFacet: true
+                },
+                'odcats_txt': {
                     noFacet: true
                 },
                 'oddetectors_txt': {

@@ -26,6 +26,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         personalRateOverall: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         personalRateDifficulty: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new TextValidationRule(false)),
         actiontype: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
+        objectDetectionCategory: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objectDetectionDetector: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objectDetectionKey: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objectDetectionPrecision: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
@@ -45,6 +46,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
     personalRateOverall: string;
     personalRateDifficulty: string;
     actiontype: string;
+    objectDetectionCategory: string;
     objectDetectionDetector: string;
     objectDetectionKey: string;
     objectDetectionPrecision: string;
@@ -65,6 +67,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         this.personalRateOverall = values['personalRateOverall'] || '';
         this.personalRateDifficulty = values['personalRateDifficulty'] || '';
         this.actiontype = values['actiontype'] || '';
+        this.objectDetectionCategory = values['objectDetectionCategory'] || '';
         this.objectDetectionDetector = values['objectDetectionDetector'] || '';
         this.objectDetectionKey = values['objectDetectionKey'] || '';
         this.objectDetectionPrecision = values['objectDetectionPrecision'] || '';
@@ -109,6 +112,7 @@ export class TourDocSearchFormFactory {
         sanitizedValues.personalRateDifficulty = TourDocSearchForm.tdocFields.personalRateDifficulty.validator.sanitize(
             values['personalRateDifficulty']) || '';
         sanitizedValues.actiontype = TourDocSearchForm.tdocFields.actiontype.validator.sanitize(values['actiontype']) || '';
+        sanitizedValues.objectDetectionCategory = TourDocSearchForm.tdocFields.objectDetectionCategory.validator.sanitize(values['objectDetectionCategory']) || '';
         sanitizedValues.objectDetectionDetector = TourDocSearchForm.tdocFields.objectDetectionDetector.validator.sanitize(values['objectDetectionDetector']) || '';
         sanitizedValues.objectDetectionKey = TourDocSearchForm.tdocFields.objectDetectionKey.validator.sanitize(values['objectDetectionKey']) || '';
         sanitizedValues.objectDetectionPrecision = TourDocSearchForm.tdocFields.objectDetectionPrecision.validator.sanitize(values['objectDetectionPrecision']) || '';
@@ -150,6 +154,7 @@ export class TourDocSearchFormValidator {
         state = TourDocSearchForm.tdocFields.personalRateOverall.validator.isValid(values['personalRateOverall']) && state;
         state = TourDocSearchForm.tdocFields.personalRateDifficulty.validator.isValid(values['personalRateDifficulty']) && state;
         state = TourDocSearchForm.tdocFields.actiontype.validator.isValid(values['actiontype']) && state;
+        state = TourDocSearchForm.tdocFields.objectDetectionCategory.validator.isValid(values['objectDetectionCategory']) && state;
         state = TourDocSearchForm.tdocFields.objectDetectionDetector.validator.isValid(values['objectDetectionDetector']) && state;
         state = TourDocSearchForm.tdocFields.objectDetectionKey.validator.isValid(values['objectDetectionKey']) && state;
         state = TourDocSearchForm.tdocFields.objectDetectionPrecision.validator.isValid(values['objectDetectionPrecision']) && state;

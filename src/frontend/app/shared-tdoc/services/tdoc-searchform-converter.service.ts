@@ -58,6 +58,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         moreFilterMap.set('techRateOverall', searchForm.techRateOverall);
         moreFilterMap.set('personalRateDifficulty', searchForm.personalRateDifficulty);
         moreFilterMap.set('personalRateOverall', searchForm.personalRateOverall);
+        moreFilterMap.set('objectDetectionCategory', searchForm.objectDetectionCategory);
         moreFilterMap.set('objectDetectionDetector', searchForm.objectDetectionDetector);
         moreFilterMap.set('objectDetectionKey', searchForm.objectDetectionKey);
         moreFilterMap.set('objectDetectionPrecision', searchForm.objectDetectionPrecision);
@@ -129,8 +130,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
 
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.moreFilter, this.splitter,
             ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:',
-                'personalRateOverall:', 'personalRateDifficulty:',
-                'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:', 'objectDetectionState:']);
+             'personalRateOverall:', 'personalRateDifficulty:',
+             'objectDetectionCategory:', 'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:',
+             'objectDetectionState:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
             moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
@@ -152,6 +154,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
                 ',') : '');
         const personalRateDifficulty: string = (moreFilterValues.has('personalRateDifficulty:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('personalRateDifficulty:'), 'personalRateDifficulty:',
+                ',') : '');
+        const objectDetectionCategory: string = (moreFilterValues.has('objectDetectionCategory:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('objectDetectionCategory:'), 'objectDetectionCategory:',
                 ',') : '');
         const objectDetectionDetector: string = (moreFilterValues.has('objectDetectionDetector:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('objectDetectionDetector:'), 'objectDetectionDetector:',
@@ -234,6 +239,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.techDataAltitudeMax = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(techDataAltitudeMax, /^ungefiltert$/, ''),
             defaults['techDataAltitudeMax'], '');
+        searchForm.objectDetectionCategory = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(objectDetectionCategory, /^ungefiltert$/, ''),
+            defaults['objectDetectionCategory'], '');
         searchForm.objectDetectionDetector = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(objectDetectionDetector, /^ungefiltert$/, ''),
             defaults['objectDetectionDetector'], '');
@@ -296,6 +304,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             undefined, true, 'label.tdocratepers.schwierigkeit.'));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.personalRateDifficulty, 'hrt_personalRateDifficulty',
             undefined, true, 'label.tdocratepers.schwierigkeit.'));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionCategory, 'hrt_objectDetectionCategory',
+            undefined, false, ''));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionDetector, 'hrt_objectDetectionDetector',
             undefined, false, ''));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionKey, 'hrt_objectDetectionKey',

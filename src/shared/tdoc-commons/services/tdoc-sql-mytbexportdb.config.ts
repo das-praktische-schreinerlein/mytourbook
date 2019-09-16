@@ -122,6 +122,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -403,6 +406,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -668,6 +674,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -912,6 +921,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -1078,6 +1090,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'objects_txt': {
                     noFacet: true
                 },
+                'odcats_txt': {
+                    noFacet: true
+                },
                 'oddetectors_txt': {
                     noFacet: true
                 },
@@ -1239,6 +1254,9 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'MONTH(n_date)'
                 },
                 'objects_txt': {
+                    noFacet: true
+                },
+                'odcats_txt': {
                     noFacet: true
                 },
                 'oddetectors_txt': {

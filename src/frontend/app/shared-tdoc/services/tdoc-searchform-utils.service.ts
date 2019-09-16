@@ -52,6 +52,10 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
         return this.searchFormUtils.getFacetValues(searchResult, 'objects_txt', '', '');
     }
 
+    getObjectDetectionCategoryValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'odcats_txt', '', '');
+    }
+
     getObjectDetectionDetectorValues(searchResult: TourDocSearchResult): any[] {
         return this.searchFormUtils.getFacetValues(searchResult, 'oddetectors_txt', '', '');
     }
