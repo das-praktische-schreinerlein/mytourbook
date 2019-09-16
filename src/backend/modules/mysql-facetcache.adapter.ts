@@ -159,15 +159,21 @@ export class MysqlFacetCacheAdapter implements FacetCacheAdapter {
         sqls.push('CREATE VIEW fc_live_' + longKey + ' AS ' + facetSql);
         sqls.push('CREATE VIEW fc_cached_' + longKey + ' AS' +
             ' SELECT fc_count AS count, ' +
-            (configuration.withLabel === true ? 'fc_label AS label, ' : '') +
-            (configuration.withId === true ? 'fc_recid AS id, ' : '') +
+                (configuration.withLabel === true ? 'fc_label AS label, ' : '') +
+                (configuration.withId === true ? 'fc_recid AS id, ' : '') +
             '    fc_value_' + configuration.valueType + ' AS value' +
             ' FROM facetcache WHERE fc_key in ("' + longKey + '") ORDER BY fc_order');
         sqls.push('CREATE VIEW fc_real_' + longKey + ' AS ' +
-            '   SELECT * FROM fc_live_' + longKey +
+            '   SELECT count, ' +
+                (configuration.withLabel === true ? 'label, ' : '') +
+                (configuration.withId === true ? 'id, ' : '') +
+            '   value FROM fc_live_' + longKey +
             '       WHERE NOT EXISTS (SELECT 1 FROM facetcacheconfig WHERE fcc_key IN ("' + longKey + '") AND fcc_usecache <> 0)' +
             ' UNION ' +
-            '   SELECT * FROM fc_cached_' + longKey +
+            '   SELECT count, ' +
+                (configuration.withLabel === true ? 'label, ' : '') +
+                (configuration.withId === true ? 'id, ' : '') +
+            '   value FROM fc_cached_' + longKey +
             '       WHERE EXISTS (SELECT 1 FROM facetcacheconfig WHERE fcc_key IN ("' + longKey + '") AND fcc_usecache <> 0)'
         );
 
