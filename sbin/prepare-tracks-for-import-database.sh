@@ -29,8 +29,21 @@ select yn in "Yes"; do
     esac
 done
 
-echo "now: copy images to import-folder and group in subfolder by date"
-${MYTBTOOLS}copyFilesToDateFolder.sh ${DIGIFOTOS_BASEDIR}/OFFEN/${IMPORTKEY} ${DIGIFOTOS_BASEDIR}/import-PRESORTED/${IMPORTKEY}
+if [ ! -d "${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}" ]; then
+  echo "now: copy images to import-folder and group in subfolder by date"
+  ${MYTBTOOLS}copyFilesToDateFolder.sh ${DIGIFOTOS_BASEDIR}OFFEN/${IMPORTKEY} ${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}
+else
+  echo "WARNING: presorted subfolder already exists '${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}'?"
+  echo "SKIP: copy images to import-folder and group in subfolder by date"
+  echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied importdir '${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}'?"
+  select yn in "Yes"; do
+      case $yn in
+          Yes ) break;;
+          No ) exit;;
+      esac
+  done
+fi
+
 
 echo "now: create import folder"
 if [ ! -d "${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY}" ]; then
@@ -61,8 +74,20 @@ select yn in "Yes"; do
     esac
 done
 
-echo "now: move videos to videofolder"
-${MYTBTOOLS}copyVideosToVideoFolder.sh ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}
+if [ ! -d "${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}" ]; then
+  echo "now: move videos to videofolder"
+  ${MYTBTOOLS}copyVideosToVideoFolder.sh ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}
+else
+  echo "WARNING: presorted video-subfolder already exists '${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}'?"
+  echo "SKIP: now: move videos to videofolder"
+  echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied video-importdir '${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}'?"
+  select yn in "Yes"; do
+      case $yn in
+          Yes ) break;;
+          No ) exit;;
+      esac
+  done
+fi
 
 echo "OPTIONAL YOUR TODO: fix exif-date run this command in a windows-shell 'D:\\ProgrammePortable\\exiftool\\exiftool -ext jpg -overwrite_original_in_place -preserve -DateTimeOriginal-=\"0:0:0 7:40:0\" ${W_DIGIFOTOS_BASEDIR}import-READY\\${IMPORTKEY}_Blablum\\CIMG6228.JPG'"
 echo "OPEN: Can we poceed the next steps ?"
@@ -72,9 +97,35 @@ select yn in "Yes"; do
     esac
 done
 
-echo "now: copy images and prefix path"
-${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full ${IMPORTKEY}
-${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full ${IMPORTKEY}
+if [ ! -d "${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full" ]; then
+  echo "now: copy images and prefix path"
+  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full ${IMPORTKEY}
+else
+  echo "WARNING: prefixed image-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full'?"
+  echo "SKIP: copy images and prefix path"
+  echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied image-subfolder '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full'?"
+  select yn in "Yes"; do
+      case $yn in
+          Yes ) break;;
+          No ) exit;;
+      esac
+  done
+fi
+
+if [ ! -d "${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full" ]; then
+  echo "now: copy videos and prefix path"
+  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full ${IMPORTKEY}
+else
+  echo "WARNING: prefixed video-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full'?"
+  echo "SKIP: copy videos and prefix path"
+  echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied image-subfolder '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full'?"
+  select yn in "Yes"; do
+      case $yn in
+          Yes ) break;;
+          No ) exit;;
+      esac
+  done
+fi
 
 echo "now: create symlink so that this folder is the current import-folder'link_${IMPORTKEY} ${IMPORTKEY}'"
 cd $MYTB_IMPORT_MEDIADIR
@@ -100,27 +151,27 @@ echo "now: create image/video-sym-links"
 cd ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}
 ${MYTB}/node_modules/.bin/symlink-dir pics_full link_pics_x600
 ${MYTB}/node_modules/.bin/symlink-dir pics_full link_pics_x100
-mkdir pics_x600
-mkdir pics_x100
+[ -d pics_x600 ] ||  mkdir pics_x600
+[ -d pics_x100 ] ||  mkdir pics_x100
 ${MYTB}/node_modules/.bin/symlink-dir video_full link_video_x600
-mkdir video_screenshot
-mkdir video_thumbnail
-mkdir video_x600
+[ -d video_screenshot ] ||  mkdir video_screenshot
+[ -d video_thumbnail ] ||  mkdir video_thumbnail
+[ -d video_x600 ] ||  mkdir video_x600
 cd $CWD
 
 echo "now: generate import-files"
 cd ${MYTB}
-node dist/backend/serverAdmin.js -c config/backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}import/pics_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
-node dist/backend/serverAdmin.js -c config/backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
+node dist/backend/serverAdmin.js -c config/backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp
+sed -e '/DONE - command finished/,$d' ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp | sed -e '0,/sqlite does not support inserting default values/d' > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json
+node dist/backend/serverAdmin.js -c config/backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp
+sed -e '/DONE - command finished/,$d' ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp | sed -e '0,/sqlite does not support inserting default values/d' > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json
 
 echo "OPTIONAL YOUR TODO: fix import-files (location-names...)"
-echo "OPEN: Did fix this files in editor '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json'?"
+echo "OPEN: Did fix this files in editor '${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json'?"
 select yn in "Yes"; do
     case $yn in
         Yes ) break;;
     esac
 done
 
-echo "done - prepare track import: ${import-XXXX}"
-
-
+echo "done - prepare track import: ${IMPORTKEY} to '${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}'"

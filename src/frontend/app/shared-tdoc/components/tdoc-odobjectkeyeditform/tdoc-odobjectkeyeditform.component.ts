@@ -12,10 +12,12 @@ import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/fac
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {ToastrService} from 'ngx-toastr';
+import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
 
 export interface TourDocObjectDetectionObjectKeyEditFormResultType {
     action: 'changeObjectKeyForRecord' | 'changeObjectLabelForObjectKey'| 'createObjectLabelForObjectKey' | 'createNewObjectKeyAndObjectLabel';
     detector: string;
+    state: ObjectDetectionState;
     objectkey: string;
     objectname: string;
     objectcategory: string;
@@ -257,9 +259,15 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
                 return false;
         }
 
+        let state = ObjectDetectionState.RUNNING_MANUAL_CORRECTED;
+        if (this.record['tdocodimageobjects'][0]['state'] === ObjectDetectionState.RUNNING_MANUAL_DETAIL_NEEDED) {
+            state = ObjectDetectionState.RUNNING_MANUAL_DETAILED;
+        }
+
         this.resultObservable.next({
             action: action,
             detector: this.record['tdocodimageobjects'][0]['detector'],
+            state: state,
             objectkey: objectkey,
             objectname: objectname,
             objectcategory: objectcategory});

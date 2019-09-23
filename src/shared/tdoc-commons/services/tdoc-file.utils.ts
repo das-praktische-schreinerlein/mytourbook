@@ -4,6 +4,10 @@ import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 
 export class TourDocFileUtils {
     public static normalizeCygwinPath(path: string): string {
+        if (!path) {
+            return path;
+        }
+
         path = path.replace(/^\/cygdrive\/([a-z])\//g, '$1:/');
 
         return path;

@@ -1246,13 +1246,25 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'LEFT JOIN video_object ON video.v_id=video_object.v_id ' +
-                    'LEFT JOIN objects persons ON video_object.vo_obj_type=persons.o_key AND LOWER(persons.o_category) LIKE "person" ',
+                        'LEFT JOIN objects ON video_object.vo_obj_type=objects.o_key',
+                    triggerParams: ['id', 'odstates_ss', 'odprecision_is', 'odcats_txt', 'odkeys_txt', 'oddetectors_txt'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_allobjects']
+                },
+                {
+                    from: 'LEFT JOIN video_object video_object_persons ON video.v_id=video_object_persons.v_id ' +
+                    'LEFT JOIN objects persons ON video_object_persons.vo_obj_type=persons.o_key' +
+                    ' AND LOWER(persons.o_category) LIKE "person"' +
+                    ' AND (video_object_persons.vo_precision = 1' +
+                    '      OR video_object_persons.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
                     triggerParams: ['id', 'persons_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS v_persons']
                 },
                 {
-                    from: 'LEFT JOIN video_object ON video.v_id=video_object.v_id ' +
-                        'LEFT JOIN objects realobjects ON video_object.vo_obj_type=realobjects.o_key AND LOWER(realobjects.o_category) NOT LIKE "person"',
+                    from: 'LEFT JOIN video_object video_object_objects ON video.v_id=video_object_objects.v_id ' +
+                        'LEFT JOIN objects realobjects ON video_object_objects.vo_obj_type=realobjects.o_key' +
+                        ' AND LOWER(realobjects.o_category) NOT LIKE "person"' +
+                        ' AND (video_object_objects.vo_precision = 1' +
+                        '      OR video_object_objects.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
                     triggerParams: ['id', 'objects_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT realobjects.o_name ORDER BY realobjects.o_name SEPARATOR ", ") AS v_objects']
                 }
@@ -1270,7 +1282,12 @@ export class TourDocSqlMytbDbConfig {
                     profile: 'video_persons',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_persons ' +
                     'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
-                    ' INNER JOIN objects ON video_object.vo_obj_type=objects.o_key AND LOWER(o_category) LIKE "person" ' +
+                    ' INNER JOIN objects_key ON video_object.vo_obj_type=objects_key.ok_key' +
+                    ' AND video_object.vo_detector=objects_key.ok_detector ' +
+                    ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
+                    ' AND LOWER(o_category) LIKE "person"' +
+                    ' AND (video_object.vo_precision = 1' +
+                    '      OR video_object.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
                     'WHERE video.v_id in (:id)',
                     parameterNames: ['id']
                 },
@@ -1278,7 +1295,12 @@ export class TourDocSqlMytbDbConfig {
                     profile: 'video_objects',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_objects ' +
                         'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
-                        ' INNER JOIN objects ON video_object.vo_obj_type=objects.o_key AND LOWER(o_category) NOT LIKE "person" ' +
+                        ' INNER JOIN objects_key ON video_object.vo_obj_type=objects_key.ok_key' +
+                        ' AND video_object.vo_detector=objects_key.ok_detector ' +
+                        ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' AND LOWER(o_category) NOT LIKE "person"' +
+                        ' AND (video_object.vo_precision = 1' +
+                        '      OR video_object.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
                         'WHERE video.v_id in (:id)',
                     parameterNames: ['id']
                 },
@@ -1397,10 +1419,11 @@ export class TourDocSqlMytbDbConfig {
                     orderBy: 'value asc'
                 },
                 'objects_txt': {
-                    selectSql: 'SELECT COUNT(vo_obj_type) AS count, ' +
+                    selectSql: 'SELECT COUNT(video.v_id) AS count, ' +
                         ' o_name AS value ' +
                         'FROM' +
                         ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
+                        ' INNER JOIN video ON video_object.v_id=video.v_id ' +
                         ' WHERE objects.o_category NOT IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
@@ -1423,10 +1446,11 @@ export class TourDocSqlMytbDbConfig {
                     noFacet: true
                 },
                 'persons_txt': {
-                    selectSql: 'SELECT COUNT(vo_obj_type) AS count, ' +
+                    selectSql: 'SELECT COUNT(video.v_id) AS count, ' +
                     ' o_name AS value ' +
                     'FROM' +
                     ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
+                    ' INNER JOIN video ON video_object.v_id=video.v_id ' +
                     ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
                     ' GROUP BY value' +
                     ' ORDER BY value',

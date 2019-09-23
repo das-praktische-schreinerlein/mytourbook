@@ -403,11 +403,13 @@ export class TourDocSqlMytbDbActionTagAdapter {
         let codeFieldName;
         let tableName;
         let idName;
+        let stateName;
         switch (table) {
             case 'odimgobject':
                 codeFieldName = 'io_obj_type';
                 tableName = 'image_object';
                 idName = 'io_id';
+                stateName = 'io_state';
                 break;
             default:
                 return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
@@ -423,6 +425,13 @@ export class TourDocSqlMytbDbActionTagAdapter {
         const action = actionTagForm.payload['action'];
         if (!this.keywordValidationRule.isValid(action)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' action not valid');
+        }
+        const state = actionTagForm.payload['state'];
+        if (!this.keywordValidationRule.isValid(state)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' state not valid');
+        }
+        if (state !== ObjectDetectionState.RUNNING_MANUAL_CORRECTED && state !== ObjectDetectionState.RUNNING_MANUAL_DETAILED) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' state not allowed');
         }
 
         let insertObjectNameSql = '';
@@ -463,7 +472,8 @@ export class TourDocSqlMytbDbActionTagAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' action unknown');
         }
 
-        let updateImageObjectObjectKeySql = 'UPDATE ' + tableName + ' SET ' + codeFieldName + '="' + objectkey + '"' +
+        let updateImageObjectObjectKeySql = 'UPDATE ' + tableName +
+            '  SET ' + codeFieldName + '="' + objectkey + '", ' + stateName + '="' + state + '"' +
             '  WHERE ' + idName + ' = "' + id + '"';
         updateImageObjectObjectKeySql = this.sqlQueryBuilder.transformToSqlDialect(updateImageObjectObjectKeySql,
             this.config.knexOpts.client);
