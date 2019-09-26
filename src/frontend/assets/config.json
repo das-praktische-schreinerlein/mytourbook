@@ -192,35 +192,6 @@
                     ]
                 },
                 {
-                    "key": "blocked",
-                    "type": "tag",
-                    "name": "Block from public",
-                    "shortName": "&#x1F6AB",
-                    "payload": {
-                    },
-                    "showFilter": [
-                        {
-                            "property": "blocked",
-                            "command": "CSVIN",
-                            "expectedValues": ["1", "2", "3", "4", "5", "true", "TRUE"]
-                        }
-                    ],
-                    "recordAvailability": [
-                        {
-                            "property": "type",
-                            "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
-                        }
-                    ],
-                    "configAvailability": [
-                        {
-                            "property": "permissions.tdocActionTagWritable",
-                            "command": "EQ",
-                            "expectedValues": [true]
-                        }
-                    ]
-                },
-                {
                     "key": "playlists_favorites",
                     "type": "tag",
                     "name": "Favorites",
@@ -473,6 +444,35 @@
                     ]
                 },
                 {
+                    "key": "blocked",
+                    "type": "tag",
+                    "name": "Block from public",
+                    "shortName": "&#x1F6AB",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "blocked",
+                            "command": "CSVIN",
+                            "expectedValues": ["1", "2", "3", "4", "5", "true", "TRUE"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "odobjectstate_APPROVED",
                     "type": "tag",
                     "name": "APPROVED",
@@ -687,6 +687,155 @@
                             "property": "tdocMaxItemsPerAlbum",
                             "command": "GE",
                             "expectedValues": [10]
+                        }
+                    ]
+                },
+                {
+                    "key": "blocked",
+                    "type": "tag",
+                    "name": "Block from public",
+                    "shortName": "&#x1F6AB",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "blocked",
+                            "command": "CSVIN",
+                            "expectedValues": ["1", "2", "3", "4", "5", "true", "TRUE"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "odobjectstate_APPROVED",
+                    "type": "tag",
+                    "name": "APPROVED",
+                    "shortName": "&#x2714",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_APPROVED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_APPROVED", "DONE_APPROVAL_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "odobjectstate_REJECTED",
+                    "type": "tag",
+                    "name": "REJECTED",
+                    "shortName": "&#x2716",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_REJECTED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_REJECTED", "DONE_REJECTION_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "odobjectstate_CORRECTION_NEEDED",
+                    "type": "tag",
+                    "name": "CORRECTION NEEDED",
+                    "shortName": "&#x270E",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_CORRECTION_NEEDED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_CORRECTED", "RUNNING_MANUAL_CORRECTION_NEEDED","DONE_CORRECTION_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "odobjectstate_DETAIL_NEEDED",
+                    "type": "tag",
+                    "name": "DETAIL NEEDED",
+                    "shortName": "&#x2315",
+                    "payload": {
+                        "state": "RUNNING_MANUAL_DETAIL_NEEDED"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RUNNING_MANUAL_DETAILED", "RUNNING_MANUAL_DETAIL_NEEDED", "DONE_DETAIL_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
                         }
                     ]
                 }
