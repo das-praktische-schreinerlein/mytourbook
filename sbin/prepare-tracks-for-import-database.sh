@@ -76,7 +76,7 @@ done
 
 if [ ! -d "${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}" ]; then
   echo "now: move videos to videofolder"
-  ${MYTBTOOLS}copyVideosToVideoFolder.sh ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}
+  ${MYTBTOOLS}moveVideosToVideoFolder.sh ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}
 else
   echo "WARNING: presorted video-subfolder already exists '${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}'?"
   echo "SKIP: now: move videos to videofolder"
@@ -99,7 +99,7 @@ done
 
 if [ ! -d "${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full" ]; then
   echo "now: copy images and prefix path"
-  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full ${IMPORTKEY}
+  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${DIGIFOTOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full ${IMPORTKEY}_
 else
   echo "WARNING: prefixed image-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full'?"
   echo "SKIP: copy images and prefix path"
@@ -114,7 +114,7 @@ fi
 
 if [ ! -d "${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full" ]; then
   echo "now: copy videos and prefix path"
-  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full ${IMPORTKEY}
+  ${MYTBTOOLS}copyDirsAndPrefixPath.sh  ${VIDEOS_BASEDIR}import-READY/${IMPORTKEY} ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full ${IMPORTKEY}_
 else
   echo "WARNING: prefixed video-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full'?"
   echo "SKIP: copy videos and prefix path"

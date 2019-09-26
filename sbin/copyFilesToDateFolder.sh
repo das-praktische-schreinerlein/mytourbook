@@ -19,6 +19,11 @@ if [ ! -d "$DESTDIR" ]; then
   mkdir -p "${DESTDIR}"
 fi
 
+if [ -z "$(ls -A $SRCDIR)" ]; then
+  echo "SKIP copy files srcDir is empty: $SRCDIR"
+  exit;
+fi
+
 # do it
 for x in $SRCDIR/*; do
   d=$(date -r "$x" +%Y%m%d)
