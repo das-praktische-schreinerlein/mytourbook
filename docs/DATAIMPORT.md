@@ -28,8 +28,8 @@ source installer/db/mysql/mytbexportdb/init_02_create-user.sql
 ```bash
 bash
 cd sbin
-./prepare-tracks-for-import-database.sh
-./import-tracks-to-import-database.sh
+./dataimport-01-prepare-tracks-for-import-database.sh
+./dataimport-02-import-tracks-to-import-database.sh
 ```
 
 ### data-management: basics 
@@ -57,8 +57,8 @@ cd sbin
 
 ### do import
 ```bash
-./import-tracks-to-production-database.sh
-./fix-data-in-production-database.sh
+./dataimport-03-import-tracks-to-production-database.sh
+./dataimport-04-fix-data-in-production-database.sh
 ```
 
 ### data-management: touren/location
