@@ -23,15 +23,15 @@ source installer/db/mysql/mytbexportdb/init_02_create-user.sql
 - configure ```src/frontend/environments/environment.ts``` to use this as backend-url 
 
 ## import tracks to import-database 
-
-### do import
+- do import
 ```bash
 bash
 cd sbin
-./dataimport-01-prepare-tracks-for-import-database.sh
+./dataimport-01-prepare-tracks-for-import-database.sh IMPORTKEY
 ./dataimport-02-import-tracks-to-import-database.sh
 ```
-
+## manage data in import-database
+ 
 ### data-management: basics 
 - [locations](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/location/10/1)
 - [create trips](http://localhost:4002/mytbdev/de/tdocadmin/create/TRIP)
@@ -53,15 +53,16 @@ cd sbin
 - [add additonal playlists for favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
 - [block private images from favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
 
-## import tracks from import-database to produrction-database 
-
-### do import
+## import tracks from import-database to production-database 
+- do import
 ```bash
 ./dataimport-03-import-tracks-to-production-database.sh
 ./dataimport-04-fix-data-in-production-database.sh
 ```
 
-### data-management: touren/location
+## manage data in production-database
+
+## data-management: touren/location
 - [tracks: assing existing routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/date/track/50/1)
 - [manage location: sublocations of ImportXXX...](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/Import/egal/date/location/10/1)
 - [create new routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/ratePers/track/50/1)
