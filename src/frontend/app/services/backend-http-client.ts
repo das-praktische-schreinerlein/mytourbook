@@ -8,5 +8,3 @@ export class BackendHttpClient extends SimpleAngularBackendHttpClient {
         super(http);
     }
 }
-
-
