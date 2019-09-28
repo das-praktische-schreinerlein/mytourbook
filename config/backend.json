@@ -54,7 +54,7 @@
         },
         "facetCacheConfig": {
             "datastore": {
-                "scriptPath": "installer/db/mysql/facetcache"
+                "scriptPath": "node_modules/@dps/mycms-commons/dist/facetcache-commons/model/db/mysql"
             },
             "facets": [
             ],
