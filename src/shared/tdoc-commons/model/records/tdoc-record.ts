@@ -252,7 +252,6 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
     public static instance = new TourDocRecordValidator();
 
     isValid(doc: BaseEntityRecord, errFieldPrefix?: string): boolean {
-        console.warn('TourDocRecordValidator: validation-errors', this.validate(doc, errFieldPrefix));
         // TODO: validate subtype requitred for TRACK, ROUTE, LOCATION
         return this.validate(doc, errFieldPrefix).length === 0;
     }
