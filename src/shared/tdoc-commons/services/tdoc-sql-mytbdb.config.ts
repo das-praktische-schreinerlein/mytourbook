@@ -25,6 +25,11 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT kt.t_id ORDER BY kt.t_id SEPARATOR ", ") AS k_kt_ids']
                 },
                 {
+                    from: 'LEFT JOIN news ON kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis',
+                    triggerParams: ['news_id_i', 'news_id_is'],
+                    groupByFields: ['news.n_id']
+                },
+                {
                     from: ' ',
                     triggerParams: ['id', 'loadTrack'],
                     groupByFields: ['k_gpstracks_gpx_source']
@@ -150,6 +155,14 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
                 },
+                'news_id_i': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'news_id_is': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'objects_txt': {
                     noFacet: true
                 },
@@ -251,7 +264,6 @@ export class TourDocSqlMytbDbConfig {
                 track_id_is: 'kategorie.k_id',
                 video_id_is: '"dummy"',
                 video_id_i: '"dummy"',
-                news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_name)'
@@ -384,6 +396,11 @@ export class TourDocSqlMytbDbConfig {
                         '      OR image_object_objects.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
                     triggerParams: ['id', 'objects_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT realobjects.o_name ORDER BY realobjects.o_name SEPARATOR ", ") AS i_objects']
+                },
+                {
+                    from: 'LEFT JOIN news ON kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis',
+                    triggerParams: ['news_id_i', 'news_id_is'],
+                    groupByFields: ['news.n_id']
                 }
             ],
             loadDetailData: [
@@ -554,6 +571,14 @@ export class TourDocSqlMytbDbConfig {
                 'month_is': {
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
+                },
+                'news_id_i': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'news_id_is': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
                 },
                 'objects_txt': {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
@@ -732,7 +757,6 @@ export class TourDocSqlMytbDbConfig {
                 route_id_is: 'kategorie.t_id',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id',
-                news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
@@ -1267,6 +1291,11 @@ export class TourDocSqlMytbDbConfig {
                         '      OR video_object_objects.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
                     triggerParams: ['id', 'objects_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT realobjects.o_name ORDER BY realobjects.o_name SEPARATOR ", ") AS v_objects']
+                },
+                {
+                    from: 'LEFT JOIN news ON kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis',
+                    triggerParams: ['news_id_i', 'news_id_is'],
+                    groupByFields: ['news.n_id']
                 }
             ],
             loadDetailData: [
@@ -1418,6 +1447,14 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'MONTH(v_date)',
                     orderBy: 'value asc'
                 },
+                'news_id_i': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'news_id_is': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'objects_txt': {
                     selectSql: 'SELECT COUNT(video.v_id) AS count, ' +
                         ' o_name AS value ' +
@@ -1531,7 +1568,6 @@ export class TourDocSqlMytbDbConfig {
                 route_id_is: 'kategorie.t_id',
                 track_id_i: 'video.k_id',
                 track_id_is: 'video.k_id',
-                news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
                 html: 'CONCAT(COALESCE(v_meta_name,""), " ", l_name)'
@@ -1625,6 +1661,24 @@ export class TourDocSqlMytbDbConfig {
                     triggerParams: ['id', 'track_id_i', 'track_id_is'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_k_ids',
                         'GROUP_CONCAT(DISTINCT kt.k_id ORDER BY kt.k_id SEPARATOR ", ") AS t_kt_ids']
+                },
+                {
+                    from: 'LEFT JOIN kategorie_tour kt_kt ON tour.t_id=kt_kt.t_id ' +
+                        'LEFT JOIN kategorie kt_k ON kt_kt.k_id=kt_k.k_id ' +
+                        'LEFT JOIN news kt_news ON kt_k.k_datevon >= kt_news.n_datevon AND kt_k.k_datevon <= kt_news.n_datebis ' +
+                        'LEFT JOIN kategorie k_k ON tour.t_id=k_k.t_id ' +
+                        'LEFT JOIN news k_news ON k_k.k_datevon >= k_news.n_datevon AND k_k.k_datevon <= k_news.n_datebis ',
+                    triggerParams: ['news_id_i', 'news_id_is'],
+                    groupByFields: ['kt_news.n_id', 'k_news.n_id']
+                },
+                {
+                    from: 'LEFT JOIN kategorie_tour kt_kt ON tour.t_id=kt_kt.t_id ' +
+                        'LEFT JOIN kategorie kt_k ON kt_kt.k_id=kt_k.k_id ' +
+                        'LEFT JOIN trip kt_trip ON kt_k.k_datevon >= kt_trip.tr_datevon AND kt_k.k_datevon <= kt_trip.tr_datebis ' +
+                        'LEFT JOIN kategorie k_k ON tour.t_id=k_k.t_id ' +
+                        'LEFT JOIN trip k_trip ON k_k.k_datevon >= k_trip.tr_datevon AND k_k.k_datevon <= k_trip.tr_datebis ',
+                    triggerParams: ['trip_id_i', 'trip_id_is'],
+                    groupByFields: ['kt_trip.tr_id', 'k_trip.tr_id']
                 },
                 {
                     from: ' ',
@@ -1769,6 +1823,14 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'MONTH(t_datevon)',
                     orderBy: 'value asc'
                 },
+                'news_id_i': {
+                    filterFields: ['k_news.n_id', 'kt_news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'news_id_is': {
+                    filterFields: ['k_news.n_id', 'kt_news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'objects_txt': {
                     noFacet: true
                 },
@@ -1833,6 +1895,14 @@ export class TourDocSqlMytbDbConfig {
                     filterFields: ['kategorie.k_id', 'kt.k_id'],
                     action: AdapterFilterActions.IN_NUMBER
                 },
+                'trip_id_i': {
+                    filterFields: ['k_trip.tr_id', 'kt_trip.tr_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'trip_id_is': {
+                    filterFields: ['k_trip.tr_id', 'kt_trip.tr_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'type_txt': {
                     constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news'],
                     filterField: '"route"',
@@ -1876,7 +1946,6 @@ export class TourDocSqlMytbDbConfig {
                 route_id_is: 'tour.t_id',
                 video_id_is: '"dummy"',
                 video_id_i: '"dummy"',
-                news_id_is: '"dummy"',
                 trip_id_is: '"dummy"',
                 loc_id_i: 'tour.l_id',
                 loc_id_is: 'tour.l_id',
@@ -2189,6 +2258,11 @@ export class TourDocSqlMytbDbConfig {
                     'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS tr_keywords']
+                },
+                {
+                    from: 'LEFT JOIN news ON kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis',
+                    triggerParams: ['news_id_i', 'news_id_is'],
+                    groupByFields: ['news.n_id']
                 }
             ],
             groupbBySelectFieldList: true,
@@ -2270,6 +2344,14 @@ export class TourDocSqlMytbDbConfig {
                 'month_is': {
                     selectField: 'MONTH(tr_datevon)'
                 },
+                'news_id_i': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'news_id_is': {
+                    filterFields: ['news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'objects_txt': {
                     noFacet: true
                 },
@@ -2340,7 +2422,6 @@ export class TourDocSqlMytbDbConfig {
                 image_id_i: '"dummy"',
                 track_id_i: '"dummy"',
                 route_id_is: '"dummy"',
-                news_id_is: '"dummy"',
                 loc_id_i: 'trip.l_id',
                 loc_id_is: 'trip.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
