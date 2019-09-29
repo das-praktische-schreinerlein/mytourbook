@@ -38,7 +38,7 @@ cd sbin
 
 ### data-management: tracks 
 - [manage track: type/persons/GPS-tracks/date](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
-  - HINT: use gpx-traclfiles from garmin archive-folder
+  - HINT: use gpx-trackfiles from garmin archive-folder
 - [generate and change tracknames](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
 - [manage rating/keywords](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
 - OPTIONAL - fix track-data if needed
