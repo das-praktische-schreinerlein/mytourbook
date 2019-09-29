@@ -1,14 +1,18 @@
 #!/bin/bash
 # exit on error
 set -e
+CWD=$(pwd)
+function dofail {
+    cd $CWD
+    printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
+}
 
 # check parameters
 if [ "$#" -ne 2 ]; then
-    echo "copy only videos from srcDir to destDir (create destDir if not exists)"
-    echo "FATAL: requires 'srcDir destDir' as parameters"
+    dofail "copy only videos from srcDir to destDir (create destDir if not exists)\nFATAL: requires 'srcDir destDir' as parameters" 1
     exit 1
 fi
-CWD=$(pwd)
 SRCDIR=$1
 DESTDIR=$2
 

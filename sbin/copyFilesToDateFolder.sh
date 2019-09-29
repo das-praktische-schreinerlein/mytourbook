@@ -1,11 +1,16 @@
 #!/bin/bash
 # exit on error
 set -e
+CWD=$(pwd)
+function dofail {
+    cd $CWD
+    printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
+}
 
 # check parameters
 if [ "$#" -ne 2 ]; then
-    echo "copy files from srcDir to destDir (create destDir if not exists) and create separate subdirs by date"
-    echo "FATAL: requires 'srcDir destDir' as parameters"
+    dofail "copy files from srcDir to destDir (create destDir if not exists) and create separate subdirs by date\nFATAL: requires 'srcDir destDir' as parameters" 1
     exit 1
 fi
 

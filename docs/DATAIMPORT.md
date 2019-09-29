@@ -28,7 +28,7 @@ source installer/db/mysql/mytbexportdb/init_02_create-user.sql
 bash
 cd sbin
 ./dataimport-01-prepare-tracks-for-import-database.sh IMPORTKEY
-./dataimport-02-import-tracks-to-import-database.sh
+./dataimport-02-import-tracks-to-import-database.sh IMPORTKEY
 ```
 ## manage data in import-database
  
@@ -50,13 +50,13 @@ cd sbin
 - [select favorite images](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
 - [identify persons](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
 - [rate favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
-- [add additonal playlists for favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
+- [add additional playlists for favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
 - [block private images from favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
 
 ## import tracks from import-database to production-database 
 - do import
 ```bash
-./dataimport-03-import-tracks-to-production-database.sh
+./dataimport-03-import-tracks-to-production-database.sh IMPORTKEY
 ./dataimport-04-fix-data-in-production-database.sh
 ```
 

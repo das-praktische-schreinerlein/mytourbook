@@ -1,11 +1,23 @@
 #!/bin/bash
 # exit on error
 set -e
-
 CWD=$(pwd)
+function dofail {
+    cd $CWD
+    printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
+}
+
+# check parameters
+if [ "$#" -ne 1 ]; then
+    dofail "USAGE: dataimport-03-import-tracks-to production-database.sh importKey\nFATAL: requires 'importKey' as parameters 'import-XXXX'" 1
+    exit 1
+fi
+IMPORTKEY=$1
+./setImportDirectory.sh $IMPORTKEY
 
 echo "OPEN: Do you want to import tracks from import-database to production-database?"
-select yn in "Yes"; do
+select yn in "Yes" "No"; do
     case $yn in
         Yes ) break;;
         No ) exit;;

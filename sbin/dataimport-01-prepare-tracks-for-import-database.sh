@@ -1,15 +1,19 @@
 #!/bin/bash
 # exit on error
 set -e
+CWD=$(pwd)
+function dofail {
+    cd $CWD
+    printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
+}
 
 # check parameters
 if [ "$#" -ne 1 ]; then
-    echo "prepare-track-import importKey"
-    echo "FATAL: requires 'importKey' as parameters 'import-XXXX'"
+    dofail "USAGE: dataimport-01-prepare-tracks-for-import-database.sh importKey\nFATAL: requires 'importKey' as parameters 'import-XXXX'" 1
     exit 1
 fi
 IMPORTKEY=$1
-CWD=$(pwd)
 
 echo "start - prepare track import: ${IMPORTKEY}"
 
@@ -22,7 +26,7 @@ if [ ! -d "${DIGIFOTOS_BASEDIR}OFFEN/${IMPORTKEY}" ]; then
 fi
 
 echo "OPEN: Do you want to start track import'${DIGIFOTOS_BASEDIR}OFFEN/${IMPORTKEY}'?"
-select yn in "Yes"; do
+select yn in "Yes" "No"; do
     case $yn in
         Yes ) break;;
         No ) exit;;
@@ -36,7 +40,7 @@ else
   echo "WARNING: presorted subfolder already exists '${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}'?"
   echo "SKIP: copy images to import-folder and group in subfolder by date"
   echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied importdir '${DIGIFOTOS_BASEDIR}import-PRESORTED/${IMPORTKEY}'?"
-  select yn in "Yes"; do
+  select yn in "Yes" "No"; do
       case $yn in
           Yes ) break;;
           No ) exit;;
@@ -81,7 +85,7 @@ else
   echo "WARNING: presorted video-subfolder already exists '${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}'?"
   echo "SKIP: now: move videos to videofolder"
   echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied video-importdir '${VIDEOS_BASEDIR}import-READY/${IMPORTKEY}'?"
-  select yn in "Yes"; do
+  select yn in "Yes" "No"; do
       case $yn in
           Yes ) break;;
           No ) exit;;
@@ -104,7 +108,7 @@ else
   echo "WARNING: prefixed image-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full'?"
   echo "SKIP: copy images and prefix path"
   echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied image-subfolder '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/pics_full'?"
-  select yn in "Yes"; do
+  select yn in "Yes" "No"; do
       case $yn in
           Yes ) break;;
           No ) exit;;
@@ -119,19 +123,13 @@ else
   echo "WARNING: prefixed video-subfolder already exists '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full'?"
   echo "SKIP: copy videos and prefix path"
   echo "OPEN: is this ok? If not type 'N' to exit and delete the already copied image-subfolder '${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full'?"
-  select yn in "Yes"; do
+  select yn in "Yes" "No"; do
       case $yn in
           Yes ) break;;
           No ) exit;;
       esac
   done
 fi
-
-echo "now: create symlink so that this folder is the current import-folder'link_${IMPORTKEY} ${IMPORTKEY}'"
-cd $MYTB_IMPORT_MEDIADIR
-${MYTB}/node_modules/.bin/symlink-dir ${IMPORTKEY} link_${IMPORTKEY}
-mv link_${IMPORTKEY} import
-cd $CWD
 
 echo "now: convert videos: avi/mov... to mp4"
 cd ${MYTB}

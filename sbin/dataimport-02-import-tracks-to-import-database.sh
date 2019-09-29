@@ -1,11 +1,23 @@
 #!/bin/bash
 # exit on error
 set -e
-
 CWD=$(pwd)
+function dofail {
+    cd $CWD
+    printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
+}
+
+# check parameters
+if [ "$#" -ne 1 ]; then
+    dofail "USAGE: dataimport-02-import-tracks-to-import-database.sh importKey\nFATAL: requires 'importKey' as parameters 'import-XXXX'" 1
+    exit 1
+fi
+IMPORTKEY=$1
+./setImportDirectory.sh $IMPORTKEY
 
 echo "OPEN: Do you want to import track to import-database?"
-select yn in "Yes"; do
+select yn in "Yes" "No"; do
     case $yn in
         Yes ) break;;
         No ) exit;;
@@ -30,10 +42,45 @@ select yn in "Yes"; do
 done
 
 echo "now: load import-files"
-cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
-node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
-cd $CWD
+if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json" ]; then
+  echo "now: load image-import-file"
+  cd ${MYTB}
+  node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
+  mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-images.json
+  rm  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.tmp || echo ""
+  cd $CWD
+else
+  echo "WARNING: image-import-file not exists '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json'?"
+  ls -l ${MYTB_IMPORT_MEDIADIR}import/*.json
+  echo "SKIP: load image-import-file"
+  echo "OPEN: is this ok? If not type 'N' to exit and check the import-folder '${MYTB_IMPORT_MEDIADIR}import/'?"
+  select yn in "Yes" "No"; do
+      case $yn in
+          Yes ) break;;
+          No ) exit;;
+      esac
+  done
+fi
+
+if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
+  echo "now: load video-import-file"
+  cd ${MYTB}
+  node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
+  mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-videos.json
+  rm  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.tmp || echo ""
+  cd $CWD
+else
+  echo "WARNING: video-import-file not exists '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json'?"
+  ls -l ${MYTB_IMPORT_MEDIADIR}import/*.json
+  echo "SKIP: load video-import-file"
+  echo "OPEN: is this ok? If not type 'N' to exit and check the import-folder '${MYTB_IMPORT_MEDIADIR}import/'?"
+  select yn in "Yes" "No"; do
+      case $yn in
+          Yes ) break;;
+          No ) exit;;
+      esac
+  done
+fi
 
 echo "OPTIONAL: read image-dates"
 echo "OPEN: Do you want to read the image-dates?"
