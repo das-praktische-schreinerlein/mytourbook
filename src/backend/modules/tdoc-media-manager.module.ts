@@ -9,6 +9,9 @@ import * as readdirp from 'readdirp';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
+import {TourDocVideoRecord} from '../shared/tdoc-commons/model/records/tdocvideo-record';
+import * as ffmpeg from 'fluent-ffmpeg';
+import {isString} from 'util';
 
 export class TourDocMediaManagerModule {
     private dataService: TourDocDataService;
@@ -19,10 +22,10 @@ export class TourDocMediaManagerModule {
         this.backendConfig = backendConfig;
     }
 
-    public readImageDates(searchForm: TourDocSearchForm): Promise<{}> {
+    public readMediaDates(searchForm: TourDocSearchForm): Promise<{}> {
         const me = this;
         const callback = function(tdoc: TourDocRecord) {
-            return [me.readAndUpdateDateFormTourDocRecord(tdoc)];
+            return [me.readAndUpdateDateFromTourDocRecord(tdoc)];
         };
 
         return this.processSearchForms(searchForm, callback, 1);
@@ -37,30 +40,31 @@ export class TourDocMediaManagerModule {
         return this.processSearchForms(searchForm, callback, 1);
     }
 
-    public readAndUpdateDateFormTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
-        const tdocImages = tdoc.get('tdocimages');
-        if (tdocImages === undefined  || tdocImages.length === 0) {
-            console.warn('no image found for ' + tdoc.id + ' details:' + tdoc);
-            return utils.resolve({});
-        }
-
+    public readAndUpdateDateFromTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
         const me = this;
-        return this.readExifForTourDocImageRecord(tdocImages[0]).then(value => {
+        return this.readMetadataForTourDocRecord(tdoc).then(value => {
             // Exif-dates are not in UTC they are in localtimezone
             if (value === undefined || value === null) {
-                console.warn('no exif found for ' + tdoc.id + ' details:' + tdocImages[0]);
+                console.warn('no exif found for ' + tdoc.id + ' details:' + tdoc);
                 return utils.resolve({});
             }
-            const exifDate = BeanUtils.getValue(value, 'exif.DateTimeOriginal');
-            if (exifDate === undefined || exifDate === null) {
-                console.warn('no exif.DateTimeOriginal found for ' + tdoc.id + ' details:' + tdocImages[0] + ' exif:' + exifDate);
+
+            let creationDate = BeanUtils.getValue(value, 'exif.DateTimeOriginal');
+            if (creationDate === undefined || creationDate === null) {
+                creationDate = new Date(BeanUtils.getValue(value, 'format.tags.creation_time'));
+            }
+
+            if (creationDate === undefined || creationDate === null) {
+                console.warn('no exif.DateTimeOriginal or format.tags.creation_time found for ' + tdoc.id +
+                    ' details:' + tdoc + ' exif:' + creationDate);
                 return utils.resolve({});
             }
+
             const myDate = new Date();
-            myDate.setHours(exifDate.getUTCHours(), exifDate.getUTCMinutes(), exifDate.getUTCSeconds(), exifDate.getUTCMilliseconds());
-            myDate.setFullYear(exifDate.getUTCFullYear(), exifDate.getUTCMonth(), exifDate.getUTCDate());
+            myDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), creationDate.getUTCMilliseconds());
+            myDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
             const date = DateUtils.dateToLocalISOString(myDate).toString();
-            for (const key of ['datestart', 'datestart', 'datestart']) {
+            for (const key of ['datestart', 'dateend', 'dateshow']) {
                 tdoc[key] = date;
             }
 
@@ -201,20 +205,38 @@ export class TourDocMediaManagerModule {
         });
     }
 
-    public readExifForTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
+    public readMetadataForTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
         const tdocImages = tdoc.get('tdocimages');
-        if (tdocImages === undefined  || tdocImages.length === 0) {
-            console.warn('no image found for ' + tdoc.id);
-            return utils.resolve({});
+        if (tdocImages !== undefined  && tdocImages.length > 0) {
+            return this.readExifForTourDocImageRecord(tdocImages[0]);
+        }
+        const tdocVideos = tdoc.get('tdocvideos');
+        if (tdocVideos !== undefined  && tdocVideos.length > 0) {
+            return this.readMetadataForTourDocVideoRecord(tdocVideos[0]);
         }
 
-        return this.readExifForTourDocImageRecord(tdocImages[0]);
+        console.warn('no image or video found for ' + tdoc.id);
+        return utils.resolve({});
     }
 
     public readExifForTourDocImageRecord(tdocImage: TourDocImageRecord): Promise<{}> {
         return this.mediaManager.readExifForImage(this.backendConfig['apiRoutePicturesStaticDir'] + '/'
             + (this.backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + 'full/' +  tdocImage.fileName);
     }
+
+    public readMetadataForTourDocVideoRecord(tdocVideo: TourDocVideoRecord): Promise<{}> {
+        return new Promise<{}>((resolve, reject) => {
+            ffmpeg.ffprobe(this.backendConfig['apiRouteVideosStaticDir'] + '/'
+                + (this.backendConfig['apiRouteStoredVideosResolutionPrefix'] || '') + 'full/' +  tdocVideo.fileName,
+                function(err, metadata) {
+                if (err) {
+                    reject('error while reading video-metadata: ' + err);
+                }
+
+               resolve(metadata);
+            });
+        });
+    };
 
     public scaleTourDocRecord(tdoc: TourDocRecord, width: number): Promise<{}> {
         const tdocImages = tdoc.get('tdocimages');

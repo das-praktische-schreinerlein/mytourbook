@@ -17,7 +17,6 @@ export class MediaManagerCommand implements AbstractCommand {
 
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
-        const searchForm = new TourDocSearchForm({ type: 'image', sort: 'dateAsc'});
         const writable = backendConfig['tdocWritable'] === true || backendConfig['tdocWritable'] === 'true';
         const dataService = TourDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
         const action = argv['action'];
@@ -32,11 +31,15 @@ export class MediaManagerCommand implements AbstractCommand {
         let promise: Promise<any>;
         switch (action) {
             case 'readImageDates':
-                promise = tdocManagerModule.readImageDates(searchForm);
+                promise = tdocManagerModule.readMediaDates(new TourDocSearchForm({ type: 'image', sort: 'dateAsc'}));
+
+                break;
+            case 'readVideoDates':
+                promise = tdocManagerModule.readMediaDates(new TourDocSearchForm({ type: 'video', sort: 'dateAsc'}));
 
                 break;
             case 'scaleImages':
-                promise = tdocManagerModule.scaleImages(searchForm);
+                promise = tdocManagerModule.scaleImages(new TourDocSearchForm({ type: 'image', sort: 'dateAsc'}));
 
                 break;
             case 'generateTourDocsFromMediaDir':

@@ -16,7 +16,7 @@
     "apiRouteStoredPictures": "/picturestore/",
     "apiRouteStoredPicturesResolutionPrefix": "pics_",
     "apiRouteStoredVideos": "/videostore/",
-    "apiRouteStoredVideosResolutionPrefix": "vid_",
+    "apiRouteStoredVideosResolutionPrefix": "video_",
     "playlistExportAudioBaseUrl": "http://localhost:4101/api/static/audios/",
     "playlistExportImageBaseUrl": "http://localhost:4101/api/static/pictures/",
     "playlistExportVideoBaseUrl": "http://localhost:4101/api/static/videos/",
