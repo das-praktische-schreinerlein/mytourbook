@@ -59,7 +59,11 @@ export class TourDocMediaManagerModule {
             const myDate = new Date();
             myDate.setHours(exifDate.getUTCHours(), exifDate.getUTCMinutes(), exifDate.getUTCSeconds(), exifDate.getUTCMilliseconds());
             myDate.setFullYear(exifDate.getUTCFullYear(), exifDate.getUTCMonth(), exifDate.getUTCDate());
-            // TODO tdoc.datestart = tdoc.dateshow = tdoc.dateend = DateUtils.dateToLocalISOString(myDate);
+            const date = DateUtils.dateToLocalISOString(myDate).toString();
+            for (const key of ['datestart', 'datestart', 'datestart']) {
+                tdoc[key] = date;
+            }
+
             return me.dataService.updateById(tdoc.id, tdoc);
         });
     }
