@@ -37,7 +37,7 @@
             "filename": "F:/playground/mytb-test/mytbbase/import/mytbdb_import.sqlite"
         },
         "facetCacheUsage": {
-            "active": true,
+            "active": false,
             "entities": {
                 "odimgobject": {
                     "facetKeyPatterns": [".*"]
