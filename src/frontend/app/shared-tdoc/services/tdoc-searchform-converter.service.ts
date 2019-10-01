@@ -283,8 +283,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         const what = (tdocSearchForm.what ? tdocSearchForm.what : '').replace(new RegExp('kw_', 'gi'), '');
         res.push(this.searchFormUtils.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
-        const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(tdocSearchForm.moreFilter, this.splitter,
-            Object.getOwnPropertyNames(this.getHrdIds()));
+        const moreFilterNames = Object.getOwnPropertyNames(this.getHrdIds()).concat(['route_no_id_is']);
+        const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(tdocSearchForm.moreFilter, this.splitter, moreFilterNames);
         moreFilterValues.forEach((value, key) => {
             const moreValue = this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get(key), key + ':', ',');
             res.push(this.searchFormUtils.valueToHumanReadableText(moreValue, key === 'unknown' ? 'hrt_moreFilter' : 'hrt_' + key,

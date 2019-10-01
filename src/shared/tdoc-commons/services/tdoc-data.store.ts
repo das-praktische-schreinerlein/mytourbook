@@ -34,6 +34,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         video_id_i: true,
         route_id_i: true,
         route_id_is: true,
+        route_no_id_is: true,
         loc_parent_id_i: true
     };
     private validMoreInFilterNames = {

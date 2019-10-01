@@ -873,6 +873,7 @@
             },
             "availableToDoDashboardRows": {
                 "noSubType": true,
+                "noRoute": true,
                 "unrated": true,
                 "objectDetectionCorrectionNeeded": true,
                 "objectDetectionDetailNeeded": true,

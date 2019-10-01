@@ -128,6 +128,20 @@
                     </td>
                 </ng-container>
             </tr>
+            <tr *ngIf="availableToDoDashboardRows['noRoute']">
+                <td i18n="tableheading dashboardToDoColumn-noRoute sectionPage|Tableheading to dashboardToDoColumn-noRoute sectionPage@@tableheading.sectionPage.noRoute">Ohne Routenzuordnung</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'noRoute', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type == 'TRACK'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
             <tr *ngIf="availableToDoDashboardRows['unrated']">
                 <td i18n="tableheading dashboardToDoColumn-unrated sectionPage|Tableheading to dashboardToDoColumn-unrated sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Noch nicht bewerted</td>
                 <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">

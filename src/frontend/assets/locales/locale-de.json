@@ -184,6 +184,7 @@
     "hrt_video_id_i": "Spezialfilter Video:",
     "hrt_route_id_i": "Spezialfilter Route:",
     "hrt_route_id_is": "Spezialfilter Route:",
+    "hrt_route_no_id_is": "Spezialfilter keine Routenzuordnung:",
     "hrt_loc_parent_id_i": "Spezialfilter Region:",
     "hrt_objectDetectionCategory":  "Bilderkennung Objektkategorie:",
     "hrt_objectDetectionDetector":  "Bilderkennung Detektor:",
