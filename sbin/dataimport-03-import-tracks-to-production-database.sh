@@ -43,13 +43,33 @@ select yn in "Yes"; do
 done
 
 echo "now: export import-database"
-cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command exportTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
-cd $CWD
+if [ ! -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" && ! -f "${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json" ]; then
+  echo "now: create image-export-file"
+  cd ${MYTB}
+  node dist/backend/serverAdmin.js --debug --command exportTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+  cd $CWD
+else
+  if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" ]; then
+      echo "WARNING: image-export-file already exists '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json'?"
+  fi
+  if [ -f "${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json" ]; then
+      echo "WARNING: imported image-export-file already exists '${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json'?"
+  fi
+  ls -l ${MYTB_IMPORT_MEDIADIR}import/*.json
+  echo "SKIP: export import-database"
+  echo "OPEN: is this ok? If not type 'N' to exit and check the import-folder '${MYTB_IMPORT_MEDIADIR}import/'?"
+  select yn in "Yes" "No"; do
+      case $yn in
+          Yes ) break;;
+          No ) exit;;
+      esac
+  done
+fi
 
 echo "now: import into production-database"
 cd ${MYTB}
 node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json
 cd $CWD
 
 echo "YOUR TODO: update appIds after check"
