@@ -33,6 +33,12 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                     'tdocdatatech.dist',
                     'tdocdatatech.dur');
                 break;
+            case 'trip':
+                fields.push('datestart', 'locId', 'dateend');
+                break;
+            case 'news':
+                fields.push('datestart', 'dateend');
+                break;
             case 'image':
                 fields.push('datestart', 'locId');
                 fields.push('tdocratepers.gesamt',

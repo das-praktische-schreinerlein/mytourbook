@@ -290,6 +290,66 @@
                     ]
                 },
                 {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "New Trip by Track",
+                    "shortName": "->*Trip",
+                    "payload": {
+                        "type": "TRIP"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "New News by Track",
+                    "shortName": "->*News",
+                    "payload": {
+                        "type": "NEWS"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "persRate_motive_milestone",
                     "type": "tag",
                     "name": "Personal Motive Meilenstein",
