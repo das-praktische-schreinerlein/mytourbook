@@ -91,6 +91,15 @@ select yn in "Yes" "No"; do
     esac
 done
 
+echo "OPTIONAL: read video-dates"
+echo "OPEN: Do you want to read the video-dates?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command imageManager --action readVideoDates -c config/backend.import.json; break;;
+        No) break;;
+    esac
+done
+
 echo "now: create scaled image-copies"
 cd ${MYTB}
 node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.import.json
