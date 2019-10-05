@@ -30,10 +30,10 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT k_id FROM kategorie WHERE k_name IN' +
+                    from: 'INNER JOIN (SELECT k_id AS id FROM kategorie WHERE k_name IN' +
                         '                (select distinct k_name FROM kategorie GROUP BY k_name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON kategorie.k_id=doublettes.k_id',
+                        '             ON kategorie.k_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 },
@@ -413,10 +413,10 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT i_id FROM image WHERE CONCAT(i_dir, i_file) IN' +
+                    from: 'INNER JOIN (SELECT i_id AS id FROM image WHERE CONCAT(i_dir, i_file) IN' +
                         '                (select distinct CONCAT(i_dir, i_file) AS filepath FROM image GROUP BY filepath HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON image.i_id=doublettes.i_id',
+                        '             ON image.i_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }
@@ -874,7 +874,7 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
                 },
                 {
-                    from: 'INNER JOIN (SELECT io_id FROM image_object WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                    from: 'INNER JOIN (SELECT io_id AS id FROM image_object WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
                                                                         ' ":::detector=", image_object.io_detector,' +
                                                                         ' ":::objX=", image_object.io_obj_x1,' +
                                                                         ' ":::objY=", image_object.io_obj_y1,' +
@@ -897,7 +897,7 @@ export class TourDocSqlMytbDbConfig {
                                                                         ' ":::precision=", image_object.io_precision)' +
                         '                    HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON image_object.io_id=doublettes.io_id',
+                        '             ON image_object.io_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }
@@ -1348,10 +1348,10 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT v_id FROM video WHERE CONCAT(v_dir, v_file) IN' +
+                    from: 'INNER JOIN (SELECT v_id AS id FROM video WHERE CONCAT(v_dir, v_file) IN' +
                         '                (select distinct CONCAT(v_dir, v_file) AS filepath FROM video GROUP BY filepath HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON video.v_id=doublettes.v_id',
+                        '             ON video.v_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }
@@ -1741,10 +1741,10 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['kt_trip.tr_id', 'k_trip.tr_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT t_id FROM tour WHERE t_name IN' +
+                    from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE t_name IN' +
                         '                (select distinct t_name FROM tour GROUP BY t_name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON tour.t_id=doublettes.t_id',
+                        '             ON tour.t_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 },
@@ -2134,10 +2134,10 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 },
                 {
-                    from: 'INNER JOIN (SELECT l_id FROM location WHERE l_name IN' +
+                    from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE l_name IN' +
                         '                (select distinct l_name FROM location GROUP BY l_name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON location.l_id=doublettes.l_id',
+                        '             ON location.l_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }
@@ -2345,10 +2345,10 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT tr_id FROM trip WHERE tr_name IN' +
+                    from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE tr_name IN' +
                         '                (select distinct tr_name FROM trip GROUP BY tr_name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON trip.tr_id=doublettes.tr_id',
+                        '             ON trip.tr_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }
@@ -2562,10 +2562,10 @@ export class TourDocSqlMytbDbConfig {
             selectFrom: 'news',
             optionalGroupBy: [
                 {
-                    from: 'INNER JOIN (SELECT n_id FROM news WHERE n_headline IN' +
+                    from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE n_headline IN' +
                         '                (select distinct n_headline FROM news GROUP BY n_headline HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
-                        '             ON news.n_id=doublettes.n_id',
+                        '             ON news.n_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }

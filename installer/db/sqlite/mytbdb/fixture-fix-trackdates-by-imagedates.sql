@@ -19,7 +19,7 @@ ORDER BY k_id DESC;
 update kategorie set
   k_datevon=(select min(i_date) from kategorie k2 inner join image on image.k_id=k2.k_id where k2.k_id=kategorie.k_id),
   k_datebis=(select max(i_date) from kategorie k2 inner join image on image.k_id=k2.k_id where k2.k_id=kategorie.k_id)
-where k_id 9999999 > 0 and k_id in (select k_id from image)
+where k_id > 99999999 and k_id in (select k_id from image)
 ;
 
 SELECT k_id, MIN(k_datevon, v_datevon) AS calced_datevon, k_datevon, v_datevon,
