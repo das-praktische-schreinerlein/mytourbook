@@ -8,7 +8,7 @@ import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/object
 export class TourDocSqlMytbDbActionTagAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
-    private rateValidationRule = new NumberValidationRule(true, 0, 15, 0);
+    private rateValidationRule = new NumberValidationRule(true, -1, 15, 0);
     private precisionValidationRule = new NumberValidationRule(true, 0, 1, 1);
     private config: any;
     private knex: any;
@@ -254,8 +254,8 @@ export class TourDocSqlMytbDbActionTagAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' ratePers not valid');
         }
 
-        let updateSql = 'UPDATE ' + baseTableName + ' SET ' + fieldName + '=GREATEST(COALESCE(' + fieldName + ', 0), ' + ratePers + ')' +
-            ', ' + rateName + '=GREATEST(COALESCE(' + rateNameMotive + ', 0), COALESCE(' + rateNameWichtigkeit + ', 0), ' + ratePers + ')' +
+        let updateSql = 'UPDATE ' + baseTableName + ' SET ' + fieldName + '=GREATEST(COALESCE(' + fieldName + ', -1), ' + ratePers + ')' +
+            ', ' + rateName + '=GREATEST(COALESCE(' + rateNameMotive + ', -1), COALESCE(' + rateNameWichtigkeit + ', -1), ' + ratePers + ')' +
             '  WHERE ' + idName + ' = "' + id + '"';
         updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
 

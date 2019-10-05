@@ -127,7 +127,6 @@
     "listSorts_dataTechAltAsc": "Aufstieg aufsteigend",
     "listSorts_dataTechMaxAsc": "max Höhe aufsteigend",
     "listSorts_dataTechDistAsc": "Strecke aufsteigend",
-    "null": "Unbestimmt",
     "ac_": "Unbestimmt",
     "ac_null": "Unbestimmt",
     "ac_0": "Unbestimmt",
@@ -251,6 +250,8 @@
     "label.tdocratepers.wichtigkeit.8": "fand ich OK",
     "label.tdocratepers.wichtigkeit.11": "war mir wichtig",
     "label.tdocratepers.wichtigkeit.14": "ein Meilenstein",
+    "filter.tdocratepers.gesamt.-1": "aussortiert",
+    "filter.tdocratepers.gesamt.Unbestimmt": "nicht eingeschätzt",
     "filter.tdocratepers.gesamt.null": "nicht eingeschätzt",
     "filter.tdocratepers.gesamt.0": "nicht eingeschätzt",
     "filter.tdocratepers.gesamt.2": "Standard",
@@ -264,6 +265,7 @@
     "filter.tdocratepers.gesamt.13": "phantastisch++",
     "filter.tdocratepers.gesamt.14": "Meilenstein",
     "filter.tdocratepers.gesamt.15": "Meilenstein+",
+    "label.tdocratepers.gesamt.-1": "aussortiert",
     "label.tdocratepers.gesamt.null": "nicht eingeschätzt",
     "label.tdocratepers.gesamt.0": "nicht eingeschätzt",
     "label.tdocratepers.gesamt.2": "nicht so schön",
@@ -271,6 +273,7 @@
     "label.tdocratepers.gesamt.8": "empfehlenswert",
     "label.tdocratepers.gesamt.11": "muß man gesehen haben",
     "label.tdocratepers.gesamt.14": "phantastischer Meilenstein",
+    "label.image.tdocratepers.gesamt.-1": "aussortiert",
     "label.image.tdocratepers.gesamt.null": "nicht eingeschätzt",
     "label.image.tdocratepers.gesamt.0": "nicht eingeschätzt",
     "label.image.tdocratepers.gesamt.2": "Playlist (autom)",
@@ -322,5 +325,6 @@
     "label.odimgobject.state.DONE_APPROVAL_PROCESSED": "\u2714 OK processiert",
     "label.odimgobject.state.DONE_REJECTION_PROCESSED": "\u2716 Falsch prozessiert",
     "label.odimgobject.state.DONE_CORRECTION_PROCESSED": "\u270E Korrektur prozessiert",
-    "label.odimgobject.state.DONE_DETAIL_PROCESSED": "\u2315 Detailierung prozessiert"
+    "label.odimgobject.state.DONE_DETAIL_PROCESSED": "\u2315 Detailierung prozessiert",
+    "null": "Unbestimmt"
 }

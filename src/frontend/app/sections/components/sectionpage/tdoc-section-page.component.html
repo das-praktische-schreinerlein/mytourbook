@@ -265,6 +265,20 @@
                     </td>
                 </ng-container>
             </tr>
+            <tr *ngIf="availableDoneDashboardRows['rejected']">
+                <td i18n="tableheading dashboardToDoColumn-rejected sectionPage|Tableheading to dashboardToDoColumn-rejected sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Aussortiert</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'rejected', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'LOCATION' && type != 'TRIP'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
             <tr *ngIf="availableDoneDashboardRows['objectDetectionDone']">
                 <td i18n="tableheading dashboardDoneColumn-objectDetectionDone sectionPage|Tableheading to dashboardDoneColumn-objectDetectionDone sectionPage@@tableheading.sectionPage.dashboardDoneColumnProfile">Bilderkennung abgeschlossen</td>
                 <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">

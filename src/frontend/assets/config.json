@@ -474,6 +474,37 @@
                     ]
                 },
                 {
+                    "key": "persRate_gesamt_reject",
+                    "type": "tag",
+                    "name": "Personal Gesamt Rejected",
+                    "shortName": "R-",
+                    "payload": {
+                        "value": "-1",
+                        "ratekey": "gesamt"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.gesamt",
+                            "command": "EQ",
+                            "expectedValues": [-1]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "local_album_current",
                     "type": "albumtag",
                     "name": "local Album",
@@ -689,6 +720,37 @@
         },
         "tdoc-multiactionheader": {
             "actionTags": [
+                {
+                    "key": "persRate_gesamt_reject",
+                    "type": "tag",
+                    "name": "Personal Gesamt Rejected",
+                    "shortName": "R-",
+                    "payload": {
+                        "value": "-1",
+                        "ratekey": "gesamt"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.gesamt",
+                            "command": "EQ",
+                            "expectedValues": [-1]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
                 {
                     "key": "local_album_current",
                     "type": "albumtag",
@@ -944,6 +1006,7 @@
             },
             "availableDoneDashboardRows": {
                 "rated": true,
+                "rejected": true,
                 "objectDetectionDone": true
             }
         },

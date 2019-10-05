@@ -23,17 +23,17 @@ export class BaseRatePersonalRecord extends BaseEntityRecord implements BaseRate
         bildung: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(false, 0, 15, undefined)),
         gesamt: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
-            new NumberValidationRule(false, 0, 15, undefined)),
+            new NumberValidationRule(false, -1, 15, undefined)),
         kraft: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(false, 0, 15, undefined)),
         mental: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(false, 0, 15, undefined)),
         motive: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
-            new NumberValidationRule(false, 0, 15, undefined)),
+            new NumberValidationRule(false, -1, 15, undefined)),
         schwierigkeit: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(false, 0, 15, undefined)),
         wichtigkeit: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
-            new NumberValidationRule(false, 0, 15, undefined))
+            new NumberValidationRule(false, -1, 15, undefined))
     };
 
     ausdauer: number;

@@ -313,7 +313,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         ratePersValues['wichtigkeit'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'rate_pers_wichtigkeit_i', undefined);
         let ratePersSet = false;
         for (const field in ratePersValues) {
-            if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 && ratePersValues[field] > 0) {
+            if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 &&
+               (ratePersValues[field] > 0 || ratePersValues[field] < 0)) {
                 ratePersSet = true;
                 break;
             }
