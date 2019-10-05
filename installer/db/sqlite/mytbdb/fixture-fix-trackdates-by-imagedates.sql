@@ -16,6 +16,12 @@ FROM (
 ) grouped WHERE k_datevon > i_datevon OR k_datebis < i_datebis
 ORDER BY k_id DESC;
 
+update kategorie set
+  k_datevon=(select min(i_date) from kategorie k2 inner join image on image.k_id=k2.k_id where k2.k_id=kategorie.k_id),
+  k_datebis=(select max(i_date) from kategorie k2 inner join image on image.k_id=k2.k_id where k2.k_id=kategorie.k_id)
+where k_id 9999999 > 0 and k_id in (select k_id from image)
+;
+
 SELECT k_id, MIN(k_datevon, v_datevon) AS calced_datevon, k_datevon, v_datevon,
              MAX(k_datebis, v_datebis) AS calced_datebis, k_datebis, v_datebis
 FROM (
@@ -31,14 +37,8 @@ FROM (
 ) grouped WHERE k_datevon > v_datevon OR k_datebis < v_datebis
 ORDER BY k_id DESC;
 
-update kategorie set
-  k_datevon=(select min(i_date) from kategorie k2 inner join image on image.k_id=k2.k_id where k2.k_id=kategorie.k_id),
-  k_datebis=(select max(i_date) from kategorie k2 inner join image on image.k_id=k2.k_id where k2.k_id=kategorie.k_id)
-where k_id > 9999999
-;
-
-update kategorie set
-  k_datevon=(select min(v_date) from kategorie k2 inner join video on video.k_id=k2.k_id where k2.k_id=kategorie.k_id),
-  k_datebis=(select max(v_date) from kategorie k2 inner join video on video.k_id=k2.k_id where k2.k_id=kategorie.k_id)
-where k_id > 9999999
-;
+-- update kategorie set
+--  k_datevon=(select min(v_date) from kategorie k2 inner join video on video.k_id=k2.k_id where k2.k_id=kategorie.k_id),
+--  k_datebis=(select max(v_date) from kategorie k2 inner join video on video.k_id=k2.k_id where k2.k_id=kategorie.k_id)
+-- where k_id > 0 and k_id in (select k_id from video)
+--;
