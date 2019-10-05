@@ -30,6 +30,14 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
+                    from: 'INNER JOIN (SELECT k_id FROM kategorie WHERE k_name IN' +
+                        '                (select distinct k_name FROM kategorie GROUP BY k_name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON kategorie.k_id=doublettes.k_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
+                },
+                {
                     from: ' ',
                     triggerParams: ['id', 'loadTrack'],
                     groupByFields: ['k_gpstracks_gpx_source']
@@ -255,6 +263,7 @@ export class TourDocSqlMytbDbConfig {
                 'relevance': 'k_datevon DESC'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
                 id: 'kategorie.k_id',
                 loc_id_i: 'kategorie.l_id',
                 loc_id_is: 'kategorie.l_id',
@@ -402,6 +411,14 @@ export class TourDocSqlMytbDbConfig {
                     from: 'LEFT JOIN news ON kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis',
                     triggerParams: ['news_id_i', 'news_id_is'],
                     groupByFields: ['news.n_id']
+                },
+                {
+                    from: 'INNER JOIN (SELECT i_id FROM image WHERE CONCAT(i_dir, i_file) IN' +
+                        '                (select distinct CONCAT(i_dir, i_file) AS filepath FROM image GROUP BY filepath HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON image.i_id=doublettes.i_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
                 }
             ],
             loadDetailData: [
@@ -749,6 +766,7 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
@@ -854,6 +872,34 @@ export class TourDocSqlMytbDbConfig {
                         'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
                     triggerParams: ['id', 'playlists_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
+                },
+                {
+                    from: 'INNER JOIN (SELECT io_id FROM image_object WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                                                                        ' ":::detector=", image_object.io_detector,' +
+                                                                        ' ":::objX=", image_object.io_obj_x1,' +
+                                                                        ' ":::objY=", image_object.io_obj_y1,' +
+                                                                        ' ":::objWidth=", image_object.io_obj_width,' +
+                                                                        ' ":::objHeight=", image_object.io_obj_height,' +
+                                                                        ' ":::precision=", image_object.io_precision) IN' +
+                        '                (select distinct CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                                                                        ' ":::detector=", image_object.io_detector,' +
+                                                                        ' ":::objX=", image_object.io_obj_x1,' +
+                                                                        ' ":::objY=", image_object.io_obj_y1,' +
+                                                                        ' ":::objWidth=", image_object.io_obj_width,' +
+                                                                        ' ":::objHeight=", image_object.io_obj_height,' +
+                                                                        ' ":::precision=", image_object.io_precision)' +
+            '                                FROM image_object GROUP BY CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                                                                        ' ":::detector=", image_object.io_detector,' +
+                                                                        ' ":::objX=", image_object.io_obj_x1,' +
+                                                                        ' ":::objY=", image_object.io_obj_y1,' +
+                                                                        ' ":::objWidth=", image_object.io_obj_width,' +
+                                                                        ' ":::objHeight=", image_object.io_obj_height,' +
+                                                                        ' ":::precision=", image_object.io_precision)' +
+                        '                    HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON image_object.io_id=doublettes.io_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
                 }
             ],
             loadDetailData: [
@@ -1180,6 +1226,7 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
                 id: 'image_object.io_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
@@ -1299,6 +1346,14 @@ export class TourDocSqlMytbDbConfig {
                     from: 'LEFT JOIN news ON kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis',
                     triggerParams: ['news_id_i', 'news_id_is'],
                     groupByFields: ['news.n_id']
+                },
+                {
+                    from: 'INNER JOIN (SELECT v_id FROM video WHERE CONCAT(v_dir, v_file) IN' +
+                        '                (select distinct CONCAT(v_dir, v_file) AS filepath FROM video GROUP BY filepath HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON video.v_id=doublettes.v_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
                 }
             ],
             loadDetailData: [
@@ -1562,6 +1617,7 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
                 id: 'video.v_id',
                 image_id_is: '"dummy"',
                 image_id_i: '"dummy"',
@@ -1683,6 +1739,14 @@ export class TourDocSqlMytbDbConfig {
                         'LEFT JOIN trip k_trip ON k_k.k_datevon >= k_trip.tr_datevon AND k_k.k_datevon <= k_trip.tr_datebis ',
                     triggerParams: ['trip_id_i', 'trip_id_is'],
                     groupByFields: ['kt_trip.tr_id', 'k_trip.tr_id']
+                },
+                {
+                    from: 'INNER JOIN (SELECT t_id FROM tour WHERE t_name IN' +
+                        '                (select distinct t_name FROM tour GROUP BY t_name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON tour.t_id=doublettes.t_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
                 },
                 {
                     from: ' ',
@@ -1945,6 +2009,7 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
@@ -2067,6 +2132,14 @@ export class TourDocSqlMytbDbConfig {
                           'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
+                },
+                {
+                    from: 'INNER JOIN (SELECT l_id FROM location WHERE l_name IN' +
+                        '                (select distinct l_name FROM location GROUP BY l_name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON location.l_id=doublettes.l_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
                 }
             ],
             groupbBySelectFieldListIgnore: ['l_keywords'],
@@ -2218,6 +2291,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_parent_id_i: 'l_parent_id',
                 trip_id_is: '"dummy"',
                 route_no_id_is: '"dummy"',
+                doublettes: '"doublettes"',
                 html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""))'
             },
             writeMapping: {
@@ -2269,6 +2343,14 @@ export class TourDocSqlMytbDbConfig {
                     from: 'LEFT JOIN news ON kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis',
                     triggerParams: ['news_id_i', 'news_id_is'],
                     groupByFields: ['news.n_id']
+                },
+                {
+                    from: 'INNER JOIN (SELECT tr_id FROM trip WHERE tr_name IN' +
+                        '                (select distinct tr_name FROM trip GROUP BY tr_name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON trip.tr_id=doublettes.tr_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
                 }
             ],
             groupbBySelectFieldList: true,
@@ -2420,6 +2502,7 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
@@ -2477,6 +2560,16 @@ export class TourDocSqlMytbDbConfig {
             key: 'news',
             tableName: 'news',
             selectFrom: 'news',
+            optionalGroupBy: [
+                {
+                    from: 'INNER JOIN (SELECT n_id FROM news WHERE n_headline IN' +
+                        '                (select distinct n_headline FROM news GROUP BY n_headline HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON news.n_id=doublettes.n_id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
+                }
+            ],
             loadDetailData: [
                 {
                     profile: 'image',
@@ -2591,6 +2684,7 @@ export class TourDocSqlMytbDbConfig {
                 'relevance': 'n_date DESC'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',

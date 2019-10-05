@@ -156,6 +156,19 @@
                     </td>
                 </ng-container>
             </tr>
+            <tr *ngIf="availableToDoDashboardRows['doublettes']">
+                <td i18n="tableheading dashboardToDoColumn-doublettes sectionPage|Tableheading to dashboardToDoColumn-doublettes sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Doubletten</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'doublettes', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
             <tr *ngIf="availableToDoDashboardRows['objectDetectionCorrectionNeeded']">
                 <td i18n="tableheading dashboardToDoColumn-objectDetectionCorrectionNeeded sectionPage|Tableheading to dashboardToDoColumn-objectDetectionCorrectionNeeded sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Bilderkennung Korrigieren</td>
                 <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">

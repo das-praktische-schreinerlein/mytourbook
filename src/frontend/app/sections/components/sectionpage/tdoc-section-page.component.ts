@@ -139,6 +139,10 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'personalRateOverall:null,0';
                 break;
+            case 'doublettes':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] += 'doublettes:doublettes';
+                break;
             case 'noRoute':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'route_no_id_is:null,0,1';

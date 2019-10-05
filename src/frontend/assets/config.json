@@ -935,6 +935,7 @@
                 "noSubType": true,
                 "noRoute": true,
                 "unrated": true,
+                "doublettes": true,
                 "objectDetectionCorrectionNeeded": true,
                 "objectDetectionDetailNeeded": true,
                 "objectDetectionSuggested": true,
