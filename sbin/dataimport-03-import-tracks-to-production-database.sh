@@ -66,6 +66,14 @@ else
   done
 fi
 
+echo "OPEN: is the file '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json' ok ? If not type 'N' to exit?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) break;;
+        No ) exit;;
+    esac
+done
+
 echo "now: import into production-database"
 cd ${MYTB}
 node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
