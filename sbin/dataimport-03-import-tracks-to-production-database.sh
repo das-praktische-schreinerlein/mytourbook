@@ -43,7 +43,7 @@ select yn in "Yes"; do
 done
 
 echo "now: export import-database"
-if [ ! -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" && ! -f "${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json" ]; then
+if [[ ! -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" && ! -f "${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json" ]]; then
   echo "now: create image-export-file"
   cd ${MYTB}
   node dist/backend/serverAdmin.js --debug --command exportTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
