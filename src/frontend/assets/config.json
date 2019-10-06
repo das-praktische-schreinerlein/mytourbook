@@ -476,8 +476,8 @@
                 {
                     "key": "persRate_gesamt_reject",
                     "type": "tag",
-                    "name": "\uD83D\uDC4E Personal Gesamt Rejected",
-                    "shortName": "&#x1f44e",
+                    "name": "\u274c Personal Gesamt Rejected",
+                    "shortName": "&#x274c",
                     "payload": {
                         "value": "-1",
                         "ratekey": "gesamt"
@@ -723,8 +723,8 @@
                 {
                     "key": "persRate_gesamt_reject",
                     "type": "tag",
-                    "name": "\uD83D\uDC4E Personal Gesamt Rejected",
-                    "shortName": "&#x1f44e",
+                    "name": "\u274c Personal Gesamt Rejected",
+                    "shortName": "&#x274c",
                     "payload": {
                         "value": "-1",
                         "ratekey": "gesamt"
