@@ -11,6 +11,7 @@ export class TourDocSqlUtils {
             'CAST(location.l_parent_id AS CHAR(50)) || "," || CAST(location.l_id AS CHAR(50))');
         sql = sql.replace(/GetTechName\(([a-zA-Z0-9_.]+)\)/g,
             'REPLACE(REPLACE(LOWER($1), " ", "_"), "/", "_")');
+        sql = sql.replace(/REGEXP_REPLACE\(/g, 'REPLACE(');
 
         return sql;
     }

@@ -169,7 +169,8 @@ export class TourDocSqlMytbDbActionTagAdapter {
         const deleteSql = 'DELETE FROM ' + joinTableName + ' ' +
             'WHERE ' + joinTableName + '.' + typeName + ' IN (SELECT objects.o_key FROM objects WHERE o_name IN ("' + objectKeys.join('", "') + '"))' +
             ' AND ' + idName + ' = "' + id + '"';
-        const insertSql = 'INSERT INTO ' + joinTableName + ' (' + typeName + ', ' + idName + ', ' + precisionName + ', ' + detectorName + ')' +
+        const insertSql = 'INSERT INTO ' + joinTableName + ' (' +
+            typeName + ', ' + idName + ', ' + precisionName + ', ' + detectorName +  ', ' + stateName + ')' +
             ' SELECT objects.o_key AS ' + typeName + ',' +
             ' "' + id + '" AS ' + idName + ',' +
             ' "' + precision + '" AS ' + precisionName + ',' +

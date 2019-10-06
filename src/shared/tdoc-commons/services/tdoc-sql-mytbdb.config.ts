@@ -31,7 +31,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT k_id AS id FROM kategorie WHERE k_name IN' +
-                        '                (select distinct k_name FROM kategorie GROUP BY k_name HAVING COUNT(*) > 1)' +
+                        '                (select distinct k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON kategorie.k_id=doublettes.id',
                     triggerParams: ['doublettes'],
@@ -414,7 +414,8 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT i_id AS id FROM image WHERE CONCAT(i_dir, i_file) IN' +
-                        '                (select distinct CONCAT(i_dir, i_file) AS filepath FROM image GROUP BY filepath HAVING COUNT(*) > 1)' +
+                        '                (select distinct CONCAT(i_dir, i_file) AS filepath' +
+                        '                 FROM image GROUP BY filepath HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON image.i_id=doublettes.id',
                     triggerParams: ['doublettes'],
@@ -1348,8 +1349,9 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT v_id AS id FROM video WHERE CONCAT(v_dir, v_file) IN' +
-                        '                (select distinct CONCAT(v_dir, v_file) AS filepath FROM video GROUP BY filepath HAVING COUNT(*) > 1)' +
+                    from: 'INNER JOIN (SELECT v_id AS id FROM video WHERE CONCAT(v_dir, v_file)' +
+                        '              IN (select distinct CONCAT(v_dir, v_file) AS filepath ' +
+                        '                  FROM video GROUP BY filepath HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON video.v_id=doublettes.id',
                     triggerParams: ['doublettes'],
@@ -1741,8 +1743,9 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['kt_trip.tr_id', 'k_trip.tr_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE t_name IN' +
-                        '                (select distinct t_name FROM tour GROUP BY t_name HAVING COUNT(*) > 1)' +
+                    from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('t_name') +
+                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('t_name') + ' AS name' +
+                        '                  FROM tour GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON tour.t_id=doublettes.id',
                     triggerParams: ['doublettes'],
@@ -2134,8 +2137,9 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 },
                 {
-                    from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE l_name IN' +
-                        '                (select distinct l_name FROM location GROUP BY l_name HAVING COUNT(*) > 1)' +
+                    from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('l_name') +
+                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('l_name') + ' AS name' +
+                        '                  FROM location GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON location.l_id=doublettes.id',
                     triggerParams: ['doublettes'],
@@ -2345,8 +2349,9 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE tr_name IN' +
-                        '                (select distinct tr_name FROM trip GROUP BY tr_name HAVING COUNT(*) > 1)' +
+                    from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('tr_name') +
+                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('tr_name') + ' AS name' +
+                        '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON trip.tr_id=doublettes.id',
                     triggerParams: ['doublettes'],
@@ -2562,8 +2567,9 @@ export class TourDocSqlMytbDbConfig {
             selectFrom: 'news',
             optionalGroupBy: [
                 {
-                    from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE n_headline IN' +
-                        '                (select distinct n_headline FROM news GROUP BY n_headline HAVING COUNT(*) > 1)' +
+                    from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('n_headline') +
+                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('n_headline') + ' AS name' +
+                        '                  FROM news GROUP BY n_henameadline HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON news.n_id=doublettes.id',
                     triggerParams: ['doublettes'],
@@ -2731,6 +2737,15 @@ export class TourDocSqlMytbDbConfig {
             }
         }
     };
+
+
+    public static generateDoubletteNameSql(field: string): string {
+        return 'REGEXP_REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(LOWER(' + field + '), "ß", "ss"),' +
+            ' "ö", "oe"),' +
+            ' "ü", "ue"),' +
+            ' "ä", "ae"),' +
+            ' "[^a-z0-9]", "")';
+    }
 
     public getTableConfigForTableKey(table: string): TableConfig {
         return TourDocSqlMytbDbConfig.tableConfigs[table];
