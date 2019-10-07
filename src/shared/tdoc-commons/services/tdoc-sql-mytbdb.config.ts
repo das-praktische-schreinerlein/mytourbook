@@ -1,5 +1,6 @@
 import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
+import {TourDocSqlUtils} from './tdoc-sql.utils';
 
 export class TourDocSqlMytbDbConfig {
     public static personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
@@ -413,11 +414,11 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT i_id AS id FROM image WHERE CONCAT(i_dir, i_file) IN' +
-                        '                (select distinct CONCAT(i_dir, i_file) AS filepath' +
-                        '                 FROM image GROUP BY filepath HAVING COUNT(*) > 1)' +
-                        '             ) doublettes' +
-                        '             ON image.i_id=doublettes.id',
+                    from: 'INNER JOIN (SELECT i_id AS id FROM image RIGHT JOIN' +
+                         '                (select distinct i_dir, i_file FROM image GROUP BY i_dir, i_file' +
+                         '                 HAVING COUNT(*) > 1) doublettes' +
+                         '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
+                        '             ON image.i_id = doublettes2.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }
@@ -1349,11 +1350,11 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT v_id AS id FROM video WHERE CONCAT(v_dir, v_file)' +
-                        '              IN (select distinct CONCAT(v_dir, v_file) AS filepath ' +
-                        '                  FROM video GROUP BY filepath HAVING COUNT(*) > 1)' +
-                        '             ) doublettes' +
-                        '             ON video.v_id=doublettes.id',
+                    from: 'INNER JOIN (SELECT v_id AS id FROM video RIGHT JOIN' +
+                        '                (select distinct v_dir, v_file FROM video GROUP BY v_dir, v_file' +
+                        '                 HAVING COUNT(*) > 1) doublettes' +
+                        '                ON video.v_file = doublettes.v_file AND video.v_dir = doublettes.v_dir) doublettes2' +
+                        '             ON video.v_id = doublettes2.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 }
@@ -1743,8 +1744,8 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['kt_trip.tr_id', 'k_trip.tr_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('t_name') +
-                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('t_name') + ' AS name' +
+                    from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE t_key' +
+                        '              IN (select distinct t_key AS name' +
                         '                  FROM tour GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON tour.t_id=doublettes.id',
@@ -2060,6 +2061,7 @@ export class TourDocSqlMytbDbConfig {
                 'tour.t_rate_schneeschuh': ':rate_tech_schneeschuh_s:',
                 'tour.t_gpstracks_basefile': ':gpstracks_basefile_s:',
                 'tour.t_gpstracks_gpx': ':gpstrack_src_s:',
+                'tour.t_key': ':key_s:',
                 'tour.t_name': ':name_s:',
                 'tour.t_typ': ':subtype_s:'
             },
@@ -2137,8 +2139,8 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 },
                 {
-                    from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('l_name') +
-                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('l_name') + ' AS name' +
+                    from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE l_key' +
+                        '              IN (select distinct l_key AS name' +
                         '                  FROM location GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON location.l_id=doublettes.id',
@@ -2301,12 +2303,13 @@ export class TourDocSqlMytbDbConfig {
             writeMapping: {
                 'location.l_meta_shortdesc': ':desc_txt:',
                 'location.l_parent_id': ':loc_id_parent_i:',
-                //'location.l_meta_shortdesc_md': ':desc_md_txt:',
-                //'location.l_meta_shortdesc_html': ':desc_html_txt:',
+                // 'location.l_meta_shortdesc_md': ':desc_md_txt:',
+                // 'location.l_meta_shortdesc_html': ':desc_html_txt:',
                 'location.l_gesperrt': ':blocked_i:',
                 'location.l_geo_longdeg': ':geo_lon_s:',
                 'location.l_geo_latdeg': ':geo_lat_s:',
-                //'location.l_gps_loc': ':geo_loc_p:',
+                // 'location.l_gps_loc': ':geo_loc_p:',
+                'location.l_key': ':key_s:',
                 'location.l_name': ':name_s:',
                 'location.l_typ': ':subtype_s:'
             },
@@ -2349,8 +2352,8 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('tr_name') +
-                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('tr_name') + ' AS name' +
+                    from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') +
+                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
                         '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON trip.tr_id=doublettes.id',
@@ -2567,8 +2570,8 @@ export class TourDocSqlMytbDbConfig {
             selectFrom: 'news',
             optionalGroupBy: [
                 {
-                    from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('n_headline') +
-                        '              IN (select distinct ' + TourDocSqlMytbDbConfig.generateDoubletteNameSql('n_headline') + ' AS name' +
+                    from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
+                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
                         '                  FROM news GROUP BY n_henameadline HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON news.n_id=doublettes.id',
@@ -2738,14 +2741,6 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
-
-    public static generateDoubletteNameSql(field: string): string {
-        return 'REGEXP_REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(LOWER(' + field + '), "ß", "ss"),' +
-            ' "ö", "oe"),' +
-            ' "ü", "ue"),' +
-            ' "ä", "ae"),' +
-            ' "[^a-z0-9]", "")';
-    }
 
     public getTableConfigForTableKey(table: string): TableConfig {
         return TourDocSqlMytbDbConfig.tableConfigs[table];

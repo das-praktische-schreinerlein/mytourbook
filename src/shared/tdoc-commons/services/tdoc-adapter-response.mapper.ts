@@ -18,6 +18,16 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
     protected mapperUtils = new MapperUtils();
     protected config: {} = {};
 
+    public static generateDoubletteValue(value: string): string {
+        return value === undefined ? value :
+            value.toLowerCase()
+                .replace(/ß/g, 'ss')
+                .replace(/ö/g, 'oe')
+                .replace(/ü/g, 'ue')
+                .replace(/ä/g, 'ae')
+                .replace(/[^a-z0-9]/g, '');
+    }
+
     constructor(config: any) {
         this.config = config;
     }
@@ -56,6 +66,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/,/g, ',,')
             .replace(/ /g, '_') : '');
         values['name_s'] = props.name;
+        values['key_s'] = TourDocAdapterResponseMapper.generateDoubletteValue(props.name);
         values['techname_s'] = props.techName;
         values['objects_txt'] =
             (props.objects ? props.objects.split(', ').join(',,') : '');

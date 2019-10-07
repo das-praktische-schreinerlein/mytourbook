@@ -1,4 +1,12 @@
 export class TourDocSqlUtils {
+    public static generateDoubletteNameSql(field: string): string {
+        return 'REGEXP_REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(LOWER(' + field + '), "ß", "ss"),' +
+            ' "ö", "oe"),' +
+            ' "ü", "ue"),' +
+            ' "ä", "ae"),' +
+            ' "[^a-z0-9]", "")';
+    }
+
     public static transformToSqliteDialect(sql: string): string {
         // dirty workaround because sqlite has no functions as mysql
         sql = sql.replace(/GetTechName\(GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)\)/g,

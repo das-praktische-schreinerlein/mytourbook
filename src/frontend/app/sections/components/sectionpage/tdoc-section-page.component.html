@@ -165,7 +165,8 @@
                                                          i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
                                                          [baseSearchUrl]="baseSearchUrl"
                                                          [params]="getDashboardFiltersForType(pdoc, 'doublettes', type, 'forExport')"
-                                                         [showOnlyIfRecordsFound]="false"></app-tdoc-dashboard-searchcolumn>
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type != 'ODIMGOBJECT'"></app-tdoc-dashboard-searchcolumn>
                     </td>
                 </ng-container>
             </tr>
