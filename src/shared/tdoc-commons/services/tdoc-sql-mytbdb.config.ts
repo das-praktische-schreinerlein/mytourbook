@@ -414,7 +414,7 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT i_id AS id FROM image RIGHT JOIN' +
+                    from: 'INNER JOIN (SELECT i_id AS id FROM image INNER JOIN' +
                          '                (select distinct i_dir, i_file FROM image GROUP BY i_dir, i_file' +
                          '                 HAVING COUNT(*) > 1) doublettes' +
                          '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
@@ -1350,7 +1350,7 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['news.n_id']
                 },
                 {
-                    from: 'INNER JOIN (SELECT v_id AS id FROM video RIGHT JOIN' +
+                    from: 'INNER JOIN (SELECT v_id AS id FROM video INNER JOIN' +
                         '                (select distinct v_dir, v_file FROM video GROUP BY v_dir, v_file' +
                         '                 HAVING COUNT(*) > 1) doublettes' +
                         '                ON video.v_file = doublettes.v_file AND video.v_dir = doublettes.v_dir) doublettes2' +
