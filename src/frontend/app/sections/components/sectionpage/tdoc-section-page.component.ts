@@ -71,7 +71,9 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         VIDEO: true,
         TRACK: true,
         ROUTE: true,
-        LOCATION: true
+        LOCATION: true,
+        TRIP: true,
+        NEWS: true
     };
     availableToDoDashboardRows: TourDocSectionPageComponentDashboardRows = {
     };

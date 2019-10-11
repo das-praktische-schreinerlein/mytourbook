@@ -124,7 +124,7 @@
                                                          [baseSearchUrl]="baseSearchUrl"
                                                          [params]="getDashboardFiltersForType(pdoc, 'noSubType', type, 'forExport')"
                                                          [showOnlyIfRecordsFound]="false"
-                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'IMAGE' && type != 'VIDEO' && type != 'TRIP'"></app-tdoc-dashboard-searchcolumn>
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'IMAGE' && type != 'VIDEO' && type != 'TRIP'&& type != 'NEWS'"></app-tdoc-dashboard-searchcolumn>
                     </td>
                 </ng-container>
             </tr>
@@ -166,7 +166,7 @@
                                                          [baseSearchUrl]="baseSearchUrl"
                                                          [params]="getDashboardFiltersForType(pdoc, 'unrated', type, 'forExport')"
                                                          [showOnlyIfRecordsFound]="false"
-                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'LOCATION' && type != 'TRIP'"></app-tdoc-dashboard-searchcolumn>
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'LOCATION' && type != 'TRIP' && type != 'NEWS'"></app-tdoc-dashboard-searchcolumn>
                     </td>
                 </ng-container>
             </tr>
