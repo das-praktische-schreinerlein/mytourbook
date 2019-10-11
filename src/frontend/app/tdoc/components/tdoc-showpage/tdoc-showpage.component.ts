@@ -142,8 +142,10 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         this.geoTracks[type] = typeTracks;
 
         let allTracks = [];
-        for (const key in this.geoTracks) {
-            allTracks = allTracks.concat(this.geoTracks[key]);
+        for (const key of ['ROUTE', 'TRACK', 'IMAGE', 'VIDEO', 'LOCATION']) {
+            if (this.geoTracks[key] !== undefined) {
+                allTracks = allTracks.concat(this.geoTracks[key]);
+            }
         }
         if (this.record.gpsTrackBasefile || this.record.geoLoc !== undefined
             || (this.record.gpsTrackSrc !== undefined && this.record.gpsTrackSrc.length > 20)) {
