@@ -995,7 +995,9 @@
             },
             "availableToDoDashboardRows": {
                 "noSubType": true,
+                "noLocation": true,
                 "noRoute": true,
+                "noCoordinates": true,
                 "unrated": true,
                 "doublettes": true,
                 "objectDetectionCorrectionNeeded": true,

@@ -143,6 +143,14 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'doublettes:doublettes';
                 break;
+            case 'noCoordinates':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] += 'noCoordinates:noCoordinates';
+                break;
+            case 'noLocation':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] += 'loc_no_parent_id_is:null,0,1';
+                break;
             case 'noRoute':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'route_no_id_is:null,0,1';

@@ -265,6 +265,7 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noCoordinates: '"dummy"',
                 id: 'kategorie.k_id',
                 loc_id_i: 'kategorie.l_id',
                 loc_id_is: 'kategorie.l_id',
@@ -277,6 +278,7 @@ export class TourDocSqlMytbDbConfig {
                 video_id_i: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: 'kategorie.l_id',
                 html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_name)'
             },
             spartialConfig: {
@@ -769,6 +771,7 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noCoordinates: '"dummy"',
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
@@ -781,6 +784,7 @@ export class TourDocSqlMytbDbConfig {
                 track_id_is: 'image.k_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
             },
             writeMapping: {
@@ -1242,6 +1246,7 @@ export class TourDocSqlMytbDbConfig {
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
             },
             // TODO: for import
@@ -1621,6 +1626,7 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noCoordinates: '"dummy"',
                 id: 'video.v_id',
                 image_id_is: '"dummy"',
                 image_id_i: '"dummy"',
@@ -1633,6 +1639,7 @@ export class TourDocSqlMytbDbConfig {
                 track_id_is: 'video.k_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(COALESCE(v_meta_name,""), " ", l_name)'
             },
             writeMapping: {
@@ -2014,6 +2021,7 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noCoordinates: '"dummy"',
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
@@ -2025,6 +2033,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: 'tour.l_id',
                 html: 'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc,""), " ", l_name)'
             },
             writeMapping: {
@@ -2145,6 +2154,23 @@ export class TourDocSqlMytbDbConfig {
                         '             ) doublettes' +
                         '             ON location.l_id=doublettes.id',
                     triggerParams: ['doublettes'],
+                    groupByFields: []
+                },
+                {
+                    from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE ' +
+                        '                 (l_typ IN (1,2,3,4) AND l_geo_area IS NULL) ' +
+                        '              OR (l_typ > 4 AND (l_geo_latdeg IS NULL OR l_geo_longdeg IS NULL))' +
+                        '             ) noCoordinates' +
+                        '             ON location.l_id=noCoordinates.id',
+                    triggerParams: ['noCoordinates'],
+                    groupByFields: []
+                },
+                {
+                    from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE ' +
+                        '               (l_parent_id IS NULL OR l_parent_id IN (0,1)) AND (l_typ IS NULL OR l_typ > 2)' +
+                        '             ) loc_no_parent_id_is' +
+                        '             ON location.l_id=loc_no_parent_id_is.id',
+                    triggerParams: ['loc_no_parent_id_is'],
                     groupByFields: []
                 },
                 {
@@ -2296,13 +2322,15 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"doublettes"',
+                noCoordinates: '"noCoordinates"',
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
+                loc_no_parent_id_is: '"loc_no_parent_id_is"',
                 trip_id_is: '"dummy"',
                 route_no_id_is: '"dummy"',
-                doublettes: '"doublettes"',
                 html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""))'
             },
             writeMapping: {
@@ -2518,6 +2546,7 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noCoordinates: '"dummy"',
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
@@ -2533,6 +2562,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_id_is: 'trip.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: 'trip.l_id',
                 html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc,""))'
             },
             writeMapping: {
@@ -2701,6 +2731,7 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noCoordinates: '"dummy"',
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
@@ -2717,6 +2748,7 @@ export class TourDocSqlMytbDbConfig {
                 route_no_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
                 l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(n_headline, " ", COALESCE(n_message,""))'
             },
             writeMapping: {
