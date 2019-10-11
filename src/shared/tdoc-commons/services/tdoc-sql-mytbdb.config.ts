@@ -2609,7 +2609,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
                         '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
-                        '                  FROM news GROUP BY n_henameadline HAVING COUNT(*) > 1)' +
+                        '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON news.n_id=doublettes.id',
                     triggerParams: ['doublettes'],
