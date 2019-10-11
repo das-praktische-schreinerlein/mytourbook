@@ -143,6 +143,32 @@
         </div>
     </ng-template>
 
+    <ng-template #inputGeoPosition let-key="key" let-formControlName="formControlName">
+        <div class="col-sm-6">
+            <div class="input-group input-group-sm align-top">
+                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+                <input class="{{'inputGeoLocAddress' + formControlName}}" value="{{editFormGroup.getRawValue()['name']}}" type="text" disabled="disabled">
+                <input class="{{'inputGeoLoc' + formControlName}}" formControlName="geoLoc" type="text">
+                <div class="input-group-addon"><span (click)="doGeoLocationSearch('.inputGeoLocAddress' + formControlName);">&#x27A4;</span></div>
+            </div>
+            <div class="input-group input-group-sm align-top">
+                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key + 'Area' | translate}}</label>
+                <button (click)="updateGeoLocMap()" i18n="updateGeoLocMap label|Label for button: updateGeoLocMap@@label.editform.tdoc.updateGeoLocMap">Update</button>
+            </div>
+            <div class="input-group input-group-sm align-top">
+                <textarea formControlName="gpsTrackSrc" class="form-control float-left" type="text" placeholder="geoArea" i18n-placeholder="geoArea placeholder|Placeholder for geoArea@@placeholder.form.tdoc.geoArea"></textarea>
+            </div>
+        </div>
+        <div class="col-sm-6" *ngIf="geoLocRecords.length > 0">
+            <div class="container content-container">
+                <app-tdoc-map [mapId]="'showGeoPosMap'"
+                              [height]="'400px'"
+                              [mapZoom]="'9'"
+                              [tdocs]="geoLocRecords"></app-tdoc-map>
+            </div>
+        </div>
+    </ng-template>
+
     <ng-template #inputTextTech let-key="key" let-formControlName="formControlName">
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
@@ -219,6 +245,11 @@
                 </div>
                 <div class="row">
                     <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="row">
+                    <ng-container *ngTemplateOutlet="inputGeoPosition;context:{key: 'tdoc.geoLoc', formControlName: 'geoLoc', recommend: trackStatistic.dist}"></ng-container>
                 </div>
             </fieldset>
             <ng-container *ngTemplateOutlet="submitRow"></ng-container>

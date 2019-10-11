@@ -2146,6 +2146,11 @@ export class TourDocSqlMytbDbConfig {
                         '             ON location.l_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
+                },
+                {
+                    from: ' ',
+                    triggerParams: ['id', 'loadTrack'],
+                    groupByFields: ['l_geo_area']
                 }
             ],
             groupbBySelectFieldListIgnore: ['l_keywords'],
@@ -2308,7 +2313,8 @@ export class TourDocSqlMytbDbConfig {
                 'location.l_gesperrt': ':blocked_i:',
                 'location.l_geo_longdeg': ':geo_lon_s:',
                 'location.l_geo_latdeg': ':geo_lat_s:',
-                // 'location.l_gps_loc': ':geo_loc_p:',
+                'location.l_geo_poly': ':geo_loc_p:',
+                'location.l_geo_area': ':gpstrack_src_s:',
                 'location.l_key': ':key_s:',
                 'location.l_name': ':name_s:',
                 'location.l_typ': ':subtype_s:'
@@ -2326,6 +2332,7 @@ export class TourDocSqlMytbDbConfig {
                 geo_lon_s: 'l_geo_longdeg',
                 geo_lat_s: 'l_geo_latdeg',
                 geo_loc_p: 'l_gps_loc',
+                gpstrack_src_s: 'l_geo_area',
                 keywords_txt: 'l_keywords',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',

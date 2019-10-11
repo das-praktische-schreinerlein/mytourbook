@@ -36,6 +36,27 @@ import {TourDocSectionPageComponentAvailableTabs} from '../../../sections/compon
 export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
     tracks: TourDocRecord[] = [];
+    geoTracks: {
+        IMAGE?: TourDocRecord[];
+        ODIMGOBJECT?: TourDocRecord[];
+        VIDEO?: TourDocRecord[];
+        LOCATION?: TourDocRecord[];
+        NEWS?: TourDocRecord[];
+        ROUTE?: TourDocRecord[];
+        TOPIMAGE?: TourDocRecord[];
+        TRACK?: TourDocRecord[];
+        TRIP?: TourDocRecord[];
+    } = {
+        IMAGE: [],
+        ODIMGOBJECT: [],
+        VIDEO: [],
+        LOCATION: [],
+        NEWS: [],
+        ROUTE: [],
+        TOPIMAGE: [],
+        TRACK: [],
+        TRIP: [],
+    };
     tagcloudSearchResult = new TourDocSearchResult(new TourDocSearchForm({}), 0, undefined, new Facets());
     currentMapTDocId = undefined;
     flgShowMap = false;
@@ -95,19 +116,19 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     }
 
     onRouteTracksFound(searchresult: TourDocSearchResult) {
-        this.onTackCloudRoutesFound(searchresult);
-        this.onTracksFound(searchresult);
+        this.onTagCloudRoutesFound(searchresult);
+        this.onGeoTracksFound(searchresult, 'ROUTE');
     }
 
-    onTackCloudRoutesFound(searchresult: TourDocSearchResult) {
+    onTagCloudRoutesFound(searchresult: TourDocSearchResult) {
         this.tagcloudSearchResult = searchresult;
     }
 
-    onTracksFound(searchresult: TourDocSearchResult) {
-        const realTracks = [];
+    onGeoTracksFound(searchresult: TourDocSearchResult, type: string) {
+        const typeTracks = [];
         if (searchresult !== undefined && searchresult.currentRecords !== undefined) {
             for (const record of searchresult.currentRecords) {
-                realTracks.push(record);
+                typeTracks.push(record);
                 if (record.gpsTrackBasefile || record.geoLoc !== undefined
                     || (record.gpsTrackSrc !== undefined && record.gpsTrackSrc.length > 20)) {
                     this.flgMapAvailable = true;
@@ -118,11 +139,17 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                 }
             }
         }
+        this.geoTracks[type] = typeTracks;
+
+        let allTracks = [];
+        for (const key in this.geoTracks) {
+            allTracks = allTracks.concat(this.geoTracks[key]);
+        }
         if (this.record.gpsTrackBasefile || this.record.geoLoc !== undefined
             || (this.record.gpsTrackSrc !== undefined && this.record.gpsTrackSrc.length > 20)) {
-            realTracks.push(this.record);
+            allTracks.push(this.record);
         }
-        this.tracks = realTracks;
+        this.tracks = allTracks;
 
         this.cd.markForCheck();
     }
@@ -236,11 +263,13 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         if (me.record.gpsTrackBasefile || me.record.geoLoc !== undefined
             || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20)) {
             me.tracks = [me.record];
+            me.geoTracks = {};
             me.flgMapAvailable = true;
             me.flgProfileMapAvailable = (me.record.gpsTrackBasefile !== undefined
                 || (me.record.gpsTrackSrc !== undefined && me.record.gpsTrackSrc.length > 20));
         } else {
             me.tracks = [];
+            me.geoTracks = {};
             me.flgMapAvailable = false;
             me.flgProfileMapAvailable = false;
         }

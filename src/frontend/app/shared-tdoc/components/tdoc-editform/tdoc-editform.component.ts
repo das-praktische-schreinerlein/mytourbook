@@ -26,6 +26,7 @@ import {
     CommonDocEditformComponentConfig
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 import {DOCUMENT} from '@angular/common';
+import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -34,6 +35,7 @@ import {DOCUMENT} from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocEditformComponent extends CommonDocEditformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
+    private geoLocationService = new GeoLocationService();
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
     private personsFound: StructuredKeywordState[] = [];
@@ -117,6 +119,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         allSelected: 'alles'};
 
     trackRecords: TourDocRecord[] = [];
+    geoLocRecords: TourDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
     personTagSuggestions: string[] = [];
 
@@ -173,6 +176,61 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 (new Date(this.editFormGroup.getRawValue()['dateend'])));
         }
         this.setValue('name', name);
+    }
+
+    doGeoLocationSearch(selector) {
+        const me = this;
+        this.geoLocationService.doLocationSearch(selector, this.editFormGroup.getRawValue()['name']).then((event: any) => {
+            me.editFormGroup.patchValue({'geoLoc': event.detail.lat + ',' + event.detail.lon + ',' + 0});
+            me.updateGeoLocMap();
+        }).catch(reason => {
+            console.warn('locationsearch failed', reason);
+        });
+
+        return false;
+    }
+
+    updateGeoLocMap(): boolean {
+        const me = this;
+        const geoRecords = [];
+
+        let trackSrc = this.editFormGroup.getRawValue()['gpsTrackSrc'];
+        if (trackSrc !== undefined && trackSrc !== null && trackSrc.length > 0) {
+            trackSrc = GeoGpxParser.fixXml(trackSrc);
+            trackSrc = GeoGpxParser.fixXmlExtended(trackSrc);
+            trackSrc = GeoGpxParser.reformatXml(trackSrc);
+            trackSrc = trackSrc.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ');
+            geoRecords.push(TourDocRecordFactory.createSanitized({
+                id: 'TMPLOC' + (new Date()).getTime(),
+                gpsTrackSrc: trackSrc,
+                gpsTrackBaseFile: 'tmp.gpx',
+                name: this.editFormGroup.getRawValue()['name'],
+                type: this.record.type,
+                datestart: new Date().toISOString(),
+                dateend: new Date().toISOString(),
+                dateshow: this.editFormGroup.getRawValue()['dateshow']
+            }));
+        }
+
+        const geoLoc = this.editFormGroup.getRawValue()['geoLoc'];
+        if (geoLoc !== undefined && geoLoc !== null && geoLoc.length > 0) {
+            const lst = geoLoc ? geoLoc.split(',') : [];
+            geoRecords.push(TourDocRecordFactory.createSanitized({
+                id: 'TMPAREA' + (new Date()).getTime(),
+                geoLoc: geoLoc,
+                geoLat: lst.length > 1 ? lst[0] : undefined,
+                geoLon: lst.length > 1 ? lst[1] : undefined,
+                name: this.editFormGroup.getRawValue()['name'],
+                type: this.record.type,
+                datestart: new Date().toISOString(),
+                dateend: new Date().toISOString(),
+                dateshow: this.editFormGroup.getRawValue()['dateshow']
+            }));
+        }
+        me.geoLocRecords = geoRecords;
+        this.cd.markForCheck();
+
+        return false;
     }
 
     updateGpsTrackSrc(gpsTrackSrc: string): void {
@@ -344,6 +402,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
             values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
         }
+        if (values['geoLoc']) {
+            const lst = values['geoLoc'].split(',');
+            values['geoLat'] = lst.length > 1 ? lst[0] : undefined;
+            values['geoLon'] = lst.length > 1 ? lst[1] : undefined;
+        }
 
         return super.prepareSubmitValues(values);
     }
@@ -367,6 +430,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     protected updateFormComponents(): void {
         super.updateFormComponents();
         this.updateMap();
+        this.updateGeoLocMap();
     }
 
     protected updateOptionValues(tdocSearchResult: TourDocSearchResult): boolean {
