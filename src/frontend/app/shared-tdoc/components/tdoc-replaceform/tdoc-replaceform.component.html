@@ -1,0 +1,39 @@
+{{updateData()}}
+<div class="modal-header">
+    <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}} ID: {{record.id}}</span></h5>
+    <button type="button" class="close" aria-label="Close" (click)="cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+    <form [formGroup]="replaceFormGroup" class="form-control-sm" (ngSubmit)="submitReplaceKey($event)" *ngIf="record !== undefined">
+        <fieldset>
+            <legend i18n="replaceRecord label|Label for fieldset: replaceRecord@@label.editform.tdoc.legend.replaceRecord">&#x2315; Ersetzen und Löschen</legend>
+            <div class="row">
+                <div class="col-sm-6 form-inline input-group input-group-sm">
+                    <label class="col-xs-3 col-form-label mr-2"
+                           i18n="name label|Label for field: objectkey@@label.editform.tdoc.objectkey">Code:</label>
+                    <ss-multiselect-dropdown [options]="optionsSelectReplacement"
+                                             [settings]="settingsSelectReplacement"
+                                             [texts]="textsSelectReplacement"
+                                             *ngIf="optionsSelectReplacement.length > 0"
+                                             formControlName="newId"
+                                             ngDefaultControl
+                                             required="required"
+                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+                    <input formControlName="newId" required="required" class="form-control" type="text" placeholder="newId"
+                           *ngIf="optionsSelectReplacement.length === 0"
+                           i18n-placeholder="newId placeholder|Placeholder for newId@@placeholder.form.tdoc.newId">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <button type="submit" (click)="submitReplaceKey($event)" class="btn btn-action btn-sm"
+                            i18n="button replaceRecord tdoc|Buttontext to replaceRecord tdoc@@button.form.tdoc.replaceRecord">Ersetzen</button>
+                    <button type="button" (click)="cancel()" class="btn btn-action btn-sm">Abbrechen</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

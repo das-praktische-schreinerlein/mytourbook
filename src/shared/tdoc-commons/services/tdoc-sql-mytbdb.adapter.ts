@@ -201,6 +201,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         }
 
         const table = (record['type'] + '').toLowerCase();
+        actionTagForm.deletes = false;
         if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('playlists_')) {
             return this.actionTagAdapter.executeActionTagPlaylist(table, id, actionTagForm, opts);
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('objects_')) {
@@ -213,6 +214,9 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return this.actionTagAdapter.executeActionTagPersRate(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {
             return this.actionTagAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
+        } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {
+            actionTagForm.deletes = true;
+            return this.actionTagAdapter.executeActionTagReplace(table, id, actionTagForm, opts);
         }
 
         return super._doActionTag(mapper, record, actionTagForm, opts);

@@ -1,15 +1,21 @@
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
-import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {
+    IdValidationRule,
+    KeywordValidationRule,
+    NumberValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
+import * as Promise_serial from 'promise-serial';
 
 export class TourDocSqlMytbDbActionTagAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
     private rateValidationRule = new NumberValidationRule(true, -1, 15, 0);
     private precisionValidationRule = new NumberValidationRule(true, 0, 1, 1);
+    private idValidator = new IdValidationRule(true);
     private config: any;
     private knex: any;
     private sqlQueryBuilder: SqlQueryBuilder;
@@ -95,11 +101,11 @@ export class TourDocSqlMytbDbActionTagAdapter {
                         return sqlBuilder.raw(updateSql);
                     }).catch(function errorPlaylist(reason) {
                         console.error('_doActionTag update ' + baseTableName + ' failed:', reason);
-                        return reject(reason);
+                        return utils.reject(reason);
                     });
                 }
 
-                return resolve(true);
+                return utils.resolve(true);
             }).then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
@@ -185,7 +191,7 @@ export class TourDocSqlMytbDbActionTagAdapter {
                     return sqlBuilder.raw(insertSql);
                 }
 
-                return resolve(true);
+                return utils.resolve(true);
             }).then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
@@ -490,21 +496,21 @@ export class TourDocSqlMytbDbActionTagAdapter {
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         return new Promise((resolve, reject) => {
-            return sqlBuilder.raw(updateImageObjectObjectKeySql).then(dbresults => {
+            sqlBuilder.raw(updateImageObjectObjectKeySql).then(dbresults => {
                 if (insertObjectNameSql) {
                     return sqlBuilder.raw(insertObjectNameSql);
                 }
-                return resolve(true);
+                return utils.resolve(true);
             }).then(dbresults => {
                 if (deleteObjectKeySql) {
                     return sqlBuilder.raw(deleteObjectKeySql);
                 }
-                return resolve(true);
+                return utils.resolve(true);
             }).then(dbresults => {
                 if (insertObjectKeySql) {
                     return sqlBuilder.raw(insertObjectKeySql);
                 }
-                return resolve(true);
+                return utils.resolve(true);
             }).then(dbresults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
@@ -513,4 +519,139 @@ export class TourDocSqlMytbDbActionTagAdapter {
             });
         });
     }
+
+    public executeActionTagReplace(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+        opts = opts || {};
+
+        if (!utils.isInteger(id)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' id not an integer');
+        }
+        if (actionTagForm.payload === undefined) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
+        }
+        let newId = actionTagForm.payload['newId'];
+        if (!this.idValidator.isValid(newId)) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' newId not valid');
+        }
+        if ((id + '') === (newId + '')) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' newId must not equal id');
+        }
+        newId = parseInt(newId, 10);
+
+
+        let checkOldSql: string;
+        let checkNewSql: string;
+        let updateSqls: string[];
+        let deleteSql: string;
+        switch (table) {
+            case 'image':
+                checkOldSql = 'SELECT i_id AS id FROM image WHERE i_id="' + id + '"';
+                checkNewSql = 'SELECT i_id AS id FROM image WHERE i_id="' + newId + '"';
+                updateSqls = [
+                    'UPDATE image_object SET i_id="' + newId + '" WHERE i_id="' + id + '"',
+                    'UPDATE image_playlist SET i_id="' + newId + '" WHERE i_id="' + id + '"',
+                    'UPDATE image_keyword SET i_id="' + newId + '" WHERE i_id="' + id + '"'
+                ];
+                deleteSql = 'DELETE FROM image WHERE i_id="' + id + '"';
+                break;
+            case 'video':
+                checkOldSql = 'SELECT v_id AS id FROM video WHERE v_id="' + id + '"';
+                checkNewSql = 'SELECT v_id AS id FROM video WHERE v_id="' + newId + '"';
+                updateSqls = [
+                    'UPDATE video_object SET v_id="' + newId + '" WHERE v_id="' + id + '"',
+                    'UPDATE video_playlist SET v_id="' + newId + '" WHERE v_id="' + id + '"',
+                    'UPDATE video_keyword SET v_id="' + newId + '" WHERE v_id="' + id + '"'
+                ];
+                deleteSql = 'DELETE FROM video WHERE v_id="' + id + '"';
+                break;
+            case 'track':
+                checkOldSql = 'SELECT k_id AS id FROM kategorie WHERE k_id="' + id + '"';
+                checkNewSql = 'SELECT k_id AS id FROM kategorie WHERE k_id="' + newId + '"';
+                updateSqls = [
+                    'UPDATE image SET k_id="' + newId + '" WHERE k_id="' + id + '"',
+                    'UPDATE kategorie_keyword SET k_id="' + newId + '" WHERE k_id="' + id + '"',
+                    'UPDATE kategorie_person SET k_id="' + newId + '" WHERE k_id="' + id + '"',
+                    'UPDATE kategorie_tour SET k_id="' + newId + '" WHERE k_id="' + id + '"',
+                    'UPDATE tour SET k_id="' + newId + '" WHERE k_id="' + id + '"',
+                    'UPDATE video SET k_id="' + newId + '" WHERE k_id="' + id + '"',
+                ];
+                deleteSql = 'DELETE FROM kategorie WHERE k_id="' + id + '"';
+                break;
+            case 'route':
+                checkOldSql = 'SELECT t_id AS id FROM tour WHERE t_id="' + id + '"';
+                checkNewSql = 'SELECT t_id AS id FROM tour WHERE t_id="' + newId + '"';
+                updateSqls = [
+                    'UPDATE kategorie SET t_id="' + newId + '" WHERE t_id="' + id + '"',
+                    'UPDATE kategorie_tour SET t_id="' + newId + '" WHERE t_id="' + id + '"',
+                    'UPDATE tour_keyword SET t_id="' + newId + '" WHERE t_id="' + id + '"'
+                ];
+                deleteSql = 'DELETE FROM tour WHERE t_id="' + id + '"';
+                break;
+            case 'location':
+                checkOldSql = 'SELECT l_id AS id FROM location WHERE l_id="' + id + '"';
+                checkNewSql = 'SELECT l_id AS id FROM location WHERE l_id="' + newId + '"';
+                updateSqls = [
+                    'UPDATE image SET l_id="' + newId + '" WHERE l_id="' + id + '"',
+                    'UPDATE kategorie SET l_id="' + newId + '" WHERE l_id="' + id + '"',
+                    'UPDATE location SET l_parent_id="' + newId + '" WHERE l_parent_id="' + id + '"',
+                    'UPDATE tour SET l_id="' + newId + '" WHERE l_id="' + id + '"',
+                    'UPDATE trip SET l_id="' + newId + '" WHERE l_id="' + id + '"',
+                    'UPDATE video SET l_id="' + newId + '" WHERE l_id="' + id + '"'
+                ];
+                deleteSql = 'DELETE FROM location WHERE l_id="' + id + '"';
+                break;
+            case 'trip':
+                checkOldSql = 'SELECT tr_id AS id FROM trip WHERE tr_id="' + id + '"';
+                checkNewSql = 'SELECT tr_id AS id FROM trip WHERE tr_id="' + newId + '"';
+                updateSqls = [
+                    'UPDATE kategorie SET tr_id="' + newId + '" WHERE tr_id="' + id + '"',
+                ];
+                deleteSql = 'DELETE FROM trip WHERE tr_id="' + id + '"';
+                break;
+            case 'news':
+                checkOldSql = 'SELECT n_id AS id FROM news WHERE n_id="' + id + '"';
+                checkNewSql = 'SELECT n_id AS id FROM news WHERE n_id="' + newId + '"';
+                updateSqls = [
+                ];
+                deleteSql = 'DELETE FROM news WHERE n_id="' + id + '"';
+                break;
+            default:
+                return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
+        }
+
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        const result = new Promise((resolve, reject) => {
+            sqlBuilder.raw(checkOldSql).then(dbresults => {
+                const records = this.sqlQueryBuilder.extractDbResult(dbresults, this.knex.client['config']['client']);
+                if (records === undefined || records.length !== 1 || records[0]['id'] !== id) {
+                    return utils.reject('_doActionTag replace ' + table + ' failed: id not found ' + id);
+                }
+
+                return sqlBuilder.raw(checkNewSql);
+            }).then(dbresults => {
+                const records = this.sqlQueryBuilder.extractDbResult(dbresults, this.knex.client['config']['client']);
+                if (records === undefined || records.length !== 1 || records[0]['id'] !== newId) {
+                    return utils.reject('_doActionTag replace ' + table + ' failed: newId not found ' + newId);
+                }
+
+                const updateSqlQueryPromises = [];
+                for (const updateSql of updateSqls) {
+                    updateSqlQueryPromises.push(function () {
+                        return sqlBuilder.raw(updateSql);
+                    });
+                }
+                return Promise_serial(updateSqlQueryPromises, {parallelize: 1});
+            }).then(dbresults => {
+                return sqlBuilder.raw(deleteSql);
+            }).then(dbresults => {
+                return resolve(true);
+            }).catch(function errorPlaylist(reason) {
+                console.error('_doActionTag replace ' + table + ' failed:', reason);
+                return reject(reason);
+            });
+        });
+
+        return result;
+    }
+
 }
