@@ -5,12 +5,15 @@ import {TourDocDataService} from '../../../shared/tdoc-commons/services/tdoc-dat
 import {CommonDocRecordCreateResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/cdoc-create.resolver';
 import {TourDocSearchForm} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
+import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 
 @Injectable()
 export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<TourDocRecord, TourDocSearchForm,
     TourDocSearchResult, TourDocDataService> {
+    private myAppService: GenericAppService;
     constructor(appService: GenericAppService, dataService: TourDocDataService) {
         super(appService, dataService);
+        this.myAppService = appService;
     }
 
     protected configureDefaultFieldToSet(type: string, fields: string[]): void {
@@ -61,8 +64,8 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         if (type.toLowerCase() === 'route') {
             let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null ? tdoc.locHirarchie : '';
             locHirarchie = locHirarchie.replace(/^OFFEN -> /, '');
-            for (const country of this.getLOcationReplacements()) {
-                locHirarchie = locHirarchie.replace(country[0], <string>country[1]);
+            for (const replacement of this.getLocationReplacements()) {
+                locHirarchie = locHirarchie.replace(replacement[0], <string>replacement[1]);
             }
 
             const locs = locHirarchie.split(/ -> /);
@@ -89,13 +92,17 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         }
     }
 
-    protected getLOcationReplacements(): [RegExp, String][] {
-        return [
-            [/^Alpen -> Dolomiten /, 'I - Dolomiten '],
-            [/^Alpen -> Karwendel /, 'Ö - Tirol '],
-            [/^Deutschland /, 'D '],
-            [/^Italien /, 'I '],
-            [/^Schweiz /, 'CH ']
-        ];
+    protected getLocationReplacements(): [RegExp, String][] {
+        const config = this.myAppService.getAppConfig();
+        const replacementConfig = [];
+        if (Array.isArray(BeanUtils.getValue(config, 'components.tdoc-create-resolver.locationReplacements'))) {
+            for (const replacement of BeanUtils.getValue(config, 'components.tdoc-create-resolver.locationReplacements')) {
+                if (Array.isArray(replacement) && replacement.length === 2) {
+                    replacementConfig.push([new RegExp(replacement[0]), replacement[1]]);
+                }
+            }
+        }
+
+        return replacementConfig;
     }
 }

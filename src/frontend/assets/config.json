@@ -1043,7 +1043,16 @@
         },
         "cdoc-odobjectdetails": {
             "defaultShowKeyAsTooltip": true,
-            "defaultFilterForNameToShowNameAndKey": ["/bla/" ,"/Defa.*/", "Default"]
+            "defaultFilterForNameToShowNameAndKey": ["bla", "Defa.*", "Default"]
+        },
+        "tdoc-create-resolver": {
+            "locationReplacements": [
+                ["^Alpen -> Dolomiten ", "I - Dolomiten "],
+                ["^Alpen -> Karwendel ", "Ö - Tirol "],
+                ["^Deutschland ", "D "],
+                ["^Italien ", "I "],
+                ["^Schweiz ", "CH "]
+            ]
         }
     },
     "services": {
