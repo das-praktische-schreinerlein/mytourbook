@@ -1052,7 +1052,12 @@
                 ["^Deutschland ", "D "],
                 ["^Italien ", "I "],
                 ["^Schweiz ", "CH "]
+            ],
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (durch |von |ab |bei |in |nach )+", "$1"]
             ]
+
         }
     },
     "services": {

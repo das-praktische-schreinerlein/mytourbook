@@ -6,6 +6,8 @@ import {CommonDocRecordCreateResolver} from '@dps/mycms-frontend-commons/dist/fr
 import {TourDocSearchForm} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
+import {ResolvedData} from '@dps/mycms-frontend-commons/dist/angular-commons/resolver/resolver.utils';
 
 @Injectable()
 export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<TourDocRecord, TourDocSearchForm,
@@ -14,6 +16,25 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
     constructor(appService: GenericAppService, dataService: TourDocDataService) {
         super(appService, dataService);
         this.myAppService = appService;
+    }
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<ResolvedData<TourDocRecord>> {
+        const res = super.resolve(route, state);
+            res.then(value => {
+                if (value.data !== undefined) {
+                    let name = value.data.name;
+                    if (name !== undefined && name !== null ) {
+                        for (const replacement of this.getNameReplacements()) {
+                            name = name.replace(replacement[0], <string>replacement[1]);
+                        }
+                        value.data.name = name;
+                    }
+                }
+
+                return value;
+            });
+
+        return res;
     }
 
     protected configureDefaultFieldToSet(type: string, fields: string[]): void {
@@ -62,6 +83,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
 
     protected copyDefaultFields(type: string, tdoc: TourDocRecord, values: {}): void {
         if (type.toLowerCase() === 'route') {
+            values['trackId'] = tdoc.trackId;
             let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null ? tdoc.locHirarchie : '';
             locHirarchie = locHirarchie.replace(/^OFFEN -> /, '');
             for (const replacement of this.getLocationReplacements()) {
@@ -92,11 +114,20 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         }
     }
 
+    protected getNameReplacements(): [RegExp, String][] {
+        return this.getCommonReplacements('components.tdoc-create-resolver.nameReplacements');
+    }
+
     protected getLocationReplacements(): [RegExp, String][] {
+        return this.getCommonReplacements('components.tdoc-create-resolver.locationReplacements');
+    }
+
+    protected getCommonReplacements(configKey: string): [RegExp, String][] {
         const config = this.myAppService.getAppConfig();
         const replacementConfig = [];
-        if (Array.isArray(BeanUtils.getValue(config, 'components.tdoc-create-resolver.locationReplacements'))) {
-            for (const replacement of BeanUtils.getValue(config, 'components.tdoc-create-resolver.locationReplacements')) {
+        const value = BeanUtils.getValue(config, configKey);
+        if (Array.isArray(value)) {
+            for (const replacement of value) {
                 if (Array.isArray(replacement) && replacement.length === 2) {
                     replacementConfig.push([new RegExp(replacement[0]), replacement[1]]);
                 }
