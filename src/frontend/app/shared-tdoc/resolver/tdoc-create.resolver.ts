@@ -59,9 +59,27 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
 
     protected copyDefaultFields(type: string, tdoc: TourDocRecord, values: {}): void {
         if (type.toLowerCase() === 'route') {
-            values['tdocdatainfo.baseloc'] = tdoc.locHirarchie;
-            values['tdocdatainfo.destloc'] = tdoc.locHirarchie;
-            values['tdocdatainfo.region'] = tdoc.locHirarchie;
+            let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null ? tdoc.locHirarchie : '';
+            locHirarchie = locHirarchie.replace(/^OFFEN -> /, '');
+            for (const country of this.getLOcationReplacements()) {
+                locHirarchie = locHirarchie.replace(country[0], <string>country[1]);
+            }
+
+            const locs = locHirarchie.split(/ -> /);
+            if (locs.length > 3) {
+                locs.splice(2, locs.length - 3);
+            }
+            values['tdocdatainfo.baseloc'] = locs.join(' - ');
+            values['tdocdatainfo.destloc'] = locs.pop();
+
+            const regions = locHirarchie.split(/ -> /);
+            if (regions.length > 1) {
+                regions.splice(regions.length - 1, 1);
+                if (regions.length > 2) {
+                    regions.splice(1, regions.length - 2);
+                }
+            }
+            values['tdocdatainfo.region'] = regions.join(' - ');
         }
     }
 
@@ -69,5 +87,15 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         if (type.toLowerCase() === 'location') {
             values['locIdParent'] = 1;
         }
+    }
+
+    protected getLOcationReplacements(): [RegExp, String][] {
+        return [
+            [/^Alpen -> Dolomiten /, 'I - Dolomiten '],
+            [/^Alpen -> Karwendel /, 'Ö - Tirol '],
+            [/^Deutschland /, 'D '],
+            [/^Italien /, 'I '],
+            [/^Schweiz /, 'CH ']
+        ];
     }
 }
