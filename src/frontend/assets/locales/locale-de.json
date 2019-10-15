@@ -202,6 +202,7 @@
     "hrt_personalRateDifficulty": "persönliche Schwierigkeit:",
     "label.tdoc.geoLoc": "Zentrums-Koordinate:",
     "label.tdoc.geoLocArea": "Area-Koordinaten (Gpx):",
+    "label.tdoc.geoLocSource": "Ortssuche:",
     "label.tdocratepers.ausdauer": "Ausdauer",
     "label.tdocratepers.bildung": "Bildung",
     "label.tdocratepers.gesamt": "Gesamt",

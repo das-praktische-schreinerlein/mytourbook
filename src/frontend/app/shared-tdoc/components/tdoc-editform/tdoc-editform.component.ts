@@ -27,6 +27,8 @@ import {
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-editform/cdoc-editform.component';
 import {DOCUMENT} from '@angular/common';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
+import * as L from 'leaflet';
+import {LatLng} from 'leaflet';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -39,6 +41,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
     private personsFound: StructuredKeywordState[] = [];
+    private geoLocMap: L.Map;
 
     public optionsSelect: {
         'tdocratepers.gesamt': IMultiSelectOption[];
@@ -180,7 +183,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     doGeoLocationSearch(selector) {
         const me = this;
-        this.geoLocationService.doLocationSearch(selector, this.editFormGroup.getRawValue()['name']).then((event: any) => {
+        this.geoLocationService.doLocationSearch(selector, this.editFormGroup.getRawValue()['geoLocAddress']).then((event: any) => {
             me.editFormGroup.patchValue({'geoLoc': event.detail.lat + ',' + event.detail.lon + ',' + 0});
             me.updateGeoLocMap();
         }).catch(reason => {
@@ -229,6 +232,84 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         }
         me.geoLocRecords = geoRecords;
         this.cd.markForCheck();
+
+        return false;
+    }
+
+    onGeoLocMapCreated(map: L.Map) {
+        this.geoLocMap = map;
+    }
+
+    createNewGeoLocArea(): boolean {
+        let points = [];
+        const geoLoc = this.editFormGroup.getRawValue()['geoLoc'];
+        if (geoLoc !== undefined && geoLoc !== null && geoLoc.length > 0) {
+            const lst = geoLoc ? geoLoc.split(',') : [];
+            if (lst.length > 1) {
+                const lat = parseFloat(lst[0]);
+                const lon = parseFloat(lst[1]);
+                let factor;
+                let type = this.editFormGroup.getRawValue()['subtype'];
+                if (Array.isArray(type) && type.length > 0) {
+                    type = type[0];
+                }
+                switch (type ? type.toString() : '') {
+                    case '1':
+                        factor = 10;
+                        break;
+                    case '2':
+                        factor = 3;
+                        break;
+                    case '3':
+                        factor = 1;
+                        break;
+                    case '4':
+                        factor = 0.2;
+                        break;
+                    default:
+                        factor = 0.02;
+                }
+
+                points.push(new LatLng(lat - factor, lon - factor),
+                    new LatLng(lat - factor, lon + factor),
+                    new LatLng(lat + factor, lon + factor),
+                    new LatLng(lat + factor, lon - factor),
+                    new LatLng(lat - factor, lon - factor));
+            }
+        }
+
+        let newGpx = GeoGpxParser.createNewRouteGpx(this.editFormGroup.getRawValue()['name'], 'AREA', points);
+        newGpx = GeoGpxParser.fixXml(newGpx);
+        newGpx = GeoGpxParser.fixXmlExtended(newGpx);
+        newGpx = GeoGpxParser.reformatXml(newGpx);
+        this.setValue('gpsTrackSrc', newGpx);
+        this.updateGeoLocMap();
+        return false;
+    }
+
+    updateGeoLocArea(): boolean {
+        if (this.geoLocMap) {
+            let newGpx = '';
+            this.geoLocMap.eachLayer(layer => {
+                if (layer['getPoints']) {
+                    const points: LatLng[] = [];
+                    // @ts-ignore
+                    const markers: L.Marker[] = layer.getPoints();
+                    if (markers) {
+                        markers.forEach(marker => {
+                            points.push(marker.getLatLng());
+                        });
+                        newGpx += GeoGpxParser.createNewRouteGpx(this.editFormGroup.getRawValue()['name'], 'AREA', points);
+                    }
+                }
+            });
+
+            newGpx = GeoGpxParser.fixXml(newGpx);
+            newGpx = GeoGpxParser.fixXmlExtended(newGpx);
+            newGpx = GeoGpxParser.reformatXml(newGpx);
+            this.setValue('gpsTrackSrc', newGpx);
+            this.updateGeoLocMap();
+        }
 
         return false;
     }
@@ -417,7 +498,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             datestart: [DateUtils.dateToLocalISOString(record.datestart)],
             dateend: [DateUtils.dateToLocalISOString(record.dateend)],
             locIdParent: [record.locIdParent],
-            gpsTrackSrc: [record.gpsTrackSrc]
+            gpsTrackSrc: [record.gpsTrackSrc],
+            geoLocAddress: [record.name]
         };
     }
 
@@ -504,5 +586,4 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             input.setSelectionRange(selectionStart, selectionEnd);
         }
     }
-
 }

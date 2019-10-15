@@ -7,6 +7,7 @@ import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {TourDocContentUtils, TrackColors} from '../../services/tdoc-contentutils.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
+import * as L from 'leaflet';
 
 @Component({
     selector: 'app-tdoc-map',
@@ -43,6 +44,12 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     @Input()
     public trackColors?: TrackColors;
 
+    @Input()
+    public editable? = false;
+
+    @Output()
+    public mapCreated: EventEmitter<L.Map> = new EventEmitter();
+
     @Output()
     public centerChanged: EventEmitter<L.LatLng> = new EventEmitter();
 
@@ -64,6 +71,10 @@ export class TourDocMapComponent extends AbstractInlineComponent {
     onMapElementsLoaded(mapElements: MapElement[]) {
         this.showLoadingSpinner = false;
         this.cd.detectChanges();
+    }
+
+    onMapCreated(map: L.Map) {
+        this.mapCreated.emit(map);
     }
 
     renderMap() {

@@ -146,17 +146,22 @@
     <ng-template #inputGeoPosition let-key="key" let-formControlName="formControlName">
         <div class="col-sm-6">
             <div class="input-group input-group-sm align-top">
-                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
-                <input class="{{'inputGeoLocAddress' + formControlName}}" value="{{editFormGroup.getRawValue()['name']}}" type="text" disabled="disabled">
-                <input class="{{'inputGeoLoc' + formControlName}}" formControlName="geoLoc" type="text">
+                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key + 'Source' | translate}}</label>
+                <input class="{{'inputGeoLocAddress' + formControlName}}" formControlName="geoLocAddress" type="text">
                 <div class="input-group-addon"><span (click)="doGeoLocationSearch('.inputGeoLocAddress' + formControlName);">&#x27A4;</span></div>
             </div>
             <div class="input-group input-group-sm align-top">
-                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key + 'Area' | translate}}</label>
-                <button (click)="updateGeoLocMap()" i18n="updateGeoLocMap label|Label for button: updateGeoLocMap@@label.editform.tdoc.updateGeoLocMap">Update</button>
+                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
+                <input class="{{'inputGeoLoc' + formControlName}}" formControlName="geoLoc" type="text">
             </div>
             <div class="input-group input-group-sm align-top">
-                <textarea formControlName="gpsTrackSrc" class="form-control float-left" type="text" placeholder="geoArea" i18n-placeholder="geoArea placeholder|Placeholder for geoArea@@placeholder.form.tdoc.geoArea"></textarea>
+                <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key + 'Area' | translate}}</label>
+                <button (click)="createNewGeoLocArea()" *ngIf="editFormGroup.get('geoLoc').value && !editFormGroup.get('gpsTrackSrc').value" type="button" i18n="updateGeoLocNewArea label|Label for button: updateGeoLocNewArea@@label.editform.tdoc.updateGeoLocNewArea">*Area</button>
+                <button (click)="updateGeoLocMap()" type="button" i18n="updateGeoLocMap label|Label for button: updateGeoLocMap@@label.editform.tdoc.updateGeoLocMap">Daten -> Karte</button>
+                <button (click)="updateGeoLocArea()" type="button" i18n="updateGeoLocArea label|Label for button: updateGeoLocArea@@label.editform.tdoc.updateGeoLocArea">Karte -> Daten</button>
+            </div>
+            <div class="input-group input-group-sm align-top">
+                <textarea formControlName="gpsTrackSrc" class="form-control float-left" type="text" placeholder="geoLocArea" i18n-placeholder="geoLocArea placeholder|Placeholder for geoLocArea@@placeholder.form.tdoc.geoLocArea"></textarea>
             </div>
         </div>
         <div class="col-sm-6" *ngIf="geoLocRecords.length > 0">
@@ -164,6 +169,8 @@
                 <app-tdoc-map [mapId]="'showGeoPosMap'"
                               [height]="'400px'"
                               [mapZoom]="'9'"
+                              [editable]="true"
+                              (mapCreated)="onGeoLocMapCreated($event)"
                               [tdocs]="geoLocRecords"></app-tdoc-map>
             </div>
         </div>
