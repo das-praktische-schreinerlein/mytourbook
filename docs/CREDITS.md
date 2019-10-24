@@ -25,6 +25,7 @@ MyTourBook uses a bunch of libraries and tools. Many thanx to the people behind 
 - maps
     - [geo-coder](https://www.npmjs.com/package/geo-coder)
     - [leaflet](https://www.npmjs.com/package/leaflet)
+    - [leaflet-editable-polyline](https://www.npmjs.com/package/leaflet-editable-polyline)
     - [leaflet.markercluster](https://www.npmjs.com/package/leaflet.markercluster)
     - [vis](https://www.npmjs.com/package/vis)
 - data-framework

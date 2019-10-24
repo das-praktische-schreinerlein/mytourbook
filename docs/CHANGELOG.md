@@ -2,6 +2,34 @@
  
 # Versions
  
+## 4.1.0
+- moved facetcache to commons
+- improved search, dashboard and data-management
+- improved data-import and documentation
+
+### new features
+- none
+
+### improvements
+- common: improved search for persons and objects
+- documentation: improved data-import and documentation
+- frontend: improved dashboard
+- frontend: improved tag-actions
+- frontend: added commands to create new entities
+- frontend: improved icons
+- frontend: added location-edit-area
+
+### bug fixes
+- backend: fixed reimport of exif-dates from images
+ 
+### breaking changes
+- backend: moved facetcache to commons
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
+
+
 ## 4.0.0
 - added new type+features for managing object-detection image-objects
 - improved trackmanagement and added dashboard
