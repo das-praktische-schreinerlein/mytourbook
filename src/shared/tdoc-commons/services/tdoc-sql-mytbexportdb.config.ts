@@ -119,6 +119,14 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'MONTH(k_datevon)',
                     orderBy: 'value asc'
                 },
+                'news_id_i': {
+                    filterFields: ['kategorie_full.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'news_id_is': {
+                    filterFields: ['kategorie_full.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'objects_txt': {
                     noFacet: true
                 },
@@ -205,11 +213,14 @@ export class TourDocSqlMytbExportDbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'k_altitude_max ASC',
                 'dataTechDistAsc': 'k_distance ASC',
-                'ratePers': 'k_rate_gesamt DESC',
+                'forExport': 'k_datevon ASC',
+                'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'k_datevon DESC'
             },
             filterMapping: {
+                doublettes: '"dummy"',
+                noCoordinates: '"dummy"',
                 id: 'kategorie_full.k_id',
                 loc_id_i: 'kategorie_full.l_id',
                 loc_id_is: 'kategorie_full.l_id',
@@ -218,7 +229,11 @@ export class TourDocSqlMytbExportDbConfig {
                 route_no_id_is: 'kategorie_full.t_id',
                 track_id_i: 'kategorie_full.k_id',
                 track_id_is: 'kategorie_full.k_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
+                l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: 'kategorie_full.l_id',
                 html: 'CONCAT(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             spartialConfig: {
@@ -404,22 +419,15 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'MONTH(i_date)',
                     orderBy: 'value asc'
                 },
+                'news_id_i': {
+                    filterFields: ['kategorie_full.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'news_id_is': {
+                    filterFields: ['kategorie_full.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'objects_txt': {
-                    noFacet: true
-                },
-                'odcats_txt': {
-                    noFacet: true
-                },
-                'oddetectors_txt': {
-                    noFacet: true
-                },
-                'odkeys_txt': {
-                    noFacet: true
-                },
-                'odprecision_is': {
-                    noFacet: true
-                },
-                'odstates_ss': {
                     noFacet: true
                 },
                 'persons_txt': {
@@ -471,7 +479,8 @@ export class TourDocSqlMytbExportDbConfig {
                 'dataTechAltAsc': 'k_altitude_asc ASC',
                 'dataTechMaxAsc': 'i_gps_ele ASC',
                 'dataTechDistAsc': 'k_distance ASC',
-                'ratePers': 'i_rate DESC',
+                'forExport': 'i_date ASC, image.i_id ASC',
+                'ratePers': 'i_rate DESC, i_date DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'
             },
@@ -482,15 +491,26 @@ export class TourDocSqlMytbExportDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"dummy"',
+                noCoordinates: '"dummy"',
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 route_id_i: 'kategorie_full.t_id',
                 route_id_is: 'kategorie_full.t_id',
                 route_no_id_is: '"dummy"',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
+                l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: '"dummy"',
+                odstates_ss: '"dummy"',
+                odprecision_is: '"dummy"',
+                odcats_txt: '"dummy"',
+                odkeys_txt: '"dummy"',
+                oddetectors_txt: '"dummy"',
                 html: 'CONCAT(i_katname, " ", i_keywords, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -737,6 +757,14 @@ export class TourDocSqlMytbExportDbConfig {
                     filterFields: ['tour.t_k_ids'],
                     action: AdapterFilterActions.IN_CSV
                 },
+                'trip_id_i': {
+                    filterFields: ['k_trip.tr_id', 'kt_trip.tr_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'trip_id_is': {
+                    filterFields: ['k_trip.tr_id', 'kt_trip.tr_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'type_txt': {
                     constValues: ['route', 'track', 'image', 'video', 'location', 'trip', 'news'],
                     filterField: '"route"',
@@ -763,7 +791,8 @@ export class TourDocSqlMytbExportDbConfig {
                 'dataTechAltAsc': 't_route_hm ASC',
                 'dataTechMaxAsc': 't_ele_max ASC',
                 'dataTechDistAsc': 't_route_m ASC',
-                'ratePers': 't_rate_gesamt DESC',
+                'forExport': 't_id ASC',
+                'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 't_datevon DESC'
             },
@@ -774,15 +803,20 @@ export class TourDocSqlMytbExportDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"dummy"',
+                noCoordinates: '"dummy"',
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
                 route_no_id_is: '"dummy"',
+                news_id_i: '"dummy"',
                 news_id_is: '"dummy"',
                 trip_id_is: '"dummy"',
                 loc_id_i: 'tour.l_id',
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
+                l_lochirarchietxt: 'location.l_name',
+                loc_no_parent_id_is: 'tour.l_id',
                 html: 'CONCAT(t_name, " ", t_keywords, " ", t_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -936,7 +970,7 @@ export class TourDocSqlMytbExportDbConfig {
                 'odprecision_is': {
                     noFacet: true
                 },
-                'odstates_ss': {
+                'tes_ss': {
                     noFacet: true
                 },
                 'persons_txt': {
@@ -981,12 +1015,16 @@ export class TourDocSqlMytbExportDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                doublettes: '"dummy"',
+                noCoordinates: '"dummy"',
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
+                loc_no_parent_id_is: '"dummy"',
                 news_id_is: '"dummy"',
                 trip_id_is: '"dummy"',
+                route_no_id_is: '"dummy"',
                 html: 'CONCAT(l_name, " ", l_html, " " , l_keywords, " ", l_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -1144,14 +1182,24 @@ export class TourDocSqlMytbExportDbConfig {
                 'relevance': 'tr_datevon DESC'
             },
             filterMapping: {
+                doublettes: '"dummy"',
+                noCoordinates: '"dummy"',
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
+                image_id_is: '"dummy"',
+                image_id_i: '"dummy"',
+                track_id_is: '"dummy"',
                 track_id_i: '"dummy"',
                 route_id_is: '"dummy"',
                 route_no_id_is: '"dummy"',
+                loc_id_i: 'trip.l_id',
+                loc_id_is: 'trip.l_id',
                 news_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
+                loc_no_parent_id_is: 'trip.l_id',
                 html: 'CONCAT(tr_name, " ", tr_keywords, " ", tr_meta_shortdesc_md)'
             },
             fieldMapping: {
@@ -1311,16 +1359,25 @@ export class TourDocSqlMytbExportDbConfig {
                 'relevance': 'n_date DESC'
             },
             filterMapping: {
+                doublettes: '"dummy"',
+                noCoordinates: '"dummy"',
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
                 image_id_i: '"dummy"',
+                image_id_is: '"dummy"',
+                video_id_is: '"dummy"',
+                video_id_i: '"dummy"',
                 track_id_i: '"dummy"',
+                track_id_is: '"dummy"',
+                trip_id_i: '"dummy"',
                 trip_id_is: '"dummy"',
                 location_id_is: '"dummy"',
+                route_id_i: '"dummy"',
                 route_id_is: '"dummy"',
                 route_no_id_is: '"dummy"',
                 loc_lochirarchie_ids_txt: '"dummy"',
+                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(n_headline, " ", n_keywords, " ", n_message_md)'
             },
             fieldMapping: {
