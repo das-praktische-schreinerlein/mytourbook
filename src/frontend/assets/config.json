@@ -713,6 +713,36 @@
                     ]
                 },
                 {
+                    "key": "odobjectstate_RETRY",
+                    "type": "tag",
+                    "name": "RETRY",
+                    "shortName": "&#x21BA",
+                    "payload": {
+                        "state": "RETRY"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RETRY"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "objectkeyedit",
                     "type": "objectkeyedit",
                     "name": "ObjectKeyEdit",
@@ -973,6 +1003,36 @@
                             "property": "tdocodimageobjects[0].state",
                             "command": "CSVIN",
                             "expectedValues": ["RUNNING_MANUAL_DETAILED", "RUNNING_MANUAL_DETAIL_NEEDED", "DONE_DETAIL_PROCESSED"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["ODIMGOBJECT", "odimgobject"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "odobjectstate_RETRY",
+                    "type": "tag",
+                    "name": "RETRY",
+                    "shortName": "&#x21BA",
+                    "payload": {
+                        "state": "RETRY"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocodimageobjects[0].state",
+                            "command": "CSVIN",
+                            "expectedValues": ["RETRY"]
                         }
                     ],
                     "recordAvailability": [
