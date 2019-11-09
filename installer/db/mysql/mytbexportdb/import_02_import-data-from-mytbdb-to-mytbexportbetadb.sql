@@ -20,6 +20,13 @@ UPDATE location toupdate,
 SET toupdate.l_keywords=grouped.l_keywords
 WHERE toupdate.l_id=grouped.l_id;
 
+
+-- remove todos
+UPDATE location SET l_meta_shortdesc=REPLACE(l_meta_shortdesc, 'TODODESC', '');
+UPDATE location SET l_keywords=REPLACE(l_keywords, 'KW_TODOKEYWORDS,', '');
+UPDATE location SET l_keywords=REPLACE(l_keywords, ',KW_TODOKEYWORDS', '');
+UPDATE location SET l_keywords=REPLACE(l_keywords, 'KW_TODOKEYWORDS', '');
+
 -- calc desc
 UPDATE location toupdate
 SET
@@ -36,6 +43,14 @@ SET
 INSERT INTO news (n_id, w_id, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords)
     SELECT n_id, w_id, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords FROM testmytbdb.news;
 
+-- remove todos
+UPDATE news SET n_message=REPLACE(n_message, 'TODODESC', '');
+UPDATE news SET n_message_md=REPLACE(n_message_md, 'TODODESC', '');
+UPDATE news SET n_message_html=REPLACE(n_message_html, 'TODODESC', '');
+UPDATE news SET n_keywords=REPLACE(n_keywords, 'KW_TODOKEYWORDS,', '');
+UPDATE news SET n_keywords=REPLACE(n_keywords, ',KW_TODOKEYWORDS', '');
+UPDATE news SET n_keywords=REPLACE(n_keywords, 'KW_TODOKEYWORDS', '');
+
 -- calc desc
 UPDATE news
 SET
@@ -48,6 +63,10 @@ SET
 INSERT INTO trip (tr_id, i_id, l_id, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url)
     SELECT tr_id, i_id, l_id, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url
 FROM testmytbdb.trip;
+
+-- remove todos
+UPDATE trip SET tr_meta_desc=REPLACE(tr_meta_desc, 'TODODESC', '');
+UPDATE trip SET tr_meta_shortdesc=REPLACE(tr_meta_shortdesc, 'TODODESC', '');
 
 -- calc desc+dates
 UPDATE trip
@@ -81,6 +100,12 @@ UPDATE kategorie_full toupdate,
            && testmytbdb.image_playlist.p_id=18) grouped
 SET toupdate.i_id=grouped.i_id
 WHERE toupdate.k_id=grouped.k_id;
+
+-- remove todos
+UPDATE kategorie_full SET k_meta_shortdesc=REPLACE(k_meta_shortdesc, 'TODODESC', '');
+UPDATE kategorie_full SET k_keywords=REPLACE(k_keywords, 'KW_TODOKEYWORDS,', '');
+UPDATE kategorie_full SET k_keywords=REPLACE(k_keywords, ',KW_TODOKEYWORDS', '');
+UPDATE kategorie_full SET k_keywords=REPLACE(k_keywords, 'KW_TODOKEYWORDS', '');
 
 -- calc desc+dates+coords
 UPDATE kategorie_full toupdate,
@@ -123,6 +148,12 @@ UPDATE tour toupdate,
    GROUP BY tour.t_id) grouped
 SET toupdate.t_keywords=grouped.t_keywords
 WHERE toupdate.t_id=grouped.t_id;
+
+-- remove todos
+UPDATE tour SET t_meta_shortdesc=REPLACE(t_meta_shortdesc, 'TODODESC', '');
+UPDATE tour SET t_keywords=REPLACE(t_keywords, 'KW_TODOKEYWORDS,', '');
+UPDATE tour SET t_keywords=REPLACE(t_keywords, ',KW_TODOKEYWORDS', '');
+UPDATE tour SET t_keywords=REPLACE(t_keywords, 'KW_TODOKEYWORDS', '');
 
 -- calc desc+dates+coords
 UPDATE tour toupdate,
@@ -189,6 +220,11 @@ UPDATE image toupdate,
 SET toupdate.i_objects=grouped.i_objects
 WHERE toupdate.i_id=grouped.i_id;
 
+-- remove todos
+UPDATE image SET i_keywords=REPLACE(i_keywords, 'KW_TODOKEYWORDS,', '');
+UPDATE image SET i_keywords=REPLACE(i_keywords, ',KW_TODOKEYWORDS', '');
+UPDATE image SET i_keywords=REPLACE(i_keywords, 'KW_TODOKEYWORDS', '');
+
 -- image calc desc+dates+coords
 UPDATE image toupdate,
  (SELECT image.i_id, kategorie_full.k_id, kategorie_full.t_id, k_name, kategorie_full.k_meta_shortdesc, location.l_lochirarchietxt
@@ -248,6 +284,11 @@ UPDATE video toupdate,
      GROUP BY video.v_id) grouped
 SET toupdate.v_objects=grouped.v_objects
 WHERE toupdate.v_id=grouped.v_id;
+
+-- remove todos
+UPDATE video SET v_keywords=REPLACE(v_keywords, 'KW_TODOKEYWORDS,', '');
+UPDATE video SET v_keywords=REPLACE(v_keywords, ',KW_TODOKEYWORDS', '');
+UPDATE video SET v_keywords=REPLACE(v_keywords, 'KW_TODOKEYWORDS', '');
 
 -- video calc desc+dates+coords
 UPDATE video toupdate,

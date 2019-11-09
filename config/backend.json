@@ -28,7 +28,7 @@
     "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
     "tdocWritable": true,
     "mapperConfig": {
-        "allowedKeywordPatterns": ["KW_.*", "Harry", "Booga", "Buddy", "Micha"],
+        "allowedKeywordPatterns": ["KW_.*", "TODO.*","Harry", "Booga", "Buddy", "Micha"],
         "replaceKeywordPatterns": []
     },
     "TourDocSqlMytbDbAdapter": {

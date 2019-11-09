@@ -106,6 +106,26 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
             }
             values['tdocdatainfo.region'] = regions.join(' - ');
         }
+
+        switch (type.toLowerCase()) {
+            case 'location':
+            case 'track':
+            case 'route':
+                if (values['keywords'] === undefined || values['keywords'] === null || values['keywords'] === '') {
+                    values['keywords'] = 'KW_TODOKEYWORDS';
+                }
+        }
+
+        switch (type.toLowerCase()) {
+            case 'news':
+            case 'trip':
+            case 'location':
+            case 'track':
+            case 'route':
+                if (values['descTxt'] === undefined || values['descTxt'] === null || values['descTxt'] === '') {
+                    values['descTxt'] = 'TODODESC';
+                }
+        }
     }
 
     protected setDefaultFields(type: string, values: {}): void {

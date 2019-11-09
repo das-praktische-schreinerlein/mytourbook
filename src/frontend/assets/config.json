@@ -22,7 +22,8 @@
                     "Höhle", "Schlucht", "Tal", "Sandstrand", "Steinstrand",
                     "Steilküste", "Blumen", "Feld", "Heide", "Steppe", "Wiese",
                     "Bergwald", "Strandwald", "Wald", "Seenlandschaft", "Berge",
-                    "Hochgebirge", "Mittelgebirge", "Meer", "Ozean", "Firn", "Schneefelder"]}
+                    "Hochgebirge", "Mittelgebirge", "Meer", "Ozean", "Firn", "Schneefelder"]},
+                {"name": "Todos", "keywords": ["TODOKEYWORDS"]}
             ],
             "keywordSuggestions": [
                 {   "name": "Action Rad-Tour", "keywords": ["Radfahren"],
@@ -1088,6 +1089,8 @@
                 "noRoute": true,
                 "noCoordinates": true,
                 "unrated": true,
+                "todoDesc": true,
+                "todoKeywords": true,
                 "doublettes": true,
                 "objectDetectionCorrectionNeeded": true,
                 "objectDetectionDetailNeeded": true,

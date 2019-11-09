@@ -141,6 +141,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'personalRateOverall:null,0';
                 break;
+            case 'todoKeywords':
+                filters['what'] = filters['what'] ? filters['what'] + ';' : '';
+                filters['what'] += 'keyword:KW_TODOKEYWORDS';
+                break;
+            case 'todoDesc':
+                filters['fulltext'] = 'TODODESC';
+                break;
             case 'doublettes':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'doublettes:doublettes';

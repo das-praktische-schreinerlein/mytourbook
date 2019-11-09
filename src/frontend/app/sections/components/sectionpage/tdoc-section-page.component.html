@@ -170,6 +170,34 @@
                     </td>
                 </ng-container>
             </tr>
+            <tr *ngIf="availableToDoDashboardRows['todoKeywords']">
+                <td i18n="tableheading dashboardToDoColumn-todoKeywords sectionPage|Tableheading to dashboardToDoColumn-todoKeywords sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Keywords offen</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'todoKeywords', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'IMAGE' && type != 'VIDEO' && type != 'LOCATION' && type != 'TRIP' && type != 'NEWS'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
+            <tr *ngIf="availableToDoDashboardRows['todoDesc']">
+                <td i18n="tableheading dashboardToDoColumn-todoDesc sectionPage|Tableheading to dashboardToDoColumn-todoDesc sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Beschreibung offen</td>
+                <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
+                    <td *ngIf="availableDashboardColumns[type]">
+                        <app-tdoc-dashboard-searchcolumn [label]="''"
+                                                         [searchLinkLabel]="'Durchsuchen'"
+                                                         i18n-searchLinkLabel="searchLinkLabel section-page type|SearchLinkLabel section-page type@@linline-search.searchLinkLabel.tdoc.type"
+                                                         [baseSearchUrl]="baseSearchUrl"
+                                                         [params]="getDashboardFiltersForType(pdoc, 'todoDesc', type, 'forExport')"
+                                                         [showOnlyIfRecordsFound]="false"
+                                                         *ngIf="type != 'ODIMGOBJECT' && type != 'IMAGE' && type != 'VIDEO'"></app-tdoc-dashboard-searchcolumn>
+                    </td>
+                </ng-container>
+            </tr>
             <tr *ngIf="availableToDoDashboardRows['doublettes']">
                 <td i18n="tableheading dashboardToDoColumn-doublettes sectionPage|Tableheading to dashboardToDoColumn-doublettes sectionPage@@tableheading.sectionPage.dashboardToDoColumnProfile">Doubletten</td>
                 <ng-container *ngFor="let type of objectKeys(availableDashboardColumns)">
