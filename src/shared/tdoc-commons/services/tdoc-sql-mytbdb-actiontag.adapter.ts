@@ -472,7 +472,7 @@ export class TourDocSqlMytbDbActionTagAdapter {
                     return utils.reject('actiontag ' + actionTagForm.key + ' objectcategory not valid');
                 }
                 insertObjectNameSql = 'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)' +
-                    ' SELECT "' + objectname + '", "' + objectname + '", "' + objectname + '", "' + objectcategory + '" FROM dual ' +
+                    ' SELECT "' + objectname + '", "' + objectkey + '", "' + objectkey + '", "' + objectcategory + '" FROM dual ' +
                     '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_name="' + objectname + '")';
             }
         } else {
