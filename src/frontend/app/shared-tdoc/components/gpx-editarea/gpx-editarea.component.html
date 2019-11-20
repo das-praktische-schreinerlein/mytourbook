@@ -1,16 +1,16 @@
 <ng-container [formGroup]="editGpxFormGroup">
     <div class="row">
         <div class="col-sm-10 form-inline input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2" i18n="gpxSrc label|Label for field: gpxSrc@@label.editform.tdoc.gpxSrc">Track:</label>
+            <label class="col-xs-3 col-form-label mr-2" i18n="gpxSrc label|Label for field: gpxSrc@@label.editareaform.tdoc.gpxSrc">Track:</label>
             <textarea formControlName="gpxSrc" id="gpxSrc" class="form-control nowrap" type="text" placeholder="gpxSrc"
                       (focusout)="updateGpsTrack()"
-                      i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpxSrc@@placeholder.form.tdoc.gpxSrc"></textarea>
+                      i18n-placeholder="gpsTrackSRc placeholder|Placeholder for gpxSrc@@placeholder.editareaform.tdoc.gpxSrc"></textarea>
         </div>
         <div class="col-sm-2 form-inline input-group input-group-sm">
-            <file-drop (onFileDrop)="gpxDropped($event)" i18n-headertext="gpsFileDropZone label|Label for button: gpsFileDropZone@@label.editform.tdoc.gpsFileDropZone">GPX-File dropzone</file-drop>
-            <label class="col-xs-3 col-form-label mr-2" i18n="gpxSrc label|Label for field: gpxSrc@@label.editform.tdoc.gpxSrc">Track:</label>
-            <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editform.tdoc.fixGpsTrackSrc">Fix errors</button>
-            <label class="col-xs-3 col-form-label mr-2" i18n="mergeNewTracks label|Label for field: mergeNewTracks@@label.editform.tdoc.mergeNewTracks">Merge:</label>
+            <file-drop (onFileDrop)="gpxDropped($event)" i18n-headertext="gpsFileDropZone label|Label for button: gpsFileDropZone@@label.editareaform.tdoc.gpsFileDropZone">GPX-File dropzone</file-drop>
+            <label class="col-xs-3 col-form-label mr-2" i18n="gpxSrc label|Label for field: gpxSrc@@label.editareaform.tdoc.gpxSrc">Track:</label>
+            <button (click)="fixMap()" i18n="fixGpsTrackSrc label|Label for button: fixGpsTrackSrc@@label.editareaform.tdoc.fixGpsTrackSrc">Fix errors</button>
+            <label class="col-xs-3 col-form-label mr-2" i18n="mergeNewTracks label|Label for field: mergeNewTracks@@label.editareaform.tdoc.mergeNewTracks">Merge:</label>
             <input formControlName="mergeNewTracks" type="checkbox" [checked]="mergeNewTracks" class="form-control">
         </div>
     </div>
@@ -18,18 +18,18 @@
     <ng-container *ngIf="trackSegmentStatistics.length > 0">
         <div class="row">
             <div class="col-sm-12 form-inline input-group input-group-sm">
-                <label class="col-xs-3 col-form-label mr-2" i18n="trackSegmentStatistics label|Label for field: trackSegmentStatistics@@label.editform.tdoc.trackSegmentStatistics">Segmente:</label>
+                <label class="col-xs-3 col-form-label mr-2" i18n="trackSegmentStatistics label|Label for field: trackSegmentStatistics@@label.editareaform.tdoc.trackSegmentStatistics">Segmente:</label>
                 <table class="trackSegmentStatistics">
                     <tr>
-                        <th i18n="trackSegments.color label|Label for field: trackSegments.color@@label.editform.tdoc.trackSegments.color"> </th>
-                        <th i18n="trackSegmentStatistics.date label|Label for field: trackSegmentStatistics.date@@label.editform.tdoc.trackSegmentStatistics.date">Datum</th>
-                        <th i18n="trackSegmentStatistics.duration label|Label for field: trackSegmentStatistics.duration@@label.editform.tdoc.trackSegmentStatistics.duration">Dauer</th>
-                        <th i18n="trackSegmentStatistics.dist label|Label for field: trackSegmentStatistics.dist@@label.editform.tdoc.trackSegmentStatistics.dist">Länge</th>
-                        <th i18n="trackSegmentStatistics.velocity label|Label for field: trackSegmentStatistics.velocity@@label.editform.tdoc.trackSegmentStatistics.velocity"> </th>
-                        <th i18n="trackSegmentStatistics.alt label|Label for field: trackSegmentStatistics.alt@@label.editform.tdoc.trackSegmentStatistics.alt">Höhe</th>
-                        <th i18n="trackSegmentStatistics.altDiff label|Label for field: trackSegmentStatistics.altDiff@@label.editform.tdoc.trackSegmentStatistics.altDiff">Höhenunterschied</th>
-                        <th i18n="trackSegmentStatistics.altVelocity label|Label for field: trackSegmentStatistics.altVelocity@@label.editform.tdoc.trackSegmentStatistics.altVelocity"> </th>
-                        <th i18n="trackSegmentStatistics.actions label|Label for field: trackSegmentStatistics.actions@@label.editform.tdoc.trackSegmentStatistics.actions"> </th>
+                        <th i18n="trackSegments.color label|Label for field: trackSegments.color@@label.editareaform.tdoc.trackSegments.color"> </th>
+                        <th i18n="trackSegmentStatistics.date label|Label for field: trackSegmentStatistics.date@@label.editareaform.tdoc.trackSegmentStatistics.date">Datum</th>
+                        <th i18n="trackSegmentStatistics.duration label|Label for field: trackSegmentStatistics.duration@@label.editareaform.tdoc.trackSegmentStatistics.duration">Dauer</th>
+                        <th i18n="trackSegmentStatistics.dist label|Label for field: trackSegmentStatistics.dist@@label.editareaform.tdoc.trackSegmentStatistics.dist">Länge</th>
+                        <th i18n="trackSegmentStatistics.velocity label|Label for field: trackSegmentStatistics.velocity@@label.editareaform.tdoc.trackSegmentStatistics.velocity"> </th>
+                        <th i18n="trackSegmentStatistics.alt label|Label for field: trackSegmentStatistics.alt@@label.editareaform.tdoc.trackSegmentStatistics.alt">Höhe</th>
+                        <th i18n="trackSegmentStatistics.altDiff label|Label for field: trackSegmentStatistics.altDiff@@label.editareaform.tdoc.trackSegmentStatistics.altDiff">Höhenunterschied</th>
+                        <th i18n="trackSegmentStatistics.altVelocity label|Label for field: trackSegmentStatistics.altVelocity@@label.editareaform.tdoc.trackSegmentStatistics.altVelocity"> </th>
+                        <th i18n="trackSegmentStatistics.actions label|Label for field: trackSegmentStatistics.actions@@label.editareaform.tdoc.trackSegmentStatistics.actions"> </th>
                     </tr>
                     <tbody>
                     <tr *ngFor="let trackSegmentStatistic of trackSegmentStatistics; let idx = index;">
@@ -50,15 +50,15 @@
                             <button (click)="jumpToTrackSegment(idx)" class="btn btn-sm"
                                     *ngIf="renderedMapElements.length > idx && renderedMapElements[idx].type === 'TRACK'"
                                     [ngClass]="trackSegmentStatistics[idx].duration  === 0 || trackSegmentStatistics[idx].velocity > 10 || trackSegmentStatistics[idx].altAscVelocity > 800 || trackSegmentStatistics[idx].altDescVelocity > 1500 ? 'btn-action' : ''">
-                                <span i18n="jumpToTrackSegment label|Label for button: jumpToTrackSegment@@label.editform.tdoc.jumpToTrackSegment">Focus</span>
+                                <span i18n="jumpToTrackSegment label|Label for button: jumpToTrackSegment@@label.editareaform.tdoc.jumpToTrackSegment">Focus</span>
                             </button>
                             <button (click)="deleteTrackSegment(idx)" class="btn btn-sm"
                                     *ngIf="renderedMapElements.length > idx && renderedMapElements[idx].type === 'TRACK'"
-                                    i18n="deleteTrackSegment label|Label for button: deleteTrackSegment@@label.editform.tdoc.deleteTrackSegment">Delete</button>
+                                    i18n="deleteTrackSegment label|Label for button: deleteTrackSegment@@label.editareaform.tdoc.deleteTrackSegment">Delete</button>
                             <button *ngIf="idx > 0 && renderedMapElements.length > idx && renderedMapElements[idx].type === 'TRACK' && trackSegmentStatistics[idx].dateStart && trackSegmentStatistics[idx-1].dateEnd"
                                     (click)="mergeTrackSegment(idx)" class="btn btn-sm"
                                     [ngClass]="(trackSegmentStatistics[idx].dateStart.getTime() - trackSegmentStatistics[idx-1].dateEnd.getTime()) < 10*60*1000 ? 'btn-action' : ''">
-                                <span i18n="mergeTrackSegment label|Label for button: mergeTrackSegment@@label.editform.tdoc.mergeTrackSegment">Merge</span>
+                                <span i18n="mergeTrackSegment label|Label for button: mergeTrackSegment@@label.editareaform.tdoc.mergeTrackSegment">Merge</span>
                             </button>
                         </td>
                     </tr>

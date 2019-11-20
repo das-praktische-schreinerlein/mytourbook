@@ -13,8 +13,9 @@ import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {ToastrService} from 'ngx-toastr';
 import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
+import {ActionTagFormResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actiontags/cdoc-actiontags.component';
 
-export interface TourDocObjectDetectionObjectKeyEditFormResultType {
+export interface TourDocObjectDetectionObjectKeyEditFormResultType extends ActionTagFormResultType {
     action: 'changeObjectKeyForRecord' | 'changeObjectLabelForObjectKey'| 'createObjectLabelForObjectKey' | 'createNewObjectKeyAndObjectLabel';
     detector: string;
     state: ObjectDetectionState;
