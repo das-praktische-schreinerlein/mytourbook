@@ -1,0 +1,12 @@
+<div *ngIf="searchResult.recordCount > 0 || showLoadingSpinner">
+    <div id="{{htmlId ? htmlId : ''}}">
+        <div class="container">
+            <span *ngIf="showLoadingSpinner">Loading</span>
+            <a href="{{getToSearchUrl()}}"
+               class="btn btn-action btn-sm float"
+               (click)="onToSearchPage($event)"
+               *ngIf="searchResult && searchResult.recordCount > 0">{{ searchResult.recordCount }}</a>
+        </div>
+    </div>
+</div>
+
