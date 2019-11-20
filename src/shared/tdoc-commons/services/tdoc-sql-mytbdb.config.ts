@@ -1,6 +1,9 @@
 import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
+import {ActionTagReplaceConfigType} from './common-sql-actiontag-replace.adapter';
+import {ActionTagBlockConfigType} from './common-sql-actiontag-block.adapter';
+import {ActionTagAssignConfigType} from './common-sql-actiontag-assign.adapter';
 
 export class TourDocSqlMytbDbConfig {
     public static personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
@@ -292,13 +295,13 @@ export class TourDocSqlMytbDbConfig {
                 // 'kategorie.i_id': ':image_id_i:',
                 'kategorie.l_id': ':loc_id_i:',
                 'kategorie.tr_id': ':trip_id_i:',
-                //'kategorie.n_id': ':news_id_i:',
+                // 'kategorie.n_id': ':news_id_i:',
                 'kategorie.k_gesperrt': ':blocked_i:',
                 'kategorie.k_datevon': ':datestart_dt:',
                 'kategorie.k_datebis': ':dateend_dt:',
                 'kategorie.k_meta_shortdesc': ':desc_txt:',
-                //'kategorie.k_meta_shortdesc_md': ':desc_md_txt:',
-                //'kategorie.k_meta_shortdesc_html': ':desc_html_txt:',
+                // 'kategorie.k_meta_shortdesc_md': ':desc_md_txt:',
+                // 'kategorie.k_meta_shortdesc_html': ':desc_html_txt:',
                 'kategorie.k_altitude_asc': ':data_tech_alt_asc_i:',
                 'kategorie.k_altitude_desc': ':data_tech_alt_desc_i:',
                 'kategorie.k_altitude_min': ':data_tech_alt_min_i:',
@@ -475,7 +478,8 @@ export class TourDocSqlMytbDbConfig {
                         ' ":::precision=", image_object.io_precision,' +
                         ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objectdetections ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
-                        ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        '            AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
                         'WHERE image.i_id in (:id)',
                     parameterNames: ['id']
@@ -618,7 +622,8 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, o_category AS value ' +
                         'FROM' +
                         ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
-                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
@@ -640,7 +645,8 @@ export class TourDocSqlMytbDbConfig {
                         ' io_obj_type AS value, CONCAT(o_name, " | "  , o_category, " | " , io_obj_type) as label ' +
                         'FROM' +
                         ' image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
-                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
@@ -652,7 +658,9 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
                         ' ok_key AS value, CONCAT(o_name, " | " , o_category, " | " , ok_key) as label ' +
                         'FROM' +
-                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' objects_key' +
+                        ' LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' LEFT JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
@@ -665,7 +673,9 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
                         ' o_category AS value, o_category as label ' +
                         'FROM' +
-                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' objects_key' +
+                        ' LEFT JOIN image_object ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' LEFT JOIN image ON image_object.i_id=image.i_id ' +
                         ' GROUP BY value' +
@@ -793,8 +803,8 @@ export class TourDocSqlMytbDbConfig {
                 'image.i_gesperrt': ':blocked_i:',
                 'image.i_date': ':datestart_dt:',
                 'image.i_meta_shortdesc': ':desc_txt:',
-                //'image.i_meta_shortdesc_md': ':desc_md_txt:',
-                //'image.i_meta_shortdesc_html': ':desc_html_txt:',
+                // 'image.i_meta_shortdesc_md': ':desc_md_txt:',
+                // 'image.i_meta_shortdesc_html': ':desc_html_txt:',
                 'image.i_gps_lon': ':geo_lon_s:',
                 'image.i_gps_lat': ':geo_lat_s:',
                 'image.i_gps_ele': ':data_tech_alt_max_i:',
@@ -863,7 +873,8 @@ export class TourDocSqlMytbDbConfig {
             tableName: 'image_object',
             selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
                 'LEFT JOIN objects persons ON image_object.io_obj_type=persons.o_key AND LOWER(persons.o_category) LIKE "person" ' +
-                'LEFT JOIN objects realobjects ON image_object.io_obj_type=realobjects.o_key AND LOWER(realobjects.o_category) NOT LIKE "person" ' +
+                'LEFT JOIN objects realobjects ON image_object.io_obj_type=realobjects.o_key' +
+                '     AND LOWER(realobjects.o_category) NOT LIKE "person" ' +
                 'LEFT JOIN kategorie ON kategorie.k_id=image.k_id ' +
                 'LEFT JOIN location ON location.l_id = kategorie.l_id ',
             optionalGroupBy: [
@@ -880,7 +891,8 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
                 },
                 {
-                    from: 'INNER JOIN (SELECT io_id AS id FROM image_object WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                    from: 'INNER JOIN (SELECT io_id AS id FROM image_object' +
+                        '                     WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
                                                                         ' ":::detector=", image_object.io_detector,' +
                                                                         ' ":::objX=", image_object.io_obj_x1,' +
                                                                         ' ":::objY=", image_object.io_obj_y1,' +
@@ -934,7 +946,8 @@ export class TourDocSqlMytbDbConfig {
                         ' ":::precision=", image_object.io_precision,' +
                         ' ":::state=", image_object.io_state) SEPARATOR ";;") as i_objectdetections ' +
                         'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
-                        ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        '       AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
                         'WHERE image_object.io_id in (:id)',
                     parameterNames: ['id']
@@ -1078,7 +1091,9 @@ export class TourDocSqlMytbDbConfig {
                 'odcats_txt': {
                     selectSql: 'SELECT COUNT(io_id) AS count, o_category AS value ' +
                         'FROM' +
-                        ' image_object LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' image_object' +
+                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY value',
@@ -1099,7 +1114,9 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(io_id) AS count, ' +
                         ' io_obj_type AS value, CONCAT(o_name, " | " , o_category, " | " , io_obj_type) as label ' +
                         'FROM' +
-                        ' image_object LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' image_object' +
+                        ' LEFT JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
@@ -1111,7 +1128,9 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(io_id) AS count, ' +
                         ' ok_key AS value, CONCAT(o_name, " | " , o_category, " | " , ok_key) as label ' +
                         'FROM' +
-                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' objects_key' +
+                        ' LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
@@ -1123,7 +1142,9 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(io_id) AS count, ' +
                         ' o_category AS value, o_category as label ' +
                         'FROM' +
-                        ' objects_key LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' objects_key' +
+                        ' LEFT JOIN image_object  ON image_object.io_obj_type=objects_key.ok_key' +
+                        '      AND image_object.io_detector=objects_key.ok_detector ' +
                         ' LEFT JOIN objects ON objects_key.o_id=objects.o_id ' +
                         ' GROUP BY value' +
                         ' ORDER BY label, value',
@@ -1648,8 +1669,8 @@ export class TourDocSqlMytbDbConfig {
                 'video.v_gesperrt': ':blocked_i:',
                 'video.v_date': ':datestart_dt:',
                 'video.v_meta_shortdesc': ':desc_txt:',
-                //'video.v_meta_shortdesc_md': ':desc_md_txt:',
-                //'video.v_meta_shortdesc_html': ':desc_html_txt:',
+                // 'video.v_meta_shortdesc_md': ':desc_md_txt:',
+                // 'video.v_meta_shortdesc_html': ':desc_html_txt:',
                 'video.v_gps_lon': ':geo_lon_s:',
                 'video.v_gps_lat': ':geo_lat_s:',
                 'video.v_gps_ele': ':data_tech_alt_max_i:',
@@ -2780,9 +2801,194 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
+    public static actionTagAssignConfig: ActionTagAssignConfigType = {
+        tables: {
+            'image': {
+                table: 'image',
+                idField: 'i_id',
+                references: {
+                    'track_id_is': {
+                        table: 'kategorie', idField: 'k_id', referenceField: 'k_id'
+                    },
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_id'
+                    }
+                }
+            },
+            'video': {
+                table: 'video',
+                idField: 'v_id',
+                references: {
+                    'track_id_is': {
+                        table: 'kategorie', idField: 'k_id', referenceField: 'k_id'
+                    },
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_id'
+                    }
+                }
+            },
+            'track': {
+                table: 'kategorie',
+                idField: 'k_id',
+                references: {
+                    'route_id_is': {
+                        table: 'tour', idField: 't_id', referenceField: 't_id'
+                    },
+                    'trip_id_is': {
+                        table: 'trip', idField: 'tr_id', referenceField: 'tr_id'
+                    },
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_id'
+                    }
+                }
+            },
+            'route': {
+                table: 'tour',
+                idField: 't_id',
+                references: {
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_id'
+                    }
+                }
+            },
+            'news': {
+                table: 'news',
+                idField: 'n_id',
+                references: {
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_id'
+                    }
+                }
+            },
+            'trip': {
+                table: 'trip',
+                idField: 'tr_id',
+                references: {
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_id'
+                    }
+                }
+            }
+        }
+    };
+
+    public static actionTagBlockConfig: ActionTagBlockConfigType = {
+        tables: {
+            'image': {
+                table: 'image', idField: 'i_id', blockField: 'i_gesperrt'
+            },
+            'video': {
+                table: 'video', idField: 'v_id', blockField: 'v_gesperrt'
+            },
+            'track': {
+                table: 'kategorie', idField: 'k_id', blockField: 'k_gesperrt'
+            },
+            'route': {
+                table: 'tour', idField: 't_id', blockField: 't_gesperrt'
+            },
+            'location': {
+                table: 'location', idField: 'l_id', blockField: 'l_gesperrt'
+            },
+            'trip': {
+                table: 'trip', idField: 'tr_id', blockField: 'tr_gesperrt'
+            },
+            'news': {
+                table: 'news', idField: 'n_id', blockField: 'n_gesperrt'
+            }
+        }
+    };
+
+    public static actionTagReplaceConfig: ActionTagReplaceConfigType = {
+        tables: {
+            'image': {
+                table: 'image',
+                idField: 'i_id',
+                referenced: [],
+                joins: [
+                    { table: 'image_object', referenceField: 'i_id' },
+                    { table: 'image_playlist', referenceField: 'i_id' },
+                    { table: 'image_keyword', referenceField: 'i_id' }
+                ]
+            },
+            'video': {
+                table: 'video',
+                idField: 'v_id',
+                referenced: [],
+                joins: [
+                    { table: 'video_object', referenceField: 'v_id' },
+                    { table: 'video_playlist', referenceField: 'v_id' },
+                    { table: 'video_keyword', referenceField: 'v_id' }
+                ]
+            },
+            'track': {
+                table: 'kategorie',
+                idField: 'k_id',
+                referenced: [
+                    { table: 'image', referenceField: 'k_id' },
+                    { table: 'tour', referenceField: 'k_id' },
+                    { table: 'video', referenceField: 'k_id' },
+                ],
+                joins: [
+                    { table: 'kategorie_keyword', referenceField: 'k_id' },
+                    { table: 'kategorie_person', referenceField: 'k_id' },
+                    { table: 'kategorie_tour', referenceField: 'k_id' }
+                ]
+            },
+            'route': {
+                table: 'tour',
+                idField: 't_id',
+                referenced: [
+                    { table: 'kategorie', referenceField: 't_id' },
+                ],
+                joins: [
+                    { table: 'kategorie_tour', referenceField: 't_id' },
+                    { table: 'tour_keyword', referenceField: 't_id' }
+                ]
+            },
+            'location': {
+                table: 'location',
+                idField: 'l_id',
+                referenced: [
+                    { table: 'image', referenceField: 'l_id' },
+                    { table: 'kategorie', referenceField: 'l_id' },
+                    { table: 'location', referenceField: 'l_parent_id' },
+                    { table: 'tour', referenceField: 'l_id' },
+                    { table: 'trip', referenceField: 'l_id' },
+                    { table: 'video', referenceField: 'l_id' }
+                ],
+                joins: []
+            },
+            'news': {
+                table: 'news',
+                idField: 'n_id',
+                referenced: [],
+                joins: []
+            },
+            'trip': {
+                table: 'trip',
+                idField: 'tr_id',
+                referenced: [
+                    { table: 'kategorie', referenceField: 'tr_id' }
+                ],
+                joins: []
+            }
+        }
+    };
 
     public getTableConfigForTableKey(table: string): TableConfig {
         return TourDocSqlMytbDbConfig.tableConfigs[table];
+    }
+
+    public getActionTagAssignConfig(): ActionTagAssignConfigType {
+        return TourDocSqlMytbDbConfig.actionTagAssignConfig;
+    }
+
+    public getActionTagBlockConfig(): ActionTagBlockConfigType {
+        return TourDocSqlMytbDbConfig.actionTagBlockConfig;
+    }
+
+    public getActionTagReplaceConfig(): ActionTagReplaceConfigType {
+        return TourDocSqlMytbDbConfig.actionTagReplaceConfig;
     }
 }
 

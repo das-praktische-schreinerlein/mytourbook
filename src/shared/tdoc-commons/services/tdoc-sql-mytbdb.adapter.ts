@@ -17,17 +17,29 @@ import {TourDocSqlMytbDbActionTagAdapter} from './tdoc-sql-mytbdb-actiontag.adap
 import {TourDocSqlMytbDbKeywordAdapter} from './tdoc-sql-mytbdb-keyword.adapter';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
+import {CommonDocSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
+import {CommonDocSqlActionTagReplaceAdapter} from './common-sql-actiontag-replace.adapter';
+import {CommonDocSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private actionTagAdapter: TourDocSqlMytbDbActionTagAdapter;
+    private actionTagAssignAdapter: CommonDocSqlActionTagAssignAdapter;
+    private actionTagBlockAdapter: CommonDocSqlActionTagBlockAdapter;
+    private actionTagReplaceAdapter: CommonDocSqlActionTagReplaceAdapter;
     private keywordsAdapter: TourDocSqlMytbDbKeywordAdapter;
-    private tableConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
+    private dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
     constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
         super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);
         this.actionTagAdapter = new TourDocSqlMytbDbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
         this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.sqlQueryBuilder);
         this.extendTableConfigs();
+        this.actionTagAssignAdapter = new CommonDocSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getActionTagAssignConfig());
+        this.actionTagBlockAdapter = new CommonDocSqlActionTagBlockAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getActionTagBlockConfig());
+        this.actionTagReplaceAdapter = new CommonDocSqlActionTagReplaceAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getActionTagReplaceConfig());
     }
 
     protected extendTableConfigs() {
@@ -39,7 +51,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     }
 
     protected getTableConfigForTableKey(table: string): TableConfig {
-        return this.tableConfig.getTableConfigForTableKey(table);
+        return this.dbModelConfig.getTableConfigForTableKey(table);
     }
 
     protected getDefaultFacets(): Facets {
@@ -63,7 +75,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         const types = params.where['type_txt'];
         if (types !== undefined && types.in !== undefined && types.in.length === 1) {
             const tabKey = types.in[0].toLowerCase();
-            if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+            if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
                 return tabKey;
             }
             return undefined;
@@ -72,7 +84,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         const ids = params.where['id'];
         if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
             const tabKey = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
-            if (this.tableConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+            if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
                 return tabKey;
             }
 
@@ -213,10 +225,12 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
             return this.actionTagAdapter.executeActionTagPersRate(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {
-            return this.actionTagAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
+            return this.actionTagBlockAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
+        } else if (actionTagForm.type === 'assign' && actionTagForm.key.startsWith('assign')) {
+            return this.actionTagAssignAdapter.executeActionTagAssign(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {
             actionTagForm.deletes = true;
-            return this.actionTagAdapter.executeActionTagReplace(table, id, actionTagForm, opts);
+            return this.actionTagReplaceAdapter.executeActionTagReplace(table, id, actionTagForm, opts);
         }
 
         return super._doActionTag(mapper, record, actionTagForm, opts);
