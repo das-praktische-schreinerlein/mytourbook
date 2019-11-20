@@ -44,6 +44,7 @@ import {TourDocPlaylistService} from './shared-tdoc/services/tdoc-playlist.servi
 import {environment} from '../environments/environment';
 import {TourDocObjectDetectionObjectKeyEditFormComponent} from './shared-tdoc/components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
 import {TourDocReplaceFormComponent} from './shared-tdoc/components/tdoc-replaceform/tdoc-replaceform.component';
+import {TourDocAssignFormComponent} from './shared-tdoc/components/tdoc-assignform/tdoc-assignform.component';
 
 registerLocaleData(localeDe);
 
@@ -66,7 +67,8 @@ export function getAngulartics2Providers(): any {
     ],
     entryComponents: [TourDocActionTagsComponent,
         TourDocObjectDetectionObjectKeyEditFormComponent,
-        TourDocReplaceFormComponent],
+        TourDocReplaceFormComponent,
+        TourDocAssignFormComponent],
     imports: [
         HttpClientModule,
         NgbModule.forRoot(),

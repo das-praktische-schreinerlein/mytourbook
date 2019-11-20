@@ -781,6 +781,56 @@
         "tdoc-multiactionheader": {
             "actionTags": [
                 {
+                    "key": "replace",
+                    "type": "replace",
+                    "name": "\uD83D\uDDD1 Replace",
+                    "multiRecordTag": true,
+                    "shortName": "&#128465",
+                    "payload": {
+                    },
+                    "showFilter": [
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "assign",
+                    "type": "assign",
+                    "name": "\uD83D\uDD89 Assign",
+                    "multiRecordTag": true,
+                    "shortName": "&#x1f589;",
+                    "payload": {
+                    },
+                    "showFilter": [
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "persRate_gesamt_reject",
                     "type": "tag",
                     "name": "\u274c Personal Gesamt Rejected",

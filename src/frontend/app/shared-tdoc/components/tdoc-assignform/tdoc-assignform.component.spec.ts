@@ -12,15 +12,15 @@ import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend
 import {Router} from '@angular/router';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
-import {TourDocReplaceFormComponent} from './tdoc-replaceform.component';
+import {TourDocAssignFormComponent} from './tdoc-assignform.component';
 
-describe('TourDocReplaceFormComponent', () => {
-    let component: TourDocReplaceFormComponent;
-    let fixture: ComponentFixture<TourDocReplaceFormComponent>;
+describe('TourDocAssignFormComponent', () => {
+    let component: TourDocAssignFormComponent;
+    let fixture: ComponentFixture<TourDocAssignFormComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocReplaceFormComponent],
+            declarations: [TourDocAssignFormComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot()],
@@ -37,7 +37,7 @@ describe('TourDocReplaceFormComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TourDocReplaceFormComponent);
+        fixture = TestBed.createComponent(TourDocAssignFormComponent);
         component = fixture.componentInstance;
         component.records = [TourDocDataServiceStub.defaultRecord()];
         fixture.detectChanges();
