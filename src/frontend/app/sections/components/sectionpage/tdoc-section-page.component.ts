@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {ToastrService} from 'ngx-toastr';
 import {TourDocSearchFormConverter} from '../../../shared-tdoc/services/tdoc-searchform-converter.service';
 import {LayoutService, LayoutSizeData} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
@@ -75,6 +74,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         TRIP: true,
         NEWS: true
     };
+
     availableToDoDashboardRows: TourDocSectionPageComponentDashboardRows = {
     };
     availableDoneDashboardRows: TourDocSectionPageComponentDashboardRows = {
@@ -93,13 +93,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             layoutService, appService);
     }
 
-    getFiltersForType(record: PDocRecord, type: string, sort?: string): any {
+    getFiltersForType(recordType: string, sort?: string): any {
         const filters = {
-            type: type
+            type: recordType
         };
 
-        filters['theme'] = record.theme;
-        if (type === 'IMAGE') {
+        filters['theme'] = this.pdoc.theme;
+        if (recordType === 'IMAGE') {
             filters['perPage'] = 6;
             if (this.layoutSize && this.layoutSize.width > 1300 && this.layoutSize.width < 1400) {
                 filters['perPage'] = 5;
@@ -115,7 +115,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             }
         }
 
-        if (type === 'NEWS') {
+        if (recordType === 'NEWS') {
             filters['perPage'] = 2;
             return filters;
         }
@@ -130,8 +130,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         return filters;
     }
 
-    getDashboardFiltersForType(record: PDocRecord, profile: string, type: string, sort?: string): any {
-        const filters = this.getFiltersForType(record, type, sort);
+    getDashboardFiltersForType(profile: string, recordType: string, sort?: string): any {
+        const filters = this.getFiltersForType(recordType, sort);
         switch (profile) {
             case 'noSubType':
                 filters['what'] = filters['what'] ? filters['what'] + ';' : '';
@@ -206,6 +206,47 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         }
 
         return filters;
+    }
+
+    getDashboardVisibilityForType(profile: string, recordType: string): boolean {
+        switch (profile) {
+            case 'noSubType':
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'TRIP'
+                    && recordType !== 'NEWS';
+            case 'noLocation':
+                return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'TRIP' || recordType === 'LOCATION';
+            case 'noRoute':
+                return recordType === 'TRACK';
+            case 'unrated':
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+            case 'todoKeywords':
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'LOCATION'
+                    && recordType !== 'TRIP' && recordType !== 'NEWS';
+            case 'todoDesc':
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO';
+            case 'doublettes':
+                return recordType !== 'ODIMGOBJECT';
+            case 'noCoordinates':
+                return recordType === 'LOCATION';
+            case 'objectDetectionCorrectionNeeded':
+                return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
+            case 'objectDetectionDetailNeeded':
+                return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
+            case 'objectDetectionSuggested':
+                return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
+            case 'objectDetectionError':
+                return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
+            case 'objectDetectionOpen':
+                return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
+            case 'rated':
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+            case 'rejected':
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+            case 'objectDetectionDone':
+                return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
+        }
+
+        return false;
     }
 
     onSearchDoc(tdocSearchForm: TourDocSearchForm) {
