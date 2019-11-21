@@ -152,6 +152,18 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'doublettes:doublettes';
                 break;
+            case 'noFavoriteChildren':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] += 'noFavoriteChildren:noFavoriteChildren';
+                break;
+            case 'unRatedChildren':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] += 'unRatedChildren:unRatedChildren';
+                break;
+            case 'noMainFavoriteChildren':
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] += 'noMainFavoriteChildren:noMainFavoriteChildren';
+                break;
             case 'noCoordinates':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'noCoordinates:noCoordinates';
@@ -226,6 +238,12 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO';
             case 'doublettes':
                 return recordType !== 'ODIMGOBJECT';
+            case 'noFavoriteChildren':
+                return recordType === 'TRACK';
+            case 'unRatedChildren':
+                return recordType === 'TRACK';
+            case 'noMainFavoriteChildren':
+                return recordType === 'TRACK' || recordType === 'ROUTE';
             case 'noCoordinates':
                 return recordType === 'LOCATION';
             case 'objectDetectionCorrectionNeeded':

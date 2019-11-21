@@ -1142,11 +1142,14 @@
                 "todoDesc": true,
                 "todoKeywords": true,
                 "doublettes": true,
+                "unRatedChildren": true,
+                "noMainFavoriteChildren": true,
                 "objectDetectionCorrectionNeeded": true,
                 "objectDetectionDetailNeeded": true,
                 "objectDetectionSuggested": true,
                 "objectDetectionError": true,
-                "objectDetectionOpen": true
+                "objectDetectionOpen": true,
+                "noFavoriteChildren": true
             },
             "availableDoneDashboardRows": {
                 "rated": true,

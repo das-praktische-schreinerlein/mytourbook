@@ -220,6 +220,9 @@ export class TourDocSqlMytbExportDbConfig {
             },
             filterMapping: {
                 doublettes: '"dummy"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'kategorie_full.k_id',
                 loc_id_i: 'kategorie_full.l_id',
@@ -492,6 +495,9 @@ export class TourDocSqlMytbExportDbConfig {
             },
             filterMapping: {
                 doublettes: '"dummy"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
@@ -804,6 +810,9 @@ export class TourDocSqlMytbExportDbConfig {
             },
             filterMapping: {
                 doublettes: '"dummy"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
@@ -1016,6 +1025,9 @@ export class TourDocSqlMytbExportDbConfig {
             },
             filterMapping: {
                 doublettes: '"dummy"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
@@ -1183,6 +1195,9 @@ export class TourDocSqlMytbExportDbConfig {
             },
             filterMapping: {
                 doublettes: '"dummy"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
@@ -1360,6 +1375,9 @@ export class TourDocSqlMytbExportDbConfig {
             },
             filterMapping: {
                 doublettes: '"dummy"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',

@@ -42,6 +42,30 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: []
                 },
                 {
+                    from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
+                        '   (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
+                        '       (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%favorites%"))' +
+                        '  AND k_id IN (SELECT DISTINCT k_ID FROM image)) noFavoriteChildren ON kategorie.k_id=noFavoriteChildren.id',
+                    triggerParams: ['noFavoriteChildren'],
+                    groupByFields: []
+                },
+                {
+                    from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id IN' +
+                        '      (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) unRatedChildren' +
+                        '   ON kategorie.k_id=unRatedChildren.id',
+                    triggerParams: ['unRatedChildren'],
+                    groupByFields: []
+                },
+                {
+                    from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
+                        '     (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
+                        '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kat_favorites%"))' +
+                        '      AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
+                        ' ON kategorie.k_id=noMainFavoriteChildren.id',
+                    triggerParams: ['noMainFavoriteChildren'],
+                    groupByFields: []
+                },
+                {
                     from: ' ',
                     triggerParams: ['id', 'loadTrack'],
                     groupByFields: ['k_gpstracks_gpx_source']
@@ -268,6 +292,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"noFavoriteChildren"',
+                unRatedChildren: '"unRatedChildren"',
+                noMainFavoriteChildren: '"noMainFavoriteChildren"',
                 noCoordinates: '"dummy"',
                 id: 'kategorie.k_id',
                 loc_id_i: 'kategorie.l_id',
@@ -781,6 +808,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
@@ -1254,6 +1284,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 id: 'image_object.io_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
@@ -1647,6 +1680,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'video.v_id',
                 image_id_is: '"dummy"',
@@ -1778,6 +1814,14 @@ export class TourDocSqlMytbDbConfig {
                         '             ) doublettes' +
                         '             ON tour.t_id=doublettes.id',
                     triggerParams: ['doublettes'],
+                    groupByFields: []
+                },
+                {
+                    from: 'INNER JOIN (SELECT DISTINCT t_id AS id FROM tour WHERE t_id IN ' +
+                        '    (SELECT DISTINCT t_id FROM kategorie WHERE t_id IS NOT NULL UNION SELECT DISTINCT t_id FROM kategorie_tour) ' +
+                        '   AND t_name NOT IN ("OFFEN", "Keine Tour") AND k_id IS NULL) noMainFavoriteChildren' +
+                        ' ON tour.t_id=noMainFavoriteChildren.id',
+                    triggerParams: ['noMainFavoriteChildren'],
                     groupByFields: []
                 },
                 {
@@ -2042,6 +2086,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"noMainFavoriteChildren"',
                 noCoordinates: '"dummy"',
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
@@ -2344,6 +2391,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"noCoordinates"',
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
@@ -2567,6 +2617,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
@@ -2752,6 +2805,9 @@ export class TourDocSqlMytbDbConfig {
             },
             filterMapping: {
                 doublettes: '"doublettes"',
+                noFavoriteChildren: '"dummy"',
+                unRatedChildren: '"dummy"',
+                noMainFavoriteChildren: '"dummy"',
                 noCoordinates: '"dummy"',
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
