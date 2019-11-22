@@ -17,6 +17,7 @@ import {CommonDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
+import {TourDocMapCodePipe} from '../../pipes/tdoc-mapcode.pipe';
 
 describe('TourDocListItemComponent', () => {
     let component: TourDocListItemComponent;
@@ -24,7 +25,7 @@ describe('TourDocListItemComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocListItemComponent, TourDocDateFormatPipe],
+            declarations: [TourDocListItemComponent, TourDocDateFormatPipe, TourDocMapCodePipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,

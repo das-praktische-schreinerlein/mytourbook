@@ -3,6 +3,7 @@ import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchf
 import {TourDocSearchResult} from '../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
+import {TourDocObjectDetectionImageObjectRecord} from '../shared/tdoc-commons/model/records/tdocobjectdetectectionimageobject-record';
 
 @Injectable()
 export class TourDocDataServiceStub {
@@ -12,7 +13,9 @@ export class TourDocDataServiceStub {
     }
 
     static defaultRecord(): TourDocRecord {
-        return new TourDocRecord({id: '1', name: 'Test'});
+        const record = new TourDocRecord({id: '1', name: 'Test'});
+        record['tdocodimageobjects'] = [new TourDocObjectDetectionImageObjectRecord({})];
+        return record;
     }
 
     cloneSanitizedSearchForm(values: TourDocSearchForm): TourDocSearchForm {

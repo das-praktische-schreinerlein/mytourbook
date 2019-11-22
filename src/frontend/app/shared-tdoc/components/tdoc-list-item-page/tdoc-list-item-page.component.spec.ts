@@ -23,6 +23,7 @@ import {TourDocSearchFormConverter} from '../../services/tdoc-searchform-convert
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
+import {TourDocMapCodePipe} from '../../pipes/tdoc-mapcode.pipe';
 
 describe('TourDocListItemPageComponent', () => {
     let component: TourDocListItemPageComponent;
@@ -30,7 +31,7 @@ describe('TourDocListItemPageComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocListItemPageComponent, TourDocDateFormatPipe],
+            declarations: [TourDocListItemPageComponent, TourDocDateFormatPipe, TourDocMapCodePipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 PlatformService,

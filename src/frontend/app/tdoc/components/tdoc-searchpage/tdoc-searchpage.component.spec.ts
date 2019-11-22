@@ -30,6 +30,8 @@ import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.serv
 import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
 import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
 
 describe('TourDocSearchpageComponent', () => {
     let component: TourDocSearchpageComponent;
@@ -45,6 +47,8 @@ describe('TourDocSearchpageComponent', () => {
                 { provide: TourDocDataService, useValue: new TourDocDataServiceStub() },
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
+                NgbModal,
+                NgbModalStack,
                 CommonRoutingService,
                 TourDocSearchFormConverter,
                 SearchFormUtils,

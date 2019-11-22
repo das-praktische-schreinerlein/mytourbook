@@ -16,6 +16,7 @@ import {TourDocDateFormatPipe} from '../../pipes/tdoc-dateformat.pipe';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {CommonDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/cdoc-dataservice-stubs';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
+import {TourDocMapCodePipe} from '../../pipes/tdoc-mapcode.pipe';
 
 describe('TourDocListItemFlatComponent', () => {
     let component: TourDocListItemFlatComponent;
@@ -23,7 +24,7 @@ describe('TourDocListItemFlatComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocListItemFlatComponent, TourDocDateFormatPipe],
+            declarations: [TourDocListItemFlatComponent, TourDocDateFormatPipe, TourDocMapCodePipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
