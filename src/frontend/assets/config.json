@@ -1148,12 +1148,12 @@
                 "objectDetectionDetailNeeded": true,
                 "objectDetectionSuggested": true,
                 "objectDetectionError": true,
-                "objectDetectionOpen": true,
-                "noFavoriteChildren": true
+                "objectDetectionOpen": true
             },
             "availableDoneDashboardRows": {
                 "rated": true,
                 "rejected": true,
+                "noFavoriteChildren": true,
                 "objectDetectionDone": true
             }
         },
