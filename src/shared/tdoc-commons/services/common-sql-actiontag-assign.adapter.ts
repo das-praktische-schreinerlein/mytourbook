@@ -95,7 +95,7 @@ export class CommonDocSqlActionTagAssignAdapter {
         let checkNewValueSql = undefined;
         const updateSqls: string[] = [];
         if (newIdSetNull) {
-            checkNewValueSql = 'SELECT "null" AS id';
+            checkNewValueSql = 'SELECT null AS id';
             updateSqls.push(
                 'UPDATE ' + assignConfig.table +
                 ' SET ' + referenceConfig.referenceField + '=null' +

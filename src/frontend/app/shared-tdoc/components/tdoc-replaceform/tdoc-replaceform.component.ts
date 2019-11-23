@@ -113,6 +113,13 @@ export class TourDocReplaceFormComponent
             keyValues.map(value => {
                 value[1] = value[5];
             });
+            const values = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                keyValues, false, [], false);
+            values.map(value => {
+                value.name = value.name + ' - ID: ' + value.id;
+            });
+
+            return values;
         }
 
         return super.generateSelectIdValues(facetName, keyValues);

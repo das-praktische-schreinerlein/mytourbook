@@ -90,12 +90,12 @@ export class CommonDocSqlActionTagReplaceAdapter {
         let checkNewValueSql = undefined;
         const updateSqls: string[] = [];
         if (newIdSetNull) {
-            checkNewValueSql = 'SELECT "null" AS id';
+            checkNewValueSql = 'SELECT null AS id';
             for (const referenceConfig of referenceConfigs) {
                 updateSqls.push(
                     'UPDATE ' + referenceConfig.table +
                     ' SET ' + referenceConfig.referenceField + '=null' +
-                    ' WHERE ' + replaceConfig.idField + '="' + id + '"',
+                    ' WHERE ' + referenceConfig.referenceField + '="' + id + '"',
                 );
             }
             for (const joinConfig of joinConfigs) {
@@ -112,14 +112,14 @@ export class CommonDocSqlActionTagReplaceAdapter {
                 updateSqls.push(
                     'UPDATE ' + referenceConfig.table +
                     ' SET ' + referenceConfig.referenceField + '="' + newId + '"' +
-                    ' WHERE ' + replaceConfig.idField + '="' + id + '"',
+                    ' WHERE ' + referenceConfig.referenceField + '="' + id + '"',
                 );
             }
             for (const joinConfig of joinConfigs) {
                 updateSqls.push(
                     'UPDATE ' + joinConfig.table +
                     ' SET ' + joinConfig.referenceField + '="' + newId + '"' +
-                    ' WHERE ' + replaceConfig.idField + '="' + id + '"',
+                    ' WHERE ' + joinConfig.referenceField + '="' + id + '"',
                 );
             }
         }
