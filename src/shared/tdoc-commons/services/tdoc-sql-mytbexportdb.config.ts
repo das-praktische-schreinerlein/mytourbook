@@ -2,7 +2,7 @@ import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
 export class TourDocSqlMytbExportDbConfig {
-    public static tableConfigs: TableConfigs = {
+    public static readonly tableConfigs: TableConfigs = {
         'track': {
             key: 'track',
             tableName: 'kategorie_full',

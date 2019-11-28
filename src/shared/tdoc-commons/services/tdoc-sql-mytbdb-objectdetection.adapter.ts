@@ -17,9 +17,9 @@ import {
 
 export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDataStore {
 
-    private config: any;
-    private knex: any;
-    private sqlQueryBuilder: SqlQueryBuilder;
+    private readonly config: any;
+    private readonly knex: any;
+    private readonly sqlQueryBuilder: SqlQueryBuilder;
 
     constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder) {
         this.config = config;

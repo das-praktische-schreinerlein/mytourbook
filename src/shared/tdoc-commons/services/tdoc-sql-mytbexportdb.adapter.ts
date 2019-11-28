@@ -10,7 +10,7 @@ import {TourDocSqlMytbExportDbConfig} from './tdoc-sql-mytbexportdb.config';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
 
 export class TourDocSqlMytbExportDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
-    private tableConfig: TourDocSqlMytbExportDbConfig = new TourDocSqlMytbExportDbConfig();
+    private readonly tableConfig: TourDocSqlMytbExportDbConfig = new TourDocSqlMytbExportDbConfig();
 
     constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
         super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);

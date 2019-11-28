@@ -1,9 +1,5 @@
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
-import {
-    IdValidationRule,
-    KeywordValidationRule,
-    NumberValidationRule
-} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
@@ -11,13 +7,12 @@ import {ObjectDetectionState} from '@dps/mycms-commons/dist/commons/model/object
 
 export class TourDocSqlMytbDbActionTagAdapter {
 
-    private keywordValidationRule = new KeywordValidationRule(true);
-    private rateValidationRule = new NumberValidationRule(true, -1, 15, 0);
-    private precisionValidationRule = new NumberValidationRule(true, 0, 1, 1);
-    private idValidator = new IdValidationRule(true);
-    private config: any;
-    private knex: any;
-    private sqlQueryBuilder: SqlQueryBuilder;
+    private readonly keywordValidationRule = new KeywordValidationRule(true);
+    private readonly rateValidationRule = new NumberValidationRule(true, -1, 15, 0);
+    private readonly precisionValidationRule = new NumberValidationRule(true, 0, 1, 1);
+    private readonly config: any;
+    private readonly knex: any;
+    private readonly sqlQueryBuilder: SqlQueryBuilder;
 
     constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder) {
         this.config = config;
