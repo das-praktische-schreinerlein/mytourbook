@@ -28,6 +28,8 @@ import * as Promise_serial from 'promise-serial';
 import {CommonDocAssignFormComponentResultType} from '../components/cdoc-assignform/cdoc-assignform.component';
 import {TourDocAssignFormComponent} from '../components/tdoc-assignform/tdoc-assignform.component';
 import {CommonDocReplaceFormComponentResultType} from '../components/cdoc-replaceform/cdoc-replaceform.component';
+import {CommonDocKeywordTagFormComponentResultType} from '../components/cdoc-keywordtagform/cdoc-keywordtagform.component';
+import {TourDocKeywordTagFormComponent} from '../components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 
 @Injectable()
 export class TourDocActionTagService extends CommonDocActionTagService<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
@@ -53,6 +55,8 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
             return this.processActionTagEventReplace(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'assign') {
             return this.processActionTagEventAssign(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'keyword') {
+            return this.processActionTagEventKeywordTag(actionTagEvent, actionTagEventEmitter);
         } else {
             return super.processActionTagEventUnknown(actionTagEvent, actionTagEventEmitter);
         }
@@ -65,6 +69,8 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
             return this.processMultiActionTagEventReplace(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'assign') {
             return this.processMultiActionTagEventAssign(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'keyword') {
+            return this.processMultiActionTagEventKeywordTag(actionTagEvent, actionTagEventEmitter);
         } else {
             return super.processActionMultiRecordTagEventUnknown(actionTagEvent, actionTagEventEmitter);
         }
@@ -142,6 +148,32 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
         const promise = this.processMultiActionFormTagEvent(multiActionTagEvent, multiActionTagEventEmitter, formResultObservable);
 
         const modalRef = this.modalService.open(TourDocAssignFormComponent);
+        modalRef.componentInstance.records = multiActionTagEvent.records;
+        modalRef.componentInstance.resultObservable = formResultObservable;
+
+        return promise;
+    }
+
+    protected processActionTagEventKeywordTag(actionTagEvent: ActionTagEvent,
+                                          actionTagEventEmitter: EventEmitter<ActionTagEvent>): Promise<TourDocRecord> {
+        return  new Promise<TourDocRecord>((resolve, reject) => {
+            this.processMultiActionTagEventKeywordTag(CommonDocActionTagService.actionTagEventToMultiActionTagEvent(actionTagEvent),
+                CommonDocActionTagService.actionTagEventEmitterToMultiActionTagEventEmitter(actionTagEventEmitter)).then(value => {
+                resolve(value !== undefined && value.length > 0 ? value[0] : undefined);
+            }).catch(reason => {
+                reject(reason);
+            });
+        });
+    }
+
+    protected processMultiActionTagEventKeywordTag(multiActionTagEvent: MultiRecordActionTagEvent,
+                                               multiActionTagEventEmitter: EventEmitter<MultiRecordActionTagEvent>):
+        Promise<TourDocRecord[]> {
+        const formResultObservable: Subject<CommonDocKeywordTagFormComponentResultType> =
+            new Subject<CommonDocKeywordTagFormComponentResultType>();
+        const promise = this.processMultiActionFormTagEvent(multiActionTagEvent, multiActionTagEventEmitter, formResultObservable);
+
+        const modalRef = this.modalService.open(TourDocKeywordTagFormComponent);
         modalRef.componentInstance.records = multiActionTagEvent.records;
         modalRef.componentInstance.resultObservable = formResultObservable;
 

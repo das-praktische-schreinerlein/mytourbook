@@ -45,6 +45,7 @@ import {environment} from '../environments/environment';
 import {TourDocObjectDetectionObjectKeyEditFormComponent} from './shared-tdoc/components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
 import {TourDocReplaceFormComponent} from './shared-tdoc/components/tdoc-replaceform/tdoc-replaceform.component';
 import {TourDocAssignFormComponent} from './shared-tdoc/components/tdoc-assignform/tdoc-assignform.component';
+import {TourDocKeywordTagFormComponent} from './shared-tdoc/components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 
 registerLocaleData(localeDe);
 
@@ -68,7 +69,8 @@ export function getAngulartics2Providers(): any {
     entryComponents: [TourDocActionTagsComponent,
         TourDocObjectDetectionObjectKeyEditFormComponent,
         TourDocReplaceFormComponent,
-        TourDocAssignFormComponent],
+        TourDocAssignFormComponent,
+        TourDocKeywordTagFormComponent],
     imports: [
         HttpClientModule,
         NgbModule.forRoot(),

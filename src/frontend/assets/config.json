@@ -506,6 +506,35 @@
                     ]
                 },
                 {
+                    "key": "keyword",
+                    "type": "keyword",
+                    "name": "\uD83D\uDD89 Keyword",
+                    "shortName": "&#x1f589",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "local_album_current",
                     "type": "albumtag",
                     "name": "\u2764 local Album",
@@ -780,6 +809,31 @@
         },
         "tdoc-multiactionheader": {
             "actionTags": [
+                {
+                    "key": "keyword",
+                    "type": "keyword",
+                    "name": "\uD83D\uDD89 Keyword",
+                    "multiRecordTag": true,
+                    "shortName": "&#x1f589",
+                    "payload": {
+                    },
+                    "showFilter": [
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
                 {
                     "key": "replace",
                     "type": "replace",

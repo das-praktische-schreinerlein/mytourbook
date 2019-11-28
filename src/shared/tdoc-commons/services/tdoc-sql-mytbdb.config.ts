@@ -4,12 +4,13 @@ import {TourDocSqlUtils} from './tdoc-sql.utils';
 import {ActionTagReplaceConfigType} from './common-sql-actiontag-replace.adapter';
 import {ActionTagBlockConfigType} from './common-sql-actiontag-block.adapter';
 import {ActionTagAssignConfigType} from './common-sql-actiontag-assign.adapter';
+import {KeywordModelConfigType} from './common-sql-keyword.adapter';
 
 export class TourDocSqlMytbDbConfig {
-    public static personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
-    public static detectionOkStates = ['RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
+    public static readonly personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
+    public static readonly detectionOkStates = ['RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
         'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'];
-    public static tableConfigs: TableConfigs = {
+    public static readonly tableConfigs: TableConfigs = {
         'track': {
             key: 'track',
             tableName: 'kategorie',
@@ -2857,7 +2858,30 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
-    public static actionTagAssignConfig: ActionTagAssignConfigType = {
+    public static readonly keywordModelConfigType: KeywordModelConfigType = {
+        table: 'keyword',
+        idField: 'kw_id',
+        nameField: 'kw_name',
+        joins: {
+            'image': {
+                table: 'image', joinTable: 'image_keyword', referenceField: 'i_id'
+            },
+            'video': {
+                table: 'video', joinTable: 'video_keyword', referenceField: 'v_id'
+            },
+            'track': {
+                table: 'kategorie', joinTable: 'kategorie_keyword', referenceField: 'k_id'
+            },
+            'route': {
+                table: 'tour', joinTable: 'tour_keyword', referenceField: 't_id'
+            },
+            'location': {
+                table: 'location', joinTable: 'location_keyword', referenceField: 'l_id'
+            }
+        }
+    };
+
+    public static readonly actionTagAssignConfig: ActionTagAssignConfigType = {
         tables: {
             'image': {
                 table: 'image',
@@ -2928,7 +2952,7 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
-    public static actionTagBlockConfig: ActionTagBlockConfigType = {
+    public static readonly actionTagBlockConfig: ActionTagBlockConfigType = {
         tables: {
             'image': {
                 table: 'image', idField: 'i_id', blockField: 'i_gesperrt'
@@ -2954,7 +2978,7 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
-    public static actionTagReplaceConfig: ActionTagReplaceConfigType = {
+    public static readonly actionTagReplaceConfig: ActionTagReplaceConfigType = {
         tables: {
             'image': {
                 table: 'image',
@@ -3033,6 +3057,10 @@ export class TourDocSqlMytbDbConfig {
 
     public getTableConfigForTableKey(table: string): TableConfig {
         return TourDocSqlMytbDbConfig.tableConfigs[table];
+    }
+
+    public getKeywordModelConfigFor(): KeywordModelConfigType {
+        return TourDocSqlMytbDbConfig.keywordModelConfigType;
     }
 
     public getActionTagAssignConfig(): ActionTagAssignConfigType {

@@ -20,26 +20,34 @@ import {TourDocSqlUtils} from './tdoc-sql.utils';
 import {CommonDocSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
 import {CommonDocSqlActionTagReplaceAdapter} from './common-sql-actiontag-replace.adapter';
 import {CommonDocSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
+import {CommonSqlKeywordAdapter} from './common-sql-keyword.adapter';
+import {CommonDocSqlActionTagKeywordAdapter} from './common-sql-actiontag-keyword.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
-    private actionTagAdapter: TourDocSqlMytbDbActionTagAdapter;
-    private actionTagAssignAdapter: CommonDocSqlActionTagAssignAdapter;
-    private actionTagBlockAdapter: CommonDocSqlActionTagBlockAdapter;
-    private actionTagReplaceAdapter: CommonDocSqlActionTagReplaceAdapter;
-    private keywordsAdapter: TourDocSqlMytbDbKeywordAdapter;
-    private dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
+    private readonly actionTagAdapter: TourDocSqlMytbDbActionTagAdapter;
+    private readonly actionTagAssignAdapter: CommonDocSqlActionTagAssignAdapter;
+    private readonly actionTagBlockAdapter: CommonDocSqlActionTagBlockAdapter;
+    private readonly actionTagReplaceAdapter: CommonDocSqlActionTagReplaceAdapter;
+    private readonly actionTagKeywordAdapter: CommonDocSqlActionTagKeywordAdapter;
+    private readonly keywordsAdapter: TourDocSqlMytbDbKeywordAdapter;
+    private readonly commonKeywordAdapter: CommonSqlKeywordAdapter;
+    private readonly dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
     constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
         super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);
         this.actionTagAdapter = new TourDocSqlMytbDbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
-        this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.sqlQueryBuilder);
         this.extendTableConfigs();
+        this.commonKeywordAdapter = new CommonSqlKeywordAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getKeywordModelConfigFor());
+        this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.commonKeywordAdapter);
         this.actionTagAssignAdapter = new CommonDocSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagAssignConfig());
         this.actionTagBlockAdapter = new CommonDocSqlActionTagBlockAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagBlockConfig());
         this.actionTagReplaceAdapter = new CommonDocSqlActionTagReplaceAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagReplaceConfig());
+        this.actionTagKeywordAdapter = new CommonDocSqlActionTagKeywordAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.commonKeywordAdapter);
     }
 
     protected extendTableConfigs() {
@@ -144,7 +152,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 const promises = [];
                 promises.push(this.keywordsAdapter.setTrackKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(dbresults => {
+                return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('setTrackKeywords failed:', reason);
@@ -156,7 +164,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 const promises = [];
                 promises.push(this.keywordsAdapter.setImageKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(dbresults => {
+                return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('setImageKeywords failed:', reason);
@@ -168,7 +176,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 const promises = [];
                 promises.push(this.keywordsAdapter.setVideoKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(dbresults => {
+                return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('setVideoKeywords failed:', reason);
@@ -180,7 +188,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 const promises = [];
                 promises.push(this.keywordsAdapter.setRouteKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(dbresults => {
+                return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('setRouteKeywords failed:', reason);
@@ -192,7 +200,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 const promises = [];
                 promises.push(this.keywordsAdapter.setLocationKeywords(dbId, props.keywords, opts));
 
-                return Promise.all(promises).then(dbresults => {
+                return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('setLocationKeywords failed:', reason);
@@ -228,6 +236,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return this.actionTagBlockAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'assign' && actionTagForm.key.startsWith('assign')) {
             return this.actionTagAssignAdapter.executeActionTagAssign(table, id, actionTagForm, opts);
+        } else if (actionTagForm.type === 'keyword' && actionTagForm.key.startsWith('keyword')) {
+            return this.actionTagKeywordAdapter.executeActionTagKeyword(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {
             actionTagForm.deletes = true;
             return this.actionTagReplaceAdapter.executeActionTagReplace(table, id, actionTagForm, opts);
