@@ -110,7 +110,7 @@ export class CommonSqlKeywordAdapter {
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {
-            sqlBuilder.raw(deleteNotUsedKeywordSql).then(dbresults => {
+            sqlBuilder.raw(deleteNotUsedKeywordSql).then(() => {
                 return sqlBuilder.raw(insertNewKeywordsSql);
             }).then(insertResults => {
                 return sqlBuilder.raw(insertNewKeywordJoinSql);
@@ -136,6 +136,52 @@ export class CommonSqlKeywordAdapter {
             return utils.reject('setGenericKeywords: ' + table + ' - table not valid');
         }
 
-        return utils.reject('unsetGenericKeywords: ' + table + ' - not implemented yet');
+        const nameField = this.keywordModelConfig.nameField;
+        const idField = this.keywordModelConfig.idField;
+        const joinTable = this.keywordModelConfig.joins[table].joinTable;
+        const joinBaseIdField = this.keywordModelConfig.joins[table].referenceField;
+        const newKeywords = StringUtils.uniqueKeywords(keywords).join(',');
+        let deleteNotUsedKeywordSql;
+        if (this.knex.client['config']['client'] !== 'mysql') {
+            const keywordSplit = ' WITH split(word, str, hascomma) AS ( ' +
+                '    VALUES("", "' + newKeywords.replace(/[ \\"']/g, '') + '", 1) ' +
+                '    UNION ALL SELECT ' +
+                '    substr(str, 0, ' +
+                '        case when instr(str, ",") ' +
+                '        then instr(str, ",") ' +
+                '        else length(str)+1 end), ' +
+                '    ltrim(substr(str, instr(str, ",")), ","), ' +
+                '    instr(str, ",") ' +
+                '    FROM split ' +
+                '    WHERE hascomma ' +
+                '  ) ' +
+                '  SELECT trim(word) AS ' + nameField + ' FROM split WHERE word!="" ';
+
+            deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable +
+                ' WHERE ' + joinBaseIdField + ' = ' + dbId +
+                '     AND ' + idField + ' IN ' +
+                '         SELECT ' + idField + ' FROM keyword kkw1 WHERE ' + nameField + ' IN ( ' + keywordSplit + '); ';
+        } else {
+            const keywordSplit = ' SELECT ' +
+                '"' + newKeywords.replace(/[ \\"']/g, '').split(',').join('" AS ' + nameField +
+                    ' UNION ALL SELECT "') + '" AS ' + nameField + ' ';
+
+            deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable +
+                ' WHERE ' + joinBaseIdField + ' = ' + dbId +
+                '     AND ' + idField + ' IN ' +
+                '         SELECT ' + idField + ' FROM keyword kkw1 WHERE ' + nameField + ' IN ( ' + keywordSplit + '); ';
+        }
+
+        const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
+        const result = new Promise((resolve, reject) => {
+            sqlBuilder.raw(deleteNotUsedKeywordSql).then(() => {
+            }).then(insertResults => {
+                return resolve(true);
+            }).catch(function errorPlaylist(reason) {
+                return reject(reason);
+            });
+        });
+
+        return result;
     }
 }

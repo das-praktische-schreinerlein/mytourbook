@@ -134,7 +134,7 @@ export class CommonDocSqlActionTagAssignAdapter {
                     });
                 }
                 return Promise_serial(updateSqlQueryPromises, {parallelize: 1});
-            }).then(dbresults => {
+            }).then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag assign ' + table + ' failed:', reason);

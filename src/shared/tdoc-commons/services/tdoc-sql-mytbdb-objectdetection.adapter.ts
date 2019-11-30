@@ -198,7 +198,7 @@ export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDa
             ' "' + this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionRequest.state) + '",' +
             ' "' + detector + '")';
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(dbresults => {
+            sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
@@ -224,7 +224,7 @@ export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDa
             ' "' + this.sqlQueryBuilder.sanitizeSqlFilterValue(newState) + '",' +
             ' "' + detector + '")';
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(dbresults => {
+            sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionError delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
@@ -239,9 +239,9 @@ export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDa
             ' SELECT "Default", "Default", "Default", "Default" FROM dual ' +
             '  WHERE NOT EXISTS (SELECT 1 FROM objects WHERE o_key="Default")';
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql)).then(dbresults => {
+            sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql)).then(() => {
                 return sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql));
-            }).then(dbresults => {
+            }).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest insert default-object failed:', reason);
@@ -277,9 +277,9 @@ export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDa
             ' "' + detector + '", "' + detailValues.join('", "') + '")';
         const sqlBuilder = this.knex;
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertObjectKeySql)).then(dbresults => {
+            sqlBuilder.raw(this.transformToSqlDialect(insertObjectKeySql)).then(() => {
                 return sqlBuilder.raw(this.transformToSqlDialect(insertImageObject));
-            }).then(dbresults => {
+            }).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
@@ -299,7 +299,7 @@ export class TourDocSqlMytbDbObjectDetectionAdapter implements ObjectDetectionDa
             ' VALUES ("' + tableConfig.id + '",' +
             ' "' + ObjectDetectionState.RUNNING_NO_SUGGESTION + '",' +
             ' "' + detector + '")';
-        return sqlBuilder.raw(this.transformToSqlDialect(deleteDummySql)).then(dbresults => {
+        return sqlBuilder.raw(this.transformToSqlDialect(deleteDummySql)).then(() => {
             return sqlBuilder.raw(this.transformToSqlDialect(insertImageObject));
         });
     }

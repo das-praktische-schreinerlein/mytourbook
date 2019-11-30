@@ -148,9 +148,9 @@ export class CommonDocSqlActionTagReplaceAdapter {
                     });
                 }
                 return Promise_serial(updateSqlQueryPromises, {parallelize: 1});
-            }).then(dbresults => {
+            }).then(() => {
                 return sqlBuilder.raw(deleteSql);
-            }).then(dbresults => {
+            }).then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag replace ' + table + ' failed:', reason);

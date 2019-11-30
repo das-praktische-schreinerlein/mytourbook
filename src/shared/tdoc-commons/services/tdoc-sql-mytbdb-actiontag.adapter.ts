@@ -89,9 +89,9 @@ export class TourDocSqlMytbDbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
         const result = new Promise((resolve, reject) => {
-            rawDelete.then(dbresults => {
+            rawDelete.then(() => {
                 if (actionTagForm.payload.set) {
-                    return sqlBuilder.raw(insertSql).then(dbResult => {
+                    return sqlBuilder.raw(insertSql).then(() => {
                         return sqlBuilder.raw(updateSql);
                     }).catch(function errorPlaylist(reason) {
                         console.error('_doActionTag update ' + baseTableName + ' failed:', reason);
@@ -100,7 +100,7 @@ export class TourDocSqlMytbDbActionTagAdapter {
                 }
 
                 return utils.resolve(true);
-            }).then(dbresults => {
+            }).then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag delete/insert ' + joinTableName + ' failed:', reason);
@@ -180,13 +180,13 @@ export class TourDocSqlMytbDbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawDelete = sqlBuilder.raw(deleteSql);
         const result = new Promise((resolve, reject) => {
-            rawDelete.then(dbresults => {
+            rawDelete.then(() => {
                 if (actionTagForm.payload.set) {
                     return sqlBuilder.raw(insertSql);
                 }
 
                 return utils.resolve(true);
-            }).then(dbresults => {
+            }).then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag delete/insert ' + joinTableName + ' failed:', reason);
@@ -263,7 +263,7 @@ export class TourDocSqlMytbDbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawUpdate = sqlBuilder.raw(updateSql);
         const result = new Promise((resolve, reject) => {
-            rawUpdate.then(dbresults => {
+            rawUpdate.then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag update ' + baseTableName + ' persRate failed:', reason);
@@ -308,7 +308,7 @@ export class TourDocSqlMytbDbActionTagAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawUpdate = sqlBuilder.raw(updateSql);
         const result = new Promise((resolve, reject) => {
-            rawUpdate.then(dbresults => {
+            rawUpdate.then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag update ' + tableName + ' odobjectstate failed:', reason);
@@ -418,22 +418,22 @@ export class TourDocSqlMytbDbActionTagAdapter {
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(updateImageObjectObjectKeySql).then(dbresults => {
+            sqlBuilder.raw(updateImageObjectObjectKeySql).then(() => {
                 if (insertObjectNameSql) {
                     return sqlBuilder.raw(insertObjectNameSql);
                 }
                 return utils.resolve(true);
-            }).then(dbresults => {
+            }).then(() => {
                 if (deleteObjectKeySql) {
                     return sqlBuilder.raw(deleteObjectKeySql);
                 }
                 return utils.resolve(true);
-            }).then(dbresults => {
+            }).then(() => {
                 if (insertObjectKeySql) {
                     return sqlBuilder.raw(insertObjectKeySql);
                 }
                 return utils.resolve(true);
-            }).then(dbresults => {
+            }).then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag update ' + tableName + ' odobjectkey failed:', reason);

@@ -56,7 +56,7 @@ export class CommonDocSqlActionTagBlockAdapter {
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const rawUpdate = sqlBuilder.raw(updateSql);
         const result = new Promise((resolve, reject) => {
-            rawUpdate.then(dbresults => {
+            rawUpdate.then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
                 console.error('_doActionTag update ' + tableName + ' blocked failed:', reason);
