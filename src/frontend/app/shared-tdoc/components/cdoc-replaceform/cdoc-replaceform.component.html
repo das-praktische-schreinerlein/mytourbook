@@ -9,7 +9,7 @@
     <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
     <form [formGroup]="assignFormGroup" class="form-control-sm" (ngSubmit)="onCancel()" *ngIf="records !== undefined && records.length > 0">
         <fieldset>
-            <legend i18n="replaceRecord label|Label for fieldset: replaceRecord@@label.replaceform.cdoc.legend.replaceRecord">&#x2315; Ersetzen und Löschen</legend>
+            <legend i18n="replaceRecord label|Label for fieldset: replaceRecord@@label.replaceform.cdoc.legend.replaceRecord">🗑 Ersetzen und Löschen</legend>
             <div class="row">
                 <div class="col-sm-2 form-inline input-group input-group-sm form-check-inline">
                     <input formControlName="newIdOption" required="required" class="form-control form-check-input"

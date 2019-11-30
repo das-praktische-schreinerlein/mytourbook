@@ -535,6 +535,36 @@
                     ]
                 },
                 {
+                    "key": "assign",
+                    "type": "assign",
+                    "name": "\uD83D\uDD89 Assign",
+                    "multiRecordTag": true,
+                    "shortName": "&#x1f589;",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "local_album_current",
                     "type": "albumtag",
                     "name": "\u2764 local Album",
