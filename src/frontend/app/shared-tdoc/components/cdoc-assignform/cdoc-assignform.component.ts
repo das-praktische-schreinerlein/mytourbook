@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Input, SimpleChange} from '@angular/core';
+import {ChangeDetectorRef, Input, OnInit, SimpleChange} from '@angular/core';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
@@ -23,7 +23,7 @@ export interface CommonDocAssignFormComponentResultType extends ActionTagFormRes
 }
 
 export abstract class CommonDocAssignFormComponent<R extends CommonDocRecord, F extends CommonDocSearchForm,
-    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractInlineComponent {
+    S extends CommonDocSearchResult<R, F>, D extends CommonDocDataService<R, F, S>> extends AbstractInlineComponent implements OnInit {
     private lastRecords: CommonDocRecord[] = undefined;
     private facetValues = {};
     protected newId: string = undefined;
@@ -89,6 +89,10 @@ export abstract class CommonDocAssignFormComponent<R extends CommonDocRecord, F 
                 protected searchFormUtils: SearchFormUtils, protected cdocDataService: D,
                 protected toastr: ToastrService) {
         super(cd);
+    }
+
+    ngOnInit() {
+        this.updateData();
     }
 
     onCancel(): boolean {

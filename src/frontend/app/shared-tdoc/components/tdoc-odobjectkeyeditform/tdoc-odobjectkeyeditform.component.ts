@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SimpleChange} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, SimpleChange} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
@@ -30,7 +30,7 @@ export interface TourDocObjectDetectionObjectKeyEditFormResultType extends Actio
     styleUrls: ['./tdoc-odobjectkeyeditform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractInlineComponent {
+export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractInlineComponent implements OnInit {
     private lastRecord: TourDocRecord = undefined;
     private existingObjectKeys = {};
     private existingObjectNames = {};
@@ -85,6 +85,10 @@ export class TourDocObjectDetectionObjectKeyEditFormComponent extends AbstractIn
                 private searchFormUtils: SearchFormUtils, private tdocSearchFormUtils: TourDocSearchFormUtils,
                 private tdocDataService: TourDocDataService, private toastr: ToastrService) {
         super(cd);
+    }
+
+    ngOnInit() {
+        this.updateData();
     }
 
     cancel(): boolean {

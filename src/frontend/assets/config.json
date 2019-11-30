@@ -138,7 +138,7 @@
                 {
                     "key": "edit",
                     "type": "edit",
-                    "name": "Edit",
+                    "name": "\uD83D\uDD89 Edit",
                     "shortName": "&#x1f589",
                     "showFilter": [
                         {
@@ -508,8 +508,8 @@
                 {
                     "key": "keyword",
                     "type": "keyword",
-                    "name": "\uD83D\uDD89 Keyword",
-                    "shortName": "&#x1f589",
+                    "name": "\uD83C\uDFF7 Keyword",
+                    "shortName": "&#127991;",
                     "payload": {
                     },
                     "showFilter": [
@@ -775,7 +775,7 @@
                 {
                     "key": "objectkeyedit",
                     "type": "objectkeyedit",
-                    "name": "ObjectKeyEdit",
+                    "name": "\uD83D\uDD89 ObjectKeyEdit",
                     "shortName": "&#x1f589",
                     "showFilter": [
                         {
@@ -812,9 +812,9 @@
                 {
                     "key": "keyword",
                     "type": "keyword",
-                    "name": "\uD83D\uDD89 Keyword",
+                    "name": "\uD83C\uDFF7 Keyword",
+                    "shortName": "&#127991;",
                     "multiRecordTag": true,
-                    "shortName": "&#x1f589",
                     "payload": {
                     },
                     "showFilter": [

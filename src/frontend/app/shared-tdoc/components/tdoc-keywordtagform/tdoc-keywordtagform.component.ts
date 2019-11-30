@@ -4,7 +4,6 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
 import {CommonDocKeywordTagFormComponent} from '../cdoc-keywordtagform/cdoc-keywordtagform.component';
-import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 
 @Component({
     selector: 'app-tdoc-keywordtagform',
@@ -15,9 +14,8 @@ import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-c
 export class TourDocKeywordTagFormComponent
     extends CommonDocKeywordTagFormComponent<TourDocRecord> {
 
-    constructor(public fb: FormBuilder, public activeModal: NgbActiveModal, protected cd: ChangeDetectorRef,
-                contentUtils: CommonDocContentUtils, toastr: ToastrService) {
-        super(fb, activeModal, cd, contentUtils, toastr);
+    constructor(public fb: FormBuilder, public activeModal: NgbActiveModal, protected cd: ChangeDetectorRef, toastr: ToastrService) {
+        super(fb, activeModal, cd, toastr);
     }
 
 }

@@ -1,4 +1,3 @@
-{{updateData()}}
 <div class="modal-header" *ngIf="records !== undefined && records.length > 0">
     <h5><span class="fx-bg-type">{{recordType | translate }}</span>
         <span class="fx-bg-name">{{records.length === 1 ? records[0].name : ''}} {{records.length === 1 ? 'ID: ' + records[0].id : ''}}</span></h5>
@@ -8,7 +7,7 @@
 </div>
 <div class="modal-body">
     <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
-    <form [formGroup]="keywordFormGroup" class="form-control-sm" (ngSubmit)="onSubmitKeywordKey()" *ngIf="records !== undefined && records.length > 0">
+    <form [formGroup]="keywordFormGroup" class="form-control-sm" (ngSubmit)="onCancel()" *ngIf="records !== undefined && records.length > 0">
         <fieldset>
             <legend i18n="keywordRecord label|Label for fieldset: keywordRecord@@label.keywordform.cdoc.legend.keywordRecord">&#x2315; Neu zuordnen</legend>
             <div class="row">
@@ -24,9 +23,13 @@
             <div class="row">
                 <div class="col-sm-12 form-inline input-group input-group-sm">
                     <button type="submit" class="btn btn-action btn-sm"
-                            (click)="onSubmitKeywordKey()"
+                            (click)="onSubmitKeywordKey(true)"
                             [disabled]="!validForSubmit"
-                            i18n="button keywordRecord cdoc|Buttontext to keywordRecord cdoc@@button.keywordform.cdoc.keywordRecord">Zuordnen</button>
+                            i18n="button keywordRecord cdoc|Buttontext to keywordRecord cdoc@@button.keywordform.cdoc.keywordRecord">Hinzufügen</button>
+                    <button type="submit" class="btn btn-action btn-sm"
+                            (click)="onSubmitKeywordKey(false)"
+                            [disabled]="!validForSubmit"
+                            i18n="button keywordRecord cdoc|Buttontext to keywordRecord cdoc@@button.keywordform.cdoc.keywordRecord">Entfernen</button>
                     <button type="button" (click)="onCancel()" class="btn btn-action btn-sm">Abbrechen</button>
                 </div>
             </div>

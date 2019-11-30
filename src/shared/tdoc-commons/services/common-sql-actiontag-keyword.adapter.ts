@@ -27,12 +27,12 @@ export class CommonDocSqlActionTagKeywordAdapter {
         if (!this.keywordValidationRule.isValid(keywords)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' keywords not valid');
         }
-        const set = actionTagForm.payload['set'];
-        if (set !== true && set !== false) {
-            return utils.reject('actiontag ' + actionTagForm.key + ' set not valid');
+        const keywordAction = actionTagForm.payload['keywordAction'];
+        if (keywordAction !== 'set' && keywordAction !== 'unset') {
+            return utils.reject('actiontag ' + actionTagForm.key + ' keywordAction not valid');
         }
 
-        if (set === true) {
+        if (keywordAction === 'set') {
             return this.commonSqlKeywordAdapter.setGenericKeywords(table, id, keywords, opts, false);
         } else {
             return this.commonSqlKeywordAdapter.unsetGenericKeywords(table, id, keywords, opts);
