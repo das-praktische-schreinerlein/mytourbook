@@ -160,7 +160,7 @@ export class CommonSqlKeywordAdapter {
             deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable +
                 ' WHERE ' + joinBaseIdField + ' = ' + dbId +
                 '     AND ' + idField + ' IN ' +
-                '         SELECT ' + idField + ' FROM keyword kkw1 WHERE ' + nameField + ' IN ( ' + keywordSplit + '); ';
+                '         (SELECT ' + idField + ' FROM keyword kkw1 WHERE ' + nameField + ' IN ( ' + keywordSplit + ')); ';
         } else {
             const keywordSplit = ' SELECT ' +
                 '"' + newKeywords.replace(/[ \\"']/g, '').split(',').join('" AS ' + nameField +
@@ -169,7 +169,7 @@ export class CommonSqlKeywordAdapter {
             deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable +
                 ' WHERE ' + joinBaseIdField + ' = ' + dbId +
                 '     AND ' + idField + ' IN ' +
-                '         SELECT ' + idField + ' FROM keyword kkw1 WHERE ' + nameField + ' IN ( ' + keywordSplit + '); ';
+                '         (SELECT ' + idField + ' FROM keyword kkw1 WHERE ' + nameField + ' IN ( ' + keywordSplit + ')); ';
         }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
