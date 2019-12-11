@@ -24,6 +24,8 @@ import {
     TourDocObjectDetectionImageObjectRecordRelation
 } from '../model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocObjectDetectionImageObjectRecordSchema} from '../model/schemas/tdocobjectdetectionimageobject-record-schema';
+import {TourDocNavigationObjectRecord, TourDocNavigationObjectRecordRelation} from '../model/records/tdocnavigationobject-record';
+import {TourDocNavigationObjectRecordSchema} from '../model/schemas/tdocnavigationobject-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -72,9 +74,14 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
         this.dataStore.defineMapper('tdocdatainfo', TourDocDataInfoRecord, TourDocDataInfoRecordSchema, TourDocDataInfoRecordRelation);
         this.dataStore.defineMapper('tdocimage', TourDocImageRecord, TourDocImageRecordSchema, TourDocImageRecordRelation);
         this.dataStore.defineMapper('tdocvideo', TourDocVideoRecord, TourDocVideoRecordSchema, TourDocVideoRecordRelation);
-        this.dataStore.defineMapper('tdocratepers', TourDocRatePersonalRecord, TourDocRatePersonalRecordSchema, TourDocRatePersonalRecordRelation);
-        this.dataStore.defineMapper('tdocratetech', TourDocRateTechRecord, TourDocRateTechRecordSchema, TourDocRateTechRecordRelation);
-        this.dataStore.defineMapper('tdocodimageobject', TourDocObjectDetectionImageObjectRecord, TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
+        this.dataStore.defineMapper('tdocratepers', TourDocRatePersonalRecord, TourDocRatePersonalRecordSchema,
+            TourDocRatePersonalRecordRelation);
+        this.dataStore.defineMapper('tdocratetech', TourDocRateTechRecord, TourDocRateTechRecordSchema,
+            TourDocRateTechRecordRelation);
+        this.dataStore.defineMapper('tdocodimageobject', TourDocObjectDetectionImageObjectRecord,
+            TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
+        this.dataStore.defineMapper('tdocnavigationobject', TourDocNavigationObjectRecord,
+            TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {

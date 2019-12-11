@@ -4,6 +4,7 @@
             "editPrefix": "KW_",
             "possiblePrefixes": ["KW_", "", "kw_"],
             "structuredKeywords": [
+                {"name": "Todos", "keywords": ["TODOKEYWORDS"]},
                 {"name": "Aktivität", "keywords": ["Alpinklettern", "Baden", "Boofen", "Bootfahren", "Campen",
                     "Fliegen", "Gletscherbegehung", "Kanu", "Klettern", "Klettersteig",
                     "Radfahren", "Schneeschuhwandern", "Skaten", "Wandern", "Museumsbesuch", "Sachsenklettern",
@@ -23,7 +24,7 @@
                     "Steilküste", "Blumen", "Feld", "Heide", "Steppe", "Wiese",
                     "Bergwald", "Strandwald", "Wald", "Seenlandschaft", "Berge",
                     "Hochgebirge", "Mittelgebirge", "Meer", "Ozean", "Firn", "Schneefelder"]},
-                {"name": "Todos", "keywords": ["TODOKEYWORDS"]}
+                {"name": "Location", "keywords": ["Indoor", "Garten", "Wohnung", "Zimmer", "Halle"]}
             ],
             "keywordSuggestions": [
                 {   "name": "Action Rad-Tour", "keywords": ["Radfahren"],

@@ -76,10 +76,36 @@
             <br clear="all" />
         </div>
         <div class="card-footer text-right" style="width: 100%">
-            <div class="card-action-buttons align-bottom btn-group" role="group" aria-label="Actions">
-                <app-tdoc-action [record]="record" [type]="'actionTagsBig'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
-                <a [href]="getBackToSearchUrl()" (click)="submitBackToSearch()" class="btn btn-action btn-sm"
-                   i18n="link back2search tdoc|Linktext back to search tdoc@@a.show.tdoc.back2search">Back to Search</a>
+            <div class="card-action-buttons align-bottom" role="group" aria-label="Actions">
+                <app-tdoc-action [record]="record"
+                                 [type]="'actionTagsBig'"
+                                 (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
+                <ng-container *ngFor="let navigationRecord of record.tdocnavigationobjects; let idx = index">
+                    <a [href]="getNavigationRecordUrl(navigationRecord)"
+                       (click)="navigateToRecord(navigationRecord)"
+                       class="btn btn-action btn-sm a-navigation">
+                        <span class="navtype">{{ 'label.navtype.' + navigationRecord.navtype | translate}}</span>
+                        <span class="name" [title]="navigationRecord.name && navigationRecord.name != 'null' ? navigationRecord.name : ''">{{navigationRecord.name && navigationRecord.name != 'null' ? navigationRecord.name : ''}}</span>
+                    </a>
+                </ng-container>
+                <a [href]="getLastSearchPredecessorUrl()"
+                   (click)="submitToLastSearchPredecessor()"
+                   *ngIf="getLastSearchPredecessorUrl()"
+                   class="btn btn-action btn-sm">
+                    <span i18n="link lastSearchPredecessor tdoc|Linktext lastSearch predecessor tdoc@@a.show.tdoc.lastSearchPredecessor">🢦</span>
+                </a>
+                <a [href]="getBackToSearchUrl()"
+                   (click)="submitBackToSearch()"
+                   *ngIf="getBackToSearchUrl()"
+                   class="btn btn-action btn-sm">
+                    <span i18n="link back2lastsearch tdoc|Linktext back to lastsearch tdoc@@a.show.tdoc.back2lastSearch">Zurück zur Suche</span>
+                </a>
+                <a [href]="getLastSearchSuccessorUrl()"
+                   (click)="submitToLastSearchSuccessor()"
+                   *ngIf="getLastSearchSuccessorUrl()"
+                   class="btn btn-action btn-sm">
+                    <span i18n="link lastSearchSuccessor tdoc|Linktext lastSearch successor tdoc@@a.show.tdoc.lastSearchSuccessorr">🢧</span>
+                </a>
             </div>
         </div>
     </div>

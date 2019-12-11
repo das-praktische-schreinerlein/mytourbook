@@ -355,5 +355,7 @@
     "label.odimgobject.state.DONE_REJECTION_PROCESSED": "\u2716 Falsch prozessiert",
     "label.odimgobject.state.DONE_CORRECTION_PROCESSED": "\u270E Korrektur prozessiert",
     "label.odimgobject.state.DONE_DETAIL_PROCESSED": "\u2315 Detailierung prozessiert",
+    "label.navtype.PREDECESSOR": "\uD83E\uDCA6",
+    "label.navtype.SUCCESSOR": "\uD83E\uDCA7",
     "null": "Unbestimmt"
 }

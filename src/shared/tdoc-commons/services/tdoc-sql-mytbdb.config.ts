@@ -78,7 +78,7 @@ export class TourDocSqlMytbDbConfig {
                     profile: 'image',
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
                          'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
-                         'WHERE image.k_id in (:id) and p_id in (18)',
+                         'WHERE image.k_id IN (:id) and p_id in (18)',
                     parameterNames: ['id']
                 },
                 {
@@ -86,9 +86,23 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM kategorie INNER JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id' +
                     ' INNER JOIN keyword on kategorie_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE kategorie.k_id in (:id)',
+                    'WHERE kategorie.k_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
+                },
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM kategorie WHERE k_datevon < (SELECT k_datevon FROM kategorie WHERE k_id IN (:id))' +
+                        '  ORDER BY k_datevon DESC, k_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM kategorie WHERE k_datevon > (SELECT k_datevon FROM kategorie WHERE k_id IN (:id))' +
+                        '   ORDER BY k_datevon, k_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
                 }
             ],
             selectFieldList: [
@@ -462,7 +476,7 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists ' +
                     'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
                     ' INNER JOIN playlist on image_playlist.p_id=playlist.p_id ' +
-                    'WHERE image.i_id in (:id)',
+                    'WHERE image.i_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -475,7 +489,7 @@ export class TourDocSqlMytbDbConfig {
                     ' AND LOWER(o_category) LIKE "person"' +
                     ' AND (image_object.io_precision = 1' +
                     '      OR image_object.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
-                    'WHERE image.i_id in (:id)',
+                    'WHERE image.i_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -488,7 +502,7 @@ export class TourDocSqlMytbDbConfig {
                         ' AND LOWER(o_category) NOT LIKE "person"' +
                         ' AND (image_object.io_precision = 1' +
                         '      OR image_object.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
-                        'WHERE image.i_id in (:id)',
+                        'WHERE image.i_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -509,7 +523,7 @@ export class TourDocSqlMytbDbConfig {
                         ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                         '            AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
-                        'WHERE image.i_id in (:id)',
+                        'WHERE image.i_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -517,9 +531,23 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM image INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
                     ' INNER JOIN keyword on image_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE image.i_id in (:id)',
+                    'WHERE image.i_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
+                },
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=IMAGE_", i_id, ":::name=", COALESCE(i_meta_name, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM image WHERE i_date < (SELECT i_date FROM image WHERE i_id IN (:id))' +
+                        '   ORDER BY i_date DESC, i_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=IMAGE_", i_id, ":::name=", COALESCE(i_meta_name, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM image WHERE i_date > (SELECT i_date FROM image WHERE i_id IN (:id))' +
+                        '   ORDER BY i_date, i_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
                 }
             ],
             groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons', 'i_objects', 'i_objectdetections'],
@@ -958,7 +986,7 @@ export class TourDocSqlMytbDbConfig {
                         'FROM image_object INNER JOIN image ON image_object.i_id=image.i_id' +
                         ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
                         ' INNER JOIN playlist on image_playlist.p_id=playlist.p_id ' +
-                        'WHERE image_object.io_id in (:id)',
+                        'WHERE image_object.io_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -980,7 +1008,7 @@ export class TourDocSqlMytbDbConfig {
                         ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                         '       AND image_object.io_detector=objects_key.ok_detector ' +
                         ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
-                        'WHERE image_object.io_id in (:id)',
+                        'WHERE image_object.io_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -989,7 +1017,7 @@ export class TourDocSqlMytbDbConfig {
                         'FROM image_object INNER JOIN image ON image_object.i_id=image.i_id' +
                         ' INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
                         ' INNER JOIN keyword on image_keyword.kw_id=keyword.kw_id ' +
-                        'WHERE image_object.io_id in (:id)',
+                        'WHERE image_object.io_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
                 }
@@ -1425,7 +1453,7 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists ' +
                     'FROM video INNER JOIN video_playlist ON video.v_id=video_playlist.v_id' +
                     ' INNER JOIN playlist on video_playlist.p_id=playlist.p_id ' +
-                    'WHERE video.v_id in (:id)',
+                    'WHERE video.v_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -1438,7 +1466,7 @@ export class TourDocSqlMytbDbConfig {
                     ' AND LOWER(o_category) LIKE "person"' +
                     ' AND (video_object.vo_precision = 1' +
                     '      OR video_object.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
-                    'WHERE video.v_id in (:id)',
+                    'WHERE video.v_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -1451,7 +1479,7 @@ export class TourDocSqlMytbDbConfig {
                         ' AND LOWER(o_category) NOT LIKE "person"' +
                         ' AND (video_object.vo_precision = 1' +
                         '      OR video_object.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
-                        'WHERE video.v_id in (:id)',
+                        'WHERE video.v_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -1459,9 +1487,23 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM video INNER JOIN video_keyword ON video.v_id=video_keyword.v_id' +
                     ' INNER JOIN keyword on video_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE video.v_id in (:id)',
+                    'WHERE video.v_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
+                },
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_meta_name, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM video WHERE v_date < (SELECT v_date FROM video WHERE v_id IN (:id))' +
+                        '  ORDER BY v_datevon DESC, v_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_meta_name, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM video WHERE v_date > (SELECT v_date FROM video WHERE v_id IN (:id))' +
+                        '   ORDER BY v_datevon, v_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
                 }
             ],
             groupbBySelectFieldListIgnore: ['v_keywords', 'v_playlists', 'v_persons', 'v_objects'],
@@ -1839,7 +1881,7 @@ export class TourDocSqlMytbDbConfig {
                     'FROM tour INNER JOIN kategorie on tour.k_id=kategorie.k_id' +
                     ' INNER JOIN image on kategorie.k_id=image.k_id ' +
                     ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
-                    'WHERE tour.t_id in (:id) and p_id in (18)',
+                    'WHERE tour.t_id IN (:id) and p_id in (18)',
                     parameterNames: ['id']
                 },
                 {
@@ -1847,9 +1889,29 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
                     ' INNER JOIN keyword on tour_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE tour.t_id in (:id)',
+                    'WHERE tour.t_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
+                },
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM tour LEFT JOIN location ON tour.l_id = location.l_id' +
+                        '  WHERE CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) <' +
+                        '      (SELECT CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) FROM tour ' +
+                        '       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
+                      '  ORDER BY CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) DESC, t_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM tour LEFT JOIN location ON tour.l_id = location.l_id' +
+                        '   WHERE CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) >' +
+                        '      (SELECT CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) FROM tour' +
+                        '       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
+                        '   ORDER BY CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name), t_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
                 }
             ],
             selectFieldList: [
@@ -2255,7 +2317,7 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
                         'FROM location INNER JOIN kategorie on location.l_id=kategorie.l_id' +
                         ' INNER JOIN image on kategorie.k_id=image.k_id ' +
-                        'WHERE location.l_id in (:id) order by i_rate desc limit 0, 1',
+                        'WHERE location.l_id IN (:id) order by i_rate desc limit 0, 1',
                     parameterNames: ['id']
                 },
                 {
@@ -2263,9 +2325,25 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                     'FROM location INNER JOIN location_keyword ON location.l_id=location_keyword.l_id' +
                     ' INNER JOIN keyword on location_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE location.l_id in (:id)',
+                    'WHERE location.l_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
+                },
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects, GetLocationNameAncestry(location.l_id, location.l_name, "->") as l_lochirarchietxt' +
+                        '  FROM location WHERE GetLocationNameAncestry(location.l_id, location.l_name, "->") <' +
+                        '      (SELECT GetLocationNameAncestry(location.l_id, location.l_name, "->") FROM location WHERE l_id IN (:id))' +
+                        '  ORDER BY l_lochirarchietxt DESC, l_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects, GetLocationNameAncestry(location.l_id, location.l_name, "->") AS l_lochirarchietxt' +
+                        '  FROM location WHERE GetLocationNameAncestry(location.l_id, location.l_name, "->") >' +
+                        '      (SELECT GetLocationNameAncestry(location.l_id, location.l_name, "->") FROM location WHERE l_id IN (:id))' +
+                        '  ORDER BY l_lochirarchietxt, l_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
                 }
             ],
             selectFieldList: [
@@ -2478,8 +2556,22 @@ export class TourDocSqlMytbDbConfig {
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
                     'FROM trip INNER JOIN kategorie on trip.tr_id=kategorie.tr_id' +
                     ' INNER JOIN image on kategorie.k_id=image.k_id ' +
-                    'WHERE trip.tr_id in (:id) order by i_rate desc limit 0, 1',
+                    'WHERE trip.tr_id IN (:id) order by i_rate desc limit 0, 1',
                     parameterNames: ['id']
+                },
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM trip WHERE tr_datevon < (SELECT tr_datevon FROM trip WHERE tr_id IN (:id))' +
+                        '  ORDER BY tr_datevon DESC, tr_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM trip WHERE tr_datevon > (SELECT tr_datevon FROM trip WHERE tr_id IN (:id))' +
+                        '   ORDER BY tr_datevon, tr_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
                 }
             ],
             selectFieldList: [
@@ -2698,8 +2790,22 @@ export class TourDocSqlMytbDbConfig {
                     'FROM news' +
                     ' INNER JOIN kategorie on (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
                     ' INNER JOIN image on kategorie.k_id=image.k_id ' +
-                    'WHERE news.n_id in (:id) order by i_rate desc limit 0, 1',
+                    'WHERE news.n_id IN (:id) order by i_rate desc limit 0, 1',
                     parameterNames: ['id']
+                },
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM news WHERE n_datevon < (SELECT n_datevon FROM news WHERE n_id IN (:id))' +
+                        '  ORDER BY n_datevon DESC, n_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM news WHERE n_datevon > (SELECT n_datevon FROM news WHERE n_id IN (:id))' +
+                        '   ORDER BY n_datevon, n_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
                 }
             ],
             selectFieldList: [

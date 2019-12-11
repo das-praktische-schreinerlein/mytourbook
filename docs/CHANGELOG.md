@@ -18,6 +18,7 @@
 - frontend: added commands to create new entities
 - frontend: improved icons
 - frontend: added location-edit-area
+- frontend: added timeline-navigation and search-navigation to show-page
 
 ### bug fixes
 - backend: fixed reimport of exif-dates from images

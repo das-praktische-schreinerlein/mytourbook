@@ -13,6 +13,7 @@ import {
     TourDocObjectDetectionImageObjectRecord,
     TourDocObjectDetectionImageObjectRecordFactory
 } from '../model/records/tdocobjectdetectectionimageobject-record';
+import {TourDocNavigationObjectRecord, TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -127,7 +128,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
         for (const mapperKey of ['tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech']) {
             const subMapper = mapper['datastore']._mappers[mapperKey];
-            let subValues;
+            let subValues = undefined;
             for (const key in values) {
                 if (key.startsWith(mapperKey + '.')) {
                     const subKey = key.replace(mapperKey + '.', '');
@@ -417,6 +418,24 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 });
                 this.mapObjectDetectionImageObjectDocToAdapterDocument(mapper, <TourDocRecord>record, imageObjectDetections);
                 break;
+            case 'navigation_objects':
+                const navigationObjects = [];
+                docs.forEach(doc => {
+                    if (doc['navigation_objects'] !== undefined && doc['navigation_objects'] !== null) {
+                        const recordSrcs = doc['navigation_objects'].split(';;');
+                        for (let i = 0; i < recordSrcs.length; i++) {
+                            const valuePairs = recordSrcs[i].split(':::');
+                            const navigationObject = {};
+                            for (let j = 0; j < valuePairs.length; j++) {
+                                const value = valuePairs[j].split('=');
+                                navigationObject[value[0]] = value[1];
+                            }
+                            navigationObjects.push(navigationObject);
+                        }
+                    }
+                });
+                this.mapNavigationObjectDocToAdapterDocument(mapper, <TourDocRecord>record, navigationObjects);
+                break;
             case 'video':
                 const videoUrls = [];
                 docs.forEach(doc => {
@@ -474,7 +493,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 }
                 const imageValues = {};
                 imageValues['name'] = record.name;
-                imageValues['id'] = (id++).toString();
+                imageValues['id'] = (id++).toString() + record.id;
                 imageValues['fileName'] = imageDoc;
                 const imageRecord = imageMapper.createRecord(
                     TourDocImageRecordFactory.instance.getSanitizedValues(imageValues, {}));
@@ -495,7 +514,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 }
                 const videoValues = {};
                 videoValues['name'] = record.name;
-                videoValues['id'] = (id++).toString();
+                videoValues['id'] = (id++).toString() + record.id;
                 videoValues['fileName'] = videoDoc;
                 const videoRecord = videoMapper.createRecord(
                     TourDocVideoRecordFactory.instance.getSanitizedValues(videoValues, {})
@@ -504,6 +523,25 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             }
         }
         record.set('tdocvideos', videos);
+    }
+
+    private mapNavigationObjectDocToAdapterDocument(mapper: Mapper, record: TourDocRecord, objectDocs: any[]) {
+        const objectMapper = mapper['datastore']._mappers['tdocnavigationobject'];
+        const objects: TourDocNavigationObjectRecord[] = [];
+        if (objectDocs !== undefined) {
+            let id = this.extractUniqueId(record);
+            for (const objectDoc of objectDocs) {
+                if (objectDoc === undefined || objectDoc === null) {
+                    continue;
+                }
+                const objectValues = objectDoc;
+                objectValues['id'] = (id++).toString() + record.id;
+                const objectRecord = objectMapper.createRecord(
+                    TourDocNavigationObjectRecordFactory.instance.getSanitizedValues(objectValues, {}));
+                objects.push(objectRecord);
+            }
+        }
+        record.set('tdocnavigationobjects', objects);
     }
 
     private mapObjectDetectionImageObjectDocToAdapterDocument(mapper: Mapper, record: TourDocRecord, objectDocs: any[]) {
@@ -516,7 +554,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     continue;
                 }
                 const objectValues = objectDoc;
-                objectValues['id'] = (id++).toString();
+                objectValues['id'] = (id++).toString() + record.id;
                 const objectRecord = objectMapper.createRecord(
                     TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(objectValues, {}));
                 objects.push(objectRecord);

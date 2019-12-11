@@ -17,6 +17,7 @@
                                     (submitSelectedMultiActions)="onSubmitSelectedMultiActions($event)"></app-tdoc-multiactionheader>
     </div>
     <div class="container">
+        <a name="itemlist_top"></a>
         <app-tdoc-list [searchResult]="searchResult"
                        [baseSearchUrl]="baseSearchUrl"
                        [layout]="layout"
@@ -24,6 +25,7 @@
                        [showItemMapFlag]="true"
                        (show)="onShowDoc($event)"
                        (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list>
+        <a name="itemlist_bottom"></a>
     </div>
     <div class="container">
         <div class="row">
