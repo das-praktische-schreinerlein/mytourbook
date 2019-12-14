@@ -60,6 +60,26 @@ export class MediaManagerCommand implements AbstractCommand {
                 });
 
                 break;
+            case 'findCorrespondingTourDocRecordsForMedia':
+                if (importDir === undefined) {
+                    console.error(action + ' missing parameter - usage: --importDir INPUTDIR', argv);
+                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR');
+                    return promise;
+                }
+
+                promise = tdocManagerModule.findCorrespondingTourDocRecordsForMedia(importDir);
+                promise.then(value => {
+                    console.log(JSON.stringify({
+                        tdocs: value,
+                        fileBaseDir: importDir,
+                        dbImageBaseDir: backendConfig['apiRoutePicturesStaticDir'] + '/' +
+                            (backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + 'full/',
+                        dbVideoBaseDir: backendConfig['apiRouteVideosStaticDir'] + '/'
+                            + (backendConfig['apiRouteStoredVideosResolutionPrefix'] || '') + 'full/'
+                    }, undefined, ' '));
+                });
+
+                break;
             default:
                 return commonMediadManagerCommand.process(argv);
         }
