@@ -405,7 +405,7 @@ export class TourDocMediaManagerModule {
     private findTourDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType): Promise<DBFileInfoType[]> {
         return new Promise<DBFileInfoType[]>((resolve, reject) => {
             const dateInSSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.lastModified).getTime() / 1000);
-            const checkPrefredSql =
+            const checkPreferredSql =
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS lastModified,' +
                 '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching' +
                 '  FROM image' +
@@ -414,7 +414,8 @@ export class TourDocMediaManagerModule {
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS lastModified, i_date AS exifDate,' +
                 '      "IMAGE" AS type, "FILENAMEANDDATE" AS matching' +
                 '  FROM image' +
-                '  WHERE UNIX_TIMESTAMP(i_date) BETWEEN "' +  (dateInSSinceEpoch - 1)  + '" AND "' +  (dateInSSinceEpoch + 1)  + '"' +
+                '  WHERE i_file = "' + fileInfo.name + '"' +
+                '      AND UNIX_TIMESTAMP(i_date) BETWEEN "' +  (dateInSSinceEpoch - 1)  + '" AND "' +  (dateInSSinceEpoch + 1)  + '"' +
                 'UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching' +
@@ -424,9 +425,10 @@ export class TourDocMediaManagerModule {
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS lastModified, v_date AS exifDate,' +
                 '      "VIDEO" AS type, "FILENAMEANDDATE" AS matching' +
                 '  FROM video' +
-                '  WHERE UNIX_TIMESTAMP(v_date) BETWEEN "' +  (dateInSSinceEpoch - 1)  + '" AND "' +  (dateInSSinceEpoch + 1)  + '"'
+                '  WHERE v_file = "' + fileInfo.name + '"' +
+                '      AND UNIX_TIMESTAMP(v_date) BETWEEN "' +  (dateInSSinceEpoch - 1)  + '" AND "' +  (dateInSSinceEpoch + 1)  + '"'
             ;
-            return this.knex.raw(checkPrefredSql).then(dbResults => {
+            return this.knex.raw(checkPreferredSql).then(dbResults => {
                 const records: DBFileInfoType[] = [];
                 TourDocMediaManagerModule.mapDBResultOnFileInfoType(
                     this.sqlQueryBuilder.extractDbResult(dbResults, this.knex.client['config']['client']), records);
