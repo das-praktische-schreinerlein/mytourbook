@@ -17,6 +17,7 @@ import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/s
 import * as Promise_serial from 'promise-serial';
 
 export interface FileInfoType {
+    created: Date;
     lastModified: Date;
     exifDate: Date;
     name: string;
@@ -47,6 +48,7 @@ export class TourDocMediaManagerModule {
                     dir: undefined,
                     exifDate: undefined,
                     id: undefined,
+                    created: undefined,
                     lastModified: undefined,
                     matching: undefined,
                     name: undefined,
@@ -301,7 +303,8 @@ export class TourDocMediaManagerModule {
                 const path = fileRes['path'].replace(/\\/g, '/');
                 const file = fileRes['name'].replace(/\\/g, '/');
                 const dir = fileRes['parentDir'].replace(/\\/g, '/');
-                const date = fileRes['stat']['mtime'];
+                const cdate = fileRes['stat']['ctime'];
+                const mdate = fileRes['stat']['mtime'];
                 const size = fileRes['stat']['size'];
                 const extension = file.split('.').splice(-1);
                 const type = mediaTypes[extension];
@@ -312,7 +315,8 @@ export class TourDocMediaManagerModule {
 
                 const fileInfo: FileInfoType = {
                     dir: dir,
-                    lastModified: date,
+                    created: cdate,
+                    lastModified: mdate,
                     exifDate: undefined,
                     name: file,
                     size: size,
@@ -404,29 +408,32 @@ export class TourDocMediaManagerModule {
 
     private findTourDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType): Promise<DBFileInfoType[]> {
         return new Promise<DBFileInfoType[]>((resolve, reject) => {
-            const dateInSSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.lastModified).getTime() / 1000);
+            const createdInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.created).getTime() / 1000);
+            const lastModInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.lastModified).getTime() / 1000);
             const checkPreferredSql =
-                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS lastModified,' +
+                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
                 '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching' +
                 '  FROM image' +
                 '  WHERE CONCAT(I_dir, "_", i_file) = "' + fileInfo.name + '"' +
                 'UNION ' +
-                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS lastModified, i_date AS exifDate,' +
-                '      "IMAGE" AS type, "FILENAMEANDDATE" AS matching' +
+                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
+                '       i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching' +
                 '  FROM image' +
                 '  WHERE i_file = "' + fileInfo.name + '"' +
-                '      AND UNIX_TIMESTAMP(i_date) BETWEEN "' +  (dateInSSinceEpoch - 1)  + '" AND "' +  (dateInSSinceEpoch + 1)  + '"' +
+                '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1)  + '" AND "' + (createdInSecondsSinceEpoch + 1)  + '"' +
+                '           OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")' +
                 'UNION ' +
-                'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS lastModified,' +
+                'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching' +
                 '  FROM video' +
                 '  WHERE CONCAT(V_dir, "_", v_file) = "' + fileInfo.name + '"' +
                 'UNION ' +
-                'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS lastModified, v_date AS exifDate,' +
-                '      "VIDEO" AS type, "FILENAMEANDDATE" AS matching' +
+                'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
+                '      v_date AS exifDate, "VIDEO" AS type, "FILENAMEANDDATE" AS matching' +
                 '  FROM video' +
                 '  WHERE v_file = "' + fileInfo.name + '"' +
-                '      AND UNIX_TIMESTAMP(v_date) BETWEEN "' +  (dateInSSinceEpoch - 1)  + '" AND "' +  (dateInSSinceEpoch + 1)  + '"'
+                '      AND (   UNIX_TIMESTAMP(v_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1)  + '" AND "' + (createdInSecondsSinceEpoch + 1)  + '"' +
+                '           OR UNIX_TIMESTAMP(v_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")'
             ;
             return this.knex.raw(checkPreferredSql).then(dbResults => {
                 const records: DBFileInfoType[] = [];
@@ -439,25 +446,27 @@ export class TourDocMediaManagerModule {
                 }
 
                 const checkFallBackSql =
-                    'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS lastModified,' +
-                    '       i_date AS exifDate, "IMAGE" AS type, "FILENAME" AS matching' +
+                    'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILENAME" AS matching' +
                     '  FROM image' +
                     '  WHERE i_file = "' + fileInfo.name + '"' +
                     'UNION ' +
-                    'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS lastModified,' +
-                    '      i_date AS exifDate, "IMAGE" AS type, "FILEDATE" AS matching' +
+                    'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDATE" AS matching' +
                     '  FROM image' +
-                    '  WHERE UNIX_TIMESTAMP(i_date) BETWEEN "' + (dateInSSinceEpoch - 1) + '" AND "' + (dateInSSinceEpoch + 1) + '"' +
+                    '  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
+                    '         OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")' +
                     'UNION ' +
-                    'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS lastModified,' +
-                    '       v_date AS exifDate, "VIDEO" AS type, "FILENAME" AS matching' +
+                    'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
+                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILENAME" AS matching' +
                     '  FROM video' +
                     '  WHERE v_file = "' + fileInfo.name + '"' +
                     'UNION ' +
-                    'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS lastModified,' +
-                    '      v_date AS exifDate, "VIDEO" AS type, "FILEDATE" AS matching' +
+                    'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
+                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILEDATE" AS matching' +
                     '  FROM video' +
-                    '  WHERE UNIX_TIMESTAMP(v_date) BETWEEN "' + (dateInSSinceEpoch - 1) + '" AND "' + (dateInSSinceEpoch + 1) + '"'
+                    '  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
+                    '         OR UNIX_TIMESTAMP(v_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")'
                 ;
 
                 return this.knex.raw(checkFallBackSql).then(fallBackDbResults => {
@@ -510,8 +519,8 @@ export class TourDocMediaManagerModule {
                         }
 
                         const checkDateSql =
-                            'SELECT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS lastModified,' +
-                            '       i_date AS exifDate,' +
+                            'SELECT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                            '       i_date AS lastModified, i_date AS exifDate,' +
                             ' "IMAGE" AS type, "EXIFDATE" AS matching' +
                             '  FROM image' +
                             '  WHERE UNIX_TIMESTAMP(i_date)' +
