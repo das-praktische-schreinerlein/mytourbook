@@ -63,7 +63,7 @@
             };
             var json = JSON.stringify(jsonObj, null, 1);
             $('#export').val(json);
-            downloadAsFile($(this), json, 'pdocs.json', "application/json", "utf-8");
+            downloadAsFile($(this), json, 'media-file-db-sync.mytbalbum.json', "application/json", "utf-8");
             return false;
         };
 
@@ -91,9 +91,9 @@
         var selector = $('#syncfiles input[name^="EXPORT_' + id + '"]');
         if (value) {
             ids[id] = id;
-            selector.attr('checked', true);
+            selector.prop('checked', true);
         } else {
-            selector.attr('checked', false);
+            selector.prop('checked', false);
             ids[id] = undefined;
         }
     }
@@ -248,7 +248,7 @@
                     { title: "DB.lastModified" }
                 ],
                 data: data,
-                pageLength: '50'
+                pageLength: '10'
             });
         }
     }
