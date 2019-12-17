@@ -196,7 +196,7 @@
                 {
                     "key": "playlists_favorites",
                     "type": "tag",
-                    "name": "Favorites",
+                    "name": "F2* Favorites",
                     "shortName": "F2*",
                     "payload": {
                         "playlistkey": "Favorites",
@@ -227,9 +227,47 @@
                     ]
                 },
                 {
+                    "key": "playlists_favorites_plus",
+                    "type": "tag",
+                    "name": "F2*+ Favorites+",
+                    "shortName": "F2*+",
+                    "payload": {
+                        "playlistkey": "Favorites",
+                        "tdocratepers.gesamt": "6",
+                        "tdocratepers.motive": "6",
+                        "tdocratepers.wichtigkeit": "6"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "playlists",
+                            "command": "CSVIN",
+                            "expectedValues": ["Favorites"]
+                        },
+                        {
+                            "property": "tdocratepers.gesamt",
+                            "command": "EQ",
+                            "expectedValues": [6]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "playlists_kat_favorites",
                     "type": "tag",
-                    "name": "Track Favorites",
+                    "name": "F3* Track Favorites",
                     "shortName": "F3*",
                     "payload": {
                         "playlistkey": "kategorie_favorites",
@@ -262,7 +300,7 @@
                 {
                     "key": "objects_micha",
                     "type": "tag",
-                    "name": "Person Micha",
+                    "name": "Mi Person Micha",
                     "shortName": "Mi",
                     "payload": {
                         "objectkey": "Playlist_Micha",
@@ -354,7 +392,7 @@
                 {
                     "key": "persRate_motive_milestone",
                     "type": "tag",
-                    "name": "Personal Motive Meilenstein",
+                    "name": "M4* Personal Motive Meilenstein",
                     "shortName": "M4*",
                     "payload": {
                         "value": "11",
@@ -385,7 +423,7 @@
                 {
                     "key": "persRate_motive_phantastic",
                     "type": "tag",
-                    "name": "Personal Motive Phantastic",
+                    "name": "M5* Personal Motive Phantastic",
                     "shortName": "M5*",
                     "payload": {
                         "value": "14",
@@ -416,7 +454,7 @@
                 {
                     "key": "persRate_wichtigkeit_milestone",
                     "type": "tag",
-                    "name": "Personal Wichtigkeit Meilenstein",
+                    "name": "W4* Personal Wichtigkeit Meilenstein",
                     "shortName": "W4*",
                     "payload": {
                         "value": "11",
@@ -447,7 +485,7 @@
                 {
                     "key": "persRate_motive_phantastic",
                     "type": "tag",
-                    "name": "Personal Wichtigkeit Phantastic",
+                    "name": "W5* Personal Wichtigkeit Phantastic",
                     "shortName": "W5*",
                     "payload": {
                         "value": "14",
@@ -619,6 +657,66 @@
                     "configAvailability": [
                         {
                             "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "New Trip by Track",
+                    "shortName": "->*Trip",
+                    "payload": {
+                        "type": "TRIP"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "createBy",
+                    "type": "createBy",
+                    "name": "New News by Track",
+                    "shortName": "->*News",
+                    "payload": {
+                        "type": "NEWS"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
                             "command": "EQ",
                             "expectedValues": [true]
                         }
@@ -905,6 +1003,233 @@
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "playlists_favorites",
+                    "type": "tag",
+                    "name": "F2* Favorites",
+                    "shortName": "F2*",
+                    "payload": {
+                        "playlistkey": "Favorites",
+                        "tdocratepers.gesamt": "5",
+                        "tdocratepers.motive": "5",
+                        "tdocratepers.wichtigkeit": "5"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "playlists",
+                            "command": "CSVIN",
+                            "expectedValues": ["Favorites"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "playlists_favorites_plus",
+                    "type": "tag",
+                    "name": "F2*+ Favorites+",
+                    "shortName": "F2*+",
+                    "payload": {
+                        "playlistkey": "Favorites",
+                        "tdocratepers.gesamt": "6",
+                        "tdocratepers.motive": "6",
+                        "tdocratepers.wichtigkeit": "6"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "playlists",
+                            "command": "CSVIN",
+                            "expectedValues": ["Favorites"]
+                        },
+                        {
+                            "property": "tdocratepers.gesamt",
+                            "command": "EQ",
+                            "expectedValues": [6]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "objects_micha",
+                    "type": "tag",
+                    "name": "Mi Person Micha",
+                    "shortName": "Mi",
+                    "payload": {
+                        "objectkey": "Playlist_Micha",
+                        "detector": "Playlist",
+                        "precision": "1"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "persons",
+                            "command": "CSVIN",
+                            "expectedValues": ["Playlist_Micha"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_motive_milestone",
+                    "type": "tag",
+                    "name": "M4* Personal Motive Meilenstein",
+                    "shortName": "M4*",
+                    "payload": {
+                        "value": "11",
+                        "ratekey": "motive"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.motive",
+                            "command": "GE",
+                            "expectedValues": [11]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_motive_phantastic",
+                    "type": "tag",
+                    "name": "M5* Personal Motive Phantastic",
+                    "shortName": "M5*",
+                    "payload": {
+                        "value": "14",
+                        "ratekey": "motive"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.motive",
+                            "command": "GE",
+                            "expectedValues": [14]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_wichtigkeit_milestone",
+                    "type": "tag",
+                    "name": "W4* Personal Wichtigkeit Meilenstein",
+                    "shortName": "W4*",
+                    "payload": {
+                        "value": "11",
+                        "ratekey": "wichtigkeit"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.wichtigkeit",
+                            "command": "GE",
+                            "expectedValues": [11]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_motive_phantastic",
+                    "type": "tag",
+                    "name": "W5* Personal Wichtigkeit Phantastic",
+                    "shortName": "W5*",
+                    "payload": {
+                        "value": "14",
+                        "ratekey": "wichtigkeit"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.wichtigkeit",
+                            "command": "GE",
+                            "expectedValues": [14]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
