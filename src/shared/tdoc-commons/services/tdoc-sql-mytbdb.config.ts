@@ -428,7 +428,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
-                    triggerParams: ['id', 'playlists_txt'],
+                    triggerParams: ['playlists_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
                 },
                 {
@@ -443,7 +443,7 @@ export class TourDocSqlMytbDbConfig {
                         ' AND LOWER(persons.o_category) LIKE "person"' +
                         ' AND (image_object_persons.io_precision = 1' +
                         '      OR image_object_persons.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
-                    triggerParams: ['id', 'persons_txt'],
+                    triggerParams: ['persons_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS i_persons']
                 },
                 {
@@ -452,7 +452,7 @@ export class TourDocSqlMytbDbConfig {
                         ' AND LOWER(realobjects.o_category) NOT LIKE "person"' +
                         ' AND (image_object_objects.io_precision = 1' +
                         '      OR image_object_objects.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
-                    triggerParams: ['id', 'objects_txt'],
+                    triggerParams: ['objects_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT realobjects.o_name ORDER BY realobjects.o_name SEPARATOR ", ") AS i_objects']
                 },
                 {
@@ -946,7 +946,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                         'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
-                    triggerParams: ['id', 'playlists_txt'],
+                    triggerParams: ['playlists_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
                 },
                 {
@@ -1405,7 +1405,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN video_playlist ON video.v_id=video_playlist.v_id ' +
                     'LEFT JOIN playlist ON video_playlist.p_id=playlist.p_id',
-                    triggerParams: ['id', 'playlists_txt'],
+                    triggerParams: ['playlists_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists']
                 },
                 {
@@ -1420,7 +1420,7 @@ export class TourDocSqlMytbDbConfig {
                     ' AND LOWER(persons.o_category) LIKE "person"' +
                     ' AND (video_object_persons.vo_precision = 1' +
                     '      OR video_object_persons.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
-                    triggerParams: ['id', 'persons_txt'],
+                    triggerParams: ['persons_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS v_persons']
                 },
                 {
@@ -1429,7 +1429,7 @@ export class TourDocSqlMytbDbConfig {
                         ' AND LOWER(realobjects.o_category) NOT LIKE "person"' +
                         ' AND (video_object_objects.vo_precision = 1' +
                         '      OR video_object_objects.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
-                    triggerParams: ['id', 'objects_txt'],
+                    triggerParams: ['objects_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT realobjects.o_name ORDER BY realobjects.o_name SEPARATOR ", ") AS v_objects']
                 },
                 {
