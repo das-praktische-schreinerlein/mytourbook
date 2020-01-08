@@ -13,32 +13,52 @@ import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/contai
 import {Mapper, utils} from 'js-data';
 import {TourDocImageRecord} from '../model/records/tdocimage-record';
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
-import {TourDocSqlMytbDbActionTagAdapter} from './tdoc-sql-mytbdb-actiontag.adapter';
+import {
+    CommonDocSqlActionTagObjectDetectionAdapter,
+    ObjectsActionTagForm,
+    ObjectsKeyActionTagForm,
+    ObjectsStateActionTagForm
+} from './common-sql-actiontag-object-detection.adapter';
 import {TourDocSqlMytbDbKeywordAdapter} from './tdoc-sql-mytbdb-keyword.adapter';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
-import {CommonDocSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
-import {CommonDocSqlActionTagReplaceAdapter} from './common-sql-actiontag-replace.adapter';
+import {AssignActionTagForm, CommonDocSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
+import {CommonDocSqlActionTagReplaceAdapter, ReplaceActionTagForm} from './common-sql-actiontag-replace.adapter';
 import {CommonDocSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
 import {CommonSqlKeywordAdapter} from './common-sql-keyword.adapter';
-import {CommonDocSqlActionTagKeywordAdapter} from './common-sql-actiontag-keyword.adapter';
+import {CommonDocSqlActionTagKeywordAdapter, KeywordActionTagForm} from './common-sql-actiontag-keyword.adapter';
+import {CommonSqlPlaylistAdapter} from './common-sql-playlist.adapter';
+import {CommonDocSqlActionTagPlaylistAdapter, PlaylistActionTagForm} from './common-sql-actiontag-playlist.adapter';
+import {CommonDocSqlActionTagRateAdapter, RateActionTagForm} from './common-sql-actiontag-rate.adapter';
+import {CommonSqlRateAdapter} from './common-sql-rate.adapter';
+import {CommonSqlObjectDetectionAdapter} from './common-sql-object-detection.adapter';
+import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
-    private readonly actionTagAdapter: TourDocSqlMytbDbActionTagAdapter;
+    private readonly actionTagODAdapter: CommonDocSqlActionTagObjectDetectionAdapter;
     private readonly actionTagAssignAdapter: CommonDocSqlActionTagAssignAdapter;
     private readonly actionTagBlockAdapter: CommonDocSqlActionTagBlockAdapter;
     private readonly actionTagReplaceAdapter: CommonDocSqlActionTagReplaceAdapter;
     private readonly actionTagKeywordAdapter: CommonDocSqlActionTagKeywordAdapter;
+    private readonly actionTagPlaylistAdapter: CommonDocSqlActionTagPlaylistAdapter;
+    private readonly actionTagRateAdapter: CommonDocSqlActionTagRateAdapter;
     private readonly keywordsAdapter: TourDocSqlMytbDbKeywordAdapter;
     private readonly commonKeywordAdapter: CommonSqlKeywordAdapter;
+    private readonly commonPlaylistAdapter: CommonSqlPlaylistAdapter;
+    private readonly commonRateAdapter: CommonSqlRateAdapter;
+    private readonly commonObjectDetectionAdapter: CommonSqlObjectDetectionAdapter;
     private readonly dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
     constructor(config: any, facetCacheUsageConfigurations: FacetCacheUsageConfigurations) {
         super(config, new TourDocAdapterResponseMapper(config), facetCacheUsageConfigurations);
-        this.actionTagAdapter = new TourDocSqlMytbDbActionTagAdapter(config, this.knex, this.sqlQueryBuilder);
         this.extendTableConfigs();
+        this.commonObjectDetectionAdapter = new TourDocSqlMytbDbObjectDetectionAdapter(config, this.knex, this.sqlQueryBuilder);
         this.commonKeywordAdapter = new CommonSqlKeywordAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getKeywordModelConfigFor());
+        this.commonPlaylistAdapter = new CommonSqlPlaylistAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getPlaylistModelConfigFor());
+        this.commonRateAdapter = new CommonSqlRateAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getRateModelConfigFor());
         this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.commonKeywordAdapter);
         this.actionTagAssignAdapter = new CommonDocSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagAssignConfig());
@@ -48,6 +68,11 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             this.dbModelConfig.getActionTagReplaceConfig());
         this.actionTagKeywordAdapter = new CommonDocSqlActionTagKeywordAdapter(config, this.knex, this.sqlQueryBuilder,
             this.commonKeywordAdapter);
+        this.actionTagPlaylistAdapter = new CommonDocSqlActionTagPlaylistAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.commonPlaylistAdapter);
+        this.actionTagRateAdapter = new CommonDocSqlActionTagRateAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.commonRateAdapter);
+        this.actionTagODAdapter = new CommonDocSqlActionTagObjectDetectionAdapter(config, this.commonObjectDetectionAdapter);
     }
 
     protected extendTableConfigs() {
@@ -223,24 +248,36 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         const table = (record['type'] + '').toLowerCase();
         actionTagForm.deletes = false;
         if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('playlists_')) {
-            return this.actionTagAdapter.executeActionTagPlaylist(table, id, actionTagForm, opts);
+            return this.actionTagPlaylistAdapter.executeActionTagPlaylist(table, id, <PlaylistActionTagForm> actionTagForm, opts).then(
+                () => {
+                    if (actionTagForm.payload.set) {
+                        const rates = {
+                            'gesamt': actionTagForm.payload['tdocratepers.gesamt'] || 0,
+                            'motive': actionTagForm.payload['tdocratepers.motive'] || 0,
+                            'wichtigkeit': actionTagForm.payload['tdocratepers.wichtigkeit'] || 0
+                        };
+                        return this.commonRateAdapter.setRates(table, id, rates, opts);
+                    } else {
+                        return utils.resolve(true);
+                    }
+                });
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('objects_')) {
-            return this.actionTagAdapter.executeActionTagObjects(table, id, actionTagForm, opts);
+            return this.actionTagODAdapter.executeActionTagObjects(table, id, <ObjectsActionTagForm> actionTagForm, opts);
         } else if ((table === 'odimgobject') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('odobjectstate_')) {
-            return this.actionTagAdapter.executeActionTagObjectsState(table, id, actionTagForm, opts);
+            return this.actionTagODAdapter.executeActionTagObjectsState(table, id, <ObjectsStateActionTagForm> actionTagForm, opts);
         } else if ((table === 'odimgobject') && actionTagForm.type === 'objectkeyedit' && actionTagForm.key.startsWith('objectkeyedit')) {
-            return this.actionTagAdapter.executeActionTagObjectsKey(table, id, actionTagForm, opts);
+            return this.actionTagODAdapter.executeActionTagObjectsKey(table, id, <ObjectsKeyActionTagForm> actionTagForm, opts);
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
-            return this.actionTagAdapter.executeActionTagPersRate(table, id, actionTagForm, opts);
+            return this.actionTagRateAdapter.executeActionTagRate(table, id, <RateActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {
             return this.actionTagBlockAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'assign' && actionTagForm.key.startsWith('assign')) {
-            return this.actionTagAssignAdapter.executeActionTagAssign(table, id, actionTagForm, opts);
+            return this.actionTagAssignAdapter.executeActionTagAssign(table, id, <AssignActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'keyword' && actionTagForm.key.startsWith('keyword')) {
-            return this.actionTagKeywordAdapter.executeActionTagKeyword(table, id, actionTagForm, opts);
+            return this.actionTagKeywordAdapter.executeActionTagKeyword(table, id, <KeywordActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {
             actionTagForm.deletes = true;
-            return this.actionTagReplaceAdapter.executeActionTagReplace(table, id, actionTagForm, opts);
+            return this.actionTagReplaceAdapter.executeActionTagReplace(table, id, <ReplaceActionTagForm> actionTagForm, opts);
         }
 
         return super._doActionTag(mapper, record, actionTagForm, opts);

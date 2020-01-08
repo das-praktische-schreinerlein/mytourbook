@@ -4,6 +4,13 @@ import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {CommonSqlKeywordAdapter} from './common-sql-keyword.adapter';
 
+export interface KeywordActionTagForm extends ActionTagForm {
+    payload: {
+        keywordAction: 'set' | 'unset'
+        keywords: string;
+    };
+}
+
 export class CommonDocSqlActionTagKeywordAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
@@ -13,7 +20,7 @@ export class CommonDocSqlActionTagKeywordAdapter {
         this.commonSqlKeywordAdapter = commonSqlKeywordAdapter;
     }
 
-    public executeActionTagKeyword(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagKeyword(table: string, id: number, actionTagForm: KeywordActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
         if (!utils.isInteger(id)) {
@@ -23,11 +30,11 @@ export class CommonDocSqlActionTagKeywordAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
         }
 
-        const keywords = actionTagForm.payload['keywords'];
+        const keywords = actionTagForm.payload.keywords;
         if (!this.keywordValidationRule.isValid(keywords)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' keywords not valid');
         }
-        const keywordAction = actionTagForm.payload['keywordAction'];
+        const keywordAction = actionTagForm.payload.keywordAction;
         if (keywordAction !== 'set' && keywordAction !== 'unset') {
             return utils.reject('actiontag ' + actionTagForm.key + ' keywordAction not valid');
         }

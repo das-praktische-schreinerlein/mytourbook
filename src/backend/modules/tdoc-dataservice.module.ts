@@ -10,7 +10,7 @@ import {TourDocSqlMytbDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-
 import {TourDocSqlMytbExportDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbexportdb.adapter';
 import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsjs.adapter';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
-import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-queued-object-detection.service';
+import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-object-detection-datastore';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection.adapter';
 import {FacetCacheUsageConfigurations, SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 

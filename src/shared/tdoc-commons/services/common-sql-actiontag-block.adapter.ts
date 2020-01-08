@@ -39,6 +39,9 @@ export class CommonDocSqlActionTagBlockAdapter {
         if (actionTagForm.payload === undefined) {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
         }
+
+        const value = actionTagForm.payload.set ? 1 : 0;
+
         const blockConfig: ActionTagBlockTableConfigType = this.blockConfigs.tables[table];
         if (!blockConfig) {
             return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
@@ -47,7 +50,6 @@ export class CommonDocSqlActionTagBlockAdapter {
         const fieldName = blockConfig.blockField;
         const tableName = blockConfig.table;
         const idName = blockConfig.idField;
-        const value = actionTagForm.payload.set ? 1 : 0;
 
         let updateSql = 'UPDATE ' + tableName + ' SET ' + fieldName + '=' + value +
             '  WHERE ' + idName + ' = "' + id + '"';

@@ -5,6 +5,9 @@ import {ActionTagReplaceConfigType} from './common-sql-actiontag-replace.adapter
 import {ActionTagBlockConfigType} from './common-sql-actiontag-block.adapter';
 import {ActionTagAssignConfigType} from './common-sql-actiontag-assign.adapter';
 import {KeywordModelConfigType} from './common-sql-keyword.adapter';
+import {PlaylistModelConfigType} from './common-sql-playlist.adapter';
+import {RateModelConfigType} from './common-sql-rate.adapter';
+import {ObjectDetectionModelConfigType} from './common-sql-object-detection.adapter';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
@@ -19,13 +22,13 @@ export class TourDocSqlMytbDbConfig {
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
-                          'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
+                        'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS k_keywords']
                 },
                 {
                     from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
-                    'LEFT JOIN tour kt ON kategorie_tour.t_id=kt.t_id',
+                        'LEFT JOIN tour kt ON kategorie_tour.t_id=kt.t_id',
                     triggerParams: ['route_id_i', 'route_id_is'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT kt.t_id ORDER BY kt.t_id SEPARATOR ", ") AS k_kt_ids']
                 },
@@ -77,16 +80,16 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'image',
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                         'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
-                         'WHERE image.k_id IN (:id) and p_id in (18)',
+                        'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
+                        'WHERE image.k_id IN (:id) and p_id in (18)',
                     parameterNames: ['id']
                 },
                 {
                     profile: 'keywords',
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM kategorie INNER JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id' +
-                    ' INNER JOIN keyword on kategorie_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE kategorie.k_id IN (:id)',
+                        'FROM kategorie INNER JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id' +
+                        ' INNER JOIN keyword on kategorie_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE kategorie.k_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
                 },
@@ -181,12 +184,12 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
-                    '  kw_name AS value ' +
-                    'FROM' +
-                    ' keyword' +
-                    ' WHERE kw_name like "KW_%"' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                        '  kw_name AS value ' +
+                        'FROM' +
+                        ' keyword' +
+                        ' WHERE kw_name like "KW_%"' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
                     filterField: 'kw_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -195,10 +198,10 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNT(kategorie.l_id) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
-                    ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
-                    ' GROUP BY value, label, id' +
-                    ' ORDER BY label',
+                        ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
+                        ' FROM location LEFT JOIN kategorie ON kategorie.l_id = location.l_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label',
                     filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
                     action: AdapterFilterActions.LIKE
                 },
@@ -258,19 +261,19 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'route_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.t_id) AS count, tour.t_id AS value,' +
-                    ' tour.t_name AS label, tour.t_id AS id' +
-                    ' FROM tour LEFT JOIN kategorie ON kategorie.t_id = tour.t_id ' +
-                    ' GROUP BY value, label, id' +
-                    ' ORDER BY label',
+                        ' tour.t_name AS label, tour.t_id AS id' +
+                        ' FROM tour LEFT JOIN kategorie ON kategorie.t_id = tour.t_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label',
                     filterFields: ['kategorie.t_id', 'kt.t_id'],
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'trip_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.tr_id) AS count, trip.tr_id AS value,' +
-                    ' trip.tr_name AS label, trip.tr_id AS id' +
-                    ' FROM trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id ' +
-                    ' GROUP BY value, label, id' +
-                    ' ORDER BY label',
+                        ' trip.tr_name AS label, trip.tr_id AS id' +
+                        ' FROM trip LEFT JOIN kategorie ON kategorie.tr_id = trip.tr_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label',
                     filterField: 'tr_id',
                     action: AdapterFilterActions.IN_NUMBER
                 },
@@ -417,17 +420,17 @@ export class TourDocSqlMytbDbConfig {
             key: 'image',
             tableName: 'image',
             selectFrom: 'image LEFT JOIN kategorie ON kategorie.k_id=image.k_id ' +
-                        'LEFT JOIN location ON location.l_id = kategorie.l_id ',
+                'LEFT JOIN location ON location.l_id = kategorie.l_id ',
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
-                          'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
+                        'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
                 },
                 {
                     from: 'LEFT JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
-                    'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
+                        'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
                     triggerParams: ['playlists_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
                 },
@@ -439,7 +442,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'LEFT JOIN image_object image_object_persons ON image.i_id=image_object_persons.i_id ' +
-                    'LEFT JOIN objects persons ON image_object_persons.io_obj_type=persons.o_key' +
+                        'LEFT JOIN objects persons ON image_object_persons.io_obj_type=persons.o_key' +
                         ' AND LOWER(persons.o_category) LIKE "person"' +
                         ' AND (image_object_persons.io_precision = 1' +
                         '      OR image_object_persons.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
@@ -462,9 +465,9 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT i_id AS id FROM image INNER JOIN' +
-                         '                (select distinct i_dir, i_file FROM image GROUP BY i_dir, i_file' +
-                         '                 HAVING COUNT(*) > 1) doublettes' +
-                         '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
+                        '                (select distinct i_dir, i_file FROM image GROUP BY i_dir, i_file' +
+                        '                 HAVING COUNT(*) > 1) doublettes' +
+                        '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
                         '             ON image.i_id = doublettes2.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
@@ -474,22 +477,22 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'image_playlist',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists ' +
-                    'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
-                    ' INNER JOIN playlist on image_playlist.p_id=playlist.p_id ' +
-                    'WHERE image.i_id IN (:id)',
+                        'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
+                        ' INNER JOIN playlist on image_playlist.p_id=playlist.p_id ' +
+                        'WHERE image.i_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
                     profile: 'image_persons',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons ' +
-                    'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
-                    ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
-                    ' AND image_object.io_detector=objects_key.ok_detector ' +
-                    ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
-                    ' AND LOWER(o_category) LIKE "person"' +
-                    ' AND (image_object.io_precision = 1' +
-                    '      OR image_object.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
-                    'WHERE image.i_id IN (:id)',
+                        'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
+                        ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
+                        ' AND image_object.io_detector=objects_key.ok_detector ' +
+                        ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' AND LOWER(o_category) LIKE "person"' +
+                        ' AND (image_object.io_precision = 1' +
+                        '      OR image_object.io_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
+                        'WHERE image.i_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -529,9 +532,9 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'keywords',
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM image INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
-                    ' INNER JOIN keyword on image_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE image.i_id IN (:id)',
+                        'FROM image INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
+                        ' INNER JOIN keyword on image_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE image.i_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
                 },
@@ -628,12 +631,12 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
-                    '  kw_name AS value ' +
-                    'FROM' +
-                    ' keyword' +
-                    ' WHERE kw_name like "KW_%"' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                        '  kw_name AS value ' +
+                        'FROM' +
+                        ' keyword' +
+                        ' WHERE kw_name like "KW_%"' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
                     filterField: 'kw_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -642,11 +645,11 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNT(image.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
-                    ' location.l_name AS label' +
-                    ' FROM location INNER JOIN kategorie ON location.l_id = kategorie.l_id ' +
-                    ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
-                    ' GROUP BY GetTechName(l_name), location.l_id' +
-                    ' ORDER BY l_name ASC',
+                        ' location.l_name AS label' +
+                        ' FROM location INNER JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                        ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
+                        ' GROUP BY GetTechName(l_name), location.l_id' +
+                        ' ORDER BY l_name ASC',
                     filterField: 'GetTechName(l_name)',
                     action: AdapterFilterActions.IN
                 },
@@ -761,23 +764,23 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'persons_txt': {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, ' +
-                    ' o_name AS value ' +
-                    'FROM' +
-                    ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
-                    ' INNER JOIN image ON image_object.i_id=image.i_id ' +
-                    ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
-                    ' GROUP BY value' +
-                    ' ORDER BY value',
+                        ' o_name AS value ' +
+                        'FROM' +
+                        ' objects LEFT JOIN image_object ON objects.o_key=image_object.io_obj_type' +
+                        ' INNER JOIN image ON image_object.i_id=image.i_id ' +
+                        ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
                     filterField: 'persons.o_name',
                     action: AdapterFilterActions.IN
                 },
                 'playlists_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
-                    '  p_name AS value ' +
-                    'FROM' +
-                    ' playlist' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                        '  p_name AS value ' +
+                        'FROM' +
+                        ' playlist' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
                     filterField: 'p_name',
                     action: AdapterFilterActions.IN
                 },
@@ -952,26 +955,26 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'INNER JOIN (SELECT io_id AS id FROM image_object' +
                         '                     WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                                                                        ' ":::detector=", image_object.io_detector,' +
-                                                                        ' ":::objX=", image_object.io_obj_x1,' +
-                                                                        ' ":::objY=", image_object.io_obj_y1,' +
-                                                                        ' ":::objWidth=", image_object.io_obj_width,' +
-                                                                        ' ":::objHeight=", image_object.io_obj_height,' +
-                                                                        ' ":::precision=", image_object.io_precision) IN' +
-                        '                (select distinct CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                                                                        ' ":::detector=", image_object.io_detector,' +
-                                                                        ' ":::objX=", image_object.io_obj_x1,' +
-                                                                        ' ":::objY=", image_object.io_obj_y1,' +
-                                                                        ' ":::objWidth=", image_object.io_obj_width,' +
-                                                                        ' ":::objHeight=", image_object.io_obj_height,' +
-                                                                        ' ":::precision=", image_object.io_precision)' +
-            '                                FROM image_object GROUP BY CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                                                                        ' ":::detector=", image_object.io_detector,' +
-                                                                        ' ":::objX=", image_object.io_obj_x1,' +
-                                                                        ' ":::objY=", image_object.io_obj_y1,' +
-                                                                        ' ":::objWidth=", image_object.io_obj_width,' +
-                                                                        ' ":::objHeight=", image_object.io_obj_height,' +
-                                                                        ' ":::precision=", image_object.io_precision)' +
+                        ' ":::detector=", image_object.io_detector,' +
+                        ' ":::objX=", image_object.io_obj_x1,' +
+                        ' ":::objY=", image_object.io_obj_y1,' +
+                        ' ":::objWidth=", image_object.io_obj_width,' +
+                        ' ":::objHeight=", image_object.io_obj_height,' +
+                        ' ":::precision=", image_object.io_precision) IN' +
+                        '    (select distinct CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        ' ":::detector=", image_object.io_detector,' +
+                        ' ":::objX=", image_object.io_obj_x1,' +
+                        ' ":::objY=", image_object.io_obj_y1,' +
+                        ' ":::objWidth=", image_object.io_obj_width,' +
+                        ' ":::objHeight=", image_object.io_obj_height,' +
+                        ' ":::precision=", image_object.io_precision)' +
+                        '     FROM image_object GROUP BY CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        ' ":::detector=", image_object.io_detector,' +
+                        ' ":::objX=", image_object.io_obj_x1,' +
+                        ' ":::objY=", image_object.io_obj_y1,' +
+                        ' ":::objWidth=", image_object.io_obj_width,' +
+                        ' ":::objHeight=", image_object.io_obj_height,' +
+                        ' ":::precision=", image_object.io_precision)' +
                         '                    HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON image_object.io_id=doublettes.id',
@@ -1086,7 +1089,7 @@ export class TourDocSqlMytbDbConfig {
                 'data_tech_alt_asc_facet_is': {
                     selectField: 'ROUND((k_altitude_asc / 500))*500',
                     selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
-                                'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
                     orderBy: 'value asc'
                 },
                 'data_tech_alt_max_facet_is': {
@@ -1097,7 +1100,7 @@ export class TourDocSqlMytbDbConfig {
                 'data_tech_dist_facets_fs': {
                     selectField: 'ROUND((k_distance / 5))*5',
                     selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
-                                'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                        'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
                     orderBy: 'value asc'
                 },
                 'data_tech_dur_facet_fs': {
@@ -1394,17 +1397,17 @@ export class TourDocSqlMytbDbConfig {
             key: 'video',
             tableName: 'video',
             selectFrom: 'video LEFT JOIN kategorie ON kategorie.k_id=video.k_id ' +
-            'LEFT JOIN location ON location.l_id = kategorie.l_id ',
+                'LEFT JOIN location ON location.l_id = kategorie.l_id ',
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN video_keyword ON video.v_id=video_keyword.v_id ' +
-                    'LEFT JOIN keyword ON video_keyword.kw_id=keyword.kw_id',
+                        'LEFT JOIN keyword ON video_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
                 },
                 {
                     from: 'LEFT JOIN video_playlist ON video.v_id=video_playlist.v_id ' +
-                    'LEFT JOIN playlist ON video_playlist.p_id=playlist.p_id',
+                        'LEFT JOIN playlist ON video_playlist.p_id=playlist.p_id',
                     triggerParams: ['playlists_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists']
                 },
@@ -1416,10 +1419,10 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'LEFT JOIN video_object video_object_persons ON video.v_id=video_object_persons.v_id ' +
-                    'LEFT JOIN objects persons ON video_object_persons.vo_obj_type=persons.o_key' +
-                    ' AND LOWER(persons.o_category) LIKE "person"' +
-                    ' AND (video_object_persons.vo_precision = 1' +
-                    '      OR video_object_persons.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
+                        'LEFT JOIN objects persons ON video_object_persons.vo_obj_type=persons.o_key' +
+                        ' AND LOWER(persons.o_category) LIKE "person"' +
+                        ' AND (video_object_persons.vo_precision = 1' +
+                        '      OR video_object_persons.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))',
                     triggerParams: ['persons_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT persons.o_name ORDER BY persons.o_name SEPARATOR ", ") AS v_persons']
                 },
@@ -1451,22 +1454,22 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'video_playlist',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists ' +
-                    'FROM video INNER JOIN video_playlist ON video.v_id=video_playlist.v_id' +
-                    ' INNER JOIN playlist on video_playlist.p_id=playlist.p_id ' +
-                    'WHERE video.v_id IN (:id)',
+                        'FROM video INNER JOIN video_playlist ON video.v_id=video_playlist.v_id' +
+                        ' INNER JOIN playlist on video_playlist.p_id=playlist.p_id ' +
+                        'WHERE video.v_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
                     profile: 'video_persons',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_persons ' +
-                    'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
-                    ' INNER JOIN objects_key ON video_object.vo_obj_type=objects_key.ok_key' +
-                    ' AND video_object.vo_detector=objects_key.ok_detector ' +
-                    ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
-                    ' AND LOWER(o_category) LIKE "person"' +
-                    ' AND (video_object.vo_precision = 1' +
-                    '      OR video_object.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
-                    'WHERE video.v_id IN (:id)',
+                        'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
+                        ' INNER JOIN objects_key ON video_object.vo_obj_type=objects_key.ok_key' +
+                        ' AND video_object.vo_detector=objects_key.ok_detector ' +
+                        ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
+                        ' AND LOWER(o_category) LIKE "person"' +
+                        ' AND (video_object.vo_precision = 1' +
+                        '      OR video_object.vo_state in ("' + TourDocSqlMytbDbConfig.detectionOkStates.join('", "') + '"))' +
+                        'WHERE video.v_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -1485,9 +1488,9 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'keywords',
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM video INNER JOIN video_keyword ON video.v_id=video_keyword.v_id' +
-                    ' INNER JOIN keyword on video_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE video.v_id IN (:id)',
+                        'FROM video INNER JOIN video_keyword ON video.v_id=video_keyword.v_id' +
+                        ' INNER JOIN keyword on video_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE video.v_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
                 },
@@ -1496,12 +1499,12 @@ export class TourDocSqlMytbDbConfig {
                     sql: '(SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_meta_name, "null"), ":::navtype=", "PREDECESSOR")' +
                         '  AS navigation_objects' +
                         '  FROM video WHERE v_date < (SELECT v_date FROM video WHERE v_id IN (:id))' +
-                        '  ORDER BY v_datevon DESC, v_id DESC LIMIT 1) ' +
+                        '  ORDER BY v_date DESC, v_id DESC LIMIT 1) ' +
                         'UNION ' +
                         ' (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_meta_name, "null"), ":::navtype=", "SUCCESSOR")' +
                         '  AS navigation_objects' +
                         '  FROM video WHERE v_date > (SELECT v_date FROM video WHERE v_id IN (:id))' +
-                        '   ORDER BY v_datevon, v_id LIMIT 1)',
+                        '   ORDER BY v_date, v_id LIMIT 1)',
                     parameterNames: ['id'],
                     modes: ['details']
                 }
@@ -1584,12 +1587,12 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
-                    '  kw_name AS value ' +
-                    'FROM' +
-                    ' keyword' +
-                    ' WHERE kw_name like "KW_%"' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                        '  kw_name AS value ' +
+                        'FROM' +
+                        ' keyword' +
+                        ' WHERE kw_name like "KW_%"' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
                     filterField: 'kw_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -1598,11 +1601,11 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNT(video.l_id) AS count, GetTechName(l_name) AS value, location.l_id AS id,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label' +
-                    ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
-                    ' LEFT JOIN video ON kategorie.k_id=video.k_id ' +
-                    ' GROUP BY GetTechName(l_name), location.l_id' +
-                    ' ORDER BY label ASC',
+                        ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label' +
+                        ' FROM location LEFT JOIN kategorie ON location.l_id = kategorie.l_id ' +
+                        ' LEFT JOIN video ON kategorie.k_id=video.k_id ' +
+                        ' GROUP BY GetTechName(l_name), location.l_id' +
+                        ' ORDER BY label ASC',
                     filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
                     action: AdapterFilterActions.LIKE
                 },
@@ -1647,23 +1650,23 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'persons_txt': {
                     selectSql: 'SELECT COUNT(video.v_id) AS count, ' +
-                    ' o_name AS value ' +
-                    'FROM' +
-                    ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
-                    ' INNER JOIN video ON video_object.v_id=video.v_id ' +
-                    ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
-                    ' GROUP BY value' +
-                    ' ORDER BY value',
+                        ' o_name AS value ' +
+                        'FROM' +
+                        ' objects LEFT JOIN video_object ON objects.o_key=video_object.vo_obj_type' +
+                        ' INNER JOIN video ON video_object.v_id=video.v_id ' +
+                        ' WHERE objects.o_category IN ("' + TourDocSqlMytbDbConfig.personCategories.join('", "') + '")' +
+                        ' GROUP BY value' +
+                        ' ORDER BY value',
                     filterField: 'persons.o_name',
                     action: AdapterFilterActions.IN
                 },
                 'playlists_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
-                    '  p_name AS value ' +
-                    'FROM' +
-                    ' playlist' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                        '  p_name AS value ' +
+                        'FROM' +
+                        ' playlist' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
                     filterField: 'p_name',
                     action: AdapterFilterActions.IN
                 },
@@ -1820,14 +1823,14 @@ export class TourDocSqlMytbDbConfig {
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN tour_keyword ON tour.t_id=tour_keyword.t_id ' +
-                          'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
+                        'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS t_keywords']
                 },
                 {
                     from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ' +
-                    'LEFT JOIN kategorie kt ON kategorie_tour.k_id=kt.k_id ' +
-                    'LEFT JOIN kategorie ON tour.t_id=kategorie.t_id',
+                        'LEFT JOIN kategorie kt ON kategorie_tour.k_id=kt.k_id ' +
+                        'LEFT JOIN kategorie ON tour.t_id=kategorie.t_id',
                     triggerParams: ['id', 'track_id_i', 'track_id_is'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_k_ids',
                         'GROUP_CONCAT(DISTINCT kt.k_id ORDER BY kt.k_id SEPARATOR ", ") AS t_kt_ids']
@@ -1878,18 +1881,18 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'image',
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                    'FROM tour INNER JOIN kategorie on tour.k_id=kategorie.k_id' +
-                    ' INNER JOIN image on kategorie.k_id=image.k_id ' +
-                    ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
-                    'WHERE tour.t_id IN (:id) and p_id in (18)',
+                        'FROM tour INNER JOIN kategorie on tour.k_id=kategorie.k_id' +
+                        ' INNER JOIN image on kategorie.k_id=image.k_id ' +
+                        ' INNER JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
+                        'WHERE tour.t_id IN (:id) and p_id in (18)',
                     parameterNames: ['id']
                 },
                 {
                     profile: 'keywords',
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
-                    ' INNER JOIN keyword on tour_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE tour.t_id IN (:id)',
+                        'FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
+                        ' INNER JOIN keyword on tour_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE tour.t_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
                 },
@@ -1901,7 +1904,7 @@ export class TourDocSqlMytbDbConfig {
                         '  WHERE CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) <' +
                         '      (SELECT CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) FROM tour ' +
                         '       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (:id))' +
-                      '  ORDER BY CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) DESC, t_id DESC LIMIT 1) ' +
+                        '  ORDER BY CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name) DESC, t_id DESC LIMIT 1) ' +
                         'UNION ' +
                         ' (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")' +
                         '  AS navigation_objects' +
@@ -2005,12 +2008,12 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
-                    '  kw_name AS value ' +
-                    'FROM' +
-                    ' keyword' +
-                    ' WHERE kw_name like "KW_%"' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                        '  kw_name AS value ' +
+                        'FROM' +
+                        ' keyword' +
+                        ' WHERE kw_name like "KW_%"' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
                     filterField: 'kw_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -2019,10 +2022,10 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNt(tour.l_id) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
-                    ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
-                    ' GROUP BY value, label, id' +
-                    ' ORDER BY label ASC',
+                        ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
+                        ' FROM location LEFT JOIN tour ON tour.l_id = location.l_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label ASC',
                     filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
                     action: AdapterFilterActions.LIKE
                 },
@@ -2095,10 +2098,10 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'track_id_is': {
                     selectSql: 'SELECT COUNT(kategorie.k_id) AS count, kategorie.k_id AS value,' +
-                    ' kategorie.k_name AS label, kategorie.k_id AS id' +
-                    ' FROM kategorie INNER JOIN tour ON kategorie.t_id = tour.t_id ' +
-                    ' GROUP BY value, label, id' +
-                    ' ORDER BY label',
+                        ' kategorie.k_name AS label, kategorie.k_id AS id' +
+                        ' FROM kategorie INNER JOIN tour ON kategorie.t_id = tour.t_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label',
                     filterFields: ['kategorie.k_id', 'kt.k_id'],
                     action: AdapterFilterActions.IN_NUMBER
                 },
@@ -2274,7 +2277,7 @@ export class TourDocSqlMytbDbConfig {
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
-                          'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
+                        'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 },
@@ -2323,9 +2326,9 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'keywords',
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM location INNER JOIN location_keyword ON location.l_id=location_keyword.l_id' +
-                    ' INNER JOIN keyword on location_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE location.l_id IN (:id)',
+                        'FROM location INNER JOIN location_keyword ON location.l_id=location_keyword.l_id' +
+                        ' INNER JOIN keyword on location_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE location.l_id IN (:id)',
                     parameterNames: ['id'],
                     modes: ['full']
                 },
@@ -2385,12 +2388,12 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
-                    '  kw_name AS value ' +
-                    'FROM' +
-                    ' keyword' +
-                    ' WHERE kw_name like "KW_%"' +
-                    ' GROUP BY count, value' +
-                    ' ORDER BY value',
+                        '  kw_name AS value ' +
+                        'FROM' +
+                        ' keyword' +
+                        ' WHERE kw_name like "KW_%"' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
                     filterField: 'kw_name',
                     action: AdapterFilterActions.LIKEIN
                 },
@@ -2398,10 +2401,10 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'loc_lochirarchie_txt': {
                     selectSql: 'SELECT COUNT(*) AS count, GetTechName(l_name) AS value,' +
-                    ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, l_id AS id' +
-                    ' FROM location' +
-                    ' GROUP BY value, label, id' +
-                    ' ORDER BY label ASC',
+                        ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, l_id AS id' +
+                        ' FROM location' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label ASC',
                     filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
                     action: AdapterFilterActions.LIKE
                 },
@@ -2527,7 +2530,7 @@ export class TourDocSqlMytbDbConfig {
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
-                    'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
+                        'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS tr_keywords']
                 },
@@ -2554,9 +2557,9 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'image',
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                    'FROM trip INNER JOIN kategorie on trip.tr_id=kategorie.tr_id' +
-                    ' INNER JOIN image on kategorie.k_id=image.k_id ' +
-                    'WHERE trip.tr_id IN (:id) order by i_rate desc limit 0, 1',
+                        'FROM trip INNER JOIN kategorie on trip.tr_id=kategorie.tr_id' +
+                        ' INNER JOIN image on kategorie.k_id=image.k_id ' +
+                        'WHERE trip.tr_id IN (:id) order by i_rate desc limit 0, 1',
                     parameterNames: ['id']
                 },
                 {
@@ -2787,10 +2790,10 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'image',
                     sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                    'FROM news' +
-                    ' INNER JOIN kategorie on (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
-                    ' INNER JOIN image on kategorie.k_id=image.k_id ' +
-                    'WHERE news.n_id IN (:id) order by i_rate desc limit 0, 1',
+                        'FROM news' +
+                        ' INNER JOIN kategorie on (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                        ' INNER JOIN image on kategorie.k_id=image.k_id ' +
+                        'WHERE news.n_id IN (:id) order by i_rate desc limit 0, 1',
                     parameterNames: ['id']
                 },
                 {
@@ -2966,25 +2969,130 @@ export class TourDocSqlMytbDbConfig {
 
     public static readonly keywordModelConfigType: KeywordModelConfigType = {
         table: 'keyword',
-        idField: 'kw_id',
-        nameField: 'kw_name',
+        fieldId: 'kw_id',
+        fieldName: 'kw_name',
         joins: {
             'image': {
-                table: 'image', joinTable: 'image_keyword', referenceField: 'i_id'
+                table: 'image', joinTable: 'image_keyword', fieldReference: 'i_id'
             },
             'video': {
-                table: 'video', joinTable: 'video_keyword', referenceField: 'v_id'
+                table: 'video', joinTable: 'video_keyword', fieldReference: 'v_id'
             },
             'track': {
-                table: 'kategorie', joinTable: 'kategorie_keyword', referenceField: 'k_id'
+                table: 'kategorie', joinTable: 'kategorie_keyword', fieldReference: 'k_id'
             },
             'route': {
-                table: 'tour', joinTable: 'tour_keyword', referenceField: 't_id'
+                table: 'tour', joinTable: 'tour_keyword', fieldReference: 't_id'
             },
             'location': {
-                table: 'location', joinTable: 'location_keyword', referenceField: 'l_id'
+                table: 'location', joinTable: 'location_keyword', fieldReference: 'l_id'
             }
         }
+    };
+
+    public static readonly playlistModelConfigType: PlaylistModelConfigType = {
+        table: 'playlist',
+        fieldId: 'p_id',
+        fieldName: 'p_name',
+        joins: {
+            'image': {
+                table: 'image', joinTable: 'image_playlist', fieldReference: 'i_id'
+            },
+            'video': {
+                table: 'video', joinTable: 'video_playlist', fieldReference: 'v_id'
+            }
+        }
+    };
+
+    public static readonly rateModelConfigType: RateModelConfigType = {
+        tables: {
+            'image': {
+                fieldId: 'i_id',
+                table: 'image',
+                rateFields: {
+                    'gesamt': 'i_rate',
+                    'motive': 'i_rate_motive',
+                    'wichtigkeit': 'i_rate_wichtigkeit'
+                },
+                fieldSum: 'i_rate'
+            },
+            'video': {
+                fieldId: 'v_id',
+                table: 'video',
+                rateFields: {
+                    'gesamt': 'v_rate',
+                    'motive': 'v_rate_motive',
+                    'wichtigkeit': 'v_rate_wichtigkeit'
+                },
+                fieldSum: 'v_rate'
+            }
+        }
+    };
+
+    public static readonly objectDetectionModelConfigType: ObjectDetectionModelConfigType = {
+        objectTable: {
+            fieldCategory: 'o_category',
+            fieldId: 'o_id',
+            fieldKey: 'o_key',
+            fieldName: 'o_name',
+            fieldPicasaKey: 'o_picasa_key',
+            table: 'objects'
+        },
+        objectKeyTable: {
+            fieldDetector: 'ok_detector',
+            fieldId: 'o_id',
+            fieldKey: 'ok_key',
+            table: 'objects_key'
+        },
+        detectionTables: {
+            'image': {
+                entityType: 'image',
+                table: 'image',
+                id: undefined,
+                baseTable: 'image',
+                baseFieldId: 'i_id',
+                baseFieldFileDir: 'i_dir',
+                baseFieldFileName: 'i_file',
+                baseFieldFilePath: 'CONCAT(i_dir, "/", i_file)',
+                detectedTable: 'image_object',
+                detectedFieldDetector: 'io_detector',
+                detectedFieldPrecision: 'io_precision',
+                detectedFieldState: 'io_state',
+                detectedFieldKey: 'io_obj_type',
+                detailFieldNames: ['io_obj_type', 'io_img_width', 'io_img_height',
+                    'io_obj_x1', 'io_obj_y1', 'io_obj_width', 'io_obj_height',
+                    'io_precision']
+            },
+            'video': {
+                entityType: 'video',
+                table: 'video',
+                id: undefined,
+                baseTable: 'video',
+                baseFieldId: 'v_id',
+                baseFieldFileDir: 'v_dir',
+                baseFieldFileName: 'v_file',
+                baseFieldFilePath: 'CONCAT(v_dir, "/", v_file)',
+                detectedTable: 'video_object',
+                detectedFieldDetector: 'vo_detector',
+                detectedFieldPrecision: 'vo_precision',
+                detectedFieldState: 'vo_state',
+                detectedFieldKey: 'vo_obj_type',
+                detailFieldNames: ['vo_obj_type', 'vo_img_width', 'vo_img_height',
+                    'vo_obj_x1', 'vo_obj_y1', 'vo_obj_width', 'vo_obj_height',
+                    'vo_precision']
+            }
+        },
+        detectedObjectsTables: {
+            'odimgobject': {
+                fieldDetector: 'io_detector',
+                fieldId: 'io_id',
+                fieldPrecision: 'io_precision',
+                fieldState: 'io_state',
+                table: 'image_object',
+                fieldKey: 'io_obj_type'
+            }
+        }
+
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignConfigType = {
@@ -3088,73 +3196,73 @@ export class TourDocSqlMytbDbConfig {
         tables: {
             'image': {
                 table: 'image',
-                idField: 'i_id',
+                fieldId: 'i_id',
                 referenced: [],
                 joins: [
-                    { table: 'image_object', referenceField: 'i_id' },
-                    { table: 'image_playlist', referenceField: 'i_id' },
-                    { table: 'image_keyword', referenceField: 'i_id' }
+                    { table: 'image_object', fieldReference: 'i_id' },
+                    { table: 'image_playlist', fieldReference: 'i_id' },
+                    { table: 'image_keyword', fieldReference: 'i_id' }
                 ]
             },
             'video': {
                 table: 'video',
-                idField: 'v_id',
+                fieldId: 'v_id',
                 referenced: [],
                 joins: [
-                    { table: 'video_object', referenceField: 'v_id' },
-                    { table: 'video_playlist', referenceField: 'v_id' },
-                    { table: 'video_keyword', referenceField: 'v_id' }
+                    { table: 'video_object', fieldReference: 'v_id' },
+                    { table: 'video_playlist', fieldReference: 'v_id' },
+                    { table: 'video_keyword', fieldReference: 'v_id' }
                 ]
             },
             'track': {
                 table: 'kategorie',
-                idField: 'k_id',
+                fieldId: 'k_id',
                 referenced: [
-                    { table: 'image', referenceField: 'k_id' },
-                    { table: 'tour', referenceField: 'k_id' },
-                    { table: 'video', referenceField: 'k_id' },
+                    { table: 'image', fieldReference: 'k_id' },
+                    { table: 'tour', fieldReference: 'k_id' },
+                    { table: 'video', fieldReference: 'k_id' },
                 ],
                 joins: [
-                    { table: 'kategorie_keyword', referenceField: 'k_id' },
-                    { table: 'kategorie_person', referenceField: 'k_id' },
-                    { table: 'kategorie_tour', referenceField: 'k_id' }
+                    { table: 'kategorie_keyword', fieldReference: 'k_id' },
+                    { table: 'kategorie_person', fieldReference: 'k_id' },
+                    { table: 'kategorie_tour', fieldReference: 'k_id' }
                 ]
             },
             'route': {
                 table: 'tour',
-                idField: 't_id',
+                fieldId: 't_id',
                 referenced: [
-                    { table: 'kategorie', referenceField: 't_id' },
+                    { table: 'kategorie', fieldReference: 't_id' },
                 ],
                 joins: [
-                    { table: 'kategorie_tour', referenceField: 't_id' },
-                    { table: 'tour_keyword', referenceField: 't_id' }
+                    { table: 'kategorie_tour', fieldReference: 't_id' },
+                    { table: 'tour_keyword', fieldReference: 't_id' }
                 ]
             },
             'location': {
                 table: 'location',
-                idField: 'l_id',
+                fieldId: 'l_id',
                 referenced: [
-                    { table: 'image', referenceField: 'l_id' },
-                    { table: 'kategorie', referenceField: 'l_id' },
-                    { table: 'location', referenceField: 'l_parent_id' },
-                    { table: 'tour', referenceField: 'l_id' },
-                    { table: 'trip', referenceField: 'l_id' },
-                    { table: 'video', referenceField: 'l_id' }
+                    { table: 'image', fieldReference: 'l_id' },
+                    { table: 'kategorie', fieldReference: 'l_id' },
+                    { table: 'location', fieldReference: 'l_parent_id' },
+                    { table: 'tour', fieldReference: 'l_id' },
+                    { table: 'trip', fieldReference: 'l_id' },
+                    { table: 'video', fieldReference: 'l_id' }
                 ],
                 joins: []
             },
             'news': {
                 table: 'news',
-                idField: 'n_id',
+                fieldId: 'n_id',
                 referenced: [],
                 joins: []
             },
             'trip': {
                 table: 'trip',
-                idField: 'tr_id',
+                fieldId: 'tr_id',
                 referenced: [
-                    { table: 'kategorie', referenceField: 'tr_id' }
+                    { table: 'kategorie', fieldReference: 'tr_id' }
                 ],
                 joins: []
             }
@@ -3167,6 +3275,18 @@ export class TourDocSqlMytbDbConfig {
 
     public getKeywordModelConfigFor(): KeywordModelConfigType {
         return TourDocSqlMytbDbConfig.keywordModelConfigType;
+    }
+
+    public getObjectDetectionModelConfigFor(): ObjectDetectionModelConfigType {
+        return TourDocSqlMytbDbConfig.objectDetectionModelConfigType;
+    }
+
+    public getPlaylistModelConfigFor(): PlaylistModelConfigType {
+        return TourDocSqlMytbDbConfig.playlistModelConfigType;
+    }
+
+    public getRateModelConfigFor(): RateModelConfigType {
+        return TourDocSqlMytbDbConfig.rateModelConfigType;
     }
 
     public getActionTagAssignConfig(): ActionTagAssignConfigType {

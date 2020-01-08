@@ -3,7 +3,6 @@ import {IdValidationRule, KeywordValidationRule} from '@dps/mycms-commons/dist/s
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import * as Promise_serial from 'promise-serial';
-import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
 
 export interface ActionTagAssignReferenceTableConfigType {
     table: string;
@@ -29,6 +28,14 @@ export interface ActionTagAssignConfigType {
     tables: ActionTagAssignTableConfigsType;
 }
 
+export interface AssignActionTagForm extends ActionTagForm {
+    payload: {
+        newId: string;
+        newIdSetNull: boolean;
+        referenceField: string;
+    };
+}
+
 export class CommonDocSqlActionTagAssignAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
@@ -45,7 +52,7 @@ export class CommonDocSqlActionTagAssignAdapter {
         this.assignConfigs = assignConfigs;
     }
 
-    public executeActionTagAssign(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagAssign(table: string, id: number, actionTagForm: AssignActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
         if (!utils.isInteger(id)) {
@@ -54,24 +61,13 @@ export class CommonDocSqlActionTagAssignAdapter {
         if (actionTagForm.payload === undefined) {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
         }
-
-        const referenceField = actionTagForm.payload['referenceField'];
+        const referenceField = actionTagForm.payload.referenceField;
         if (!this.keywordValidationRule.isValid(referenceField)) {
             return utils.reject('actiontag ' + actionTagForm.key + ' referenceField not valid');
         }
 
-        const assignConfig: ActionTagAssignTableConfigType = this.assignConfigs.tables[table];
-        if (!assignConfig) {
-            return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
-        }
-
-        const referenceConfig: ActionTagAssignReferenceTableConfigType = assignConfig.references[referenceField];
-        if (!referenceConfig) {
-            return utils.reject('actiontag ' + actionTagForm.key + ' referenceField not exists');
-        }
-
-        let newId = actionTagForm.payload['newId'];
-        const newIdSetNull = actionTagForm.payload['newIdSetNull'];
+        let newId: any = actionTagForm.payload.newId;
+        const newIdSetNull = actionTagForm.payload.newIdSetNull;
         if (newIdSetNull) {
             if (newId !== null && newId !== 'null') {
                 return utils.reject('actiontag ' + actionTagForm.key + ' newId must be null if newIdSetNull');
@@ -84,9 +80,19 @@ export class CommonDocSqlActionTagAssignAdapter {
                 return utils.reject('actiontag ' + actionTagForm.key + ' newId must not equal id');
             }
             newId = parseInt(newId, 10);
-            if (!isInteger(newId)) {
+            if (!utils.isInteger(newId)) {
                 return utils.reject('actiontag ' + actionTagForm.key + ' newId must be integer');
             }
+        }
+
+        const assignConfig: ActionTagAssignTableConfigType = this.assignConfigs.tables[table];
+        if (!assignConfig) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' table not valid');
+        }
+
+        const referenceConfig: ActionTagAssignReferenceTableConfigType = assignConfig.references[referenceField];
+        if (!referenceConfig) {
+            return utils.reject('actiontag ' + actionTagForm.key + ' referenceField not exists');
         }
 
         const checkBaseSql = 'SELECT ' + assignConfig.idField + ' AS id' +

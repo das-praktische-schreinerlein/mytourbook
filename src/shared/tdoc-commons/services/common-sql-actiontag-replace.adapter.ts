@@ -3,18 +3,17 @@ import {IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/for
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import * as Promise_serial from 'promise-serial';
-import {isInteger} from '@ng-bootstrap/ng-bootstrap/util/util';
 
 export interface ActionTagReplaceReferenceTableConfigType {
     table: string;
-    referenceField: string;
+    fieldReference: string;
 }
 
 export interface ActionTagReplaceTableConfigType {
-    table: string;
-    idField: string;
-    referenced: ActionTagReplaceReferenceTableConfigType[];
+    fieldId: string;
     joins: ActionTagReplaceReferenceTableConfigType[];
+    referenced: ActionTagReplaceReferenceTableConfigType[];
+    table: string;
 }
 
 export interface ActionTagReplaceTableConfigsType {
@@ -23,6 +22,13 @@ export interface ActionTagReplaceTableConfigsType {
 
 export interface ActionTagReplaceConfigType {
     tables: ActionTagReplaceTableConfigsType;
+}
+
+export interface ReplaceActionTagForm extends ActionTagForm {
+    payload: {
+        newId: string;
+        newIdSetNull: boolean;
+    };
 }
 
 export class CommonDocSqlActionTagReplaceAdapter {
@@ -40,7 +46,7 @@ export class CommonDocSqlActionTagReplaceAdapter {
         this.replaceConfigs = replaceConfigs;
     }
 
-    public executeActionTagReplace(table: string, id: number, actionTagForm: ActionTagForm, opts: any): Promise<any> {
+    public executeActionTagReplace(table: string, id: number, actionTagForm: ReplaceActionTagForm, opts: any): Promise<any> {
         opts = opts || {};
 
         if (!utils.isInteger(id)) {
@@ -48,6 +54,24 @@ export class CommonDocSqlActionTagReplaceAdapter {
         }
         if (actionTagForm.payload === undefined) {
             return utils.reject('actiontag ' + actionTagForm.key + ' playload expected');
+        }
+        let newId: any = actionTagForm.payload.newId;
+        const newIdSetNull = actionTagForm.payload.newIdSetNull;
+        if (newIdSetNull) {
+            if (newId !== null && newId !== 'null') {
+                return utils.reject('actiontag ' + actionTagForm.key + ' newId must be null if newIdSetNull');
+            }
+        } else {
+            if (!this.idValidator.isValid(newId)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' newId not valid');
+            }
+            if ((id + '') === (newId + '')) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' newId must not equal id');
+            }
+            newId = parseInt(newId, 10);
+            if (!utils.isInteger(newId)) {
+                return utils.reject('actiontag ' + actionTagForm.key + ' newId must be integer');
+            }
         }
 
         const replaceConfig: ActionTagReplaceTableConfigType = this.replaceConfigs.tables[table];
@@ -65,28 +89,9 @@ export class CommonDocSqlActionTagReplaceAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' table.joins not valid');
         }
 
-        let newId = actionTagForm.payload['newId'];
-        const newIdSetNull = actionTagForm.payload['newIdSetNull'];
-        if (newIdSetNull) {
-            if (newId !== null && newId !== 'null') {
-                return utils.reject('actiontag ' + actionTagForm.key + ' newId must be null if newIdSetNull');
-            }
-        } else {
-            if (!this.idValidator.isValid(newId)) {
-                return utils.reject('actiontag ' + actionTagForm.key + ' newId not valid');
-            }
-            if ((id + '') === (newId + '')) {
-                return utils.reject('actiontag ' + actionTagForm.key + ' newId must not equal id');
-            }
-            newId = parseInt(newId, 10);
-            if (!isInteger(newId)) {
-                return utils.reject('actiontag ' + actionTagForm.key + ' newId must be integer');
-            }
-        }
-
-        const checkBaseSql = 'SELECT ' + replaceConfig.idField + ' AS id' +
+        const checkBaseSql = 'SELECT ' + replaceConfig.fieldId + ' AS id' +
             ' FROM ' + replaceConfig.table +
-            ' WHERE ' + replaceConfig.idField + '="' + id + '"';
+            ' WHERE ' + replaceConfig.fieldId + '="' + id + '"';
         let checkNewValueSql = undefined;
         const updateSqls: string[] = [];
         if (newIdSetNull) {
@@ -94,37 +99,37 @@ export class CommonDocSqlActionTagReplaceAdapter {
             for (const referenceConfig of referenceConfigs) {
                 updateSqls.push(
                     'UPDATE ' + referenceConfig.table +
-                    ' SET ' + referenceConfig.referenceField + '=null' +
-                    ' WHERE ' + referenceConfig.referenceField + '="' + id + '"',
+                    ' SET ' + referenceConfig.fieldReference + '=null' +
+                    ' WHERE ' + referenceConfig.fieldReference + '="' + id + '"',
                 );
             }
             for (const joinConfig of joinConfigs) {
                 updateSqls.push(
                     'DELETE FROM ' + joinConfig.table +
-                    ' WHERE ' + joinConfig.referenceField + '="' + id + '"',
+                    ' WHERE ' + joinConfig.fieldReference + '="' + id + '"',
                 );
             }
         } else {
-            checkNewValueSql = 'SELECT ' + replaceConfig.idField + ' AS id' +
+            checkNewValueSql = 'SELECT ' + replaceConfig.fieldId + ' AS id' +
                 ' FROM ' + replaceConfig.table +
-                ' WHERE ' + replaceConfig.idField + '="' + newId + '"';
+                ' WHERE ' + replaceConfig.fieldId + '="' + newId + '"';
             for (const referenceConfig of referenceConfigs) {
                 updateSqls.push(
                     'UPDATE ' + referenceConfig.table +
-                    ' SET ' + referenceConfig.referenceField + '="' + newId + '"' +
-                    ' WHERE ' + referenceConfig.referenceField + '="' + id + '"',
+                    ' SET ' + referenceConfig.fieldReference + '="' + newId + '"' +
+                    ' WHERE ' + referenceConfig.fieldReference + '="' + id + '"',
                 );
             }
             for (const joinConfig of joinConfigs) {
                 updateSqls.push(
                     'UPDATE ' + joinConfig.table +
-                    ' SET ' + joinConfig.referenceField + '="' + newId + '"' +
-                    ' WHERE ' + joinConfig.referenceField + '="' + id + '"',
+                    ' SET ' + joinConfig.fieldReference + '="' + newId + '"' +
+                    ' WHERE ' + joinConfig.fieldReference + '="' + id + '"',
                 );
             }
         }
         const deleteSql = 'DELETE FROM ' + replaceConfig.table +
-            ' WHERE ' + replaceConfig.idField + '="' + id + '"';
+            ' WHERE ' + replaceConfig.fieldId + '="' + id + '"';
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {

@@ -1,6 +1,5 @@
 import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 import {
-    ObjectDetectionDetectedObjectType,
     ObjectDetectionRequest,
     ObjectDetectionRequestType,
     ObjectDetectionResponseType,
@@ -10,15 +9,7 @@ import * as RSMQWorker from 'rsmq-worker';
 import * as Promise_serial from 'promise-serial';
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-
-export interface RequestImageDataType {
-    id: string;
-    recordId: number;
-    fileName: string;
-    fileDir: string;
-    filePath: string;
-    detectors: [string];
-}
+import {ObjectDetectionDataStore, ObjectDetectionMaxIdPerDetectorType, RequestImageDataType} from './common-object-detection-datastore';
 
 export interface RedisQueueConfig {
     host: string;
@@ -37,44 +28,6 @@ export interface ObjectDetectionManagerBackendConfig {
         availableDetectors: string[];
         defaultDetectors: string[];
     };
-}
-
-export interface ObjectDetectionSqlTableConfiguration {
-    id: string;
-    baseTableName: string;
-    joinTableName: string;
-    idFieldName: string;
-    stateFieldName: string;
-    detectorFieldName: string;
-    detailFieldNames: string[];
-    table: string;
-}
-
-export interface ObjectDetectionMaxIdPerDetectorType {
-    maxId: number;
-    detector: string;
-}
-
-export interface ObjectDetectionDataStore {
-    readMaxIdAlreadyDetectedPerDetector(entityType: string, detectorFilterNames: string[]): Promise<ObjectDetectionMaxIdPerDetectorType[]>;
-
-    readRequestImageDataType(entityType: string, detector: string, maxId: number, maxPerRun: number): Promise<RequestImageDataType[]>;
-
-    getObjectDetectionConfiguration(input: ObjectDetectionRequestType): ObjectDetectionSqlTableConfiguration;
-
-    deleteOldDetectionRequests(detectionRequest: ObjectDetectionRequestType, onlyNotSucceeded: boolean): Promise<any>;
-
-    createDetectionRequest(detectionRequest: ObjectDetectionRequestType, detector: string): Promise<any>;
-
-    createDetectionError(detectionResponse: ObjectDetectionResponseType, detector: string): Promise<any>;
-
-    createDefaultObject(): Promise<any>;
-
-    processDetectionWithResult(detector: string, detectionResult: ObjectDetectionDetectedObjectType,
-                               tableConfig: ObjectDetectionSqlTableConfiguration): Promise<any>;
-
-    processDetectionWithoutResult(detector: string, tableConfig: ObjectDetectionSqlTableConfiguration): Promise<any>;
-
 }
 
 export abstract class CommonQueuedObjectDetectionService {
@@ -99,8 +52,9 @@ export abstract class CommonQueuedObjectDetectionService {
         }
 
         const rsmqOptions = {
-            host: queueConfig.host, port: queueConfig.port, ns: queueConfig.ns,
-            options: {password: queueConfig.pass, db: queueConfig.db}
+            host: queueConfig.host, port: queueConfig.port, db: queueConfig.db, ns: queueConfig.ns, redisPrefix: queueConfig.ns,
+            options: {password: queueConfig.pass,
+                host: queueConfig.host, port: queueConfig.port, db: queueConfig.db, ns: queueConfig.ns, redisPrefix: queueConfig.ns}
         };
         if (flgRequest) {
             this.requestQueueName = queueConfig.requestQueue;
@@ -428,7 +382,7 @@ export abstract class CommonQueuedObjectDetectionService {
                 console.log('DONE - saved detectionError to database');
                 return resolve('DONE - saved detectionError to database');
             }).catch(function errorFunction(reason) {
-                console.error('detectionError delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
+                console.error('detectionError delete/insert ' + tableConfig.entityType + ' failed:', reason);
                 return reject(reason);
             });
         });
@@ -458,7 +412,7 @@ export abstract class CommonQueuedObjectDetectionService {
                 console.log('DONE - saved detectionRequest to database');
                 return resolve('DONE - saved detectionRequest to database');
             }).catch(function errorFunction(reason) {
-                console.error('detectionRequest delete/insert ' + tableConfig.joinTableName + ' failed:', reason);
+                console.error('detectionRequest delete/insert ' + tableConfig.entityType + ' failed:', reason);
                 return reject(reason);
             });
         });
