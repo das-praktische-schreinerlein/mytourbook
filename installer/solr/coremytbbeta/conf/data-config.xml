@@ -76,6 +76,12 @@
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
 
             <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='(SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects  FROM kategorie_full WHERE k_datevon &lt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))  ORDER BY k_datevon DESC, k_id DESC LIMIT 1) UNION  (SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects  FROM kategorie_full WHERE k_datevon &gt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id})) ORDER BY k_datevon, k_id LIMIT 1)'
+            >
+                <field column="navigation_objects" name="navigation_objects"/>
+            </entity>
+
             <entity name='image'
                     query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image where k_id='${track.k_id}' order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
@@ -84,9 +90,11 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
+                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='tour'
-                    query="select t_id from tour where find_in_set(t_id, '${track.k_t_ids}') > 0"
+                    query="select t_id from tour where find_in_set(t_id, '${track.k_t_ids}') &gt; 0"
                     deltaImportQuery="select t_id from tour where t_id='${dih.delta.id}'"
                     deltaQuery="SELECT t_id from tour'"
             >
@@ -167,17 +175,25 @@
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
 
             <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='(SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects  FROM tour LEFT JOIN location ON tour.l_id = location.l_id  WHERE CONCAT(L_lochirarchietxt, t_name) &lt;     (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour        LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))  ORDER BY CONCAT(L_lochirarchietxt, t_name) DESC, t_id DESC LIMIT 1) UNION  (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects  FROM tour LEFT JOIN location ON tour.l_id = location.l_id   WHERE CONCAT(L_lochirarchietxt, t_name) &gt;     (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))   ORDER BY CONCAT(L_lochirarchietxt, t_name), t_id LIMIT 1)'
+            >
+                <field column="navigation_objects" name="navigation_objects"/>
+            </entity>
+
             <entity name='image'
-                    query="select image.i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image, kategorie_full where image.k_id=kategorie_full.k_id and (image.k_id in (${route.t_k_ids} 0) or image.k_id in (${route.k_id}) or find_in_set(${route.t_id}, k_t_ids) > 0) and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
+                    query="select image.i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image, kategorie_full where image.k_id=kategorie_full.k_id and (image.k_id in (${route.t_k_ids} 0) or image.k_id in (${route.k_id}) or find_in_set(${route.t_id}, k_t_ids) &gt;0) and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
+                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='bericht'
-                    query="select k_id, tr_id, n_id, k_dateshow, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, year(k_datevon) as year, k_persons, k_objects from kategorie_full where k_id in (${route.t_k_ids} 0) or k_id in (${route.k_id}) or find_in_set(${route.t_id}, k_t_ids) > 0 order by k_datevon asc"
+                    query="select k_id, tr_id, n_id, k_dateshow, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, year(k_datevon) as year, k_persons, k_objects from kategorie_full where k_id in (${route.t_k_ids} 0) or k_id in (${route.k_id}) or find_in_set(${route.t_id}, k_t_ids) &gt;0 order by k_datevon asc"
                     deltaImportQuery="select tr_id, k_dateshow, k_datevon, week(k_datevon) AS week, month(k_datevon) as month, year(k_datevon) as year, k_persons, k_objects from kategorie_full where k_id=dih.delta.id}'"
                     deltaQuery="SELECT k_id from kategorie_full'"
             >
@@ -188,6 +204,8 @@
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
                 <field column="year" name="year_is" />
+                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
         </entity>
 
@@ -224,6 +242,12 @@
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
 
             <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='(SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects, l_lochirarchietxt FROM location WHERE l_lochirarchietxt &lt;    (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id})) ORDER BY l_lochirarchietxt DESC, l_id DESC LIMIT 1) UNION (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects, l_lochirarchietxt FROM location WHERE l_lochirarchietxt &gt;     (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id})) ORDER BY l_lochirarchietxt, l_id LIMIT 1)'
+            >
+                <field column="navigation_objects" name="navigation_objects"/>
+            </entity>
+
             <entity name='image'
                     query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image where k_id in (${location.l_katids} 0) and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
@@ -232,6 +256,8 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
+                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
 
             <entity name='tour'
@@ -253,6 +279,8 @@
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
                 <field column="year" name="year_is" />
+                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
 
         </entity>
@@ -375,6 +403,14 @@
             <field column="motive" name="rate_pers_motive_i" />
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
+
+            <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='(SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects FROM video WHERE v_date &lt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))  ORDER BY v_date DESC, v_id DESC LIMIT 1)  UNION (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects FROM video WHERE v_date &gt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))  ORDER BY v_date, v_id LIMIT 1)'
+            >
+                <field column="navigation_objects" name="navigation_objects"/>
+            </entity>
+
         </entity>
 
         <entity name="trip"
@@ -417,6 +453,12 @@
 <!--            <field column="dur" name="data_tech_dur_f" />   -->
 
             <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='(SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects FROM trip WHERE tr_datevon &lt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id})) ORDER BY tr_datevon DESC, tr_id DESC LIMIT 1) UNION (SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects FROM trip WHERE tr_datevon &gt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))  ORDER BY tr_datevon, tr_id LIMIT 1)'
+            >
+                <field column="navigation_objects" name="navigation_objects"/>
+            </entity>
+
             <entity name='image'
                     query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (select k_id from kategorie_full where tr_id in (${trip.tr_id})) and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
@@ -443,6 +485,8 @@
             >
                 <field column="l_id" name="loc_id_i"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_datevon" name="date_dts" />
                 <field column="n_id" name="news_id_i"/>
                 <field column="n_id" name="news_id_is"/>
@@ -493,6 +537,11 @@
             <field column="dist" name="data_tech_dist_f" />
 
             <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='(SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects FROM news WHERE n_datevon &lt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id})) ORDER BY n_datevon DESC, n_id DESC LIMIT 1) UNION (SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects FROM news WHERE n_datevon &gt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))  ORDER BY n_datevon, n_id LIMIT 1)'
+            >
+                <field column="navigation_objects" name="navigation_objects"/>
+            </entity>
             <entity name='image'
                     query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (select k_id from kategorie_full where n_id in (${news.n_id})) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
@@ -518,6 +567,8 @@
             >
                 <field column="l_id" name="loc_id_i"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
