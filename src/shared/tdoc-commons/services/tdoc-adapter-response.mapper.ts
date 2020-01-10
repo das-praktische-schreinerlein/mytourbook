@@ -267,6 +267,33 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
         // console.log('mapResponseDocument record full:', record);
 
+        const navigationObjectField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'navigation_objects_txt')];
+        const navigationObjectDocs = [];
+        if (navigationObjectField !== undefined) {
+            let navigationObjects = [];
+            if (Array.isArray(navigationObjectField)) {
+                navigationObjects = navigationObjectField;
+            } else {
+                navigationObjects.push(navigationObjectField);
+            }
+
+            navigationObjects.forEach(navdoc => {
+                const recordSrcs = navdoc.split(';;');
+                for (let i = 0; i < recordSrcs.length; i++) {
+                    const valuePairs = recordSrcs[i].split(':::');
+                    const navigationObject = {};
+                    for (let j = 0; j < valuePairs.length; j++) {
+                        const value = valuePairs[j].split('=');
+                        navigationObject[value[0]] = value[1];
+                    }
+                    navigationObjectDocs.push(navigationObject);
+                }
+            });
+            this.mapNavigationObjectDocToAdapterDocument(mapper, record, navigationObjectDocs);
+        } else {
+            record.set('navigation_objects', []);
+        }
+
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);

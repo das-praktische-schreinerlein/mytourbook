@@ -281,7 +281,8 @@
             </div>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPlaylists.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('playlists').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="playlists label|Label for filter: playlists@@label.searchform.tdoc.playlists">Playlist:</label>
+                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('playlists').value.length > 0 ? 'label-active' : 'label-inactive')"
+                          i18n="playlists label|Label for filter: playlists@@label.searchform.tdoc.playlists">Playlist:</label>
                     <ng-container *ngIf="optionsSelectPlaylists.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPlaylists"
                                                  [settings]="settingsSelectPlaylists"
@@ -293,8 +294,23 @@
                                                  (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                     </ng-container>
                 </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectObjects.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('objects').value.length > 0 ? 'label-active' : 'label-inactive')"
+                           i18n="objects label|Label for filter: objects@@label.searchform.tdoc.objects">Objekte:</label>
+                    <ng-container *ngIf="optionsSelectObjects.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectObjects"
+                                                 [settings]="settingsSelectObjects"
+                                                 [texts]="textsSelectObjects"
+                                                 formControlName="objects"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersons.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('persons').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="persons label|Label for filter: persons@@label.searchform.tdoc.persons">Personen:</label>
+                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('persons').value.length > 0 ? 'label-active' : 'label-inactive')"
+                          i18n="persons label|Label for filter: persons@@label.searchform.tdoc.persons">Personen:</label>
                     <ng-container *ngIf="optionsSelectPersons.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPersons"
                                                  [settings]="settingsSelectPersons"

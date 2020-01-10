@@ -80,6 +80,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         whatMap.set('keyword', searchForm.what);
         whatMap.set('action', searchForm.actiontype);
         whatMap.set('persons', searchForm.persons);
+        whatMap.set('objects', searchForm.objects);
         whatMap.set('playlists', searchForm.playlists);
         return this.searchParameterUtils.joinParamsToOneRouteParameter(whatMap, this.splitter);
     }
@@ -172,7 +173,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
                 ',') : '');
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
-            ['action:', 'keyword:', 'playlists:', 'persons:']);
+            ['action:', 'keyword:', 'playlists:', 'persons:', 'objects:']);
         const what: string = (whatFilterValues.has('keyword:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('keyword:'), 'keyword:', ',') : '');
         const actiontype: string = (whatFilterValues.has('action:') ?
@@ -181,6 +182,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('playlists:'), 'playlists:', ',') : '');
         const persons: string = (whatFilterValues.has('persons:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('persons:'), 'persons:', ',') : '');
+        const objects: string = (whatFilterValues.has('objects:') ?
+            this.searchParameterUtils.joinValuesAndReplacePrefix(whatFilterValues.get('objects:'), 'objects:', ',') : '');
 
         searchForm.theme = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['theme'], /^alle$/, ''),
@@ -212,6 +215,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.persons = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(persons, /^alles$/, ''),
             defaults['persons'], '');
+        searchForm.objects = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(objects, /^alles$/, ''),
+            defaults['objects'], '');
         searchForm.fulltext = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['fulltext'], /^egal$/, ''),
             defaults['fulltext'], '');

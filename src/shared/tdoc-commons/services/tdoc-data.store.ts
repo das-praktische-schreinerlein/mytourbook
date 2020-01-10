@@ -147,6 +147,12 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                 'in': searchForm.persons.split(/,/)
             };
         }
+        if (searchForm.objects !== undefined && searchForm.objects.length > 0) {
+            filter = filter || {};
+            filter['objects_txt'] = {
+                'in': searchForm.objects.split(/,/)
+            };
+        }
         if (searchForm.objectDetectionCategory !== undefined && searchForm.objectDetectionCategory.length > 0) {
             filter = filter || {};
             filter['odcats_txt'] = {

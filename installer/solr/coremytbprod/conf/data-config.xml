@@ -79,7 +79,7 @@
             <entity name='navigation_objects'
                     query='(SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects  FROM kategorie_full WHERE k_datevon &lt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))  ORDER BY k_datevon DESC, k_id DESC LIMIT 1) UNION  (SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects  FROM kategorie_full WHERE k_datevon &gt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id})) ORDER BY k_datevon, k_id LIMIT 1)'
             >
-                <field column="navigation_objects" name="navigation_objects"/>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
             <entity name='image'
@@ -178,7 +178,7 @@
             <entity name='navigation_objects'
                     query='(SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects  FROM tour LEFT JOIN location ON tour.l_id = location.l_id  WHERE CONCAT(L_lochirarchietxt, t_name) &lt;     (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour        LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))  ORDER BY CONCAT(L_lochirarchietxt, t_name) DESC, t_id DESC LIMIT 1) UNION  (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects  FROM tour LEFT JOIN location ON tour.l_id = location.l_id   WHERE CONCAT(L_lochirarchietxt, t_name) &gt;     (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour       LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))   ORDER BY CONCAT(L_lochirarchietxt, t_name), t_id LIMIT 1)'
             >
-                <field column="navigation_objects" name="navigation_objects"/>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
             <entity name='image'
@@ -245,7 +245,7 @@
             <entity name='navigation_objects'
                     query='(SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects, l_lochirarchietxt FROM location WHERE l_lochirarchietxt &lt;    (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id})) ORDER BY l_lochirarchietxt DESC, l_id DESC LIMIT 1) UNION (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects, l_lochirarchietxt FROM location WHERE l_lochirarchietxt &gt;     (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id})) ORDER BY l_lochirarchietxt, l_id LIMIT 1)'
             >
-                <field column="navigation_objects" name="navigation_objects"/>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
             <entity name='image'
@@ -408,7 +408,7 @@
             <entity name='navigation_objects'
                     query='(SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects FROM video WHERE v_date &lt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))  ORDER BY v_date DESC, v_id DESC LIMIT 1)  UNION (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects FROM video WHERE v_date &gt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))  ORDER BY v_date, v_id LIMIT 1)'
             >
-                <field column="navigation_objects" name="navigation_objects"/>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
         </entity>
@@ -456,7 +456,7 @@
             <entity name='navigation_objects'
                     query='(SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects FROM trip WHERE tr_datevon &lt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id})) ORDER BY tr_datevon DESC, tr_id DESC LIMIT 1) UNION (SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects FROM trip WHERE tr_datevon &gt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))  ORDER BY tr_datevon, tr_id LIMIT 1)'
             >
-                <field column="navigation_objects" name="navigation_objects"/>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
             <entity name='image'
@@ -540,7 +540,7 @@
             <entity name='navigation_objects'
                     query='(SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects FROM news WHERE n_datevon &lt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id})) ORDER BY n_datevon DESC, n_id DESC LIMIT 1) UNION (SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects FROM news WHERE n_datevon &gt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))  ORDER BY n_datevon, n_id LIMIT 1)'
             >
-                <field column="navigation_objects" name="navigation_objects"/>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
             <entity name='image'
                     query="select i_id, i_date, concat(i_dir, '/', i_file) as i_url from image where k_id in (select k_id from kategorie_full where n_id in (${news.n_id})) order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
