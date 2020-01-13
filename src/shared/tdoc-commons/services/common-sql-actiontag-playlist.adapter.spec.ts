@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
@@ -41,16 +40,16 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
             done();
         });
 
-        it('executeActionTagBlock should error on no payload', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidPayload(knex, service, 'executeActionTagPlaylist', 'playlist' , done);
+        it('executeActionTagPlaylist should error on no payload', done => {
+            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagPlaylist', 'playlist' , done);
         });
 
-        it('executeActionTagBlock should error on invalid id', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidId(knex, service, 'executeActionTagPlaylist', 'playlist', done);
+        it('executeActionTagPlaylist should error on invalid id', done => {
+            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagPlaylist', 'playlist', done);
         });
 
-        it('executeActionTagBlock should error on unknown table', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidTable(knex, service, 'executeActionTagPlaylist', 'playlist',
+        it('executeActionTagPlaylist should error on unknown table', done => {
+            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagPlaylist', 'playlist',
                 {
                     playlistkey: 'playlist',
                     set: 1,
@@ -59,10 +58,8 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
 
 
         it('executeActionTagPlaylist should reject playlist', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
-            Observable.fromPromise(service.executeActionTagPlaylist('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
                 payload: {
                     playlistkey: 'playlist??`"',
                     set: false,
@@ -71,20 +68,7 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
                 key: 'playlist',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag playlist playlists not valid');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag playlist playlists not valid', done);
         });
     });
 
@@ -93,69 +77,46 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
         const service: CommonDocSqlActionTagPlaylistAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagPlaylist should set playlist', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
-            Observable.fromPromise(service.executeActionTagPlaylist('image', id, {
-                payload: {
-                    playlistkey: 'playlist',
-                    set: true,
-                },
-                deletes: false,
-                key: 'playlist',
-                recordId: id,
-                type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toEqual(true);
-                    expect(knex.sqls).toEqual(['DELETE FROM image_playlist' +
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
+                    payload: {
+                        playlistkey: 'playlist',
+                        set: true,
+                    },
+                    deletes: false,
+                    key: 'playlist',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'DELETE FROM image_playlist' +
                     ' WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND i_id = ?',
-                        'INSERT INTO image_playlist (p_id, i_id)' +
-                        ' SELECT p_id +  AS p_id,     ? AS i_id FROM playlist     WHERE p_name IN (?)']);
-                    expect(knex.params).toEqual([['playlist', 5], [5, 'playlist']]);
-                    done();
-                },
-                error => {
-                    expect(error).toBeUndefined();
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+                    'INSERT INTO image_playlist (p_id, i_id)' +
+                    ' SELECT p_id +  AS p_id,     ? AS i_id FROM playlist     WHERE p_name IN (?)'],
+                [
+                    ['playlist', 5],
+                    [5, 'playlist']],
+                done);
         });
 
         it('executeActionTagPlaylist should unset playlist', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
-            Observable.fromPromise(service.executeActionTagPlaylist('image', id, {
-                payload: {
-                    playlistkey: 'playlist',
-                    set: false,
-                },
-                deletes: false,
-                key: 'playlist',
-                recordId: id,
-                type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toEqual(true);
-                    expect(knex.sqls).toEqual(['DELETE FROM image_playlist' +
-                    ' WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND i_id = ?']);
-                    expect(knex.params).toEqual([['playlist', 5]]);
-                    done();
-                },
-                error => {
-                    expect(error).toBeUndefined();
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
+                    payload: {
+                        playlistkey: 'playlist',
+                        set: false,
+                    },
+                    deletes: false,
+                    key: 'playlist',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'DELETE FROM image_playlist' +
+                    ' WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND i_id = ?'],
+                [
+                    ['playlist', 5]],
+                done);
         });
     });
 });

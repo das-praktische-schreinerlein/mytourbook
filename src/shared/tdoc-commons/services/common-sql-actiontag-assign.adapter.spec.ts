@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
@@ -45,11 +44,11 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
         });
 
         it('executeActionTagAssign should error on no payload', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidPayload(knex, service, 'executeActionTagAssign', 'assign' , done);
+            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagAssign', 'assign' , done);
         });
 
         it('executeActionTagAssign should error on unknown table', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidTable(knex, service, 'executeActionTagAssign', 'assign',
+            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagAssign', 'assign',
                 {
                     newId: '10',
                     newIdSetNull: false,
@@ -58,15 +57,13 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
         });
 
         it('executeActionTagAssign should error on invalid id', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidId(knex, service, 'executeActionTagAssign', 'assign', done);
+            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagAssign', 'assign', done);
         });
 
         it('executeActionTagAssign should reject: invalid newId', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = 'a*';
-            Observable.fromPromise(service.executeActionTagAssign('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -76,28 +73,13 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
                 key: 'assign',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag assign newId not valid');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag assign newId not valid', done);
         });
 
         it('executeActionTagAssign should reject: newId must be null if newIdSetNull', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = '10';
-            Observable.fromPromise(service.executeActionTagAssign('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: true,
@@ -107,28 +89,13 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
                 key: 'assign',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag assign newId must be null if newIdSetNull');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag assign newId must be null if newIdSetNull', done);
         });
 
         it('executeActionTagAssign should reject: newId must integer', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = 'a';
-            Observable.fromPromise(service.executeActionTagAssign('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -138,28 +105,13 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
                 key: 'assign',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag assign newId must be integer');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag assign newId must be integer', done);
         });
 
         it('executeActionTagAssign should reject: invalid referenceField', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = '10';
-            Observable.fromPromise(service.executeActionTagAssign('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -169,28 +121,13 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
                 key: 'assign',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag assign referenceField not valid');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag assign referenceField not valid', done);
         });
 
         it('executeActionTagAssign should reject: unknown referenceField', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = '10';
-            Observable.fromPromise(service.executeActionTagAssign('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -200,23 +137,123 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
                 key: 'assign',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag assign referenceField not exists');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag assign referenceField not exists', done);
         });
 
     });
 
-    // TODO add specs
+    describe('#executeActionTagAssign()', () => {
+        const knex = TestHelperSpec.createKnex('mysql', []);
+        const service: CommonDocSqlActionTagAssignAdapter = localTestHelper.createService(knex);
+
+        it('executeActionTagAssign should set newId', done => {
+            const id: any = 5;
+            const newId: any = '10';
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagAssign', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: false,
+                        referenceField: 'track_id_is'
+                    },
+                    deletes: false,
+                    key: 'assign',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?',
+                    'SELECT k_id AS id FROM kategorie WHERE k_id=?',
+                    'UPDATE image SET k_id=? WHERE i_id=?'
+                ],
+                [
+                    [5],
+                    [10],
+                    [10, 5]],
+                done, [
+                    [[{id: 5}]],
+                    [[{id: 10}]]
+                ]);
+        });
+
+        it('executeActionTagAssign should set newId null', done => {
+            const id: any = 5;
+            const newId: any = null;
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagAssign', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: true,
+                        referenceField: 'track_id_is'
+                    },
+                    deletes: false,
+                    key: 'assign',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?',
+                    'SELECT null AS id',
+                    'UPDATE image SET k_id=null WHERE i_id=?'
+                ],
+                [
+                    [5],
+                    [],
+                    [5]],
+                done, [
+                    [[{id: 5}]],
+                    [[{id: null}]]
+                ]);
+        });
+
+        it('executeActionTagAssign should reject: id not exists', done => {
+            const id: any = 5;
+            const newId: any = '10';
+            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagAssign', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: false,
+                        referenceField: 'track_id_is'
+                    },
+                    deletes: false,
+                    key: 'assign',
+                    recordId: id,
+                    type: 'tag'
+                }, '_doActionTag assign image failed: id not found ' + id,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?'
+                ],
+                [
+                    [5]],
+                done, [
+                    [[]]
+                ]);
+        });
+
+        it('executeActionTagAssign should reject: newId not exists', done => {
+            const id: any = 5;
+            const newId: any = '10';
+            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagAssign', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: false,
+                        referenceField: 'track_id_is'
+                    },
+                    deletes: false,
+                    key: 'assign',
+                    recordId: id,
+                    type: 'tag'
+                }, '_doActionTag assign image failed: newId not found ' + newId,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?',
+                    'SELECT k_id AS id FROM kategorie WHERE k_id=?'
+                ],
+                [
+                    [5],
+                    [10]],
+                done, [
+                    [[{id: 5}]],
+                    [[]]
+                ]);
+        });
+
+    });
 });

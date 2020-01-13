@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import {ActionTagBlockConfigType, CommonDocSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
@@ -36,16 +35,16 @@ describe('CommonDocSqlActionTagBlockAdapter', () => {
         });
 
         it('executeActionTagBlock should error on no payload', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidPayload(knex, service, 'executeActionTagBlock', 'block' , done);
+            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagBlock', 'block' , done);
         });
 
         it('executeActionTagBlock should error on unknown table', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidTable(knex, service, 'executeActionTagBlock', 'blockd',
+            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagBlock', 'blockd',
                 {set: 1}, undefined, done);
         });
 
         it('executeActionTagBlock should error on invalid id', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidId(knex, service, 'executeActionTagBlock', 'block', done);
+            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagBlock', 'block', done);
         });
     });
 
@@ -54,63 +53,39 @@ describe('CommonDocSqlActionTagBlockAdapter', () => {
         const service: CommonDocSqlActionTagBlockAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagBlock should set', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
-            Observable.fromPromise(service.executeActionTagBlock('location', id, {
-                payload: {
-                    set: 1
-                },
-                deletes: false,
-                key: 'block',
-                recordId: id,
-                type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toEqual(true);
-                    expect(knex.sqls).toEqual(['UPDATE location SET l_gesperrt=?  WHERE l_id = ?']);
-                    expect(knex.params).toEqual([[1, 5]]);
-                    done();
-                },
-                error => {
-                    expect(error).toBeUndefined();
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagBlock', 'location', id, {
+                    payload: {
+                        set: 1
+                    },
+                    deletes: false,
+                    key: 'block',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'UPDATE location SET l_gesperrt=?  WHERE l_id = ?'],
+                [
+                    [1, 5]],
+                done);
         });
 
         it('executeActionTagBlock should unset', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 7;
-            Observable.fromPromise(service.executeActionTagBlock('location', id, {
-                payload: {
-                    set: 0
-                },
-                deletes: false,
-                key: 'block',
-                recordId: id,
-                type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toEqual(true);
-                    expect(knex.sqls).toEqual(['UPDATE location SET l_gesperrt=?  WHERE l_id = ?']);
-                    expect(knex.params).toEqual([[0, 7]]);
-                    done();
-                },
-                error => {
-                    expect(error).toBeUndefined();
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagBlock', 'location', id, {
+                    payload: {
+                        set: 0
+                    },
+                    deletes: false,
+                    key: 'block',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'UPDATE location SET l_gesperrt=?  WHERE l_id = ?'],
+                [
+                    [0, 7]],
+                done);
         });
     });
 });

@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
@@ -43,11 +42,11 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         });
 
         it('executeActionTagReplace should error on no payload', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidPayload(knex, service, 'executeActionTagReplace', 'replace' , done);
+            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagReplace', 'replace' , done);
         });
 
         it('executeActionTagReplace should error on unknown table', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidTable(knex, service, 'executeActionTagReplace', 'replace',
+            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagReplace', 'replace',
                 {
                     newId: '10',
                     newIdSetNull: false
@@ -55,15 +54,13 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         });
 
         it('executeActionTagReplace should error on invalid id', done => {
-            TestHelperSpec.doDefaultTestActionTagInvalidId(knex, service, 'executeActionTagReplace', 'replace', done);
+            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagReplace', 'replace', done);
         });
 
         it('executeActionTagReplace should reject: invalid newId', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = 'a*';
-            Observable.fromPromise(service.executeActionTagReplace('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false
@@ -72,28 +69,13 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                 key: 'replace',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag replace newId not valid');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag replace newId not valid', done);
         });
 
         it('executeActionTagReplace should reject: newId must be null if newIdSetNull', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = '10';
-            Observable.fromPromise(service.executeActionTagReplace('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: true
@@ -102,28 +84,13 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                 key: 'replace',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag replace newId must be null if newIdSetNull');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag replace newId must be null if newIdSetNull', done);
         });
 
         it('executeActionTagReplace should reject: newId must integer', done => {
-            // WHEN
-            knex.resetTestResults([true]);
             const id: any = 5;
             const newId: any = 'a';
-            Observable.fromPromise(service.executeActionTagReplace('image', id, {
+            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false
@@ -132,22 +99,130 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                 key: 'replace',
                 recordId: id,
                 type: 'tag'
-            }, {})).subscribe(
-                res => {
-                    // THEN
-                    expect(res).toBeUndefined();
-                    done();
-                },
-                error => {
-                    expect(error).toEqual('actiontag replace newId must be integer');
-                    done();
-                },
-                () => {
-                    done();
-                }
-            );
+            }, 'actiontag replace newId must be integer', done);
         });
     });
 
-    // TODO add specs
+    describe('#executeActionTagReplace()', () => {
+        const knex = TestHelperSpec.createKnex('mysql', []);
+        const service: CommonDocSqlActionTagReplaceAdapter = localTestHelper.createService(knex);
+
+        it('executeActionTagReplace should set newId', done => {
+            const id: any = 5;
+            const newId: any = '10';
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagReplace', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: false
+                    },
+                    deletes: false,
+                    key: 'replace',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?',
+                    'SELECT i_id AS id FROM image WHERE i_id=?',
+                    'UPDATE image_object SET i_id=? WHERE i_id=?',
+                    'UPDATE image_playlist SET i_id=? WHERE i_id=?',
+                    'UPDATE image_keyword SET i_id=? WHERE i_id=?',
+                    'DELETE FROM image WHERE i_id=?'
+                ],
+                [
+                    [5],
+                    [10],
+                    [10, 5],
+                    [10, 5],
+                    [10, 5],
+                    [5]],
+                done, [
+                    [[{id: 5}]],
+                    [[{id: 10}]]
+                ]);
+        });
+
+        it('executeActionTagReplace should set newId null', done => {
+            const id: any = 5;
+            const newId: any = null;
+            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagReplace', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: true
+                    },
+                    deletes: false,
+                    key: 'replace',
+                    recordId: id,
+                    type: 'tag'
+                }, true,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?',
+                    'SELECT null AS id',
+                    'DELETE FROM image_object WHERE i_id=?',
+                    'DELETE FROM image_playlist WHERE i_id=?',
+                    'DELETE FROM image_keyword WHERE i_id=?',
+                    'DELETE FROM image WHERE i_id=?'
+                ],
+                [
+                    [5],
+                    [],
+                    [5],
+                    [5],
+                    [5],
+                    [5]],
+                done, [
+                    [[{id: 5}]],
+                    [[{id: null}]]
+                ]);
+        });
+
+        it('executeActionTagReplace should reject: id not exists', done => {
+            const id: any = 5;
+            const newId: any = '10';
+            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagReplace', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: false
+                    },
+                    deletes: false,
+                    key: 'replace',
+                    recordId: id,
+                    type: 'tag'
+                }, '_doActionTag replace image failed: id not found ' + id,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?'
+                ],
+                [
+                    [5]],
+                done, [
+                    [[]]
+                ]);
+        });
+
+        it('executeActionTagReplace should reject: newId not exists', done => {
+            const id: any = 5;
+            const newId: any = '10';
+            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagReplace', 'image', id, {
+                    payload: {
+                        newId: newId,
+                        newIdSetNull: false
+                    },
+                    deletes: false,
+                    key: 'replace',
+                    recordId: id,
+                    type: 'tag'
+                }, '_doActionTag replace image failed: newId not found ' + newId,
+                [
+                    'SELECT i_id AS id FROM image WHERE i_id=?',
+                    'SELECT i_id AS id FROM image WHERE i_id=?'
+                ],
+                [
+                    [5],
+                    [10]],
+                done, [
+                    [[{id: 5}]],
+                    [[]]
+                ]);
+        });
+
+    });
 });
