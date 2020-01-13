@@ -1,7 +1,6 @@
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {KeywordValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
-import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {CommonSqlPlaylistAdapter} from './common-sql-playlist.adapter';
 
 export interface PlaylistActionTagForm extends ActionTagForm {
@@ -16,7 +15,7 @@ export class CommonDocSqlActionTagPlaylistAdapter {
     private playlistValidationRule = new KeywordValidationRule(true);
     private readonly commonSqlPlaylistAdapter: CommonSqlPlaylistAdapter;
 
-    constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder, commonSqlPlaylistAdapter: CommonSqlPlaylistAdapter) {
+    constructor(commonSqlPlaylistAdapter: CommonSqlPlaylistAdapter) {
         this.commonSqlPlaylistAdapter = commonSqlPlaylistAdapter;
     }
 

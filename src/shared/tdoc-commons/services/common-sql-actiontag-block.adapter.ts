@@ -1,6 +1,7 @@
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
 export interface ActionTagBlockTableConfigType {
     table: string;
@@ -51,12 +52,16 @@ export class CommonDocSqlActionTagBlockAdapter {
         const tableName = blockConfig.table;
         const idName = blockConfig.idField;
 
-        let updateSql = 'UPDATE ' + tableName + ' SET ' + fieldName + '=' + value +
-            '  WHERE ' + idName + ' = "' + id + '"';
+        let updateSql = 'UPDATE ' + tableName + ' SET ' + fieldName + '=' + '?' +
+            '  WHERE ' + idName + ' = ' + '?' + '';
         updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
+        const updateSqlQuery: RawSqlQueryData = {
+            sql: updateSql,
+            parameters: [value, id]
+        };
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const rawUpdate = sqlBuilder.raw(updateSql);
+        const rawUpdate = SqlUtils.executeRawSqlQueryData(sqlBuilder, updateSqlQuery);
         const result = new Promise((resolve, reject) => {
             rawUpdate.then(() => {
                 return resolve(true);

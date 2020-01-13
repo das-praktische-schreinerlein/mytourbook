@@ -1,7 +1,6 @@
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
-import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {CommonSqlRateAdapter} from './common-sql-rate.adapter';
 
 export interface RateActionTagForm extends ActionTagForm {
@@ -17,7 +16,7 @@ export class CommonDocSqlActionTagRateAdapter {
     private keywordValidationRule = new KeywordValidationRule(true);
     private readonly commonSqlRateAdapter: CommonSqlRateAdapter;
 
-    constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder, commonSqlRateAdapter: CommonSqlRateAdapter) {
+    constructor(commonSqlRateAdapter: CommonSqlRateAdapter) {
         this.commonSqlRateAdapter = commonSqlRateAdapter;
     }
 
@@ -40,7 +39,10 @@ export class CommonDocSqlActionTagRateAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' rate not valid');
         }
 
-        return this.commonSqlRateAdapter.setRates(table, id, { rateKey: rate}, opts);
+        const rates = {};
+        rates[rateKey] = rate;
+
+        return this.commonSqlRateAdapter.setRates(table, id, rates, opts);
     }
 
 }

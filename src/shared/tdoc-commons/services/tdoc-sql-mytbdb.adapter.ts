@@ -66,12 +66,9 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             this.dbModelConfig.getActionTagBlockConfig());
         this.actionTagReplaceAdapter = new CommonDocSqlActionTagReplaceAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagReplaceConfig());
-        this.actionTagKeywordAdapter = new CommonDocSqlActionTagKeywordAdapter(config, this.knex, this.sqlQueryBuilder,
-            this.commonKeywordAdapter);
-        this.actionTagPlaylistAdapter = new CommonDocSqlActionTagPlaylistAdapter(config, this.knex, this.sqlQueryBuilder,
-            this.commonPlaylistAdapter);
-        this.actionTagRateAdapter = new CommonDocSqlActionTagRateAdapter(config, this.knex, this.sqlQueryBuilder,
-            this.commonRateAdapter);
+        this.actionTagKeywordAdapter = new CommonDocSqlActionTagKeywordAdapter(this.commonKeywordAdapter);
+        this.actionTagPlaylistAdapter = new CommonDocSqlActionTagPlaylistAdapter(this.commonPlaylistAdapter);
+        this.actionTagRateAdapter = new CommonDocSqlActionTagRateAdapter(this.commonRateAdapter);
         this.actionTagODAdapter = new CommonDocSqlActionTagObjectDetectionAdapter(config, this.commonObjectDetectionAdapter);
     }
 

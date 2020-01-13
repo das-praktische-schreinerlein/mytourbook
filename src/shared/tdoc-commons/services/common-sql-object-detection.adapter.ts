@@ -13,7 +13,8 @@ import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/di
 import {
     ObjectDetectionDataStore,
     ObjectDetectionEntityDatastoreConfiguration,
-    ObjectDetectionMaxIdPerDetectorType, RequestImageDataType
+    ObjectDetectionMaxIdPerDetectorType,
+    RequestImageDataType
 } from './common-object-detection-datastore';
 
 

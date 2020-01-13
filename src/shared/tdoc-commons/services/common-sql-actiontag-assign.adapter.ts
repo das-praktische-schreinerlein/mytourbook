@@ -3,6 +3,7 @@ import {IdValidationRule, KeywordValidationRule} from '@dps/mycms-commons/dist/s
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import * as Promise_serial from 'promise-serial';
+import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
 export interface ActionTagAssignReferenceTableConfigType {
     table: string;
@@ -95,38 +96,45 @@ export class CommonDocSqlActionTagAssignAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' referenceField not exists');
         }
 
-        const checkBaseSql = 'SELECT ' + assignConfig.idField + ' AS id' +
-            ' FROM ' + assignConfig.table +
-            ' WHERE ' + assignConfig.idField + '="' + id + '"';
-        let checkNewValueSql = undefined;
-        const updateSqls: string[] = [];
+        const checkBaseSqlQuery: RawSqlQueryData = {
+            sql: 'SELECT ' + assignConfig.idField + ' AS id' +
+                ' FROM ' + assignConfig.table +
+                ' WHERE ' + assignConfig.idField + '=' + '?' + '',
+            parameters: [id]};
+        let checkNewValueSqlQuery: RawSqlQueryData = undefined;
+        const updateSqlQueries: RawSqlQueryData[] = [];
         if (newIdSetNull) {
-            checkNewValueSql = 'SELECT null AS id';
-            updateSqls.push(
-                'UPDATE ' + assignConfig.table +
-                ' SET ' + referenceConfig.referenceField + '=null' +
-                ' WHERE ' + assignConfig.idField + '="' + id + '"',
+            checkNewValueSqlQuery = {
+                sql: 'SELECT null AS id',
+                parameters: []};
+            updateSqlQueries.push({
+                sql: 'UPDATE ' + assignConfig.table +
+                    ' SET ' + referenceConfig.referenceField + '=null' +
+                    ' WHERE ' + assignConfig.idField + '=' + '?' + '',
+                parameters: [id]}
             );
         } else {
-            checkNewValueSql = 'SELECT ' + referenceConfig.idField + ' AS id' +
-                ' FROM ' + referenceConfig.table +
-                ' WHERE ' + referenceConfig.idField + '="' + newId + '"';
-            updateSqls.push(
-                'UPDATE ' + assignConfig.table +
-                ' SET ' + referenceConfig.referenceField + '="' + newId + '"' +
-                ' WHERE ' + assignConfig.idField + '="' + id + '"',
+            checkNewValueSqlQuery = {sql: 'SELECT ' + referenceConfig.idField + ' AS id' +
+                    ' FROM ' + referenceConfig.table +
+                    ' WHERE ' + referenceConfig.idField + '=' + '?' + '',
+                parameters: [newId]};
+            updateSqlQueries.push({sql:
+                    'UPDATE ' + assignConfig.table +
+                    ' SET ' + referenceConfig.referenceField + '=' + '?' + '' +
+                    ' WHERE ' + assignConfig.idField + '=' + '?' + '',
+                parameters: [newId, id]}
             );
         }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {
-            sqlBuilder.raw(checkBaseSql).then(dbresults => {
+            SqlUtils.executeRawSqlQueryData(sqlBuilder, checkBaseSqlQuery).then(dbresults => {
                 const records = this.sqlQueryBuilder.extractDbResult(dbresults, this.knex.client['config']['client']);
                 if (records === undefined || records.length !== 1 || records[0]['id'] !== id) {
                     return utils.reject('_doActionTag assign ' + table + ' failed: id not found ' + id);
                 }
 
-                return sqlBuilder.raw(checkNewValueSql);
+                return SqlUtils.executeRawSqlQueryData(sqlBuilder, checkNewValueSqlQuery);
             }).then(dbresults => {
                 const records = this.sqlQueryBuilder.extractDbResult(dbresults, this.knex.client['config']['client']);
                 if (records === undefined || records.length !== 1 || records[0]['id'] !== newId) {
@@ -134,9 +142,9 @@ export class CommonDocSqlActionTagAssignAdapter {
                 }
 
                 const updateSqlQueryPromises = [];
-                for (const updateSql of updateSqls) {
+                for (const updateSql of updateSqlQueries) {
                     updateSqlQueryPromises.push(function () {
-                        return sqlBuilder.raw(updateSql);
+                        return SqlUtils.executeRawSqlQueryData(sqlBuilder, updateSql);
                     });
                 }
                 return Promise_serial(updateSqlQueryPromises, {parallelize: 1});

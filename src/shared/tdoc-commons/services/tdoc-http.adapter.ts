@@ -2,7 +2,7 @@ import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {GenericSearchHttpAdapter} from '@dps/mycms-commons/dist/search-commons/services/generic-search-http.adapter';
-import {Mapper, utils} from 'js-data';
+import {Mapper} from 'js-data';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 
 export class TourDocHttpAdapter extends GenericSearchHttpAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {

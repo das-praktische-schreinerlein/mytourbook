@@ -1,7 +1,6 @@
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {KeywordValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {utils} from 'js-data';
-import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {CommonSqlKeywordAdapter} from './common-sql-keyword.adapter';
 
 export interface KeywordActionTagForm extends ActionTagForm {
@@ -16,7 +15,7 @@ export class CommonDocSqlActionTagKeywordAdapter {
     private keywordValidationRule = new KeywordValidationRule(true);
     private readonly commonSqlKeywordAdapter: CommonSqlKeywordAdapter;
 
-    constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder, commonSqlKeywordAdapter: CommonSqlKeywordAdapter) {
+    constructor(commonSqlKeywordAdapter: CommonSqlKeywordAdapter) {
         this.commonSqlKeywordAdapter = commonSqlKeywordAdapter;
     }
 

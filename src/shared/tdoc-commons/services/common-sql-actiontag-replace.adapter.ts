@@ -3,6 +3,7 @@ import {IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/for
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import * as Promise_serial from 'promise-serial';
+import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
 export interface ActionTagReplaceReferenceTableConfigType {
     table: string;
@@ -89,57 +90,74 @@ export class CommonDocSqlActionTagReplaceAdapter {
             return utils.reject('actiontag ' + actionTagForm.key + ' table.joins not valid');
         }
 
-        const checkBaseSql = 'SELECT ' + replaceConfig.fieldId + ' AS id' +
-            ' FROM ' + replaceConfig.table +
-            ' WHERE ' + replaceConfig.fieldId + '="' + id + '"';
-        let checkNewValueSql = undefined;
-        const updateSqls: string[] = [];
+        const checkBaseSqlQuery: RawSqlQueryData = {
+            sql: 'SELECT ' + replaceConfig.fieldId + ' AS id' +
+                ' FROM ' + replaceConfig.table +
+                ' WHERE ' + replaceConfig.fieldId + '=' + '?' + '',
+            parameters: [id]
+        };
+        let checkNewValueSqlQuery: RawSqlQueryData = undefined;
+        const updateSqlQueries: RawSqlQueryData[] = [];
         if (newIdSetNull) {
-            checkNewValueSql = 'SELECT null AS id';
+            checkNewValueSqlQuery = {
+                sql: 'SELECT null AS id',
+                parameters: []};
             for (const referenceConfig of referenceConfigs) {
-                updateSqls.push(
-                    'UPDATE ' + referenceConfig.table +
-                    ' SET ' + referenceConfig.fieldReference + '=null' +
-                    ' WHERE ' + referenceConfig.fieldReference + '="' + id + '"',
+                updateSqlQueries.push({
+                    sql:
+                        'UPDATE ' + referenceConfig.table +
+                        ' SET ' + referenceConfig.fieldReference + '=null' +
+                        ' WHERE ' + referenceConfig.fieldReference + '=' + '?' + '',
+                    parameters: [id]}
                 );
             }
             for (const joinConfig of joinConfigs) {
-                updateSqls.push(
-                    'DELETE FROM ' + joinConfig.table +
-                    ' WHERE ' + joinConfig.fieldReference + '="' + id + '"',
+                updateSqlQueries.push({
+                    sql:
+                        'DELETE FROM ' + joinConfig.table +
+                        ' WHERE ' + joinConfig.fieldReference + '=' + '?' + '',
+                    parameters: [id]}
                 );
             }
         } else {
-            checkNewValueSql = 'SELECT ' + replaceConfig.fieldId + ' AS id' +
-                ' FROM ' + replaceConfig.table +
-                ' WHERE ' + replaceConfig.fieldId + '="' + newId + '"';
+            checkNewValueSqlQuery = {
+                sql: 'SELECT ' + replaceConfig.fieldId + ' AS id' +
+                    ' FROM ' + replaceConfig.table +
+                    ' WHERE ' + replaceConfig.fieldId + '=' + '?' + '',
+                parameters: [newId]};
             for (const referenceConfig of referenceConfigs) {
-                updateSqls.push(
-                    'UPDATE ' + referenceConfig.table +
-                    ' SET ' + referenceConfig.fieldReference + '="' + newId + '"' +
-                    ' WHERE ' + referenceConfig.fieldReference + '="' + id + '"',
+                updateSqlQueries.push({
+                    sql:
+                        'UPDATE ' + referenceConfig.table +
+                        ' SET ' + referenceConfig.fieldReference + '=' + '?' + '' +
+                        ' WHERE ' + referenceConfig.fieldReference + '=' + '?' + '',
+                    parameters: [newId, id]}
                 );
             }
             for (const joinConfig of joinConfigs) {
-                updateSqls.push(
-                    'UPDATE ' + joinConfig.table +
-                    ' SET ' + joinConfig.fieldReference + '="' + newId + '"' +
-                    ' WHERE ' + joinConfig.fieldReference + '="' + id + '"',
+                updateSqlQueries.push({
+                    sql:
+                        'UPDATE ' + joinConfig.table +
+                        ' SET ' + joinConfig.fieldReference + '=' + '?' + '' +
+                        ' WHERE ' + joinConfig.fieldReference + '=' + '?' + '',
+                    parameters: [newId, id]}
                 );
             }
         }
-        const deleteSql = 'DELETE FROM ' + replaceConfig.table +
-            ' WHERE ' + replaceConfig.fieldId + '="' + id + '"';
+        const deleteSqlQuery: RawSqlQueryData = {
+            sql: 'DELETE FROM ' + replaceConfig.table +
+                ' WHERE ' + replaceConfig.fieldId + '=' + '?' + '',
+            parameters: [id]};
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {
-            sqlBuilder.raw(checkBaseSql).then(dbresults => {
+            SqlUtils.executeRawSqlQueryData(sqlBuilder, checkBaseSqlQuery).then(dbresults => {
                 const records = this.sqlQueryBuilder.extractDbResult(dbresults, this.knex.client['config']['client']);
                 if (records === undefined || records.length !== 1 || records[0]['id'] !== id) {
                     return utils.reject('_doActionTag replace ' + table + ' failed: id not found ' + id);
                 }
 
-                return sqlBuilder.raw(checkNewValueSql);
+                return SqlUtils.executeRawSqlQueryData(sqlBuilder, checkNewValueSqlQuery);
             }).then(dbresults => {
                 const records = this.sqlQueryBuilder.extractDbResult(dbresults, this.knex.client['config']['client']);
                 if (records === undefined || records.length !== 1 || records[0]['id'] !== newId) {
@@ -147,14 +165,14 @@ export class CommonDocSqlActionTagReplaceAdapter {
                 }
 
                 const updateSqlQueryPromises = [];
-                for (const updateSql of updateSqls) {
+                for (const updateSql of updateSqlQueries) {
                     updateSqlQueryPromises.push(function () {
-                        return sqlBuilder.raw(updateSql);
+                        return SqlUtils.executeRawSqlQueryData(sqlBuilder, updateSql);
                     });
                 }
                 return Promise_serial(updateSqlQueryPromises, {parallelize: 1});
             }).then(() => {
-                return sqlBuilder.raw(deleteSql);
+                return SqlUtils.executeRawSqlQueryData(sqlBuilder, deleteSqlQuery);
             }).then(() => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {

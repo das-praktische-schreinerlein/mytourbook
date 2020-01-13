@@ -2,6 +2,7 @@ import {utils} from 'js-data';
 import {KeywordValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
+import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
 export interface PlaylistModelConfigJoinType {
     table: string;
@@ -54,22 +55,26 @@ export class CommonSqlPlaylistAdapter {
         const joinTable = this.playlistModelConfig.joins[joinTableKey].joinTable;
         const joinBaseIdField = this.playlistModelConfig.joins[joinTableKey].fieldReference;
 
-        const deleteSql = 'DELETE FROM ' + joinTable + ' ' +
-            'WHERE ' + playlistIdField + ' IN' +
-            '     (SELECT ' + playlistIdField + ' FROM ' + playlistTable +
-            '      WHERE ' + playlistNameField + ' IN ("' + playlistKeys.join('", "') + '"))' +
-            ' AND ' + joinBaseIdField + ' = "' + dbId + '"';
-        const insertSql = 'INSERT INTO ' + joinTable + ' (' + playlistIdField + ', ' + joinBaseIdField + ')' +
-            ' SELECT ' + playlistIdField + ' +  AS ' + playlistIdField + ', "' +
-            '     ' + dbId + '" AS ' + joinBaseIdField + ' FROM ' + playlistTable +
-            '     WHERE ' + playlistNameField + ' IN ("' + playlistKeys.join('", "') + '")';
+        const deleteSqlQuery: RawSqlQueryData = {
+            sql: 'DELETE FROM ' + joinTable + ' ' +
+                'WHERE ' + playlistIdField + ' IN' +
+                '     (SELECT ' + playlistIdField + ' FROM ' + playlistTable +
+                '      WHERE ' + playlistNameField + ' IN (' + SqlUtils.mapParametersToPlaceholderString(playlistKeys) + '))' +
+                ' AND ' + joinBaseIdField + ' = ' + '?' + '',
+            parameters: [].concat(playlistKeys).concat([dbId])};
+        const insertSqlQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + joinTable + ' (' + playlistIdField + ', ' + joinBaseIdField + ')' +
+                ' SELECT ' + playlistIdField + ' +  AS ' + playlistIdField + ',' +
+                '     ' + '?' + ' AS ' + joinBaseIdField + ' FROM ' + playlistTable +
+                '     WHERE ' + playlistNameField + ' IN (' + SqlUtils.mapParametersToPlaceholderString(playlistKeys) + ')',
+            parameters: [].concat([dbId]).concat(playlistKeys)};
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const rawDelete = sqlBuilder.raw(deleteSql);
+        const rawDelete = SqlUtils.executeRawSqlQueryData(sqlBuilder, deleteSqlQuery);
         const result = new Promise((resolve, reject) => {
             rawDelete.then(() => {
                 if (set) {
-                    return sqlBuilder.raw(insertSql);
+                    return SqlUtils.executeRawSqlQueryData(sqlBuilder, insertSqlQuery);
                 }
 
                 return utils.resolve(true);

@@ -2,6 +2,7 @@ import {utils} from 'js-data';
 import {KeywordValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
+import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
 export interface KeywordModelConfigJoinType {
     joinTable: string;
@@ -53,69 +54,83 @@ export class CommonSqlKeywordAdapter {
         const joinTable = this.keywordModelConfig.joins[joinTableKey].joinTable;
         const joinBaseIdField = this.keywordModelConfig.joins[joinTableKey].fieldReference;
         const newKeywords = StringUtils.uniqueKeywords(keywords).join(',');
-        const deleteNotUsedKeywordSql = deleteOld ?
-            'DELETE FROM ' + joinTable + ' WHERE ' + joinBaseIdField + ' IN (' + dbId + ')' :
-            'SELECT 1';
-        let insertNewKeywordsSql;
-        let insertNewKeywordJoinSql;
+        const deleteNotUsedKeywordSqlQuery: RawSqlQueryData = deleteOld ? {
+            sql: 'DELETE FROM ' + joinTable + ' WHERE ' + joinBaseIdField + ' IN (' + '?' + ')',
+            parameters: [dbId]
+        } : { sql: 'SELECT 1', parameters: []};
+        let insertNewKeywordsSqlQuery: RawSqlQueryData;
+        let insertNewKeywordJoinSqlQuery: RawSqlQueryData;
         if (this.knex.client['config']['client'] !== 'mysql') {
-            const keywordSplit = ' WITH split(word, str, hascomma) AS ( ' +
-                '    VALUES("", "' + newKeywords.replace(/[ \\"']/g, '') + '", 1) ' +
-            '    UNION ALL SELECT ' +
-            '    substr(str, 0, ' +
-            '        case when instr(str, ",") ' +
-            '        then instr(str, ",") ' +
-            '        else length(str)+1 end), ' +
-            '    ltrim(substr(str, instr(str, ",")), ","), ' +
-            '    instr(str, ",") ' +
-            '    FROM split ' +
-            '    WHERE hascomma ' +
-            '  ) ' +
-            '  SELECT trim(word) AS ' + keywordNameField + ' FROM split WHERE word!="" ';
+            const keywordSplitParameter = newKeywords.replace(/[ \\"']/g, '');
+            const keywordSplitSql = ' WITH split(word, str, hascomma) AS ( ' +
+                '    VALUES("", ' + '?' + ', 1) ' +
+                '    UNION ALL SELECT ' +
+                '    substr(str, 0, ' +
+                '        case when instr(str, ",") ' +
+                '        then instr(str, ",") ' +
+                '        else length(str)+1 end), ' +
+                '    ltrim(substr(str, instr(str, ",")), ","), ' +
+                '    instr(str, ",") ' +
+                '    FROM split ' +
+                '    WHERE hascomma ' +
+                '  ) ' +
+                '  SELECT trim(word) AS ' + keywordNameField + ' FROM split WHERE word!="" ';
 
-            insertNewKeywordsSql = 'INSERT INTO ' + keywordTable + ' (' + keywordNameField + ') ' +
-                'SELECT ' + keywordNameField + ' ' +
-                'FROM ( ' +
-                keywordSplit +
-                ') AS kw1 ' +
-                'WHERE NOT EXISTS (SELECT 1 ' +
-                '                  FROM ' + keywordTable + ' kw2 ' +
-                '                  WHERE kw2.' + keywordNameField + ' = kw1.' + keywordNameField + '); ';
-            insertNewKeywordJoinSql = 'INSERT INTO ' + joinTable + ' (' + joinBaseIdField + ', ' + keywordIdField + ') ' +
-                'SELECT ' + dbId + ' AS ' + joinBaseIdField + ',' +
-                ' ' + keywordIdField + ' AS ' + keywordIdField + ' FROM ' + keywordTable + ' kkw1 WHERE ' + keywordNameField + ' IN ( ' +
-                keywordSplit +
-                ') and NOT EXISTS (SELECT 1 ' +
-                '                  FROM ' + joinTable + ' kkw2 ' +
-                '                  WHERE kkw2.' + keywordIdField + ' = kkw1.' + keywordIdField +
-                '                        AND ' + joinBaseIdField + ' = ' + dbId + '); ';
+            insertNewKeywordsSqlQuery = {
+                sql: 'INSERT INTO ' + keywordTable + ' (' + keywordNameField + ') ' +
+                    'SELECT ' + keywordNameField + ' ' +
+                    'FROM ( ' +
+                    keywordSplitSql +
+                    ') AS kw1 ' +
+                    'WHERE NOT EXISTS (SELECT 1 ' +
+                    '                  FROM ' + keywordTable + ' kw2 ' +
+                    '                  WHERE kw2.' + keywordNameField + ' = kw1.' + keywordNameField + '); ',
+                parameters: [keywordSplitParameter]
+            };
+            insertNewKeywordJoinSqlQuery = {
+                sql: 'INSERT INTO ' + joinTable + ' (' + joinBaseIdField + ', ' + keywordIdField + ') ' +
+                    'SELECT ' + '?' + ' AS ' + joinBaseIdField + ', ' + keywordIdField + ' AS ' + keywordIdField +
+                    ' FROM ' + keywordTable + ' kkw1 WHERE ' + keywordNameField + ' IN ( ' +
+                    keywordSplitSql +
+                    ') AND NOT EXISTS (SELECT 1 ' +
+                    '                  FROM ' + joinTable + ' kkw2 ' +
+                    '                  WHERE kkw2.' + keywordIdField + ' = kkw1.' + keywordIdField +
+                    '                        AND ' + joinBaseIdField + ' = ' + '?' + '); ',
+                parameters: [].concat([dbId]).concat([keywordSplitParameter]).concat([dbId])
+            };
         } else {
-            const keywordSplit = ' SELECT ' +
-                '"' + newKeywords.replace(/[ \\"']/g, '').split(',').join('" AS ' + keywordNameField +
-                ' UNION ALL SELECT "') + '" AS ' + keywordNameField + ' ';
+            const escapedKeywords = newKeywords.replace(/[ \\"']/g, '').split(',');
+            const keywordSplitSql = escapedKeywords.map(value => 'SELECT ? AS ' + keywordNameField + ' ').join(' UNION ALL ');
+            const keywordSplitParameter = escapedKeywords.map(value => value);
 
-            insertNewKeywordsSql = 'INSERT INTO ' + keywordTable + ' (' + keywordNameField + ') ' +
-                'SELECT ' + keywordNameField + ' ' +
-                'FROM ( ' +
-                keywordSplit +
-                ') AS kw1 ' +
-                'WHERE NOT EXISTS (SELECT 1 ' +
-                '                  FROM ' + keywordTable + ' kw2 ' +
-                '                  WHERE BINARY kw2.' + keywordNameField + ' = BINARY kw1.' + keywordNameField + '); ';
-            insertNewKeywordJoinSql = 'INSERT INTO ' + joinTable + ' (' + joinBaseIdField + ', ' + keywordIdField + ') ' +
-                'SELECT ' + dbId + ' AS ' + joinBaseIdField + ', ' + keywordIdField + ' AS ' + keywordIdField +
-                '  FROM ' + keywordTable + ' kkw1 WHERE ' + keywordNameField + ' IN ( ' + keywordSplit + ') AND' +
-                '      NOT EXISTS (SELECT 1 ' + ' FROM ' + joinTable + ' kkw2 ' +
-                '                  WHERE kkw2.' + keywordIdField + ' = kkw1.' + keywordIdField +
-                '                        AND ' + joinBaseIdField + ' = ' + dbId + '); ';
+            insertNewKeywordsSqlQuery = {
+                sql: 'INSERT INTO ' + keywordTable + ' (' + keywordNameField + ') ' +
+                    'SELECT ' + keywordNameField + ' ' +
+                    'FROM ( ' +
+                    keywordSplitSql +
+                    ') AS kw1 ' +
+                    'WHERE NOT EXISTS (SELECT 1 ' +
+                    '                  FROM ' + keywordTable + ' kw2 ' +
+                    '                  WHERE BINARY kw2.' + keywordNameField + ' = BINARY kw1.' + keywordNameField + '); ',
+                parameters: [].concat(keywordSplitParameter)
+            };
+            insertNewKeywordJoinSqlQuery = {
+                sql: 'INSERT INTO ' + joinTable + ' (' + joinBaseIdField + ', ' + keywordIdField + ') ' +
+                    'SELECT ' + '?' + ' AS ' + joinBaseIdField + ', ' + keywordIdField + ' AS ' + keywordIdField +
+                    '  FROM ' + keywordTable + ' kkw1 WHERE ' + keywordNameField + ' IN ( ' + keywordSplitSql + ') AND' +
+                    '      NOT EXISTS (SELECT 1 ' + ' FROM ' + joinTable + ' kkw2 ' +
+                    '                  WHERE kkw2.' + keywordIdField + ' = kkw1.' + keywordIdField +
+                    '                        AND ' + joinBaseIdField + ' = ' + '?' + '); ',
+                parameters: [].concat([dbId]).concat(keywordSplitParameter).concat([dbId])
+            };
         }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {
-            sqlBuilder.raw(deleteNotUsedKeywordSql).then(() => {
-                return sqlBuilder.raw(insertNewKeywordsSql);
+            SqlUtils.executeRawSqlQueryData(sqlBuilder, deleteNotUsedKeywordSqlQuery).then(() => {
+                return SqlUtils.executeRawSqlQueryData(sqlBuilder, insertNewKeywordsSqlQuery);
             }).then(insertResults => {
-                return sqlBuilder.raw(insertNewKeywordJoinSql);
+                return SqlUtils.executeRawSqlQueryData(sqlBuilder, insertNewKeywordJoinSqlQuery);
             }).then(insertResults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {
@@ -144,10 +159,11 @@ export class CommonSqlKeywordAdapter {
         const joinTable = this.keywordModelConfig.joins[joinTableKey].joinTable;
         const joinBaseIdField = this.keywordModelConfig.joins[joinTableKey].fieldReference;
         const newKeywords = StringUtils.uniqueKeywords(keywords).join(',');
-        let deleteNotUsedKeywordSql;
+        let deleteNotUsedKeywordSql: RawSqlQueryData;
         if (this.knex.client['config']['client'] !== 'mysql') {
-            const keywordSplit = ' WITH split(word, str, hascomma) AS ( ' +
-                '    VALUES("", "' + newKeywords.replace(/[ \\"']/g, '') + '", 1) ' +
+            const keywordSplitParameter = newKeywords.replace(/[ \\"']/g, '');
+            const keywordSplitSql = ' WITH split(word, str, hascomma) AS ( ' +
+                '    VALUES("", "' + '?' + '", 1) ' +
                 '    UNION ALL SELECT ' +
                 '    substr(str, 0, ' +
                 '        case when instr(str, ",") ' +
@@ -160,26 +176,31 @@ export class CommonSqlKeywordAdapter {
                 '  ) ' +
                 '  SELECT trim(word) AS ' + keywordNameField + ' FROM split WHERE word!="" ';
 
-            deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable +
-                ' WHERE ' + joinBaseIdField + ' = ' + dbId +
-                '     AND ' + keywordIdField + ' IN ' +
-                '         (SELECT ' + keywordIdField + ' FROM ' + keywordTable + ' kkw1' +
-                '           WHERE ' + keywordNameField + ' IN ( ' + keywordSplit + ')); ';
+            deleteNotUsedKeywordSql = {
+                sql: 'DELETE FROM ' + joinTable +
+                    ' WHERE ' + joinBaseIdField + ' = ' + '?' +
+                    '     AND ' + keywordIdField + ' IN ' +
+                    '         (SELECT ' + keywordIdField + ' FROM ' + keywordTable + ' kkw1' +
+                    '           WHERE ' + keywordNameField + ' IN ( ' + keywordSplitSql + ')); ',
+                parameters: [].concat([dbId]).concat(keywordSplitParameter)};
         } else {
-            const keywordSplit = ' SELECT ' +
-                '"' + newKeywords.replace(/[ \\"']/g, '').split(',').join('" AS ' + keywordNameField +
-                    ' UNION ALL SELECT "') + '" AS ' + keywordNameField + ' ';
+            const escapedKeywords = newKeywords.replace(/[ \\"']/g, '').split(',');
+            const keywordSplitSql = escapedKeywords.map(value => 'SELECT ? AS ' + keywordNameField + ' ').join(' UNION ALL ');
+            const keywordSplitParameter = escapedKeywords.map(value => value);
 
-            deleteNotUsedKeywordSql = 'DELETE FROM ' + joinTable +
-                ' WHERE ' + joinBaseIdField + ' = ' + dbId +
-                '     AND ' + keywordIdField + ' IN ' +
-                '         (SELECT ' + keywordIdField + ' FROM ' + keywordTable + ' kkw1' +
-                '           WHERE ' + keywordNameField + ' IN ( ' + keywordSplit + ')); ';
+            deleteNotUsedKeywordSql = {
+                sql: 'DELETE FROM ' + joinTable +
+                    ' WHERE ' + joinBaseIdField + ' = ' + '?' +
+                    '     AND ' + keywordIdField + ' IN ' +
+                    '         (SELECT ' + keywordIdField + ' FROM ' + keywordTable + ' kkw1' +
+                    '           WHERE ' + keywordNameField + ' IN ( ' + keywordSplitSql + ')); ',
+                parameters: [].concat([dbId]).concat(keywordSplitParameter)
+            };
         }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         const result = new Promise((resolve, reject) => {
-            sqlBuilder.raw(deleteNotUsedKeywordSql).then(() => {
+            SqlUtils.executeRawSqlQueryData(sqlBuilder, deleteNotUsedKeywordSql).then(() => {
             }).then(insertResults => {
                 return resolve(true);
             }).catch(function errorPlaylist(reason) {

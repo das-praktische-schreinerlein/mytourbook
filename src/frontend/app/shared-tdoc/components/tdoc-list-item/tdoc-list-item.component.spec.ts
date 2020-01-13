@@ -16,8 +16,8 @@ import {DatePipe} from '@angular/common';
 import {CommonDocDataServiceStub} from '@dps/mycms-frontend-commons/dist/testing/cdoc-dataservice-stubs';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
-import {AngularCommonsModule} from '@dps/mycms-frontend-commons/dist/angular-commons/angular-commons.module';
 import {TourDocMapCodePipe} from '../../pipes/tdoc-mapcode.pipe';
+import {TruncatePipe} from '@dps/mycms-frontend-commons/dist/angular-commons/pipes/truncate.pipe';
 
 describe('TourDocListItemComponent', () => {
     let component: TourDocListItemComponent;
@@ -25,7 +25,7 @@ describe('TourDocListItemComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocListItemComponent, TourDocDateFormatPipe, TourDocMapCodePipe],
+            declarations: [TourDocListItemComponent, TourDocDateFormatPipe, TourDocMapCodePipe, TruncatePipe],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 CommonRoutingService,
@@ -38,8 +38,7 @@ describe('TourDocListItemComponent', () => {
             ],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
-                TranslateModule.forRoot(),
-            AngularCommonsModule]
+                TranslateModule.forRoot()]
         })
             .compileComponents();
     }));
