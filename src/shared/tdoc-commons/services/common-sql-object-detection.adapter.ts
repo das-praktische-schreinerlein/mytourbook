@@ -5,6 +5,7 @@ import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {KeywordValidationRule, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {ObjectDetectionModelConfigType} from './common-sql-object-detection.model';
+import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
 
 export class CommonSqlObjectDetectionAdapter {
@@ -53,27 +54,34 @@ export class CommonSqlObjectDetectionAdapter {
             return utils.reject('actiontag ObjectsKey ' + table + ' precision not valid');
         }
 
-        const deleteSql = 'DELETE FROM ' + config.detectedTable + ' ' +
-            ' WHERE ' + config.detectedTable + '.' + config.detectedFieldKey + ' IN (' +
-            '    SELECT ' + this.objectDetectionModelConfig.objectTable.fieldKey +
-            '    FROM ' + this.objectDetectionModelConfig.objectTable.table +
-            '    WHERE ' + this.objectDetectionModelConfig.objectTable.fieldName + ' IN ("' + objectKeys.join('", "') + '"))' +
-            ' AND ' + config.baseFieldId + ' = "' + id + '"';
-        const insertSql = 'INSERT INTO ' + config.detectedTable + ' (' +
-            [config.detectedFieldKey, config.baseFieldId, config.detectedFieldPrecision, config.detectedFieldDetector,
-                config.detectedFieldState].join(', ') + ')' +
-            ' SELECT objects.o_key AS ' + config.detectedFieldKey + ',' +
-            ' "' + id + '" AS ' + config.baseFieldId + ',' +
-            ' "' + precision + '" AS ' + config.detectedFieldPrecision + ',' +
-            ' "' + detector + '" AS ' + config.detectedFieldDetector + ',' +
-            ' "' + ObjectDetectionState.DONE_APPROVAL_PROCESSED + '" AS ' + config.detectedFieldState +
-            ' FROM objects WHERE o_name = ("' + objectKeys.join('", "') + '")';
+        const deleteSqlQuery: RawSqlQueryData = {
+            sql: 'DELETE FROM ' + config.detectedTable + ' ' +
+                ' WHERE ' + config.detectedTable + '.' + config.detectedFieldKey + ' IN (' +
+                '    SELECT ' + this.objectDetectionModelConfig.objectTable.fieldKey +
+                '    FROM ' + this.objectDetectionModelConfig.objectTable.table +
+                '    WHERE ' + this.objectDetectionModelConfig.objectTable.fieldName + ' IN (' +
+                SqlUtils.mapParametersToPlaceholderString(objectKeys) + '))' +
+                ' AND ' + config.baseFieldId + ' = ' + '?' + '',
+            parameters: [].concat(objectKeys).concat([id])
+        };
+        const insertSqlQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + config.detectedTable + ' (' +
+                [config.detectedFieldKey, config.baseFieldId, config.detectedFieldPrecision, config.detectedFieldDetector,
+                    config.detectedFieldState].join(', ') + ')' +
+                ' SELECT objects.o_key AS ' + config.detectedFieldKey + ',' +
+                ' ' + '?' + ' AS ' + config.baseFieldId + ',' +
+                ' ' + '?' + ' AS ' + config.detectedFieldPrecision + ',' +
+                ' ' + '?' + ' AS ' + config.detectedFieldDetector + ',' +
+                ' ' + '?' + ' AS ' + config.detectedFieldState +
+                ' FROM objects WHERE o_name = (' + SqlUtils.mapParametersToPlaceholderString(objectKeys) + ')',
+            parameters: [id, precision, detector, ObjectDetectionState.DONE_APPROVAL_PROCESSED].concat(objectKeys)
+        };
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const rawDelete = sqlBuilder.raw(deleteSql);
+        const rawDelete = SqlUtils.executeRawSqlQueryData(sqlBuilder, deleteSqlQuery);
         const result = new Promise((resolve, reject) => {
             rawDelete.then(() => {
                 if (set) {
-                    return sqlBuilder.raw(insertSql);
+                    return SqlUtils.executeRawSqlQueryData(sqlBuilder, insertSqlQuery);
                 }
 
                 return utils.resolve(true);
@@ -103,12 +111,15 @@ export class CommonSqlObjectDetectionAdapter {
             return utils.reject('actiontag ObjectsState ' + table + ' state not valid');
         }
 
-        let updateSql = 'UPDATE ' + config.detectedTable + ' SET ' + config.detectedFieldState + '="' + state + '"' +
-            '  WHERE ' + config.baseFieldId + ' = "' + id + '"';
-        updateSql = this.sqlQueryBuilder.transformToSqlDialect(updateSql, this.config.knexOpts.client);
+        const updateSqlQuery: RawSqlQueryData = {
+            sql: 'UPDATE ' + config.detectedTable + ' SET ' + config.detectedFieldState + '=' + '?' + '' +
+                '  WHERE ' + config.baseFieldId + ' = ' + '?' + '',
+            parameters: [state, id]
+        };
+        updateSqlQuery.sql = this.sqlQueryBuilder.transformToSqlDialect(updateSqlQuery.sql, this.config.knexOpts.client);
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
-        const rawUpdate = sqlBuilder.raw(updateSql);
+        const rawUpdate = SqlUtils.executeRawSqlQueryData(sqlBuilder, updateSqlQuery);
         const result = new Promise((resolve, reject) => {
             rawUpdate.then(() => {
                 return resolve(true);
@@ -149,9 +160,9 @@ export class CommonSqlObjectDetectionAdapter {
             return utils.reject('actiontag updateObjectsKey ' + table + ' state not allowed');
         }
 
-        let insertObjectNameSql = '';
-        let deleteObjectKeySql = '';
-        let insertObjectKeySql = '';
+        let insertObjectNameSqlQuery: RawSqlQueryData;
+        let deleteObjectKeySqlQuery: RawSqlQueryData;
+        let insertObjectKeySqlQuery: RawSqlQueryData;
         if (action === 'changeObjectKeyForRecord') {
             // NOOP
         } else if (action === 'changeObjectLabelForObjectKey'
@@ -162,71 +173,88 @@ export class CommonSqlObjectDetectionAdapter {
             }
 
             // update object_key (remove+insert)
-            deleteObjectKeySql = 'DELETE FROM ' + this.objectDetectionModelConfig.objectKeyTable.table +
-                ' WHERE ' + this.objectDetectionModelConfig.objectKeyTable.fieldDetector + '="' + detector + '" ' +
-                ' AND ' + this.objectDetectionModelConfig.objectKeyTable.fieldKey + '="' + objectkey + '"';
-            insertObjectKeySql = 'INSERT INTO ' + this.objectDetectionModelConfig.objectKeyTable.table +
-                '   (' + [this.objectDetectionModelConfig.objectKeyTable.fieldDetector,
-                    this.objectDetectionModelConfig.objectKeyTable.fieldKey,
-                    this.objectDetectionModelConfig.objectKeyTable.fieldId].join(', ') + ') ' +
-                '   SELECT "' + detector + '",' +
-                '          "' + objectkey + '",' +
-                '          (SELECT MAX(' + this.objectDetectionModelConfig.objectTable.fieldId + ') AS newId' +
-                '           FROM ' + this.objectDetectionModelConfig.objectTable.table +
-                '           WHERE ' + this.objectDetectionModelConfig.objectTable.fieldName + '="' + objectname + '") AS newId FROM dual ' +
-                '   WHERE NOT EXISTS (' +
-                '      SELECT 1 FROM ' + this.objectDetectionModelConfig.objectKeyTable.table +
-                '      WHERE ' + this.objectDetectionModelConfig.objectKeyTable.fieldDetector + '="' + detector + '" ' +
-                '      AND ' + this.objectDetectionModelConfig.objectKeyTable.fieldKey + '="' + objectkey + '")';
+            deleteObjectKeySqlQuery = {
+                sql: 'DELETE FROM ' + this.objectDetectionModelConfig.objectKeyTable.table +
+                    ' WHERE ' + this.objectDetectionModelConfig.objectKeyTable.fieldDetector + '=' + '?' + ' ' +
+                    ' AND ' + this.objectDetectionModelConfig.objectKeyTable.fieldKey + '=' + '?' + '',
+                parameters: [detector, objectkey]
+            };
+            insertObjectKeySqlQuery = {
+                sql: 'INSERT INTO ' + this.objectDetectionModelConfig.objectKeyTable.table +
+                    '   (' + [this.objectDetectionModelConfig.objectKeyTable.fieldDetector,
+                        this.objectDetectionModelConfig.objectKeyTable.fieldKey,
+                        this.objectDetectionModelConfig.objectKeyTable.fieldId].join(', ') + ') ' +
+                    '   SELECT ' + '?' + ',' +
+                    '          ' + '?' + ',' +
+                    '          (SELECT MAX(' + this.objectDetectionModelConfig.objectTable.fieldId + ') AS newId' +
+                    '           FROM ' + this.objectDetectionModelConfig.objectTable.table +
+                    '           WHERE ' + this.objectDetectionModelConfig.objectTable.fieldName + '=' + '?' + ')' +
+                    ' AS newId FROM dual ' +
+                    '   WHERE NOT EXISTS (' +
+                    '      SELECT 1 FROM ' + this.objectDetectionModelConfig.objectKeyTable.table +
+                    '      WHERE ' + this.objectDetectionModelConfig.objectKeyTable.fieldDetector + '=' + '?' + ' ' +
+                    '      AND ' + this.objectDetectionModelConfig.objectKeyTable.fieldKey + '=' + '?' + ')',
+                parameters: [detector, objectkey, objectname, detector, objectkey]
+            };
 
             // insert object_name if not exists
             if (action === 'createNewObjectKeyAndObjectLabel' || action === 'createObjectLabelForObjectKey') {
                 if (!this.keywordValidationRule.isValid(objectcategory)) {
                     return utils.reject('actiontag updateObjectsKey ' + table + ' objectcategory not valid');
                 }
-                insertObjectNameSql = 'INSERT INTO ' + this.objectDetectionModelConfig.objectTable.table +
-                    ' (' + [this.objectDetectionModelConfig.objectTable.fieldName,
-                        this.objectDetectionModelConfig.objectTable.fieldPicasaKey,
-                        this.objectDetectionModelConfig.objectTable.fieldKey,
-                        this.objectDetectionModelConfig.objectTable.fieldCategory].join(', ') + ')' +
-                    ' SELECT "' + objectname + '", "' + objectkey + '", "' + objectkey + '", "' + objectcategory + '" FROM dual ' +
-                    '  WHERE NOT EXISTS (SELECT 1 FROM ' + this.objectDetectionModelConfig.objectTable.table +
-                    '                    WHERE ' + this.objectDetectionModelConfig.objectTable.fieldName + '="' + objectname + '")';
+                insertObjectNameSqlQuery = {
+                    sql: 'INSERT INTO ' + this.objectDetectionModelConfig.objectTable.table +
+                        ' (' + [this.objectDetectionModelConfig.objectTable.fieldName,
+                            this.objectDetectionModelConfig.objectTable.fieldPicasaKey,
+                            this.objectDetectionModelConfig.objectTable.fieldKey,
+                            this.objectDetectionModelConfig.objectTable.fieldCategory].join(', ') + ')' +
+                        ' SELECT ' + '?' + ', ' + '?' + ', ' + '?' + ', ' + '?' + ' FROM dual ' +
+                        '  WHERE NOT EXISTS (SELECT 1 FROM ' + this.objectDetectionModelConfig.objectTable.table +
+                        '                    WHERE ' + this.objectDetectionModelConfig.objectTable.fieldName + '=' + '?' + ')',
+                    parameters: [objectname, objectkey, objectkey, objectcategory, objectname]
+                };
             }
         } else {
             return utils.reject('actiontag updateObjectsKey ' + table + ' action unknown');
         }
 
-        let updateImageObjectObjectKeySql = 'UPDATE ' + config.table +
-            '  SET ' + config.fieldKey + '="' + objectkey + '", ' + config.fieldState + '="' + state + '"' +
-            '  WHERE ' + config.fieldId + ' = "' + id + '"';
-        updateImageObjectObjectKeySql = this.sqlQueryBuilder.transformToSqlDialect(updateImageObjectObjectKeySql,
+        const updateImageObjectObjectKeySqlQuery: RawSqlQueryData = {
+            sql: 'UPDATE ' + config.table +
+                '  SET ' + config.fieldKey + '=' + '?' + ', ' + config.fieldState + '=' + '?' + '' +
+                '  WHERE ' + config.fieldId + ' = ' + '?' + '',
+            parameters: [objectkey, state, id]
+        };
+
+        updateImageObjectObjectKeySqlQuery.sql = this.sqlQueryBuilder.transformToSqlDialect(updateImageObjectObjectKeySqlQuery.sql,
             this.config.knexOpts.client);
-        if (insertObjectNameSql) {
-            insertObjectNameSql = this.sqlQueryBuilder.transformToSqlDialect(insertObjectNameSql, this.config.knexOpts.client);
+        if (insertObjectNameSqlQuery) {
+            insertObjectNameSqlQuery.sql = this.sqlQueryBuilder.transformToSqlDialect(insertObjectNameSqlQuery.sql,
+                this.config.knexOpts.client);
         }
-        if (deleteObjectKeySql) {
-            deleteObjectKeySql = this.sqlQueryBuilder.transformToSqlDialect(deleteObjectKeySql, this.config.knexOpts.client);
+        if (deleteObjectKeySqlQuery) {
+            deleteObjectKeySqlQuery.sql = this.sqlQueryBuilder.transformToSqlDialect(deleteObjectKeySqlQuery.sql,
+                this.config.knexOpts.client);
         }
-        if (insertObjectKeySql) {
-            insertObjectKeySql = this.sqlQueryBuilder.transformToSqlDialect(insertObjectKeySql, this.config.knexOpts.client);
+        if (insertObjectKeySqlQuery) {
+            insertObjectKeySqlQuery.sql = this.sqlQueryBuilder.transformToSqlDialect(insertObjectKeySqlQuery.sql,
+                this.config.knexOpts.client);
         }
 
         const sqlBuilder = utils.isUndefined(opts.transaction) ? this.knex : opts.transaction;
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(updateImageObjectObjectKeySql).then(() => {
-                if (insertObjectNameSql) {
-                    return sqlBuilder.raw(insertObjectNameSql);
+            SqlUtils.executeRawSqlQueryData(sqlBuilder, updateImageObjectObjectKeySqlQuery).then(() => {
+                if (insertObjectNameSqlQuery) {
+                    return SqlUtils.executeRawSqlQueryData(sqlBuilder, insertObjectNameSqlQuery);
                 }
                 return utils.resolve(true);
             }).then(() => {
-                if (deleteObjectKeySql) {
-                    return sqlBuilder.raw(deleteObjectKeySql);
+                if (deleteObjectKeySqlQuery) {
+                    return SqlUtils.executeRawSqlQueryData(sqlBuilder, deleteObjectKeySqlQuery);
                 }
                 return utils.resolve(true);
             }).then(() => {
-                if (insertObjectKeySql) {
-                    return sqlBuilder.raw(insertObjectKeySql);
+                if (insertObjectKeySqlQuery) {
+                    return SqlUtils.executeRawSqlQueryData(sqlBuilder, insertObjectKeySqlQuery);
                 }
                 return utils.resolve(true);
             }).then(() => {
