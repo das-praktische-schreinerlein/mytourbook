@@ -17,6 +17,7 @@ import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-commons/services/td
 import {TourDocSqlMytbExportDbAdapter} from './tdoc-commons/services/tdoc-sql-mytbexportdb.adapter';
 import {TourDocSqlMytbExportDbConfig} from './tdoc-commons/services/tdoc-sql-mytbexportdb.config';
 import {CommonQueuedObjectDetectionProcessingService} from './tdoc-commons/services/common-queued-object-detection-processing.service';
+import {CommonSqlObjectDetectionProcessingAdapter} from './tdoc-commons/services/common-sql-object-detection-processing.adapter';
 
 
 // import untested service for code-coverage
@@ -24,6 +25,7 @@ for (const a in [
     CommonQueuedObjectDetectionProcessingService,
     CommonSqlKeywordAdapter,
     CommonSqlObjectDetectionAdapter,
+    CommonSqlObjectDetectionProcessingAdapter,
     CommonSqlPlaylistAdapter,
     CommonSqlRateAdapter,
     TourDocAdapterResponseMapper,
