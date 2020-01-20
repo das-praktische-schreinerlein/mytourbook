@@ -24,5 +24,8 @@
     "include": [
         "**/*.spec.ts",
         "**/*.d.ts"
+    ],
+    "exclude": [
+        "**/backend-only-untested.*"
     ]
 }

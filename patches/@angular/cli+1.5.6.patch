@@ -6,7 +6,7 @@ patch-package
      return {
          resolve: {
 -            extensions: ['.ts', '.js'],
-+            extensions: ['.js', '.ts'],
++            extensions: ['@dps.js', '.ts', '.js'],
              modules: ['node_modules', nodeModules],
              symlinks: !buildOptions.preserveSymlinks,
              alias

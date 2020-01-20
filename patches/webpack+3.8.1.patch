@@ -1,0 +1,26 @@
+patch-package
+--- a/node_modules/webpack/node_modules/enhanced-resolve/lib/AppendPlugin.js
++++ b/node_modules/webpack/node_modules/enhanced-resolve/lib/AppendPlugin.js
+@@ -13,10 +13,17 @@ AppendPlugin.prototype.apply = function(resolver) {
+ 	var target = this.target;
+ 	var appending = this.appending;
+ 	resolver.plugin(this.source, function(request, callback) {
+-		var obj = Object.assign({}, request, {
+-			path: request.path + appending,
+-			relativePath: request.relativePath && (request.relativePath + appending)
+-		});
+-		resolver.doResolve(target, obj, appending, callback);
++        var localPppending = appending;
++        if (appending === '@dps.js'
++            && (request.path.indexOf('@dps\\mycms-frontend-commons') >= 0
++                || request.path.indexOf('@dps/mycms-frontend-commons') >= 0)) {
++            localPppending = '.js';
++            console.log("remapping ts->js request.path", request.path, appending, localPppending);
++        }
++        var obj = Object.assign({}, request, {
++            path: request.path + localPppending,
++            relativePath: request.relativePath && (request.relativePath + localPppending)
++        });
++        resolver.doResolve(target, obj, localPppending, callback);
+ 	});
+ };

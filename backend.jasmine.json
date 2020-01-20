@@ -1,0 +1,9 @@
+{
+    "spec_dir": "dist/tsc-out/backend-spec",
+    "spec_files": [
+        "**/*spec.js"
+    ],
+    "helpers": [
+        "../../../helpers/**/*.js"
+    ]
+}

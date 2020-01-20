@@ -4,7 +4,6 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular/cli'],
     plugins: [
       require('karma-jasmine' ),
       require('karma-chrome-launcher' ),
@@ -13,6 +12,7 @@ module.exports = function (config) {
       require('karma-coverage-istanbul-reporter'),
       require('@angular/cli/plugins/karma' )
     ],
+    frameworks: ['jasmine', '@angular/cli'],
     client:{
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
@@ -26,8 +26,14 @@ module.exports = function (config) {
       'text/x-typescript': ['ts','tsx']
     },
     coverageIstanbulReporter: {
-      reports: [ 'html', 'lcovonly' ],
-      fixWebpackSourcePaths: true
+      reports: [ 'html', 'lcovonly', 'text-summary' ],
+      fixWebpackSourcePaths: true,
+      dir: './coverage/frontend/'
+    },
+    coverageReporter: {
+        instrumenterOptions: {
+          istanbul: { noCompact: true }
+        }
     },
     angularCli: {
       environment: 'dev'
@@ -40,6 +46,10 @@ module.exports = function (config) {
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['PhantomJS'], // 'Chrome'
-    singleRun: false
+    singleRun: false,
+    captureTimeout: 60000,
+    browserDisconnectTimeout: 20000,
+    browserDisconnectTolerance: 3,
+    browserNoActivityTimeout: 60000
   });
 };
