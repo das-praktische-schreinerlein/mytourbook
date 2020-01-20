@@ -37,7 +37,7 @@ export interface AssignActionTagForm extends ActionTagForm {
     };
 }
 
-export class CommonDocSqlActionTagAssignAdapter {
+export class CommonSqlActionTagAssignAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
     private idValidator = new IdValidationRule(true);

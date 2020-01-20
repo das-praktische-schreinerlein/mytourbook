@@ -17,7 +17,7 @@ export interface ActionTagBlockConfigType {
     tables: ActionTagBlockTableConfigsType;
 }
 
-export class CommonDocSqlActionTagBlockAdapter {
+export class CommonSqlActionTagBlockAdapter {
 
     private config: any;
     private readonly knex: any;

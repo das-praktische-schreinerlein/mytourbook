@@ -2,7 +2,7 @@
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
-import {CommonDocSqlActionTagPlaylistAdapter} from './common-sql-actiontag-playlist.adapter';
+import {CommonSqlActionTagPlaylistAdapter} from './common-sql-actiontag-playlist.adapter';
 import {CommonSqlPlaylistAdapter, PlaylistModelConfigType} from './common-sql-playlist.adapter';
 
 describe('CommonDocSqlActionTagPlaylistAdapter', () => {
@@ -24,7 +24,7 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
                 knexOpts: {
                     client: knex.client.config.client
                 }};
-            return new CommonDocSqlActionTagPlaylistAdapter(
+            return new CommonSqlActionTagPlaylistAdapter(
                 new CommonSqlPlaylistAdapter(config, knex, sqlQueryBuilder, modelConfigType));
         },
     };
@@ -32,7 +32,7 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
 
     describe('test defaults', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagPlaylistAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagPlaylistAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
             // WHEN/THEN
@@ -74,7 +74,7 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
 
     describe('#executeActionTagPlaylist()', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagPlaylistAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagPlaylistAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagPlaylist should set playlist', done => {
             const id: any = 5;

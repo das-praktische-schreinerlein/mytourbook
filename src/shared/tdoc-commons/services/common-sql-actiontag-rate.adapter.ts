@@ -10,7 +10,7 @@ export interface RateActionTagForm extends ActionTagForm {
     };
 }
 
-export class CommonDocSqlActionTagRateAdapter {
+export class CommonSqlActionTagRateAdapter {
 
     private rateValidationRule = new NumberValidationRule(true, -1, 15, 0);
     private keywordValidationRule = new KeywordValidationRule(true);

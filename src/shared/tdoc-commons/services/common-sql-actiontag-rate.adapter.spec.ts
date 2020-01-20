@@ -2,7 +2,7 @@
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
-import {CommonDocSqlActionTagRateAdapter} from './common-sql-actiontag-rate.adapter';
+import {CommonSqlActionTagRateAdapter} from './common-sql-actiontag-rate.adapter';
 import {CommonSqlRateAdapter, RateModelConfigType} from './common-sql-rate.adapter';
 
 describe('CommonDocSqlActionTagRateAdapter', () => {
@@ -28,7 +28,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
                 knexOpts: {
                     client: knex.client.config.client
                 }};
-            return new CommonDocSqlActionTagRateAdapter(
+            return new CommonSqlActionTagRateAdapter(
                 new CommonSqlRateAdapter(config, knex, sqlQueryBuilder, modelConfigType));
         },
     };
@@ -36,7 +36,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
 
     describe('test defaults', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagRateAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagRateAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
             // WHEN/THEN
@@ -92,7 +92,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
 
     describe('#executeActionTagRate()', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagRateAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagRateAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagRate should set gesamt', done => {
             const id: any = 5;

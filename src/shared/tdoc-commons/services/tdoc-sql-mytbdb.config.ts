@@ -3092,7 +3092,6 @@ export class TourDocSqlMytbDbConfig {
                 fieldKey: 'io_obj_type'
             }
         }
-
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignConfigType = {

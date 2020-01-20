@@ -14,7 +14,7 @@ import {Mapper, utils} from 'js-data';
 import {TourDocImageRecord} from '../model/records/tdocimage-record';
 import {ActionTagForm} from '@dps/mycms-commons/dist/commons/utils/actiontag.utils';
 import {
-    CommonDocSqlActionTagObjectDetectionAdapter,
+    CommonSqlActionTagObjectDetectionAdapter,
     ObjectsActionTagForm,
     ObjectsKeyActionTagForm,
     ObjectsStateActionTagForm
@@ -22,26 +22,26 @@ import {
 import {TourDocSqlMytbDbKeywordAdapter} from './tdoc-sql-mytbdb-keyword.adapter';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
-import {AssignActionTagForm, CommonDocSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
-import {CommonDocSqlActionTagReplaceAdapter, ReplaceActionTagForm} from './common-sql-actiontag-replace.adapter';
-import {CommonDocSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
+import {AssignActionTagForm, CommonSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
+import {CommonSqlActionTagReplaceAdapter, ReplaceActionTagForm} from './common-sql-actiontag-replace.adapter';
+import {CommonSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
 import {CommonSqlKeywordAdapter} from './common-sql-keyword.adapter';
-import {CommonDocSqlActionTagKeywordAdapter, KeywordActionTagForm} from './common-sql-actiontag-keyword.adapter';
+import {CommonSqlActionTagKeywordAdapter, KeywordActionTagForm} from './common-sql-actiontag-keyword.adapter';
 import {CommonSqlPlaylistAdapter} from './common-sql-playlist.adapter';
-import {CommonDocSqlActionTagPlaylistAdapter, PlaylistActionTagForm} from './common-sql-actiontag-playlist.adapter';
-import {CommonDocSqlActionTagRateAdapter, RateActionTagForm} from './common-sql-actiontag-rate.adapter';
+import {CommonSqlActionTagPlaylistAdapter, PlaylistActionTagForm} from './common-sql-actiontag-playlist.adapter';
+import {CommonSqlActionTagRateAdapter, RateActionTagForm} from './common-sql-actiontag-rate.adapter';
 import {CommonSqlRateAdapter} from './common-sql-rate.adapter';
 import {CommonSqlObjectDetectionAdapter} from './common-sql-object-detection.adapter';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
-    private readonly actionTagODAdapter: CommonDocSqlActionTagObjectDetectionAdapter;
-    private readonly actionTagAssignAdapter: CommonDocSqlActionTagAssignAdapter;
-    private readonly actionTagBlockAdapter: CommonDocSqlActionTagBlockAdapter;
-    private readonly actionTagReplaceAdapter: CommonDocSqlActionTagReplaceAdapter;
-    private readonly actionTagKeywordAdapter: CommonDocSqlActionTagKeywordAdapter;
-    private readonly actionTagPlaylistAdapter: CommonDocSqlActionTagPlaylistAdapter;
-    private readonly actionTagRateAdapter: CommonDocSqlActionTagRateAdapter;
+    private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
+    private readonly actionTagAssignAdapter: CommonSqlActionTagAssignAdapter;
+    private readonly actionTagBlockAdapter: CommonSqlActionTagBlockAdapter;
+    private readonly actionTagReplaceAdapter: CommonSqlActionTagReplaceAdapter;
+    private readonly actionTagKeywordAdapter: CommonSqlActionTagKeywordAdapter;
+    private readonly actionTagPlaylistAdapter: CommonSqlActionTagPlaylistAdapter;
+    private readonly actionTagRateAdapter: CommonSqlActionTagRateAdapter;
     private readonly keywordsAdapter: TourDocSqlMytbDbKeywordAdapter;
     private readonly commonKeywordAdapter: CommonSqlKeywordAdapter;
     private readonly commonPlaylistAdapter: CommonSqlPlaylistAdapter;
@@ -60,16 +60,16 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.commonRateAdapter = new CommonSqlRateAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getRateModelConfigFor());
         this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.commonKeywordAdapter);
-        this.actionTagAssignAdapter = new CommonDocSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
+        this.actionTagAssignAdapter = new CommonSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagAssignConfig());
-        this.actionTagBlockAdapter = new CommonDocSqlActionTagBlockAdapter(config, this.knex, this.sqlQueryBuilder,
+        this.actionTagBlockAdapter = new CommonSqlActionTagBlockAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagBlockConfig());
-        this.actionTagReplaceAdapter = new CommonDocSqlActionTagReplaceAdapter(config, this.knex, this.sqlQueryBuilder,
+        this.actionTagReplaceAdapter = new CommonSqlActionTagReplaceAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagReplaceConfig());
-        this.actionTagKeywordAdapter = new CommonDocSqlActionTagKeywordAdapter(this.commonKeywordAdapter);
-        this.actionTagPlaylistAdapter = new CommonDocSqlActionTagPlaylistAdapter(this.commonPlaylistAdapter);
-        this.actionTagRateAdapter = new CommonDocSqlActionTagRateAdapter(this.commonRateAdapter);
-        this.actionTagODAdapter = new CommonDocSqlActionTagObjectDetectionAdapter(config, this.commonObjectDetectionAdapter);
+        this.actionTagKeywordAdapter = new CommonSqlActionTagKeywordAdapter(this.commonKeywordAdapter);
+        this.actionTagPlaylistAdapter = new CommonSqlActionTagPlaylistAdapter(this.commonPlaylistAdapter);
+        this.actionTagRateAdapter = new CommonSqlActionTagRateAdapter(this.commonRateAdapter);
+        this.actionTagODAdapter = new CommonSqlActionTagObjectDetectionAdapter(this.commonObjectDetectionAdapter);
     }
 
     protected extendTableConfigs() {

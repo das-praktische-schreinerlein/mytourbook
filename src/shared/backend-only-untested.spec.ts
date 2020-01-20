@@ -1,5 +1,4 @@
 import {CommonSqlObjectDetectionAdapter} from './tdoc-commons/services/common-sql-object-detection.adapter';
-import {CommonDocSqlActionTagObjectDetectionAdapter} from './tdoc-commons/services/common-sql-actiontag-object-detection.adapter';
 import {CommonSqlKeywordAdapter} from './tdoc-commons/services/common-sql-keyword.adapter';
 import {CommonSqlPlaylistAdapter} from './tdoc-commons/services/common-sql-playlist.adapter';
 import {CommonSqlRateAdapter} from './tdoc-commons/services/common-sql-rate.adapter';
@@ -22,7 +21,6 @@ import {CommonQueuedObjectDetectionProcessingService} from './tdoc-commons/servi
 
 // import untested service for code-coverage
 for (const a in [
-    CommonDocSqlActionTagObjectDetectionAdapter,
     CommonQueuedObjectDetectionProcessingService,
     CommonSqlKeywordAdapter,
     CommonSqlObjectDetectionAdapter,

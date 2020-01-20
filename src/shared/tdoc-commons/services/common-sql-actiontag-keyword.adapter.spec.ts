@@ -3,9 +3,9 @@ import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
 import {CommonSqlKeywordAdapter, KeywordModelConfigType} from './common-sql-keyword.adapter';
-import {CommonDocSqlActionTagKeywordAdapter} from './common-sql-actiontag-keyword.adapter';
+import {CommonSqlActionTagKeywordAdapter} from './common-sql-actiontag-keyword.adapter';
 
-describe('CommonDocSqlActionTagKeywordAdapter', () => {
+describe('CommonSqlActionTagKeywordAdapter', () => {
     const modelConfigType: KeywordModelConfigType = {
         table: 'keyword',
         fieldId: 'kw_id',
@@ -24,7 +24,7 @@ describe('CommonDocSqlActionTagKeywordAdapter', () => {
                 knexOpts: {
                     client: knex.client.config.client
                 }};
-            return new CommonDocSqlActionTagKeywordAdapter(
+            return new CommonSqlActionTagKeywordAdapter(
                 new CommonSqlKeywordAdapter(config, knex, sqlQueryBuilder, modelConfigType));
         },
     };
@@ -32,7 +32,7 @@ describe('CommonDocSqlActionTagKeywordAdapter', () => {
 
     describe('test defaults', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
             // WHEN/THEN
@@ -74,7 +74,7 @@ describe('CommonDocSqlActionTagKeywordAdapter', () => {
 
     describe('#executeActionTagKeyword() mysql', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagKeyword should set keywords mysql', done => {
             const id: any = 5;
@@ -129,7 +129,7 @@ describe('CommonDocSqlActionTagKeywordAdapter', () => {
 
     describe('#executeActionTagKeyword() sqlite3', () => {
         const knex = TestHelperSpec.createKnex('sqlite3', []);
-        const service: CommonDocSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagKeyword should set keywords sqlite3', done => {
             const id: any = 5;

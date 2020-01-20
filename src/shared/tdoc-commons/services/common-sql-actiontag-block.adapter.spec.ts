@@ -1,10 +1,10 @@
 /* tslint:disable:no-unused-variable */
 import 'rxjs/add/observable/fromPromise';
-import {ActionTagBlockConfigType, CommonDocSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
+import {ActionTagBlockConfigType, CommonSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
 
-describe('CommonDocSqlActionTagBlockAdapter', () => {
+describe('CommonSqlActionTagBlockAdapter', () => {
     const sqlQueryBuilder: SqlQueryBuilder = new SqlQueryBuilder();
     const modelConfigType: ActionTagBlockConfigType = {
         tables: {
@@ -19,14 +19,14 @@ describe('CommonDocSqlActionTagBlockAdapter', () => {
                 knexOpts: {
                     client: knex.client.config.client
                 }};
-            return new CommonDocSqlActionTagBlockAdapter(config, knex, sqlQueryBuilder, modelConfigType);
+            return new CommonSqlActionTagBlockAdapter(config, knex, sqlQueryBuilder, modelConfigType);
         },
     };
 
 
     describe('test defaults', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagBlockAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagBlockAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
             // WHEN/THEN
@@ -50,7 +50,7 @@ describe('CommonDocSqlActionTagBlockAdapter', () => {
 
     describe('#executeActionTagBlock()', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagBlockAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagBlockAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagBlock should set', done => {
             const id: any = 5;

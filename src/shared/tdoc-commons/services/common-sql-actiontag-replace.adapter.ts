@@ -32,7 +32,7 @@ export interface ReplaceActionTagForm extends ActionTagForm {
     };
 }
 
-export class CommonDocSqlActionTagReplaceAdapter {
+export class CommonSqlActionTagReplaceAdapter {
 
     private idValidator = new IdValidationRule(true);
     private config: any;

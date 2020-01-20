@@ -10,7 +10,7 @@ export interface KeywordActionTagForm extends ActionTagForm {
     };
 }
 
-export class CommonDocSqlActionTagKeywordAdapter {
+export class CommonSqlActionTagKeywordAdapter {
 
     private keywordValidationRule = new KeywordValidationRule(true);
     private readonly commonSqlKeywordAdapter: CommonSqlKeywordAdapter;

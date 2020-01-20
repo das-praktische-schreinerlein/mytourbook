@@ -2,9 +2,9 @@
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TestHelperSpec} from './test-helper.spec';
-import {ActionTagAssignConfigType, CommonDocSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
+import {ActionTagAssignConfigType, CommonSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
 
-describe('CommonDocSqlActionTagAssignAdapter', () => {
+describe('CommonSqlActionTagAssignAdapter', () => {
     const sqlQueryBuilder: SqlQueryBuilder = new SqlQueryBuilder();
     const modelConfigType: ActionTagAssignConfigType = {
         tables: {
@@ -28,14 +28,14 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
                 knexOpts: {
                     client: knex.client.config.client
                 }};
-            return new CommonDocSqlActionTagAssignAdapter(config, knex, sqlQueryBuilder, modelConfigType);
+            return new CommonSqlActionTagAssignAdapter(config, knex, sqlQueryBuilder, modelConfigType);
         },
     };
 
 
     describe('test defaults', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagAssignAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagAssignAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
             // WHEN/THEN
@@ -144,7 +144,7 @@ describe('CommonDocSqlActionTagAssignAdapter', () => {
 
     describe('#executeActionTagAssign()', () => {
         const knex = TestHelperSpec.createKnex('mysql', []);
-        const service: CommonDocSqlActionTagAssignAdapter = localTestHelper.createService(knex);
+        const service: CommonSqlActionTagAssignAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagAssign should set newId', done => {
             const id: any = 5;

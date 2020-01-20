@@ -10,7 +10,7 @@ export interface PlaylistActionTagForm extends ActionTagForm {
     };
 }
 
-export class CommonDocSqlActionTagPlaylistAdapter {
+export class CommonSqlActionTagPlaylistAdapter {
 
     private playlistValidationRule = new KeywordValidationRule(true);
     private readonly commonSqlPlaylistAdapter: CommonSqlPlaylistAdapter;

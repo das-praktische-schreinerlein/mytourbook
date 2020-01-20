@@ -26,15 +26,13 @@ export interface ObjectsKeyActionTagForm extends ActionTagForm {
     state: string;
 }
 
-export class CommonDocSqlActionTagObjectDetectionAdapter {
+export class CommonSqlActionTagObjectDetectionAdapter {
 
     private readonly keywordValidationRule = new KeywordValidationRule(true);
     private readonly precisionValidationRule = new NumberValidationRule(true, 0, 1, 1);
-    private readonly config: any;
     private readonly commonSqlObjectDetectionAdapter: CommonSqlObjectDetectionAdapter;
 
-    constructor(config: any, commonSqlObjectDetectionAdapter: CommonSqlObjectDetectionAdapter) {
-        this.config = config;
+    constructor(commonSqlObjectDetectionAdapter: CommonSqlObjectDetectionAdapter) {
         this.commonSqlObjectDetectionAdapter = commonSqlObjectDetectionAdapter;
     }
 
