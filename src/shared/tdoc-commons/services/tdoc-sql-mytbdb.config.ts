@@ -7,7 +7,7 @@ import {ActionTagAssignConfigType} from './common-sql-actiontag-assign.adapter';
 import {KeywordModelConfigType} from './common-sql-keyword.adapter';
 import {PlaylistModelConfigType} from './common-sql-playlist.adapter';
 import {RateModelConfigType} from './common-sql-rate.adapter';
-import {ObjectDetectionModelConfigType} from './common-sql-object-detection.adapter';
+import {ObjectDetectionModelConfigType} from './common-sql-object-detection.model';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];

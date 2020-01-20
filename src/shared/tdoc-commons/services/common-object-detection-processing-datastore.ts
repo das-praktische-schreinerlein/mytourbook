@@ -3,6 +3,7 @@ import {
     ObjectDetectionRequestType,
     ObjectDetectionResponseType
 } from '@dps/mycms-commons/dist/commons/model/objectdetection-model';
+import {ObjectDetectionEntityDatastoreConfiguration} from './common-sql-object-detection.model';
 
 export interface RequestImageDataType {
     id: string;
@@ -18,11 +19,7 @@ export interface ObjectDetectionMaxIdPerDetectorType {
     detector: string;
 }
 
-export interface ObjectDetectionEntityDatastoreConfiguration {
-    entityType: string;
-}
-
-export interface ObjectDetectionDataStore {
+export interface CommonObjectDetectionProcessingDatastore {
     getObjectDetectionConfiguration(input: ObjectDetectionRequestType): ObjectDetectionEntityDatastoreConfiguration;
 
     readMaxIdAlreadyDetectedPerDetector(entityType: string, detectorFilterNames: string[]): Promise<ObjectDetectionMaxIdPerDetectorType[]>;

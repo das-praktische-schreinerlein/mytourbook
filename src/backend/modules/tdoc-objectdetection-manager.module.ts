@@ -1,15 +1,15 @@
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {
-    CommonQueuedObjectDetectionService,
+    CommonQueuedObjectDetectionProcessingService,
     ObjectDetectionManagerBackendConfig,
     RedisQueueConfig
-} from '../shared/tdoc-commons/services/common-queued-object-detection.service';
-import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-object-detection-datastore';
+} from '../shared/tdoc-commons/services/common-queued-object-detection-processing.service';
+import {CommonObjectDetectionProcessingDatastore} from '../shared/tdoc-commons/services/common-object-detection-processing-datastore';
 
-export class TourDocObjectDetectionManagerModule extends CommonQueuedObjectDetectionService {
+export class TourDocObjectDetectionManagerModule extends CommonQueuedObjectDetectionProcessingService {
     private backendConfig: ObjectDetectionManagerBackendConfig;
 
-    constructor(backendConfig: ObjectDetectionManagerBackendConfig, dataStore: ObjectDetectionDataStore) {
+    constructor(backendConfig: ObjectDetectionManagerBackendConfig, dataStore: CommonObjectDetectionProcessingDatastore) {
         super(dataStore);
         this.backendConfig = backendConfig;
     }

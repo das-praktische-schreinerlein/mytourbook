@@ -10,9 +10,9 @@ import {TourDocSqlMytbDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-
 import {TourDocSqlMytbExportDbAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbexportdb.adapter';
 import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsjs.adapter';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
-import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-object-detection-datastore';
-import {TourDocSqlMytbDbObjectDetectionAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection.adapter';
 import {FacetCacheUsageConfigurations, SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {CommonObjectDetectionProcessingDatastore} from '../shared/tdoc-commons/services/common-object-detection-processing-datastore';
+import {TourDocSqlMytbDbObjectDetectionProcessingAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection-processing.adapter';
 
 export interface SqlConnectionConfig {
     client: 'sqlite3' | 'mysql';
@@ -28,7 +28,7 @@ export interface SqlConnectionConfig {
 
 export class TourDocDataServiceModule {
     private static dataServices = new Map<string, TourDocDataService>();
-    private static odDataStores = new Map<string, ObjectDetectionDataStore>();
+    private static odDataStores = new Map<string, CommonObjectDetectionProcessingDatastore>();
 
     public static getDataService(profile: string, backendConfig: {}): TourDocDataService {
         if (!this.dataServices.has(profile)) {
@@ -53,7 +53,7 @@ export class TourDocDataServiceModule {
         return this.dataServices.get(profile);
     }
 
-    public static getObjectDetectionDataStore(profile: string, backendConfig: {}): ObjectDetectionDataStore {
+    public static getObjectDetectionDataStore(profile: string, backendConfig: {}): CommonObjectDetectionProcessingDatastore {
         if (!this.odDataStores.has(profile)) {
             switch (backendConfig['tdocDataStoreAdapter']) {
                 case 'TourDocSqlMytbDbAdapter':
@@ -185,7 +185,7 @@ export class TourDocDataServiceModule {
         return dataService;
     }
 
-    private static createObjectDetectionDataStoreMytbDbSql(backendConfig: {}): ObjectDetectionDataStore {
+    private static createObjectDetectionDataStoreMytbDbSql(backendConfig: {}): CommonObjectDetectionProcessingDatastore {
         // configure adapter
         const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbDbAdapter'];
         if (sqlConfig === undefined) {
@@ -197,8 +197,8 @@ export class TourDocDataServiceModule {
                 connection: sqlConfig.connection
             }
         };
-        const odDataStore: ObjectDetectionDataStore =
-            new TourDocSqlMytbDbObjectDetectionAdapter(options, knex(options.knexOpts), new SqlQueryBuilder());
+        const odDataStore: CommonObjectDetectionProcessingDatastore =
+            new TourDocSqlMytbDbObjectDetectionProcessingAdapter(options, knex(options.knexOpts), new SqlQueryBuilder());
 
         return odDataStore;
     }

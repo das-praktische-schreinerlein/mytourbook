@@ -9,7 +9,11 @@ import * as RSMQWorker from 'rsmq-worker';
 import * as Promise_serial from 'promise-serial';
 import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {ObjectDetectionDataStore, ObjectDetectionMaxIdPerDetectorType, RequestImageDataType} from './common-object-detection-datastore';
+import {
+    CommonObjectDetectionProcessingDatastore,
+    ObjectDetectionMaxIdPerDetectorType,
+    RequestImageDataType
+} from './common-object-detection-processing-datastore';
 
 export interface RedisQueueConfig {
     host: string;
@@ -30,7 +34,7 @@ export interface ObjectDetectionManagerBackendConfig {
     };
 }
 
-export abstract class CommonQueuedObjectDetectionService {
+export abstract class CommonQueuedObjectDetectionProcessingService {
     protected sqlQueryBuilder: SqlQueryBuilder;
     protected requestQueueName: string;
     protected requestQueueWorker: RSMQWorker;
@@ -38,9 +42,9 @@ export abstract class CommonQueuedObjectDetectionService {
     protected responseQueueWorker: RSMQWorker;
     protected errorQueueName: string;
     protected errorQueueWorker: RSMQWorker;
-    protected dataStore: ObjectDetectionDataStore;
+    protected dataStore: CommonObjectDetectionProcessingDatastore;
 
-    public constructor(dataStore: ObjectDetectionDataStore) {
+    public constructor(dataStore: CommonObjectDetectionProcessingDatastore) {
         this.sqlQueryBuilder = new SqlQueryBuilder();
         this.dataStore = dataStore;
     }

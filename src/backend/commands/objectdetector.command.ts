@@ -3,14 +3,14 @@ import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/co
 import {TourDocObjectDetectionManagerModule} from '../modules/tdoc-objectdetection-manager.module';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {utils} from 'js-data';
-import {ObjectDetectionDataStore} from '../shared/tdoc-commons/services/common-object-detection-datastore';
+import {CommonObjectDetectionProcessingDatastore} from '../shared/tdoc-commons/services/common-object-detection-processing-datastore';
 
 export class ObjectDetectionManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
 
-        const detectionDataStore: ObjectDetectionDataStore =
+        const detectionDataStore: CommonObjectDetectionProcessingDatastore =
             TourDocDataServiceModule.getObjectDetectionDataStore('tdocSolr', backendConfig);
         const objectDetectionManager = new TourDocObjectDetectionManagerModule(backendConfig, detectionDataStore);
         const action = argv['action'];
