@@ -192,8 +192,6 @@ export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDe
             '        WHERE ' + this.objectDetectionModelConfig.objectTable.fieldKey + '="Default")';
         return new Promise((resolve, reject) => {
             sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql)).then(() => {
-                return sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql));
-            }).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest insert default-object failed:', reason);
