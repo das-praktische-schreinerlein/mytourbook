@@ -1,9 +1,10 @@
 /* tslint:disable:no-unused-variable */
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {TestHelperSpec} from './test-helper.spec';
+import {TestHelper} from './test-helper.spec';
 import {CommonSqlActionTagPlaylistAdapter} from './common-sql-actiontag-playlist.adapter';
 import {CommonSqlPlaylistAdapter, PlaylistModelConfigType} from './common-sql-playlist.adapter';
+import {TestActionFormHelper} from './test-actionform-helper.spec';
 
 describe('CommonDocSqlActionTagPlaylistAdapter', () => {
     const modelConfigType: PlaylistModelConfigType = {
@@ -23,15 +24,17 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
             const config = {
                 knexOpts: {
                     client: knex.client.config.client
-                }};
+                }
+            };
+
             return new CommonSqlActionTagPlaylistAdapter(
                 new CommonSqlPlaylistAdapter(config, knex, sqlQueryBuilder, modelConfigType));
-        },
+        }
     };
 
 
     describe('test defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagPlaylistAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -41,15 +44,15 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
         });
 
         it('executeActionTagPlaylist should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagPlaylist', 'playlist' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagPlaylist', 'playlist' , done);
         });
 
         it('executeActionTagPlaylist should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagPlaylist', 'playlist', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagPlaylist', 'playlist', done);
         });
 
         it('executeActionTagPlaylist should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagPlaylist', 'playlist',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagPlaylist', 'playlist',
                 {
                     playlistkey: 'playlist',
                     set: 1,
@@ -59,7 +62,7 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
 
         it('executeActionTagPlaylist should reject playlist', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
                 payload: {
                     playlistkey: 'playlist??`"',
                     set: false,
@@ -73,12 +76,12 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
     });
 
     describe('#executeActionTagPlaylist()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagPlaylistAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagPlaylist should set playlist', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
                     payload: {
                         playlistkey: 'playlist',
                         set: true,
@@ -101,7 +104,7 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
 
         it('executeActionTagPlaylist should unset playlist', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagPlaylist', 'image', id, {
                     payload: {
                         playlistkey: 'playlist',
                         set: false,

@@ -1,8 +1,9 @@
 /* tslint:disable:no-unused-variable */
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {TestHelperSpec} from './test-helper.spec';
+import {TestHelper} from './test-helper.spec';
 import {ActionTagAssignConfigType, CommonSqlActionTagAssignAdapter} from './common-sql-actiontag-assign.adapter';
+import {TestActionFormHelper} from './test-actionform-helper.spec';
 
 describe('CommonSqlActionTagAssignAdapter', () => {
     const sqlQueryBuilder: SqlQueryBuilder = new SqlQueryBuilder();
@@ -27,14 +28,16 @@ describe('CommonSqlActionTagAssignAdapter', () => {
             const config = {
                 knexOpts: {
                     client: knex.client.config.client
-                }};
+                }
+            };
+
             return new CommonSqlActionTagAssignAdapter(config, knex, sqlQueryBuilder, modelConfigType);
-        },
+        }
     };
 
 
     describe('test defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagAssignAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -44,11 +47,11 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         });
 
         it('executeActionTagAssign should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagAssign', 'assign' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagAssign', 'assign' , done);
         });
 
         it('executeActionTagAssign should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagAssign', 'assign',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagAssign', 'assign',
                 {
                     newId: '10',
                     newIdSetNull: false,
@@ -57,13 +60,13 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         });
 
         it('executeActionTagAssign should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagAssign', 'assign', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagAssign', 'assign', done);
         });
 
         it('executeActionTagAssign should reject: invalid newId', done => {
             const id: any = 5;
             const newId: any = 'a*';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -79,7 +82,7 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         it('executeActionTagAssign should reject: newId must be null if newIdSetNull', done => {
             const id: any = 5;
             const newId: any = '10';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: true,
@@ -95,7 +98,7 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         it('executeActionTagAssign should reject: newId must integer', done => {
             const id: any = 5;
             const newId: any = 'a';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -111,7 +114,7 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         it('executeActionTagAssign should reject: invalid referenceField', done => {
             const id: any = 5;
             const newId: any = '10';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -127,7 +130,7 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         it('executeActionTagAssign should reject: unknown referenceField', done => {
             const id: any = 5;
             const newId: any = '10';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagAssign', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false,
@@ -143,13 +146,13 @@ describe('CommonSqlActionTagAssignAdapter', () => {
     });
 
     describe('#executeActionTagAssign()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagAssignAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagAssign should set newId', done => {
             const id: any = 5;
             const newId: any = '10';
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagAssign', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: false,
@@ -178,7 +181,7 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         it('executeActionTagAssign should set newId null', done => {
             const id: any = 5;
             const newId: any = null;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagAssign', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: true,
@@ -207,7 +210,7 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         it('executeActionTagAssign should reject: id not exists', done => {
             const id: any = 5;
             const newId: any = '10';
-            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            TestActionFormHelper.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagAssign', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: false,
@@ -231,7 +234,7 @@ describe('CommonSqlActionTagAssignAdapter', () => {
         it('executeActionTagAssign should reject: newId not exists', done => {
             const id: any = 5;
             const newId: any = '10';
-            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagAssign', 'image', id, {
+            TestActionFormHelper.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagAssign', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: false,

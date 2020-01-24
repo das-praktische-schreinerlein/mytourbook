@@ -1,8 +1,9 @@
 /* tslint:disable:no-unused-variable */
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {TestHelperSpec} from './test-helper.spec';
+import {TestHelper} from './test-helper.spec';
 import {ActionTagReplaceConfigType, CommonSqlActionTagReplaceAdapter} from './common-sql-actiontag-replace.adapter';
+import {TestActionFormHelper} from './test-actionform-helper.spec';
 
 describe('CommonDocSqlActionTagReplaceAdapter', () => {
     const sqlQueryBuilder: SqlQueryBuilder = new SqlQueryBuilder();
@@ -25,14 +26,16 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
             const config = {
                 knexOpts: {
                     client: knex.client.config.client
-                }};
+                }
+            };
+
             return new CommonSqlActionTagReplaceAdapter(config, knex, sqlQueryBuilder, modelConfigType);
-        },
+        }
     };
 
 
     describe('test defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagReplaceAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -42,11 +45,11 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         });
 
         it('executeActionTagReplace should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagReplace', 'replace' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagReplace', 'replace' , done);
         });
 
         it('executeActionTagReplace should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagReplace', 'replace',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagReplace', 'replace',
                 {
                     newId: '10',
                     newIdSetNull: false
@@ -54,13 +57,13 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         });
 
         it('executeActionTagReplace should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagReplace', 'replace', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagReplace', 'replace', done);
         });
 
         it('executeActionTagReplace should reject: invalid newId', done => {
             const id: any = 5;
             const newId: any = 'a*';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false
@@ -75,7 +78,7 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         it('executeActionTagReplace should reject: newId must be null if newIdSetNull', done => {
             const id: any = 5;
             const newId: any = '10';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: true
@@ -90,7 +93,7 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         it('executeActionTagReplace should reject: newId must integer', done => {
             const id: any = 5;
             const newId: any = 'a';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagReplace', 'image', id, {
                 payload: {
                     newId: newId,
                     newIdSetNull: false
@@ -104,13 +107,13 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
     });
 
     describe('#executeActionTagReplace()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagReplaceAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagReplace should set newId', done => {
             const id: any = 5;
             const newId: any = '10';
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagReplace', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagReplace', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: false
@@ -144,7 +147,7 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         it('executeActionTagReplace should set newId null', done => {
             const id: any = 5;
             const newId: any = null;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagReplace', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagReplace', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: true
@@ -178,7 +181,7 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         it('executeActionTagReplace should reject: id not exists', done => {
             const id: any = 5;
             const newId: any = '10';
-            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagReplace', 'image', id, {
+            TestActionFormHelper.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagReplace', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: false
@@ -201,7 +204,7 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
         it('executeActionTagReplace should reject: newId not exists', done => {
             const id: any = 5;
             const newId: any = '10';
-            TestHelperSpec.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagReplace', 'image', id, {
+            TestActionFormHelper.doActionTagTestFailWithSqlsTest(knex, service, 'executeActionTagReplace', 'image', id, {
                     payload: {
                         newId: newId,
                         newIdSetNull: false

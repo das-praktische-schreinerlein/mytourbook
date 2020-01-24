@@ -1,9 +1,10 @@
 /* tslint:disable:no-unused-variable */
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {TestHelperSpec} from './test-helper.spec';
+import {TestHelper} from './test-helper.spec';
 import {CommonSqlKeywordAdapter, KeywordModelConfigType} from './common-sql-keyword.adapter';
 import {CommonSqlActionTagKeywordAdapter} from './common-sql-actiontag-keyword.adapter';
+import {TestActionFormHelper} from './test-actionform-helper.spec';
 
 describe('CommonSqlActionTagKeywordAdapter', () => {
     const modelConfigType: KeywordModelConfigType = {
@@ -23,15 +24,17 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
             const config = {
                 knexOpts: {
                     client: knex.client.config.client
-                }};
+                }
+            };
+
             return new CommonSqlActionTagKeywordAdapter(
                 new CommonSqlKeywordAdapter(config, knex, sqlQueryBuilder, modelConfigType));
-        },
+        }
     };
 
 
     describe('test defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -41,15 +44,15 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
         });
 
         it('executeActionTagKeyword should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagKeyword', 'keyword' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagKeyword', 'keyword' , done);
         });
 
         it('executeActionTagKeyword should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagKeyword', 'keyword', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagKeyword', 'keyword', done);
         });
 
         it('executeActionTagKeyword should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagKeyword', 'keyword',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagKeyword', 'keyword',
                 {
                     keywordAction: 'set',
                     keywords: 'KW_1, KW_2'
@@ -59,7 +62,7 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
 
         it('executeActionTagKeyword should reject keywords', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagKeyword', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagKeyword', 'image', id, {
                 payload: {
                     keywordAction: 'set',
                     keywords: '"""""'
@@ -73,12 +76,12 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
     });
 
     describe('#executeActionTagKeyword() mysql', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagKeyword should set keywords mysql', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
                     payload: {
                         keywordAction: 'set',
                         keywords: 'KW_1, KW_2'
@@ -106,7 +109,7 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
 
         it('executeActionTagKeyword should unset keywords mysql', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
                     payload: {
                         keywordAction: 'unset',
                         keywords: 'KW_1, KW_2'
@@ -128,12 +131,12 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
     });
 
     describe('#executeActionTagKeyword() sqlite3', () => {
-        const knex = TestHelperSpec.createKnex('sqlite3', []);
+        const knex = TestHelper.createKnex('sqlite3', []);
         const service: CommonSqlActionTagKeywordAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagKeyword should set keywords sqlite3', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
                     payload: {
                         keywordAction: 'set',
                         keywords: 'KW_1, KW_2'
@@ -166,7 +169,7 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
 
         it('executeActionTagKeyword should unset keywords sqlite3', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagKeyword', 'image', id, {
                     payload: {
                         keywordAction: 'unset',
                         keywords: 'KW_1, KW_2'

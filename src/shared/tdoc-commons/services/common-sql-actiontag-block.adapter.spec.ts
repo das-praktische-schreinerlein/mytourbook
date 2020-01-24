@@ -2,7 +2,8 @@
 import 'rxjs/add/observable/fromPromise';
 import {ActionTagBlockConfigType, CommonSqlActionTagBlockAdapter} from './common-sql-actiontag-block.adapter';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {TestHelperSpec} from './test-helper.spec';
+import {TestHelper} from './test-helper.spec';
+import {TestActionFormHelper} from './test-actionform-helper.spec';
 
 describe('CommonSqlActionTagBlockAdapter', () => {
     const sqlQueryBuilder: SqlQueryBuilder = new SqlQueryBuilder();
@@ -18,14 +19,16 @@ describe('CommonSqlActionTagBlockAdapter', () => {
             const config = {
                 knexOpts: {
                     client: knex.client.config.client
-                }};
+                }
+            };
+
             return new CommonSqlActionTagBlockAdapter(config, knex, sqlQueryBuilder, modelConfigType);
-        },
+        }
     };
 
 
     describe('test defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagBlockAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -35,26 +38,26 @@ describe('CommonSqlActionTagBlockAdapter', () => {
         });
 
         it('executeActionTagBlock should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagBlock', 'block' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagBlock', 'block' , done);
         });
 
         it('executeActionTagBlock should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagBlock', 'blockd',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagBlock', 'blockd',
                 {set: 1}, undefined, done);
         });
 
         it('executeActionTagBlock should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagBlock', 'block', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagBlock', 'block', done);
         });
     });
 
     describe('#executeActionTagBlock()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagBlockAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagBlock should set', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagBlock', 'location', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagBlock', 'location', id, {
                     payload: {
                         set: 1
                     },
@@ -72,7 +75,7 @@ describe('CommonSqlActionTagBlockAdapter', () => {
 
         it('executeActionTagBlock should unset', done => {
             const id: any = 7;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagBlock', 'location', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagBlock', 'location', id, {
                     payload: {
                         set: 0
                     },

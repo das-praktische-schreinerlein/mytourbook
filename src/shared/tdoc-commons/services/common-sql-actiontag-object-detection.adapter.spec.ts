@@ -1,10 +1,11 @@
 /* tslint:disable:no-unused-variable */
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {TestHelperSpec} from './test-helper.spec';
+import {TestHelper} from './test-helper.spec';
 import {CommonSqlObjectDetectionAdapter} from './common-sql-object-detection.adapter';
 import {ObjectDetectionModelConfigType} from './common-sql-object-detection.model';
 import {CommonSqlActionTagObjectDetectionAdapter} from './common-sql-actiontag-object-detection.adapter';
+import {TestActionFormHelper} from './test-actionform-helper.spec';
 
 describe('CommonSqlActionTagObjectDetectionAdapter', () => {
     const modelConfigType: ObjectDetectionModelConfigType = {
@@ -60,15 +61,17 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
             const config = {
                 knexOpts: {
                     client: knex.client.config.client
-                }};
+                }
+            };
+
             return new CommonSqlActionTagObjectDetectionAdapter(
                 new CommonSqlObjectDetectionAdapter(config, knex, sqlQueryBuilder, modelConfigType));
-        },
+        }
     };
 
 
     describe('test executeActionTagObjects defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagObjectDetectionAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -78,15 +81,15 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
         });
 
         it('executeActionTagObjects should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagObjects', 'objects' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagObjects', 'objects' , done);
         });
 
         it('executeActionTagObjects should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagObjects', 'objects', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagObjects', 'objects', done);
         });
 
         it('executeActionTagObjects should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagObjects', 'objects',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagObjects', 'objects',
                 {
                     detector: 'bla',
                     objectkey: 'bla',
@@ -98,7 +101,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjects should reject objectkey', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagObjects', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagObjects', 'image', id, {
                 payload: {
                     detector: 'bla',
                     objectkey: 'bla"',
@@ -114,7 +117,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjects should reject precision', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagObjects', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagObjects', 'image', id, {
                 payload: {
                     detector: 'bla',
                     objectkey: 'bla',
@@ -130,12 +133,12 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
     });
 
     describe('#executeActionTagObjects()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagObjectDetectionAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagObjects should set objects', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjects', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjects', 'image', id, {
                     payload: {
                         detector: 'detectorBla',
                         objectkey: 'objectkeyBlum,objectkeyBlimm',
@@ -165,7 +168,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
     });
 
     describe('test executeActionTagObjectsState defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagObjectDetectionAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -175,15 +178,15 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
         });
 
         it('executeActionTagObjectsState should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagObjectsState', 'objectsState' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagObjectsState', 'objectsState' , done);
         });
 
         it('executeActionTagObjectsState should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagObjectsState', 'objectsState', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagObjectsState', 'objectsState', done);
         });
 
         it('executeActionTagObjectsState should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagObjectsState', 'objectsState',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagObjectsState', 'objectsState',
                 {
                     state: 'blaState'
                 }, 'unknown table: unknowntable', done);
@@ -192,7 +195,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjectsState should reject state', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagObjectsState', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagObjectsState', 'image', id, {
                 payload: {
                     state: '"'
                 },
@@ -205,12 +208,12 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
     });
 
     describe('#executeActionTagObjectsState()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagObjectDetectionAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagObjectsState should set state', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsState', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsState', 'image', id, {
                     payload: {
                         state: 'stateBla'
                     },
@@ -231,7 +234,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
     });
 
     describe('test executeActionTagObjectsKey defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagObjectDetectionAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -241,15 +244,15 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
         });
 
         it('executeActionTagObjectsKey should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagObjectsKey', 'objectsKey' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagObjectsKey', 'objectsKey' , done);
         });
 
         it('executeActionTagObjectsKey should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagObjectsKey', 'objectsKey', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagObjectsKey', 'objectsKey', done);
         });
 
         it('executeActionTagObjectsKey should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagObjectsState', 'objectsKey',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagObjectsState', 'objectsKey',
                 {
                     objectname: 'objectNameBlim',
                     objectcategory: 'objectcategoryBluuuum',
@@ -263,7 +266,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjectsKey should reject detector', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagObjectsKey', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagObjectsKey', 'image', id, {
                 payload: {
                     objectname: '"objectNameBlim',
                     objectcategory: '"objectcategoryBluuuum',
@@ -281,7 +284,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjectsKey should reject state', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagObjectsKey', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagObjectsKey', 'image', id, {
                 payload: {
                     objectname: 'objectNameBlim',
                     objectcategory: 'objectcategoryBluuuum',
@@ -299,12 +302,12 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
     });
 
     describe('#executeActionTagObjectsKey()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagObjectDetectionAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagObjectsKey should changeObjectKeyForRecord', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
                     payload: {
                         objectname: 'objectNameBlim',
                         objectcategory: 'objectcategoryBluuuum',
@@ -330,7 +333,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjectsKey should changeObjectLabelForObjectKey', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
                     payload: {
                         objectname: 'objectNameBlim',
                         objectcategory: 'objectcategoryBluuuum',
@@ -365,7 +368,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjectsKey should createNewObjectKeyAndObjectLabel', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
                     payload: {
                         objectname: 'objectNameBlim',
                         objectcategory: 'objectcategoryBluuuum',
@@ -404,7 +407,7 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
 
         it('executeActionTagObjectsKey should createObjectLabelForObjectKey', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagObjectsKey', 'odimgobject', id, {
                     payload: {
                         objectname: 'objectNameBlim',
                         objectcategory: 'objectcategoryBluuuum',

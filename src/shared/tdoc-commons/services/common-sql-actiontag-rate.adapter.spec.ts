@@ -1,9 +1,10 @@
 /* tslint:disable:no-unused-variable */
 import 'rxjs/add/observable/fromPromise';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {TestHelperSpec} from './test-helper.spec';
+import {TestHelper} from './test-helper.spec';
 import {CommonSqlActionTagRateAdapter} from './common-sql-actiontag-rate.adapter';
 import {CommonSqlRateAdapter, RateModelConfigType} from './common-sql-rate.adapter';
+import {TestActionFormHelper} from './test-actionform-helper.spec';
 
 describe('CommonDocSqlActionTagRateAdapter', () => {
     const modelConfigType: RateModelConfigType = {
@@ -27,15 +28,17 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
             const config = {
                 knexOpts: {
                     client: knex.client.config.client
-                }};
+                }
+            };
+
             return new CommonSqlActionTagRateAdapter(
                 new CommonSqlRateAdapter(config, knex, sqlQueryBuilder, modelConfigType));
-        },
+        }
     };
 
 
     describe('test defaults', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagRateAdapter = localTestHelper.createService(knex);
 
         it('should created', done => {
@@ -45,15 +48,15 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
         });
 
         it('executeActionTagPlaylist should error on no payload', done => {
-            TestHelperSpec.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagRate', 'rate' , done);
+            TestActionFormHelper.doActionTagTestInvalidPayloadTest(knex, service, 'executeActionTagRate', 'rate' , done);
         });
 
         it('executeActionTagPlaylist should error on invalid id', done => {
-            TestHelperSpec.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagRate', 'rate', done);
+            TestActionFormHelper.doActionTagTestInvalidIdTest(knex, service, 'executeActionTagRate', 'rate', done);
         });
 
         it('executeActionTagPlaylist should error on unknown table', done => {
-            TestHelperSpec.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagRate', 'rate',
+            TestActionFormHelper.doActionTagFailInvalidTableTest(knex, service, 'executeActionTagRate', 'rate',
                 {
                     ratekey: 'gesamt',
                     value: 1,
@@ -62,7 +65,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
 
         it('executeActionTagRate should reject ratekey', done => {
             const id: any = 5;
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagRate', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagRate', 'image', id, {
                 payload: {
                     ratekey: 'unknownRateKey',
                     value: 15,
@@ -77,7 +80,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
         it('executeActionTagRate should reject rate', done => {
             const id: any = 5;
             const rate: any = 'a';
-            return TestHelperSpec.doActionTagFailTest(knex, service, 'executeActionTagRate', 'image', id, {
+            return TestActionFormHelper.doActionTagFailTest(knex, service, 'executeActionTagRate', 'image', id, {
                 payload: {
                     ratekey: 'gesamt',
                     value: rate,
@@ -91,12 +94,12 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
     });
 
     describe('#executeActionTagRate()', () => {
-        const knex = TestHelperSpec.createKnex('mysql', []);
+        const knex = TestHelper.createKnex('mysql', []);
         const service: CommonSqlActionTagRateAdapter = localTestHelper.createService(knex);
 
         it('executeActionTagRate should set gesamt', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagRate', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagRate', 'image', id, {
                     payload: {
                         ratekey: 'gesamt',
                         value: 15,
@@ -118,7 +121,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
 
         it('executeActionTagRate should set gesamt', done => {
             const id: any = 5;
-            TestHelperSpec.doActionTagTestSuccessTest(knex, service, 'executeActionTagRate', 'image', id, {
+            TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagRate', 'image', id, {
                     payload: {
                         ratekey: 'motive',
                         value: 15,
