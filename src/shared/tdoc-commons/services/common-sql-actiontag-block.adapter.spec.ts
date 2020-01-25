@@ -65,11 +65,14 @@ describe('CommonSqlActionTagBlockAdapter', () => {
                     key: 'block',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'UPDATE location SET l_gesperrt=?  WHERE l_id = ?'],
+                    'UPDATE location SET l_gesperrt=?  WHERE l_id = ?'
+                ],
                 [
-                    [1, 5]],
+                    [1, 5]
+                ],
                 done);
         });
 
@@ -83,11 +86,14 @@ describe('CommonSqlActionTagBlockAdapter', () => {
                     key: 'block',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'UPDATE location SET l_gesperrt=?  WHERE l_id = ?'],
+                    'UPDATE location SET l_gesperrt=?  WHERE l_id = ?'
+                ],
                 [
-                    [0, 7]],
+                    [0, 7]
+                ],
                 done);
         });
     });

@@ -108,14 +108,17 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
                     key: 'rate',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'UPDATE image SET' +
-                    ' i_rate=GREATEST(COALESCE(?, -1)),' +
-                    ' i_rate=GREATEST(COALESCE(i_rate, -1), COALESCE(i_rate_motive, -1), COALESCE(i_rate_wichtigkeit, -1))' +
-                    '  WHERE i_id = ?'],
+                    'UPDATE image SET'
+                    + ' i_rate=GREATEST(COALESCE(?, -1)),'
+                    + ' i_rate=GREATEST(COALESCE(i_rate, -1), COALESCE(i_rate_motive, -1), COALESCE(i_rate_wichtigkeit, -1))'
+                    + '  WHERE i_id = ?'
+                ],
                 [
-                    [15, 5]],
+                    [15, 5]
+                ],
                 done);
         });
 
@@ -130,14 +133,17 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
                     key: 'rate',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'UPDATE image SET' +
-                    ' i_rate_motive=GREATEST(COALESCE(?, -1)),' +
-                    ' i_rate=GREATEST(COALESCE(i_rate, -1), COALESCE(i_rate_motive, -1), COALESCE(i_rate_wichtigkeit, -1))' +
-                    '  WHERE i_id = ?'],
+                    'UPDATE image SET'
+                    + ' i_rate_motive=GREATEST(COALESCE(?, -1)),'
+                    + ' i_rate=GREATEST(COALESCE(i_rate, -1), COALESCE(i_rate_motive, -1), COALESCE(i_rate_wichtigkeit, -1))'
+                    + '  WHERE i_id = ?'
+                ],
                 [
-                    [15, 5]],
+                    [15, 5]
+                ],
                 done);
         });
     });

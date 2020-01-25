@@ -140,7 +140,8 @@ describe('CommonSqlActionTagAssignAdapter', () => {
                 key: 'assign',
                 recordId: id,
                 type: 'tag'
-            }, 'actiontag assign referenceField not exists', done);
+            },
+                'actiontag assign referenceField not exists', done);
         });
 
     });
@@ -162,7 +163,8 @@ describe('CommonSqlActionTagAssignAdapter', () => {
                     key: 'assign',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?',
                     'SELECT k_id AS id FROM kategorie WHERE k_id=?',
@@ -171,8 +173,10 @@ describe('CommonSqlActionTagAssignAdapter', () => {
                 [
                     [5],
                     [10],
-                    [10, 5]],
-                done, [
+                    [10, 5]
+                ],
+                done,
+                [
                     [[{id: 5}]],
                     [[{id: 10}]]
                 ]);
@@ -191,7 +195,8 @@ describe('CommonSqlActionTagAssignAdapter', () => {
                     key: 'assign',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?',
                     'SELECT null AS id',
@@ -200,8 +205,10 @@ describe('CommonSqlActionTagAssignAdapter', () => {
                 [
                     [5],
                     [],
-                    [5]],
-                done, [
+                    [5]
+                ],
+                done,
+                [
                     [[{id: 5}]],
                     [[{id: null}]]
                 ]);
@@ -220,13 +227,16 @@ describe('CommonSqlActionTagAssignAdapter', () => {
                     key: 'assign',
                     recordId: id,
                     type: 'tag'
-                }, '_doActionTag assign image failed: id not found ' + id,
+                },
+                '_doActionTag assign image failed: id not found ' + id,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?'
                 ],
                 [
-                    [5]],
-                done, [
+                    [5]
+                ],
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -244,15 +254,18 @@ describe('CommonSqlActionTagAssignAdapter', () => {
                     key: 'assign',
                     recordId: id,
                     type: 'tag'
-                }, '_doActionTag assign image failed: newId not found ' + newId,
+                },
+                '_doActionTag assign image failed: newId not found ' + newId,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?',
                     'SELECT k_id AS id FROM kategorie WHERE k_id=?'
                 ],
                 [
                     [5],
-                    [10]],
-                done, [
+                    [10]
+                ],
+                done,
+                [
                     [[{id: 5}]],
                     [[]]
                 ]);

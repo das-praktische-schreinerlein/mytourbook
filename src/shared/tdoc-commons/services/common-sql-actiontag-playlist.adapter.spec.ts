@@ -90,15 +90,18 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
                     key: 'playlist',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'DELETE FROM image_playlist' +
-                    ' WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND i_id = ?',
-                    'INSERT INTO image_playlist (p_id, i_id)' +
-                    ' SELECT p_id +  AS p_id,     ? AS i_id FROM playlist     WHERE p_name IN (?)'],
+                    'DELETE FROM image_playlist'
+                    + ' WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND i_id = ?',
+                    'INSERT INTO image_playlist (p_id, i_id)'
+                    + ' SELECT p_id +  AS p_id,     ? AS i_id FROM playlist     WHERE p_name IN (?)'
+                ],
                 [
                     ['playlist', 5],
-                    [5, 'playlist']],
+                    [5, 'playlist']
+                ],
                 done);
         });
 
@@ -113,12 +116,15 @@ describe('CommonDocSqlActionTagPlaylistAdapter', () => {
                     key: 'playlist',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'DELETE FROM image_playlist' +
-                    ' WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND i_id = ?'],
+                    'DELETE FROM image_playlist'
+                    + ' WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND i_id = ?'
+                ],
                 [
-                    ['playlist', 5]],
+                    ['playlist', 5]
+                ],
                 done);
         });
     });

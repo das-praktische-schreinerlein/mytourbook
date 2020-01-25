@@ -90,20 +90,23 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
                     key: 'keyword',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'SELECT 1',
-                    'INSERT INTO keyword (kw_name) SELECT kw_name FROM ( SELECT ? AS kw_name  UNION ALL SELECT ? AS kw_name ) AS kw1' +
-                    ' WHERE NOT EXISTS (SELECT 1                   FROM keyword kw2' +
-                    '                   WHERE BINARY kw2.kw_name = BINARY kw1.kw_name); ',
-                    'INSERT INTO image_keyword (i_id, kw_id) SELECT ? AS i_id, kw_id AS kw_id  FROM keyword kkw1' +
-                    ' WHERE kw_name IN ( SELECT ? AS kw_name  UNION ALL SELECT ? AS kw_name )' +
-                    ' AND      NOT EXISTS (SELECT 1  FROM image_keyword kkw2' +
-                    '                   WHERE kkw2.kw_id = kkw1.kw_id                        AND i_id = ?); '],
+                    'INSERT INTO keyword (kw_name) SELECT kw_name FROM ( SELECT ? AS kw_name  UNION ALL SELECT ? AS kw_name ) AS kw1'
+                    + ' WHERE NOT EXISTS (SELECT 1                   FROM keyword kw2'
+                    + '                   WHERE BINARY kw2.kw_name = BINARY kw1.kw_name); ',
+                    'INSERT INTO image_keyword (i_id, kw_id) SELECT ? AS i_id, kw_id AS kw_id  FROM keyword kkw1'
+                    + ' WHERE kw_name IN ( SELECT ? AS kw_name  UNION ALL SELECT ? AS kw_name )'
+                    + ' AND      NOT EXISTS (SELECT 1  FROM image_keyword kkw2'
+                    + '                   WHERE kkw2.kw_id = kkw1.kw_id                        AND i_id = ?); '
+                ],
                 [
                     [],
                     ['KW_1', 'KW_2'],
-                    [5, 'KW_1', 'KW_2', 5]],
+                    [5, 'KW_1', 'KW_2', 5]
+                ],
                 done);
         });
 
@@ -118,14 +121,17 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
                     key: 'keyword',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'DELETE FROM image_keyword' +
-                    ' WHERE i_id = ?     AND kw_id IN' +
-                    '          (SELECT kw_id FROM keyword kkw1' +
-                    '           WHERE kw_name IN ( SELECT ? AS kw_name  UNION ALL SELECT ? AS kw_name )); '],
+                    'DELETE FROM image_keyword'
+                    + ' WHERE i_id = ?     AND kw_id IN'
+                    + '          (SELECT kw_id FROM keyword kkw1'
+                    + '           WHERE kw_name IN ( SELECT ? AS kw_name  UNION ALL SELECT ? AS kw_name )); '
+                ],
                 [
-                    [5, 'KW_1', 'KW_2']],
+                    [5, 'KW_1', 'KW_2']
+                ],
                 done);
         });
     });
@@ -145,25 +151,28 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
                     key: 'keyword',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'SELECT 1',
-                    'INSERT INTO keyword (kw_name)' +
-                    ' SELECT kw_name FROM (' +
-                    '  WITH split(word, str, hascomma) AS (     VALUES("", ?, 1)     UNION ALL SELECT     substr(str, 0,         case when instr(str, ",")         then instr(str, ",")         else length(str)+1 end),     ltrim(substr(str, instr(str, ",")), ","),     instr(str, ",")     FROM split     WHERE hascomma   )   SELECT trim(word) AS kw_name FROM split WHERE word!="" )' +
-                    ' AS kw1 WHERE NOT EXISTS (SELECT 1                   FROM keyword kw2' +
-                    '                   WHERE kw2.kw_name = kw1.kw_name); ',
-                    'INSERT INTO image_keyword (i_id, kw_id)' +
-                    ' SELECT ? AS i_id, kw_id AS kw_id FROM keyword kkw1 WHERE kw_name IN (' +
-                    '  WITH split(word, str, hascomma) AS (     VALUES("", ?, 1)' +
-                    '     UNION ALL SELECT     substr(str, 0,         case when instr(str, ",")         then instr(str, ",")         else length(str)+1 end),     ltrim(substr(str, instr(str, ",")), ","),     instr(str, ",")     FROM split' +
-                    '     WHERE hascomma   )   SELECT trim(word) AS kw_name FROM split WHERE word!="" )' +
-                    ' AND NOT EXISTS (SELECT 1                   FROM image_keyword kkw2' +
-                    '                   WHERE kkw2.kw_id = kkw1.kw_id                        AND i_id = ?); '],
+                    'INSERT INTO keyword (kw_name)'
+                    + ' SELECT kw_name FROM ('
+                    + '  WITH split(word, str, hascomma) AS (     VALUES("", ?, 1)     UNION ALL SELECT     substr(str, 0,         case when instr(str, ",")         then instr(str, ",")         else length(str)+1 end),     ltrim(substr(str, instr(str, ",")), ","),     instr(str, ",")     FROM split     WHERE hascomma   )   SELECT trim(word) AS kw_name FROM split WHERE word!="" )'
+                    + ' AS kw1 WHERE NOT EXISTS (SELECT 1                   FROM keyword kw2'
+                    + '                   WHERE kw2.kw_name = kw1.kw_name); ',
+                    'INSERT INTO image_keyword (i_id, kw_id)'
+                    + ' SELECT ? AS i_id, kw_id AS kw_id FROM keyword kkw1 WHERE kw_name IN ('
+                    + '  WITH split(word, str, hascomma) AS (     VALUES("", ?, 1)'
+                    + '     UNION ALL SELECT     substr(str, 0,         case when instr(str, ",")         then instr(str, ",")         else length(str)+1 end),     ltrim(substr(str, instr(str, ",")), ","),     instr(str, ",")     FROM split'
+                    + '     WHERE hascomma   )   SELECT trim(word) AS kw_name FROM split WHERE word!="" )'
+                    + ' AND NOT EXISTS (SELECT 1                   FROM image_keyword kkw2'
+                    + '                   WHERE kkw2.kw_id = kkw1.kw_id                        AND i_id = ?); '
+                ],
                 [
                     [],
                     ['KW_1,KW_2'],
-                    [5, 'KW_1,KW_2', 5]],
+                    [5, 'KW_1,KW_2', 5]
+                ],
                 done);
         });
 
@@ -178,14 +187,17 @@ describe('CommonSqlActionTagKeywordAdapter', () => {
                     key: 'keyword',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'DELETE FROM image_keyword WHERE i_id = ?' +
-                    '     AND kw_id IN          (SELECT kw_id FROM keyword kkw1' +
-                    '           WHERE kw_name IN (' +
-                    '  WITH split(word, str, hascomma) AS (     VALUES("", "?", 1)     UNION ALL SELECT     substr(str, 0,         case when instr(str, ",")         then instr(str, ",")         else length(str)+1 end),     ltrim(substr(str, instr(str, ",")), ","),     instr(str, ",")     FROM split     WHERE hascomma   )   SELECT trim(word) AS kw_name FROM split WHERE word!="" )); '],
+                    'DELETE FROM image_keyword WHERE i_id = ?'
+                    + '     AND kw_id IN          (SELECT kw_id FROM keyword kkw1'
+                    + '           WHERE kw_name IN ('
+                    + '  WITH split(word, str, hascomma) AS (     VALUES("", "?", 1)     UNION ALL SELECT     substr(str, 0,         case when instr(str, ",")         then instr(str, ",")         else length(str)+1 end),     ltrim(substr(str, instr(str, ",")), ","),     instr(str, ",")     FROM split     WHERE hascomma   )   SELECT trim(word) AS kw_name FROM split WHERE word!="" )); '
+                ],
                 [
-                    [5, 'KW_1,KW_2']],
+                    [5, 'KW_1,KW_2']
+                ],
                 done);
         });
     });

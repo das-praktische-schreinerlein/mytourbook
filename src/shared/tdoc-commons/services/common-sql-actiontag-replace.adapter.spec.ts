@@ -122,7 +122,8 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                     key: 'replace',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?',
                     'SELECT i_id AS id FROM image WHERE i_id=?',
@@ -137,8 +138,10 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                     [10, 5],
                     [10, 5],
                     [10, 5],
-                    [5]],
-                done, [
+                    [5]
+                ],
+                done,
+                [
                     [[{id: 5}]],
                     [[{id: 10}]]
                 ]);
@@ -156,7 +159,8 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                     key: 'replace',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?',
                     'SELECT null AS id',
@@ -171,8 +175,10 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                     [5],
                     [5],
                     [5],
-                    [5]],
-                done, [
+                    [5]
+                ],
+                done,
+                [
                     [[{id: 5}]],
                     [[{id: null}]]
                 ]);
@@ -190,13 +196,16 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                     key: 'replace',
                     recordId: id,
                     type: 'tag'
-                }, '_doActionTag replace image failed: id not found ' + id,
+                },
+                '_doActionTag replace image failed: id not found ' + id,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?'
                 ],
                 [
-                    [5]],
-                done, [
+                    [5]
+                ],
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -213,15 +222,18 @@ describe('CommonDocSqlActionTagReplaceAdapter', () => {
                     key: 'replace',
                     recordId: id,
                     type: 'tag'
-                }, '_doActionTag replace image failed: newId not found ' + newId,
+                },
+                '_doActionTag replace image failed: newId not found ' + newId,
                 [
                     'SELECT i_id AS id FROM image WHERE i_id=?',
                     'SELECT i_id AS id FROM image WHERE i_id=?'
                 ],
                 [
                     [5],
-                    [10]],
-                done, [
+                    [10]
+                ],
+                done,
+                [
                     [[{id: 5}]],
                     [[]]
                 ]);

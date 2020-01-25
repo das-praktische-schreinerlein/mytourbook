@@ -149,20 +149,21 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     key: 'objects',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
-                    'DELETE FROM image_object  WHERE image_object.io_obj_type IN (' +
-                    '    SELECT o_key    FROM objects    WHERE o_name IN (?, ?)) AND i_id = ?',
-                    'INSERT INTO image_object (io_obj_type, i_id, io_precision, io_detector, io_state)' +
-                    ' SELECT objects.o_key AS io_obj_type, ? AS i_id, ? AS io_precision, ? AS io_detector, ? AS io_state' +
-                    ' FROM objects WHERE o_name = (?, ?)'
+                    'DELETE FROM image_object  WHERE image_object.io_obj_type IN ('
+                    + '    SELECT o_key    FROM objects    WHERE o_name IN (?, ?)) AND i_id = ?',
+                    'INSERT INTO image_object (io_obj_type, i_id, io_precision, io_detector, io_state)'
+                    + ' SELECT objects.o_key AS io_obj_type, ? AS i_id, ? AS io_precision, ? AS io_detector, ? AS io_state'
+                    + ' FROM objects WHERE o_name = (?, ?)'
                 ],
                 [
                     ['objectkeyBlum', 'objectkeyBlimm', 5],
                     [5, 1, 'detectorBla', 'DONE_APPROVAL_PROCESSED', 'objectkeyBlum', 'objectkeyBlimm']
                 ],
-                done, [
-                ]);
+                done,
+                []);
         });
 
     });
@@ -221,15 +222,16 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     key: 'objectsState',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'UPDATE image_object SET io_state=?  WHERE i_id = ?'
                 ],
                 [
                     ['stateBla', 5]
                 ],
-                done, [
-                ]);
+                done,
+                []);
         });
     });
 
@@ -320,15 +322,16 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     key: 'objectsKey',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'UPDATE image_object  SET io_obj_type=?, io_state=?  WHERE io_id = ?'
                 ],
                 [
                     ['objectkeyBlim', 'RUNNING_MANUAL_CORRECTED', 5]
                 ],
-                done, [
-                ]);
+                done,
+                []);
         });
 
         it('executeActionTagObjectsKey should changeObjectLabelForObjectKey', done => {
@@ -346,24 +349,25 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     key: 'objectsKey',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'UPDATE image_object  SET io_obj_type=?, io_state=?  WHERE io_id = ?',
                     'DELETE FROM objects_key WHERE ok_detector=?  AND ok_key=?',
-                    'INSERT INTO objects_key   (ok_detector, ok_key, o_id)' +
-                    '    SELECT ?,          ?,' +
-                    '          (SELECT MAX(o_id) AS newId           FROM objects' +
-                    '           WHERE o_name=?) AS newId FROM dual' +
-                    '    WHERE NOT EXISTS (' +
-                    '      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)'
+                    'INSERT INTO objects_key   (ok_detector, ok_key, o_id)'
+                    + '    SELECT ?,          ?,'
+                    + '          (SELECT MAX(o_id) AS newId           FROM objects'
+                    + '           WHERE o_name=?) AS newId FROM dual'
+                    + '    WHERE NOT EXISTS ('
+                    + '      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)'
                 ],
                 [
                     ['objectkeyBlim', 'RUNNING_MANUAL_CORRECTED', 5],
                     ['detectorBlum', 'objectkeyBlim'],
                     ['detectorBlum', 'objectkeyBlim', 'objectNameBlim', 'detectorBlum', 'objectkeyBlim'],
                 ],
-                done, [
-                ]);
+                done,
+                []);
         });
 
         it('executeActionTagObjectsKey should createNewObjectKeyAndObjectLabel', done => {
@@ -381,19 +385,20 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     key: 'objectsKey',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'UPDATE image_object  SET io_obj_type=?, io_state=?  WHERE io_id = ?',
-                    'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)' +
-                    ' SELECT ?, ?, ?, ? FROM dual' +
-                    '   WHERE NOT EXISTS (SELECT 1 FROM objects                    WHERE o_name=?)',
+                    'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)'
+                    + ' SELECT ?, ?, ?, ? FROM dual'
+                    + '   WHERE NOT EXISTS (SELECT 1 FROM objects                    WHERE o_name=?)',
                     'DELETE FROM objects_key WHERE ok_detector=?  AND ok_key=?',
-                    'INSERT INTO objects_key   (ok_detector, ok_key, o_id)' +
-                    '    SELECT ?,          ?,' +
-                    '          (SELECT MAX(o_id) AS newId           FROM objects           WHERE o_name=?)' +
-                    ' AS newId FROM dual' +
-                    '    WHERE NOT EXISTS (' +
-                    '      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)'
+                    'INSERT INTO objects_key   (ok_detector, ok_key, o_id)'
+                    + '    SELECT ?,          ?,'
+                    + '          (SELECT MAX(o_id) AS newId           FROM objects           WHERE o_name=?)'
+                    + ' AS newId FROM dual'
+                    + '    WHERE NOT EXISTS ('
+                    + '      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)'
                 ],
                 [
                     ['objectkeyBlim', 'RUNNING_MANUAL_CORRECTED', 5],
@@ -401,8 +406,8 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     ['detectorBlum', 'objectkeyBlim'],
                     ['detectorBlum', 'objectkeyBlim', 'objectNameBlim', 'detectorBlum', 'objectkeyBlim']
                 ],
-                done, [
-                ]);
+                done,
+                []);
         });
 
         it('executeActionTagObjectsKey should createObjectLabelForObjectKey', done => {
@@ -420,19 +425,20 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     key: 'objectsKey',
                     recordId: id,
                     type: 'tag'
-                }, true,
+                },
+                true,
                 [
                     'UPDATE image_object  SET io_obj_type=?, io_state=?  WHERE io_id = ?',
-                    'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)' +
-                    ' SELECT ?, ?, ?, ? FROM dual' +
-                    '   WHERE NOT EXISTS (SELECT 1 FROM objects                    WHERE o_name=?)',
+                    'INSERT INTO objects (o_name, o_picasa_key, o_key, o_category)'
+                    + ' SELECT ?, ?, ?, ? FROM dual'
+                    + '   WHERE NOT EXISTS (SELECT 1 FROM objects                    WHERE o_name=?)',
                     'DELETE FROM objects_key WHERE ok_detector=?  AND ok_key=?',
-                    'INSERT INTO objects_key   (ok_detector, ok_key, o_id)' +
-                    '    SELECT ?,          ?,' +
-                    '          (SELECT MAX(o_id) AS newId           FROM objects' +
-                    '           WHERE o_name=?) AS newId FROM dual' +
-                    '    WHERE NOT EXISTS (' +
-                    '      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)'
+                    'INSERT INTO objects_key   (ok_detector, ok_key, o_id)'
+                    + '    SELECT ?,          ?,'
+                    + '          (SELECT MAX(o_id) AS newId           FROM objects'
+                    + '           WHERE o_name=?) AS newId FROM dual'
+                    + '    WHERE NOT EXISTS ('
+                    + '      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)'
                 ],
                 [
                     ['objectkeyBlim', 'RUNNING_MANUAL_CORRECTED', 5],
@@ -440,8 +446,8 @@ describe('CommonSqlActionTagObjectDetectionAdapter', () => {
                     ['detectorBlum', 'objectkeyBlim'],
                     ['detectorBlum', 'objectkeyBlim', 'objectNameBlim', 'detectorBlum', 'objectkeyBlim']
                 ],
-                done, [
-                ]);
+                done,
+                []);
         });
     });
 });

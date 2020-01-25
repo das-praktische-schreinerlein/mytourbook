@@ -118,13 +118,14 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 [{detector: 'detector1', maxId: 10}],
                 [
-                    'select io_detector as detector, COALESCE(MAX(i_id), 0) as maxId from image_object' +
-                    ' where io_detector in ("detector1", "detector2")  group by io_detector  '
+                    'select io_detector as detector, COALESCE(MAX(i_id), 0) as maxId from image_object'
+                    + ' where io_detector in ("detector1", "detector2")  group by io_detector  '
                 ],
                 [
                     undefined
                 ],
-                done, [
+                done,
+                [
                     [[{detector: 'detector1', maxId: 10}]]
                 ]);
         });
@@ -136,12 +137,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                     return service.readMaxIdAlreadyDetectedPerDetector('UnknownEntity', ['detector1', 'detector2']);
                 },
                 'unknown entityType: UnknownEntity',
-                [
-                ],
-                [
-                ],
-                done, [
-                ]);
+                [],
+                [],
+                done,
+                []);
         });
     });
 
@@ -157,15 +156,16 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 [],
                 [
-                    'select CONCAT("IMAGE", "_", i_id) AS id, i_id, CONCAT(i_dir, "/", i_file) AS filePath, i_dir as fileDir,' +
-                    ' i_file as fileName, "detector1" as detector from image' +
-                    ' where i_id > 10' +
-                    ' OR i_id IN (SELECT i_id        FROM image_object WHERE io_state in ("RETRY"))   order by i_id ASC limit 0, 10'
+                    'select CONCAT("IMAGE", "_", i_id) AS id, i_id, CONCAT(i_dir, "/", i_file) AS filePath, i_dir as fileDir,'
+                    + ' i_file as fileName, "detector1" as detector from image'
+                    + ' where i_id > 10'
+                    + ' OR i_id IN (SELECT i_id        FROM image_object WHERE io_state in ("RETRY"))   order by i_id ASC limit 0, 10'
                 ],
                 [
                     undefined
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -177,12 +177,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                     return service.readRequestImageDataType('UnknownEntity', 'detector1', 10, 10);
                 },
                 'unknown entityType: UnknownEntity',
-                [
-                ],
-                [
-                ],
-                done, [
-                ]);
+                [],
+                [],
+                done,
+                []);
         });
     });
 
@@ -204,7 +202,8 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 [
                     ['detector1', 'detector2', '12345', 'ERROR', 'OPEN', 'RETRY', 'UNKNOWN']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -223,7 +222,8 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 [
                     ['detector1', 'detector2', '12345']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -236,12 +236,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                         <ObjectDetectionRequestType>{refId: 'DUMMY_12345', detectors: ['detector1', 'detector2']}, false);
                 },
                 'detectionRequest table not valid: DUMMY_12345',
-                [
-                ],
-                [
-                ],
-                done, [
-                ]);
+                [],
+                [],
+                done,
+                []);
         });
     });
 
@@ -267,7 +265,8 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 [
                     ['12345', 'UNKNOWN', 'detector1']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -280,12 +279,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                         <ObjectDetectionRequestType>{refId: 'DUMMY_12345', detectors: ['detector1', 'detector2']}, 'detector1');
                 },
                 'detectionRequest table not valid: DUMMY_12345',
-                [
-                ],
-                [
-                ],
-                done, [
-                ]);
+                [],
+                [],
+                done,
+                []);
         });
     });
 
@@ -315,7 +312,8 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 [
                     ['12345', 'ERROR', 'detector1']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -342,7 +340,8 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 [
                     ['12345', 'RETRY', 'detector1']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -363,12 +362,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                         , 'detector1');
                 },
                 'detectionError table not valid: DUMMY_12345',
-                [
-                ],
-                [
-                ],
-                done, [
-                ]);
+                [],
+                [],
+                done,
+                []);
         });
     });
 
@@ -384,14 +381,15 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 true,
                 [
-                    'INSERT INTO objects (o_name,o_picasa_key,o_key,o_category)' +
-                    ' SELECT ?, ?, ?, ? FROM dual' +
-                    '   WHERE NOT EXISTS (SELECT 1 FROM objects        WHERE o_key=?)'
+                    'INSERT INTO objects (o_name,o_picasa_key,o_key,o_category)'
+                    + ' SELECT ?, ?, ?, ? FROM dual'
+                    + '   WHERE NOT EXISTS (SELECT 1 FROM objects        WHERE o_key=?)'
                 ],
                 [
                     ['Default', 'Default', 'Default', 'Default', 'Default']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -426,18 +424,19 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 true,
                 [
-                    'INSERT INTO objects_key   (ok_detector,ok_key,o_id)' +
-                    '    SELECT ?,          ?,          (SELECT MAX(o_id) AS newId            FROM objects' +
-                    '           WHERE o_key=?                  OR o_key=?)   AS newId FROM dual' +
-                    '    WHERE NOT EXISTS (      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)',
-                    'INSERT INTO image_object (i_id, io_state, io_detector, io_obj_type, io_img_width, io_img_height, io_obj_x1,' +
-                    ' io_obj_y1, io_obj_width, io_obj_height, io_precision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+                    'INSERT INTO objects_key   (ok_detector,ok_key,o_id)'
+                    + '    SELECT ?,          ?,          (SELECT MAX(o_id) AS newId            FROM objects'
+                    + '           WHERE o_key=?                  OR o_key=?)   AS newId FROM dual'
+                    + '    WHERE NOT EXISTS (      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)',
+                    'INSERT INTO image_object (i_id, io_state, io_detector, io_obj_type, io_img_width, io_img_height, io_obj_x1,'
+                    + ' io_obj_y1, io_obj_width, io_obj_height, io_precision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
                 ],
                 [
                     ['detector1', 'keySuggestionBlam', 'Default', 'keySuggestionBlam', 'detector1', 'keySuggestionBlam'],
                     [undefined, 'DONE_CORRECTION_PROCESSED', 'detector1', 'keySuggestionBlam', '100', '200', '1', '2', '10', '10', '0.6']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
@@ -462,7 +461,8 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                     ['detector1', 'RUNNING_NO_SUGGESTION'],
                     [undefined, 'RUNNING_NO_SUGGESTION', 'detector1']
                 ],
-                done, [
+                done,
+                [
                     [[]]
                 ]);
         });
