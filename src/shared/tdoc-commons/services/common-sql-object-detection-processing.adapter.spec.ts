@@ -195,10 +195,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 [[]],
                 [
-                    'DELETE FROM image_object WHERE image_object.io_detector IN ("detector1", "detector2")  AND i_id = "12345" AND io_state IN ("ERROR", "OPEN", "RETRY", "UNKNOWN")'
+                    'DELETE FROM image_object WHERE image_object.io_detector IN (?, ?)  AND i_id = ? AND io_state IN (?, ?, ?, ?)'
                 ],
                 [
-                    undefined
+                    ['detector1', 'detector2', '12345', 'ERROR', 'OPEN', 'RETRY', 'UNKNOWN']
                 ],
                 done, [
                     [[]]
@@ -214,10 +214,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 [[]],
                 [
-                    'DELETE FROM image_object WHERE image_object.io_detector IN ("detector1", "detector2")  AND i_id = "12345"'
+                    'DELETE FROM image_object WHERE image_object.io_detector IN (?, ?)  AND i_id = ?'
                 ],
                 [
-                    undefined
+                    ['detector1', 'detector2', '12345']
                 ],
                 done, [
                     [[]]
@@ -255,10 +255,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 true,
                 [
-                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES ("12345", "UNKNOWN", "detector1")'
+                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES (?, ?, ?)'
                 ],
                 [
-                    undefined
+                    ["12345", "UNKNOWN", "detector1"]
                 ],
                 done, [
                     [[]]
@@ -303,10 +303,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 true,
                 [
-                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES ("12345", "ERROR", "detector1")'
+                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES (?, ?, ?)'
                 ],
                 [
-                    undefined
+                    ["12345", "ERROR", "detector1"]
                 ],
                 done, [
                     [[]]
@@ -330,10 +330,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 true,
                 [
-                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES ("12345", "RETRY", "detector1")'
+                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES (?, ?, ?)'
                 ],
                 [
-                    undefined
+                    ["12345", "RETRY", "detector1"]
                 ],
                 done, [
                     [[]]
@@ -377,10 +377,10 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 true,
                 [
-                    'INSERT INTO objects (o_name,o_picasa_key,o_key,o_category) SELECT "Default", "Default", "Default", "Default" FROM dual   WHERE NOT EXISTS (SELECT 1 FROM objects        WHERE o_key="Default")'
+                    'INSERT INTO objects (o_name,o_picasa_key,o_key,o_category) SELECT ?, ?, ?, ? FROM dual   WHERE NOT EXISTS (SELECT 1 FROM objects        WHERE o_key=?)'
                 ],
                 [
-                    undefined
+                    ["Default", "Default", "Default", "Default", "Default"]
                 ],
                 done, [
                     [[]]
@@ -417,12 +417,12 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 true,
                 [
-                    'INSERT INTO objects_key   (ok_detector,ok_key,o_id)    SELECT "detector1",          "keySuggestionBlam",          (SELECT MAX(o_id) AS newId            FROM objects           WHERE o_key="Default"                  OR o_key="keySuggestionBlam")   AS newId FROM dual    WHERE NOT EXISTS (      SELECT 1 FROM objects_key      WHERE ok_detector="detector1"       AND ok_key="keySuggestionBlam")',
-                    'INSERT INTO image_object (i_id, io_state, io_detector, io_obj_type, io_img_width, io_img_height, io_obj_x1, io_obj_y1, io_obj_width, io_obj_height, io_precision) VALUES ("undefined", "DONE_CORRECTION_PROCESSED", "detector1", "keySuggestionBlam", "100", "200", "1", "2", "10", "10", "0.6")'
+                    'INSERT INTO objects_key   (ok_detector,ok_key,o_id)    SELECT ?,          ?,          (SELECT MAX(o_id) AS newId            FROM objects           WHERE o_key=?                  OR o_key=?)   AS newId FROM dual    WHERE NOT EXISTS (      SELECT 1 FROM objects_key      WHERE ok_detector=?       AND ok_key=?)',
+                    'INSERT INTO image_object (i_id, io_state, io_detector, io_obj_type, io_img_width, io_img_height, io_obj_x1, io_obj_y1, io_obj_width, io_obj_height, io_precision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
                 ],
                 [
-                    undefined,
-                    undefined
+                    ["detector1", "keySuggestionBlam", "Default", "keySuggestionBlam", "detector1", "keySuggestionBlam"],
+                    [undefined, "DONE_CORRECTION_PROCESSED", "detector1", "keySuggestionBlam", "100", "200", "1", "2", "10", "10", "0.6"]
                 ],
                 done, [
                     [[]]
@@ -442,12 +442,12 @@ describe('CommonSqlObjectDetectionProcessingAdapter', () => {
                 },
                 undefined,
                 [
-                    'DELETE FROM image_object WHERE image_object.io_detector IN ("detector1")  AND io_state = "RUNNING_NO_SUGGESTION"',
-                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES ("undefined", "RUNNING_NO_SUGGESTION", "detector1")'
+                    'DELETE FROM image_object WHERE image_object.io_detector IN (?)  AND io_state = ?',
+                    'INSERT INTO image_object (i_id, io_state, io_detector) VALUES (?, ?, ?)'
                 ],
                 [
-                    undefined,
-                    undefined
+                    ["detector1", "RUNNING_NO_SUGGESTION"],
+                    [undefined, "RUNNING_NO_SUGGESTION", "detector1"]
                 ],
                 done, [
                     [[]]

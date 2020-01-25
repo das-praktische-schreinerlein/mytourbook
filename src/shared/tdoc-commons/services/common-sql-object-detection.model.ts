@@ -1,3 +1,6 @@
+export const OBJECTDETECTION_KEY_DEFAULT = 'Default';
+export const OBJECTDETECTION_NAME_DEFAULT = 'Default';
+
 export interface ObjectDetectionEntityDatastoreConfiguration {
     entityType: string;
 }

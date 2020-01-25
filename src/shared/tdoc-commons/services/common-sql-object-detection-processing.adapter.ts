@@ -13,7 +13,13 @@ import {
     ObjectDetectionMaxIdPerDetectorType,
     RequestImageDataType
 } from './common-object-detection-processing-datastore';
-import {ObjectDetectionModelConfigType, ObjectDetectionSqlTableConfiguration} from './common-sql-object-detection.model';
+import {
+    OBJECTDETECTION_KEY_DEFAULT,
+    OBJECTDETECTION_NAME_DEFAULT,
+    ObjectDetectionModelConfigType,
+    ObjectDetectionSqlTableConfiguration
+} from './common-sql-object-detection.model';
+import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
 
 export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDetectionProcessingDatastore {
@@ -123,13 +129,21 @@ export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDe
         });
         const onlyNotSucceededStates = [ObjectDetectionState.ERROR, ObjectDetectionState.OPEN, ObjectDetectionState.RETRY,
             ObjectDetectionState.UNKNOWN];
-        const deleteSql = 'DELETE FROM ' + tableConfig.detectedTable + ' ' +
-            'WHERE ' + tableConfig.detectedTable + '.' + tableConfig.detectedFieldDetector +
-            ' IN ("' + detectorFilterValues.join('", "') + '") ' +
-            ' AND ' + tableConfig.baseFieldId + ' = "' + tableConfig.id + '"' +
-            (onlyNotSucceeded ? ' AND ' + tableConfig.detectedFieldState + ' IN ("' + onlyNotSucceededStates.join('", "') + '")' : '');
-        const sqlBuilder = this.knex;
-        return sqlBuilder.raw(this.transformToSqlDialect(deleteSql));
+        const deleteSqlQuery: RawSqlQueryData = {
+            sql: 'DELETE FROM ' + tableConfig.detectedTable + ' ' +
+                'WHERE ' + tableConfig.detectedTable + '.' + tableConfig.detectedFieldDetector +
+                ' IN (' + SqlUtils.mapParametersToPlaceholderString(detectorFilterValues) + ') ' +
+                ' AND ' + tableConfig.baseFieldId + ' = ' + '?' + '' +
+                (onlyNotSucceeded
+                    ? ' AND ' + tableConfig.detectedFieldState +
+                    ' IN (' + SqlUtils.mapParametersToPlaceholderString(onlyNotSucceededStates) + ')'
+                    : ''),
+            parameters: [].concat(detectorFilterValues).concat([tableConfig.id]
+                .concat(onlyNotSucceeded ? onlyNotSucceededStates : []))
+        };
+
+        deleteSqlQuery.sql = this.transformToSqlDialect(deleteSqlQuery.sql);
+        return SqlUtils.executeRawSqlQueryData(this.knex, deleteSqlQuery);
     }
 
     public createDetectionRequest(detectionRequest: ObjectDetectionRequestType, detector: string): Promise<any> {
@@ -138,14 +152,18 @@ export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDe
             return utils.reject('detectionRequest table not valid: ' + LogUtils.sanitizeLogMsg(detectionRequest.refId));
         }
 
-        const sqlBuilder = this.knex;
-        const insertSql = 'INSERT INTO ' + tableConfig.detectedTable +
-            ' (' + tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' + tableConfig.detectedFieldDetector + ')' +
-            ' VALUES ("' + tableConfig.id + '",' +
-            ' "' + this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionRequest.state) + '",' +
-            ' "' + detector + '")';
+        const insertSqlQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + tableConfig.detectedTable +
+                ' (' + tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' + tableConfig.detectedFieldDetector + ')' +
+                ' VALUES (' + '?' + ',' +
+                ' ' + '?' + ',' +
+                ' ' + '?' + ')',
+            parameters: [tableConfig.id, this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionRequest.state), detector]
+        };
+        insertSqlQuery.sql = this.transformToSqlDialect(insertSqlQuery.sql);
+
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(() => {
+            SqlUtils.executeRawSqlQueryData(this.knex, insertSqlQuery).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest delete/insert ' + tableConfig.detectedTable + ' failed:', reason);
@@ -160,18 +178,22 @@ export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDe
             return utils.reject('detectionError table not valid: ' + LogUtils.sanitizeLogMsg(detectionResponse.request.refId));
         }
 
-        const sqlBuilder = this.knex;
         const newState = detectionResponse.responseCode === undefined
         || detectionResponse.responseCode === ObjectDetectionResponseCode.NONRECOVERABLE_ERROR
             ? ObjectDetectionState.ERROR
             : ObjectDetectionState.RETRY;
-        const insertSql = 'INSERT INTO ' + tableConfig.detectedTable +
-            ' (' + tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' + tableConfig.detectedFieldDetector + ')' +
-            ' VALUES ("' + tableConfig.id + '",' +
-            ' "' + this.sqlQueryBuilder.sanitizeSqlFilterValue(newState) + '",' +
-            ' "' + detector + '")';
+        const insertSqlQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + tableConfig.detectedTable +
+                ' (' + tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' + tableConfig.detectedFieldDetector + ')' +
+                ' VALUES (' + '?' + ',' +
+                ' ' + '?' + ',' +
+                ' ' + '?' + ')',
+            parameters: [tableConfig.id, this.sqlQueryBuilder.sanitizeSqlFilterValue(newState), detector]
+        };
+        insertSqlQuery.sql = this.transformToSqlDialect(insertSqlQuery.sql);
+
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertSql)).then(() => {
+            SqlUtils.executeRawSqlQueryData(this.knex, insertSqlQuery).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionError delete/insert ' + tableConfig.detectedTable + ' failed:', reason);
@@ -181,17 +203,22 @@ export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDe
     }
 
     public createDefaultObject(): Promise<any> {
-        const sqlBuilder = this.knex;
-        const insertObjectSql = 'INSERT INTO ' + this.objectDetectionModelConfig.objectTable.table +
-            ' (' + [this.objectDetectionModelConfig.objectTable.fieldName,
-                this.objectDetectionModelConfig.objectTable.fieldPicasaKey,
-                this.objectDetectionModelConfig.objectTable.fieldKey,
-                this.objectDetectionModelConfig.objectTable.fieldCategory].join(',') + ')' +
-            ' SELECT "Default", "Default", "Default", "Default" FROM dual ' +
-            '  WHERE NOT EXISTS (SELECT 1 FROM ' + this.objectDetectionModelConfig.objectTable.table +
-            '        WHERE ' + this.objectDetectionModelConfig.objectTable.fieldKey + '="Default")';
+        const insertObjectSqlQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + this.objectDetectionModelConfig.objectTable.table +
+                ' (' + [this.objectDetectionModelConfig.objectTable.fieldName,
+                    this.objectDetectionModelConfig.objectTable.fieldPicasaKey,
+                    this.objectDetectionModelConfig.objectTable.fieldKey,
+                    this.objectDetectionModelConfig.objectTable.fieldCategory].join(',') + ')' +
+                ' SELECT ?, ?, ?, ? FROM dual ' +
+                '  WHERE NOT EXISTS (SELECT 1 FROM ' + this.objectDetectionModelConfig.objectTable.table +
+                '        WHERE ' + this.objectDetectionModelConfig.objectTable.fieldKey + '=?)',
+            parameters: [OBJECTDETECTION_NAME_DEFAULT, OBJECTDETECTION_KEY_DEFAULT, OBJECTDETECTION_KEY_DEFAULT,
+                OBJECTDETECTION_NAME_DEFAULT, OBJECTDETECTION_KEY_DEFAULT]
+        };
+        insertObjectSqlQuery.sql = this.transformToSqlDialect(insertObjectSqlQuery.sql);
+
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertObjectSql)).then(() => {
+            SqlUtils.executeRawSqlQueryData(this.knex, insertObjectSqlQuery).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
                 console.error('detectionRequest insert default-object failed:', reason);
@@ -212,31 +239,40 @@ export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDe
             .map(value => {
                 return this.sqlQueryBuilder.sanitizeSqlFilterValue(value);
             });
-        const insertObjectKeySql = 'INSERT INTO ' + this.objectDetectionModelConfig.objectKeyTable.table +
-            '   (' + [this.objectDetectionModelConfig.objectKeyTable.fieldDetector,
-                this.objectDetectionModelConfig.objectKeyTable.fieldKey,
-                this.objectDetectionModelConfig.objectKeyTable.fieldId].join(',') + ') ' +
-            '   SELECT "' + detector + '",' +
-            '          "' + keySuggestion + '",' +
-            '          (SELECT MAX(' + this.objectDetectionModelConfig.objectTable.fieldId + ') AS newId ' +
-            '           FROM ' + this.objectDetectionModelConfig.objectTable.table +
-            '           WHERE ' + this.objectDetectionModelConfig.objectTable.fieldKey + '="Default" ' +
-            '                 OR ' + this.objectDetectionModelConfig.objectTable.fieldKey + '="' + keySuggestion + '")' +
-            '   AS newId FROM dual ' +
-            '   WHERE NOT EXISTS (' +
-            '      SELECT 1 FROM ' + this.objectDetectionModelConfig.objectKeyTable.table +
-            '      WHERE ' + this.objectDetectionModelConfig.objectKeyTable.fieldDetector + '="' + detector + '" ' +
-            '      AND ' + this.objectDetectionModelConfig.objectKeyTable.fieldKey + '="' + keySuggestion + '")';
-        const insertImageObject = 'INSERT INTO ' + tableConfig.detectedTable + ' (' +
-            tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' +
-            tableConfig.detectedFieldDetector + ', ' + tableConfig.detailFieldNames.join(', ') + ')' +
-            ' VALUES ("' + tableConfig.id + '",' +
-            ' "' + this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionResult.state) + '",' +
-            ' "' + detector + '", "' + detailValues.join('", "') + '")';
-        const sqlBuilder = this.knex;
+        const insertObjectKeySqlQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + this.objectDetectionModelConfig.objectKeyTable.table +
+                '   (' + [this.objectDetectionModelConfig.objectKeyTable.fieldDetector,
+                    this.objectDetectionModelConfig.objectKeyTable.fieldKey,
+                    this.objectDetectionModelConfig.objectKeyTable.fieldId].join(',') + ') ' +
+                '   SELECT ' + '?' + ',' +
+                '          ' + '?' + ',' +
+                '          (SELECT MAX(' + this.objectDetectionModelConfig.objectTable.fieldId + ') AS newId ' +
+                '           FROM ' + this.objectDetectionModelConfig.objectTable.table +
+                '           WHERE ' + this.objectDetectionModelConfig.objectTable.fieldKey + '=? ' +
+                '                 OR ' + this.objectDetectionModelConfig.objectTable.fieldKey + '=' + '?' + ')' +
+                '   AS newId FROM dual ' +
+                '   WHERE NOT EXISTS (' +
+                '      SELECT 1 FROM ' + this.objectDetectionModelConfig.objectKeyTable.table +
+                '      WHERE ' + this.objectDetectionModelConfig.objectKeyTable.fieldDetector + '=' + '?' + ' ' +
+                '      AND ' + this.objectDetectionModelConfig.objectKeyTable.fieldKey + '=' + '?' + ')',
+            parameters: [ detector, keySuggestion, OBJECTDETECTION_KEY_DEFAULT, keySuggestion, detector, keySuggestion]
+        };
+        const insertImageObjectQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + tableConfig.detectedTable + ' (' +
+                tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' +
+                tableConfig.detectedFieldDetector + ', ' + tableConfig.detailFieldNames.join(', ') + ')' +
+                ' VALUES (' + '?' + ',' +
+                ' ' + '?' + ',' +
+                ' ' + '?' + ', ' + SqlUtils.mapParametersToPlaceholderString(detailValues) + ')',
+            parameters: [tableConfig.id, this.sqlQueryBuilder.sanitizeSqlFilterValue(detectionResult.state), detector]
+                .concat(detailValues)
+        };
+        insertObjectKeySqlQuery.sql = this.transformToSqlDialect(insertObjectKeySqlQuery.sql);
+        insertImageObjectQuery.sql = this.transformToSqlDialect(insertImageObjectQuery.sql);
+
         return new Promise((resolve, reject) => {
-            sqlBuilder.raw(this.transformToSqlDialect(insertObjectKeySql)).then(() => {
-                return sqlBuilder.raw(this.transformToSqlDialect(insertImageObject));
+            SqlUtils.executeRawSqlQueryData(this.knex, insertObjectKeySqlQuery).then(() => {
+                return SqlUtils.executeRawSqlQueryData(this.knex, insertImageObjectQuery);
             }).then(() => {
                 return resolve(true);
             }).catch(function errorFunction(reason) {
@@ -247,18 +283,26 @@ export class CommonSqlObjectDetectionProcessingAdapter implements CommonObjectDe
     }
 
     public processDetectionWithoutResult(detector: string, tableConfig: ObjectDetectionSqlTableConfiguration): Promise<any> {
-        const sqlBuilder = this.knex;
-        const deleteDummySql = 'DELETE FROM ' + tableConfig.detectedTable + ' ' +
-            'WHERE ' + tableConfig.detectedTable + '.' + tableConfig.detectedFieldDetector +
-            ' IN ("' + detector + '") ' +
-            ' AND ' + tableConfig.detectedFieldState + ' = "' + ObjectDetectionState.RUNNING_NO_SUGGESTION + '"';
-        const insertImageObject = 'INSERT INTO ' + tableConfig.detectedTable + ' (' +
-            tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' + tableConfig.detectedFieldDetector + ')' +
-            ' VALUES ("' + tableConfig.id + '",' +
-            ' "' + ObjectDetectionState.RUNNING_NO_SUGGESTION + '",' +
-            ' "' + detector + '")';
-        return sqlBuilder.raw(this.transformToSqlDialect(deleteDummySql)).then(() => {
-            return sqlBuilder.raw(this.transformToSqlDialect(insertImageObject));
+        const deleteDummySqlQuery: RawSqlQueryData = {
+            sql: 'DELETE FROM ' + tableConfig.detectedTable + ' ' +
+                'WHERE ' + tableConfig.detectedTable + '.' + tableConfig.detectedFieldDetector +
+                ' IN (' + '?' + ') ' +
+                ' AND ' + tableConfig.detectedFieldState + ' = ' + '?' + '',
+            parameters: [detector, ObjectDetectionState.RUNNING_NO_SUGGESTION]
+        };
+        const insertImageObjectQuery: RawSqlQueryData = {
+            sql: 'INSERT INTO ' + tableConfig.detectedTable + ' (' +
+                tableConfig.baseFieldId + ', ' + tableConfig.detectedFieldState + ', ' + tableConfig.detectedFieldDetector + ')' +
+                ' VALUES (' + '?' + ',' +
+                ' ' + '?' + ',' +
+                ' ' + '?' + ')',
+            parameters: [tableConfig.id, ObjectDetectionState.RUNNING_NO_SUGGESTION, detector]
+        };
+        deleteDummySqlQuery.sql = this.transformToSqlDialect(deleteDummySqlQuery.sql);
+        insertImageObjectQuery.sql = this.transformToSqlDialect(insertImageObjectQuery.sql);
+
+        return SqlUtils.executeRawSqlQueryData(this.knex, deleteDummySqlQuery).then(() => {
+            return SqlUtils.executeRawSqlQueryData(this.knex, insertImageObjectQuery);
         });
     }
 
