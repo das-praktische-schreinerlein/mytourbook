@@ -9,11 +9,9 @@ import {TourDocDataTechRecordFactory} from '../model/records/tdocdatatech-record
 import {TourDocRateTechRecordFactory} from '../model/records/tdocratetech-record';
 import {TourDocRatePersonalRecordFactory} from '../model/records/tdocratepers-record';
 import {TourDocDataInfoRecordFactory} from '../model/records/tdocdatainfo-record';
-import {
-    TourDocObjectDetectionImageObjectRecord,
-    TourDocObjectDetectionImageObjectRecordFactory
-} from '../model/records/tdocobjectdetectectionimageobject-record';
-import {TourDocNavigationObjectRecord, TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
+import {TourDocObjectDetectionImageObjectRecordFactory} from '../model/records/tdocobjectdetectectionimageobject-record';
+import {TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
+import {BaseEntityRecordFactory} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -166,7 +164,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
         const subtypeField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'subtypes_ss')];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
-           values['subtypes'] = subtypeField.join(',');
+            values['subtypes'] = subtypeField.join(',');
         }
         values['blocked'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'blocked_i', undefined);
         values['dateshow'] = this.mapperUtils.getMappedAdapterDateTimeValue(mapping, doc, 'dateshow_dt', undefined);
@@ -241,59 +239,9 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         const record: TourDocRecord = <TourDocRecord>mapper.createRecord(
             TourDocRecordFactory.instance.getSanitizedValues(values, {}));
 
-        const imageField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_fav_url_txt')];
-        let imageDocs = [];
-        if (imageField !== undefined) {
-            if (Array.isArray(imageField)) {
-                imageDocs = imageField;
-            } else {
-                imageDocs.push(imageField);
-            }
-            this.mapImageDocsToAdapterDocument(mapper, record, imageDocs);
-        } else {
-            record.set('tdocimages', []);
-        }
-        const videoField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'v_fav_url_txt')];
-        let videoDocs = [];
-        if (videoField !== undefined) {
-            if (Array.isArray(videoField)) {
-                videoDocs = videoField;
-            } else {
-                videoDocs.push(videoField);
-            }
-            this.mapVideoDocsToAdapterDocument(mapper, record, videoDocs);
-        } else {
-            record.set('tdocvideos', []);
-        }
-        // console.log('mapResponseDocument record full:', record);
-
-        const navigationObjectField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'navigation_objects_txt')];
-        const navigationObjectDocs = [];
-        if (navigationObjectField !== undefined) {
-            let navigationObjects = [];
-            if (Array.isArray(navigationObjectField)) {
-                navigationObjects = navigationObjectField;
-            } else {
-                navigationObjects.push(navigationObjectField);
-            }
-
-            navigationObjects.forEach(navdoc => {
-                const recordSrcs = navdoc.split(';;');
-                for (let i = 0; i < recordSrcs.length; i++) {
-                    const valuePairs = recordSrcs[i].split(':::');
-                    const navigationObject = {};
-                    for (let j = 0; j < valuePairs.length; j++) {
-                        const value = valuePairs[j].split('=');
-                        navigationObject[value[0]] = value[1];
-                    }
-                    navigationObjectDocs.push(navigationObject);
-                }
-            });
-            this.mapNavigationObjectDocToAdapterDocument(mapper, record, navigationObjectDocs);
-        } else {
-            record.set('navigation_objects', []);
-        }
-
+        this.mapAdapterFieldWithDetailDataToAdapterDocument(mapper, mapping, 'image', doc, 'i_fav_url_txt', record);
+        this.mapAdapterFieldWithDetailDataToAdapterDocument(mapper, mapping, 'video', doc, 'v_fav_url_txt', record);
+        this.mapAdapterFieldWithDetailDataToAdapterDocument(mapper, mapping, 'navigation_objects', doc, 'navigation_objects_txt', record);
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
@@ -353,7 +301,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         let ratePersSet = false;
         for (const field in ratePersValues) {
             if (ratePersValues[field] !== undefined && (ratePersValues[field] + '').length > 0 &&
-               (ratePersValues[field] > 0 || ratePersValues[field] < 0)) {
+                (ratePersValues[field] > 0 || ratePersValues[field] < 0)) {
                 ratePersSet = true;
                 break;
             }
@@ -391,206 +339,149 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         return record;
     }
 
-    mapDetailDataToAdapterDocument(mapper: Mapper, profile: string, record: Record, docs: any[]): void {
+    mapAdapterFieldWithDetailDataToAdapterDocument(mapper: Mapper, mapping: {}, profile: string, src: {}, fieldName: string,
+                                                   record: Record) {
+        const fieldValues = src[this.mapperUtils.mapToAdapterFieldName(mapping, fieldName)];
+        const docs = [];
+        if (fieldValues !== undefined) {
+            if (Array.isArray(fieldValues)) {
+                fieldValues.forEach(fieldValue => {
+                    const doc = {};
+                    doc[fieldName] = fieldValue;
+                    docs.push(doc);
+                });
+            } else {
+                const doc = {};
+                doc[fieldName] = fieldValues;
+                docs.push(doc);
+            }
+        }
+
+        this.mapDetailDataToAdapterDocument(mapper, profile, record, docs);
+    }
+
+    mapDetailDataToAdapterDocument(mapper: Mapper, profile: string, src: Record, docs: any[]): void {
+        const record: TourDocRecord = <TourDocRecord>src;
         switch (profile) {
             case 'image':
-                const imageUrls = [];
+                const imageDocs = [];
                 docs.forEach(doc => {
-                    imageUrls.push(doc['i_fav_url_txt']);
+                    const imageDoc = {};
+                    imageDoc['name'] = record.name;
+                    imageDoc['fileName'] = doc['i_fav_url_txt'];
+                    imageDocs.push(imageDoc);
                 });
-                this.mapImageDocsToAdapterDocument(mapper, <TourDocRecord>record, imageUrls);
+                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocimage'],
+                    'tdocimages', TourDocImageRecordFactory.instance, record, imageDocs);
                 break;
             case 'image_playlist':
-                const imagePlaylists = [];
-                docs.forEach(doc => {
-                    if (doc['i_playlists'] !== undefined && doc['i_playlists'] !== null) {
-                        imagePlaylists.push(doc['i_playlists']);
-                    }
-                });
-                (<TourDocRecord>record).playlists = imagePlaylists.join(', ');
+                this.mergeDetailDocsToAdapterField('playlists', record, docs, 'i_playlists', ', ');
                 break;
             case 'image_persons':
-                const imagePersons = [];
-                docs.forEach(doc => {
-                    if (doc['i_persons'] !== undefined && doc['i_persons'] !== null) {
-                        imagePersons.push(doc['i_persons']);
-                    }
-                });
-                (<TourDocRecord>record).persons = imagePersons.join((', '));
+                this.mergeDetailDocsToAdapterField('persons', record, docs, 'i_persons', ', ');
                 break;
             case 'image_objects':
-                const imageObjects = [];
-                docs.forEach(doc => {
-                    if (doc['i_objects'] !== undefined && doc['i_objects'] !== null) {
-                        imageObjects.push(doc['i_objects']);
-                    }
-                });
-                (<TourDocRecord>record).objects = imageObjects.join(', ');
+                this.mergeDetailDocsToAdapterField('objects', record, docs, 'i_objects', ', ');
                 break;
             case 'image_objectdetections':
-                const imageObjectDetections = [];
+                let odDocs = [];
                 docs.forEach(doc => {
-                    if (doc['i_objectdetections'] !== undefined && doc['i_objectdetections'] !== null) {
-                        const recordSrcs = doc['i_objectdetections'].split(';;');
-                        for (let i = 0; i < recordSrcs.length; i++) {
-                            const valuePairs = recordSrcs[i].split(':::');
-                            const imageObject = {};
-                            for (let j = 0; j < valuePairs.length; j++) {
-                                const value = valuePairs[j].split('=');
-                                imageObject[value[0]] = value[1];
-                            }
-                            imageObjectDetections.push(imageObject);
-                        }
+                    const fieldName = 'i_objectdetections';
+                    if (doc[fieldName] !== undefined && doc[fieldName] !== null) {
+                        odDocs = odDocs.concat(this.explodeValueToObjects(doc[fieldName]));
                     }
                 });
-                this.mapObjectDetectionImageObjectDocToAdapterDocument(mapper, <TourDocRecord>record, imageObjectDetections);
+                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocodimageobject'],
+                    'tdocodimageobjects', TourDocObjectDetectionImageObjectRecordFactory.instance, record, odDocs);
                 break;
             case 'navigation_objects':
-                const navigationObjects = [];
+                let navDocs = [];
                 docs.forEach(doc => {
+                    let fieldName;
                     if (doc['navigation_objects'] !== undefined && doc['navigation_objects'] !== null) {
-                        const recordSrcs = doc['navigation_objects'].split(';;');
-                        for (let i = 0; i < recordSrcs.length; i++) {
-                            const valuePairs = recordSrcs[i].split(':::');
-                            const navigationObject = {};
-                            for (let j = 0; j < valuePairs.length; j++) {
-                                const value = valuePairs[j].split('=');
-                                navigationObject[value[0]] = value[1];
-                            }
-                            navigationObjects.push(navigationObject);
-                        }
+                        fieldName = 'navigation_objects';
+                    } else if (doc['navigation_objects_txt'] !== undefined && doc['navigation_objects_txt'] !== null) {
+                        fieldName = 'navigation_objects_txt';
+                    }
+                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
+                        navDocs = navDocs.concat(this.explodeValueToObjects(doc[fieldName]));
                     }
                 });
-                this.mapNavigationObjectDocToAdapterDocument(mapper, <TourDocRecord>record, navigationObjects);
+                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocnavigationobject'],
+                    'tdocnavigationobjects', TourDocNavigationObjectRecordFactory.instance, record, navDocs);
                 break;
             case 'video':
-                const videoUrls = [];
+                const videoDocs = [];
                 docs.forEach(doc => {
-                    videoUrls.push(doc['v_fav_url_txt']);
+                    const videoDoc = {};
+                    videoDoc['name'] = record.name;
+                    videoDoc['fileName'] = doc['v_fav_url_txt'];
+                    videoDocs.push(videoDoc);
                 });
-                this.mapVideoDocsToAdapterDocument(mapper, <TourDocRecord>record, videoUrls);
+                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocvideo'],
+                    'tdocvideos', TourDocVideoRecordFactory.instance, record, videoDocs);
                 break;
             case 'video_playlist':
-                let videoPlaylist = '';
-                docs.forEach(doc => {
-                    if (doc['v_playlists'] !== undefined && doc['v_playlists'] !== null) {
-                        videoPlaylist = doc['v_playlists'];
-                    }
-                });
-                (<TourDocRecord>record).playlists = videoPlaylist;
+                this.mergeDetailDocsToAdapterField('playlists', record, docs, 'v_playlists', ', ');
                 break;
             case 'video_persons':
-                const videoPersons = [];
-                docs.forEach(doc => {
-                    if (doc['v_persons'] !== undefined && doc['v_persons'] !== null) {
-                        videoPersons.push(doc['v_persons']);
-                    }
-                });
-                (<TourDocRecord>record).persons = videoPersons.join(', ');
+                this.mergeDetailDocsToAdapterField('persons', record, docs, 'v_persons', ', ');
                 break;
             case 'video_objects':
-                const videoObjects = [];
-                docs.forEach(doc => {
-                    if (doc['v_objects'] !== undefined && doc['v_objects'] !== null) {
-                        videoObjects.push(doc['v_objects']);
-                    }
-                });
-                (<TourDocRecord>record).objects = videoObjects.join(', ');
+                this.mergeDetailDocsToAdapterField('objects', record, docs, 'v_objects', ', ');
                 break;
             case 'keywords':
-                let keywords = '';
-                docs.forEach(doc => {
-                    if (doc['keywords'] !== undefined && doc['keywords'] !== null) {
-                        keywords = doc['keywords'];
-                    }
-                });
-                (<TourDocRecord>record).keywords = keywords;
+                this.mergeDetailDocsToAdapterField('keywords', record, docs, 'keywords', ', ');
                 break;
         }
     }
 
-    private mapImageDocsToAdapterDocument(mapper: Mapper, record: TourDocRecord, imageDocs: any[]) {
-        const imageMapper = mapper['datastore']._mappers['tdocimage'];
-        const images: TourDocImageRecord[] = [];
-        if (imageDocs !== undefined) {
-            let id = this.extractUniqueId(record);
-            for (const imageDoc of imageDocs) {
-                if (imageDoc === undefined || imageDoc === null) {
-                    continue;
-                }
-                const imageValues = {};
-                imageValues['name'] = record.name;
-                imageValues['id'] = (id++).toString() + record.id;
-                imageValues['fileName'] = imageDoc;
-                const imageRecord = imageMapper.createRecord(
-                    TourDocImageRecordFactory.instance.getSanitizedValues(imageValues, {}));
-                images.push(imageRecord);
+    explodeValueToObjects(srcValue: string): {}[] {
+        const objectsSrcs = srcValue.split(';;');
+        const objects: {}[] = [];
+        for (let i = 0; i < objectsSrcs.length; i++) {
+            const valuePairs = objectsSrcs[i].split(':::');
+            const detailDoc = {};
+            for (let j = 0; j < valuePairs.length; j++) {
+                const value = valuePairs[j].split('=');
+                detailDoc[value[0]] = value[1];
             }
+            objects.push(detailDoc);
         }
-        record.set('tdocimages', images);
+
+        return objects;
     }
 
-    private mapVideoDocsToAdapterDocument(mapper: Mapper, record: TourDocRecord, videoDocs: any[]) {
-        const videoMapper = mapper['datastore']._mappers['tdocvideo'];
-        const videos: TourDocImageRecord[] = [];
-        if (videoDocs !== undefined) {
-            let id = this.extractUniqueId(record);
-            for (const videoDoc of videoDocs) {
-                if (videoDoc === undefined || videoDoc === null) {
-                    continue;
-                }
-                const videoValues = {};
-                videoValues['name'] = record.name;
-                videoValues['id'] = (id++).toString() + record.id;
-                videoValues['fileName'] = videoDoc;
-                const videoRecord = videoMapper.createRecord(
-                    TourDocVideoRecordFactory.instance.getSanitizedValues(videoValues, {})
-                );
-                videos.push(videoRecord);
+    mergeDetailDocsToAdapterField(profile: string, record: TourDocRecord, detailDocs: {}[], srcField: string, joiner: string) {
+        const merged = [];
+        detailDocs.forEach(doc => {
+            if (doc[srcField] !== undefined && doc[srcField] !== null) {
+                merged.push(doc[srcField]);
             }
-        }
-        record.set('tdocvideos', videos);
+        });
+        record[profile] = merged.join(joiner);
     }
 
-    private mapNavigationObjectDocToAdapterDocument(mapper: Mapper, record: TourDocRecord, objectDocs: any[]) {
-        const objectMapper = mapper['datastore']._mappers['tdocnavigationobject'];
-        const objects: TourDocNavigationObjectRecord[] = [];
-        if (objectDocs !== undefined) {
+    mapDetailDocsToAdapterDocument(mapper: Mapper, profile: string, factory: BaseEntityRecordFactory, record: TourDocRecord,
+                                   detailDocs: {}[]) {
+        const detailRecords: Record[] = [];
+        if (detailDocs !== undefined) {
             let id = this.extractUniqueId(record);
-            for (const objectDoc of objectDocs) {
-                if (objectDoc === undefined || objectDoc === null) {
+            for (const detailDoc of detailDocs) {
+                if (detailDoc === undefined || detailDoc === null) {
                     continue;
                 }
-                const objectValues = objectDoc;
-                objectValues['id'] = (id++).toString() + record.id;
-                const objectRecord = objectMapper.createRecord(
-                    TourDocNavigationObjectRecordFactory.instance.getSanitizedValues(objectValues, {}));
-                objects.push(objectRecord);
+                const detailValues = {... detailDoc};
+                detailValues['id'] = (id++).toString() + record.id;
+                const detailRecord = mapper.createRecord(
+                    factory.getSanitizedValues(detailValues, {}));
+                detailRecords.push(detailRecord);
             }
         }
-        record.set('tdocnavigationobjects', objects);
+        record.set(profile, detailRecords);
     }
 
-    private mapObjectDetectionImageObjectDocToAdapterDocument(mapper: Mapper, record: TourDocRecord, objectDocs: any[]) {
-        const objectMapper = mapper['datastore']._mappers['tdocodimageobject'];
-        const objects: TourDocObjectDetectionImageObjectRecord[] = [];
-        if (objectDocs !== undefined) {
-            let id = this.extractUniqueId(record);
-            for (const objectDoc of objectDocs) {
-                if (objectDoc === undefined || objectDoc === null) {
-                    continue;
-                }
-                const objectValues = objectDoc;
-                objectValues['id'] = (id++).toString() + record.id;
-                const objectRecord = objectMapper.createRecord(
-                    TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(objectValues, {}));
-                objects.push(objectRecord);
-            }
-        }
-        record.set('tdocodimageobjects', objects);
-    }
-
-    private extractUniqueId(record: TourDocRecord): number {
+    protected extractUniqueId(record: TourDocRecord): number {
         let id = 1;
         if (record.type === 'TRACK') {
             id = Number(record.trackId);
