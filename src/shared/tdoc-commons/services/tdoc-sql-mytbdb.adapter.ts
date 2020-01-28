@@ -253,7 +253,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                             'motive': actionTagForm.payload['tdocratepers.motive'] || 0,
                             'wichtigkeit': actionTagForm.payload['tdocratepers.wichtigkeit'] || 0
                         };
-                        return this.commonRateAdapter.setRates(table, id, rates, opts);
+                        return this.commonRateAdapter.setRates(table, id, rates, true, opts);
                     } else {
                         return utils.resolve(true);
                     }

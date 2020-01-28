@@ -64,7 +64,7 @@ export class CommonSqlPlaylistAdapter {
             parameters: [].concat(playlistKeys).concat([dbId])};
         const insertSqlQuery: RawSqlQueryData = {
             sql: 'INSERT INTO ' + joinTable + ' (' + playlistIdField + ', ' + joinBaseIdField + ')' +
-                ' SELECT ' + playlistIdField + ' +  AS ' + playlistIdField + ',' +
+                ' SELECT ' + playlistIdField + ' AS ' + playlistIdField + ',' +
                 '     ' + '?' + ' AS ' + joinBaseIdField + ' FROM ' + playlistTable +
                 '     WHERE ' + playlistNameField + ' IN (' + SqlUtils.mapParametersToPlaceholderString(playlistKeys) + ')',
             parameters: [].concat([dbId]).concat(playlistKeys)};

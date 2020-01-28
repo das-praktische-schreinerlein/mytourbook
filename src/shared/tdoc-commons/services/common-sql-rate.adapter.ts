@@ -37,7 +37,7 @@ export class CommonSqlRateAdapter {
         this.rateModelConfig = rateModelConfig;
     }
 
-    public setRates(rateTableKey: string, dbId: number, rates: {[key: string]: number}, opts: any):
+    public setRates(rateTableKey: string, dbId: number, rates: {[key: string]: number}, checkGreatestHimself: boolean, opts: any):
         Promise<any> {
         if (!utils.isInteger(dbId)) {
             return utils.reject('setRates ' + rateTableKey + ' id not an integer');
@@ -60,7 +60,8 @@ export class CommonSqlRateAdapter {
             if (!rateConfig.rateFields[rateKey]) {
                 return utils.reject('setRates: ' + rateTableKey + ' - rateKey not valid');
             }
-            rateUpdateSqls.push(rateConfig.rateFields[rateKey] + '=GREATEST(COALESCE(' + '?' + ', -1))');
+            const base = checkGreatestHimself ? rateConfig.rateFields[rateKey] : '-1';
+            rateUpdateSqls.push(rateConfig.rateFields[rateKey] + '=GREATEST(COALESCE(' + base + ', -1), ?)');
             rateUpdateSqlParams.push(rate);
         }
 
@@ -72,6 +73,9 @@ export class CommonSqlRateAdapter {
                 }
 
                 greatesSqls.push('COALESCE(' + rateConfig.rateFields[rateFieldKey] + ', -1)');
+            }
+            if (checkGreatestHimself) {
+                greatesSqls.push('COALESCE(' + rateConfig.fieldSum + ', -1)');
             }
             rateUpdateSqls.push(rateConfig.fieldSum + '=GREATEST(' + greatesSqls.join(', ') + ')');
         }

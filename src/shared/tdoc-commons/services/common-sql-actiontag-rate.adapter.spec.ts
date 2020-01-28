@@ -112,7 +112,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
                 true,
                 [
                     'UPDATE image SET'
-                    + ' i_rate=GREATEST(COALESCE(?, -1)),'
+                    + ' i_rate=GREATEST(COALESCE(-1, -1), ?),'
                     + ' i_rate=GREATEST(COALESCE(i_rate, -1), COALESCE(i_rate_motive, -1), COALESCE(i_rate_wichtigkeit, -1))'
                     + '  WHERE i_id = ?'
                 ],
@@ -122,7 +122,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
                 done);
         });
 
-        it('executeActionTagRate should set gesamt', done => {
+        it('executeActionTagRate should set motive', done => {
             const id: any = 5;
             TestActionFormHelper.doActionTagTestSuccessTest(knex, service, 'executeActionTagRate', 'image', id, {
                     payload: {
@@ -137,7 +137,7 @@ describe('CommonDocSqlActionTagRateAdapter', () => {
                 true,
                 [
                     'UPDATE image SET'
-                    + ' i_rate_motive=GREATEST(COALESCE(?, -1)),'
+                    + ' i_rate_motive=GREATEST(COALESCE(-1, -1), ?),'
                     + ' i_rate=GREATEST(COALESCE(i_rate, -1), COALESCE(i_rate_motive, -1), COALESCE(i_rate_wichtigkeit, -1))'
                     + '  WHERE i_id = ?'
                 ],

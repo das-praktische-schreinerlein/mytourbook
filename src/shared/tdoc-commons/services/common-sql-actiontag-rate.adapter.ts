@@ -42,7 +42,7 @@ export class CommonSqlActionTagRateAdapter {
         const rates = {};
         rates[rateKey] = rate;
 
-        return this.commonSqlRateAdapter.setRates(table, id, rates, opts);
+        return this.commonSqlRateAdapter.setRates(table, id, rates, false, opts);
     }
 
 }
