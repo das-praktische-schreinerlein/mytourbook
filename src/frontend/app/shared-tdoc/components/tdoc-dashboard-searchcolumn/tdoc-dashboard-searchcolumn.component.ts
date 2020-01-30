@@ -12,12 +12,12 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
-import {CommonDocDashboardSearchColumnComponent} from '../cdoc-dashboard-searchcolumn/cdoc-dashboard-searchcolumn.component';
+import {CommonDocDashboardSearchColumnComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-dashboard-searchcolumn/cdoc-dashboard-searchcolumn.component';
 
 @Component({
     selector: 'app-tdoc-dashboard-searchcolumn',
-    templateUrl: '../cdoc-dashboard-searchcolumn/cdoc-dashboard-searchcolumn.component.html',
-    styleUrls: ['../cdoc-dashboard-searchcolumn/cdoc-dashboard-searchcolumn.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-dashboard-searchcolumn/cdoc-dashboard-searchcolumn.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-dashboard-searchcolumn/cdoc-dashboard-searchcolumn.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocDashboardSearchColumnComponent extends

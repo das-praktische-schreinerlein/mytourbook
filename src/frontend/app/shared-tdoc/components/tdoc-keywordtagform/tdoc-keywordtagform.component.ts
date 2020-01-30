@@ -3,12 +3,12 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
-import {CommonDocKeywordTagFormComponent} from '../cdoc-keywordtagform/cdoc-keywordtagform.component';
+import {CommonDocKeywordTagFormComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component';
 
 @Component({
     selector: 'app-tdoc-keywordtagform',
-    templateUrl: '../cdoc-keywordtagform/cdoc-keywordtagform.component.html',
-    styleUrls: ['../cdoc-keywordtagform/cdoc-keywordtagform.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocKeywordTagFormComponent

@@ -7,14 +7,14 @@ import {FormBuilder} from '@angular/forms';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {ToastrService} from 'ngx-toastr';
 import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
-import {CommonDocReplaceFormComponent} from '../cdoc-replaceform/cdoc-replaceform.component';
+import {CommonDocReplaceFormComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 
 @Component({
     selector: 'app-tdoc-replaceform',
-    templateUrl: '../cdoc-replaceform/cdoc-replaceform.component.html',
-    styleUrls: ['../cdoc-replaceform/cdoc-replaceform.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocReplaceFormComponent

@@ -3,7 +3,7 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
-import {CommonDocAssignFormComponent} from '../cdoc-assignform/cdoc-assignform.component';
+import {CommonDocAssignFormComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignform/cdoc-assignform.component';
 import {FormBuilder} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
@@ -12,8 +12,8 @@ import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 
 @Component({
     selector: 'app-tdoc-assignform',
-    templateUrl: '../cdoc-assignform/cdoc-assignform.component.html',
-    styleUrls: ['../cdoc-assignform/cdoc-assignform.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignform/cdoc-assignform.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignform/cdoc-assignform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocAssignFormComponent

@@ -25,10 +25,10 @@ import {Subject} from 'rxjs/Subject';
 import {TourDocReplaceFormComponent} from '../components/tdoc-replaceform/tdoc-replaceform.component';
 import {ToastrService} from 'ngx-toastr';
 import * as Promise_serial from 'promise-serial';
-import {CommonDocAssignFormComponentResultType} from '../components/cdoc-assignform/cdoc-assignform.component';
+import {CommonDocAssignFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignform/cdoc-assignform.component';
 import {TourDocAssignFormComponent} from '../components/tdoc-assignform/tdoc-assignform.component';
-import {CommonDocReplaceFormComponentResultType} from '../components/cdoc-replaceform/cdoc-replaceform.component';
-import {CommonDocKeywordTagFormComponentResultType} from '../components/cdoc-keywordtagform/cdoc-keywordtagform.component';
+import {CommonDocReplaceFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component';
+import {CommonDocKeywordTagFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component';
 import {TourDocKeywordTagFormComponent} from '../components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 
 @Injectable()
