@@ -6,9 +6,10 @@
 - moved facetcache to commons
 - improved search, dashboard and data-management
 - improved data-import and documentation
+- improved build-process - activated tests+coverage
 
 ### new features
-- none
+- backend: added job to find corresponding TourDocRecords for media
 
 ### improvements
 - common: improved search for persons and objects
@@ -19,9 +20,16 @@
 - frontend: improved icons
 - frontend: added location-edit-area
 - frontend: added timeline-navigation and search-navigation to show-page
+- development: improved build-process - activated tests+coverage
+- common: improved naming of object-detection-modules
+- backend: use parameter-substitution for sql
+- common: added timeline-navigation
+- backend: decoupled and improved package-structure
+- backend: extracted configurable common-functionality
 
 ### bug fixes
 - backend: fixed reimport of exif-dates from images
+- backend: fix performance-issue - do not read details when filtering by id
  
 ### breaking changes
 - backend: moved facetcache to commons
