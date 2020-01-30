@@ -1,10 +1,16 @@
-import {ChangeDetectorRef, Input} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 import {BaseNavigationObjectRecordType} from '@dps/mycms-commons/dist/search-commons/model/records/basenavigationobject-record';
 
-export abstract class CommonDocObjectNavigationComponent extends AbstractInlineComponent {
+@Component({
+    selector: 'app-cdoc-object-navigation',
+    templateUrl: './cdoc-object-navigation.component.html',
+    styleUrls: ['./cdoc-object-navigation.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class CommonDocObjectNavigationComponent extends AbstractInlineComponent {
 
     @Input()
     public baseSearchUrl? = 'cdoc/';

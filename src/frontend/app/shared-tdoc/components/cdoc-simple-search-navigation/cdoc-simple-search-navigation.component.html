@@ -1,0 +1,21 @@
+<ng-container *ngIf="record">
+    <a [href]="getLastSearchPredecessorUrl()"
+       (click)="submitToLastSearchPredecessor()"
+       *ngIf="getLastSearchPredecessorUrl()"
+       class="btn btn-action btn-sm">
+        <span i18n="link lastSearchPredecessor cdoc|Linktext lastSearch predecessor cdoc@@a.show.cdoc.lastSearchPredecessor">🢦</span>
+    </a>
+    <a [href]="getBackToSearchUrl()"
+       (click)="submitBackToSearch()"
+       *ngIf="getBackToSearchUrl()"
+       class="btn btn-action btn-sm">
+        <span i18n="link back2lastsearch cdoc|Linktext back to lastsearch cdoc@@a.show.cdoc.back2lastSearch">Zurück zur Suche</span>
+    </a>
+    <a [href]="getLastSearchSuccessorUrl()"
+       (click)="submitToLastSearchSuccessor()"
+       *ngIf="getLastSearchSuccessorUrl()"
+       class="btn btn-action btn-sm">
+        <span i18n="link lastSearchSuccessor cdoc|Linktext lastSearch successor cdoc@@a.show.cdoc.lastSearchSuccessorr">🢧</span>
+    </a>
+</ng-container>
+

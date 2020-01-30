@@ -7,15 +7,15 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
-import {TourDocObjectNavigationComponent} from './tdoc-object-navigation.component';
+import {CommonDocObjectNavigationComponent} from './cdoc-object-navigation.component';
 
-describe('TourDocObjectNavigationComponent', () => {
-    let component: TourDocObjectNavigationComponent;
-    let fixture: ComponentFixture<TourDocObjectNavigationComponent>;
+describe('CommonDocObjectNavigationComponent', () => {
+    let component: CommonDocObjectNavigationComponent;
+    let fixture: ComponentFixture<CommonDocObjectNavigationComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocObjectNavigationComponent],
+            declarations: [CommonDocObjectNavigationComponent],
             imports: [
                 TranslateModule.forRoot()
             ],
@@ -30,7 +30,7 @@ describe('TourDocObjectNavigationComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TourDocObjectNavigationComponent);
+        fixture = TestBed.createComponent(CommonDocObjectNavigationComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
