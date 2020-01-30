@@ -1,0 +1,11 @@
+<ng-container *ngIf="navigationobjects && navigationobjects.length > 0">
+    <ng-container *ngFor="let navigationRecord of navigationobjects; let idx = index">
+        <a [href]="getNavigationObjectRecordUrl(navigationRecord)"
+           (click)="navigateToRecord(navigationRecord)"
+           class="btn btn-action btn-sm a-navigation">
+            <span class="navtype">{{ 'label.navtype.' + navigationRecord.navtype | translate}}</span>
+            <span class="name" [title]="navigationRecord.name && navigationRecord.name != 'null' ? navigationRecord.name : ''">{{navigationRecord.name && navigationRecord.name != 'null' ? navigationRecord.name : ''}}</span>
+        </a>
+    </ng-container>
+</ng-container>
+

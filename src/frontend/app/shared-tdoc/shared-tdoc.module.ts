@@ -48,6 +48,7 @@ import {GpxEditAreaComponent} from './components/gpx-editarea/gpx-editarea.compo
 import {TourDocReplaceFormComponent} from './components/tdoc-replaceform/tdoc-replaceform.component';
 import {TourDocAssignFormComponent} from './components/tdoc-assignform/tdoc-assignform.component';
 import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/tdoc-keywordtagform.component';
+import {TourDocObjectNavigationComponent} from './components/tdoc-object-navigation/tdoc-object-navigation.component';
 
 @NgModule({
     declarations: [
@@ -86,7 +87,8 @@ import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/t
         GpxEditAreaComponent,
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
-        TourDocKeywordTagFormComponent
+        TourDocKeywordTagFormComponent,
+        TourDocObjectNavigationComponent
     ],
     imports: [
         ToastrModule,
@@ -143,7 +145,8 @@ import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/t
         GpxEditAreaComponent,
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
-        TourDocKeywordTagFormComponent
+        TourDocKeywordTagFormComponent,
+        TourDocObjectNavigationComponent
     ]
 })
 export class SharedTourDocModule {}

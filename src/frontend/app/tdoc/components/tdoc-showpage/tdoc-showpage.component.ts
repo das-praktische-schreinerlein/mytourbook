@@ -26,8 +26,6 @@ import {
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {environment} from '../../../../environments/environment';
 import {TourDocSectionPageComponentAvailableTabs} from '../../../sections/components/sectionpage/tdoc-section-page.component';
-import {TourDocNavigationObjectRecord} from '../../../../shared/tdoc-commons/model/records/tdocnavigationobject-record';
-import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 @Component({
     selector: 'app-tdoc-showpage',
@@ -214,16 +212,6 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         }
 
         return filters;
-    }
-
-    getNavigationRecordUrl(navRecord: TourDocNavigationObjectRecord): string {
-        const name = StringUtils.generateTechnicalName(navRecord.name ? navRecord.name : 'name');
-        return 'tdoc/' + 'show/' + name + '/' + navRecord.navid;
-    }
-
-    navigateToRecord(navRecord: TourDocNavigationObjectRecord): boolean {
-        this.commonRoutingService.navigateByUrl(this.getNavigationRecordUrl(navRecord));
-        return false;
     }
 
     protected onResize(layoutSizeData: LayoutSizeData): void {
