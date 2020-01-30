@@ -3,10 +3,7 @@ import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-
 import {TourDocDynamicComponentService} from '../../services/tdoc-dynamic-components.service';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {ToastrService} from 'ngx-toastr';
-import {
-    CommonDocActionsComponent,
-    CommonDocActionsComponentConfig
-} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component';
+import {CommonDocActionsComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-actions/cdoc-actions.component';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
@@ -24,12 +21,6 @@ export class TourDocActionsComponent extends CommonDocActionsComponent<TourDocRe
                 protected cd: ChangeDetectorRef, protected appService: GenericAppService,
                 protected actionTagService: TourDocActionTagService) {
         super(dynamicComponentService, toastr, cd, appService, actionTagService);
-    }
-
-    protected getComponentConfig(config: {}): CommonDocActionsComponentConfig {
-        return {
-            baseEditPath: 'tdocadmin'
-        };
     }
 
 }
