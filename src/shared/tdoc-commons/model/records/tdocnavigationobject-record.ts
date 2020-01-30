@@ -1,5 +1,5 @@
 import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {BaseNavigationObjectRecord} from './basenavigationobject-record';
+import {BaseNavigationObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/basenavigationobject-record';
 
 export class TourDocNavigationObjectRecord extends BaseNavigationObjectRecord {
     tdoc_id: string;

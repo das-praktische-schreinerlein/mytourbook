@@ -11,7 +11,7 @@ import {TourDocRatePersonalRecordFactory} from '../model/records/tdocratepers-re
 import {TourDocDataInfoRecordFactory} from '../model/records/tdocdatainfo-record';
 import {TourDocObjectDetectionImageObjectRecordFactory} from '../model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
-import {BaseEntityRecordFactory} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -239,9 +239,18 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         const record: TourDocRecord = <TourDocRecord>mapper.createRecord(
             TourDocRecordFactory.instance.getSanitizedValues(values, {}));
 
-        this.mapAdapterFieldWithDetailDataToAdapterDocument(mapper, mapping, 'image', doc, 'i_fav_url_txt', record);
-        this.mapAdapterFieldWithDetailDataToAdapterDocument(mapper, mapping, 'video', doc, 'v_fav_url_txt', record);
-        this.mapAdapterFieldWithDetailDataToAdapterDocument(mapper, mapping, 'navigation_objects', doc, 'navigation_objects_txt', record);
+        this.mapDetailDataToAdapterDocument(mapper, 'image', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_fav_url_txt')],
+                'i_fav_url_txt'));
+        this.mapDetailDataToAdapterDocument(mapper, 'video', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'v_fav_url_txt')],
+                'v_fav_url_txt'));
+        this.mapDetailDataToAdapterDocument(mapper, 'navigation_objects', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'navigation_objects_txt')],
+                'navigation_objects_txt'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
@@ -339,27 +348,6 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         return record;
     }
 
-    mapAdapterFieldWithDetailDataToAdapterDocument(mapper: Mapper, mapping: {}, profile: string, src: {}, fieldName: string,
-                                                   record: Record) {
-        const fieldValues = src[this.mapperUtils.mapToAdapterFieldName(mapping, fieldName)];
-        const docs = [];
-        if (fieldValues !== undefined) {
-            if (Array.isArray(fieldValues)) {
-                fieldValues.forEach(fieldValue => {
-                    const doc = {};
-                    doc[fieldName] = fieldValue;
-                    docs.push(doc);
-                });
-            } else {
-                const doc = {};
-                doc[fieldName] = fieldValues;
-                docs.push(doc);
-            }
-        }
-
-        this.mapDetailDataToAdapterDocument(mapper, profile, record, docs);
-    }
-
     mapDetailDataToAdapterDocument(mapper: Mapper, profile: string, src: Record, docs: any[]): void {
         const record: TourDocRecord = <TourDocRecord>src;
         switch (profile) {
@@ -371,28 +359,30 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     imageDoc['fileName'] = doc['i_fav_url_txt'];
                     imageDocs.push(imageDoc);
                 });
-                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocimage'],
-                    'tdocimages', TourDocImageRecordFactory.instance, record, imageDocs);
+                record.set('tdocimages',
+                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocimage'],
+                        TourDocImageRecordFactory.instance, record, imageDocs));
                 break;
             case 'image_playlist':
-                this.mergeDetailDocsToAdapterField('playlists', record, docs, 'i_playlists', ', ');
+                record.playlists = ObjectUtils.mergePropertyValues(docs, 'i_playlists', ', ');
                 break;
             case 'image_persons':
-                this.mergeDetailDocsToAdapterField('persons', record, docs, 'i_persons', ', ');
+                record.persons = ObjectUtils.mergePropertyValues(docs, 'i_persons', ', ');
                 break;
             case 'image_objects':
-                this.mergeDetailDocsToAdapterField('objects', record, docs, 'i_objects', ', ');
+                record.objects = ObjectUtils.mergePropertyValues(docs, 'i_objects', ', ');
                 break;
             case 'image_objectdetections':
                 let odDocs = [];
                 docs.forEach(doc => {
                     const fieldName = 'i_objectdetections';
                     if (doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        odDocs = odDocs.concat(this.explodeValueToObjects(doc[fieldName]));
+                        odDocs = odDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
                     }
                 });
-                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocodimageobject'],
-                    'tdocodimageobjects', TourDocObjectDetectionImageObjectRecordFactory.instance, record, odDocs);
+                record.set('tdocodimageobjects',
+                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocodimageobject'],
+                        TourDocObjectDetectionImageObjectRecordFactory.instance, record, odDocs));
                 break;
             case 'navigation_objects':
                 let navDocs = [];
@@ -404,11 +394,12 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                         fieldName = 'navigation_objects_txt';
                     }
                     if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        navDocs = navDocs.concat(this.explodeValueToObjects(doc[fieldName]));
+                        navDocs = navDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
                     }
                 });
-                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocnavigationobject'],
-                    'tdocnavigationobjects', TourDocNavigationObjectRecordFactory.instance, record, navDocs);
+                record.set('tdocnavigationobjects',
+                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocnavigationobject'],
+                        TourDocNavigationObjectRecordFactory.instance, record, navDocs));
                 break;
             case 'video':
                 const videoDocs = [];
@@ -418,91 +409,22 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     videoDoc['fileName'] = doc['v_fav_url_txt'];
                     videoDocs.push(videoDoc);
                 });
-                this.mapDetailDocsToAdapterDocument(mapper['datastore']._mappers['tdocvideo'],
-                    'tdocvideos', TourDocVideoRecordFactory.instance, record, videoDocs);
+                record.set('tdocvideos', this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocvideo'],
+                    TourDocVideoRecordFactory.instance, record, videoDocs));
                 break;
             case 'video_playlist':
-                this.mergeDetailDocsToAdapterField('playlists', record, docs, 'v_playlists', ', ');
+                record.playlists = ObjectUtils.mergePropertyValues(docs, 'v_playlists', ', ');
                 break;
             case 'video_persons':
-                this.mergeDetailDocsToAdapterField('persons', record, docs, 'v_persons', ', ');
+                record.persons = ObjectUtils.mergePropertyValues(docs, 'v_persons', ', ');
                 break;
             case 'video_objects':
-                this.mergeDetailDocsToAdapterField('objects', record, docs, 'v_objects', ', ');
+                record.objects = ObjectUtils.mergePropertyValues(docs, 'v_objects', ', ');
                 break;
             case 'keywords':
-                this.mergeDetailDocsToAdapterField('keywords', record, docs, 'keywords', ', ');
+                record.keywords = ObjectUtils.mergePropertyValues(docs, 'keywords', ', ');
                 break;
         }
-    }
-
-    explodeValueToObjects(srcValue: string): {}[] {
-        const objectsSrcs = srcValue.split(';;');
-        const objects: {}[] = [];
-        for (let i = 0; i < objectsSrcs.length; i++) {
-            const valuePairs = objectsSrcs[i].split(':::');
-            const detailDoc = {};
-            for (let j = 0; j < valuePairs.length; j++) {
-                const value = valuePairs[j].split('=');
-                detailDoc[value[0]] = value[1];
-            }
-            objects.push(detailDoc);
-        }
-
-        return objects;
-    }
-
-    mergeDetailDocsToAdapterField(profile: string, record: TourDocRecord, detailDocs: {}[], srcField: string, joiner: string) {
-        const merged = [];
-        detailDocs.forEach(doc => {
-            if (doc[srcField] !== undefined && doc[srcField] !== null) {
-                merged.push(doc[srcField]);
-            }
-        });
-        record[profile] = merged.join(joiner);
-    }
-
-    mapDetailDocsToAdapterDocument(mapper: Mapper, profile: string, factory: BaseEntityRecordFactory, record: TourDocRecord,
-                                   detailDocs: {}[]) {
-        const detailRecords: Record[] = [];
-        if (detailDocs !== undefined) {
-            let id = this.extractUniqueId(record);
-            for (const detailDoc of detailDocs) {
-                if (detailDoc === undefined || detailDoc === null) {
-                    continue;
-                }
-                const detailValues = {... detailDoc};
-                detailValues['id'] = (id++).toString() + record.id;
-                const detailRecord = mapper.createRecord(
-                    factory.getSanitizedValues(detailValues, {}));
-                detailRecords.push(detailRecord);
-            }
-        }
-        record.set(profile, detailRecords);
-    }
-
-    protected extractUniqueId(record: TourDocRecord): number {
-        let id = 1;
-        if (record.type === 'TRACK') {
-            id = Number(record.trackId);
-        } else if (record.type === 'ROUTE') {
-            id = Number(record.routeId);
-        } else if (record.type === 'LOCATION') {
-            id = Number(record.locId);
-        } else if (record.type === 'IMAGE') {
-            id = Number(record.imageId);
-        } else if (record.type === 'VIDEO') {
-            id = Number(record.videoId);
-        } else if (record.type === 'TRIP') {
-            id = Number(record.tripId);
-        } else if (record.type === 'NEWS') {
-            id = Number(record.newsId);
-        } else if (record.type === 'ODIMGOBJECT') {
-            id = Number(record.id.replace(/.*_/, ''));
-        }
-        id = id * 1000000;
-
-        return id;
     }
 }
 
