@@ -47,6 +47,7 @@ MYCMSPROJECT="mytourbook_upgrade"
 
 echo "STEP: build server -> they need the node_modules"
 cd ${WORKSPACE}${MYCMSPROJECT}
+npm run backend-test || exit
 npm run backend-build || exit
 npm run frontendserver-build-server-dev-de || exit
 npm run frontendserver-build-admin-dev-de || exit
@@ -64,5 +65,6 @@ npm run frontendserver-build-admin-dev-de || exit
 
 echo "STEP: build frontend  -> there MUST NOT be the node_modules"
 cd ${WORKSPACE}${MYCMSPROJECT}
+npm run testCoverage || exit
 npm run build-dev || exit
 npm run frontendserver-build-dev-de || exit
