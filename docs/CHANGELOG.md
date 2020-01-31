@@ -9,6 +9,8 @@
 - improved build-process - activated tests+coverage
 - moved common action-tag-components and navigation-components from mytourbook to frontend-commons
 - moved full implementation of actions and actiontags to commons
+- bumped up deps
+
 
 ### new features
 - backend: added job to find corresponding TourDocRecords for media
@@ -30,6 +32,7 @@
 - backend: extracted configurable common-functionality
 - frontend: moved common action-tag-components and navigation-components from mytourbook to frontend-commons
 - common: moved full implementation of actions and actiontags to commons
+- development: bumped up deps
 
 ### bug fixes
 - backend: fixed reimport of exif-dates from images
