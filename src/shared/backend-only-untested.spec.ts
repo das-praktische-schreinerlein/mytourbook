@@ -1,7 +1,3 @@
-import {CommonSqlObjectDetectionAdapter} from './tdoc-commons/services/common-sql-object-detection.adapter';
-import {CommonSqlKeywordAdapter} from './tdoc-commons/services/common-sql-keyword.adapter';
-import {CommonSqlPlaylistAdapter} from './tdoc-commons/services/common-sql-playlist.adapter';
-import {CommonSqlRateAdapter} from './tdoc-commons/services/common-sql-rate.adapter';
 import {TourDocAdapterResponseMapper} from './tdoc-commons/services/tdoc-adapter-response.mapper';
 import {TourDocDataStore} from './tdoc-commons/services/tdoc-data.store';
 import {TourDocFileUtils} from './tdoc-commons/services/tdoc-file.utils';
@@ -22,10 +18,6 @@ import {CommonQueuedObjectDetectionProcessingService} from './tdoc-commons/servi
 // import untested service for code-coverage
 for (const a in [
     CommonQueuedObjectDetectionProcessingService,
-    CommonSqlKeywordAdapter,
-    CommonSqlObjectDetectionAdapter,
-    CommonSqlPlaylistAdapter,
-    CommonSqlRateAdapter,
     TourDocAdapterResponseMapper,
     TourDocDataStore,
     TourDocFileUtils,

@@ -1,6 +1,6 @@
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
-import {CommonSqlObjectDetectionProcessingAdapter} from './common-sql-object-detection-processing.adapter';
+import {CommonSqlObjectDetectionProcessingAdapter} from '@dps/mycms-commons/dist/commons/services/common-sql-object-detection-processing.adapter';
 
 export class TourDocSqlMytbDbObjectDetectionProcessingAdapter extends CommonSqlObjectDetectionProcessingAdapter {
 

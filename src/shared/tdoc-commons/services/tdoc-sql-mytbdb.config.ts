@@ -1,13 +1,13 @@
 import {TableConfig, TableConfigs} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
-import {ActionTagReplaceConfigType} from './common-sql-actiontag-replace.adapter';
-import {ActionTagBlockConfigType} from './common-sql-actiontag-block.adapter';
-import {ActionTagAssignConfigType} from './common-sql-actiontag-assign.adapter';
-import {KeywordModelConfigType} from './common-sql-keyword.adapter';
-import {PlaylistModelConfigType} from './common-sql-playlist.adapter';
-import {RateModelConfigType} from './common-sql-rate.adapter';
-import {ObjectDetectionModelConfigType} from './common-sql-object-detection.model';
+import {ActionTagReplaceConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
+import {ActionTagBlockConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
+import {ActionTagAssignConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
+import {KeywordModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
+import {PlaylistModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
+import {RateModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
+import {ObjectDetectionModelConfigType} from '@dps/mycms-commons/dist/commons/model/common-sql-object-detection.model';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];

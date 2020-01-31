@@ -11,7 +11,7 @@ import {TourDocSqlMytbExportDbAdapter} from '../shared/tdoc-commons/services/tdo
 import {TourDocItemsJsAdapter} from '../shared/tdoc-commons/services/tdoc-itemsjs.adapter';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {FacetCacheUsageConfigurations, SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import {CommonObjectDetectionProcessingDatastore} from '../shared/tdoc-commons/services/common-object-detection-processing-datastore';
+import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
 import {TourDocSqlMytbDbObjectDetectionProcessingAdapter} from '../shared/tdoc-commons/services/tdoc-sql-mytbdb-objectdetection-processing.adapter';
 
 export interface SqlConnectionConfig {

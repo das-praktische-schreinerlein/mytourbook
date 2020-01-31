@@ -4,7 +4,7 @@ import {
     ObjectDetectionManagerBackendConfig,
     RedisQueueConfig
 } from '../shared/tdoc-commons/services/common-queued-object-detection-processing.service';
-import {CommonObjectDetectionProcessingDatastore} from '../shared/tdoc-commons/services/common-object-detection-processing-datastore';
+import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
 
 export class TourDocObjectDetectionManagerModule extends CommonQueuedObjectDetectionProcessingService {
     private backendConfig: ObjectDetectionManagerBackendConfig;

@@ -1,4 +1,4 @@
-import {CommonSqlKeywordAdapter} from './common-sql-keyword.adapter';
+import {CommonSqlKeywordAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 
 export class TourDocSqlMytbDbKeywordAdapter {
 

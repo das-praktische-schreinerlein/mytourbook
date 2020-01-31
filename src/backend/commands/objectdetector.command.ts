@@ -3,7 +3,7 @@ import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/co
 import {TourDocObjectDetectionManagerModule} from '../modules/tdoc-objectdetection-manager.module';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {utils} from 'js-data';
-import {CommonObjectDetectionProcessingDatastore} from '../shared/tdoc-commons/services/common-object-detection-processing-datastore';
+import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
 
 export class ObjectDetectionManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {

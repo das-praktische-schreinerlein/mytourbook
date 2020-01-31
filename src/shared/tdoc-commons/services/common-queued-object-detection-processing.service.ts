@@ -13,7 +13,7 @@ import {
     CommonObjectDetectionProcessingDatastore,
     ObjectDetectionMaxIdPerDetectorType,
     RequestImageDataType
-} from './common-object-detection-processing-datastore';
+} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
 
 export interface RedisQueueConfig {
     host: string;
