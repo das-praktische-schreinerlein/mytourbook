@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {TourDocMediaManagerModule} from '../modules/tdoc-media-manager.module';
+import {FileSystemDBSyncType, TourDocMediaManagerModule} from '../modules/tdoc-media-manager.module';
 import {utils} from 'js-data';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import * as os from 'os';
@@ -66,8 +66,20 @@ export class MediaManagerCommand implements AbstractCommand {
                     promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR');
                     return promise;
                 }
+                const additionalMappingsJson = argv['additionalMappingsFile'];
+                let additionalMappings: {[key: string]: FileSystemDBSyncType};
+                if (additionalMappingsJson) {
+                    additionalMappings = {};
+                    const additionalMappingsSrc = JSON.parse(fs.readFileSync(additionalMappingsJson, {encoding: 'utf8'}));
+                    if (additionalMappingsSrc['files']) {
+                        const fileRecords: FileSystemDBSyncType[] = additionalMappingsSrc['files'];
+                        fileRecords.forEach(fileRecord => {
+                            additionalMappings[(fileRecord.file.dir + '/' + fileRecord.file.name).replace(/[\\\/]+/g, '/')] = fileRecord;
+                        });
+                    }
+                }
 
-                promise = tdocManagerModule.findCorrespondingTourDocRecordsForMedia(importDir);
+                promise = tdocManagerModule.findCorrespondingTourDocRecordsForMedia(importDir, additionalMappings);
                 promise.then(value => {
                     console.log(JSON.stringify({
                         tdocs: value,

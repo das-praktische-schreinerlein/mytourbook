@@ -25,10 +25,18 @@ export interface FileInfoType {
     size: number;
     type: string;
 }
-export type FileSystemDBSyncMatchingType = 'EXIFDATE' | 'FILEDATE' | 'FILENAME' | 'FILEDIRANDNAME' | 'FILESIZE' | 'FILENAMEANDDATE';
+export type FileSystemDBSyncMatchingType = 'EXIFDATE' | 'FILEDATE' | 'FILENAME' | 'FILEDIRANDNAME' | 'FILESIZE' | 'FILENAMEANDDATE'
+    | 'SIMILARITY';
+export interface FileSystemDBSyncMatchType {
+    type: FileSystemDBSyncMatchingType;
+    details: String;
+    score: number;
+}
 export interface DBFileInfoType extends FileInfoType {
     id: string;
-    matching: [FileSystemDBSyncMatchingType];
+    matching: FileSystemDBSyncMatchType;
+    matchingDetails: String;
+    matchingScore: number;
 }
 export interface FileSystemDBSyncType {
     file: FileInfoType;
@@ -51,6 +59,8 @@ export class TourDocMediaManagerModule {
                     created: undefined,
                     lastModified: undefined,
                     matching: undefined,
+                    matchingDetails: undefined,
+                    matchingScore: undefined,
                     name: undefined,
                     size: undefined,
                     type: undefined
@@ -271,7 +281,8 @@ export class TourDocMediaManagerModule {
         });
     }
 
-    public findCorrespondingTourDocRecordsForMedia(baseDir: string): Promise<FileSystemDBSyncType[]> {
+    public findCorrespondingTourDocRecordsForMedia(baseDir: string, additionalMappings: {[key: string]: FileSystemDBSyncType}):
+        Promise<FileSystemDBSyncType[]> {
         const me = this;
         const mediaTypes = {
             'jpg': 'IMAGE',
@@ -335,7 +346,7 @@ export class TourDocMediaManagerModule {
         }).then(fileSystemTourDocSyncEntries => {
             const promises = fileSystemTourDocSyncEntries.map(fileSystemTourDocSyncEntry => {
                 return function () {
-                    return me.findTourDocRecordsForFileInfo(baseDir, fileSystemTourDocSyncEntry.file).then(records => {
+                    return me.findTourDocRecordsForFileInfo(baseDir, fileSystemTourDocSyncEntry.file, additionalMappings).then(records => {
                         if (records !== undefined) {
                             fileSystemTourDocSyncEntry.records = records;
                         }
@@ -406,32 +417,53 @@ export class TourDocMediaManagerModule {
             width);
     }
 
-    private findTourDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType): Promise<DBFileInfoType[]> {
+    private findTourDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType,
+                                          additionalMappings: {[key: string]: FileSystemDBSyncType}): Promise<DBFileInfoType[]> {
         return new Promise<DBFileInfoType[]>((resolve, reject) => {
             const createdInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.created).getTime() / 1000);
             const lastModInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.lastModified).getTime() / 1000);
+            const filePath = (fileInfo.dir + '/' + fileInfo.name).replace(/[\\\/]+/g, '/');
+            const fullPath = (baseDir + '/' + filePath).replace(/[\\\/]+/g, '/');
             const checkPreferredSql =
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
-                '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching' +
+                '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
+                '      "filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM image' +
-                '  WHERE CONCAT(I_dir, "_", i_file) = "' + fileInfo.name + '"' +
+                '  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER("' + fileInfo.name + '")' +
                 'UNION ' +
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
-                '       i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching' +
+                '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
+                '      "dir: ' + fileInfo.dir + ' filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM image' +
-                '  WHERE i_file = "' + fileInfo.name + '"' +
+                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("' + filePath + '")' +
+                'UNION ' +
+                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
+                '       i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
+                '      "filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
+                '       0.25 AS matchingScore' +
+                '  FROM image' +
+                '  WHERE LOWER(i_file) = LOWER("' + fileInfo.name + '")' +
                 '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1)  + '" AND "' + (createdInSecondsSinceEpoch + 1)  + '"' +
                 '           OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")' +
                 'UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
-                '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching' +
+                '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
+                '      "filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM video' +
-                '  WHERE CONCAT(V_dir, "_", v_file) = "' + fileInfo.name + '"' +
+                '  WHERE LOWER(CONCAT(V_dir, "_", v_file)) = LOWER("' + fileInfo.name + '")' +
                 'UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
-                '      v_date AS exifDate, "VIDEO" AS type, "FILENAMEANDDATE" AS matching' +
+                '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
+                '      "dir: ' + fileInfo.dir + ' filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM video' +
-                '  WHERE v_file = "' + fileInfo.name + '"' +
+                '  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER("' + filePath + '")' +
+                'UNION ' +
+                'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
+                '      v_date AS exifDate, "VIDEO" AS type, "FILENAMEANDDATE" AS matching,' +
+                '      "filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
+                '       0.25 AS matchingScore' +
+                '  FROM video' +
+                '  WHERE LOWER(v_file) = LOWER("' + fileInfo.name + '")' +
                 '      AND (   UNIX_TIMESTAMP(v_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1)  + '" AND "' + (createdInSecondsSinceEpoch + 1)  + '"' +
                 '           OR UNIX_TIMESTAMP(v_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")'
             ;
@@ -445,29 +477,61 @@ export class TourDocMediaManagerModule {
                     return;
                 }
 
-                const checkFallBackSql =
+                let checkFallBackSql =
                     'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
-                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILENAME" AS matching' +
+                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILENAME" AS matching,' +
+                    '       "filename:' + fileInfo.name + '" AS matchingDetails, 0.5 AS matchingScore' +
                     '  FROM image' +
-                    '  WHERE i_file = "' + fileInfo.name + '"' +
+                    '  WHERE LOWER(i_file) = LOWER("' + fileInfo.name + '")' +
                     'UNION ' +
                     'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
-                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDATE" AS matching' +
+                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDATE" AS matching,' +
+                    '      "cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
+                    '       0.75 AS matchingScore' +
                     '  FROM image' +
                     '  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
                     '         OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")' +
                     'UNION ' +
                     'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
-                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILENAME" AS matching' +
+                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILENAME" AS matching,' +
+                    '       "filename:' + fileInfo.name + '" AS matchingDetails, 0.5 AS matchingScore' +
                     '  FROM video' +
-                    '  WHERE v_file = "' + fileInfo.name + '"' +
+                    '  WHERE LOWER(v_file) = LOWER("' + fileInfo.name + '")' +
                     'UNION ' +
                     'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
-                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILEDATE" AS matching' +
+                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILEDATE" AS matching,' +
+                    '      "cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
+                    '       0.75 AS matchingScore' +
                     '  FROM video' +
                     '  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
                     '         OR UNIX_TIMESTAMP(v_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")'
                 ;
+
+                for (const fileInfoKey of [filePath, fullPath]) {
+                    if (additionalMappings && additionalMappings[fileInfoKey]) {
+                        const additionalMapping = additionalMappings[fileInfoKey];
+                        additionalMapping.records.forEach(record => {
+                            const recordPath = (record.dir + '/' + record.name).replace(/\\/g, '/');
+                            checkFallBackSql +=
+                                ' UNION ' +
+                                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                                '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type,' +
+                                '       "' + record.matching + '" AS matching,' +
+                                '       "' + record.matchingDetails + '" AS matchingDetails,' +
+                                '       "' + record.matchingScore + '" AS matchingScore' +
+                                '  FROM image' +
+                                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("' + recordPath + '")' +
+                                'UNION ' +
+                                'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
+                                '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type,' +
+                                '       "' + record.matching + '" AS matching,' +
+                                '       "' + record.matchingDetails + '" AS matchingDetails,' +
+                                '       "' + record.matchingScore + '" AS matchingScore' +
+                                '  FROM video' +
+                                '  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER("' + recordPath + '")';
+                        });
+                    }
+                }
 
                 return this.knex.raw(checkFallBackSql).then(fallBackDbResults => {
                     TourDocMediaManagerModule.mapDBResultOnFileInfoType(
@@ -521,7 +585,8 @@ export class TourDocMediaManagerModule {
                         const checkDateSql =
                             'SELECT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
                             '       i_date AS lastModified, i_date AS exifDate,' +
-                            ' "IMAGE" AS type, "EXIFDATE" AS matching' +
+                            '       "IMAGE" AS type, "EXIFDATE" AS matching,' +
+                            '      "exifdate:' + exifDateInSSinceEpoch +  '" AS matchingDetails, 0.9 AS matchingScore' +
                             '  FROM image' +
                             '  WHERE UNIX_TIMESTAMP(i_date)' +
                             '        BETWEEN "' +  (exifDateInSSinceEpoch - 1)  + '" AND "' +  (exifDateInSSinceEpoch + 1)  + '"';
