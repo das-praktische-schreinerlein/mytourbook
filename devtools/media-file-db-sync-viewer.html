@@ -112,10 +112,10 @@
                     defaultDataTablesEntry.push(srcEntry.file[k] ? srcEntry.file[k] : '');
                 }
 
-                var dataTablesEntry
+                var dataTablesEntry;
                 if (srcEntry.records === undefined || srcEntry.records.length <= 0) {
                     dataTablesEntry = [].concat(defaultDataTablesEntry);
-                    for (var k of ['id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate']) {
+                    for (var k of ['id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate','matchingDetails', 'matchingScore']) {
                         dataTablesEntry.push('');
                     }
                     data.push(dataTablesEntry);
@@ -124,7 +124,7 @@
 
                 for (var record of srcEntry.records) {
                     dataTablesEntry = [].concat(defaultDataTablesEntry);
-                    for (var k of ['id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate']) {
+                    for (var k of ['id', 'matching', 'type', 'dir', 'name', 'lastModified', 'exifDate', 'matchingDetails', 'matchingScore']) {
                         dataTablesEntry.push(record[k] ? record[k] : '');
                     }
                     data.push(dataTablesEntry);
@@ -234,6 +234,20 @@
                             return row[10];
                         },
                         "targets": 8
+                    },
+                    {
+                        // matchingDetails
+                        "render": function ( data, type, row ) {
+                            return row[12];
+                        },
+                        "targets": 9
+                    },
+                    {
+                        // matchingScore
+                        "render": function ( data, type, row ) {
+                            return row[13] !== '' ? parseFloat(row[13]).toFixed(2) : '';
+                        },
+                        "targets": 10
                     }
                 ],
                 columns: [
@@ -245,7 +259,9 @@
                     { title: "File.file" },
                     { title: "DB.dir" },
                     { title: "DB.file" },
-                    { title: "DB.lastModified" }
+                    { title: "DB.lastModified" },
+                    { title: "MatchingDetails" },
+                    { title: "Score" }
                 ],
                 data: data,
                 pageLength: '10'
