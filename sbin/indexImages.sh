@@ -15,9 +15,9 @@ LIREINDEXER_FEATURES=CEDD,FCTH,OpponentHistogram,ColorLayout,JCD,SimpleColorHist
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ./configure-environment.bash
 
-echo "now: running indexing images from '$W_MYTB_INDEXSRC_MEDIADIR' to '$MYTB_INDEXDIR'"
+echo "now: running indexing images from '$W_MYTB_INDEXSRC_MEDIADIR' to '$W_MYTB_INDEXDIR'"
 cd ${LIRETOOLS}
-./gradlew runIndexing --args="-i $W_MYTB_INDEXSRC_MEDIADIR -l $MYTB_INDEXDIR -n $LIREINDEXER_NUMTHREADS -f $LIREINDEXER_FEATURES"
+./gradlew runIndexing --args="-i $W_MYTB_INDEXSRC_MEDIADIR -l $W_MYTB_INDEXDIR -n $LIREINDEXER_NUMTHREADS -f $LIREINDEXER_FEATURES"
 cd ${CWD}
 
 echo "done - index mytb-images"

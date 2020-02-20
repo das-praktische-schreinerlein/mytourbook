@@ -84,13 +84,13 @@ cd sbin
 ```
 bash
 cd sbin
-./searchCorrespondingImages.sh /cygdrive/f/playground/mytb-test/testsearch/
+./searchCorrespondingImages.sh f:/playground/mytb-test/testsearch/
 ``` 
 - check playlist-directory with images against database with additional mapping-file from lire-search
 ```
 bash
 cd sbin
-./searchCorrespondingImages.sh /cygdrive/f/playground/mytb-test/testsearch/ similars
+./searchCorrespondingImages.sh f:/playground/mytb-test/testsearch/ similars
 ``` 
 -  open result-file in [MediaFileSync-Viewer](devtools/media-file-db-sync-viewer.html) check files and export playlist to import it as favorites andset playlist in database
 
