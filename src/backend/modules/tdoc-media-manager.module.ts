@@ -508,7 +508,7 @@ export class TourDocMediaManagerModule {
                 ;
 
                 for (const fileInfoKey of [filePath, fullPath]) {
-                    if (additionalMappings && additionalMappings[fileInfoKey]) {
+                    if (additionalMappings && additionalMappings[fileInfoKey.toLowerCase()]) {
                         const additionalMapping = additionalMappings[fileInfoKey];
                         additionalMapping.records.forEach(record => {
                             const recordPath = (record.dir + '/' + record.name).replace(/\\/g, '/');

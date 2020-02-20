@@ -72,9 +72,25 @@ export class MediaManagerCommand implements AbstractCommand {
                     additionalMappings = {};
                     const additionalMappingsSrc = JSON.parse(fs.readFileSync(additionalMappingsJson, {encoding: 'utf8'}));
                     if (additionalMappingsSrc['files']) {
+                        const possibleLocalPaths = [];
+                        ['full', 'x100', 'x400', 'x600', 'x1400'].forEach(resolution => {
+                            const path = backendConfig['apiRoutePicturesStaticDir'] + '/' +
+                                (backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + resolution + '/';
+                            possibleLocalPaths.push(path);
+                            possibleLocalPaths.push(path.replace(/[\\\/]+/g, '/'));
+                            possibleLocalPaths.push(path.toLowerCase());
+                            possibleLocalPaths.push(path.replace(/[\\\/]+/g, '/').toLowerCase());
+                        });
                         const fileRecords: FileSystemDBSyncType[] = additionalMappingsSrc['files'];
                         fileRecords.forEach(fileRecord => {
-                            additionalMappings[(fileRecord.file.dir + '/' + fileRecord.file.name).replace(/[\\\/]+/g, '/')] = fileRecord;
+                            fileRecord.records.forEach(record => {
+                                record.dir = record.dir.replace(/[\\\/]+/g, '/');
+                                possibleLocalPaths.forEach(possibleLocalPath => {
+                                    record.dir = record.dir.replace(possibleLocalPath, '');
+                                });
+                            });
+                            const fileInfoKey = (fileRecord.file.dir + '/' + fileRecord.file.name).replace(/[\\\/]+/g, '/');
+                            additionalMappings[fileInfoKey.toLowerCase()] = fileRecord;
                         });
                     }
                 }
