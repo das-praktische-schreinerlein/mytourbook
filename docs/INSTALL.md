@@ -113,6 +113,13 @@ cp utils/redis_init_script /etc/init.d/redis_6379
 sudo update-rc.d redis_6379 defaults
 ```
 
+## install liretools
+```
+git clone https://github.com/das-praktische-schreinerlein/liretools.git
+cd liretools
+gradlew initLireWin jar
+```
+
 ## Build dev
 Run for the dev-versions in `dist/`.
 ```bash

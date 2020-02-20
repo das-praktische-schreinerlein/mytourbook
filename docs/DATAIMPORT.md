@@ -22,7 +22,7 @@ source installer/db/mysql/mytbexportdb/init_02_create-user.sql
 - copy orig from config and configure a ```backend.import.json``` and ```backend.json``` with another port and SqlMytbDb in ```overrides/after-build/config```
 - configure ```src/frontend/environments/environment.ts``` to use this as backend-url 
 
-## import tracks to import-database 
+## import tracks to import-database
 - do import
 ```bash
 bash
@@ -63,6 +63,14 @@ cd sbin
 
 ## manage data in production-database
 
+### data-management: index images
+- index images for similarity-search
+```
+bash
+cd sbin
+./indexImages
+```
+
 ### data-management: touren/location
 - [tracks: assign existing routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/date/track/50/1)
 - [manage location: sublocations of ImportXXX...](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/Import/egal/date/location/10/1)
@@ -70,6 +78,21 @@ cd sbin
 - assign additional tracks to new routes
 - [assign multi-route-tracks in legacy-system](http://localhost:8080/mediadb2/admin/Kategorie_TourEdit.do?CURTABLE=KATEGORIE&CURPAGE=popupshowkategorietouren&CURID=2316)
 - [SQL mytbdb mysql: route set minDate](installer/db/mysql/mytbdb/update-tour-min-dates.sql)
+
+### OPTIONAL data-management: sync with external
+- check playlist-directory with images against database
+```
+bash
+cd sbin
+./searchCorrespondingImages.sh /cygdrive/f/playground/mytb-test/testsearch/
+``` 
+- check playlist-directory with images against database with additional mapping-file from lire-search
+```
+bash
+cd sbin
+./searchCorrespondingImages.sh /cygdrive/f/playground/mytb-test/testsearch/ similars
+``` 
+-  open result-file in [MediaFileSync-Viewer](devtools/media-file-db-sync-viewer.html) check files and export playlist to import it as favorites andset playlist in database
 
 ## export to beta-solr
 - import from mytbdb to mytbexportbetadb

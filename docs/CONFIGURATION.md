@@ -11,8 +11,11 @@ set DIGIFOTOS_BASEDIR=F:\playground\mytb-test\Bilder\digifotos\
 set VIDEOS_BASEDIR=F:\playground\mytb-test\Bilder\Videos\
 set MYTB_IMPORT_MEDIADIR=F:\playground\mytb-test\mytbbase\
 set MYTB_MEDIADIR=F:\playground\mytb-test\mytbmediabase\
+set MYTB_INDEXDIR=F:\playground\mytb-test\mytbindex\
+set MYTB_INDEXSRC_MEDIADIR=%MYTB_MEDIADIR%pics_x100\
 set MYTBTOOLS=F:\Projekte\mytourbook_upgrade\sbin\
 set MYTB=F:\Projekte\mytourbook_upgrade\
+set LIRETOOLS=F:\Projekte\liretools\
 ```   
 - configure unix vars in sbin/configure-environment.bash
 ```bash
@@ -20,14 +23,20 @@ DIGIFOTOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/digifotos/
 VIDEOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/Videos/
 MYTB_IMPORT_MEDIADIR=/cygdrive/f/playground/mytb-test/mytbbase/
 MYTB_MEDIADIR=/cygdrive/f/playground/mytb-test/mytbmediabase/
+MYTB_INDEXDIR=/cygdrive/f/playground/mytb-test/mytbindex/
+MYTB_INDEXSRC_MEDIADIR=${MYTB_MEDIADIR}pics_x100/
 MYTBTOOLS=/cygdrive/f/Projekte/mytourbook_upgrade/sbin/
 MYTB=/cygdrive/f/Projekte/mytourbook_upgrade/
+LIRETOOLS=/cygdrive/f/Projekte/liretools/
 W_DIGIFOTOS_BASEDIR="F:\\playground\\mytb-test\\Bilder\\digifotos\\"
 W_VIDEOS_BASEDIR="F:\\playground\\mytb-test\\Bilder\\Videos\\"
 W_MYTB_IMPORT_MEDIADIR="F:\\playground\\mytb-test\\mytbbase\\"
 W_MYTB_MEDIADIR="F:\\playground\\mytb-test\\mytbmediabase\\"
+W_MYTB_INDEXDIR="F:\\playground\\mytb-test\\mytbindex\\"
+W_MYTB_INDEXSRC_MEDIADIR="${W_MYTB_MEDIADIR}pics_x100\\"
 W_MYTBTOOLS="F:\\Projekte\\mytourbook_upgrade\\sbin\\"
 W_MYTB="F:\\Projekte\\mytourbook_upgrade\\"
+W_LIREOOLS="F:\\Projekte\\liretools\\"
 ```
 
 ### API-Server Config: config/backend.json
