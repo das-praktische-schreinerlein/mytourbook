@@ -21,8 +21,8 @@ getTestBed().initTestEnvironment(
     platformBrowserDynamicTesting()
 );
 // Then we find all the files.
-const context = require.context('./', true, /\.spec\.ts$/);
-const context2 = require.context('./shared', true, /(?!backend-only)*\.ts$/);
+const context = require.context('./', true, /(?!backend-only).*\.spec\.ts$/);
+const context2 = require.context('./shared', true, /(?!backend-only).*\.ts$/);
 const context3 = require.context('./testing', true, /\.ts$/);
 // And load the modules.
 context.keys().map(context);

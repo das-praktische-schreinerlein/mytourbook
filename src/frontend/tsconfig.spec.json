@@ -26,6 +26,6 @@
         "**/*.d.ts"
     ],
     "exclude": [
-        "**/backend-only-untested.*"
+        "**/backend-only*"
     ]
 }

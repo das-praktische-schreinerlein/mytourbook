@@ -33,5 +33,5 @@ for (const a in [
     TourDocSqlMytbExportDbAdapter,
     TourDocSqlMytbExportDbConfig
 ]) {
-    console.log('import unused modules for codecoverage');
+    console.log('import untested backend-modules for codecoverage');
 }

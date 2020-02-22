@@ -17,5 +17,5 @@ for (const a in [
     TourDocRoutingService,
     TourDocSearchService,
 ]) {
-    console.log('import unused modules for codecoverage');
+    console.log('import untested frontend-modules for codecoverage');
 }
