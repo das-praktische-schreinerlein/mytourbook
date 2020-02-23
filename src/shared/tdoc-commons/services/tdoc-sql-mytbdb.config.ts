@@ -2139,7 +2139,7 @@ export class TourDocSqlMytbDbConfig {
                 'dataTechAltAsc': 't_route_hm ASC',
                 'dataTechMaxAsc': 't_ele_max ASC',
                 'dataTechDistAsc': 't_route_m ASC',
-                'forExport': 't_id ASC',
+                'forExport': 'tour.t_id ASC',
                 'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 't_datevon DESC'
