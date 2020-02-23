@@ -223,8 +223,8 @@ export class TourDocMediaManagerModule {
                         id: 'LOCATION_' + (records.length + 1),
                         loc_id_i: records.length + 1,
                         name_s: locationName,
-                        keywords: 'KW_TODOKEYWORDS',
-                        descTxt: 'TODODESC'
+                        keywords_txt: 'KW_TODOKEYWORDS',
+                        desc_txt: 'TODODESC'
                     }, {});
                     records.push(location);
                     locations[locationName] = location;
@@ -239,8 +239,8 @@ export class TourDocMediaManagerModule {
                         track_id_i: records.length + 1,
                         loc_id_i: location.locId,
                         name_s: trackName,
-                        keywords: 'KW_TODOKEYWORDS',
-                        descTxt: 'TODODESC',
+                        keywords_txt: 'KW_TODOKEYWORDS',
+                        desc_txt: 'TODODESC',
                         dateshow_dt: date,
                         datestart_dt: date,
                         dateend_dt: date
