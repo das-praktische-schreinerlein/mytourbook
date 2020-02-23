@@ -13,6 +13,8 @@ export class TourDocSqlUtils {
             'GetTechName(location.l_name)');
         sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, " -> "\)/g,
             '"T" || location.l_typ || "L" || location.l_parent_id || " -> " || location.l_name');
+        sql = sql.replace(/GetLocationNameAncestry\(location.l_id, location.l_name, "->"\)/g,
+            '"T" || location.l_typ || "L" || location.l_parent_id || "->" || location.l_name');
         sql = sql.replace(/GetLocationIdAncestry\(location.l_id, ","\)/g,
             'CAST(location.l_parent_id AS CHAR(50)) || "," || CAST(location.l_id AS CHAR(50))');
         sql = sql.replace('CONCAT(CAST(location.l_parent_id AS CHAR(50)), ",", CAST(location.l_id AS CHAR(50)))',
@@ -20,6 +22,8 @@ export class TourDocSqlUtils {
         sql = sql.replace(/GetTechName\(([a-zA-Z0-9_.]+)\)/g,
             'REPLACE(REPLACE(LOWER($1), " ", "_"), "/", "_")');
         sql = sql.replace(/REGEXP_REPLACE\(/g, 'REPLACE(');
+        sql = sql.replace(/\(SELECT CONCAT\("navid=(.*?)", (.*?), ":::name=", COALESCE\((.*?), "null"\), ":::navtype=", "/g,
+            'SELECT navigation_objects FROM (SELECT ("navid=$1" || $2 || ":::name=" || COALESCE($3, "null") || ":::navtype=');
 
         return sql;
     }
