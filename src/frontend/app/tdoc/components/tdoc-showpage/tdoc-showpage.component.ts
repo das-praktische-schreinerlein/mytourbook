@@ -236,7 +236,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             if (record.geoLat !== undefined) {
                 filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
             } else {
-                filters['where'] = 'nearby:' + [0, 0, 0].join('_');
+                filters['where'] = 'blimblamblummichgibtesnicht';
             }
             if (record.type === 'LOCATION' && theme !== undefined) {
                 filters['theme'] = theme;
@@ -248,7 +248,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             if (record.geoLat !== undefined) {
                 filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
             } else {
-                filters['where'] = 'nearby:' + [0, 0, 0].join('_');
+                filters['where'] = 'blimblamblummichgibtesnicht';
             }
         } else if (type === 'IMAGE_NEARBY') {
             filters['type'] = 'IMAGE';
@@ -257,7 +257,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             if (record.geoLat !== undefined) {
                 filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
             } else {
-                filters['where'] = 'nearby:' + [0, 0, 0].join('_');
+                filters['where'] = 'blimblamblummichgibtesnicht';
             }
         }
 
