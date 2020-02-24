@@ -131,7 +131,7 @@
             <field column="t_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
             <field column="t_gps_lat" name="geo_lat_s" />
-            <field column="t_gps_lon" name="geo_lon__s" />
+            <field column="t_gps_lon" name="geo_lon_s" />
             <field column="t_gps_loc" name="geo_loc_p" type="location" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
