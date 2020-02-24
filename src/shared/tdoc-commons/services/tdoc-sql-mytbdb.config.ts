@@ -160,6 +160,10 @@ export class TourDocSqlMytbDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("TRACK", "_", kategorie.k_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)'
                 },
@@ -603,6 +607,10 @@ export class TourDocSqlMytbDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("IMAGE", "_", image.i_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)',
                     selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id'
@@ -1077,6 +1085,10 @@ export class TourDocSqlMytbDbConfig {
                 'persons.o_name AS i_persons',
                 'realobjects.o_name AS i_objects'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("ODIMGOBJECT", "_", video.v_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)',
                     selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id ' +
@@ -1559,6 +1571,10 @@ export class TourDocSqlMytbDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("VIDEO", "_", video.v_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie.k_type)',
                     selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id'
@@ -1972,6 +1988,10 @@ export class TourDocSqlMytbDbConfig {
                 't_route_dauer',
                 'ROUND(ROUND(t_route_dauer * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("ROUTE", "_", tour.t_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
                 },
@@ -2368,6 +2388,10 @@ export class TourDocSqlMytbDbConfig {
                 'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
                 'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("LOCATION", "_", location.l_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", location.l_typ)'
                 },
@@ -2606,6 +2630,10 @@ export class TourDocSqlMytbDbConfig {
                 'tr_meta_shortdesc AS tr_meta_shortdesc_md',
                 'tr_meta_shortdesc AS tr_meta_shortdesc_html'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("TRIP", "_", trip.tr_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     noFacet: true
                 },
@@ -2829,6 +2857,10 @@ export class TourDocSqlMytbDbConfig {
                 'n_message AS n_message_md',
                 'n_message AS n_message_html'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("NEWS", "_", news.n_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     noFacet: true
                 },

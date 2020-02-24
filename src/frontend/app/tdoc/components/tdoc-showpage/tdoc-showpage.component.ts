@@ -25,7 +25,23 @@ import {
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-showpage.component';
 import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/tdoc-routing.service';
 import {environment} from '../../../../environments/environment';
-import {TourDocSectionPageComponentAvailableTabs} from '../../../sections/components/sectionpage/tdoc-section-page.component';
+
+export interface TourDocShowpageComponentAvailableTabs {
+    IMAGE?: boolean;
+    IMAGE_NEARBY?: boolean;
+    ODIMGOBJECT?: boolean;
+    VIDEO?: boolean;
+    VIDEO_NEARBY?: boolean;
+    LOCATION?: boolean;
+    LOCATION_NEARBY?: boolean;
+    NEWS?: boolean;
+    ROUTE?: boolean;
+    ROUTE_NEARBY?: boolean;
+    TRACK?: boolean;
+    TRIP?: boolean;
+    TRIP_NEARBY?: boolean;
+    ALL?: boolean;
+}
 
 @Component({
     selector: 'app-tdoc-showpage',
@@ -87,11 +103,14 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRACK: false,
         TRIP: false
     };
-    availableTabs: TourDocSectionPageComponentAvailableTabs = {
+    availableTabs: TourDocShowpageComponentAvailableTabs = {
         IMAGE: true,
+        IMAGE_NEARBY: true,
         ROUTE: true,
+        ROUTE_NEARBY: true,
         TRACK: true,
         LOCATION: true,
+        LOCATION_NEARBY: true,
         TRIP: true,
         VIDEO: true,
         NEWS: true,
@@ -203,11 +222,42 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     getFiltersForType(record: TourDocRecord, type: string): any {
         const minPerPage = isNumber(this.showResultListTrigger[type]) ? this.showResultListTrigger[type] : 0;
 
-        const filters = (<TourDocContentUtils>this.contentUtils).getTourDocSubItemFiltersForType(record, type,
-            (this.pdoc ? this.pdoc.theme : undefined), minPerPage);
+        const theme = this.pdoc ? this.pdoc.theme : undefined;
+        const filters = (<TourDocContentUtils>this.contentUtils).getTourDocSubItemFiltersForType(record, type, theme, minPerPage);
         if (type === 'TOPIMAGE') {
             if (this.layoutSize && this.layoutSize.width > 1200 && this.layoutSize.width < 1480) {
                 filters['perPage'] = 3;
+            }
+        } else if (type === 'LOCATION_NEARBY') {
+            filters['type'] = 'LOCATION';
+            filters['sort'] = 'distance';
+            filters['where'] = undefined;
+            filters['moreFilter'] = 'id_notin_is:' + record.id;
+            if (record.geoLat !== undefined) {
+                filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
+            } else {
+                filters['where'] = 'nearby:' + [0, 0, 0].join('_');
+            }
+            if (record.type === 'LOCATION' && theme !== undefined) {
+                filters['theme'] = theme;
+            }
+        } else if (type === 'ROUTE_NEARBY') {
+            filters['type'] = 'ROUTE';
+            filters['sort'] = 'distance';
+            filters['moreFilter'] = 'id_notin_is:' + record.id;
+            if (record.geoLat !== undefined) {
+                filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
+            } else {
+                filters['where'] = 'nearby:' + [0, 0, 0].join('_');
+            }
+        } else if (type === 'IMAGE_NEARBY') {
+            filters['type'] = 'IMAGE';
+            filters['sort'] = 'distance';
+            filters['moreFilter'] = 'id_notin_is:' + record.id;
+            if (record.geoLat !== undefined) {
+                filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
+            } else {
+                filters['where'] = 'nearby:' + [0, 0, 0].join('_');
             }
         }
 

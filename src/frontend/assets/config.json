@@ -1518,10 +1518,13 @@
             "allowedQueryParams": [],
             "availableTabs": {
                 "IMAGE": true,
+                "IMAGE_NEARBY": true,
                 "ODIMGOBJECT": true,
                 "ROUTE": true,
+                "ROUTE_NEARBY": true,
                 "TRACK": true,
                 "LOCATION": true,
+                "LOCATION_NEARBY": true,
                 "TRIP": true,
                 "NEWS": true,
                 "VIDEO": true

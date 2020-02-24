@@ -144,6 +144,18 @@
                                             [layout]="Layout.FLAT"
                                             [showResultList]="showResultListTrigger.LOCATION"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION_NEARBY"
+                                            [label]="'Regionen in der Nähe'"
+                                            i18n-label="label inline-searchpage LOCATION_NEARBY|Label inline-searchpage LOCATION_NEARBY@@linline-search.label.tdoc.LOCATION_NEARBY"
+                                            [params]="getFiltersForType(record, 'LOCATION_NEARBY')"
+                                            [htmlId]="'LOCATION_NEARBY'"
+                                            [loadTrack]="'true'"
+                                            [showLayout]="true"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="false"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
                                             [label]="'Routen'"
                                             i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.tdoc.ROUTE"
@@ -264,6 +276,15 @@
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.TRACK"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE_NEARBY"
+                                            [label]="'Routen in der Nähe'"
+                                            i18n-label="label inline-searchpage ROUTE_NEARBY|Label inline-searchpage ROUTE_NEARBY@@linline-search.label.tdoc.ROUTE_NEARBY"
+                                            [params]="getFiltersForType(record, 'ROUTE_NEARBY')"
+                                            [htmlId]="'ROUTE_NEARBY'"
+                                            [showResultList]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRACK'">
@@ -490,6 +511,17 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.THIN"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE_NEARBY"
+                                            [label]="'Bilder in der Nähe'"
+                                            i18n-label="label inline-searchpage IMAGE_NEARBY|Label inline-searchpage IMAGE_NEARBY@@linline-search.label.tdoc.IMAGE_NEARBY"
+                                            [params]="getFiltersForType(record, 'IMAGE_NEARBY')"
+                                            [htmlId]="'IMAGE_NEARBY'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [showTimetable]="'true'"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
             <ng-container *ngSwitchCase="'TRIP'">

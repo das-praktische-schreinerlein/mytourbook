@@ -5,6 +5,7 @@ import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {SolrConfig} from '@dps/mycms-commons/dist/search-commons/services/solr-query.builder';
 import {Mapper} from 'js-data';
+import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 
 export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
 
@@ -23,6 +24,10 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
             'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt', 'navigation_objects_txt'],
         facetConfigs: {
+            'id_notin_is': {
+                filterField: 'id',
+                action: AdapterFilterActions.NOTIN
+            },
             'actiontype_ss': {
                 'f.actiontype_ss.facet.limit': '-1',
                 'f.actiontype_ss.facet.sort': 'index'

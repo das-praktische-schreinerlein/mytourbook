@@ -162,6 +162,7 @@
     "loc_4": "Region",
     "loc_5": "Ort/ Stadt",
     "loc_6": "Park/ See/ Sehenswürdigkeit",
+    "id_notin_is": "außer",
     "hrt_search": "Suche",
     "hrt_type": "nach",
     "hrt_alltypes": "nach Allem",

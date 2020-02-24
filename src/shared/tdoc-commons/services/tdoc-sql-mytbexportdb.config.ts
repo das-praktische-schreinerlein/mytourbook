@@ -83,6 +83,10 @@ export class TourDocSqlMytbExportDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("TRACK", "_", kategorie_full.k_id) AS id',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)'
                 },
@@ -380,6 +384,10 @@ export class TourDocSqlMytbExportDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("IMAGE", "_", image.i_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)',
                     selectFrom: 'image INNER join kategorie_full ON kategorie_full.k_id=image.k_id'
@@ -670,6 +678,10 @@ export class TourDocSqlMytbExportDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("VIDEO", "_", video.v_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", kategorie_full.k_type)',
                     selectFrom: 'video INNER join kategorie_full ON kategorie_full.k_id=video.k_id'
@@ -978,6 +990,10 @@ export class TourDocSqlMytbExportDbConfig {
                 't_route_dauer',
                 'ROUND(ROUND(t_route_dauer * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("ROUTE", "_", tour.t_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", tour.t_typ)'
                 },
@@ -1277,6 +1293,10 @@ export class TourDocSqlMytbExportDbConfig {
                 'l_lochirarchietxt',
                 'l_lochirarchieids'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("LOCATION", "_", location.l_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     selectField: 'CONCAT("ac_", location.l_typ)'
                 },
@@ -1471,6 +1491,10 @@ export class TourDocSqlMytbExportDbConfig {
                 'tr_meta_shortdesc_md',
                 'tr_meta_shortdesc_html'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("TRIP", "_", trip.tr_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     noFacet: true
                 },
@@ -1665,6 +1689,10 @@ export class TourDocSqlMytbExportDbConfig {
                 'n_message_md',
                 'n_message_html'],
             facetConfigs: {
+                'id_notin_is': {
+                    filterField: 'CONCAT("NEWS", "_", news.n_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
                 'actiontype_ss': {
                     noFacet: true
                 },

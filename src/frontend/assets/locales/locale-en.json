@@ -267,6 +267,7 @@
     "kw_winter":"winter",
     "kw_wüste":"desert",
     "kw_zoo":"zoo",
+    "id_notin_is": "except",
     "hrt_search": "Search",
     "hrt_type": "for",
     "hrt_alltypes": "for all",
