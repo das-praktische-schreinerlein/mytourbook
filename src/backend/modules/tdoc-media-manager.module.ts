@@ -27,14 +27,9 @@ export interface FileInfoType {
 }
 export type FileSystemDBSyncMatchingType = 'EXIFDATE' | 'FILEDATE' | 'FILENAME' | 'FILEDIRANDNAME' | 'FILESIZE' | 'FILENAMEANDDATE'
     | 'SIMILARITY';
-export interface FileSystemDBSyncMatchType {
-    type: FileSystemDBSyncMatchingType;
-    details: String;
-    score: number;
-}
 export interface DBFileInfoType extends FileInfoType {
     id: string;
-    matching: FileSystemDBSyncMatchType;
+    matching: FileSystemDBSyncMatchingType;
     matchingDetails: String;
     matchingScore: number;
 }
@@ -78,19 +73,8 @@ export class TourDocMediaManagerModule {
     constructor(backendConfig, dataService: TourDocDataService, private mediaManager: MediaManagerModule) {
         this.dataService = dataService;
         this.backendConfig = backendConfig;
-        // configure adapter
-        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbDbAdapter'];
-        if (sqlConfig === undefined) {
-            throw new Error('config for TourDocSqlMytbDbAdapter not exists');
-        }
-        const options = {
-            knexOpts: {
-                client: sqlConfig.client,
-                connection: sqlConfig.connection
-            }
-        };
-        this.knex = knex(options.knexOpts);
         this.sqlQueryBuilder = new SqlQueryBuilder();
+        this.knex = this.createKnex(backendConfig);
     }
 
     public readMediaDates(searchForm: TourDocSearchForm): Promise<{}> {
@@ -417,7 +401,7 @@ export class TourDocMediaManagerModule {
             width);
     }
 
-    private findTourDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType,
+    public findTourDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType,
                                           additionalMappings: {[key: string]: FileSystemDBSyncType}): Promise<DBFileInfoType[]> {
         return new Promise<DBFileInfoType[]>((resolve, reject) => {
             const createdInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.created).getTime() / 1000);
@@ -612,6 +596,21 @@ export class TourDocMediaManagerModule {
                 return reject(reason);
             });
         });
+    }
+
+    protected createKnex(backendConfig: {}): any {
+        // configure adapter
+        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbDbAdapter'];
+        if (sqlConfig === undefined) {
+            throw new Error('config for TourDocSqlMytbDbAdapter not exists');
+        }
+        const options = {
+            knexOpts: {
+                client: sqlConfig.client,
+                connection: sqlConfig.connection
+            }
+        };
+        return knex(options.knexOpts);
     }
 
     private processSearchForms(searchForm: TourDocSearchForm, cb, parallel: number): Promise<{}> {
