@@ -413,52 +413,76 @@ export class TourDocMediaManagerModule {
                 sql:
                     'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
                     '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
-                    '      "filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
+                    '      ? AS matchingDetails, 0 AS matchingScore' +
                     '  FROM image' +
-                    '  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER("' + fileInfo.name + '")',
-                parameters: []
+                    '  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER(?)',
+                parameters: [
+                    'filename:' + fileInfo.name,
+                    fileInfo.name]
             };
             checkPreferredSqlQuery.sql += ' UNION ' +
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
                 '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
-                '      "dir: ' + fileInfo.dir + ' filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
+                '      ? AS matchingDetails, 0 AS matchingScore' +
                 '  FROM image' +
-                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("' + filePath + '")';
-            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([]);
+                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([
+                'dir: ' + fileInfo.dir + ' filename:' + fileInfo.name,
+                filePath]);
             checkPreferredSqlQuery.sql += ' UNION ' +
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
-                '       i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
-                '      "filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch + '" AS matchingDetails,' +
-                '       0.25 AS matchingScore' +
+                '      i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
+                '      ? AS matchingDetails,' +
+                '      0.25 AS matchingScore' +
                 '  FROM image' +
-                '  WHERE LOWER(i_file) = LOWER("' + fileInfo.name + '")' +
-                '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
-                '           OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")';
-            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([]);
+                '  WHERE LOWER(i_file) = LOWER(?)' +
+                '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?' +
+                '           OR UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?)';
+            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([
+                'filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch,
+                fileInfo.name,
+                (createdInSecondsSinceEpoch - 1),
+                (createdInSecondsSinceEpoch + 1),
+                (lastModInSecondsSinceEpoch - 1),
+                (lastModInSecondsSinceEpoch + 1)
+            ]);
             checkPreferredSqlQuery.sql += ' UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
-                '      "filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
+                '      ? AS matchingDetails, 0 AS matchingScore' +
                 '  FROM video' +
-                '  WHERE LOWER(CONCAT(V_dir, "_", v_file)) = LOWER("' + fileInfo.name + '")';
-            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([]);
+                '  WHERE LOWER(CONCAT(V_dir, "_", v_file)) = LOWER(?)';
+            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([
+                'filename:' + fileInfo.name,
+                fileInfo.name
+            ]);
             checkPreferredSqlQuery.sql += ' UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
-                '      "dir: ' + fileInfo.dir + ' filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
+                '      ? AS matchingDetails, 0 AS matchingScore' +
                 '  FROM video' +
-                '  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER("' + filePath + '")';
-            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([]);
+                '  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER(?)';
+            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([
+                'dir: ' + fileInfo.dir + ' filename:' + fileInfo.name,
+                filePath
+            ]);
             checkPreferredSqlQuery.sql += ' UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILENAMEANDDATE" AS matching,' +
-                '      "filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch + '" AS matchingDetails,' +
-                '       0.25 AS matchingScore' +
+                '      ? AS matchingDetails,' +
+                '      0.25 AS matchingScore' +
                 '  FROM video' +
-                '  WHERE LOWER(v_file) = LOWER("' + fileInfo.name + '")' +
-                '      AND (   UNIX_TIMESTAMP(v_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
-                '           OR UNIX_TIMESTAMP(v_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")';
-            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([]);
+                '  WHERE LOWER(v_file) = LOWER(?)' +
+                '      AND (   UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?' +
+                '           OR UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?)';
+            checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([
+                'filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch,
+                fileInfo.name,
+                (createdInSecondsSinceEpoch - 1),
+                (createdInSecondsSinceEpoch + 1),
+                (lastModInSecondsSinceEpoch - 1),
+                (lastModInSecondsSinceEpoch + 1)
+            ]);
             return SqlUtils.executeRawSqlQueryData(this.knex, checkPreferredSqlQuery).then(dbResults => {
                 const records: DBFileInfoType[] = [];
                 TourDocMediaManagerModule.mapDBResultOnFileInfoType(
@@ -473,36 +497,54 @@ export class TourDocMediaManagerModule {
                     sql:
                         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
                         '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILENAME" AS matching,' +
-                        '       "filename:' + fileInfo.name + '" AS matchingDetails, 0.5 AS matchingScore' +
+                        '       ? AS matchingDetails, 0.5 AS matchingScore' +
                         '  FROM image' +
-                        '  WHERE LOWER(i_file) = LOWER("' + fileInfo.name + '")',
-                    parameters: []
+                        '  WHERE LOWER(i_file) = LOWER(?)',
+                    parameters: [
+                        'filename:' + fileInfo.name,
+                        fileInfo.name
+                    ]
                 };
                 checkFallBackSqlQuery.sql += ' UNION ' +
-                        'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
-                        '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDATE" AS matching,' +
-                        '      "cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch + '" AS matchingDetails,' +
-                        '       0.75 AS matchingScore' +
-                        '  FROM image' +
-                        '  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
-                        '         OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")';
-                checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([]);
+                    'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDATE" AS matching,' +
+                    '       ? AS matchingDetails,' +
+                    '       0.75 AS matchingScore' +
+                    '  FROM image' +
+                    '  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?' +
+                    '         OR UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?)';
+                checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([
+                    'cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch,
+                    (createdInSecondsSinceEpoch - 1),
+                    (createdInSecondsSinceEpoch + 1),
+                    (lastModInSecondsSinceEpoch - 1),
+                    (lastModInSecondsSinceEpoch + 1)
+                ]);
                 checkFallBackSqlQuery.sql += ' UNION ' +
-                        'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
-                        '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILENAME" AS matching,' +
-                        '       "filename:' + fileInfo.name + '" AS matchingDetails, 0.5 AS matchingScore' +
-                        '  FROM video' +
-                        '  WHERE LOWER(v_file) = LOWER("' + fileInfo.name + '")';
-                checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([]);
+                    'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
+                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILENAME" AS matching,' +
+                    '       ? AS matchingDetails, 0.5 AS matchingScore' +
+                    '  FROM video' +
+                    '  WHERE LOWER(v_file) = LOWER(?)';
+                checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([
+                    'filename:' + fileInfo.name,
+                    fileInfo.name
+                ]);
                 checkFallBackSqlQuery.sql += ' UNION ' +
-                        'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
-                        '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILEDATE" AS matching,' +
-                        '      "cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch + '" AS matchingDetails,' +
-                        '       0.75 AS matchingScore' +
-                        '  FROM video' +
-                        '  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
-                        '         OR UNIX_TIMESTAMP(v_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")';
-                checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([]);
+                    'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
+                    '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILEDATE" AS matching,' +
+                    '       ? AS matchingDetails,' +
+                    '       0.75 AS matchingScore' +
+                    '  FROM video' +
+                    '  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?' +
+                    '         OR UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?)';
+                checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([
+                    'cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch,
+                    (createdInSecondsSinceEpoch - 1),
+                    (createdInSecondsSinceEpoch + 1),
+                    (lastModInSecondsSinceEpoch - 1),
+                    (lastModInSecondsSinceEpoch + 1)
+                ]);
 
                 for (const fileInfoKey of [filePath, fullPath]) {
                     if (additionalMappings && additionalMappings[fileInfoKey.toLowerCase()]) {
@@ -513,21 +555,31 @@ export class TourDocMediaManagerModule {
                                 ' UNION ' +
                                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
                                 '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type,' +
-                                '       "' + record.matching + '" AS matching,' +
-                                '       "' + record.matchingDetails + '" AS matchingDetails,' +
-                                '       "' + record.matchingScore + '" AS matchingScore' +
+                                '       ? AS matching,' +
+                                '       ? AS matchingDetails,' +
+                                '       ? AS matchingScore' +
                                 '  FROM image' +
-                                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("' + recordPath + '")';
-                            checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([]);
+                                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+                            checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([
+                                record.matching,
+                                record.matchingDetails,
+                                record.matchingScore,
+                                recordPath
+                            ]);
                             checkFallBackSqlQuery.sql += ' UNION ' +
                                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
                                 '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type,' +
-                                '       "' + record.matching + '" AS matching,' +
-                                '       "' + record.matchingDetails + '" AS matchingDetails,' +
-                                '       "' + record.matchingScore + '" AS matchingScore' +
+                                '       ? AS matching,' +
+                                '       ? AS matchingDetails,' +
+                                '       ? AS matchingScore' +
                                 '  FROM video' +
-                                '  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER("' + recordPath + '")';
-                            checkFallBackSqlQuery.parameters = checkFallBackSqlQuery.parameters.concat([]);
+                                '  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER(?)';
+                            checkFallBackSqlQuery.parameters = checkFallBackSqlQuery.parameters.concat([
+                                record.matching,
+                                record.matchingDetails,
+                                record.matchingScore,
+                                recordPath
+                            ]);
                         });
                     }
                 }
@@ -587,11 +639,15 @@ export class TourDocMediaManagerModule {
                                 'SELECT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
                                 '       i_date AS lastModified, i_date AS exifDate,' +
                                 '       "IMAGE" AS type, "EXIFDATE" AS matching,' +
-                                '      "exifdate:' + exifDateInSSinceEpoch + '" AS matchingDetails, 0.9 AS matchingScore' +
+                                '       ? AS matchingDetails, 0.9 AS matchingScore' +
                                 '  FROM image' +
                                 '  WHERE UNIX_TIMESTAMP(i_date)' +
-                                '        BETWEEN "' + (exifDateInSSinceEpoch - 1) + '" AND "' + (exifDateInSSinceEpoch + 1) + '"',
-                            parameters: []
+                                '        BETWEEN ? AND ?',
+                            parameters: [
+                                'exifdate:' + exifDateInSSinceEpoch,
+                                (exifDateInSSinceEpoch - 1),
+                                (exifDateInSSinceEpoch + 1)
+                            ]
                         };
                         SqlUtils.executeRawSqlQueryData(this.knex, checkDateSqlQuery).then(dateDbResults => {
                             TourDocMediaManagerModule.mapDBResultOnFileInfoType(
