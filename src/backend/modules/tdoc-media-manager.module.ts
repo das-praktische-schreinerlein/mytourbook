@@ -414,13 +414,13 @@ export class TourDocMediaManagerModule {
                 '      "filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM image' +
                 '  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER("' + fileInfo.name + '")' +
-                'UNION ' +
+                ' UNION ' +
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
                 '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
                 '      "dir: ' + fileInfo.dir + ' filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM image' +
                 '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("' + filePath + '")' +
-                'UNION ' +
+                ' UNION ' +
                 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
                 '       i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
                 '      "filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
@@ -429,19 +429,19 @@ export class TourDocMediaManagerModule {
                 '  WHERE LOWER(i_file) = LOWER("' + fileInfo.name + '")' +
                 '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1)  + '" AND "' + (createdInSecondsSinceEpoch + 1)  + '"' +
                 '           OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")' +
-                'UNION ' +
+                ' UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
                 '      "filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM video' +
                 '  WHERE LOWER(CONCAT(V_dir, "_", v_file)) = LOWER("' + fileInfo.name + '")' +
-                'UNION ' +
+                ' UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
                 '      "dir: ' + fileInfo.dir + ' filename:' + fileInfo.name + '" AS matchingDetails, 0 AS matchingScore' +
                 '  FROM video' +
                 '  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER("' + filePath + '")' +
-                'UNION ' +
+                ' UNION ' +
                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created, v_date AS lastModified,' +
                 '      v_date AS exifDate, "VIDEO" AS type, "FILENAMEANDDATE" AS matching,' +
                 '      "filename:' + fileInfo.name + ' cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
@@ -467,7 +467,7 @@ export class TourDocMediaManagerModule {
                     '       "filename:' + fileInfo.name + '" AS matchingDetails, 0.5 AS matchingScore' +
                     '  FROM image' +
                     '  WHERE LOWER(i_file) = LOWER("' + fileInfo.name + '")' +
-                    'UNION ' +
+                    ' UNION ' +
                     'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
                     '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDATE" AS matching,' +
                     '      "cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
@@ -475,13 +475,13 @@ export class TourDocMediaManagerModule {
                     '  FROM image' +
                     '  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN "' + (createdInSecondsSinceEpoch - 1) + '" AND "' + (createdInSecondsSinceEpoch + 1) + '"' +
                     '         OR UNIX_TIMESTAMP(i_date) BETWEEN "' + (lastModInSecondsSinceEpoch - 1) + '" AND "' + (lastModInSecondsSinceEpoch + 1) + '")' +
-                    'UNION ' +
+                    ' UNION ' +
                     'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
                     '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILENAME" AS matching,' +
                     '       "filename:' + fileInfo.name + '" AS matchingDetails, 0.5 AS matchingScore' +
                     '  FROM video' +
                     '  WHERE LOWER(v_file) = LOWER("' + fileInfo.name + '")' +
-                    'UNION ' +
+                    ' UNION ' +
                     'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
                     '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type, "FILEDATE" AS matching,' +
                     '      "cdate:' + createdInSecondsSinceEpoch + ' mdate:' + lastModInSecondsSinceEpoch +  '" AS matchingDetails,' +
@@ -505,7 +505,7 @@ export class TourDocMediaManagerModule {
                                 '       "' + record.matchingScore + '" AS matchingScore' +
                                 '  FROM image' +
                                 '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("' + recordPath + '")' +
-                                'UNION ' +
+                                ' UNION ' +
                                 'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir, v_date AS created,' +
                                 '       v_date AS lastModified, v_date AS exifDate, "VIDEO" AS type,' +
                                 '       "' + record.matching + '" AS matching,' +
@@ -551,13 +551,14 @@ export class TourDocMediaManagerModule {
                         }
 
                         const myDate = new Date();
-                        myDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(),
-                            creationDate.getUTCMilliseconds());
+                        myDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(), 0);
                         myDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
 
                         fileInfo.exifDate = myDate;
-                        const exifDateInSSinceEpoch = Math.round(DateUtils.parseDateStringWithLocaltime(
-                            DateUtils.dateToLocalISOString(fileInfo.exifDate)).getTime() / 1000);
+                        const localExifDate = DateUtils.parseDateStringWithLocaltime(
+                            DateUtils.dateToLocalISOString(fileInfo.exifDate));
+                        localExifDate.setMilliseconds(0);
+                        const exifDateInSSinceEpoch = Math.round(localExifDate.getTime() / 1000);
 
                         return utils.resolve(exifDateInSSinceEpoch);
                     }).then(exifDateInSSinceEpoch => {
