@@ -63,128 +63,194 @@ describe('TourDocMediaManagerModule', () => {
         sql: 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
             ' i_date AS created, i_date AS lastModified,      i_date AS exifDate,' +
             ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
-            '      "filename:testfile.jpg" AS matchingDetails, 0 AS matchingScore' +
-            '  FROM image  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER("testfile.jpg")',
-        parameters: []
+            '      ? AS matchingDetails, 0 AS matchingScore' +
+            '  FROM image  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER(?)',
+        parameters: [
+            'filename:testfile.jpg',
+            'testfile.jpg']
     };
     preferedMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
         ' i_date AS created, i_date AS lastModified,      i_date AS exifDate,' +
         ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
-        '      "dir: testdir filename:testfile.jpg" AS matchingDetails, 0 AS matchingScore' +
-        '  FROM image  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("testdir/testfile.jpg")';
-    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([]);
+        '      ? AS matchingDetails, 0 AS matchingScore' +
+        '  FROM image  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
+        'dir: testdir filename:testfile.jpg',
+        'testdir/testfile.jpg'
+    ]);
     preferedMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
-        ' i_date AS created, i_date AS lastModified,       i_date AS exifDate,' +
+        ' i_date AS created, i_date AS lastModified,      i_date AS exifDate,' +
         ' "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
-        '      "filename:testfile.jpg cdate:1582750 mdate:1582752" AS matchingDetails,       0.25 AS matchingScore' +
-        '  FROM image  WHERE LOWER(i_file) = LOWER("testfile.jpg")' +
-        '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN "1582749" AND "1582751"' +
-        '           OR UNIX_TIMESTAMP(i_date) BETWEEN "1582751" AND "1582753")';
-    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([]);
+        '      ? AS matchingDetails,      0.25 AS matchingScore' +
+        '  FROM image  WHERE LOWER(i_file) = LOWER(?)' +
+        '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?' +
+        '           OR UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?)';
+    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
+        'filename:testfile.jpg cdate:1582750 mdate:1582752',
+        'testfile.jpg',
+        1582749,
+        1582751,
+        1582751,
+        1582753
+    ]);
     preferedMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created, v_date AS lastModified,      v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
-        '      "filename:testfile.jpg" AS matchingDetails, 0 AS matchingScore' +
-        '  FROM video  WHERE LOWER(CONCAT(V_dir, "_", v_file)) = LOWER("testfile.jpg")';
-    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([]);
+        '      ? AS matchingDetails, 0 AS matchingScore' +
+        '  FROM video  WHERE LOWER(CONCAT(V_dir, "_", v_file)) = LOWER(?)';
+    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
+        'filename:testfile.jpg',
+        'testfile.jpg'
+    ]);
     preferedMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created, v_date AS lastModified,      v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
-        '      "dir: testdir filename:testfile.jpg" AS matchingDetails, 0 AS matchingScore' +
-        '  FROM video  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER("testdir/testfile.jpg")';
-    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([]);
+        '      ? AS matchingDetails, 0 AS matchingScore' +
+        '  FROM video  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER(?)';
+    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
+        'dir: testdir filename:testfile.jpg',
+        'testdir/testfile.jpg'
+    ]);
     preferedMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created, v_date AS lastModified,      v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILENAMEANDDATE" AS matching,' +
-        '      "filename:testfile.jpg cdate:1582750 mdate:1582752" AS matchingDetails,       0.25 AS matchingScore' +
-        '  FROM video  WHERE LOWER(v_file) = LOWER("testfile.jpg")' +
-        '      AND (   UNIX_TIMESTAMP(v_date) BETWEEN "1582749" AND "1582751"' +
-        '           OR UNIX_TIMESTAMP(v_date) BETWEEN "1582751" AND "1582753")';
-    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([]);
+        '      ? AS matchingDetails,      0.25 AS matchingScore' +
+        '  FROM video  WHERE LOWER(v_file) = LOWER(?)' +
+        '      AND (   UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?' +
+        '           OR UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?)';
+    preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
+        'filename:testfile.jpg cdate:1582750 mdate:1582752',
+        'testfile.jpg',
+        1582749,
+        1582751,
+        1582751,
+        1582753
+    ]);
     const fallbackMatchingSql: RawSqlQueryData = {
         sql: 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
             ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
-            ' "IMAGE" AS type, "FILENAME" AS matching,       "filename:testfile.jpg" AS matchingDetails, 0.5 AS matchingScore' +
-            '  FROM image  WHERE LOWER(i_file) = LOWER("testfile.jpg")',
-        parameters: []
+            ' "IMAGE" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
+            '  FROM image  WHERE LOWER(i_file) = LOWER(?)',
+        parameters: [
+            'filename:testfile.jpg',
+            'testfile.jpg'
+        ]
     };
-    fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([]);
     fallbackMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
         ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
-        ' "IMAGE" AS type, "FILEDATE" AS matching,      "cdate:1582750 mdate:1582752" AS matchingDetails,       0.75 AS matchingScore' +
-        '  FROM image  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN "1582749" AND "1582751"' +
-        '         OR UNIX_TIMESTAMP(i_date) BETWEEN "1582751" AND "1582753")';
-    fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([]);
-    fallbackMatchingSql.sql +=
-    ' UNION ' +
+        ' "IMAGE" AS type, "FILEDATE" AS matching,       ? AS matchingDetails,       0.75 AS matchingScore' +
+        '  FROM image  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?' +
+        '         OR UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?)';
+    fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([
+        'cdate:1582750 mdate:1582752',
+        1582749,
+        1582751,
+        1582751,
+        1582753
+    ]);
+    fallbackMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
-        ' "VIDEO" AS type, "FILENAME" AS matching,       "filename:testfile.jpg" AS matchingDetails, 0.5 AS matchingScore' +
-        '  FROM video  WHERE LOWER(v_file) = LOWER("testfile.jpg")';
-    fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([]);
-    fallbackMatchingSql.sql +=
-    ' UNION ' +
+        ' "VIDEO" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
+        '  FROM video  WHERE LOWER(v_file) = LOWER(?)';
+    fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([
+        'filename:testfile.jpg',
+        'testfile.jpg'
+    ]);
+    fallbackMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
-        ' "VIDEO" AS type, "FILEDATE" AS matching,      "cdate:1582750 mdate:1582752" AS matchingDetails,       0.75 AS matchingScore' +
-        '  FROM video  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN "1582749" AND "1582751"' +
-        '         OR UNIX_TIMESTAMP(v_date) BETWEEN "1582751" AND "1582753")';
-    fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([]);
+        ' "VIDEO" AS type, "FILEDATE" AS matching,       ? AS matchingDetails,       0.75 AS matchingScore' +
+        '  FROM video  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?' +
+        '         OR UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?)';
+    fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([
+        'cdate:1582750 mdate:1582752',
+        1582749,
+        1582751,
+        1582751,
+        1582753
+    ]);
     const fallBackMatchingWithExternals: RawSqlQueryData = {
-        sql:
-        'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
-        ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
-        ' "IMAGE" AS type, "FILENAME" AS matching,       "filename:testfile.jpg" AS matchingDetails, 0.5 AS matchingScore' +
-        '  FROM image  WHERE LOWER(i_file) = LOWER("testfile.jpg")',
-        parameters: []
+        sql: 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
+            ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
+            ' "IMAGE" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
+            '  FROM image  WHERE LOWER(i_file) = LOWER(?)',
+        parameters: [
+            'filename:testfile.jpg',
+            'testfile.jpg']
     };
     fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([]);
     fallBackMatchingWithExternals.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
         ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
-        ' "IMAGE" AS type, "FILEDATE" AS matching,      "cdate:1582750 mdate:1582752" AS matchingDetails,       0.75 AS matchingScore' +
-        '  FROM image  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN "1582749" AND "1582751"' +
-        '         OR UNIX_TIMESTAMP(i_date) BETWEEN "1582751" AND "1582753")';
-    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([]);
+        ' "IMAGE" AS type, "FILEDATE" AS matching,       ? AS matchingDetails,       0.75 AS matchingScore' +
+        '  FROM image  WHERE (   UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?' +
+        '         OR UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?)';
+    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
+        'cdate:1582750 mdate:1582752',
+        1582749,
+        1582751,
+        1582751,
+        1582753
+    ]);
     fallBackMatchingWithExternals.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
-        ' "VIDEO" AS type, "FILENAME" AS matching,       "filename:testfile.jpg" AS matchingDetails, 0.5 AS matchingScore' +
-        '  FROM video  WHERE LOWER(v_file) = LOWER("testfile.jpg")';
-    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([]);
+        ' "VIDEO" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
+        '  FROM video  WHERE LOWER(v_file) = LOWER(?)';
+    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
+        'filename:testfile.jpg',
+        'testfile.jpg'
+    ]);
     fallBackMatchingWithExternals.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
-        ' "VIDEO" AS type, "FILEDATE" AS matching,      "cdate:1582750 mdate:1582752" AS matchingDetails,       0.75 AS matchingScore' +
-        '  FROM video  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN "1582749" AND "1582751"' +
-        '         OR UNIX_TIMESTAMP(v_date) BETWEEN "1582751" AND "1582753")';
-    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([]);
+        ' "VIDEO" AS type, "FILEDATE" AS matching,       ? AS matchingDetails,       0.75 AS matchingScore' +
+        '  FROM video  WHERE (   UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?' +
+        '         OR UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?)';
+    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
+        'cdate:1582750 mdate:1582752',
+        1582749,
+        1582751,
+        1582751,
+        1582753
+    ]);
     fallBackMatchingWithExternals.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
         ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
-        ' "IMAGE" AS type,       "SIMILARITY" AS matching,' +
-        '       "OpponentHistogram" AS matchingDetails,       "8.876523575567672" AS matchingScore' +
-        '  FROM image  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER("import-dir/IMAGE.JPG")';
-    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([]);
+        ' "IMAGE" AS type,       ? AS matching,' +
+        '       ? AS matchingDetails,       ? AS matchingScore' +
+        '  FROM image  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
+        'SIMILARITY',
+        'OpponentHistogram',
+        8.876523575567672,
+        'import-dir/IMAGE.JPG'
+    ]);
     fallBackMatchingWithExternals.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
-        ' "VIDEO" AS type,       "SIMILARITY" AS matching,' +
-        '       "OpponentHistogram" AS matchingDetails,       "8.876523575567672" AS matchingScore' +
-        '  FROM video  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER("import-dir/IMAGE.JPG")';
-    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([]);
+        ' "VIDEO" AS type,       ? AS matching,' +
+        '       ? AS matchingDetails,       ? AS matchingScore' +
+        '  FROM video  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER(?)';
+    fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
+        'SIMILARITY',
+        'OpponentHistogram',
+        8.876523575567672,
+        'import-dir/IMAGE.JPG'
+    ]);
     const exifMatchingSql: RawSqlQueryData = {
         sql: 'SELECT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
-        ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
-        '       "IMAGE" AS type, "EXIFDATE" AS matching,      "exifdate:1579150" AS matchingDetails, 0.9 AS matchingScore' +
-        '  FROM image  WHERE UNIX_TIMESTAMP(i_date)        BETWEEN "1579149" AND "1579151"',
-        parameters: []
+            ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
+            '       "IMAGE" AS type, "EXIFDATE" AS matching,       ? AS matchingDetails, 0.9 AS matchingScore' +
+            '  FROM image  WHERE UNIX_TIMESTAMP(i_date)        BETWEEN ? AND ?',
+        parameters: ['exifdate:1579150', 1579149, 1579151]
     };
 
     beforeEach(() => {
