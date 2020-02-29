@@ -68,7 +68,7 @@ cd sbin
 ```
 bash
 cd sbin
-./indexImages
+./indexImages.sh
 ```
 
 ### data-management: touren/location
