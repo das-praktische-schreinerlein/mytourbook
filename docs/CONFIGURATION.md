@@ -300,7 +300,7 @@ export const environment = {
                     "Fliegen", "Gletscherbegehung", "Kanu", "Klettern", "Klettersteig",
                     "Radfahren", "Schneeschuhwandern", "Skaten", "Wandern", "Museumsbesuch", "Sachsenklettern",
                     "Sportklettern", "Stadtbesichtigung", "Besichtigung", "Gassi", "Hochtour", "Spaziergang",
-                    "Wanderung"]},
+                    "Wanderung", "Wildwasserschwimmen"]},
                 {"name": "Kultur", "keywords": ["Denkmal", "Geschichte", "Kunst", "Museum",
                     "Architektur", "Burg", "Dom", "Kirche", "Park", "Schloss", "Zoo"]},
             ],

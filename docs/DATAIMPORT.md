@@ -63,14 +63,6 @@ cd sbin
 
 ## manage data in production-database
 
-### data-management: index images
-- index images for similarity-search
-```
-bash
-cd sbin
-./indexImages.sh
-```
-
 ### data-management: touren/location
 - [tracks: assign existing routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/date/track/50/1)
 - [manage location: sublocations of ImportXXX...](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/Import/egal/date/location/10/1)
@@ -79,7 +71,7 @@ cd sbin
 - [assign multi-route-tracks in legacy-system](http://localhost:8080/mediadb2/admin/Kategorie_TourEdit.do?CURTABLE=KATEGORIE&CURPAGE=popupshowkategorietouren&CURID=2316)
 - [SQL mytbdb mysql: route set minDate](installer/db/mysql/mytbdb/update-tour-min-dates.sql)
 
-### OPTIONAL data-management: sync with external
+### OPTIONAL data-management: sync with external playlist-directories
 - check playlist-directory with images against database
 ```
 bash

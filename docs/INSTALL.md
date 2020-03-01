@@ -117,6 +117,7 @@ sudo update-rc.d redis_6379 defaults
 ```
 git clone https://github.com/das-praktische-schreinerlein/liretools.git
 cd liretools
+gradle wrapper
 gradlew initLireWin jar
 ```
 
