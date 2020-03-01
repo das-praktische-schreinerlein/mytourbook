@@ -222,7 +222,7 @@ describe('TourDocMediaManagerModule', () => {
         1582753
     ]);
     fallBackMatchingWithExternals.sql += ' UNION ' +
-        'SELECT DISTINCT CONCAT("IMAGE_", i_id). as id, i_file AS name, i_dir AS dir,' +
+        'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
         ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type,       ? AS matching,' +
         '       ? AS matchingDetails,       ? AS matchingScore' +
