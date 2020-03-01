@@ -13,6 +13,16 @@ echo "start - fix data in production-database"
 echo "now: configure linux vars: run sbin/configure-environment.bash"
 source configure-environment.bash
 
+
+echo "OPTIONAL: index images"
+echo "OPEN: Do you want to index the images for similarity-search?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) cd ${MYTB}/sin && ./indexImages.sh; break;;
+        No) break;;
+    esac
+done
+
 echo "YOUR TODO: start backend with production-profile in separate shell (stop backend with import-profile before) 'cd ${MYTB} && npm run backend-serve-dev && cd $CWD'"
 echo "YOUR TODO: start frontend with production-profile in separate shell (if not already startet) 'cd ${MYTB} && npm run frontendserver-serve-dev-de && cd $CWD'"
 echo "YOUR TODO: manage import-data on http://localhost:4001/mytbdev/de/"
@@ -22,7 +32,6 @@ select yn in "Yes"; do
         Yes ) break;;
     esac
 done
-
 
 echo "YOUR TODO: run fixtures on mysql"
 echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"

@@ -32,8 +32,7 @@ fi
 
 if [ "${USESIMILARITYINDEX}" != "" ]; then
     echo "now: check image with image-index: ${SEARCHDIR}"
-    cd ${LIRETOOLS}
-    ./gradlew runSearch --args="-i $SEARCHDIR -l $W_MYTB_INDEXDIR -m $LIRESEARCHER_MAXDIFFERENCESCORE -n $LIRESEARCHER_NUMTHREADS -f $LIRESEARCHER_FEATURES" > $SEARCHDIR/findFilesInLireIndex.tmp && sed -e '/BUILD SUCCESSFUL/,$d' $SEARCHDIR/findFilesInLireIndex.tmp | sed -e '1,/Getting all images in/d' > $SEARCHDIR/findFilesInLireIndex.json
+    ${LIRETOOLS}/sbin/searchIndexedImages.sh "$SEARCHDIR" "$W_MYTB_INDEXDIR" "$LIRESEARCHER_FEATURES" "$LIRESEARCHER_MAXDIFFERENCESCORE" "1" "$LIRESEARCHER_NUMTHREADS"
     cd ${CWD}
     echo "now: check images and image-index-result with database: ${SEARCHDIR}"
     cd ${MYTB}

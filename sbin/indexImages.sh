@@ -8,16 +8,15 @@ function dofail {
     exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
 }
 
-echo "start - index mytb-images"
+echo "start - indexing mytb-images"
 LIREINDEXER_NUMTHREADS=8
 LIREINDEXER_FEATURES=CEDD,FCTH,OpponentHistogram,ColorLayout,JCD,SimpleColorHistogram
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ./configure-environment.bash
 
-echo "now: running indexing images from '$W_MYTB_INDEXSRC_MEDIADIR' to '$W_MYTB_INDEXDIR'"
-cd ${LIRETOOLS}
-./gradlew runIndexing --args="-i $W_MYTB_INDEXSRC_MEDIADIR -l $W_MYTB_INDEXDIR -n $LIREINDEXER_NUMTHREADS -f $LIREINDEXER_FEATURES"
+echo "now: running indexing mytb-images from '$W_MYTB_INDEXSRC_MEDIADIR' to '$W_MYTB_INDEXDIR'"
+${LIRETOOLS}/sbin/indexImages.sh "$W_MYTB_INDEXSRC_MEDIADIR" "$W_MYTB_INDEXDIR" "$LIREINDEXER_FEATURES" "$LIREINDEXER_NUMTHREADS"
 cd ${CWD}
 
-echo "done - index mytb-images"
+echo "done - indexing mytb-images"
