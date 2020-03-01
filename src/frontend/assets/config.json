@@ -9,7 +9,7 @@
                     "Fliegen", "Gletscherbegehung", "Kanu", "Klettern", "Klettersteig",
                     "Radfahren", "Schneeschuhwandern", "Skaten", "Wandern", "Museumsbesuch", "Sachsenklettern",
                     "Sportklettern", "Stadtbesichtigung", "Besichtigung", "Gassi", "Hochtour", "Spaziergang",
-                    "Wanderung"]},
+                    "Wanderung", "Wildwasserschwimmen"]},
                 {"name": "Kultur", "keywords": ["Denkmal", "Geschichte", "Kunst", "Museum",
                     "Architektur", "Burg", "Dom", "Kirche", "Park", "Schloss", "Zoo"]},
                 {"name": "Jahreszeit", "keywords": ["Frühling", "Herbst", "Sommer", "Winter"]},
@@ -39,8 +39,11 @@
                 {   "name": "Action Boots-Tour", "keywords": ["Bootfarhen", "See", "Natur", "Naturlandschaft", "Landschaft"],
                     "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["4"]}]
                 },
-                {   "name": "Action Baden", "keywords": ["Baden", "See", "Natur", "Naturlandschaft", "Landschaft"],
-                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["5"]}]
+                {   "name": "Action Baden", "keywords": ["Baden", "Wildwasserschwimmen", "See", "Natur", "Naturlandschaft", "Landschaft"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["5", "6"]}]
+                },
+                {   "name": "Action Wildwasserschwimmen", "keywords": ["Baden", "Wildwasserschwimmen", "See", "Natur", "Naturlandschaft", "Landschaft"],
+                    "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["5", "6"]}]
                 },
                 {   "name": "Action Stadtbesichtigung", "keywords": ["Stadtbesichtigung", "Stadt"],
                     "filters": [{ "property": "subtype", "command": "CSVIN", "expectedValues": ["101"]}]

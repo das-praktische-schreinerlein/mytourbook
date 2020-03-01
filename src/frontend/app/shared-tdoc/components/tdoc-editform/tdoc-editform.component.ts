@@ -401,7 +401,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'subtype': {},
                 'subTypeActiontype': {
                     labelPrefix: 'ac_',
-                    values: [0, 1, 2, 3, 4, 5, 101, 102, 103, 104, 105, 106, 110, 111,
+                    values: [0, 1, 2, 3, 4, 5, 6, 101, 102, 103, 104, 105, 106, 110, 111,
                         120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132]
                 },
                 'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
