@@ -5,7 +5,8 @@
             <div>
                 <ng-container [ngSwitch]="true">
                     <ng-container *ngSwitchCase="record.type === 'IMAGE' || record.type === 'ODIMGOBJECT'">
-                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
+                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span>
+                            <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
                         <div class="image-container">
                             <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
                                 <div class="picture-with-objects-container"
@@ -13,8 +14,8 @@
                                     <img #mainImage class="picture-big" width="600px"
                                          [src]="contentUtils.getFullUrl(record.tdocimages[0])"
                                          alt="{{record.tdocimages[0].name}}"
-                                         (resize)="onResizeMainImage()"
-                                         (load)="onResizeMainImage()">
+                                         (resize)="onResizeMainImage($event)"
+                                         (load)="onResizeMainImage($event)">
                                     <app-cdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
                                          [width]="imageWidth"
                                          *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>
@@ -23,7 +24,8 @@
                         </div>
                     </ng-container>
                     <ng-container *ngSwitchCase="record.type === 'VIDEO'">
-                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span> <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
+                        <h5><span class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</span>
+                            <span class="fx-bg-name">{{record | tdocdate}} {{record.name}}</span></h5>
                         <div class="image-container">
                             <ng-container *ngIf="record.tdocvideos !== undefined && record.tdocvideos.length > 0">
                                 <app-tdoc-videoplayer [record]="record"
@@ -36,7 +38,9 @@
                         <div class="picture-small" style="float: left; margin-right: 10px; padding-right: 20px">
                             <h6 class="fx-bg-type">{{record.type | translate }} {{record.subtype | translate }}</h6>
                             <ng-container *ngIf="record.tdocimages !== undefined && record.tdocimages.length > 0">
-                                <img class="picture-small" width="300px" [src]="contentUtils.getPreviewUrl(record.tdocimages[0])" alt="{{record.tdocimages[0].name}}">
+                                <img class="picture-small" width="300px"
+                                     [src]="contentUtils.getPreviewUrl(record.tdocimages[0])"
+                                     alt="{{record.tdocimages[0].name}}">
                             </ng-container>
                         </div>
                         <h5><span class="fx-bg-name">{{record.name}}</span></h5>

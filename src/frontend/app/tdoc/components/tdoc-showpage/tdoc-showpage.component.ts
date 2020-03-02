@@ -212,11 +212,13 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         }
     }
 
-    onResizeMainImage() {
-        if (this.mainImage.nativeElement['width']) {
+    onResizeMainImage(ev: Event) {
+        if (this.mainImage.nativeElement['width'] !== this.imageWidth) {
             this.imageWidth = this.mainImage.nativeElement['width'];
             this.cd.markForCheck();
         }
+
+        return true;
     }
 
     getFiltersForType(record: TourDocRecord, type: string): any {
@@ -233,11 +235,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             filters['sort'] = 'distance';
             filters['where'] = undefined;
             filters['moreFilter'] = 'id_notin_is:' + record.id;
-            if (record.geoLat !== undefined) {
-                filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
-            } else {
-                filters['where'] = 'blimblamblummichgibtesnicht';
-            }
+            filters['where'] = this.createNearByFilter(record);
             if (record.type === 'LOCATION' && theme !== undefined) {
                 filters['theme'] = theme;
             }
@@ -245,25 +243,23 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
             filters['type'] = 'ROUTE';
             filters['sort'] = 'distance';
             filters['moreFilter'] = 'id_notin_is:' + record.id;
-            if (record.geoLat !== undefined) {
-                filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
-            } else {
-                filters['where'] = 'blimblamblummichgibtesnicht';
-            }
+            filters['where'] = this.createNearByFilter(record);
         } else if (type === 'IMAGE_NEARBY') {
             filters['type'] = 'IMAGE';
             filters['sort'] = 'distance';
             filters['moreFilter'] = 'id_notin_is:' + record.id;
-            if (record.geoLat !== undefined) {
-                filters['where'] = 'nearby:' + [record.geoLat, record.geoLon, 1].join('_');
-            } else {
-                filters['where'] = 'blimblamblummichgibtesnicht';
-            }
+            filters['where'] = this.createNearByFilter(record);
         }
 
         return filters;
     }
 
+    protected createNearByFilter(record: TourDocRecord): string {
+        return record.geoLat !== undefined
+            ? 'nearby:' + [record.geoLat, record.geoLon, 1].join('_') +
+                '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/, '')
+            : 'blimblamblummichgibtesnicht';
+    }
     protected onResize(layoutSizeData: LayoutSizeData): void {
         super.onResize(layoutSizeData);
         this.layoutSize = layoutSizeData;
