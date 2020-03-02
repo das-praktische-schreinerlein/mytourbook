@@ -14,8 +14,8 @@
                                     <img #mainImage class="picture-big" width="600px"
                                          [src]="contentUtils.getFullUrl(record.tdocimages[0])"
                                          alt="{{record.tdocimages[0].name}}"
-                                         (resize)="onResizeMainImage($event)"
-                                         (load)="onResizeMainImage($event)">
+                                         (resize)="onResizeMainImage()"
+                                         (loaded)="onResizeMainImage()">
                                     <app-cdoc-odobjectrectangles [objects]="record.tdocodimageobjects"
                                          [width]="imageWidth"
                                          *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectrectangles>

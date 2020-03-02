@@ -212,8 +212,8 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         }
     }
 
-    onResizeMainImage(ev: Event) {
-        if (this.mainImage.nativeElement['width'] !== this.imageWidth) {
+    onResizeMainImage() {
+        if (this.mainImage !== undefined && this.mainImage.nativeElement['width'] !== this.imageWidth) {
             this.imageWidth = this.mainImage.nativeElement['width'];
             this.cd.markForCheck();
         }
@@ -260,9 +260,11 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
                 '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/, '')
             : 'blimblamblummichgibtesnicht';
     }
+
     protected onResize(layoutSizeData: LayoutSizeData): void {
         super.onResize(layoutSizeData);
         this.layoutSize = layoutSizeData;
+        this.onResizeMainImage();
         this.cd.markForCheck();
     }
 
