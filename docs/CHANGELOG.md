@@ -33,6 +33,7 @@
 - frontend: moved common action-tag-components and navigation-components from mytourbook to frontend-commons
 - common: moved full implementation of actions and actiontags to commons
 - development: bumped up deps
+- frontend: added nearby-list for showpage of location, image, route
 
 ### bug fixes
 - backend: fixed reimport of exif-dates from images
