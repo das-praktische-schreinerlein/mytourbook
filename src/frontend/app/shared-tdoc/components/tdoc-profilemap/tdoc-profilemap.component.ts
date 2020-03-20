@@ -44,7 +44,8 @@ export class TourDocProfileMapComponent extends AbstractInlineComponent {
         const tmpList: MapElement[] = [];
         for (let i = 0; i < this.tdocs.length; i++) {
             const record =  this.tdocs[i];
-            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record, StringUtils.calcCharCodeForListIndex(i + 1), this.showImageTrackAndGeoPos)) {
+            for (const mapElement of this.contentUtils.createMapElementForTourDoc(record, StringUtils.calcCharCodeForListIndex(i + 1),
+                this.showImageTrackAndGeoPos)) {
                 tmpList.push(mapElement);
             }
         }

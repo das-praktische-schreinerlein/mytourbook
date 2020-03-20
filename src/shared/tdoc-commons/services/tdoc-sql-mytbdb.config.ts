@@ -63,7 +63,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
                         '     (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
-                        '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kat_favorites%"))' +
+                        '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kategorie_favorites%"))' +
                         '      AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
                         ' ON kategorie.k_id=noMainFavoriteChildren.id',
                     triggerParams: ['noMainFavoriteChildren'],
@@ -1315,7 +1315,8 @@ export class TourDocSqlMytbDbConfig {
                 'dataTechMaxAsc': 'i_gps_ele ASC',
                 'dataTechDistAsc': 'k_distance ASC',
                 'forExport': 'i_date ASC, image.i_id ASC',
-                'odState': 'io_stat ASC, image.i_id ASC',
+                'odState': 'io_state ASC, image.i_id ASC',
+                'odPrecision': 'io_precision DESC, image.i_id ASC',
                 'ratePers': 'i_rate DESC, i_date DESC',
                 'location': 'l_lochirarchietxt ASC',
                 'relevance': 'i_date DESC'

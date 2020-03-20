@@ -116,6 +116,8 @@
     "listSorts_dateDesc": "Datum absteigend",
     "listSorts_dateAsc": "Datum aufsteigend",
     "listSorts_name": "Name",
+    "listSorts_odState": "Erkennungsstatus",
+    "listSorts_odPrecision": "Erkennungswahrscheinlichkeit",
     "listSorts_type": "Typ",
     "listSorts_subtype": "Art",
     "listSorts_ratePers": "persönliche Bewertung",

@@ -310,7 +310,7 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
             case 'tdocnavigationobjects':
                 return TourDocNavigationObjectRecordValidator.instance.validate(<TourDocNavigationObjectRecord>doc, errFieldPrefix);
             default:
-                super.validateRelationDoc(relation, doc, errFieldPrefix);
+                return super.validateRelationDoc(relation, doc, errFieldPrefix);
         }
     };
 
@@ -333,7 +333,7 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
             case 'tdocnavigationobjects':
                 return TourDocNavigationObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             default:
-                super.validateValueRelationDoc(relation, values, fieldPrefix, errFieldPrefix);
+                return super.validateValueRelationDoc(relation, values, fieldPrefix, errFieldPrefix);
         }
     };
 }

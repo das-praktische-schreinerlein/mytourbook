@@ -116,6 +116,8 @@
     "listSorts_dateDesc": "date",
     "listSorts_dateAsc": "date asc",
     "listSorts_name": "name",
+    "listSorts_odState": "od-state",
+    "listSorts_odPrecision": "od-precision",
     "listSorts_type": "type",
     "listSorts_subtype": "subtype",
     "listSorts_ratePers": "personal rating",
