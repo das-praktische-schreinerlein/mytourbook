@@ -67,9 +67,9 @@
     "prepare-build-before-copy-overrides-src": "cpx --verbose \"overrides/before-build/src/**/*.*\" src/",
     "prepare-build-before-copy-overrides-devtools": "cpx --verbose \"overrides/before-build/devtools/**/*.*\" devtools/",
     "prepare-build-os": {
-      "darwin": "./node_modules/.bin/rimraf dist && ./node_modules/.bin/mkdirp dist",
-      "linux": "./node_modules/.bin/rimraf dist && ./node_modules/.bin/mkdirp dist",
-      "win32": "node_modules\\.bin\\rimraf dist && node_modules\\.bin\\mkdirp dist"
+        "darwin": "./node_modules/.bin/rimraf node_modules/@dps/*/node_modules/@dps & ./node_modules/.bin/rimraf dist && ./node_modules/.bin/mkdirp dist && ./node_modules/.bin/mkdirp src/shared",
+        "linux": "./node_modules/.bin/rimraf node_modules/@dps/*/node_modules/@dps & ./node_modules/.bin/rimraf dist && ./node_modules/.bin/mkdirp dist && ./node_modules/.bin/mkdirp src/shared",
+        "win32": "node_modules\\.bin\\rimraf node_modules\\@dps\\*\\node_modules\\@dps & node_modules\\.bin\\rimraf dist && node_modules\\.bin\\mkdirp dist && node_modules\\.bin\\mkdirp src\\shared"
     },
     "start": "ng serve --app=frontend --watch --aot true --preserve-symlinks true --locale de --i18n-format xlf --i18n-file src/frontend/locales/messages.de.xlf --proxy-config proxy.conf.json",
     "start-en": "ng serve --app=frontend --watch --aot true --preserve-symlinks true --locale en --i18n-format xlf --i18n-file src/frontend/locales/messages.en.xlf --proxy-config proxy.conf.json",
