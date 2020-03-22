@@ -4,7 +4,7 @@
 Run initially to copy overrides into project
 ```bash
 bash
-npm install && npm prune && ./build-dev.bash
+npm prune && npm install && ./build-dev.bash
 ```
  
 
