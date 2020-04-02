@@ -173,45 +173,7 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
     }
 
     mapToAdapterDocument(props: any): any {
-        const values = {
-            id: props.id,
-            image_id_i: props.imageId,
-            video_id_i: props.videoId,
-            loc_id_i: props.locId,
-            route_id_i: props.routeId,
-            track_id_i: props.trackId,
-            trip_id_i: props.tripId,
-            news_id_i: props.newsId,
-            dateshow_dt: props.dateshow,
-            datestart_dt: props.datestart,
-            dateend_dt: props.dateend,
-            desc_txt: props.descTxt,
-            desc_md_txt: props.descMd,
-            desc_html_txt: props.descHtml,
-            geo_lon_s: props.geoLon,
-            geo_lat_s: props.geoLat,
-            geo_loc_p: props.geoLoc,
-            gpstracks_basefile_s: props.gpsTrackBasefile,
-            keywords_txt: (props.keywords ? props.keywords.split(', ').join(',,') : ''),
-            loc_lochirarchie_s: (props.locHirarchie ? props.locHirarchie
-                .toLowerCase()
-                .replace(/[ ]*->[ ]*/g, ',,')
-                .replace(/ /g, '_') : ''),
-            loc_lochirarchie_ids_s: (props.locHirarchieIds ? props.locHirarchieIds
-                .toLowerCase()
-                .replace(/,/g, ',,')
-                .replace(/ /g, '_') : ''),
-            name_s: props.name,
-            objects_txt: (props.objects ? props.objects.split(', ').join(',,') : ''),
-            persons_txt: (props.persons ? props.persons.split(', ').join(',,') : ''),
-            playlists_txt: (props.playlists ? props.playlists.split(', ').join(',,') : ''),
-            type_s: props.type,
-
-        };
-
-        values['html_txt'] = [values.desc_txt, values.name_s, values.keywords_txt, values.type_s].join(' ');
-
-        return values;
+        return this.mapper.mapToAdapterDocument({}, props);
     }
 
     create(mapper: Mapper, record: any, opts?: any): Promise<TourDocRecord> {
