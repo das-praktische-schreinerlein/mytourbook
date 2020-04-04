@@ -13,6 +13,7 @@ import {
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
 import LatLng = L.LatLng;
+import {ChartElement} from '../components/visjs-profilechart/visjs-profilechart.component';
 
 export interface TourDocItemData extends CommonItemData {
     tracks?: TourDocRecord[];
@@ -255,6 +256,11 @@ export class TourDocContentUtils extends CommonDocContentUtils {
 
     createMapElementForTourDoc(record: TourDocRecord, code: string, showImageTrackAndGeoPos: boolean,
                                trackColors?: TrackColors): MapElement[] {
+        return this.createChartElementForTourDoc(record, code, showImageTrackAndGeoPos, trackColors);
+    }
+
+    createChartElementForTourDoc(record: TourDocRecord, code: string, showImageTrackAndGeoPos: boolean,
+                               trackColors?: TrackColors): ChartElement[] {
         const trackUrl = record.gpsTrackBasefile;
 
         const isImage = (record.type === 'IMAGE' || record.type === 'VIDEO');
@@ -263,7 +269,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             && (!isImage || showImageTrackAndGeoPos);
         const showGeoPos = (!showTrack || isImage) && record.geoLat && record.geoLon &&
             record.geoLat !== '0.0' && record.geoLon !== '0.0';
-        const mapElements: MapElement[] = [];
+        const mapElements: ChartElement[] = [];
 
         if (showTrack) {
             let storeUrl;
@@ -272,7 +278,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else {
                 storeUrl = this.appService.getAppConfig()['tracksBaseUrl'] + trackUrl + '.json';
             }
-            const mapElement: MapElement = {
+            const mapElement: ChartElement = {
                 id: record.id,
                 code: code,
                 name: record.name,
@@ -287,7 +293,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
         if (showGeoPos) {
             const ele = BeanUtils.getValue(record, 'tdocdatatech.altMax');
             const point = ele !== undefined ? new LatLng(+record.geoLat, +record.geoLon, +ele) : new LatLng(+record.geoLat, +record.geoLon);
-            const mapElement: MapElement = {
+            const mapElement: ChartElement = {
                 id: record.id,
                 code: code,
                 name: record.type + ': ' + record.name,

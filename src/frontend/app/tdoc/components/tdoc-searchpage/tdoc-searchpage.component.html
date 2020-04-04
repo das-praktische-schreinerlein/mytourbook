@@ -65,7 +65,7 @@
     <div class="container">
         <app-cdoc-timetable [searchResult]="searchResult" (columnClicked)="onTimeTableColumnClicked($event)"></app-cdoc-timetable>
     </div>
-    <div [class]="('container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
+    <div [class]="('container map-container container-fullline')" *ngIf="flgShowMap">
         <app-tdoc-map [mapId]="'searchMap' + (searchFormLayout === 0 ? 'small' : 'big')"
                       [height]="'300'"
                       [mapZoom]="mapZoom"
@@ -76,12 +76,6 @@
                       (mapElementsFound)="onMapElementsFound($event)"
                       [mapCenterPos]="mapCenterPos"></app-tdoc-map>
     </div>
-    <div class="container map-container" *ngIf="flgShowProfileMap">
-        <app-tdoc-profilemap [mapId]="'showProfileMap'"
-                             [height]="'300px'"
-                             (mapElementsFound)="onProfileMapElementsFound($event)"
-                             [tdocs]="searchResult.currentRecords"></app-tdoc-profilemap>
-    </div>
     <div class="container containter profile-toggler-container" *ngIf="flgShowMap">
         <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = true" *ngIf="flgMapAvailable && !flgShowProfileMap">
             <span i18n="button show profilemap|Buttontext to show profilemap@@button.searchform.show.profilemap">Profil einblenden</span>
@@ -89,6 +83,18 @@
         <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && flgProfileMapAvailable">
             <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>
             <span class="btn-action-icon">&#x21D1;</span></button>
+    </div>
+    <div class="container map-container" *ngIf="flgShowProfileMap">
+        <app-tdoc-profilemap [mapId]="'showProfileMap'"
+                             [height]="'300px'"
+                             (mapElementsFound)="onProfileMapElementsFound($event)"
+                             [tdocs]="searchResult.currentRecords"></app-tdoc-profilemap>
+    </div>
+    <div class="container map-container" *ngIf="flgShowProfileMap">
+        <app-tdoc-profilechart [chartId]="'showProfileChart'"
+                             [height]="'300px'"
+                             (chartElementsFound)="onProfileMapElementsFound($event)"
+                             [tdocs]="searchResult.currentRecords"></app-tdoc-profilechart>
     </div>
     <div class="container">
         <app-cdoc-typetable [searchResult]="searchResult" (columnClicked)="onTypeTableColumnClicked($event)"></app-cdoc-typetable>
