@@ -14,3 +14,5 @@ declare module vis {
     }
 }
 
+type USVString = string;
+declare type USVString = string;

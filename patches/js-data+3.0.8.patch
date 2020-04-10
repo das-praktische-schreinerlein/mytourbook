@@ -1,0 +1,23 @@
+diff --git a/node_modules/js-data/dist/js-data.js b/node_modules/js-data/dist/js-data.js
+index 2e42261..8a828b8 100644
+--- a/node_modules/js-data/dist/js-data.js
++++ b/node_modules/js-data/dist/js-data.js
+@@ -13288,6 +13288,7 @@
+               }
+             }
+           };
++            foreignKeyDescriptor.configurable = true;
+           Object.defineProperty(mapper.recordClass.prototype, foreignKey, foreignKeyDescriptor);
+         } else if (type === hasManyType) {
+           var localKeys = def.localKeys;
+@@ -13539,7 +13540,10 @@
+               });
+             };
+           }
++            descriptor.configurable = true;
++          console.error("bla", localfield);
+           Object.defineProperty(mapper.recordClass.prototype, localField, descriptor);
++            console.error("blum", localfield);
+         }
+       });
+ 

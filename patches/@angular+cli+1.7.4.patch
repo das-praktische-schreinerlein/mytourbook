@@ -1,0 +1,22 @@
+diff --git a/node_modules/@angular/cli/models/webpack-configs/common.js b/node_modules/@angular/cli/models/webpack-configs/common.js
+index 54513f5..05a3863 100644
+--- a/node_modules/@angular/cli/models/webpack-configs/common.js
++++ b/node_modules/@angular/cli/models/webpack-configs/common.js
+@@ -170,7 +170,7 @@ function getCommonConfig(wco) {
+     }
+     return {
+         resolve: {
+-            extensions: ['.ts', '.js'],
++            extensions: ['@dps.js', '.ts', '.js'],
+             symlinks: !buildOptions.preserveSymlinks,
+             modules: [appRoot, 'node_modules'],
+             alias
+@@ -208,6 +208,8 @@ function getCommonConfig(wco) {
+             ].concat(extraRules)
+         },
+         plugins: [
++            new webpack.NormalModuleReplacementPlugin(/knex/, 'node-noop'),
++            new webpack.NormalModuleReplacementPlugin(/redis/, 'node-noop'),
+             new webpack.NoEmitOnErrorsPlugin()
+         ].concat(extraPlugins)
+     };

@@ -1,4 +1,5 @@
-patch-package
+diff --git a/node_modules/webpack/node_modules/enhanced-resolve/lib/AppendPlugin.js b/node_modules/webpack/node_modules/enhanced-resolve/lib/AppendPlugin.js
+index a42ff36..189a31a 100644
 --- a/node_modules/webpack/node_modules/enhanced-resolve/lib/AppendPlugin.js
 +++ b/node_modules/webpack/node_modules/enhanced-resolve/lib/AppendPlugin.js
 @@ -13,10 +13,17 @@ AppendPlugin.prototype.apply = function(resolver) {

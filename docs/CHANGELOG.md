@@ -2,6 +2,27 @@
  
 # Versions
  
+## 5.0.0
+- upgraded all dev-dependencies to latest
+
+### new features
+- none
+
+### improvements
+- none
+
+### bug fixes
+- none 
+ 
+### breaking changes
+- build: upgraded all dev-dependencies to latest
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
+
+
+
 ## 4.1.0
 - moved facetcache to commons
 - improved search, dashboard and data-management
