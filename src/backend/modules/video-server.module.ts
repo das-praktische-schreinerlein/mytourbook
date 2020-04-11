@@ -31,7 +31,7 @@ export class VideoServerModule {
             console.log('configure route videoproxy:',
                 apiPrefix +  backendConfig['apiRouteVideos'] + ' to ' + backendConfig['proxyVideosRouteToUrl']);
             app.use(apiPrefix + backendConfig['apiRouteVideos'],
-                proxy({target: backendConfig['proxyVideosRouteToUrl'], changeOrigin: true}));
+                proxy.createProxyMiddleware({target: backendConfig['proxyVideosRouteToUrl'], changeOrigin: true}));
         }
     }
 

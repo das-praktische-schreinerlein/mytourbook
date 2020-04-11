@@ -34,7 +34,7 @@ export class AssetsServerModule {
             console.log('configure route trackproxy:',
                 apiPrefix + backendConfig['apiRouteTracks'] + ' to ' + backendConfig['proxyTrackRouteToUrl']);
             app.use(apiPrefix + backendConfig['apiRouteTracks'],
-                proxy({target: backendConfig['proxyTrackRouteToUrl'], changeOrigin: true}));
+                proxy.createProxyMiddleware({target: backendConfig['proxyTrackRouteToUrl'], changeOrigin: true}));
         }
     }
 
@@ -99,7 +99,7 @@ export class AssetsServerModule {
             console.log('configure route pictureproxy:',
                 apiPrefix +  backendConfig['apiRoutePictures'] + ' to ' + backendConfig['proxyPicturesRouteToUrl']);
             app.use(apiPrefix + backendConfig['apiRoutePictures'],
-                proxy({target: backendConfig['proxyPicturesRouteToUrl'], changeOrigin: true}));
+                proxy.createProxyMiddleware({target: backendConfig['proxyPicturesRouteToUrl'], changeOrigin: true}));
         }
     }
 
