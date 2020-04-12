@@ -174,7 +174,7 @@
     "postcss-loader": "3.0.0",
     "protractor": "5.4.3",
     "redis-dump": "0.1.10",
-    "remap-istanbul": "~0.10.1",
+    "remap-istanbul": "0.13.0",
     "rimraf": "3.0.2",
     "string-replace-loader": "2.3.0",
     "symlink-dir": "3.1.2",
