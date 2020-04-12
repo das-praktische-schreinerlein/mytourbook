@@ -10,8 +10,6 @@ import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {Router} from '@angular/router';
-import {HttpModule, XHRBackend} from '@angular/http';
-import {MockBackend} from '@angular/http/testing';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';

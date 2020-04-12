@@ -7,7 +7,7 @@ import {ConfigureServerModule} from '@dps/mycms-server-commons/dist/server-commo
 import {FirewallModule} from '@dps/mycms-server-commons/dist/server-commons/firewall.module';
 import * as fs from 'fs';
 import {DnsBLModule} from '@dps/mycms-server-commons/dist/server-commons/dnsbl.module';
-import {CacheModeType, SimpleFrontendServerModule, ServerModuleConfig} from './simple-frontend-server.module';
+import {CacheModeType, ServerModuleConfig, SimpleFrontendServerModule} from './simple-frontend-server.module';
 
 const minimist = require ('minimist');
 

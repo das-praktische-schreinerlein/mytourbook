@@ -7,7 +7,7 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as fs from 'fs';
-import {CacheModeType, SimpleFrontendServerModule, ServerModuleConfig} from './simple-frontend-server.module';
+import {CacheModeType, ServerModuleConfig, SimpleFrontendServerModule} from './simple-frontend-server.module';
 import {LogUtils} from '@dps/mycms-commons/dist/commons/utils/log.utils';
 
 export class AngularUniversalFrontendServerModule extends SimpleFrontendServerModule {

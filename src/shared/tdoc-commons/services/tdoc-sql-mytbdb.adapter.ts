@@ -22,14 +22,29 @@ import {
 import {TourDocSqlMytbDbKeywordAdapter} from './tdoc-sql-mytbdb-keyword.adapter';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
-import {AssignActionTagForm, CommonSqlActionTagAssignAdapter} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
-import {CommonSqlActionTagReplaceAdapter, ReplaceActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
+import {
+    AssignActionTagForm,
+    CommonSqlActionTagAssignAdapter
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
+import {
+    CommonSqlActionTagReplaceAdapter,
+    ReplaceActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {CommonSqlActionTagBlockAdapter} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
 import {CommonSqlKeywordAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
-import {CommonSqlActionTagKeywordAdapter, KeywordActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-keyword.adapter';
+import {
+    CommonSqlActionTagKeywordAdapter,
+    KeywordActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-keyword.adapter';
 import {CommonSqlPlaylistAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
-import {CommonSqlActionTagPlaylistAdapter, PlaylistActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-playlist.adapter';
-import {CommonSqlActionTagRateAdapter, RateActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-rate.adapter';
+import {
+    CommonSqlActionTagPlaylistAdapter,
+    PlaylistActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-playlist.adapter';
+import {
+    CommonSqlActionTagRateAdapter,
+    RateActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-rate.adapter';
 import {CommonSqlRateAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {CommonSqlObjectDetectionAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-object-detection.adapter';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';

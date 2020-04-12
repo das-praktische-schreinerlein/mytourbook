@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocDataService} from './tdoc-data.service';
-import {Observable} from 'rxjs/Observable';
 import {TourDocDataStore, TourDocTeamFilterConfig} from './tdoc-data.store';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/forkJoin';
