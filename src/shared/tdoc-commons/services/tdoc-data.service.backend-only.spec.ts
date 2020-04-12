@@ -2,8 +2,6 @@
 import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocDataService} from './tdoc-data.service';
 import {TourDocDataStore, TourDocTeamFilterConfig} from './tdoc-data.store';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/observable/forkJoin';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TourDocSqlMytbDbAdapter} from './tdoc-sql-mytbdb.adapter';
 import {TestHelper} from '@dps/mycms-commons/dist/testing/test-helper';
@@ -53,7 +51,7 @@ describe('TourDocDataService', () => {
                 [{id: '51', type: 'IMAGE'}],
                 [{'COUNT( DISTINCT kategorie.k_id)': 1}]
             ]);
-            Observable.forkJoin(
+            forkJoin(
                 service.search(service.newSearchForm({fulltext: 'bla', type: 'TRACK', sort: 'dateAsc', pageNum: 11, perPage: 12}))
             ).subscribe(
                 results => {

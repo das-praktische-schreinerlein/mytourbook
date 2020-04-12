@@ -1,10 +1,8 @@
 /* tslint:disable:no-unused-variable */
 import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocDataService} from './tdoc-data.service';
-import {Observable} from 'rxjs/Observable';
+import {from, forkJoin} from 'rxjs';
 import {TourDocDataStore, TourDocTeamFilterConfig} from './tdoc-data.store';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/observable/forkJoin';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 
 describe('TourDocDataService', () => {
@@ -30,7 +28,7 @@ describe('TourDocDataService', () => {
     describe('#getAll()', () => {
         it('should return an empty array by default', done => {
             // WHEN
-            Observable.fromPromise(service.getAll()).subscribe(
+            from(service.getAll()).subscribe(
                 tdocs => {
                     // THEN
                     expect(tdocs).toEqual([]);
@@ -48,7 +46,7 @@ describe('TourDocDataService', () => {
 
         it('should return all tdocs', done => {
             // GIVEN
-            Observable.forkJoin(
+            forkJoin(
                 service.addMany([tdoc1, tdoc2]),
                 service.getAll()
             ).subscribe(
@@ -73,7 +71,7 @@ describe('TourDocDataService', () => {
 
         it('should automatically assign an incrementing id', done => {
             // GIVEN
-            Observable.forkJoin(
+            forkJoin(
                 service.addMany([tdoc1, tdoc2]),
                 service.getById('1'),
                 service.getById('2')
@@ -101,7 +99,7 @@ describe('TourDocDataService', () => {
     describe('#deleteById(id)', () => {
 
         it('should remove record with the corresponding id', done => {
-            Observable.forkJoin(
+            forkJoin(
                 service.addMany([tdoc1, tdoc2]),
                 service.getAll(),
                 service.deleteById('1'),
@@ -131,7 +129,7 @@ describe('TourDocDataService', () => {
         });
 
         it('should not removing anything if record with corresponding id is not found', done => {
-            Observable.forkJoin(
+            forkJoin(
                 service.addMany([tdoc1, tdoc2]),
                 service.getAll(),
                 service.deleteById('3'),
@@ -161,7 +159,7 @@ describe('TourDocDataService', () => {
     describe('#updateById(id, values)', () => {
 
         it('should return record with the corresponding id and updated data', done => {
-            Observable.forkJoin(
+            forkJoin(
                 service.addMany([tdoc1, tdoc2]),
                 service.getAll(),
                 service.updateById('1', {
@@ -189,7 +187,7 @@ describe('TourDocDataService', () => {
         });
 
         it('should return null if record is not found', done => {
-            Observable.forkJoin(
+            forkJoin(
                 service.addMany([tdoc1, tdoc2]),
                 service.getAll(),
                 service.updateById('26', {

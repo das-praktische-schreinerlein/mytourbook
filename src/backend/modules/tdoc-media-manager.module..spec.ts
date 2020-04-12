@@ -1,7 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/observable/forkJoin';
+import {forkJoin} from 'rxjs';
 import {TestHelper} from '@dps/mycms-commons/dist/testing/test-helper';
 import {FileInfoType, FileSystemDBSyncType, TourDocMediaManagerModule} from './tdoc-media-manager.module';
 import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
@@ -265,7 +263,7 @@ describe('TourDocMediaManagerModule', () => {
                 []
             ]);
             const additionalMappings: {[key: string]: FileSystemDBSyncType} = {};
-            Observable.forkJoin(
+            forkJoin(
                 service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {
@@ -309,7 +307,7 @@ describe('TourDocMediaManagerModule', () => {
                 ]
             ]);
             const additionalMappings: {[key: string]: FileSystemDBSyncType} = {};
-            Observable.forkJoin(
+            forkJoin(
                 service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {
@@ -362,7 +360,7 @@ describe('TourDocMediaManagerModule', () => {
                 }]
             ]);
             const additionalMappings: {[key: string]: FileSystemDBSyncType} = {};
-            Observable.forkJoin(
+            forkJoin(
                 service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {
@@ -436,7 +434,7 @@ describe('TourDocMediaManagerModule', () => {
                     ]
                 }
             };
-            Observable.forkJoin(
+            forkJoin(
                 service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {

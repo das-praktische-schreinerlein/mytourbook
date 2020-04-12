@@ -1,7 +1,5 @@
 /* tslint:disable:no-unused-variable */
 import {TourDocRecord, TourDocRecordRelation} from '../model/records/tdoc-record';
-import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/observable/forkJoin';
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {TourDocDataTechRecord, TourDocDataTechRecordRelation} from '../model/records/tdocdatatech-record';
 import {TourDocRatePersonalRecord, TourDocRatePersonalRecordRelation} from '../model/records/tdocratepers-record';
