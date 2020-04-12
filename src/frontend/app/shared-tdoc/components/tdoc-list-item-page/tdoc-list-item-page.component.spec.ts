@@ -14,7 +14,7 @@ import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testi
 import {TourDocDateFormatPipe} from '../../pipes/tdoc-dateformat.pipe';
 import {DatePipe} from '@angular/common';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
-import {MarkdownService} from 'angular2-markdown';
+import {NgxMdService} from 'ngx-md';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {HttpClientModule} from '@angular/common/http';
@@ -42,7 +42,7 @@ describe('TourDocListItemPageComponent', () => {
                 CommonDocRoutingService,
                 SearchFormUtils,
                 TourDocContentUtils,
-                MarkdownService,
+                NgxMdService,
                 AngularMarkdownService,
                 AngularHtmlService,
                 DatePipe,

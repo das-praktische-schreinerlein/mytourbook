@@ -100,11 +100,11 @@
             "browserTarget": "frontend:build"
           },
           "configurations": {
-            "beta": {
-              "browserTarget": "frontend:build:beta"
+            "de": {
+              "browserTarget": "frontend:build:de"
             },
-            "production": {
-              "browserTarget": "frontend:build:production"
+            "en": {
+              "browserTarget": "frontend:build:en"
             }
           }
         },

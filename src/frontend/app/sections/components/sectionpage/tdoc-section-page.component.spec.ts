@@ -14,7 +14,7 @@ import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend
 import {ErrorResolver} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/resolver/error.resolver';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
-import {MarkdownModule, MarkdownService} from 'angular2-markdown';
+import {NgxMdModule, NgxMdService} from 'ngx-md';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
@@ -38,7 +38,7 @@ describe('SectionPageComponent', () => {
             schemas: [NO_ERRORS_SCHEMA],
             imports: [
                 TranslateModule.forRoot(),
-                MarkdownModule.forRoot()],
+                NgxMdModule.forRoot()],
             providers: [
                 { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
                 { provide: Router, useValue: new RouterStub() },
@@ -51,7 +51,7 @@ describe('SectionPageComponent', () => {
                 SearchParameterUtils,
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
                 TranslateService,
-                MarkdownService,
+                NgxMdService,
                 AngularMarkdownService,
                 AngularHtmlService,
                 ErrorResolver,

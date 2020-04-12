@@ -18,7 +18,7 @@ import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-c
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
 
 describe('TourDocActionsComponent', () => {
@@ -29,6 +29,7 @@ describe('TourDocActionsComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocActionsComponent],
             imports: [
+                NgbModule.forRoot()
             ],
             providers: [
                 { provide: Router, useValue: new RouterStub() },

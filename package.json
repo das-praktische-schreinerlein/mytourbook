@@ -71,8 +71,8 @@
       "linux": "./node_modules/.bin/rimraf node_modules/@dps/*/node_modules/@dps & ./node_modules/.bin/rimraf dist && ./node_modules/.bin/mkdirp dist && ./node_modules/.bin/mkdirp src/shared",
       "win32": "node_modules\\.bin\\rimraf node_modules\\@dps\\*\\node_modules\\@dps & node_modules\\.bin\\rimraf dist && node_modules\\.bin\\mkdirp dist && node_modules\\.bin\\mkdirp src\\shared"
     },
-    "start": "ng serve frontend --watch --aot true --configuration dev,en --proxy-config proxy.conf.json",
-    "start-en": "ng serve frontend --watch --aot true --configuration dev,en --proxy-config proxy.conf.json",
+    "start": "ng serve frontend --watch --aot true --configuration de --proxy-config proxy.conf.json",
+    "start-en": "ng serve frontend --watch --aot true --configuration en --proxy-config proxy.conf.json",
     "static-serve": "cd dist/static/ && live-server --port=4300 --no-browser --host=localhost --entry-file=/mytbdev/de/index.html",
     "serve-mycms-frontend-devtools": "live-server --port=4201 --no-browser --host=localhost --entry-file=index.html node_modules/@dps/mycms-frontend-commons/dist/devtools/httproot",
     "test": "ng test frontend --preserveSymlinks=true --environment=dev --watch=false",

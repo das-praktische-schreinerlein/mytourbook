@@ -6,7 +6,7 @@ import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.service';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {ComponentUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/component.utils';
 import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';

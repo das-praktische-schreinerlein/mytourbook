@@ -21,7 +21,7 @@ import {
     TourDocObjectDetectionObjectKeyEditFormComponent,
     TourDocObjectDetectionObjectKeyEditFormResultType
 } from '../components/tdoc-odobjectkeyeditform/tdoc-odobjectkeyeditform.component';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {TourDocReplaceFormComponent} from '../components/tdoc-replaceform/tdoc-replaceform.component';
 import {ToastrService} from 'ngx-toastr';
 import * as Promise_serial from 'promise-serial';
