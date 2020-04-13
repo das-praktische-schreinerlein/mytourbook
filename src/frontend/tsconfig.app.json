@@ -15,6 +15,9 @@
     "baseUrl": "",
     "types": []
   },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true
+  },
   "exclude": [
     "test.ts",
     "**/*.spec.ts"

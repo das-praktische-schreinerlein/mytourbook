@@ -18,7 +18,8 @@
   // Add "angularCompilerOptions" with the AppServerModule you wrote
   // set as the "entryModule".
   "angularCompilerOptions": {
-    "entryModule": "app/app.server.module#AppServerModule"
+      "preserveWhitespaces": true,
+      "entryModule": "app/app.server.module#AppServerModule"
   },
   "exclude": [
     "test.ts",
