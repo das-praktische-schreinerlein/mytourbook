@@ -13,6 +13,7 @@ fs.readdirSync('node_modules')
 
 module.exports = {
     entry: './dist/tsc-out/backend/serverAdmin.js',
+    mode: 'production',
     target: 'async-node',
     output: {
         path: path.join(__dirname, 'dist/backend/'),

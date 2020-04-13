@@ -1,5 +1,5 @@
 diff --git a/node_modules/enhanced-resolve/lib/AppendPlugin.js b/node_modules/enhanced-resolve/lib/AppendPlugin.js
-index 7f488fc..7d4f81f 100644
+index 7f488fc..4b9a691 100644
 --- a/node_modules/enhanced-resolve/lib/AppendPlugin.js
 +++ b/node_modules/enhanced-resolve/lib/AppendPlugin.js
 @@ -16,15 +16,22 @@ module.exports = class AppendPlugin {
@@ -16,7 +16,7 @@ index 7f488fc..7d4f81f 100644
 +                        && (request.path.indexOf('@dps\\mycms-frontend-commons') >= 0
 +                                || request.path.indexOf('@dps/mycms-frontend-commons') >= 0)) {
 +                        localAppending = '.js';
-+                        console.log("remapping @dps.js ts->js request.path", request.path, this.appending, localAppending);
++                        // console.log("remapping @dps.js ts->js request.path", request.path, this.appending, localAppending);
 +                    }
 +                const obj = Object.assign({}, request, {
 +                    path: request.path + localAppending,

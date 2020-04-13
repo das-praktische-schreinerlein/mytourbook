@@ -42,6 +42,7 @@ if (profile === 'prod-de') {
 module.exports = {
     entry: {  frontendserverAngular: './src/frontendserver/frontendserverAngular.ts' },
     resolve: { extensions: ['.js', '.ts', '.json'] },
+    mode: 'production',
     target: 'node',
     // this makes sure we include node_modules and other 3rd party libraries
     externals: {

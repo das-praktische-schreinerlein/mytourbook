@@ -26,7 +26,8 @@ import 'zone.js/dist/zone';
 
 // Animations
 // Needed for: All but Chrome and Firefox, Not supported in IE9
-import 'web-animations-js';
+// TODO check if this will this with ie...
+// import 'web-animations-js';
 
 // Date, currency, decimal and percent pipes
 // Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10
