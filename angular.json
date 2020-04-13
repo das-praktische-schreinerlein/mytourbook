@@ -240,13 +240,125 @@
                         ],
                         "exclude": []
                     }
-                },
-                "server": {
+                }
+            }
+        },
+        "server": {
+            "root": "src",
+            "sourceRoot": "src/frontend",
+            "projectType": "application",
+            "architect": {
+                "build": {
                     "builder": "@angular-devkit/build-angular:server",
                     "options": {
                         "outputPath": "dist/server",
-                        "main": "src/frontend/main.server.ts",
-                        "tsConfig": "src/frontend/tsconfig.server.json"
+                        "main": "src/frontend/main.ts",
+                        "tsConfig": "src/frontend/tsconfig.server.json",
+                        "preserveSymlinks": true,
+                        "bundleDependencies": "all"
+                    },
+                    "configurations": {
+                        "de": {
+                            "i18nFile": "src/frontend/locales/messages.de.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "de"
+                        },
+                        "en": {
+                            "i18nFile": "src/frontend/locales/messages.en.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "en"
+                        },
+                        "dev-de": {
+                            "progress":  false,
+                            "i18nFile": "src/frontend/locales/messages.de.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "de",
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                        },
+                        "dev-en": {
+                            "i18nFile": "src/frontend/locales/messages.en.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "en",
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false
+                        },
+                        "beta-de": {
+                            "i18nFile": "src/frontend/locales/messages.de.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "de",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/frontend/environments/environment.ts",
+                                    "with": "src/frontend/environments/environment.beta.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false
+                        },
+                        "beta-en": {
+                            "i18nFile": "src/frontend/locales/messages.en.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "en",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/frontend/environments/environment.ts",
+                                    "with": "src/frontend/environments/environment.beta.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false
+                        },
+                        "prod-de": {
+                            "i18nFile": "src/frontend/locales/messages.de.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "de",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/frontend/environments/environment.ts",
+                                    "with": "src/frontend/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false
+                        },
+                        "prod-en": {
+                            "i18nFile": "src/frontend/locales/messages.en.xlf",
+                            "i18nFormat": "xlf",
+                            "i18nLocale": "en",
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/frontend/environments/environment.ts",
+                                    "with": "src/frontend/environments/environment.prod.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false
+                        }
                     }
                 }
             }
