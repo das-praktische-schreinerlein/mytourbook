@@ -1,7 +1,6 @@
 import proxy from 'http-proxy-middleware';
 import express from 'express';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
-import {isArray} from 'util';
 
 export enum PictureResolutions {
     'x100', 'x400', 'x600'
@@ -128,8 +127,8 @@ export class AssetsServerModule {
                 .get(function(req, res, next) {
                     const tdoc: TourDocRecord = req['tdoc'];
                     const resolution = req['resolution'];
-                    if (resolution === undefined || tdoc === undefined ||
-                        !isArray(tdoc['tdocimages']) || tdoc['tdocimages'].length < 0) {
+                    if (resolution === undefined || tdoc === undefined
+                        || !Array.isArray(tdoc['tdocimages']) || tdoc['tdocimages'].length < 1) {
                         res.status(200);
                         res.sendFile(errorFile, {root: filePathErrorDocs});
                         return;

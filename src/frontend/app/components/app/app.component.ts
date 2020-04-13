@@ -84,7 +84,7 @@ export class AppComponent {
     private doBrowserCheck() {
         // check ie
         const browser = this.layoutService.getBrowser();
-        switch (browser && browser['name']) {
+        switch (browser && browser['name']) { // NOSONAR more possible :-)
             case 'ie':
                 this.toastr.warning('<h4>Auweia</h4>\n' +
                     'Dieser Browser ist leider etwas "..." und wird die Seite wahrscheinlich nicht richtig darstellen können :-(<br />\n' +

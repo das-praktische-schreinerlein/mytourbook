@@ -31,7 +31,7 @@ export type FileSystemDBSyncMatchingType = 'EXIFDATE' | 'FILEDATE' | 'FILENAME' 
 export interface DBFileInfoType extends FileInfoType {
     id: string;
     matching: FileSystemDBSyncMatchingType;
-    matchingDetails: String;
+    matchingDetails: string;
     matchingScore: number;
 }
 export interface FileSystemDBSyncType {
@@ -382,7 +382,7 @@ export class TourDocMediaManagerModule {
                     resolve(metadata);
                 });
         });
-    };
+    }
 
     public scaleTourDocRecord(tdoc: TourDocRecord, width: number): Promise<{}> {
         const tdocImages = tdoc.get('tdocimages');

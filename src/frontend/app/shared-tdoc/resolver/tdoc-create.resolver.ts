@@ -25,7 +25,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                     let name = value.data.name;
                     if (name !== undefined && name !== null ) {
                         for (const replacement of this.getNameReplacements()) {
-                            name = name.replace(replacement[0], <string>replacement[1]);
+                            name = name.replace(replacement[0], replacement[1]);
                         }
                         value.data.name = name;
                     }
@@ -64,11 +64,6 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                 fields.push('datestart', 'dateend');
                 break;
             case 'image':
-                fields.push('datestart', 'locId');
-                fields.push('tdocratepers.gesamt',
-                    'tdocratepers.motive',
-                    'tdocratepers.wichtigkeit');
-                break;
             case 'video':
                 fields.push('datestart', 'locId');
                 fields.push('tdocratepers.gesamt',
@@ -87,7 +82,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
             let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null ? tdoc.locHirarchie : '';
             locHirarchie = locHirarchie.replace(/^OFFEN -> /, '');
             for (const replacement of this.getLocationReplacements()) {
-                locHirarchie = locHirarchie.replace(replacement[0], <string>replacement[1]);
+                locHirarchie = locHirarchie.replace(replacement[0], replacement[1]);
             }
 
             const locs = locHirarchie.split(/ -> /);
@@ -134,15 +129,15 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         }
     }
 
-    protected getNameReplacements(): [RegExp, String][] {
+    protected getNameReplacements(): [RegExp, string][] {
         return this.getCommonReplacements('components.tdoc-create-resolver.nameReplacements');
     }
 
-    protected getLocationReplacements(): [RegExp, String][] {
+    protected getLocationReplacements(): [RegExp, string][] {
         return this.getCommonReplacements('components.tdoc-create-resolver.locationReplacements');
     }
 
-    protected getCommonReplacements(configKey: string): [RegExp, String][] {
+    protected getCommonReplacements(configKey: string): [RegExp, string][] {
         const config = this.myAppService.getAppConfig();
         const replacementConfig = [];
         const value = BeanUtils.getValue(config, configKey);

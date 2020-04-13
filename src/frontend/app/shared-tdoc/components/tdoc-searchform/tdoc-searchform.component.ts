@@ -250,7 +250,6 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
 
     public clearNearBy() {
         const me = this;
-        const values = this.searchFormGroup.getRawValue();
         me.searchFormGroup.patchValue({'nearby': undefined});
         me.searchFormGroup.patchValue({'nearbyAddress': ''});
         me.doSearch();

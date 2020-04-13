@@ -28,7 +28,7 @@ export class TourDocDataServiceStub {
 
     search(searchForm: TourDocSearchForm): Promise<TourDocSearchResult> {
         return Promise.resolve(new TourDocSearchResult(searchForm, 0, [], new Facets()));
-    };
+    }
 
     newSearchResult(tdocSearchForm: TourDocSearchForm, recordCount: number,
                     currentRecords: TourDocRecord[], facets: Facets): TourDocSearchResult {

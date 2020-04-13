@@ -55,13 +55,11 @@ export class TourDocDataServiceModule {
 
     public static getObjectDetectionDataStore(profile: string, backendConfig: {}): CommonObjectDetectionProcessingDatastore {
         if (!this.odDataStores.has(profile)) {
-            switch (backendConfig['tdocDataStoreAdapter']) {
-                case 'TourDocSqlMytbDbAdapter':
-                    this.odDataStores.set(profile, TourDocDataServiceModule.createObjectDetectionDataStoreMytbDbSql(backendConfig));
-                    break;
-                default:
-                    throw new Error('configured tdocDataStoreAdapter not exist as ObjectDetectionDataStore:'
-                        + backendConfig['tdocDataStoreAdapter']);
+            if (backendConfig['tdocDataStoreAdapter'] === 'TourDocSqlMytbDbAdapter') {
+                this.odDataStores.set(profile, TourDocDataServiceModule.createObjectDetectionDataStoreMytbDbSql(backendConfig));
+            } else {
+                throw new Error('configured tdocDataStoreAdapter not exist as ObjectDetectionDataStore:'
+                    + backendConfig['tdocDataStoreAdapter']);
             }
         }
 

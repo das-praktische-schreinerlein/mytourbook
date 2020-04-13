@@ -437,7 +437,7 @@ export abstract class CommonQueuedObjectDetectionProcessingService {
         if (detectionResponse.results && detectionResponse.results.length > 0) {
             for (const detectionResult of detectionResponse.results) {
                 const detector = me.sqlQueryBuilder.sanitizeSqlFilterValue(detectionResult.detector);
-                if (noSuggestionDetectorNames.indexOf(detector) > 0) {
+                if (noSuggestionDetectorNames.indexOf(detector) >= 0) {
                     noSuggestionDetectorNames.splice(noSuggestionDetectorNames.indexOf(detector), 1);
                 }
                 detectionResultPromises.push(function () {

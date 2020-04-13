@@ -271,8 +271,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         return this.searchFormUtils.searchFormToHumanReadableMarkup(filters, true, obJCache, this.getHrdIds());
     }
 
-    searchFormToHumanReadableFilter(tdocSearchForm: TourDocSearchForm): HumanReadableFilter[] {
-        const searchForm = (tdocSearchForm ? tdocSearchForm : new TourDocSearchForm({}));
+    searchFormToHumanReadableFilter(searchForm: TourDocSearchForm): HumanReadableFilter[] {
+        const tdocSearchForm = (searchForm ? searchForm : new TourDocSearchForm({}));
 
         const res: HumanReadableFilter[] = [];
         res.push(this.translateService.instant('hrt_search') || 'search');

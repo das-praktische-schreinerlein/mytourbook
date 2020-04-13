@@ -25,24 +25,23 @@ export class RedirectGeneratorCommand implements AbstractCommand {
         for (const profile of profiles.split(',')) {
             // generate Redirects
             let redirectConfig: RedirectConfig;
-            switch (profile) {
-                case 'tdocShow':
-                    redirectConfig = {
-                        perPage: 100,
-                        srcUrlPathGenerator: function (config: RedirectConfig, doc: PDocRecord): string[] {
-                            return [srcBaseUrl + 'sections/start/show/redirect/' + doc.id,
-                                srcBaseUrl + 'sections/start/show/unknown/' + doc.id,
-                                srcBaseUrl + 'sections/start/show/nocomment/' + doc.id];
-                        },
-                        redirectGenerator: function (config: RedirectConfig, doc: PDocRecord): string {
-                            const name = StringUtils.generateTechnicalName(doc.name ? doc.name : 'name');
-                            return destBaseUrl + 'sections/start/show/' + name + '/' + doc.id;
-                        }
-                    };
-                    break;
-                default:
-                    return utils.reject('ERROR - unknown profile to generate redirects for: ' + profile);
+            if (profile === 'tdocShow') {
+                redirectConfig = {
+                    perPage: 100,
+                    srcUrlPathGenerator: function (config: RedirectConfig, doc: PDocRecord): string[] {
+                        return [srcBaseUrl + 'sections/start/show/redirect/' + doc.id,
+                            srcBaseUrl + 'sections/start/show/unknown/' + doc.id,
+                            srcBaseUrl + 'sections/start/show/nocomment/' + doc.id];
+                    },
+                    redirectGenerator: function (config: RedirectConfig, doc: PDocRecord): string {
+                        const name = StringUtils.generateTechnicalName(doc.name ? doc.name : 'name');
+                        return destBaseUrl + 'sections/start/show/' + name + '/' + doc.id;
+                    }
+                };
+            } else {
+                return utils.reject('ERROR - unknown profile to generate redirects for: ' + profile);
             }
+
             const dataservice: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
                 CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
                     TourDocDataServiceModule.getDataService('tdocSolrReadOnly', generatorConfig.backendConfig);
