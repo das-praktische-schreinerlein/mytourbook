@@ -278,6 +278,7 @@
     "hrt_in": "in",
     "hrt_nearby": "nearby",
     "hrt_actiontype": "with actions:",
+    "hrt_dashboardFilter": "dashboard-filter:",
     "hrt_when": "at time:",
     "hrt_keyword": "with keywords:",
     "hrt_fulltext": "contains:",

@@ -172,6 +172,7 @@
     "hrt_in": "in",
     "hrt_nearby": "nahe",
     "hrt_actiontype": "mit Aktionen:",
+    "hrt_dashboardFilter": "Dashboard-Filter:",
     "hrt_when": "im Zeitraum:",
     "hrt_keyword": "mit Schlüsselworten:",
     "hrt_fulltext": "enthält:",
