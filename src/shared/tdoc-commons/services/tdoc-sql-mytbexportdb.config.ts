@@ -237,24 +237,30 @@ export class TourDocSqlMytbExportDbConfig {
                 'relevance': 'k_datevon DESC'
             },
             filterMapping: {
-                doublettes: '"dummy"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'kategorie_full.k_id',
                 loc_id_i: 'kategorie_full.l_id',
                 loc_id_is: 'kategorie_full.l_id',
                 route_id_i: 'kategorie_full.t_id',
                 route_id_is: 'kategorie_full.t_id',
-                route_no_id_is: 'kategorie_full.t_id',
                 track_id_i: 'kategorie_full.k_id',
                 track_id_is: 'kategorie_full.k_id',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: 'kategorie_full.l_id',
                 html: 'CONCAT(k_html, " ", k_name, " ", k_keywords, " ", k_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             spartialConfig: {
@@ -384,6 +390,7 @@ export class TourDocSqlMytbExportDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("IMAGE", "_", image.i_id)',
                     action: AdapterFilterActions.NOTIN
@@ -532,29 +539,35 @@ export class TourDocSqlMytbExportDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
-                doublettes: '"dummy"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
                 route_id_i: 'kategorie_full.t_id',
                 route_id_is: 'kategorie_full.t_id',
-                route_no_id_is: '"dummy"',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: '"dummy"',
-                odstates_ss: '"dummy"',
-                odprecision_is: '"dummy"',
-                odcats_txt: '"dummy"',
-                odkeys_txt: '"dummy"',
-                oddetectors_txt: '"dummy"',
+                odstates_ss: '"666dummy999"',
+                odprecision_is: '"666dummy999"',
+                odcats_txt: '"666dummy999"',
+                odkeys_txt: '"666dummy999"',
+                oddetectors_txt: '"666dummy999"',
                 html: 'CONCAT(i_katname, " ", i_keywords, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -678,6 +691,7 @@ export class TourDocSqlMytbExportDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+// common
                 'id_notin_is': {
                     filterField: 'CONCAT("VIDEO", "_", video.v_id)',
                     action: AdapterFilterActions.NOTIN
@@ -826,29 +840,35 @@ export class TourDocSqlMytbExportDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
-                doublettes: '"dummy"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'video.v_id',
                 video_id_i: 'video.v_id',
                 video_id_is: 'video.v_id',
-                image_id_is: '"dummy"',
-                image_id_i: '"dummy"',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
                 route_id_i: 'kategorie_full.t_id',
                 route_id_is: 'kategorie_full.t_id',
-                route_no_id_is: '"dummy"',
                 track_id_i: 'video.k_id',
                 track_id_is: 'video.k_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: '"dummy"',
-                odstates_ss: '"dummy"',
-                odprecision_is: '"dummy"',
-                odcats_txt: '"dummy"',
-                odkeys_txt: '"dummy"',
-                oddetectors_txt: '"dummy"',
+                odstates_ss: '"666dummy999"',
+                odprecision_is: '"666dummy999"',
+                odcats_txt: '"666dummy999"',
+                odkeys_txt: '"666dummy999"',
+                oddetectors_txt: '"666dummy999"',
                 html: 'CONCAT(v_katname, " ", v_keywords, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -990,6 +1010,7 @@ export class TourDocSqlMytbExportDbConfig {
                 't_route_dauer',
                 'ROUND(ROUND(t_route_dauer * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+// common
                 'id_notin_is': {
                     filterField: 'CONCAT("ROUTE", "_", tour.t_id)',
                     action: AdapterFilterActions.NOTIN
@@ -1166,23 +1187,29 @@ export class TourDocSqlMytbExportDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
-                doublettes: '"dummy"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
-                route_no_id_is: '"dummy"',
-                news_id_i: '"dummy"',
-                news_id_is: '"dummy"',
-                trip_id_is: '"dummy"',
+                news_id_i: '"666dummy999"',
+                news_id_is: '"666dummy999"',
+                trip_id_is: '"666dummy999"',
                 loc_id_i: 'tour.l_id',
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: 'tour.l_id',
                 html: 'CONCAT(t_name, " ", t_keywords, " ", t_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -1293,6 +1320,7 @@ export class TourDocSqlMytbExportDbConfig {
                 'l_lochirarchietxt',
                 'l_lochirarchieids'],
             facetConfigs: {
+// common
                 'id_notin_is': {
                     filterField: 'CONCAT("LOCATION", "_", location.l_id)',
                     action: AdapterFilterActions.NOTIN
@@ -1401,19 +1429,25 @@ export class TourDocSqlMytbExportDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
-                doublettes: '"dummy"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
-                loc_no_parent_id_is: '"dummy"',
-                news_id_is: '"dummy"',
-                trip_id_is: '"dummy"',
-                route_no_id_is: '"dummy"',
+                news_id_is: '"666dummy999"',
+                trip_id_is: '"666dummy999"',
                 html: 'CONCAT(l_name, " ", l_html, " " , l_keywords, " ", l_meta_shortdesc_md, " ", l_lochirarchietxt)'
             },
             fieldMapping: {
@@ -1491,6 +1525,7 @@ export class TourDocSqlMytbExportDbConfig {
                 'tr_meta_shortdesc_md',
                 'tr_meta_shortdesc_html'],
             facetConfigs: {
+// common
                 'id_notin_is': {
                     filterField: 'CONCAT("TRIP", "_", trip.tr_id)',
                     action: AdapterFilterActions.NOTIN
@@ -1589,27 +1624,33 @@ export class TourDocSqlMytbExportDbConfig {
                 'relevance': 'tr_datevon DESC'
             },
             filterMapping: {
-                doublettes: '"dummy"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
-                image_id_is: '"dummy"',
-                image_id_i: '"dummy"',
-                track_id_is: '"dummy"',
-                track_id_i: '"dummy"',
-                route_id_is: '"dummy"',
-                route_no_id_is: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
+                track_id_is: '"666dummy999"',
+                track_id_i: '"666dummy999"',
+                route_id_is: '"666dummy999"',
                 loc_id_i: 'trip.l_id',
                 loc_id_is: 'trip.l_id',
-                news_id_is: '"dummy"',
-                loc_lochirarchie_ids_txt: '"dummy"',
-                loc_no_parent_id_is: 'trip.l_id',
+                news_id_is: '"666dummy999"',
+                loc_lochirarchie_ids_txt: '"666dummy999"',
                 html: 'CONCAT(tr_name, " ", tr_keywords, " ", tr_meta_shortdesc_md)'
             },
             fieldMapping: {
@@ -1787,28 +1828,34 @@ export class TourDocSqlMytbExportDbConfig {
                 'relevance': 'n_date DESC'
             },
             filterMapping: {
-                doublettes: '"dummy"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
-                image_id_i: '"dummy"',
-                image_id_is: '"dummy"',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
-                track_id_i: '"dummy"',
-                track_id_is: '"dummy"',
-                trip_id_i: '"dummy"',
-                trip_id_is: '"dummy"',
-                location_id_is: '"dummy"',
-                route_id_i: '"dummy"',
-                route_id_is: '"dummy"',
-                route_no_id_is: '"dummy"',
-                loc_lochirarchie_ids_txt: '"dummy"',
-                loc_no_parent_id_is: '"dummy"',
+                image_id_i: '"666dummy999"',
+                image_id_is: '"666dummy999"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
+                track_id_i: '"666dummy999"',
+                track_id_is: '"666dummy999"',
+                trip_id_i: '"666dummy999"',
+                trip_id_is: '"666dummy999"',
+                location_id_is: '"666dummy999"',
+                route_id_i: '"666dummy999"',
+                route_id_is: '"666dummy999"',
+                loc_lochirarchie_ids_txt: '"666dummy999"',
                 html: 'CONCAT(n_headline, " ", n_keywords, " ", n_message_md)'
             },
             fieldMapping: {

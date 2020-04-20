@@ -32,7 +32,8 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         objectDetectionPrecision: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objectDetectionState: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         persons: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
-        objects: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false))
+        objects: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        dashboardFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false))
     };
 
     where: string;
@@ -54,6 +55,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
     objectDetectionState: string;
     objects: string;
     persons: string;
+    dashboardFilter: string;
 
     constructor(values: {}) {
         super(values);
@@ -76,6 +78,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         this.objectDetectionState = values['objectDetectionState'] || '';
         this.objects = values['objects'] || '';
         this.persons = values['persons'] || '';
+        this.dashboardFilter = values['dashboardFilter'] || '';
     }
 
     toString() {
@@ -127,8 +130,9 @@ export class TourDocSearchFormFactory {
             TourDocSearchForm.tdocFields.objectDetectionPrecision.validator.sanitize(values['objectDetectionPrecision']) || '';
         sanitizedValues.objectDetectionState =
             TourDocSearchForm.tdocFields.objectDetectionState.validator.sanitize(values['objectDetectionState']) || '';
-        sanitizedValues.objects = TourDocSearchForm.tdocFields.persons.validator.sanitize(values['objects']) || '';
+        sanitizedValues.objects = TourDocSearchForm.tdocFields.objects.validator.sanitize(values['objects']) || '';
         sanitizedValues.persons = TourDocSearchForm.tdocFields.persons.validator.sanitize(values['persons']) || '';
+        sanitizedValues.dashboardFilter = TourDocSearchForm.tdocFields.dashboardFilter.validator.sanitize(values['dashboardFilter']) || '';
 
         return sanitizedValues;
     }
@@ -172,6 +176,7 @@ export class TourDocSearchFormValidator {
         state = TourDocSearchForm.tdocFields.objectDetectionState.validator.isValid(values['objectDetectionState']) && state;
         state = TourDocSearchForm.tdocFields.objects.validator.isValid(values['objects']) && state;
         state = TourDocSearchForm.tdocFields.persons.validator.isValid(values['persons']) && state;
+        state = TourDocSearchForm.tdocFields.dashboardFilter.validator.isValid(values['dashboardFilter']) && state;
 
         return state;
     }

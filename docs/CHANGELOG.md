@@ -2,6 +2,26 @@
  
 # Versions
  
+## 4.2.0
+- improved and fixed charts and maps
+
+### new features
+- frontend: improved and added new charts
+
+### improvements
+- none
+
+### bug fixes
+- frontend: use maps-fixes from commons
+ 
+### breaking changes
+- none
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
+
+
 ## 4.1.0
 - moved facetcache to commons
 - improved search, dashboard and data-management
@@ -10,7 +30,6 @@
 - moved common action-tag-components and navigation-components from mytourbook to frontend-commons
 - moved full implementation of actions and actiontags to commons
 - bumped up deps
-
 
 ### new features
 - backend: added job to find corresponding TourDocRecords for media

@@ -13,6 +13,9 @@
             <div class="col-sm-12">
                 Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter" (click)="updateFormState(true);"></div>
                 <ng-container *ngIf="!short">
+                    <button *ngIf="!showDashboardFilter && showDashboardFilterAvailable" class="btn btn-configure btn-sm float-right" (click)="showDashboardFilter = true; updateFormState();">
+                        <span i18n="button show dashboardFilterform|Buttontext to show dashboardFilterform@@button.searchform.show.dashboardFilterform">"Dashboard" filtern</span>
+                        <span>&#x21D3;</span></button>
                     <button *ngIf="!showObjectDetection && showObjectDetectionAvailable" class="btn btn-configure btn-sm float-right" (click)="showObjectDetection = true; updateFormState();">
                         <span i18n="button show ObjectDetectionDataform|Buttontext to show ObjectDetectiondataform@@button.searchform.show.ObjectDetectiondataform">"Objekterkennung" filtern</span>
                         <span>&#x21D3;</span></button>
@@ -123,6 +126,30 @@
 
     <!-- extended searchform-->
     <ng-container *ngIf="!short && showForm">
+        <fieldset class="hidden-print" *ngIf="showDashboardFilter && showDashboardFilterAvailable">
+            <legend i18n="details label|Label for fieldset: dashboardFilter@@label.searchform.tdoc.legend.dashboardFilter">&#x231b; Dashboard</legend>
+            <div class="row">
+                <div [class]="(width8 + ' input-group input-group-sm')">
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('dashboardFilter').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="dashboardFilter label|Label for filter: dashboardFilter@@label.searchform.tdoc.dashboardFilter">Dashboard:</label>
+                    <ng-container *ngIf="optionsSelectDashboardFilter.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectDashboardFilter"
+                                                 [settings]="settingsSelectDashboardFilter"
+                                                 [texts]="textsSelectDashboardFilter"
+                                                 formControlName="dashboardFilter"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
+                <div [class]="(width4 + ' input-group input-group-sm justify-content-end')">
+                    <button class="btn btn-configure btn-sm" (click)="showDashboardFilter = false; updateFormState();">
+                        <span i18n="button hide Moreform|Buttontext to hide Moreform@@button.searchform.hide.Moreform">ausblenden</span>
+                        <span>&#x21D1;</span></button>
+                </div>
+            </div>
+        </fieldset>
+
         <fieldset class="hidden-print" *ngIf="showWhere && showWhereAvailable">
             <legend i18n="where label|Label for fieldset: where@@label.searchform.tdoc.legend.where">&#x26f3; Wo</legend>
             <div class="row">
@@ -478,6 +505,7 @@
                 </div>
             </div>
         </fieldset>
+
         <fieldset class="hidden-print" *ngIf="showSpecialFilter && humanReadableSpecialFilter !== ''">
             <div class="row">
                 <div [class]="(width8 + ' form-inline input-group input-group-sm')">
