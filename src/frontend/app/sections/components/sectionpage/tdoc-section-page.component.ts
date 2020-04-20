@@ -133,49 +133,22 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     getDashboardFiltersForType(profile: string, recordType: string, sort?: string): any {
         const filters = this.getFiltersForType(recordType, sort);
         switch (profile) {
-            case 'noSubType':
-                filters['what'] = filters['what'] ? filters['what'] + ';' : '';
-                filters['what'] += 'action:null,ac_,ac_null,ac_0';
-                break;
-            case 'unrated':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'personalRateOverall:null,0';
-                break;
-            case 'todoKeywords':
-                filters['what'] = filters['what'] ? filters['what'] + ';' : '';
-                filters['what'] += 'keyword:KW_TODOKEYWORDS';
-                break;
-            case 'todoDesc':
-                filters['fulltext'] = 'TODODESC';
-                break;
+            // dashboard
             case 'doublettes':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'doublettes:doublettes';
-                break;
             case 'noFavoriteChildren':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'noFavoriteChildren:noFavoriteChildren';
-                break;
-            case 'unRatedChildren':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'unRatedChildren:unRatedChildren';
-                break;
             case 'noMainFavoriteChildren':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'noMainFavoriteChildren:noMainFavoriteChildren';
-                break;
             case 'noCoordinates':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'noCoordinates:noCoordinates';
-                break;
             case 'noLocation':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'loc_no_parent_id_is:null,0,1';
-                break;
             case 'noRoute':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'route_no_id_is:null,0,1';
+            case 'noSubType':
+            case 'todoDesc':
+            case 'todoKeywords':
+            case 'unrated':
+            case 'unRatedChildren':
+                filters['dashboardFilter'] = filters['dashboardFilter'] ? filters['dashboardFilter'] + ';' : '';
+                filters['dashboardFilter'] += profile;
                 break;
+            // Others
             case 'rated':
                 filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
                 filters['moreFilter'] += 'personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';

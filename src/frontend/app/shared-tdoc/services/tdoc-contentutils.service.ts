@@ -127,10 +127,10 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
                 filters['sort'] = 'dateAsc';
                 filters['perPage'] = 100;
-            }else if (type === 'ROUTE') {
+            } else if (type === 'ROUTE') {
                 filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'TRIP' && record.tripId) {
-                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['moreFilter'] = 'trip_id_is:' + record.tripId;
             } else if (type === 'LOCATION' && record.locId) {
                 filters['moreFilter'] = 'loc_id_i:' + record.locId;
             } else if (type === 'NEWS' && record.newsId) {
@@ -206,7 +206,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['moreFilter'] = 'trip_id_i:' + record.tripId;
                 filters['perPage'] = 12;
             } else if (type === 'TRACK') {
-                filters['moreFilter'] = 'trip_id_i:' + record.tripId;
+                filters['moreFilter'] = 'trip_id_is:' + record.tripId;
                 filters['perPage'] = 99;
                 filters['sort'] = 'dateAsc';
             } else if (type === 'NEWS' && record.newsId) {
