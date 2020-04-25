@@ -95,7 +95,7 @@ export class VisJsProfileTimeChart extends VisJsGeoProfileMap {
                 const point = geoElement.points[p];
                 if (point.lat && point.lng && point.alt !== undefined) {
                     const geoElement = geoElements[i];
-                    dist += lastPoint != undefined
+                    dist += lastPoint !== undefined
                         ? point.distanceTo(lastPoint)
                         : 0;
 
@@ -150,7 +150,7 @@ export class VisJsProfileChartComponent implements AfterViewChecked, OnChanges {
     public flgGenerateNameFromGpx?: boolean;
 
     @Input()
-    public flagTimeChart?: boolean = false;
+    public flagTimeChart? = false;
 
     constructor(private http: MinimalHttpBackendClient) {
         this.gpxLoader = new GeoLoader(http, new GeoGpxParser());
@@ -223,8 +223,8 @@ export class VisJsProfileChartComponent implements AfterViewChecked, OnChanges {
                 verticalRatio: 0.2,
                 xBarWidth: 0.004,
                 yBarWidth: 0.004,
-                xLabel: 'lat',
-                yLabel: 'lon',
+                xLabel: 'Tour',
+                yLabel: 'km',
                 zLabel: 'm',
                 cameraPosition: {
                     horizontal: 1.0,

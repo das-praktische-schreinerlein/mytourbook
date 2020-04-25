@@ -43,6 +43,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
     private validMoreInFilterNames = {
         id_notin_is: true,
         doublettes: true,
+        conflictingRates: true,
         noCoordinates: true,
         noFavoriteChildren: true,
         noMainFavoriteChildren: true,

@@ -135,6 +135,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         switch (profile) {
             // dashboard
             case 'doublettes':
+            case 'conflictingRates':
             case 'noFavoriteChildren':
             case 'noMainFavoriteChildren':
             case 'noCoordinates':
@@ -211,6 +212,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO';
             case 'doublettes':
                 return recordType !== 'ODIMGOBJECT';
+            case 'conflictingRates':
+                return recordType === 'TRACK';
             case 'noFavoriteChildren':
                 return recordType === 'TRACK';
             case 'unRatedChildren':

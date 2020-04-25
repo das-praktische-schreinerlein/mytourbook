@@ -22,7 +22,8 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
             this.searchFormUtils.getFacetValues(searchResult, 'todoKeywords', '', 'label.dashboardColumn.')).concat(
             this.searchFormUtils.getFacetValues(searchResult, 'noFavoriteChildren', '', 'label.dashboardColumn.')).concat(
             this.searchFormUtils.getFacetValues(searchResult, 'noMainFavoriteChildren', '', 'label.dashboardColumn.')).concat(
-            this.searchFormUtils.getFacetValues(searchResult, 'unRatedChildren', '', 'label.dashboardColumn.'));
+            this.searchFormUtils.getFacetValues(searchResult, 'unRatedChildren', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'conflictingRates', '', 'label.dashboardColumn.'));
     }
 
     getWhereValues(searchResult: TourDocSearchResult): any[] {

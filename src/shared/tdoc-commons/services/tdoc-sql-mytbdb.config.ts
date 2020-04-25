@@ -39,10 +39,18 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT k_id AS id FROM kategorie WHERE k_name IN' +
-                        '                (select distinct k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
+                        '                (SELECT DISTINCT k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON kategorie.k_id=doublettes.id',
                     triggerParams: ['doublettes'],
+                    groupByFields: []
+                },
+                {
+                    from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
+                        '   k_rate_motive > 0 AND k_id NOT IN ' +
+                        '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 6))) conflictingRates' +
+                        '  ON kategorie.k_id=conflictingRates.id',
+                    triggerParams: ['conflictingRates'],
                     groupByFields: []
                 },
                 {
@@ -167,9 +175,20 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
                         ' FROM kategorie INNER JOIN (SELECT k_id AS id FROM kategorie WHERE k_name IN' +
-                        '                (select distinct k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
+                        '                (SELECT DISTINCT k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON kategorie.k_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "conflictingRates" AS value,' +
+                        ' "conflictingRates" AS label, "true" AS id' +
+                        ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
+                        '   k_rate_motive > 0 AND k_id NOT IN ' +
+                        '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 6))) conflictingRates' +
+                        '  ON kategorie.k_id=conflictingRates.id',
                     cache: {
                         useCache: false
                     }
@@ -413,6 +432,7 @@ export class TourDocSqlMytbDbConfig {
             filterMapping: {
                 // dashboard
                 doublettes: '"doublettes"',
+                conflictingRates: '"conflictingRates"',
                 noFavoriteChildren: '"noFavoriteChildren"',
                 noMainFavoriteChildren: '"noMainFavoriteChildren"',
                 noCoordinates: '"666dummy999"',
@@ -573,7 +593,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT i_id AS id FROM image INNER JOIN' +
-                        '                (select distinct i_dir, i_file FROM image GROUP BY i_dir, i_file' +
+                        '                (SELECT DISTINCT i_dir, i_file FROM image GROUP BY i_dir, i_file' +
                         '                 HAVING COUNT(*) > 1) doublettes' +
                         '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
                         '             ON image.i_id = doublettes2.id',
@@ -716,13 +736,17 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(image.i_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
                         ' FROM image INNER JOIN (SELECT i_id AS id FROM image INNER JOIN' +
-                        '                (select distinct i_dir, i_file FROM image GROUP BY i_dir, i_file' +
+                        '                (SELECT DISTINCT i_dir, i_file FROM image GROUP BY i_dir, i_file' +
                         '                 HAVING COUNT(*) > 1) doublettes' +
                         '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
                         '             ON image.i_id = doublettes2.id',
                     cache: {
                         useCache: false
                     }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
                 },
                 'noCoordinates': {
                     constValues: ['noCoordinates'],
@@ -1021,6 +1045,7 @@ export class TourDocSqlMytbDbConfig {
             filterMapping: {
                 // dashboard
                 doublettes: '"doublettes"',
+                conflictingRates: '"666dummy999"',
                 noFavoriteChildren: '"666dummy999"',
                 noMainFavoriteChildren: '"666dummy999"',
                 noCoordinates: '"666dummy999"',
@@ -1147,7 +1172,7 @@ export class TourDocSqlMytbDbConfig {
                         ' ":::objWidth=", image_object.io_obj_width,' +
                         ' ":::objHeight=", image_object.io_obj_height,' +
                         ' ":::precision=", image_object.io_precision) IN' +
-                        '    (select distinct CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        '    (SELECT DISTINCT CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
                         ' ":::detector=", image_object.io_detector,' +
                         ' ":::objX=", image_object.io_obj_x1,' +
                         ' ":::objY=", image_object.io_obj_y1,' +
@@ -1275,7 +1300,7 @@ export class TourDocSqlMytbDbConfig {
                         ' ":::objWidth=", image_object.io_obj_width,' +
                         ' ":::objHeight=", image_object.io_obj_height,' +
                         ' ":::precision=", image_object.io_precision) IN' +
-                        '    (select distinct CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        '    (SELECT DISTINCT CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
                         ' ":::detector=", image_object.io_detector,' +
                         ' ":::objX=", image_object.io_obj_x1,' +
                         ' ":::objY=", image_object.io_obj_y1,' +
@@ -1295,6 +1320,10 @@ export class TourDocSqlMytbDbConfig {
                     cache: {
                         useCache: false
                     }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
                 },
                 'noCoordinates': {
                     constValues: ['noCoordinates'],
@@ -1582,6 +1611,7 @@ export class TourDocSqlMytbDbConfig {
             filterMapping: {
                 // dashboard
                 doublettes: '"666dummy999"',
+                conflictingRates: '"666dummy999"',
                 noFavoriteChildren: '"666dummy999"',
                 noMainFavoriteChildren: '"666dummy999"',
                 noCoordinates: '"666dummy999"',
@@ -1714,7 +1744,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT v_id AS id FROM video INNER JOIN' +
-                        '                (select distinct v_dir, v_file FROM video GROUP BY v_dir, v_file' +
+                        '                (SELECT DISTINCT v_dir, v_file FROM video GROUP BY v_dir, v_file' +
                         '                 HAVING COUNT(*) > 1) doublettes' +
                         '                ON video.v_file = doublettes.v_file AND video.v_dir = doublettes.v_dir) doublettes2' +
                         '             ON video.v_id = doublettes2.id',
@@ -1836,13 +1866,17 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(video.v_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
                         ' FROM video INNER JOIN (SELECT v_id AS id FROM video INNER JOIN' +
-                        '                (select distinct v_dir, v_file FROM video GROUP BY v_dir, v_file' +
+                        '                (SELECT DISTINCT v_dir, v_file FROM video GROUP BY v_dir, v_file' +
                         '                 HAVING COUNT(*) > 1) doublettes' +
                         '                ON video.v_file = doublettes.v_file AND video.v_dir = doublettes.v_dir) doublettes2' +
                         '             ON video.v_id = doublettes2.id',
                     cache: {
                         useCache: false
                     }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
                 },
                 'noCoordinates': {
                     constValues: ['noCoordinates'],
@@ -2071,6 +2105,7 @@ export class TourDocSqlMytbDbConfig {
             filterMapping: {
                 // dashboard
                 doublettes: '"doublettes"',
+                conflictingRates: '"666dummy999"',
                 noFavoriteChildren: '"666dummy999"',
                 noMainFavoriteChildren: '"666dummy999"',
                 noCoordinates: '"666dummy999"',
@@ -2205,7 +2240,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE t_key' +
-                        '              IN (select distinct t_key AS name' +
+                        '              IN (SELECT DISTINCT t_key AS name' +
                         '                  FROM tour GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON tour.t_id=doublettes.id',
@@ -2327,13 +2362,17 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(tour.t_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
                         ' FROM tour INNER JOIN (SELECT t_id AS id FROM tour WHERE t_key' +
-                        '              IN (select distinct t_key AS name' +
+                        '              IN (SELECT DISTINCT t_key AS name' +
                         '                  FROM tour GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON tour.t_id=doublettes.id',
                     cache: {
                         useCache: false
                     }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
                 },
                 'noCoordinates': {
                     constValues: ['noCoordinates'],
@@ -2578,6 +2617,7 @@ export class TourDocSqlMytbDbConfig {
             filterMapping: {
                 // dashboard
                 doublettes: '"doublettes"',
+                conflictingRates: '"666dummy999"',
                 noFavoriteChildren: '"666dummy999"',
                 noMainFavoriteChildren: '"666dummy999"',
                 noCoordinates: '"666dummy999"',
@@ -2714,7 +2754,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE l_key' +
-                        '              IN (select distinct l_key AS name' +
+                        '              IN (SELECT DISTINCT l_key AS name' +
                         '                  FROM location GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON location.l_id=doublettes.id',
@@ -2804,13 +2844,17 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(location.l_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
                         ' FROM location INNER JOIN (SELECT l_id AS id FROM location WHERE l_key' +
-                        '              IN (select distinct l_key AS name' +
+                        '              IN (SELECT DISTINCT l_key AS name' +
                         '                  FROM location GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON location.l_id=doublettes.id',
                     cache: {
                         useCache: false
                     }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
                 },
                 'noCoordinates': {
                     selectSql: 'SELECT COUNT(location.l_id) AS count, "noCoordinates" AS value,' +
@@ -3057,7 +3101,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') +
-                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
                         '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON trip.tr_id=doublettes.id',
@@ -3127,13 +3171,17 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(trip.tr_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
                         ' FROM trip INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') +
-                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
                         '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON trip.tr_id=doublettes.id',
                     cache: {
                         useCache: false
                     }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
                 },
                 'noCoordinates': {
                     constValues: ['noCoordinates'],
@@ -3294,6 +3342,7 @@ export class TourDocSqlMytbDbConfig {
             filterMapping: {
                 // dashboard
                 doublettes: '"doublettes"',
+                conflictingRates: '"666dummy999"',
                 noFavoriteChildren: '"666dummy999"',
                 noMainFavoriteChildren: '"666dummy999"',
                 noCoordinates: '"666dummy999"',
@@ -3364,7 +3413,7 @@ export class TourDocSqlMytbDbConfig {
             optionalGroupBy: [
                 {
                     from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
-                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
                         '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON news.n_id=doublettes.id',
@@ -3420,13 +3469,17 @@ export class TourDocSqlMytbDbConfig {
                     selectSql: 'SELECT COUNT(news.n_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
                         ' FROM news INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
-                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
                         '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON news.n_id=doublettes.id',
                     cache: {
                         useCache: false
                     }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
                 },
                 'noCoordinates': {
                     constValues: ['noCoordinates'],
@@ -3563,6 +3616,7 @@ export class TourDocSqlMytbDbConfig {
             filterMapping: {
                 // dashboard
                 doublettes: '"doublettes"',
+                conflictingRates: '"666dummy999"',
                 noFavoriteChildren: '"666dummy999"',
                 noMainFavoriteChildren: '"666dummy999"',
                 noCoordinates: '"666dummy999"',

@@ -217,6 +217,7 @@
     "label.dashboardColumn.noRoute": "Ohne Routenzuordnung",
     "label.dashboardColumn.unrated": "Noch nicht bewerted",
     "label.dashboardColumn.doublettes": "Doubletten",
+    "label.dashboardColumn.conflictingRates": "mögliche Bewertungskonflikte",
     "label.dashboardColumn.noFavoriteChildren": "Keine Bild-Favoriten",
     "label.dashboardColumn.unRatedChildren": "Nicht bewertete Bilder",
     "label.dashboardColumn.noMainFavoriteChildren": "kein zugeordneter Main-Favorite",
