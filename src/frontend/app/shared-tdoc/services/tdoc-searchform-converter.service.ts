@@ -63,6 +63,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         moreFilterMap.set('objectDetectionKey', searchForm.objectDetectionKey);
         moreFilterMap.set('objectDetectionPrecision', searchForm.objectDetectionPrecision);
         moreFilterMap.set('objectDetectionState', searchForm.objectDetectionState);
+        moreFilterMap.set('dashboardFilter', searchForm.dashboardFilter);
         let moreFilter = this.searchParameterUtils.joinParamsToOneRouteParameter(moreFilterMap, this.splitter);
         if (moreFilter !== undefined && moreFilter.length > 0) {
             if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
@@ -133,7 +134,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
             ['techDataAltitudeMax:', 'techDataAscent:', 'techDataDistance:', 'techDataDuration:', 'techRateOverall:',
              'personalRateOverall:', 'personalRateDifficulty:',
              'objectDetectionCategory:', 'objectDetectionDetector:', 'objectDetectionKey:', 'objectDetectionPrecision:',
-             'objectDetectionState:']);
+             'objectDetectionState:', 'dashboardFilter:']);
         let moreFilter = '';
         if (moreFilterValues.has('unknown')) {
             moreFilter += ',' + this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('unknown'), '', ',');
@@ -171,6 +172,12 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         const objectDetectionState: string = (moreFilterValues.has('objectDetectionState:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('objectDetectionState:'), 'objectDetectionState:',
                 ',') : '');
+        const dashboardFilter: string = (params.dashboardFilter
+            ? params.dashboardFilter
+            : ( moreFilterValues.has('dashboardFilter:') ?
+                this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('dashboardFilter:'), 'dashboardFilter:',
+                ',')
+                : ''));
 
         const whatFilterValues = this.searchParameterUtils.splitValuesByPrefixes(params.what, this.splitter,
             ['action:', 'keyword:', 'playlists:', 'persons:', 'objects:']);
@@ -263,6 +270,9 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         searchForm.sort = this.searchParameterUtils.useValueDefaultOrFallback(params['sort'], defaults['sort'], '');
         searchForm.type = this.searchParameterUtils.useValueDefaultOrFallback(
             this.searchParameterUtils.replacePlaceHolder(params['type'], /^alle$/, ''), defaults['type'], '').toLowerCase();
+        searchForm.dashboardFilter = this.searchParameterUtils.useValueDefaultOrFallback(
+            this.searchParameterUtils.replacePlaceHolder(dashboardFilter, /^alles$/, ''),
+            defaults['dashboardFilter'], '');
         searchForm.perPage = +params['perPage'] || 10;
         searchForm.pageNum = +params['pageNum'] || 1;
     }
@@ -289,7 +299,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         const what = (tdocSearchForm.what ? tdocSearchForm.what : '').replace(new RegExp('kw_', 'gi'), '');
         res.push(this.searchFormUtils.valueToHumanReadableText(what, 'hrt_keyword', undefined, true));
 
-        const moreFilterNames = Object.getOwnPropertyNames(this.getHrdIds()).concat(['route_no_id_is']);
+        const moreFilterNames = Object.getOwnPropertyNames(this.getHrdIds()).concat(['noRoute']);
         const moreFilterValues = this.searchParameterUtils.splitValuesByPrefixes(tdocSearchForm.moreFilter, this.splitter, moreFilterNames);
         moreFilterValues.forEach((value, key) => {
             const moreValue = this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get(key), key + ':', ',');
@@ -321,6 +331,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.objectDetectionState, 'hrt_objectDetectionState',
             undefined, true, 'label.odimgobject.state.'));
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.playlists, 'hrt_playlists', undefined, true));
+        res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.dashboardFilter, 'hrt_dashboardFilter',
+            undefined, true, 'label.dashboardColumn.'));
 
         return res;
     }

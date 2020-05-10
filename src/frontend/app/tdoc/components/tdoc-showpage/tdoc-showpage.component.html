@@ -106,7 +106,7 @@
     </div>
 
     <div>
-        <div [class]="('container content-container map-container ' + (!flgShowProfileMap ? 'container-fullline' : ''))" *ngIf="flgShowMap">
+        <div [class]="('container content-container map-container container-fullline')" *ngIf="flgShowMap">
             <app-tdoc-map [mapId]="'showMap'"
                           [height]="'400px'"
                           [mapZoom]="'9'"
@@ -126,6 +126,17 @@
                                  [height]="'370px'"
                                  [showImageTrackAndGeoPos]="false"
                                  [tdocs]="tracks"></app-tdoc-profilemap>
+            <div class="container profile-toggler-container">
+                <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && flgProfileMapAvailable">
+                    <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>
+                    <span class="btn-action-icon">&#x21D1;</span></button>
+            </div>
+        </div>
+        <div class="container content-container map-container" *ngIf="flgShowProfileMap">
+            <app-tdoc-profilechart [chartId]="'showProfileChart'"
+                                 [height]="'370px'"
+                                 [showImageTrackAndGeoPos]="false"
+                                 [tdocs]="tracks"></app-tdoc-profilechart>
             <div class="container profile-toggler-container">
                 <button class="btn btn-action btn-sm right" (click)="flgShowProfileMap = false" *ngIf="flgShowProfileMap && flgProfileMapAvailable">
                     <span i18n="button hide profilemap|Buttontext to hide profilemap@@button.searchform.hide.profilemap">Profil ausblenden</span>

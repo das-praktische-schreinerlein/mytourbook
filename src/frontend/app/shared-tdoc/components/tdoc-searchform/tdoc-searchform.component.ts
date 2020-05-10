@@ -42,6 +42,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     public optionsSelectObjectDetectionKey: IMultiSelectOption[] = [];
     public optionsSelectObjectDetectionPrecision: IMultiSelectOption[] = [];
     public optionsSelectObjectDetectionState: IMultiSelectOption[] = [];
+    public optionsSelectDashboardFilter: IMultiSelectOption[] = [];
 
     public settingsSelectWhen = this.defaultSeLectSettings;
     public settingsSelectWhere: IMultiSelectSettings =
@@ -68,6 +69,13 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     public settingsSelectObjectDetectionKey = this.defaultSeLectSettings;
     public settingsSelectObjectDetectionPrecision = this.defaultSeLectSettings;
     public settingsSelectObjectDetectionState = this.defaultSeLectSettings;
+    public settingsSelectDashboardFilter = {dynamicTitleMaxItems: 1,
+        buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
+        containerClasses: 'dropdown-inline fullwidth',
+        enableSearch: true,
+        showUncheckAll: true,
+        autoUnselect: true,
+        selectionLimit: 1};
 
     public textsSelectWhen: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
@@ -189,13 +197,24 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'Alle'};
+    public textsSelectDashboardFilter: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Dashboard ausgewählt',
+        checkedPlural: 'Dashboard ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
 
     public showWhereAvailable = true;
     public showWhenAvailable = true;
     public showObjectDetectionAvailable = true;
+    public showDashboardFilterAvailable = true;
 
     @Input()
     public showObjectDetection? = this.showForm;
+
+    @Input()
+    public showDashboardFilter? = this.showForm;
 
     @Input()
     public showWhere? = this.showForm;
@@ -216,6 +235,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
 
     protected createDefaultFormGroup(): any {
         return this.fb.group({
+            dashboardFilter: [],
             when: [],
             where: [],
             nearby: '',
@@ -279,6 +299,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             }
         }
         this.searchFormGroup = this.fb.group({
+            dashboardFilter: [(values.dashboardFilter ? values.dashboardFilter.split(/;/) : [])],
             when: [(values.when ? values.when.split(/,/) : [])],
             what: [(values.what ? values.what.split(/,/) : [])],
             where: [(values.where ? values.where.split(/,/) : [])],
@@ -383,6 +404,9 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
         if (dist) {
             this.searchFormGroup.patchValue({'nearbyDistance': dist});
         }
+
+        this.optionsSelectDashboardFilter = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getDashboardFilterValues(tdocSearchSearchResult), true, [], true);
     }
 
     protected updateAvailabilityFlags(tdocSearchSearchResult: TourDocSearchResult) {
@@ -397,6 +421,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
         this.showObjectDetectionAvailable = (this.optionsSelectObjectDetectionDetector.length > 0 ||
             this.optionsSelectObjectDetectionCategory.length > 0 || this.optionsSelectObjectDetectionKey.length > 0 ||
             this.optionsSelectObjectDetectionPrecision.length > 0 || this.optionsSelectObjectDetectionState.length > 0);
+        this.showDashboardFilterAvailable = (this.optionsSelectDashboardFilter.length > 0);
     }
 
     protected beforeDoSearchPrepareValues(values: any) {
@@ -408,10 +433,10 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     updateFormState(state?: boolean): void {
         if (state !== undefined) {
             this.showForm = this.showDetails = this.showFulltext = this.showMeta = this.showSpecialFilter = this.showWhat = this.showWhen
-                = this.showWhere = this.showObjectDetection = state;
+                = this.showWhere = this.showObjectDetection = this.showDashboardFilter = state;
         } else {
             this.showForm = this.showDetails || this.showFulltext || this.showMeta || this.showSpecialFilter || this.showWhat
-                || this.showWhen || this.showWhere || this.showObjectDetection;
+                || this.showWhen || this.showWhere || this.showObjectDetection || this.showDashboardFilter;
         }
 
         this.changedShowForm.emit(this.showForm);
@@ -431,4 +456,5 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
 
         return false;
     }
+
 }

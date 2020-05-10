@@ -118,15 +118,15 @@
                     <th *ngIf="availableDashboardColumns[type]">{{type | translate}}</th>
                 </ng-container>
             </tr>
-            <ng-container *ngFor="let rowType of dashboardRows">
-                <tr *ngIf="availableDashboardRows[rowType]">
-                    <td>{{ 'label.dashboardColumn.' + rowType | translate}}</td>
+            <ng-container *ngFor="let dashboardRowType of dashboardRows">
+                <tr *ngIf="availableDashboardRows[dashboardRowType]">
+                    <td>{{ 'label.dashboardColumn.' + dashboardRowType | translate}}</td>
                     <ng-container *ngFor="let type of dashboardColumns">
                         <td *ngIf="availableDashboardColumns[type]">
                             <app-tdoc-dashboard-searchcolumn [baseSearchUrl]="baseSearchUrl"
-                                                             [params]="getDashboardFiltersForType(rowType, type, 'forExport')"
+                                                             [params]="getDashboardFiltersForType(dashboardRowType, type, 'forExport')"
                                                              [showOnlyIfRecordsFound]="false"
-                                                             *ngIf="getDashboardVisibilityForType(rowType, type)"></app-tdoc-dashboard-searchcolumn>
+                                                             *ngIf="getDashboardVisibilityForType(dashboardRowType, type)"></app-tdoc-dashboard-searchcolumn>
                         </td>
                     </ng-container>
                 </tr>

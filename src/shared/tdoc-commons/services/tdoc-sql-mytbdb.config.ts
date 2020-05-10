@@ -23,7 +23,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id ' +
                         'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
-                    triggerParams: ['id', 'keywords_txt'],
+                    triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS k_keywords']
                 },
                 {
@@ -39,16 +39,26 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT k_id AS id FROM kategorie WHERE k_name IN' +
-                        '                (select distinct k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
+                        '                (SELECT DISTINCT k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON kategorie.k_id=doublettes.id',
                     triggerParams: ['doublettes'],
                     groupByFields: []
                 },
                 {
-                    from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
-                        '      (SELECT DISTINCT k_ID FROM image WHERE i_rate >= 0 OR i_rate IS NULL)' +
-                        '     AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate < 0)) noFavoriteChildren' +
+                    from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
+                        '   k_rate_motive > 0 AND k_id NOT IN ' +
+                        '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
+                        '  ON kategorie.k_id=conflictingRates.id',
+                    triggerParams: ['conflictingRates'],
+                    groupByFields: []
+                },
+                {
+                    from: 'INNER JOIN' +
+                        '      (SELECT DISTINCT k_id AS id FROM kategorie' +
+                        '       WHERE k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)' +
+                        '       AND k_id NOT IN (SELECT DISTINCT k_ID FROM image WHERE i_rate <> 0 AND i_rate IS NOT NULL)' +
+                        '      ) noFavoriteChildren' +
                         '  ON kategorie.k_id=noFavoriteChildren.id',
                     triggerParams: ['noFavoriteChildren'],
                     groupByFields: []
@@ -160,6 +170,113 @@ export class TourDocSqlMytbDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM kategorie INNER JOIN (SELECT k_id AS id FROM kategorie WHERE k_name IN' +
+                        '                (SELECT DISTINCT k_name AS name FROM kategorie GROUP BY name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON kategorie.k_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "conflictingRates" AS value,' +
+                        ' "conflictingRates" AS label, "true" AS id' +
+                        ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
+                        '   k_rate_motive > 0 AND k_id NOT IN ' +
+                        '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 6))) conflictingRates' +
+                        '  ON kategorie.k_id=conflictingRates.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noFavoriteChildren" AS value,' +
+                        ' "noFavoriteChildren" AS label, "true" AS id' +
+                        ' FROM kategorie INNER JOIN' +
+                        '      (SELECT DISTINCT k_id AS id FROM kategorie' +
+                        '       WHERE k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)' +
+                        '       AND k_id NOT IN (SELECT DISTINCT k_ID FROM image WHERE i_rate <> 0 AND i_rate IS NOT NULL)' +
+                        '      ) noFavoriteChildren' +
+                        '  ON kategorie.k_id=noFavoriteChildren.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'noLocation': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noLocation" AS value,' +
+                        ' "noLocation" AS label, "true" AS id' +
+                        ' FROM kategorie WHERE l_id IS NULL OR l_id IN (0,1 )',
+                    filterField: 'kategorie.l_id',
+                    action: AdapterFilterActions.IN
+                },
+                'noMainFavoriteChildren': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noMainFavoriteChildren" AS value,' +
+                        ' "noMainFavoriteChildren" AS label, "true" AS id' +
+                        ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
+                        '     (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
+                        '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kategorie_favorites%"))' +
+                        '      AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
+                        ' ON kategorie.k_id=noMainFavoriteChildren.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'noRoute': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noRoute" AS value,' +
+                        ' "noRoute" AS label, "true" AS id' +
+                        ' FROM kategorie WHERE t_id IS NULL OR t_id IN (0,1 )',
+                    filterField: 'kategorie.t_id',
+                    action: AdapterFilterActions.IN
+                },
+                'noSubType': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "noSubType" AS value,' +
+                        ' "noSubType" AS label, "true" AS id' +
+                        ' FROM kategorie WHERE k_type IS NULL or k_type in (0)',
+                    filterField: 'CONCAT("ac_", kategorie.k_type)',
+                    action: AdapterFilterActions.IN
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM kategorie WHERE k_meta_shortdesc LIKE "TODODESC"',
+                    filterField: 'kategorie.k_meta_shortdesc',
+                    action: AdapterFilterActions.LIKE
+                },
+                'todoKeywords': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "todoKeywords" AS value,' +
+                        ' "todoKeywords" AS label, "true" AS id' +
+                        ' FROM kategorie INNER JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id' +
+                        ' INNER JOIN keyword on kategorie_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                    filterField: 'keyword.kw_name',
+                    action: AdapterFilterActions.IN
+                },
+                'unrated': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "unrated" AS value,' +
+                        ' "unrated" AS label, "true" AS id' +
+                        ' FROM kategorie WHERE k_rate_gesamt IS NULL or k_rate_gesamt in (0)',
+                    filterField: 'kategorie.k_rate_gesamt',
+                    action: AdapterFilterActions.IN
+                },
+                'unRatedChildren': {
+                    selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "unRatedChildren" AS value,' +
+                        ' "unRatedChildren" AS label, "true" AS id' +
+                        ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id IN' +
+                        '      (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) unRatedChildren' +
+                        '   ON kategorie.k_id=unRatedChildren.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("TRACK", "_", kategorie.k_id)',
                     action: AdapterFilterActions.NOTIN
@@ -313,24 +430,31 @@ export class TourDocSqlMytbDbConfig {
                 'relevance': 'k_datevon DESC'
             },
             filterMapping: {
+                // dashboard
                 doublettes: '"doublettes"',
+                conflictingRates: '"conflictingRates"',
                 noFavoriteChildren: '"noFavoriteChildren"',
-                unRatedChildren: '"unRatedChildren"',
                 noMainFavoriteChildren: '"noMainFavoriteChildren"',
-                noCoordinates: '"dummy"',
+                noCoordinates: '"666dummy999"',
+                noLocation: 'kategorie.l_id',
+                noRoute: 'kategorie.t_id',
+                noSubType: 'CONCAT("ac_", kategorie.k_type)',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: 'kategorie.k_rate_gesamt',
+                unRatedChildren: '"unRatedChildren"',
+                // common
                 id: 'kategorie.k_id',
                 loc_id_i: 'kategorie.l_id',
                 loc_id_is: 'kategorie.l_id',
                 route_id_i: 'kategorie.t_id',
                 route_id_is: 'kategorie.t_id',
-                route_no_id_is:  'kategorie.t_id',
                 track_id_i: 'kategorie.k_id',
                 track_id_is: 'kategorie.k_id',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: 'kategorie.l_id',
                 html: 'CONCAT(k_name, " ", COALESCE(k_meta_shortdesc,""), " ", l_name)'
             },
             spartialConfig: {
@@ -429,7 +553,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN image_keyword ON image.i_id=image_keyword.i_id ' +
                         'LEFT JOIN keyword ON image_keyword.kw_id=keyword.kw_id',
-                    triggerParams: ['id', 'keywords_txt'],
+                    triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
                 },
                 {
@@ -469,7 +593,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT i_id AS id FROM image INNER JOIN' +
-                        '                (select distinct i_dir, i_file FROM image GROUP BY i_dir, i_file' +
+                        '                (SELECT DISTINCT i_dir, i_file FROM image GROUP BY i_dir, i_file' +
                         '                 HAVING COUNT(*) > 1) doublettes' +
                         '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
                         '             ON image.i_id = doublettes2.id',
@@ -607,6 +731,78 @@ export class TourDocSqlMytbDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM image INNER JOIN (SELECT i_id AS id FROM image INNER JOIN' +
+                        '                (SELECT DISTINCT i_dir, i_file FROM image GROUP BY i_dir, i_file' +
+                        '                 HAVING COUNT(*) > 1) doublettes' +
+                        '                ON image.i_file = doublettes.i_file AND image.i_dir = doublettes.i_dir) doublettes2' +
+                        '             ON image.i_id = doublettes2.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, "noLocation" AS value,' +
+                        ' "noLocation" AS label, "true" AS id' +
+                        ' FROM image WHERE l_id IS NULL OR l_id IN (0,1 )',
+                    filterField: 'image.l_id',
+                    action: AdapterFilterActions.IN
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    constValues: ['noSubType'],
+                    filterField: '"666dummy999"'
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(image.k_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM image WHERE i_meta_shortdesc LIKE "TODODESC"',
+                    filterField: 'image.i_meta_shortdesc',
+                    action: AdapterFilterActions.IN
+                },
+                'todoKeywords': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, "todoKeywords" AS value,' +
+                        ' "todoKeywords" AS label, "true" AS id' +
+                        ' FROM image INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
+                        ' INNER JOIN keyword on image_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                    filterField: 'keyword.kw_name',
+                    action: AdapterFilterActions.IN
+                },
+                'unrated': {
+                    selectSql: 'SELECT COUNT(image.i_id) AS count, "unrated" AS value,' +
+                        ' "unrated" AS label, "true" AS id' +
+                        ' FROM image WHERE i_rate IS NULL or i_rate in (0)',
+                    filterField: 'image.i_rate',
+                    action: AdapterFilterActions.IN
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("IMAGE", "_", image.i_id)',
                     action: AdapterFilterActions.NOTIN
@@ -847,24 +1043,31 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                // dashboard
                 doublettes: '"doublettes"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                conflictingRates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noLocation: 'image.l_id',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: 'image.i_rate',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'image.i_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
                 route_id_i: 'kategorie.t_id',
                 route_id_is: 'kategorie.t_id',
-                route_no_id_is: '"dummy"',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
             },
             writeMapping: {
@@ -969,7 +1172,7 @@ export class TourDocSqlMytbDbConfig {
                         ' ":::objWidth=", image_object.io_obj_width,' +
                         ' ":::objHeight=", image_object.io_obj_height,' +
                         ' ":::precision=", image_object.io_precision) IN' +
-                        '    (select distinct CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        '    (SELECT DISTINCT CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
                         ' ":::detector=", image_object.io_detector,' +
                         ' ":::objX=", image_object.io_obj_x1,' +
                         ' ":::objY=", image_object.io_obj_y1,' +
@@ -1085,6 +1288,84 @@ export class TourDocSqlMytbDbConfig {
                 'persons.o_name AS i_persons',
                 'realobjects.o_name AS i_objects'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(image_object.io_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM image_object INNER JOIN (SELECT io_id AS id FROM image_object' +
+                        '                     WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        ' ":::detector=", image_object.io_detector,' +
+                        ' ":::objX=", image_object.io_obj_x1,' +
+                        ' ":::objY=", image_object.io_obj_y1,' +
+                        ' ":::objWidth=", image_object.io_obj_width,' +
+                        ' ":::objHeight=", image_object.io_obj_height,' +
+                        ' ":::precision=", image_object.io_precision) IN' +
+                        '    (SELECT DISTINCT CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        ' ":::detector=", image_object.io_detector,' +
+                        ' ":::objX=", image_object.io_obj_x1,' +
+                        ' ":::objY=", image_object.io_obj_y1,' +
+                        ' ":::objWidth=", image_object.io_obj_width,' +
+                        ' ":::objHeight=", image_object.io_obj_height,' +
+                        ' ":::precision=", image_object.io_precision)' +
+                        '     FROM image_object GROUP BY CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
+                        ' ":::detector=", image_object.io_detector,' +
+                        ' ":::objX=", image_object.io_obj_x1,' +
+                        ' ":::objY=", image_object.io_obj_y1,' +
+                        ' ":::objWidth=", image_object.io_obj_width,' +
+                        ' ":::objHeight=", image_object.io_obj_height,' +
+                        ' ":::precision=", image_object.io_precision)' +
+                        '                    HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON image_object.io_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    constValues: ['noLocation'],
+                    filterField: '"666dummy999"'
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    constValues: ['noSubType'],
+                    filterField: '"666dummy999"'
+                },
+                'todoDesc': {
+                    constValues: ['todoDesc'],
+                    filterField: '"666dummy999"'
+                },
+                'todoKeywords': {
+                    constValues: ['todoKeywords'],
+                    filterField: '"666dummy999"'
+                },
+                'unrated': {
+                    constValues: ['unrated'],
+                    filterField: '"666dummy999"'
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("ODIMGOBJECT", "_", video.v_id)',
                     action: AdapterFilterActions.NOTIN
@@ -1328,24 +1609,32 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
-                doublettes: '"doublettes"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
+                // dashboard
+                doublettes: '"666dummy999"',
+                conflictingRates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"666dummy999"',
+                todoKeywords: '"666dummy999"',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'image_object.io_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
                 route_id_i: 'kategorie.t_id',
                 route_id_is: 'kategorie.t_id',
-                route_no_id_is: '"dummy"',
                 track_id_i: 'image.k_id',
                 track_id_is: 'image.k_id',
-                news_id_is: '"dummy"',
+                news_id_is: '"666dummy999"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
             },
             // TODO: for import
@@ -1415,7 +1704,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN video_keyword ON video.v_id=video_keyword.v_id ' +
                         'LEFT JOIN keyword ON video_keyword.kw_id=keyword.kw_id',
-                    triggerParams: ['id', 'keywords_txt'],
+                    triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS i_keywords']
                 },
                 {
@@ -1455,7 +1744,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT v_id AS id FROM video INNER JOIN' +
-                        '                (select distinct v_dir, v_file FROM video GROUP BY v_dir, v_file' +
+                        '                (SELECT DISTINCT v_dir, v_file FROM video GROUP BY v_dir, v_file' +
                         '                 HAVING COUNT(*) > 1) doublettes' +
                         '                ON video.v_file = doublettes.v_file AND video.v_dir = doublettes.v_dir) doublettes2' +
                         '             ON video.v_id = doublettes2.id',
@@ -1572,6 +1861,78 @@ export class TourDocSqlMytbDbConfig {
                 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 AS dur',
                 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(video.v_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM video INNER JOIN (SELECT v_id AS id FROM video INNER JOIN' +
+                        '                (SELECT DISTINCT v_dir, v_file FROM video GROUP BY v_dir, v_file' +
+                        '                 HAVING COUNT(*) > 1) doublettes' +
+                        '                ON video.v_file = doublettes.v_file AND video.v_dir = doublettes.v_dir) doublettes2' +
+                        '             ON video.v_id = doublettes2.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    selectSql: 'SELECT COUNT(video.v_id) AS count, "noLocation" AS value,' +
+                        ' "noLocation" AS label, "true" AS id' +
+                        ' FROM video WHERE l_id IS NULL OR l_id IN (0,1 )',
+                    filterField: 'video.l_id',
+                    action: AdapterFilterActions.IN
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    constValues: ['noSubType'],
+                    filterField: '"666dummy999"'
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(video.k_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM video WHERE v_meta_shortdesc LIKE "TODODESC"',
+                    filterField: 'video.v_meta_shortdesc',
+                    action: AdapterFilterActions.IN
+                },
+                'todoKeywords': {
+                    selectSql: 'SELECT COUNT(video.v_id) AS count, "todoKeywords" AS value,' +
+                        ' "todoKeywords" AS label, "true" AS id' +
+                        ' FROM video INNER JOIN video_keyword ON video.v_id=video_keyword.v_id' +
+                        ' INNER JOIN keyword on video_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                    filterField: 'keyword.kw_name',
+                    action: AdapterFilterActions.IN
+                },
+                'unrated': {
+                    selectSql: 'SELECT COUNT(video.v_id) AS count, "unrated" AS value,' +
+                        ' "unrated" AS label, "true" AS id' +
+                        ' FROM video WHERE v_rate IS NULL or v_rate in (0)',
+                    filterField: 'video.v_rate',
+                    action: AdapterFilterActions.IN
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("VIDEO", "_", video.v_id)',
                     action: AdapterFilterActions.NOTIN
@@ -1742,24 +2103,31 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                // dashboard
                 doublettes: '"doublettes"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                conflictingRates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noLocation: 'video.l_id',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: 'video.v_rate',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'video.v_id',
-                image_id_is: '"dummy"',
-                image_id_i: '"dummy"',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
                 video_id_i: 'video.v_id',
                 video_id_is: 'video.v_id',
                 route_id_i: 'kategorie.t_id',
                 route_id_is: 'kategorie.t_id',
-                route_no_id_is: '"dummy"',
                 track_id_i: 'video.k_id',
                 track_id_is: 'video.k_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(COALESCE(v_meta_name,""), " ", l_name)'
             },
             writeMapping: {
@@ -1841,7 +2209,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN tour_keyword ON tour.t_id=tour_keyword.t_id ' +
                         'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id',
-                    triggerParams: ['id', 'keywords_txt'],
+                    triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS t_keywords']
                 },
                 {
@@ -1872,7 +2240,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT t_id AS id FROM tour WHERE t_key' +
-                        '              IN (select distinct t_key AS name' +
+                        '              IN (SELECT DISTINCT t_key AS name' +
                         '                  FROM tour GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON tour.t_id=doublettes.id',
@@ -1989,6 +2357,81 @@ export class TourDocSqlMytbDbConfig {
                 't_route_dauer',
                 'ROUND(ROUND(t_route_dauer * 2) / 2, 1) AS durFacet'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(tour.t_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM tour INNER JOIN (SELECT t_id AS id FROM tour WHERE t_key' +
+                        '              IN (SELECT DISTINCT t_key AS name' +
+                        '                  FROM tour GROUP BY name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON tour.t_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    selectSql: 'SELECT COUNT(tour.t_id) AS count, "noLocation" AS value,' +
+                        ' "noLocation" AS label, "true" AS id' +
+                        ' FROM tour WHERE l_id IS NULL OR l_id IN (0,1 )',
+                    filterField: 'tour.l_id',
+                    action: AdapterFilterActions.IN
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    selectSql: 'SELECT COUNT(tour.t_id) AS count, "noSubType" AS value,' +
+                        ' "noSubType" AS label, "true" AS id' +
+                        ' FROM tour WHERE t_typ IS NULL or t_typ in (0)',
+                    filterField: 'CONCAT("ac_", tour.t_typ)',
+                    action: AdapterFilterActions.IN
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(tour.t_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM tour WHERE t_meta_shortdesc LIKE "TODODESC"',
+                    filterField: 'tour.t_meta_shortdesc',
+                    action: AdapterFilterActions.IN
+                },
+                'todoKeywords': {
+                    selectSql: 'SELECT COUNT(tour.t_id) AS count, "todoKeywords" AS value,' +
+                        ' "todoKeywords" AS label, "true" AS id' +
+                        ' FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
+                        ' INNER JOIN keyword on tour_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                    filterField: 'keyword.kw_name',
+                    action: AdapterFilterActions.IN
+                },
+                'unrated': {
+                    selectSql: 'SELECT COUNT(tour.t_id) AS count, "unrated" AS value,' +
+                        ' "unrated" AS label, "true" AS id' +
+                        ' FROM tour WHERE t_rate_gesamt IS NULL or t_rate_gesamt in (0)',
+                    filterField: 'tour.t_rate_gesamt',
+                    action: AdapterFilterActions.IN
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("ROUTE", "_", tour.t_id)',
                     action: AdapterFilterActions.NOTIN
@@ -2172,23 +2615,30 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                // dashboard
                 doublettes: '"doublettes"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"noMainFavoriteChildren"',
-                noCoordinates: '"dummy"',
+                conflictingRates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noLocation: 'tour.l_id',
+                noRoute: '"666dummy999"',
+                noSubType: 'CONCAT("ac_", tour.t_typ)',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: 'tour.t_rate_gesamt',
+                unRatedChildren: '"unRatedChildren"',
+                // common
                 id: 'tour.t_id',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
-                route_no_id_is: '"dummy"',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
-                trip_id_is: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
+                trip_id_is: '"666dummy999"',
                 loc_id_i: 'tour.l_id',
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: 'tour.l_id',
                 html: 'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc,""), " ", l_name)'
             },
             writeMapping: {
@@ -2299,12 +2749,12 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'LEFT JOIN location_keyword ON location.l_id=location_keyword.l_id ' +
                         'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
-                    triggerParams: ['id', 'keywords_txt'],
+                    triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 },
                 {
                     from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE l_key' +
-                        '              IN (select distinct l_key AS name' +
+                        '              IN (SELECT DISTINCT l_key AS name' +
                         '                  FROM location GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON location.l_id=doublettes.id',
@@ -2323,9 +2773,9 @@ export class TourDocSqlMytbDbConfig {
                 {
                     from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE ' +
                         '               (l_parent_id IS NULL OR l_parent_id IN (0,1)) AND (l_typ IS NULL OR l_typ > 2)' +
-                        '             ) loc_no_parent_id_is' +
-                        '             ON location.l_id=loc_no_parent_id_is.id',
-                    triggerParams: ['loc_no_parent_id_is'],
+                        '             ) noLocation' +
+                        '             ON location.l_id=noLocation.id',
+                    triggerParams: ['noLocation'],
                     groupByFields: []
                 },
                 {
@@ -2389,6 +2839,85 @@ export class TourDocSqlMytbDbConfig {
                 'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
                 'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(location.l_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM location INNER JOIN (SELECT l_id AS id FROM location WHERE l_key' +
+                        '              IN (SELECT DISTINCT l_key AS name' +
+                        '                  FROM location GROUP BY name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON location.l_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    selectSql: 'SELECT COUNT(location.l_id) AS count, "noCoordinates" AS value,' +
+                        ' "noCoordinates" AS label, "true" AS id' +
+                        ' FROM location INNER JOIN (SELECT l_id AS id FROM location WHERE ' +
+                        '                 (l_typ IN (1,2,3,4) AND l_geo_area IS NULL) ' +
+                        '              OR (l_typ > 4 AND (l_geo_latdeg IS NULL OR l_geo_longdeg IS NULL))' +
+                        '             ) noCoordinates' +
+                        '             ON location.l_id=noCoordinates.id',
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    selectSql: 'SELECT COUNT(location.l_id) AS count, "noLocation" AS value,' +
+                        ' "noLocation" AS label, "true" AS id' +
+                        ' FROM location INNER JOIN (SELECT l_id AS id FROM location WHERE ' +
+                        '               (l_parent_id IS NULL OR l_parent_id IN (0,1)) AND (l_typ IS NULL OR l_typ > 2)' +
+                        '             ) noLocation' +
+                        '             ON location.l_id=noLocation.id',
+                    filterField: 'location.l_parent_id',
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    selectSql: 'SELECT COUNT(location.l_id) AS count, "noSubType" AS value,' +
+                        ' "noSubType" AS label, "true" AS id' +
+                        ' FROM location WHERE l_typ IS NULL or l_typ in (0)',
+                    filterField: 'CONCAT("ac_", location.l_typ)',
+                    action: AdapterFilterActions.IN
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(location.l_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM location WHERE l_meta_shortdesc LIKE "TODODESC"',
+                    filterField: 'location.l_meta_shortdesc',
+                    action: AdapterFilterActions.IN
+                },
+                'todoKeywords': {
+                    selectSql: 'SELECT COUNT(location.l_id) AS count, "todoKeywords" AS value,' +
+                        ' "todoKeywords" AS label, "true" AS id' +
+                        ' FROM location INNER JOIN location_keyword ON location.l_id=location_keyword.l_id' +
+                        ' INNER JOIN keyword on location_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                    filterField: 'keyword.kw_name',
+                    action: AdapterFilterActions.IN
+                },
+                'unrated': {
+                    constValues: ['unrated'],
+                    filterField: '"666dummy999"'
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("LOCATION", "_", location.l_id)',
                     action: AdapterFilterActions.NOTIN
@@ -2497,18 +3026,24 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                // dashboard
                 doublettes: '"doublettes"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
                 noCoordinates: '"noCoordinates"',
+                noLocation: 'location.l_parent_id',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'location.l_id',
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
-                loc_no_parent_id_is: '"loc_no_parent_id_is"',
-                trip_id_is: '"dummy"',
-                route_no_id_is: '"dummy"',
+                trip_id_is: '"666dummy999"',
                 html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""))'
             },
             writeMapping: {
@@ -2566,7 +3101,7 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') +
-                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
                         '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON trip.tr_id=doublettes.id',
@@ -2631,6 +3166,70 @@ export class TourDocSqlMytbDbConfig {
                 'tr_meta_shortdesc AS tr_meta_shortdesc_md',
                 'tr_meta_shortdesc AS tr_meta_shortdesc_html'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(trip.tr_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM trip INNER JOIN (SELECT tr_id AS id FROM trip WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('tr_name') + ' AS name' +
+                        '                  FROM trip GROUP BY name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON trip.tr_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    selectSql: 'SELECT COUNT(trip.tr_id) AS count, "loc_no_parentr_id_is" AS value,' +
+                        ' "loc_no_parentr_id_is" AS label, "true" AS id' +
+                        ' FROM trip WHERE l_id IS NULL OR l_id IN (0,1 )',
+                    filterField: 'trip.l_id',
+                    action: AdapterFilterActions.IN
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    constValues: ['noSubType'],
+                    filterField: '"666dummy999"'
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(trip.tr_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM trip WHERE tr_meta_shortdesc LIKE "TODODESC"',
+                    filterField: 'trip.tr_meta_shortdesc',
+                    action: AdapterFilterActions.IN
+                },
+                'todoKeywords': {
+                    constValues: ['todoKeywords'],
+                    filterField: '"666dummy999"'
+                },
+                'unrated': {
+                    constValues: ['unrated'],
+                    filterField: '"666dummy999"'
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("TRIP", "_", trip.tr_id)',
                     action: AdapterFilterActions.NOTIN
@@ -2741,27 +3340,34 @@ export class TourDocSqlMytbDbConfig {
                 spatialSortKey: 'distance'
             },
             filterMapping: {
+                // dashboard
                 doublettes: '"doublettes"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                conflictingRates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noLocation: 'trip.l_id',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'trip.tr_id',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
-                image_id_is: '"dummy"',
-                image_id_i: '"dummy"',
-                track_id_is: '"dummy"',
-                track_id_i: '"dummy"',
-                route_id_is: '"dummy"',
-                route_no_id_is: '"dummy"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
+                track_id_is: '"666dummy999"',
+                track_id_i: '"666dummy999"',
+                route_id_is: '"666dummy999"',
                 loc_id_i: 'trip.l_id',
                 loc_id_is: 'trip.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: 'trip.l_id',
                 html: 'CONCAT(tr_name, " ", COALESCE(tr_meta_shortdesc,""))'
             },
             writeMapping: {
@@ -2807,7 +3413,7 @@ export class TourDocSqlMytbDbConfig {
             optionalGroupBy: [
                 {
                     from: 'INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
-                        '              IN (select distinct ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
                         '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
                         '             ON news.n_id=doublettes.id',
@@ -2858,6 +3464,67 @@ export class TourDocSqlMytbDbConfig {
                 'n_message AS n_message_md',
                 'n_message AS n_message_html'],
             facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(news.n_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM news INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
+                        '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON news.n_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    constValues: ['noLocation'],
+                    filterField: '"666dummy999"'
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    constValues: ['noSubType'],
+                    filterField: '"666dummy999"'
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(news.n_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM news WHERE n_message LIKE "TODODESC"',
+                    filterField: 'news.n_message',
+                    action: AdapterFilterActions.IN
+                },
+                'todoKeywords': {
+                    constValues: ['todoKeywords'],
+                    filterField: '"666dummy999"'
+                },
+                'unrated': {
+                    constValues: ['unrated'],
+                    filterField: '"666dummy999"'
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
                 'id_notin_is': {
                     filterField: 'CONCAT("NEWS", "_", news.n_id)',
                     action: AdapterFilterActions.NOTIN
@@ -2947,28 +3614,35 @@ export class TourDocSqlMytbDbConfig {
                 'relevance': 'n_date DESC'
             },
             filterMapping: {
+                // dashboard
                 doublettes: '"doublettes"',
-                noFavoriteChildren: '"dummy"',
-                unRatedChildren: '"dummy"',
-                noMainFavoriteChildren: '"dummy"',
-                noCoordinates: '"dummy"',
+                conflictingRates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noLocation: '"666dummy999"',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
                 id: 'news.n_id',
                 news_id_i: 'news.n_id',
                 news_id_is: 'news.n_id',
-                image_id_i: '"dummy"',
-                image_id_is: '"dummy"',
-                video_id_is: '"dummy"',
-                video_id_i: '"dummy"',
-                track_id_i: '"dummy"',
-                track_id_is: '"dummy"',
-                trip_id_i: '"dummy"',
-                trip_id_is: '"dummy"',
-                route_id_i: '"dummy"',
-                route_id_is: '"dummy"',
-                route_no_id_is: '"dummy"',
-                loc_lochirarchie_ids_txt: '"dummy"',
+                image_id_i: '"666dummy999"',
+                image_id_is: '"666dummy999"',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
+                track_id_i: '"666dummy999"',
+                track_id_is: '"666dummy999"',
+                trip_id_i: '"666dummy999"',
+                trip_id_is: '"666dummy999"',
+                route_id_i: '"666dummy999"',
+                route_id_is: '"666dummy999"',
+                loc_lochirarchie_ids_txt: '"666dummy999"',
                 l_lochirarchietxt: 'location.l_name',
-                loc_no_parent_id_is: '"dummy"',
                 html: 'CONCAT(n_headline, " ", COALESCE(n_message,""))'
             },
             writeMapping: {

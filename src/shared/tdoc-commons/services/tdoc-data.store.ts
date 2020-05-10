@@ -35,20 +35,25 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         video_id_i: true,
         route_id_i: true,
         route_id_is: true,
-        route_no_id_is: true,
-        loc_no_parent_id_is: true,
+        unrated: true,
+        noLocation: true,
+        noRoute: true,
         loc_parent_id_i: true
     };
     private validMoreInFilterNames = {
         id_notin_is: true,
         doublettes: true,
-        noFavoriteChildren: true,
-        unRatedChildren: true,
-        noMainFavoriteChildren: true,
+        conflictingRates: true,
         noCoordinates: true,
+        noFavoriteChildren: true,
+        noMainFavoriteChildren: true,
+        noSubType: true,
         objects_txt: true,
         persons_txt: true,
-        playlists_txt: true
+        playlists_txt: true,
+        todoDesc: true,
+        todoKeywords: true,
+        unRatedChildren: true,
     };
 
     constructor(private searchParameterUtils: SearchParameterUtils, private teamFilterConfig: TourDocTeamFilterConfig) {
@@ -185,6 +190,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                 'in': searchForm.objectDetectionState.split(/,/)
             };
         }
+
         if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
             filter = filter || {};
             const moreFilters = searchForm.moreFilter.split(/;/);
@@ -201,6 +207,40 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                     };
                 }
 
+            }
+        }
+
+        if (searchForm.dashboardFilter !== undefined && searchForm.dashboardFilter.length > 0) {
+            filter = filter || {};
+            const moreFilters = searchForm.dashboardFilter.split(/;/);
+            for (const index in moreFilters) {
+                const moreFilter = moreFilters[index];
+                let [filterName, values] = moreFilter.split(/:/);
+                if (values === undefined && (filterName === 'noRoute' || filterName === 'noLocation')) {
+                    values = 'null,0,1';
+                }
+                if (values === undefined && (filterName === 'noSubType')) {
+                    values = 'null,ac_,ac_null,ac_0';
+                }
+                if (values === undefined && (filterName === 'todoDesc')) {
+                    values = 'TODODESC';
+                }
+                if (values === undefined && (filterName === 'todoKeywords')) {
+                    values = 'KW_TODOKEYWORDS';
+                }
+                if (values === undefined && (filterName === 'unrated')) {
+                    values = 'null,0';
+                }
+
+                if (filterName && values && this.validMoreNumberFilterNames[filterName] === true) {
+                    filter[filterName] = {
+                        'in_number': values.split(/,/)
+                    };
+                } else if (filterName && this.validMoreInFilterNames[filterName] === true) {
+                    filter[filterName] = {
+                        'in': values ? values.split(/,/) : [filterName]
+                    };
+                }
             }
         }
 

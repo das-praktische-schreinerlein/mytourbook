@@ -49,6 +49,8 @@ import {TourDocReplaceFormComponent} from './components/tdoc-replaceform/tdoc-re
 import {TourDocAssignFormComponent} from './components/tdoc-assignform/tdoc-assignform.component';
 import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-search-navigation/tdoc-simple-search-navigation.component';
+import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-profilechart.component';
+import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
 
 @NgModule({
     declarations: [
@@ -88,7 +90,9 @@ import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-s
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
         TourDocKeywordTagFormComponent,
-        TourDocSimpleSearchNavigationComponent
+        TourDocSimpleSearchNavigationComponent,
+        VisJsProfileChartComponent,
+        TourDocProfileChartComponent
     ],
     imports: [
         ToastrModule,
@@ -146,7 +150,9 @@ import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-s
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
         TourDocKeywordTagFormComponent,
-        TourDocSimpleSearchNavigationComponent
+        TourDocSimpleSearchNavigationComponent,
+        VisJsProfileChartComponent,
+        TourDocProfileChartComponent
     ]
 })
 export class SharedTourDocModule {}

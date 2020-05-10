@@ -4,23 +4,48 @@
  
 ## 5.0.0
 - upgraded all dev-dependencies to latest
+- upgraded to angular 6
 
 ### new features
 - none
 
 ### improvements
-- none
+- build: upgraded all dev-dependencies to latest
+- frontend: upgraded to angular 6
 
 ### bug fixes
-- none 
+- frontend: IE now functional
  
 ### breaking changes
 - build: upgraded all dev-dependencies to latest
 
 ### known issues
-- frontend: IE till 11 not functional (can block rendering sometimes)
 - frontendserver: angularuniversal-support broken
 
+
+
+## 4.2.0
+- improved and fixed charts, maps and dashboard
+
+### new features
+- frontend: improved and added new charts
+- frontend: added additional dashboard-filter
+
+### improvements
+- common: improved dashboard - use concrete filter+facets
+- common: improved naming
+- backend: added facets and filter for dashboard-filter
+
+### bug fixes
+- frontend: use maps-fixes from commons
+- common: fixed codeStyle-issue
+ 
+### breaking changes
+- none
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
 
 
 ## 4.1.0
@@ -31,7 +56,6 @@
 - moved common action-tag-components and navigation-components from mytourbook to frontend-commons
 - moved full implementation of actions and actiontags to commons
 - bumped up deps
-
 
 ### new features
 - backend: added job to find corresponding TourDocRecords for media

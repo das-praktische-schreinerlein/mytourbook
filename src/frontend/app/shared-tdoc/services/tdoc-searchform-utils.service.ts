@@ -11,6 +11,21 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
         super(searchFormUtils, searchParameterUtils);
     }
 
+    getDashboardFilterValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'noSubType', '', 'label.dashboardColumn.').concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'noLocation', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'noRoute', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'noCoordinates', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'unrated', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'doublettes', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'todoDesc', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'todoKeywords', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'noFavoriteChildren', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'noMainFavoriteChildren', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'unRatedChildren', '', 'label.dashboardColumn.')).concat(
+            this.searchFormUtils.getFacetValues(searchResult, 'conflictingRates', '', 'label.dashboardColumn.'));
+    }
+
     getWhereValues(searchResult: TourDocSearchResult): any[] {
          return this.searchFormUtils.getFacetValues(searchResult, 'loc_lochirarchie_txt', '', '');
     }
