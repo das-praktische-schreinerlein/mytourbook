@@ -3,16 +3,20 @@
 # Versions
  
 ## 4.2.0
-- improved and fixed charts and maps
+- improved and fixed charts, maps and dashboard
 
 ### new features
 - frontend: improved and added new charts
+- frontend: added additional dashboard-filter
 
 ### improvements
-- none
+- common: improved dashboard - use concrete filter+facets
+- common: improved naming
+- backend: added facets and filter for dashboard-filter
 
 ### bug fixes
 - frontend: use maps-fixes from commons
+- common: fixed codeStyle-issue
  
 ### breaking changes
 - none
