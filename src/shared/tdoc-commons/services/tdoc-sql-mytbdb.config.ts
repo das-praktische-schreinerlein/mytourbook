@@ -3803,6 +3803,15 @@ export class TourDocSqlMytbDbConfig {
 
     public static readonly actionTagAssignConfig: ActionTagAssignConfigType = {
         tables: {
+            'location': {
+                table: 'location',
+                idField: 'l_id',
+                references: {
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_parent_id'
+                    }
+                }
+            },
             'image': {
                 table: 'image',
                 idField: 'i_id',
