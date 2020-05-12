@@ -5,6 +5,7 @@
 ## 5.0.0
 - upgraded all dev-dependencies to latest
 - upgraded to angular 6
+- build: use peerDependencies
 
 ### new features
 - none
@@ -18,6 +19,7 @@
  
 ### breaking changes
 - build: upgraded all dev-dependencies to latest
+- build: use peerDependencies
 
 ### known issues
 - frontendserver: angularuniversal-support broken
