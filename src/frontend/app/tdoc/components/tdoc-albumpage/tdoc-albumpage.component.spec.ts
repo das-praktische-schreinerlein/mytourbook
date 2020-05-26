@@ -42,7 +42,7 @@ describe('TourDocAlbumpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocAlbumpageComponent],
             imports: [
-                NgbModule.forRoot(),
+                NgbModule,
                 TranslateModule.forRoot(),
                 NoopAnimationsModule
             ],

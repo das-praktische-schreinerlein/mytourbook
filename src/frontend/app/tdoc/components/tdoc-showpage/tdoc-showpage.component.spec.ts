@@ -39,7 +39,7 @@ describe('TourDocShowpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocShowpageComponent, TourDocDateFormatPipe],
             imports: [
-                NgbModule.forRoot(),
+                NgbModule,
                 TranslateModule.forRoot(),
                 NgxMdModule.forRoot()],
             providers: [

@@ -11,7 +11,6 @@ import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend
 import {Router} from '@angular/router';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {FormBuilder} from '@angular/forms';
-import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
 import {ToastrService} from 'ngx-toastr';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {TourDocKeywordTagFormComponent} from './tdoc-keywordtagform.component';
@@ -24,14 +23,13 @@ describe('TourDocKeywordTagFormComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocKeywordTagFormComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot(),
+            imports: [NgbModule,
                 TranslateModule.forRoot()],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 FormBuilder,
                 NgbModal,
-                NgbModalStack,
                 NgbActiveModal,
                 CommonRoutingService,
                 CommonDocRoutingService,

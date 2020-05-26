@@ -73,7 +73,7 @@ export function getAngulartics2Providers(): any {
         TourDocKeywordTagFormComponent],
     imports: [
         HttpClientModule,
-        NgbModule.forRoot(),
+        NgbModule,
         BrowserModule.withServerTransition({appId: 'tdoc-app'}),
         ToastrModule.forRoot(),
         TranslateModule.forRoot({

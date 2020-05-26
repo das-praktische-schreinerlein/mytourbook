@@ -14,7 +14,7 @@ describe('TourDocDistanceComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocDistanceComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot(),
+            imports: [NgbModule,
                 TranslateModule.forRoot()]
         })
             .compileComponents();

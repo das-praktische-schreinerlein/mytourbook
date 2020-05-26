@@ -14,7 +14,7 @@ describe('TourDocDataInfoComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocDataInfoComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot(),
+            imports: [NgbModule,
                 TranslateModule.forRoot()]
         })
             .compileComponents();

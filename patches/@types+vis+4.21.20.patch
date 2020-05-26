@@ -1,7 +1,8 @@
-patch-package
+diff --git a/node_modules/@types/vis/index.d.ts b/node_modules/@types/vis/index.d.ts
+index b473949..d2fea18 100644
 --- a/node_modules/@types/vis/index.d.ts
 +++ b/node_modules/@types/vis/index.d.ts
-@@ -21,6 +21,13 @@ export type MomentConstructor2 =
+@@ -24,6 +24,13 @@ export type MomentConstructor2 =
  
  export type MomentConstructor = MomentConstructor1 | MomentConstructor2;
  

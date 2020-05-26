@@ -1,10 +1,10 @@
 diff --git a/node_modules/@angular/compiler-cli/src/transformers/compiler_host.js b/node_modules/@angular/compiler-cli/src/transformers/compiler_host.js
-index 879d88a..0388bc3 100644
+index c2054ba..7ae4c02 100644
 --- a/node_modules/@angular/compiler-cli/src/transformers/compiler_host.js
 +++ b/node_modules/@angular/compiler-cli/src/transformers/compiler_host.js
-@@ -127,12 +127,19 @@
-         TsCompilerAotCompilerTypeCheckHostAdapter.prototype.resolveModuleName = function (moduleName, containingFile) {
-             var rm = ts.resolveModuleName(moduleName, containingFile.replace(/\\/g, '/'), this.options, this, this.moduleResolutionCache)
+@@ -116,12 +116,19 @@
+         resolveModuleName(moduleName, containingFile) {
+             const rm = ts.resolveModuleName(moduleName, containingFile.replace(/\\/g, '/'), this.options, this, this.moduleResolutionCache)
                  .resolvedModule;
 -            if (rm && this.isSourceFile(rm.resolvedFileName) && util_1.DTS.test(rm.resolvedFileName)) {
 +            if (rm && this.isSourceFile(rm.resolvedFileName)) {
@@ -23,4 +23,4 @@ index 879d88a..0388bc3 100644
 +                }
              }
              return rm;
-         };
+         }

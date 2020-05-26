@@ -22,7 +22,7 @@ describe('TourDocRatePersonalComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocRatePersonalComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot(),
+            imports: [NgbModule,
                 TranslateModule.forRoot()],
             providers: [
                 { provide: Router, useValue: new RouterStub() },

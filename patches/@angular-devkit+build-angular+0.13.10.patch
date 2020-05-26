@@ -1,40 +1,29 @@
 diff --git a/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js b/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js
-index 99903a9..689f991 100644
+index ad1abbc..1fc008d 100644
 --- a/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js
 +++ b/node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/common.js
-@@ -23,6 +23,8 @@ const utils_2 = require("./utils");
+@@ -19,6 +19,7 @@ const require_project_module_1 = require("../../utilities/require-project-module
+ const utils_1 = require("./utils");
  const ProgressPlugin = require('webpack/lib/ProgressPlugin');
  const CircularDependencyPlugin = require('circular-dependency-plugin');
- const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 +const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-+
+ const TerserPlugin = require('terser-webpack-plugin');
  const StatsPlugin = require('stats-webpack-plugin');
- /**
-  * Enumerate loaders and their dependencies from this file to let the dependency validator
-@@ -44,7 +46,11 @@ function getCommonConfig(wco) {
-     if (!nodeModules) {
+ // tslint:disable-next-line:no-any
+@@ -36,7 +37,10 @@ function getCommonConfig(wco) {
          throw new Error('Cannot locate node_modules directory.');
      }
--    let extraPlugins = [];
-+    let extraPlugins = [
+     // tslint:disable-next-line:no-any
+-    const extraPlugins = [];
++    const extraPlugins = [
 +        new NormalModuleReplacementPlugin(/knex/, 'node-noop'),
 +        new NormalModuleReplacementPlugin(/redis/, 'node-noop'),
-+
 +    ];
-     let entryPoints = {};
+     const entryPoints = {};
      if (buildOptions.main) {
          entryPoints['main'] = [path.resolve(root, buildOptions.main)];
-@@ -120,7 +126,7 @@ function getCommonConfig(wco) {
-         extraPlugins.push(copyWebpackPluginInstance);
-     }
-     if (buildOptions.progress) {
--        extraPlugins.push(new ProgressPlugin({ profile: buildOptions.verbose, colors: true }));
-+        extraPlugins.push(new ProgressPlugin({ profile: buildOptions.verbose }));
-     }
-     if (buildOptions.showCircularDependencies) {
-         extraPlugins.push(new CircularDependencyPlugin({
-@@ -202,7 +208,7 @@ function getCommonConfig(wco) {
-         mode: buildOptions.optimization ? 'production' : 'development',
+@@ -226,7 +230,7 @@ function getCommonConfig(wco) {
+             : 'development',
          devtool: false,
          resolve: {
 -            extensions: ['.ts', '.tsx', '.mjs', '.js'],

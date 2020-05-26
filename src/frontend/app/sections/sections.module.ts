@@ -26,7 +26,7 @@ import {FrontendPDocCommonsModule} from '@dps/mycms-frontend-commons/dist/fronte
     ],
     imports: [
         TranslateModule,
-        NgbModule.forRoot(),
+        NgbModule,
         NgxMdModule.forRoot(),
         BrowserModule,
         FormsModule,

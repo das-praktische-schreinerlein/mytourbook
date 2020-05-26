@@ -14,7 +14,6 @@ import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testi
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {TourDocAssignFormComponent} from './tdoc-assignform.component';
 import {FormBuilder} from '@angular/forms';
-import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../../shared/tdoc-commons/services/tdoc-data.store';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
@@ -30,7 +29,7 @@ describe('TourDocAssignFormComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocAssignFormComponent],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot(),
+            imports: [NgbModule,
                 TranslateModule.forRoot()],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
@@ -40,7 +39,6 @@ describe('TourDocAssignFormComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 FormBuilder,
                 NgbModal,
-                NgbModalStack,
                 NgbActiveModal,
                 CommonRoutingService,
                 CommonDocRoutingService,

@@ -19,7 +19,6 @@ import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
 
 describe('TourDocActionsComponent', () => {
     let component: TourDocActionsComponent;
@@ -29,7 +28,7 @@ describe('TourDocActionsComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocActionsComponent],
             imports: [
-                NgbModule.forRoot()
+                NgbModule
             ],
             providers: [
                 { provide: Router, useValue: new RouterStub() },
@@ -37,7 +36,6 @@ describe('TourDocActionsComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() },
                 NgbModal,
-                NgbModalStack,
                 TourDocDynamicComponentService,
                 DynamicComponentService,
                 TourDocAlbumService,

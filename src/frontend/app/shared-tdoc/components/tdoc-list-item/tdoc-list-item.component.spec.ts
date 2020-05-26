@@ -37,7 +37,7 @@ describe('TourDocListItemComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA],
-            imports: [NgbModule.forRoot(),
+            imports: [NgbModule,
                 TranslateModule.forRoot()]
         })
             .compileComponents();

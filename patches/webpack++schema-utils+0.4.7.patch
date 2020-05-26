@@ -1,8 +1,8 @@
 diff --git a/node_modules/webpack/node_modules/schema-utils/src/validateOptions.js b/node_modules/webpack/node_modules/schema-utils/src/validateOptions.js
-index 363af44..21f5440 100644
+index f6d9f22..01215d9 100644
 --- a/node_modules/webpack/node_modules/schema-utils/src/validateOptions.js
 +++ b/node_modules/webpack/node_modules/schema-utils/src/validateOptions.js
-@@ -27,8 +27,8 @@ const validateOptions = (schema, options, name) => {
+@@ -26,8 +26,8 @@ const validateOptions = (schema, options, name) => {
      schema = fs.readFileSync(path.resolve(schema), 'utf8');
      schema = JSON.parse(schema);
    }

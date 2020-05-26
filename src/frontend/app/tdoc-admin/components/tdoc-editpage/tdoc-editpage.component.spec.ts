@@ -39,7 +39,7 @@ describe('TourDocEditpageComponent', () => {
         TestBed.configureTestingModule({
             declarations: [TourDocEditpageComponent, TourDocDateFormatPipe],
             imports: [
-                NgbModule.forRoot(),
+                NgbModule,
                 TranslateModule.forRoot(),
                 NgxMdModule.forRoot(),
                 NoopAnimationsModule
