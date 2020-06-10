@@ -171,6 +171,22 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+        <ngb-tab title="Ziele" *ngIf="availableTabs.DESTINATION">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Ziele'"
+                                            i18n-label="label section-page DESTINATION|Label section-page DESTINATION@@linline-search.label.tdoc.DESTINATION"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page DESTINATION|SearchLinkLabel section-page DESTINATION@@linline-search.searchLinkLabel.tdoc.DESTINATION"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType('DESTINATION', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
         <ngb-tab title="Regionen" *ngIf="availableTabs.LOCATION">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Regionen'"
@@ -297,6 +313,22 @@
                                             i18n-searchLinkLabel="searchLinkLabel section-page ROUTE|SearchLinkLabel section-page ROUTE@@linline-search.searchLinkLabel.tdoc.ROUTE"
                                             [baseSearchUrl]="baseSearchUrl"
                                             [params]="getFiltersForType('ROUTE', 'ratePers')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Ziele" *ngIf="availableTabs.DESTINATION">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Ziele'"
+                                            i18n-label="label section-page DESTINATION|Label section-page DESTINATION@@linline-search.label.tdoc.DESTINATION"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page DESTINATION|SearchLinkLabel section-page DESTINATION@@linline-search.searchLinkLabel.tdoc.DESTINATION"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType('DESTINATION', 'ratePers')"
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [loadFacets]="true"

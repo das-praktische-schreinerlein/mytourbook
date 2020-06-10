@@ -1,6 +1,6 @@
---
+-- ##################
 -- import location
---
+-- ##################
 INSERT INTO location (l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ)
      SELECT l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ FROM testmytbdb.location;
 
@@ -37,9 +37,9 @@ SET
                            COALESCE(l_meta_shortdesc, ''), ' ',
                            COALESCE(l_keywords, ''), ' ');
 
---
+-- ##################
 -- import news
---
+-- ##################
 INSERT INTO news (n_id, w_id, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords)
     SELECT n_id, w_id, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords FROM testmytbdb.news;
 
@@ -57,9 +57,9 @@ SET
     n_message_md=n_message,
     n_message_html=n_message;
 
---
+-- ##################
 -- import trip
---
+-- ##################
 INSERT INTO trip (tr_id, i_id, l_id, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url)
     SELECT tr_id, i_id, l_id, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url
 FROM testmytbdb.trip;
@@ -75,9 +75,9 @@ SET
     tr_meta_shortdesc_html=tr_meta_shortdesc,
     tr_dateshow=tr_datevon;
 
---
+-- ##################
 -- import tracks
---
+-- ##################
 INSERT into kategorie_full (k_id, t_id, l_id, tr_id, k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_type)
     SELECT k_id, t_id, l_id, COALESCE(tr_id, 0), k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_type
     FROM testmytbdb.kategorie WHERE (testmytbdb.kategorie.k_gesperrt=0 OR testmytbdb.kategorie.k_gesperrt IS NULL);
@@ -134,12 +134,15 @@ SET
     toupdate.n_id=grouped.n_id
 WHERE toupdate.k_id=grouped.k_id;
 
---
+-- ##################
 -- import routes
---
+-- ##################
 INSERT into tour (t_id, l_id, k_id, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ)
     SELECT t_id, l_id, k_id, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ
     FROM testmytbdb.tour;
+
+-- calc tour: d-ids
+UPDATE tour SET d_id=MD5(CONCAT(tour.l_id, "_", t_desc_gebiet, "_", t_desc_ziel, "_", t_typ));
 
 -- calc keywords
 UPDATE tour toupdate,
@@ -173,9 +176,70 @@ SET
                            COALESCE(t_keywords, ''), ' ')
 WHERE toupdate.t_id=grouped.t_id;
 
---
+-- ##################
+-- import-destinations
+-- ##################
+INSERT INTO destination (d_id,
+       l_id,
+       d_desc_gebiet,
+       d_desc_ziel,
+       d_name,
+       d_typ,
+       d_datevon,
+       d_route_hm,
+       d_ele_max,
+       d_route_m,
+       d_rate_ausdauer,
+       d_rate_bildung,
+       d_rate_gesamt,
+       d_rate_kraft,
+       d_rate_mental,
+       d_rate_motive,
+       d_rate_schwierigkeit,
+       d_rate_wichtigkeit,
+       d_rate,
+       d_rate_ks,
+       d_rate_firn,
+       d_rate_gletscher,
+       d_rate_klettern,
+       d_rate_bergtour,
+       d_rate_schneeschuh,
+       d_route_dauer
+       )
+SELECT MD5(CONCAT(tour.l_id, "_", t_desc_gebiet, "_", t_desc_ziel, "_", t_typ))                    AS d_id,
+       tour.l_id,
+       t_desc_gebiet AS d_desc_gebiet,
+       t_desc_ziel AS d_desc_ziel,
+       t_desc_ziel AS d_name,
+       t_typ AS d_typ,
+       min(t_datevon)                                                  AS d_datevon,
+       min(t_route_hm)                                                 AS d_route_hm,
+       min(t_ele_max)                                                  AS d_ele_max,
+       min(t_route_m)                                                  AS d_route_m,
+       min(t_rate_ausdauer)                                            AS d_rate_ausdauer,
+       max(t_rate_bildung)                                             AS d_rate_bildung,
+       max(t_rate_gesamt)                                              AS d_rate_gesamt,
+       min(t_rate_kraft)                                               AS d_rate_kraft,
+       min(t_rate_mental)                                              AS d_rate_mental,
+       max(t_rate_motive)                                              AS d_rate_motive,
+       min(t_rate_schwierigkeit)                                       AS d_rate_schwierigkeit,
+       max(t_rate_wichtigkeit)                                         AS d_rate_wichtigkeit,
+       min(t_rate)                                                     AS d_rate,
+       min(t_rate_ks)                                                  AS d_rate_ks,
+       min(t_rate_firn)                                                AS d_rate_firn,
+       min(t_rate_gletscher)                                           AS d_rate_gletscher,
+       min(t_rate_klettern)                                            AS d_rate_klettern,
+       min(t_rate_bergtour)                                            AS d_rate_bergtour,
+       min(t_rate_schneeschuh)                                         AS d_rate_schneeschuh,
+       min(t_route_dauer)                                              AS d_route_dauer
+FROM tour
+         LEFT JOIN location ON tour.l_id = location.l_id
+GROUP BY d_id;
+
+
+-- ##################
 -- import images
---
+-- ##################
 INSERT into image (i_id, k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit)
     SELECT distinct testmytbdb.image.i_id, testmytbdb.kategorie.k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit
     FROM testmytbdb.image INNER JOIN testmytbdb.kategorie ON testmytbdb.kategorie.k_id=testmytbdb.image.k_id
@@ -238,9 +302,9 @@ SET
     toupdate.i_lochirarchie=grouped.l_lochirarchietxt
 WHERE toupdate.i_id=grouped.i_id;
 
---
+-- ##################
 -- import videos
---
+-- ##################
 INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit)
     SELECT distinct testmytbdb.video.v_id, testmytbdb.kategorie.k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit
     FROM testmytbdb.video INNER JOIN testmytbdb.kategorie ON testmytbdb.kategorie.k_id=testmytbdb.video.k_id
@@ -303,19 +367,26 @@ SET
     toupdate.v_lochirarchie=grouped.l_lochirarchietxt
 WHERE toupdate.v_id=grouped.v_id;
 
--- -----------
+-- ##################
 -- update id-summary-fields
--- -----------
+-- ##################
 SET SESSION group_concat_max_len = 200000000;
 
 
 -- calc location: kat/tour-ids
 UPDATE location SET l_tids='0';
+UPDATE location SET l_dids='0';
 UPDATE location SET l_katids='0';
 UPDATE location toupdate,
  (SELECT tour.l_id AS l_id, GROUP_CONCAT(t_id SEPARATOR ',,') AS l_t_ids
   FROM tour GROUP BY tour.l_id) grouped
 SET toupdate.l_tids=grouped.l_t_ids
+WHERE toupdate.l_id=grouped.l_id;
+
+UPDATE location toupdate,
+ (SELECT destination.l_id AS l_id, GROUP_CONCAT(d_id SEPARATOR ',,') AS l_d_ids
+  FROM destination GROUP BY destination.l_id) grouped
+SET toupdate.l_dids=grouped.l_d_ids
 WHERE toupdate.l_id=grouped.l_id;
 
 UPDATE location toupdate,
@@ -325,10 +396,13 @@ SET toupdate.l_katids=grouped.l_k_ids
 WHERE toupdate.l_id=grouped.l_id;
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -337,14 +411,18 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=7;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -353,15 +431,19 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=6;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -370,15 +452,19 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=5;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -387,15 +473,19 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=4;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -404,15 +494,19 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=3;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -421,14 +515,18 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=2;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -437,14 +535,18 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=1;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id, GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
     GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
   FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
 SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
   toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
   toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
 WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
@@ -453,9 +555,11 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
     )=0;
+UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
+UPDATE location SET l_dids=CONCAT(l_dids, ',');
 UPDATE location SET l_tids=CONCAT(l_tids, ',');
 UPDATE location SET l_katids=CONCAT(l_katids, ',');
 
@@ -481,17 +585,33 @@ UPDATE tour SET k_id=0 WHERE K_ID IS NULL;
 UPDATE tour SET t_k_ids=REGEXP_REPLACE(REGEXP_REPLACE(t_k_ids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 
--- calc track: tour-ids
-UPDATE kategorie_full SET k_t_ids=COALESCE(t_id, '0');
+-- calc track: d_id
 UPDATE kategorie_full toupdate,
-  (SELECT mjoin.k_id AS k_id, GROUP_CONCAT(CAST(mjoin.t_id AS char(100)) SEPARATOR  ',,') AS t_ids
-   FROM testmytbdb.kategorie_tour mjoin
+ (SELECT kategorie_full.k_id, tour.d_id
+  FROM kategorie_full INNER JOIN tour ON kategorie_full.t_id=tour.t_id
+  GROUP BY kategorie_full.k_id) grouped
+SET
+    toupdate.d_id=grouped.d_id
+WHERE toupdate.k_id=grouped.k_id;
+
+-- calc track: destination/tour-ids
+UPDATE kategorie_full SET k_t_ids=COALESCE(t_id, '0');
+UPDATE kategorie_full SET k_d_ids=CONCAT('"', COALESCE(d_id, '0'));
+UPDATE kategorie_full toupdate,
+  (SELECT mjoin.k_id AS k_id,
+    GROUP_CONCAT(CAST(mjoin.t_id AS char(100)) SEPARATOR  ',,') AS t_ids,
+    GROUP_CONCAT(tour.d_id SEPARATOR  '",,"') AS d_ids
+   FROM testmytbdb.kategorie_tour mjoin INNER JOIN tour on mjoin.t_id=tour.t_id
    GROUP BY mjoin.k_id) grouped
-SET toupdate.k_t_ids=CONCAT(COALESCE(k_t_ids, ''), ',,', COALESCE(grouped.t_ids, ''))
+SET toupdate.k_t_ids=CONCAT(COALESCE(k_t_ids, ''), ',,', COALESCE(grouped.t_ids, '')),
+    toupdate.k_d_ids=CONCAT(COALESCE(k_d_ids, ''), '",,"', COALESCE(grouped.d_ids, ''))
 WHERE toupdate.k_id=grouped.k_id;
 
 UPDATE kategorie_full SET k_t_ids=REGEXP_REPLACE(REGEXP_REPLACE(k_t_ids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE kategorie_full SET k_t_ids_full=COALESCE(k_t_ids, '');
+UPDATE kategorie_full SET k_d_ids=REGEXP_REPLACE(REGEXP_REPLACE(k_d_ids, '^",*(.*),"*$', '\\1'), ',+', ',');
+UPDATE kategorie_full SET k_d_ids=CONCAT(k_d_ids, '"');
+UPDATE kategorie_full SET k_d_ids_full=COALESCE(k_d_ids, '');
 
 --
 -- update trackdata

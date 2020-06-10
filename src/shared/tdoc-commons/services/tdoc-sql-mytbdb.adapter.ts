@@ -87,7 +87,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'video', 'news', 'odimgobject'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject'].map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
         facet = new Facet();
@@ -114,6 +114,15 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         const ids = params.where['id'];
         if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
             const tabKey = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
+            if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+                return tabKey;
+            }
+
+            return undefined;
+        }
+
+        if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
+            const tabKey = ids.in[0].replace(/_.*/g, '').toLowerCase();
             if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
                 return tabKey;
             }

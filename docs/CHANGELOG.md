@@ -2,6 +2,26 @@
  
 # Versions
  
+## 4.3.0
+- added new tourdoc-type: destination
+
+### new features
+- common: added new type: destination
+
+### improvements
+- none
+
+### bug fixes
+- none
+ 
+### breaking changes
+- none
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
+
+
 ## 4.2.0
 - improved and fixed charts, maps and dashboard
 

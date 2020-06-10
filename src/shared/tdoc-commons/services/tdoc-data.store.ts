@@ -22,7 +22,6 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
     static UPDATE_RELATION = ['tdocimage', 'tdocvideo', 'tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech',
         'tdocodimageobject', 'tdocnavigationobject'];
     private validMoreNumberFilterNames = {
-        id: true,
         track_id_i: true,
         track_id_is:  true,
         trip_id_i: true,
@@ -41,7 +40,10 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         loc_parent_id_i: true
     };
     private validMoreInFilterNames = {
+        id: true,
         id_notin_is: true,
+        destination_id_s: true,
+        destination_id_ss:  true,
         doublettes: true,
         conflictingRates: true,
         noCoordinates: true,

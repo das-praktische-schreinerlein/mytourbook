@@ -13,6 +13,9 @@ INSERT INTO trip SELECT * FROM testmytbexportbetadb.trip;
 TRUNCATE TABLE kategorie_full;
 INSERT INTO kategorie_full SELECT * FROM testmytbexportbetadb.kategorie_full;
 
+TRUNCATE TABLE destianation;
+INSERT INTO destianation SELECT * FROM testmytbexportbetadb.destianation;
+
 TRUNCATE TABLE tour;
 INSERT INTO tour SELECT * FROM testmytbexportbetadb.tour;
 

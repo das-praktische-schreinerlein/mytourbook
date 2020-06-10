@@ -1523,6 +1523,7 @@
                 "IMAGE": true,
                 "IMAGE_NEARBY": true,
                 "ODIMGOBJECT": true,
+                "DESTINATION": true,
                 "ROUTE": true,
                 "ROUTE_NEARBY": true,
                 "TRACK": true,
@@ -1542,6 +1543,7 @@
         },
         "pdoc-sectionpage": {
             "availableTabs": {
+                "DESTINATION": true,
                 "IMAGE": true,
                 "ROUTE": true,
                 "TRACK": true,

@@ -23,6 +23,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         video_id_i: 'VIDEO',
         route_id_i: 'ROUTE',
         route_id_is: 'ROUTE',
+        destination_id_s: 'DESTINATION',
+        destination_id_ss: 'DESTINATION',
         loc_parent_id_i: 'LOCATION'};
 
     private splitter = '_,_';
