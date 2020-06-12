@@ -48,6 +48,10 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
                 'f.data_tech_dur_facet_fs.facet.limit': '-1',
                 'f.data_tech_dur_facet_fs.facet.sort': 'index'
             },
+            'done_ss': {
+                'f.done_ss.facet.limit': '-1',
+                'f.done_ss.facet.sort': 'index'
+            },
             'keywords_txt': {
                 'f.keywords_txt.facet.prefix': 'kw_',
                 'f.keywords_txt.facet.limit': '-1',

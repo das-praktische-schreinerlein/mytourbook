@@ -294,6 +294,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.actiontype, 'hrt_actiontype', undefined, true));
 
         const when = (tdocSearchForm.when ? tdocSearchForm.when : '')
+            .replace(new RegExp('done', 'g'), '')
             .replace(new RegExp('year', 'g'), '')
             .replace(new RegExp('month', 'g'), 'Monat')
             .replace(new RegExp('week', 'g'), 'Woche');

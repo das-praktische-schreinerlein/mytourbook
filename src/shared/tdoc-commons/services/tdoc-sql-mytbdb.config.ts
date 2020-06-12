@@ -310,6 +310,10 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (k_datevon IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                         '  kw_name AS value ' +
@@ -846,6 +850,10 @@ export class TourDocSqlMytbDbConfig {
                 'data_tech_dur_facet_fs': {
                     selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
                     selectFrom: 'image INNER JOIN kategorie ON kategorie.k_id=image.k_id',
+                    orderBy: 'value asc'
+                },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (i_date IS NOT NULL))',
                     orderBy: 'value asc'
                 },
                 'keywords_txt': {
@@ -1419,6 +1427,11 @@ export class TourDocSqlMytbDbConfig {
                         'INNER JOIN kategorie ON kategorie.k_id=image.k_id',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (i_date IS NOT NULL))',
+                    selectFrom: 'image_object INNER JOIN image ON image_object.i_id=image.i_id',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                         '  kw_name AS value ' +
@@ -1986,6 +1999,10 @@ export class TourDocSqlMytbDbConfig {
                     selectFrom: 'video INNER JOIN kategorie ON kategorie.k_id=video.k_id',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (v_date IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                         '  kw_name AS value ' +
@@ -2499,6 +2516,10 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'tour.t_desc_gebiet',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (t_datevon IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                         '  kw_name AS value ' +
@@ -2962,6 +2983,10 @@ export class TourDocSqlMytbDbConfig {
                     selectField: 'destination.d_desc_gebiet',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (d_datevon IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                         '  kw_name AS value ' +
@@ -3382,6 +3407,9 @@ export class TourDocSqlMytbDbConfig {
                 'data_tech_dur_facet_fs': {
                     noFacet: true
                 },
+                'done_ss': {
+                    noFacet: true
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                         '  kw_name AS value ' +
@@ -3703,6 +3731,10 @@ export class TourDocSqlMytbDbConfig {
                 'data_tech_dur_facet_fs': {
                     noFacet: true
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (tr_datevon IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     noFacet: true
                 },
@@ -4002,6 +4034,10 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'data_tech_dur_facet_fs': {
                     noFacet: true
+                },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (n_date IS NOT NULL))',
+                    orderBy: 'value asc'
                 },
                 'keywords_txt': {
                     noFacet: true

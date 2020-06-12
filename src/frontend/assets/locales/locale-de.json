@@ -33,6 +33,8 @@
     "news": "News",
     "route": "Route",
     "destination": "Ziel",
+    "DONE0": "Ohne Datum/Nicht begangen",
+    "DONE1": "Mit Datum/Begangen",
     "Monatnull": "Ohne Datum",
     "Monat0": "Ohne Datum",
     "Monat1": "Januar",

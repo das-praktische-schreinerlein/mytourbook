@@ -88,6 +88,16 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                     };
                 }
             }
+            const stringKeys = ['done'];
+            const whenStringValues = this.searchParameterUtils.splitValuesByPrefixes(searchForm.when, ',', stringKeys);
+            for (const key of stringKeys) {
+                if (whenStringValues.has(key)) {
+                    filter = filter || {};
+                    filter[key + '_ss'] = {
+                        'in': this.searchParameterUtils.joinValuesAndReplacePrefix(whenStringValues.get(key), key, ',').split(/,/)
+                    };
+                }
+            }
         }
 
         if (searchForm.locId !== undefined && searchForm.locId.length > 0) {

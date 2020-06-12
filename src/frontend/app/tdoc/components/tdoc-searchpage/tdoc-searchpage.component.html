@@ -143,6 +143,10 @@
                             <app-cdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
                                                (columnClicked)="onTagcloudClicked($event, 'actiontype')"
                                                [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Mit Datum/Begangen'" [facetName]="'done_ss'" [valuePrefix]="'done'"
+                                               [sortKey]="'key'"
+                                               (columnClicked)="onTagcloudClicked($event, 'when')"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
                             <app-cdoc-tagcloud [label]="'Jahr'" [facetName]="'year_is'" [valuePrefix]="'year'"
                                                [sortKey]="'key'"
                                                (columnClicked)="onTagcloudClicked($event, 'when')"

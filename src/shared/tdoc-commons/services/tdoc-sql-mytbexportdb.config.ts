@@ -108,6 +108,10 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 * 2) / 2, 1)',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (k_datevon IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                     '  SUBSTRING_INDEX(SUBSTRING_INDEX(kategorie_full.k_keywords, ",", numbers.n), ",", -1) AS value ' +
@@ -425,6 +429,10 @@ export class TourDocSqlMytbExportDbConfig {
                     selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (i_date IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     // use only kat-keywords because of performance-issues
                     selectSql: 'SELECT 0 AS count, ' +
@@ -731,6 +739,10 @@ export class TourDocSqlMytbExportDbConfig {
                     selectFrom: 'video INNER JOIN kategorie_full ON kategorie_full.k_id=video.k_id',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (v_date IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     // use only kat-keywords because of performance-issues
                     selectSql: 'SELECT 0 AS count, ' +
@@ -815,7 +827,7 @@ export class TourDocSqlMytbExportDbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['video', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination'],
+                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'destination'],
                     filterField: '"video"',
                     selectLimit: 1
                 },
@@ -1060,6 +1072,10 @@ export class TourDocSqlMytbExportDbConfig {
                 },
                 'data_info_region_s': {
                     selectField: 'tour.t_desc_gebiet',
+                    orderBy: 'value asc'
+                },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (t_datevon IS NOT NULL))',
                     orderBy: 'value asc'
                 },
                 'keywords_txt': {
@@ -1387,6 +1403,10 @@ export class TourDocSqlMytbExportDbConfig {
                     selectField: 'destination.d_desc_gebiet',
                     orderBy: 'value asc'
                 },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (d_datevon IS NOT NULL))',
+                    orderBy: 'value asc'
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                         '  SUBSTRING_INDEX(SUBSTRING_INDEX(destination.d_keywords, ",", numbers.n), ",", -1) AS value ' +
@@ -1672,6 +1692,9 @@ export class TourDocSqlMytbExportDbConfig {
                 'data_tech_dur_facet_fs': {
                     noFacet: true
                 },
+                'done_ss': {
+                    noFacet: true
+                },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
                     '  SUBSTRING_INDEX(SUBSTRING_INDEX(location.l_keywords, ",", numbers.n), ",", -1) AS value ' +
@@ -1877,6 +1900,10 @@ export class TourDocSqlMytbExportDbConfig {
                 },
                 'data_tech_dur_facet_fs': {
                     noFacet: true
+                },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (tr_datevon IS NOT NULL))',
+                    orderBy: 'value asc'
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -2084,6 +2111,10 @@ export class TourDocSqlMytbExportDbConfig {
                 },
                 'data_tech_dur_facet_fs': {
                     noFacet: true
+                },
+                'done_ss': {
+                    selectField: 'CONCAT("DONE", (n_date IS NOT NULL))',
+                    orderBy: 'value asc'
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +

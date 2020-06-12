@@ -21,6 +21,7 @@
                            d_datevon                                                                                           as datesort,
                            d_datevon,
                            DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
+                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             as done,
                            d_keywords,
                            d_rate_gesamt,
                            d_gps_lat,
@@ -69,6 +70,7 @@
                            d_datevon                                                                                           as datesort,
                            d_datevon,
                            DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
+                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             as done,
                            d_keywords,
                            d_rate_gesamt,
                            d_gps_lat,
@@ -130,6 +132,7 @@
             <field column="d_datevon" name="date_dt" />
             <field column="d_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
+            <field column="done" name="done_ss" />
             <field column="d_gps_lat" name="geo_lat_s" />
             <field column="d_gps_lon" name="geo_lon_s" />
             <field column="d_gps_loc" name="geo_loc_p" type="location" />
@@ -286,6 +289,7 @@
                            k_datevon                                                                                      as datesort,
                            k_datevon,
                            DATE_FORMAT(k_datevon, GET_FORMAT(DATE, 'ISO'))                                                as dateonly,
+                           CONCAT('DONE', (k_datevon IS NOT NULL))                                                        as done,
                            week(k_datevon)                                                                                AS week,
                            month(k_datevon)                                                                               as month,
                            year(k_datevon)                                                                                as year,
@@ -343,6 +347,7 @@
                            k_datevon                                                                                      as datesort,
                            k_datevon,
                            DATE_FORMAT(k_datevon, GET_FORMAT(DATE, 'ISO'))                                                as dateonly,
+                           CONCAT('DONE', (k_datevon IS NOT NULL))                                                        as done,
                            week(k_datevon)                                                                                AS month,
                            month(k_datevon)                                                                               as month,
                            year(k_datevon)                                                                                as year,
@@ -412,6 +417,7 @@
             <field column="datesort" name="datesort_dt" />
             <field column="dateonly" name="dateonly_s" />
             <field column="k_datevon" name="date_dts" />
+            <field column="done" name="done_ss" />
             <field column="week" name="week_is" />
             <field column="month" name="month_is" />
             <field column="year" name="year_is" />
@@ -521,6 +527,7 @@
                            t_datevon                                                                                           as datesort,
                            t_datevon,
                            DATE_FORMAT(t_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
+                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             as done,
                            t_gpstracks_basefile,
                            t_keywords,
                            t_persons,
@@ -580,6 +587,7 @@
                            t_datevon                                                                                           as datesort,
                            t_datevon,
                            DATE_FORMAT(t_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
+                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             as done,
                            t_gpstracks_basefile,
                            t_keywords,
                            t_persons,
@@ -651,6 +659,7 @@
             <field column="t_datevon" name="date_dt" />
             <field column="t_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
+            <field column="done" name="done_ss" />
             <field column="t_gps_lat" name="geo_lat_s" />
             <field column="t_gps_lon" name="geo_lon_s" />
             <field column="t_gps_loc" name="geo_loc_p" type="location" />
@@ -976,6 +985,7 @@
                            i_date                                                                                            as datesort,
                            i_date,
                            DATE_FORMAT(i_date, GET_FORMAT(DATE, 'ISO'))                                                      as dateonly,
+                           CONCAT('DONE', (i_date IS NOT NULL))                                                              as done,
                            k_gpstracks_basefile,
                            i_keywords,
                            i_persons,
@@ -1023,6 +1033,7 @@
                            i_date                                                   as datesort,
                            i_date,
                            DATE_FORMAT(i_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
+                           CONCAT('DONE', (i_date IS NOT NULL))                     as done,
                            k_gpstracks_basefile,
                            i_keywords,
                            i_persons,
@@ -1089,6 +1100,7 @@
             <field column="dateonly" name="dateonly_s" />
             <field column="i_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
+            <field column="done" name="done_ss" />
             <field column="i_date" name="date_dt" />
             <field column="i_date" name="date_dts" />
             <field column="week" name="week_is" />
@@ -1131,6 +1143,7 @@
                            v_date                                                                                            as datesort,
                            v_date,
                            DATE_FORMAT(v_date, GET_FORMAT(DATE, 'ISO'))                                                      as dateonly,
+                           CONCAT('DONE', (v_date IS NOT NULL))                                                              as done,
                            k_gpstracks_basefile,
                            v_keywords,
                            v_persons,
@@ -1178,6 +1191,7 @@
                            v_date                                                   as datesort,
                            v_date,
                            DATE_FORMAT(v_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
+                           CONCAT('DONE', (v_date IS NOT NULL))                     as done,
                            k_gpstracks_basefile,
                            v_keywords,
                            v_persons,
@@ -1245,6 +1259,7 @@
             <field column="dateonly" name="dateonly_s" />
             <field column="v_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
+            <field column="done" name="done_ss" />
             <field column="v_date" name="date_dt" />
             <field column="v_date" name="date_dts" />
             <field column="week" name="week_is" />
@@ -1294,6 +1309,7 @@
                                     tr_datevon                                                   as datesort,
                                     tr_datevon,
                                     DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, 'ISO'))             as dateonly,
+                                    CONCAT('DONE', (tr_datevon IS NOT NULL))                     as done,
                                     TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon)) / 3600         as dur,
                                     tr_name,
                                     tr_meta_shortdesc_md,
@@ -1327,6 +1343,7 @@
                                     tr_datevon                                                   as datesort,
                                     tr_datevon,
                                     DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, 'ISO'))             as dateonly,
+                                    CONCAT('DONE', (tr_datevon IS NOT NULL))                     as done,
                                     TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon)) / 3600         as dur,
                                     tr_name,
                                     tr_meta_shortdesc_md,
@@ -1372,6 +1389,7 @@
             <field column="datesort" name="datesort_dt" />
             <field column="tr_datevon" name="date_dt" />
             <field column="dateonly" name="dateonly_s" />
+            <field column="done" name="done_ss" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
             <field column="altAsc" name="data_tech_alt_asc_i" />
@@ -1519,6 +1537,7 @@
                                     n_date,
                                     n_date                                                   as dateshow,
                                     DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
+                                    CONCAT('DONE', (n_date IS NOT NULL))                     as done,
                                     n_headline,
                                     n_message_md,
                                     n_message_html,
@@ -1546,6 +1565,7 @@
                                     n_date,
                                     n_date                                                   as dateshow,
                                     DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
+                                    CONCAT('DONE', (n_date IS NOT NULL))                     as done,
                                     n_headline,
                                     n_message_md,
                                     n_message_html,
@@ -1586,6 +1606,7 @@
             <field column="n_date" name="datesort_dt" />
             <field column="n_date" name="date_dt" />
             <field column="dateonly" name="dateonly_s" />
+            <field column="done" name="done_ss" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
             <field column="altAsc" name="data_tech_alt_asc_i" />
