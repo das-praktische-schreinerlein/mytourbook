@@ -279,6 +279,10 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             nearBy: this.tdocSearchForm.nearby,
             personalRateDifficulty: this.tdocSearchForm.personalRateDifficulty,
             techRateOverall: this.tdocSearchForm.techRateOverall,
+            techDataDuration: this.tdocSearchForm.techDataDuration,
+            techDataDistance: this.tdocSearchForm.techDataDistance,
+            techDataAltitudeMax: this.tdocSearchForm.techDataAltitudeMax,
+            techDataAscent: this.tdocSearchForm.techDataAscent,
             nearbyAddress: this.tdocSearchForm.nearbyAddress,
             fulltext: this.tdocSearchForm.fulltext
         }));

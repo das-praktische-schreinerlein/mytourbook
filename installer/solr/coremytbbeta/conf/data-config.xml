@@ -121,9 +121,6 @@
             <field column="d_name" name="name_s" stripHTML="true" />
             <field column="d_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
-            <field column="d_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="d_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="d_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="d_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />

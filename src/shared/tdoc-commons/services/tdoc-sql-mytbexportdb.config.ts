@@ -1562,7 +1562,7 @@ export class TourDocSqlMytbExportDbConfig {
                 trip_id_i: '"666dummy999"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(d_name, " ", COALESCE(d_meta_shortdesc,""), " ", l_name)'
+                html: 'CONCAT(d_name, " ", l_name)'
             },
             writeMapping: {
             },

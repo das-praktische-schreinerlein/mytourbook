@@ -164,6 +164,18 @@
                             <app-cdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
                                                (columnClicked)="onTagcloudClicked($event, 'techRateOverall')"
                                                [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Dauer in h'" [facetName]="'data_tech_dur_facet_fs'" [max]="50"
+                                               (columnClicked)="onTagcloudClicked($event, 'techDataDuration')"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Länge in km'" [facetName]="'data_tech_dist_facets_fs'" [max]="50"
+                                               (columnClicked)="onTagcloudClicked($event, 'techDataDistance')"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Höhe in m'" [facetName]="'data_tech_alt_max_facet_is'" [max]="50"
+                                               (columnClicked)="onTagcloudClicked($event, 'techDataAltitudeMax')"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
+                            <app-cdoc-tagcloud [label]="'Aufstieg in hm'" [facetName]="'data_tech_alt_asc_facet_is'" [max]="50"
+                                               (columnClicked)="onTagcloudClicked($event, 'techDataAscent')"
+                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
                         </div>
                     </div>
 
