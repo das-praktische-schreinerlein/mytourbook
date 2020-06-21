@@ -4,12 +4,14 @@
  
 ## 4.3.0
 - added new tourdoc-type: destination
+- improved create-doc-handling
 
 ### new features
 - common: added new type: destination
 
 ### improvements
-- none
+- documentation: added admin-hints
+- frontend: improved create-doc-handling
 
 ### bug fixes
 - none

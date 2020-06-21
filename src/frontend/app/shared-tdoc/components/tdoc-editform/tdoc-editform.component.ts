@@ -36,7 +36,8 @@ import {LatLng} from 'leaflet';
     styleUrls: ['./tdoc-editform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TourDocEditformComponent extends CommonDocEditformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
+export class TourDocEditformComponent extends CommonDocEditformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
+    TourDocDataService> {
     private geoLocationService = new GeoLocationService();
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
@@ -241,7 +242,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     createNewGeoLocArea(): boolean {
-        let points = [];
+        const points = [];
         const geoLoc = this.editFormGroup.getRawValue()['geoLoc'];
         if (geoLoc !== undefined && geoLoc !== null && geoLoc.length > 0) {
             const lst = geoLoc ? geoLoc.split(',') : [];
@@ -284,6 +285,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         newGpx = GeoGpxParser.reformatXml(newGpx);
         this.setValue('gpsTrackSrc', newGpx);
         this.updateGeoLocMap();
+
         return false;
     }
 

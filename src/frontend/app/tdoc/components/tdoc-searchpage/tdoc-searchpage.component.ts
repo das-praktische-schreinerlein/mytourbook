@@ -47,7 +47,7 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
 
     constructor(route: ActivatedRoute, commonRoutingService: CommonRoutingService, errorResolver: ErrorResolver,
                 tdocDataService: TourDocDataService, searchFormConverter: TourDocSearchFormConverter,
-                cdocRoutingService: TourDocRoutingService, toastr: ToastrService, pageUtils: PageUtils,
+                protected cdocRoutingService: TourDocRoutingService, toastr: ToastrService, pageUtils: PageUtils,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, appService: GenericAppService,
                 platformService: PlatformService, layoutService: LayoutService, searchFormUtils: SearchFormUtils,
                 tdocSearchFormUtils: TourDocSearchFormUtils, protected actionService: TourDocActionTagService,
@@ -72,6 +72,11 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
             this.pageUtils.scrollToTopOfElement(this.elRef);
             this.cd.markForCheck();
         }
+    }
+
+    onCreateNewRecord(type: string) {
+        this.cdocRoutingService.navigateToCreate(type, null, null);
+        return false;
     }
 
     onMapElementsFound(mapElements: MapElement[]) {
@@ -101,11 +106,13 @@ export class TourDocSearchpageComponent extends CommonDocSearchpageComponent<Tou
         return {
             baseSearchUrl: ['tdoc'].join('/'),
             baseSearchUrlDefault: ['tdoc'].join('/'),
-            maxAllowedM3UExportItems: BeanUtils.getValue(config, 'services.serverItemExport.maxAllowedM3UItems')
+            maxAllowedM3UExportItems: BeanUtils.getValue(config, 'services.serverItemExport.maxAllowedM3UItems'),
+            availableCreateActionTypes: BeanUtils.getValue(config, 'components.tdoc-searchpage.availableCreateActionTypes')
         };
     }
 
     protected doProcessAfterResolvedData(config: {}): void {
+        super.doProcessAfterResolvedData(config);
         if (this.searchForm.nearby !== undefined && this.searchForm.nearby.length > 0) {
             const [lat, lon] = this.searchForm.nearby.split('_');
             this.mapCenterPos = new L.LatLng(+lat, +lon);

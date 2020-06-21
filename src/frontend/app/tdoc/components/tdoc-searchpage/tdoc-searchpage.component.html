@@ -34,6 +34,8 @@
                                       (pageChange)="onPageChange($event, true)" ></app-cdoc-list-footer>
             </div>
             <div class="col-sm-6">
+                <a (click)="onCreateNewRecord(availableCreateActionType)" *ngIf="availableCreateActionType" class="btn btn-action btn-sm float-right"
+                   i18n="link text createRecord|linktext for createRecord@@link.searchresult.createRecord">Create New Record</a>
                 <a (click)="onM3UExport($event)" *ngIf="m3uExportAvailable" class="btn btn-action btn-sm float-right"
                    i18n="link text playlistexport|linktext for playlistexport@@link.searchresult.playlistexport">Playlist-Export</a>
             </div>

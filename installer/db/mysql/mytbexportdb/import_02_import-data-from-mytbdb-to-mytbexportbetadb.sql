@@ -236,6 +236,17 @@ FROM tour
          LEFT JOIN location ON tour.l_id = location.l_id
 GROUP BY d_id;
 
+-- calc desc+dates+coords
+UPDATE destination toupdate,
+ (SELECT destination.d_id, location.l_gps_lat, location.l_gps_lon, location.l_lochirarchietxt
+  FROM destination INNER JOIN location ON destination.l_id=location.l_id
+  GROUP BY destination.d_id) grouped
+SET
+    toupdate.d_gps_lat=grouped.l_gps_lat,
+    toupdate.d_gps_lon=grouped.l_gps_lon,
+    toupdate.d_dateshow=d_datevon,
+WHERE toupdate.d_id=grouped.d_id;
+
 
 -- ##################
 -- import images

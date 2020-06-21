@@ -13,7 +13,9 @@
     </div>
     <div class="container content-container">
         <div class="container">
-            <app-tdoc-editform [record]="record" (save)="submitSave($event)"></app-tdoc-editform>
+            <app-tdoc-editform [record]="record"
+                               [availableForwardModes]="suggestedForwardModes"
+                               (saveAndForward)="submitSaveAndForward($event)"></app-tdoc-editform>
         </div>
     </div>
 </ng-container>

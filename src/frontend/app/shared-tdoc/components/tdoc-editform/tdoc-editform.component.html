@@ -227,8 +227,28 @@
     <ng-template #submitRow>
         <div class="row">
             <div class="col-sm-12 form-inline input-group input-group-sm">
-                <button type="submit" (click)="submitSave($event, false)" class="btn btn-action btn-sm" i18n="button edit tdoc|Buttontext to edit tdoc@@button.form.tdoc.edit">Save</button>
-                <button type="submit" (click)="submitSave($event, true)" *ngIf="backToSearch" class="btn btn-action btn-sm" i18n="button editAndSearch tdoc|Buttontext to editAndSearch tdoc@@button.form.tdoc.editAndSearch">Save and Search</button>
+                <ng-container *ngIf="availableForwardModes == null || availableForwardModes.length <= 0">
+                    <button type="submit" (click)="submitSave($event, false)" class="btn btn-action btn-sm" i18n="button edit tdoc|Buttontext to edit tdoc@@button.form.tdoc.edit">Save</button>
+                    <button type="submit" (click)="submitSave($event, true)" *ngIf="backToSearch" class="btn btn-action btn-sm" i18n="button editAndSearch tdoc|Buttontext to editAndSearch tdoc@@button.form.tdoc.editAndSearch">Save and Search</button>
+                </ng-container>
+                <ng-container *ngIf="availableForwardModes != null && availableForwardModes.length > 0">
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.SHOW)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.SHOW)"
+                            class="btn btn-action btn-sm" i18n="button edit tdoc|Buttontext to edit tdoc@@button.form.tdoc.edit">Save</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SEARCH)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SEARCH)"
+                            class="btn btn-action btn-sm" i18n="button editAndSearch tdoc|Buttontext to editAndSearch tdoc@@button.form.tdoc.editAndSearch">Save and Search</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_SHOW)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_SHOW)"
+                            class="btn btn-action btn-sm" i18n="button editAndShowSource tdoc|Buttontext to editAndShowSource tdoc@@button.form.tdoc.editAndShowSource">Save and Show Source</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_EDIT)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_EDIT)"
+                            class="btn btn-action btn-sm" i18n="button editAndEditSource tdoc|Buttontext to editAndEditSource tdoc@@button.form.tdoc.editAndEditSource">Save and Edit Source</button>
+                </ng-container>
             </div>
         </div>
     </ng-template>

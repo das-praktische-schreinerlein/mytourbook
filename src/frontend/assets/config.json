@@ -1516,6 +1516,9 @@
                 }
             ]
         },
+        "tdoc-searchpage": {
+            "availableCreateActionTypes": "ROUTE,LOCATION,NEWS,TRIP"
+        },
         "tdoc-showpage": {
             "showBigImages": false,
             "allowedQueryParams": [],
