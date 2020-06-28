@@ -12,6 +12,7 @@
 ### improvements
 - documentation: added admin-hints
 - frontend: improved create-doc-handling
+- frontend: suggest routes
 
 ### bug fixes
 - none

@@ -29,6 +29,7 @@ import {DOCUMENT} from '@angular/common';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
+import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -537,10 +538,29 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 me.tdocSearchFormUtils.getPersonValues(tdocSearchResult), true, [], true);
 
-            const routeValues = me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getRouteValues(tdocSearchResult));
-            me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(
-                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(routeValues, true, [],
-                    false), rawValues['routeId']);
+            const selectableRouteValues = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getRouteValues(tdocSearchResult)),
+                true, [], false);
+            const location = this.record.locHirarchie
+                ? TourDocAdapterResponseMapper.generateDoubletteValue(this.record.locHirarchie.replace(/.*-> /, ''))
+                : '';
+            let ordinaryRoutes: IMultiSelectOption[] = [];
+            const suggestedRoutes: IMultiSelectOption[] = [];
+            if (location && location.length > 0) {
+                selectableRouteValues.forEach(value => {
+                    if (TourDocAdapterResponseMapper.generateDoubletteValue(value.name).includes(location)) {
+                        const copy: IMultiSelectOption = { ...value};
+                        copy.name = '\uD83D\uDCA1 ' + copy.name;
+                        suggestedRoutes.push(copy);
+                    } else {
+                        ordinaryRoutes.push(value);
+                    }
+                });
+            } else {
+                ordinaryRoutes = selectableRouteValues;
+            }
+            const sortedRoutes: IMultiSelectOption[] = [].concat(suggestedRoutes).concat(ordinaryRoutes);
+            me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(sortedRoutes, rawValues['routeId']);
 
             const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getTrackValues(tdocSearchResult));
             me.optionsSelect['trackId'] = me.searchFormUtils.moveSelectedToTop(
