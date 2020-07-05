@@ -2453,8 +2453,8 @@ export class TourDocSqlMytbDbConfig {
                 'todoDesc': {
                     selectSql: 'SELECT COUNT(tour.t_id) AS count, "todoDesc" AS value,' +
                         ' "todoDesc" AS label, "true" AS id' +
-                        ' FROM tour WHERE t_meta_shortdesc LIKE "TODODESC"',
-                    filterField: 'tour.t_meta_shortdesc',
+                        ' FROM tour WHERE t_datevon IS NOT NULL AND t_meta_shortdesc LIKE "TODODESC"',
+                    filterField: 't_datevon IS NOT NULL AND tour.t_meta_shortdesc',
                     action: AdapterFilterActions.IN
                 },
                 'todoKeywords': {
@@ -2462,15 +2462,15 @@ export class TourDocSqlMytbDbConfig {
                         ' "todoKeywords" AS label, "true" AS id' +
                         ' FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
                         ' INNER JOIN keyword on tour_keyword.kw_id=keyword.kw_id ' +
-                        'WHERE keyword.kw_name IN ("KW_TODOKEYWORDS")',
-                    filterField: 'keyword.kw_name',
+                        'WHERE t_datevon IS NOT NULL AND keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                    filterField: 't_datevon IS NOT NULL AND keyword.kw_name',
                     action: AdapterFilterActions.IN
                 },
                 'unrated': {
                     selectSql: 'SELECT COUNT(tour.t_id) AS count, "unrated" AS value,' +
                         ' "unrated" AS label, "true" AS id' +
-                        ' FROM tour WHERE t_rate_gesamt IS NULL or t_rate_gesamt in (0)',
-                    filterField: 'tour.t_rate_gesamt',
+                        ' FROM tour WHERE t_datevon IS NOT NULL AND (t_rate_gesamt IS NULL or t_rate_gesamt in (0))',
+                    filterField: 't_datevon IS NOT NULL AND tour.t_rate_gesamt',
                     action: AdapterFilterActions.IN
                 },
                 'unRatedChildren': {
