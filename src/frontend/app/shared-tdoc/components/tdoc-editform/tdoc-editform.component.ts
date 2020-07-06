@@ -375,7 +375,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             prefix = BeanUtils.getValue(config, 'components.tdoc-keywords.editPrefix');
         }
 
-        return {
+        const defaultConfig: CommonDocEditformComponentConfig = {
             suggestionConfigs: suggestionConfig,
             editPrefix: prefix,
             numBeanFieldConfig: {
@@ -405,7 +405,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'subTypeActiontype': {
                     labelPrefix: 'ac_',
                     values: [0, 1, 2, 3, 4, 5, 6, 101, 102, 103, 104, 105, 106, 110, 111,
-                        120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132]
+                        120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134]
                 },
                 'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
                 'tdocdatainfo.baseloc': {},
@@ -480,6 +480,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tripId': []
             }
         };
+
+        return defaultConfig;
     }
 
     protected prepareSubmitValues(values: {}): void {
