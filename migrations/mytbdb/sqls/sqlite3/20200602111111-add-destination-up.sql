@@ -1,7 +1,8 @@
 -- ------------------------------------
 -- add destination
 -- ------------------------------------
-CREATE OR REPLACE VIEW DESTINATION AS
+DROP VIEW IF EXISTS DESTINATION;
+CREATE VIEW  DESTINATION AS
 SELECT MD5(CONCAT(tour.l_id, "_", t_desc_gebiet, "_", t_desc_ziel, "_", t_typ))                    AS d_id,
        tour.l_id,
        t_desc_gebiet AS d_desc_gebiet,
