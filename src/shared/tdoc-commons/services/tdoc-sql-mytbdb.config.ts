@@ -122,11 +122,13 @@ export class TourDocSqlMytbDbConfig {
                         '        AS flag_objects' +
                         '    FROM kategorie_tour WHERE kategorie_tour.k_id IN (:id)' +
                         '   UNION ' +
+/**
                         'SELECT CONCAT("name=ADDITIONAL_ROUTE_IDS:::value=",' +
                         '     GROUP_CONCAT(DISTINCT kategorie_tour.t_id ORDER BY CAST(kategorie_tour.t_id AS CHAR) SEPARATOR ", "))' +
                         '         AS flag_objects' +
                         '    FROM kategorie_tour WHERE kategorie_tour.k_id IN (:id)' +
                         '   UNION ' +
+**/
                         'SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS flag_objects' +
                         '      FROM image WHERE image.k_id IN (:id)' +
                         '   UNION ' +
@@ -3351,21 +3353,21 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     profile: 'flag_objects',
-                    sql: '(SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour.t_id) AS CHAR)) AS flag_objects' +
+                    sql: 'SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour.t_id) AS CHAR)) AS flag_objects' +
                         '       FROM tour ' +
-                        '       WHERE tour.l_id IN (:id))' +
+                        '       WHERE tour.l_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS flag_objects' +
                         '      FROM kategorie' +
-                        '      WHERE kategorie.l_id IN (:id))' +
+                        '      WHERE kategorie.l_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS flag_objects' +
                         '      FROM image INNER JOIN kategorie ON image.k_id = kategorie.k_id' +
-                        '      WHERE kategorie.l_id IN (:id))' +
+                        '      WHERE kategorie.l_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS flag_objects' +
                         '      FROM video INNER JOIN kategorie ON video.k_id = kategorie.k_id' +
-                        '      WHERE kategorie.l_id IN (:id))',
+                        '      WHERE kategorie.l_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -3707,23 +3709,23 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     profile: 'flag_objects',
-                    sql: '(SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour.t_id) AS CHAR)) AS flag_objects' +
+                    sql: 'SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour.t_id) AS CHAR)) AS flag_objects' +
                         '      FROM trip INNER JOIN kategorie ON trip.tr_id = kategorie.tr_id' +
                         '      LEFT JOIN kategorie_tour ON kategorie_tour.k_id = kategorie.k_id' +
                         '      INNER JOIN tour ON tour.t_id = kategorie.t_id OR tour.t_id = kategorie_tour.t_id' +
-                        '      WHERE kategorie.tr_id IN (:id))' +
+                        '      WHERE kategorie.tr_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS flag_objects' +
                         '      FROM kategorie ' +
-                        '      WHERE kategorie.tr_id IN (:id))' +
+                        '      WHERE kategorie.tr_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS flag_objects' +
                         '      FROM image INNER JOIN kategorie ON image.k_id = kategorie.k_id' +
-                        '      WHERE kategorie.tr_id IN (:id))' +
+                        '      WHERE kategorie.tr_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS flag_objects' +
                         '      FROM video INNER JOIN kategorie ON video.k_id = kategorie.k_id' +
-                        '      WHERE kategorie.tr_id IN (:id))',
+                        '      WHERE kategorie.tr_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
@@ -4070,35 +4072,35 @@ export class TourDocSqlMytbDbConfig {
                 },
                 {
                     profile: 'flag_objects',
-                    sql: '(SELECT CONCAT("name=TRIP_COUNT:::value=", CAST(COUNT(DISTINCT trip.tr_id) AS CHAR)) AS flag_objects' +
+                    sql: 'SELECT CONCAT("name=TRIP_COUNT:::value=", CAST(COUNT(DISTINCT trip.tr_id) AS CHAR)) AS flag_objects' +
                         '       FROM news' +
                         '       INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
                         '       INNER JOIN trip ON trip.tr_id=kategorie.tr_id' +
-                        '       WHERE news.n_id IN (:id))' +
+                        '       WHERE news.n_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour.t_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour.t_id) AS CHAR)) AS flag_objects' +
                         '      FROM news' +
                         '      INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
                         '      LEFT JOIN kategorie_tour ON kategorie_tour.k_id = kategorie.k_id' +
                         '      INNER JOIN tour ON tour.t_id = kategorie.t_id OR tour.t_id = kategorie_tour.t_id' +
-                        '      WHERE news.n_id IN (:id))' +
+                        '      WHERE news.n_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS flag_objects' +
                         '      FROM news' +
                         '      INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
-                        '      WHERE news.n_id IN (:id))' +
+                        '      WHERE news.n_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS flag_objects' +
                         '      FROM news' +
                         '      INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
                         '      INNER JOIN image ON image.k_id = kategorie.k_id' +
-                        '      WHERE news.n_id IN (:id))' +
+                        '      WHERE news.n_id IN (:id)' +
                         '   UNION ' +
-                        '(SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS flag_objects' +
+                        'SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS flag_objects' +
                         '      FROM news' +
                         '      INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
                         '      INNER JOIN video ON video.k_id = kategorie.k_id' +
-                        '      WHERE news.n_id IN (:id))',
+                        '      WHERE news.n_id IN (:id)',
                     parameterNames: ['id']
                 },
                 {
