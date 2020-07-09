@@ -5,6 +5,7 @@ import {GenericSqlAdapter} from '@dps/mycms-commons/dist/search-commons/services
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {
     FacetCacheUsageConfigurations,
+    LoadDetailDataConfig,
     TableConfig,
     WriteQueryData
 } from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
@@ -22,14 +23,29 @@ import {
 import {TourDocSqlMytbDbKeywordAdapter} from './tdoc-sql-mytbdb-keyword.adapter';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
 import {TourDocSqlUtils} from './tdoc-sql.utils';
-import {AssignActionTagForm, CommonSqlActionTagAssignAdapter} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
-import {CommonSqlActionTagReplaceAdapter, ReplaceActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
+import {
+    AssignActionTagForm,
+    CommonSqlActionTagAssignAdapter
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
+import {
+    CommonSqlActionTagReplaceAdapter,
+    ReplaceActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {CommonSqlActionTagBlockAdapter} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
 import {CommonSqlKeywordAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
-import {CommonSqlActionTagKeywordAdapter, KeywordActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-keyword.adapter';
+import {
+    CommonSqlActionTagKeywordAdapter,
+    KeywordActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-keyword.adapter';
 import {CommonSqlPlaylistAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
-import {CommonSqlActionTagPlaylistAdapter, PlaylistActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-playlist.adapter';
-import {CommonSqlActionTagRateAdapter, RateActionTagForm} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-rate.adapter';
+import {
+    CommonSqlActionTagPlaylistAdapter,
+    PlaylistActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-playlist.adapter';
+import {
+    CommonSqlActionTagRateAdapter,
+    RateActionTagForm
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-rate.adapter';
 import {CommonSqlRateAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {CommonSqlObjectDetectionAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-object-detection.adapter';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
@@ -70,6 +86,22 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.actionTagPlaylistAdapter = new CommonSqlActionTagPlaylistAdapter(this.commonPlaylistAdapter);
         this.actionTagRateAdapter = new CommonSqlActionTagRateAdapter(this.commonRateAdapter);
         this.actionTagODAdapter = new CommonSqlActionTagObjectDetectionAdapter(this.commonObjectDetectionAdapter);
+    }
+
+    protected isActiveLoadDetailsMode(tableConfig: TableConfig, loadDetailDataConfig: LoadDetailDataConfig,
+                                      loadDetailsMode: string): boolean {
+        if (loadDetailDataConfig && loadDetailDataConfig.modes) {
+            if (!loadDetailsMode) {
+                // mode required but no mode set on options
+                return false;
+            }
+            if (loadDetailDataConfig.modes.indexOf(loadDetailsMode) < 0) {
+                // mode not set on options
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected extendTableConfigs() {

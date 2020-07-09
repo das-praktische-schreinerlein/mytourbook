@@ -72,6 +72,8 @@
     <div class="col-3 location layout-big">
         <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
         <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
+        <app-cdoc-object-flags [flagobjects]="listItem.currentRecord.tdocflagobjects"
+                               [profile]="'list-item-flat-big'" class="float-right"></app-cdoc-object-flags>
     </div>
 </ng-template>
 

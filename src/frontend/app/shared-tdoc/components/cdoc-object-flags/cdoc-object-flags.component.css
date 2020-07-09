@@ -1,0 +1,7 @@
+div.short-entry {
+    display: inline-block !IMPORTANT;
+}
+
+div.short-entry, div.techvaluetable .entry .label, div.techvaluetable .entry .value {
+    min-width: 20px;
+}

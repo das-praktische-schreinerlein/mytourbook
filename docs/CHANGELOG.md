@@ -5,14 +5,20 @@
 ## 4.3.0
 - added new tourdoc-type: destination
 - improved create-doc-handling
+- common: added new field for entity-flags
 
 ### new features
 - common: added new type: destination
+- common: added new field for entity-flags
 
 ### improvements
 - documentation: added admin-hints
 - frontend: improved create-doc-handling
+- frontend: improved create-doc-handling
 - frontend: suggest routes
+- frontend: added new tour-types and keywords
+- frontend: improved labels and keywords
+- frontend: use internal templates
 
 ### bug fixes
 - none
