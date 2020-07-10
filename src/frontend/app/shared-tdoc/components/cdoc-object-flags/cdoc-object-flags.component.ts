@@ -66,7 +66,6 @@ export class CommonDocObjectFlagsComponent extends AbstractInlineComponent imple
     }
 
     isVisible(): boolean {
-        console.error("mode:", this.profile, this.modes, this.modes[this.profile]);
         return this.modes[this.profile] && this.modes[this.profile] !== 'hidden' ;
     }
 
@@ -75,7 +74,6 @@ export class CommonDocObjectFlagsComponent extends AbstractInlineComponent imple
     }
 
     isShortMode(): boolean {
-        console.error("mode:", this.modes[this.profile]);
         return this.modes[this.profile] && this.modes[this.profile] === 'short';
     }
 }
