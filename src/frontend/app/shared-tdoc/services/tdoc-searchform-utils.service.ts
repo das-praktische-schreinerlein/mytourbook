@@ -3,6 +3,9 @@ import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {CommonDocSearchFormUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
+import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
 
 @Injectable()
 export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
@@ -24,6 +27,11 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
             this.searchFormUtils.getFacetValues(searchResult, 'noMainFavoriteChildren', '', 'label.dashboardColumn.')).concat(
             this.searchFormUtils.getFacetValues(searchResult, 'unRatedChildren', '', 'label.dashboardColumn.')).concat(
             this.searchFormUtils.getFacetValues(searchResult, 'conflictingRates', '', 'label.dashboardColumn.'));
+    }
+
+    getWhenValues(searchResult: CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'done_ss', 'done', '')
+            .concat(super.getWhenValues(searchResult));
     }
 
     getWhereValues(searchResult: TourDocSearchResult): any[] {

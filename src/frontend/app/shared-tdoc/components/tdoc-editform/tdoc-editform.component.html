@@ -1,4 +1,306 @@
 <form [formGroup]="editFormGroup" class="form-control-sm" (ngSubmit)="submitSave($event)" *ngIf="record !== undefined">
+    <ng-container [ngSwitch]="record.type">
+        <ng-container *ngSwitchCase="'LOCATION'">
+            <ng-container *ngTemplateOutlet="formLocation"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'TRACK'">
+            <ng-container *ngTemplateOutlet="formTrack"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'IMAGE'">
+            <ng-container *ngTemplateOutlet="formImage"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'VIDEO'">
+            <ng-container *ngTemplateOutlet="formVideo"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'ROUTE'">
+            <ng-container *ngTemplateOutlet="formRoute"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'TRIP'">
+            <ng-container *ngTemplateOutlet="formTrip"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'NEWS'">
+            <ng-container *ngTemplateOutlet="formNews"></ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-template #formLocation>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputLoctype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputGeoPosition;context:{key: 'tdoc.geoLoc', formControlName: 'geoLoc', recommend: trackStatistic.dist}"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+            </div>
+        </fieldset>
+        <div class="row">
+            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+        </div>
+    </ng-template>
+
+    <ng-template #formTrack>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateStart;context:{recommend: formatInputDate(trackStatistic.dateStart)}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateEnd;context:{recommend: formatInputDate(trackStatistic.dateEnd)}"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTrip"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                <ng-container *ngTemplateOutlet="inputRoute"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTech">&#x231a; technische Daten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altDesc', formControlName: 'tdocdatatech_altDesc', recommend: trackStatistic.altDesc}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMin', formControlName: 'tdocdatatech_altMin', recommend: trackStatistic.altMin}"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.bildung', formControlName: 'tdocratepers_bildung'}"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.tdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.kraft', formControlName: 'tdocratepers_kraft'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.mental', formControlName: 'tdocratepers_mental'}"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
+            </div>
+        </fieldset>
+    </ng-template>
+
+    <ng-template #formImage>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt_image', formControlName: 'tdocratepers_gesamt'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </fieldset>
+    </ng-template>
+
+    <ng-template #formVideo>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt_image', formControlName: 'tdocratepers_gesamt'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </fieldset>
+    </ng-template>
+
+    <ng-template #formRoute>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTrack"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTech">&#x231a; technische Daten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dur', formControlName: 'tdocdatatech_dur', recommend: trackStatistic.duration}"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.bildung', formControlName: 'tdocratepers_bildung'}"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.tdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.kraft', formControlName: 'tdocratepers_kraft'}"></ng-container>
+                <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.mental', formControlName: 'tdocratepers_mental'}"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="rateTech label|Label for fieldset: rateTech@@label.editform.tdoc.legend.rateTech">&#x2757; technische Bewertung</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.overall', formControlName: 'tdocratetech_overall'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.klettern', formControlName: 'tdocratetech_klettern'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.ks', formControlName: 'tdocratetech_ks'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.bergtour', formControlName: 'tdocratetech_bergtour'}"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.firn', formControlName: 'tdocratetech_firn'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.gletscher', formControlName: 'tdocratetech_gletscher'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.schneeschuh', formControlName: 'tdocratetech_schneeschuh'}"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="dataInfo label|Label for fieldset: dataInfo@@label.editform.tdoc.legend.dataInfo">&#x26f3; Daten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.baseloc', formControlName: 'tdocdatainfo_baseloc'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.destloc', formControlName: 'tdocdatainfo_destloc'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.guides', formControlName: 'tdocdatainfo_guides'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.region', formControlName: 'tdocdatainfo_region'}"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
+            </div>
+        </fieldset>
+    </ng-template>
+
+    <ng-template #formTrip>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <div class="row">
+            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+        </div>
+    </ng-template>
+
+    <ng-template #formNews>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <div class="row">
+            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+        </div>
+    </ng-template>
+
     <ng-template #inputName>
         <div class="col-sm-6 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.tdoc.name">Name:</label>
@@ -227,8 +529,28 @@
     <ng-template #submitRow>
         <div class="row">
             <div class="col-sm-12 form-inline input-group input-group-sm">
-                <button type="submit" (click)="submitSave($event, false)" class="btn btn-action btn-sm" i18n="button edit tdoc|Buttontext to edit tdoc@@button.form.tdoc.edit">Save</button>
-                <button type="submit" (click)="submitSave($event, true)" *ngIf="backToSearch" class="btn btn-action btn-sm" i18n="button editAndSearch tdoc|Buttontext to editAndSearch tdoc@@button.form.tdoc.editAndSearch">Save and Search</button>
+                <ng-container *ngIf="availableForwardModes == null || availableForwardModes.length <= 0">
+                    <button type="submit" (click)="submitSave($event, false)" class="btn btn-action btn-sm" i18n="button edit tdoc|Buttontext to edit tdoc@@button.form.tdoc.edit">Save</button>
+                    <button type="submit" (click)="submitSave($event, true)" *ngIf="backToSearch" class="btn btn-action btn-sm" i18n="button editAndSearch tdoc|Buttontext to editAndSearch tdoc@@button.form.tdoc.editAndSearch">Save and Search</button>
+                </ng-container>
+                <ng-container *ngIf="availableForwardModes != null && availableForwardModes.length > 0">
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.SHOW)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.SHOW)"
+                            class="btn btn-action btn-sm" i18n="button edit tdoc|Buttontext to edit tdoc@@button.form.tdoc.edit">Save</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SEARCH)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SEARCH)"
+                            class="btn btn-action btn-sm" i18n="button editAndSearch tdoc|Buttontext to editAndSearch tdoc@@button.form.tdoc.editAndSearch">Save and Search</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_SHOW)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_SHOW)"
+                            class="btn btn-action btn-sm" i18n="button editAndShowSource tdoc|Buttontext to editAndShowSource tdoc@@button.form.tdoc.editAndShowSource">Save and Show Source</button>
+                    <button type="submit"
+                            *ngIf="availableForwardModes.includes(CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_EDIT)"
+                            (click)="submitSaveAndForward($event, CommonDocEditformComponentForwardMode.BACK_TO_SOURCE_EDIT)"
+                            class="btn btn-action btn-sm" i18n="button editAndEditSource tdoc|Buttontext to editAndEditSource tdoc@@button.form.tdoc.editAndEditSource">Save and Edit Source</button>
+                </ng-container>
             </div>
         </div>
     </ng-template>
@@ -241,272 +563,4 @@
                     (save)="updateGpsTrackSrc($event)"></app-gpx-editarea>
         </div>
     </ng-template>
-
-    <ng-container [ngSwitch]="record.type">
-        <ng-container *ngSwitchCase="'LOCATION'">
-            <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputLoctype"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputLocationParent"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputGeoPosition;context:{key: 'tdoc.geoLoc', formControlName: 'geoLoc', recommend: trackStatistic.dist}"></ng-container>
-                </div>
-            </fieldset>
-            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
-                </div>
-            </fieldset>
-            <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-            </div>
-        </ng-container>
-        <ng-container *ngSwitchCase="'TRACK'">
-            <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateStart;context:{recommend: formatInputDate(trackStatistic.dateStart)}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateEnd;context:{recommend: formatInputDate(trackStatistic.dateEnd)}"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputTrip"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputRoute"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTech">&#x231a; technische Daten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altDesc', formControlName: 'tdocdatatech_altDesc', recommend: trackStatistic.altDesc}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMin', formControlName: 'tdocdatatech_altMin', recommend: trackStatistic.altMin}"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.bildung', formControlName: 'tdocratepers_bildung'}"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.tdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.kraft', formControlName: 'tdocratepers_kraft'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.mental', formControlName: 'tdocratepers_mental'}"></ng-container>
-                </div>
-            </fieldset>
-            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
-                </div>
-            </fieldset>
-        </ng-container>
-        <ng-container *ngSwitchCase="'IMAGE'">
-            <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt_image', formControlName: 'tdocratepers_gesamt'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
-                </div>
-            </fieldset>
-            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-                </div>
-            </fieldset>
-        </ng-container>
-        <ng-container *ngSwitchCase="'VIDEO'">
-            <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateStartTime"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt_image', formControlName: 'tdocratepers_gesamt'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
-                </div>
-            </fieldset>
-            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-                </div>
-            </fieldset>
-        </ng-container>
-        <ng-container *ngSwitchCase="'ROUTE'">
-            <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputTrack"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTech">&#x231a; technische Daten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altMax', formControlName: 'tdocdatatech_altMax', recommend: trackStatistic.altMax}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.altAsc', formControlName: 'tdocdatatech_altAsc', recommend: trackStatistic.altAsc}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dur', formControlName: 'tdocdatatech_dur', recommend: trackStatistic.duration}"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="ratePersCharacter label|Label for fieldset: ratePersCharacter@@label.editform.tdoc.legend.ratePersCharacter">&#x2764; persönliche Bewertung: Charakter</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.gesamt', formControlName: 'tdocratepers_gesamt'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.wichtigkeit', formControlName: 'tdocratepers_wichtigkeit'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.motive', formControlName: 'tdocratepers_motive'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.bildung', formControlName: 'tdocratepers_bildung'}"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="ratePersDificult label|Label for fieldset: ratePersDificult@@label.editform.tdoc.legend.ratePersDificult">&#x26F9; persönliche Bewertung: Schwierigkeit</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.schwierigkeit', formControlName: 'tdocratepers_schwierigkeit'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.ausdauer', formControlName: 'tdocratepers_ausdauer'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.kraft', formControlName: 'tdocratepers_kraft'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="selectPersRate;context:{key: 'tdocratepers.mental', formControlName: 'tdocratepers_mental'}"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="rateTech label|Label for fieldset: rateTech@@label.editform.tdoc.legend.rateTech">&#x2757; technische Bewertung</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.overall', formControlName: 'tdocratetech_overall'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.klettern', formControlName: 'tdocratetech_klettern'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.ks', formControlName: 'tdocratetech_ks'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.bergtour', formControlName: 'tdocratetech_bergtour'}"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.firn', formControlName: 'tdocratetech_firn'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.gletscher', formControlName: 'tdocratetech_gletscher'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'tdocratetech.schneeschuh', formControlName: 'tdocratetech_schneeschuh'}"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend i18n="dataInfo label|Label for fieldset: dataInfo@@label.editform.tdoc.legend.dataInfo">&#x26f3; Daten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.baseloc', formControlName: 'tdocdatainfo_baseloc'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.destloc', formControlName: 'tdocdatainfo_destloc'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.guides', formControlName: 'tdocdatainfo_guides'}"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocdatainfo.region', formControlName: 'tdocdatainfo_region'}"></ng-container>
-                </div>
-            </fieldset>
-            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-                </div>
-            </fieldset>
-            <fieldset>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputGpsTrack"></ng-container>
-                </div>
-            </fieldset>
-        </ng-container>
-        <ng-container *ngSwitchCase="'TRIP'">
-            <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                </div>
-            </fieldset>
-            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-            </div>
-        </ng-container>
-        <ng-container *ngSwitchCase="'NEWS'">
-            <fieldset>
-                <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputName"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateShow"></ng-container>
-                </div>
-                <div class="row">
-                    <ng-container *ngTemplateOutlet="inputDateStart"></ng-container>
-                    <ng-container *ngTemplateOutlet="inputDateEnd"></ng-container>
-                </div>
-            </fieldset>
-            <ng-container *ngTemplateOutlet="submitRow"></ng-container>
-            <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
-            </div>
-        </ng-container>
-    </ng-container>
 </form>

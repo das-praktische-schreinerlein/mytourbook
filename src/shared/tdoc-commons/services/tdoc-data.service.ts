@@ -26,6 +26,8 @@ import {
 import {TourDocObjectDetectionImageObjectRecordSchema} from '../model/schemas/tdocobjectdetectionimageobject-record-schema';
 import {TourDocNavigationObjectRecord, TourDocNavigationObjectRecordRelation} from '../model/records/tdocnavigationobject-record';
 import {TourDocNavigationObjectRecordSchema} from '../model/schemas/tdocnavigationobject-record-schema';
+import {TourDocFlagObjectRecord, TourDocFlagObjectRecordRelation} from '../model/records/tdocflagobject-record';
+import {TourDocFlagObjectRecordSchema} from '../model/schemas/tdocflagobject-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -82,6 +84,8 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
         this.dataStore.defineMapper('tdocnavigationobject', TourDocNavigationObjectRecord,
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
+        this.dataStore.defineMapper('tdocflagobject', TourDocFlagObjectRecord,
+            TourDocFlagObjectRecordSchema, TourDocFlagObjectRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {

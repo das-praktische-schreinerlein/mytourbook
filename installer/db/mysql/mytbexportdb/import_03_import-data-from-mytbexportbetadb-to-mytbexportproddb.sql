@@ -1,6 +1,6 @@
---
+-- ##################
 -- copy tables
---
+-- ##################
 TRUNCATE TABLE location;
 INSERT INTO location SELECT * FROM testmytbexportbetadb.location;
 
@@ -13,6 +13,9 @@ INSERT INTO trip SELECT * FROM testmytbexportbetadb.trip;
 TRUNCATE TABLE kategorie_full;
 INSERT INTO kategorie_full SELECT * FROM testmytbexportbetadb.kategorie_full;
 
+TRUNCATE TABLE destianation;
+INSERT INTO destianation SELECT * FROM testmytbexportbetadb.destianation;
+
 TRUNCATE TABLE tour;
 INSERT INTO tour SELECT * FROM testmytbexportbetadb.tour;
 
@@ -21,3 +24,11 @@ INSERT INTO image SELECT * FROM testmytbexportbetadb.image;
 
 TRUNCATE TABLE video;
 INSERT INTO video SELECT * FROM testmytbexportbetadb.video;
+
+-- ##################
+-- optimize tables
+-- ##################
+ANALYZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
+REPAIR TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
+OPTIMIZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
+ANALYZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;

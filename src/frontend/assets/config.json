@@ -5,26 +5,27 @@
             "possiblePrefixes": ["KW_", "", "kw_"],
             "structuredKeywords": [
                 {"name": "Todos", "keywords": ["TODOKEYWORDS"]},
-                {"name": "Aktivität", "keywords": ["Alpinklettern", "Baden", "Boofen", "Bootfahren", "Campen",
-                    "Fliegen", "Gletscherbegehung", "Kanu", "Klettern", "Klettersteig",
+                {"name": "Tourdauer", "keywords": ["Kurztour", "Mehrtagestour", "Tagestour"]},
+                {"name": "Aktivität", "keywords": ["Alpinklettern", "Autofahrt", "Baden", "Boofen", "Bootfahren",
+                    "Bouldern", "Campen", "Fliegen", "Gletscherbegehung", "Kanu", "Klettern", "Klettersteig",
                     "Radfahren", "Schneeschuhwandern", "Skaten", "Wandern", "Museumsbesuch", "Sachsenklettern",
                     "Sportklettern", "Stadtbesichtigung", "Besichtigung", "Gassi", "Hochtour", "Spaziergang",
                     "Wanderung", "Wildwasserschwimmen"]},
+                {"name": "Veranstaltung", "keywords": ["Ausstellung", "Konzert", "Messe", "Party"]},
                 {"name": "Kultur", "keywords": ["Denkmal", "Geschichte", "Kunst", "Museum",
-                    "Architektur", "Burg", "Dom", "Kirche", "Park", "Schloss", "Zoo"]},
-                {"name": "Jahreszeit", "keywords": ["Frühling", "Herbst", "Sommer", "Winter"]},
-                {"name": "Tourdauer", "keywords": ["Kurztour", "Mehrtagestour", "Tagestour"]},
-                {"name": "Wetter", "keywords": ["bedeckt", "Eis", "heiter", "Regen", "Schnee",
-                    "sonnig", "Sonne", "Mond", "Sonnenaufgang", "Sonnenuntergang"]},
+                    "Architektur", "Burg", "Dom", "Kirche", "Park", "Schloss", "Technik", "Zoo"]},
                 {"name": "Landschaft", "keywords": ["Kulturlandschaft", "Landschaft", "Dorf",
                     "Stadt", "Naturlandschaft", "Natur"]},
-                {"name": "Natur", "keywords": ["Alm", "Aue", "Bach", "Fluss", "Moor", "See",
-                    "Teich", "Wasserfall", "Felsen", "Felswand", "Gletscherschau",
-                    "Höhle", "Schlucht", "Tal", "Sandstrand", "Steinstrand",
-                    "Steilküste", "Blumen", "Feld", "Heide", "Steppe", "Wiese",
-                    "Bergwald", "Strandwald", "Wald", "Seenlandschaft", "Berge",
-                    "Hochgebirge", "Mittelgebirge", "Meer", "Ozean", "Firn", "Schneefelder"]},
-                {"name": "Location", "keywords": ["Indoor", "Garten", "Wohnung", "Zimmer", "Halle"]}
+                {"name": "Leben", "keywords": ["Bäume", "Blumen", "Fische", "Menschen", "Tiere"]},
+                {"name": "Flachland", "keywords": ["Aue", "Feld", "Heide", "Steppe", "Wiese", "Wald"]},
+                {"name": "Gebirge", "keywords": ["Alm", "Berge", "Felsen", "Felswand", "Firn", "Gletscherschau",
+                    "Hochgebirge", "Höhle", "Mittelgebirge", "Schlucht", "Schneefelder", "Tal"]},
+                {"name": "Wasser", "keywords": [ "Bach", "Fluss", "Meer", "Moor", "Ozean", "See", "Seenlandschaft",
+                    "Sandstrand", "Steilküste", "Steinstrand", "Teich", "Wasserfall"]},
+                {"name": "Location", "keywords": ["Indoor", "Garten", "Wohnung", "Zimmer", "Halle"]},
+                {"name": "Jahreszeit", "keywords": ["Frühling", "Herbst", "Sommer", "Winter"]},
+                {"name": "Wetter", "keywords": ["bedeckt", "Eis", "heiter", "Regen", "Schnee",
+                    "sonnig", "Sonne", "Mond", "Regenbogen", "Sonnenaufgang", "Sonnenuntergang"]}
             ],
             "keywordSuggestions": [
                 {   "name": "Action Rad-Tour", "keywords": ["Radfahren"],
@@ -1516,6 +1517,9 @@
                 }
             ]
         },
+        "tdoc-searchpage": {
+            "availableCreateActionTypes": "ROUTE,LOCATION,NEWS,TRIP"
+        },
         "tdoc-showpage": {
             "showBigImages": false,
             "allowedQueryParams": [],
@@ -1523,6 +1527,7 @@
                 "IMAGE": true,
                 "IMAGE_NEARBY": true,
                 "ODIMGOBJECT": true,
+                "DESTINATION": true,
                 "ROUTE": true,
                 "ROUTE_NEARBY": true,
                 "TRACK": true,
@@ -1542,6 +1547,7 @@
         },
         "pdoc-sectionpage": {
             "availableTabs": {
+                "DESTINATION": true,
                 "IMAGE": true,
                 "ROUTE": true,
                 "TRACK": true,
@@ -1577,6 +1583,16 @@
         "cdoc-odobjectdetails": {
             "defaultShowKeyAsTooltip": true,
             "defaultFilterForNameToShowNameAndKey": ["bla", "Defa.*", "Default"]
+        },
+        "cdoc-object-flags":  {
+            "allowedFlags": {
+                "list-item-flat-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT"],
+                "show-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT"]
+            },
+            "modes": {
+                "list-item-flat-big": "short",
+                "show-big": "long"
+            }
         },
         "tdoc-create-resolver": {
             "locationReplacements": [

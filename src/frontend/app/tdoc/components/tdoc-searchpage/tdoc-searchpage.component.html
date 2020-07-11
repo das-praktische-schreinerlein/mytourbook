@@ -1,3 +1,110 @@
+<ng-container [ngSwitch]="layout">
+    <ng-container *ngSwitchCase="Layout.PAGE">
+        <ng-container *ngTemplateOutlet="layoutPage"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchDefault="">
+        <ng-container *ngTemplateOutlet="layoutDefault"></ng-container>
+    </ng-container>
+</ng-container>
+
+<ng-template #layoutPage>
+    <div class="relative-container">
+        <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+        <div class="container content-container">
+            <div class="container list-header-container">
+                <app-cdoc-list-header [searchResult]="searchResult"
+                                      [perPage]="perPage"
+                                      [layout]="layout"
+                                      [sort]="sort"
+                                      [showAutoplay]="true"
+                                      [pauseAutoplay]="pauseAutoPlay"
+                                      (perPageChange)="onPerPageChange($event)"
+                                      (sortChange)="onSortChange($event)"
+                                      (layoutChange)="onLayoutChange($event)"
+                                      (pageChange)="onPageChange($event, true)" ></app-cdoc-list-header>
+            </div>
+            <div class="container list-container">
+                <app-tdoc-list [searchResult]="searchResult"
+                               [baseSearchUrl]="baseSearchUrl"
+                               [layout]="layout"
+                               (playerStarted)="onPlayerStarted($event)"
+                               (playerStopped)="onPlayerStopped($event)"
+                               (show)="onShowDoc($event)"></app-tdoc-list>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #layoutDefault>
+    <div class="relative-container">
+        <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+        <ng-container [ngSwitch]="searchFormLayout">
+            <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
+                <div class="container content-container searchpage-stacked-sidebar-container" style="width: 25%; float: left">
+                    <ng-container *ngTemplateOutlet="formContainer;context:{searchFormLayout: searchFormLayout, showForm: true}"></ng-container>
+                    <div class="container hidden-print" *ngIf="searchResult.recordCount > 0">
+                        <span class="text-bold" i18n="text shortlinks|Hint for shortlinks@@text.searchform.hints.shortLinks">Oder auf einen Klick...</span>
+                        <app-cdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
+                                           (columnClicked)="onTagcloudClicked($event, 'actiontype')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Mit Datum/Begangen'" [facetName]="'done_ss'" [valuePrefix]="'done'"
+                                           [sortKey]="'key'"
+                                           (columnClicked)="onTagcloudClicked($event, 'when')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Jahr'" [facetName]="'year_is'" [valuePrefix]="'year'"
+                                           [sortKey]="'key'"
+                                           (columnClicked)="onTagcloudClicked($event, 'when')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Wann'" [facetName]="'month_is'" [valuePrefix]="'month'"
+                                           [labelPrefix]="'Monat'" [sortKey]="'key'"
+                                           (columnClicked)="onTagcloudClicked($event, 'when')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'where')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Schwierig?'" [facetName]="'rate_pers_schwierigkeit_is'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'personalRateDifficulty')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'techRateOverall')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Dauer in h'" [facetName]="'data_tech_dur_facet_fs'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'techDataDuration')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Länge in km'" [facetName]="'data_tech_dist_facets_fs'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'techDataDistance')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Höhe in m'" [facetName]="'data_tech_alt_max_facet_is'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'techDataAltitudeMax')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                        <app-cdoc-tagcloud [label]="'Aufstieg in hm'" [facetName]="'data_tech_alt_asc_facet_is'" [max]="50"
+                                           (columnClicked)="onTagcloudClicked($event, 'techDataAscent')"
+                                           [searchResult]="searchResult"></app-cdoc-tagcloud>
+                    </div>
+                </div>
+
+                <div class="searchpage-stacked-right-content-container" style="width: 73%; display: inline-block;">
+                    <div class="container content-container">
+                        <ng-container *ngTemplateOutlet="mapContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
+                    </div>
+                    <div class="container content-container">
+                        <ng-container *ngTemplateOutlet="resultContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngSwitchDefault="">
+                <div class="container content-container">
+                    <ng-container *ngTemplateOutlet="formContainer;context:{searchFormLayout: searchFormLayout, showForm: false}"></ng-container>
+                    <ng-container *ngTemplateOutlet="mapContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
+                </div>
+                <div class="container content-container">
+                    <ng-container *ngTemplateOutlet="resultContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+</ng-template>
+
 <ng-template #resultContainer let-searchFormLayout=searchFormLayout>
     <div class="container">
         <app-cdoc-list-header [searchResult]="searchResult"
@@ -34,6 +141,8 @@
                                       (pageChange)="onPageChange($event, true)" ></app-cdoc-list-footer>
             </div>
             <div class="col-sm-6">
+                <a (click)="onCreateNewRecord(availableCreateActionType)" *ngIf="availableCreateActionType" class="btn btn-action btn-sm float-right"
+                   i18n="link text createRecord|linktext for createRecord@@link.searchresult.createRecord">Create New Record</a>
                 <a (click)="onM3UExport($event)" *ngIf="m3uExportAvailable" class="btn btn-action btn-sm float-right"
                    i18n="link text playlistexport|linktext for playlistexport@@link.searchresult.playlistexport">Playlist-Export</a>
             </div>
@@ -101,87 +210,3 @@
         <app-cdoc-typetable [searchResult]="searchResult" (columnClicked)="onTypeTableColumnClicked($event)"></app-cdoc-typetable>
     </div>
 </ng-template>
-
-
-<ng-container [ngSwitch]="layout">
-    <ng-container *ngSwitchCase="Layout.PAGE">
-        <div class="relative-container">
-            <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
-            <div class="container content-container">
-                <div class="container list-header-container">
-                    <app-cdoc-list-header [searchResult]="searchResult"
-                                          [perPage]="perPage"
-                                          [layout]="layout"
-                                          [sort]="sort"
-                                          [showAutoplay]="true"
-                                          [pauseAutoplay]="pauseAutoPlay"
-                                          (perPageChange)="onPerPageChange($event)"
-                                          (sortChange)="onSortChange($event)"
-                                          (layoutChange)="onLayoutChange($event)"
-                                          (pageChange)="onPageChange($event, true)" ></app-cdoc-list-header>
-                </div>
-                <div class="container list-container">
-                    <app-tdoc-list [searchResult]="searchResult"
-                                   [baseSearchUrl]="baseSearchUrl"
-                                   [layout]="layout"
-                                   (playerStarted)="onPlayerStarted($event)"
-                                   (playerStopped)="onPlayerStopped($event)"
-                                   (show)="onShowDoc($event)"></app-tdoc-list>
-                </div>
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngSwitchDefault="">
-        <div class="relative-container">
-            <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
-            <ng-container [ngSwitch]="searchFormLayout">
-                <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
-                    <div class="container content-container searchpage-stacked-sidebar-container" style="width: 25%; float: left">
-                        <ng-container *ngTemplateOutlet="formContainer;context:{searchFormLayout: searchFormLayout, showForm: true}"></ng-container>
-                        <div class="container hidden-print" *ngIf="searchResult.recordCount > 0">
-                            <span class="text-bold" i18n="text shortlinks|Hint for shortlinks@@text.searchform.hints.shortLinks">Oder auf einen Klick...</span>
-                            <app-cdoc-tagcloud [label]="'Was'" [facetName]="'actiontype_ss'" [max]="99"
-                                               (columnClicked)="onTagcloudClicked($event, 'actiontype')"
-                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
-                            <app-cdoc-tagcloud [label]="'Jahr'" [facetName]="'year_is'" [valuePrefix]="'year'"
-                                               [sortKey]="'key'"
-                                               (columnClicked)="onTagcloudClicked($event, 'when')"
-                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
-                            <app-cdoc-tagcloud [label]="'Wann'" [facetName]="'month_is'" [valuePrefix]="'month'"
-                                               [labelPrefix]="'Monat'" [sortKey]="'key'"
-                                               (columnClicked)="onTagcloudClicked($event, 'when')"
-                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
-                            <app-cdoc-tagcloud [label]="'Wo'" [facetName]="'loc_lochirarchie_txt'" [max]="50"
-                                               (columnClicked)="onTagcloudClicked($event, 'where')"
-                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
-                            <app-cdoc-tagcloud [label]="'Schwierig?'" [facetName]="'rate_pers_schwierigkeit_is'" [max]="50"
-                                               (columnClicked)="onTagcloudClicked($event, 'personalRateDifficulty')"
-                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
-                            <app-cdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
-                                               (columnClicked)="onTagcloudClicked($event, 'techRateOverall')"
-                                               [searchResult]="searchResult"></app-cdoc-tagcloud>
-                        </div>
-                    </div>
-
-                    <div class="searchpage-stacked-right-content-container" style="width: 73%; display: inline-block;">
-                        <div class="container content-container">
-                            <ng-container *ngTemplateOutlet="mapContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
-                        </div>
-                        <div class="container content-container">
-                            <ng-container *ngTemplateOutlet="resultContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngSwitchDefault="">
-                    <div class="container content-container">
-                        <ng-container *ngTemplateOutlet="formContainer;context:{searchFormLayout: searchFormLayout, showForm: false}"></ng-container>
-                        <ng-container *ngTemplateOutlet="mapContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
-                    </div>
-                    <div class="container content-container">
-                        <ng-container *ngTemplateOutlet="resultContainer;context:{searchFormLayout: searchFormLayout}"></ng-container>
-                    </div>
-                </ng-container>
-            </ng-container>
-        </div>
-    </ng-container>
-</ng-container>

@@ -2,193 +2,207 @@
     <a [name]="listItem.currentRecord.id"></a>
     <ng-container [ngSwitch]="listItem.currentRecord.type">
         <ng-container *ngSwitchDefault="">
-            <ng-container *ngIf="layoutSize >= LayoutSize.BIG">
-                <!--- BIG -->
-                <div class="col-1 image layout-big">
-                    <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
-                        <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
-                               [checked]="isMultiActionSelectedForRecord()"
-                               (click)="onChangeMultiActionForRecord($event)">
-                    </div>
-                    <ng-container *ngIf="listItem.image">
-                        <div class="picture-with-objects-container">
-                            <img #mainImage class="picture-thumbnail" width="50px"
-                                 [src]="listItem.thumbnailUrl"
-                                 (click)="submitShowImage(listItem.currentRecord)"
-                                 alt="{{listItem.image.name}}"
-                                 (resize)="onResizeMainImage()"
-                                 (load)="onResizeMainImage()">
-                            <app-cdoc-odobjectrectangles [objects]="listItem.objectdetections"
-                                 [width]="imageWidth"
-                                 *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="listItem.video">
-                        <img class="picture-thumbnail" width="50px"
-                             [src]="listItem.thumbnailUrl"
-                             (click)="submitShow(listItem.currentRecord)"
-                             alt="{{listItem.video.name}}">
-                    </ng-container>
-                </div>
-                <div class="col-2 type layout-big">
-                    <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
-                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
-                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
-                        <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
-                    </h5>
-                    <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                    <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
-                        <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                        <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                        <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
-                    </ng-container>
-                </div>
-                <div class="col-4 layout-big">
-                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
-                    <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                        <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
-                    </ng-container>
-                    <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
-                    <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
-                </div>
-                <div class="col-2 ratetech layout-big">
-                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                </div>
-                <div class="col-3 location layout-big">
-                    <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
-                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
-                </div>
+            <ng-container *ngIf="layoutSize >= LayoutSize.BIG" >
+                <ng-container *ngTemplateOutlet="defaultTypeLayoutBig"></ng-container>
             </ng-container>
 
             <ng-container *ngIf="layoutSize === LayoutSize.SMALL">
-                <!--- SMALL -->
-                <div class="col-3 image layout-small">
-                    <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
-                        <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
-                               [checked]="isMultiActionSelectedForRecord()"
-                               (click)="onChangeMultiActionForRecord($event)">
-                    </div>
-                    <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
-                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
-                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
-                        <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
-                    </h5>
-                    <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                    <ng-container *ngIf="listItem.image">
-                        <img class="picture-thumbnail" width="50px"
-                             [src]="listItem.thumbnailUrl"
-                             (click)="submitShowImage(listItem.currentRecord)"
-                             alt="{{listItem.image.name}}">
-                    </ng-container>
-                    <ng-container *ngIf="listItem.video">
-                        <img class="picture-thumbnail" width="50px"
-                             [src]="listItem.thumbnailUrl"
-                             (click)="submitShow(listItem.currentRecord)"
-                             alt="{{listItem.video.name}}">
-                    </ng-container>
-                </div>
-                <ng-container [ngSwitch]="listItem.currentRecord.type">
-                    <ng-container *ngSwitchCase="'LOCATION'">
-                        <div class="col-9 location layout-small">
-                            <div class="">
-                                <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
-                            </div>
-                            <div class="row">
-                                <div class="col-4 layout-small">
-                                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                                </div>
-                                <div class="col-8 layout-small">
-                                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
-                                    <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                                    <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                                    <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchDefault="">
-                        <div class="col-9 location layout-small">
-                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
-                            <div class="row">
-                                <div class="col-4 location layout-small">
-                                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                                </div>
-                                <div class="col-8 location layout-small">
-                                    <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                                        <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
-                                    </ng-container>
-                                    <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
-                                        <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                                        <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                                        <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
-                                    </ng-container>
-                                    <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
-                                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                </ng-container>
+                <ng-container *ngTemplateOutlet="defaultTypeLayoutSmall"></ng-container>
             </ng-container>
 
             <ng-container *ngIf="layoutSize <= LayoutSize.VERYSMALL">
-                <!--- VERYSMALL -->
-                <div class="col-3 image layout-verysmall">
-                    <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
-                        <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
-                               [checked]="isMultiActionSelectedForRecord()"
-                               (click)="onChangeMultiActionForRecord($event)">
-                    </div>
-                    <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
-                        <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
-                        <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
-                        <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
-                    </h5>
-                    <h5>{{listItem.currentRecord.subtype | translate }}</h5>
-                    <ng-container *ngIf="listItem.image">
-                        <img class="picture-thumbnail" width="50px"
-                             [src]="listItem.thumbnailUrl"
-                             (click)="submitShowImage(listItem.currentRecord)"
-                             alt="{{listItem.image.name}}">
-                    </ng-container>
-                    <ng-container *ngIf="listItem.video">
-                        <img class="picture-thumbnail" width="50px"
-                             [src]="listItem.thumbnailUrl"
-                             (click)="submitShow(listItem.currentRecord)"
-                             alt="{{listItem.video.name}}">
-                    </ng-container>
-                </div>
-                <ng-container [ngSwitch]="listItem.currentRecord.type">
-                    <ng-container *ngSwitchCase="'LOCATION'">
-                        <div class="col-9 location layout-verysmall">
-                            <div class="">
-                                <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
-                                <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                                <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                                <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                                <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
-                                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngSwitchDefault="">
-                        <div class="col-9 location layout-verysmall">
-                            <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
-                            <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
-                                <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
-                            </ng-container>
-                            <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
-                                <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
-                                <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
-                                <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
-                                <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
-                            </ng-container>
-                            <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
-                            <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
-                        </div>
-                    </ng-container>
-                </ng-container>
+                <ng-container *ngTemplateOutlet="defaultTypeLayoutVerySmall"></ng-container>
             </ng-container>
         </ng-container>
     </ng-container>
 </div>
+
+<ng-template #defaultTypeLayoutBig>
+    <!--- BIG -->
+    <div class="col-1 image layout-big">
+        <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
+            <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
+                   [checked]="isMultiActionSelectedForRecord()"
+                   (click)="onChangeMultiActionForRecord($event)">
+        </div>
+        <ng-container *ngIf="listItem.image">
+            <div class="picture-with-objects-container">
+                <img #mainImage class="picture-thumbnail" width="50px"
+                     [src]="listItem.thumbnailUrl"
+                     (click)="submitShowImage(listItem.currentRecord)"
+                     alt="{{listItem.image.name}}"
+                     (resize)="onResizeMainImage()"
+                     (load)="onResizeMainImage()">
+                <app-cdoc-odobjectrectangles [objects]="listItem.objectdetections"
+                                             [width]="imageWidth"
+                                             *ngIf="imageWidth > 0 && ((showItemObjectsFlag && listItem.currentRecord.type === 'IMAGE') || listItem.currentRecord.type === 'ODIMGOBJECT')"></app-cdoc-odobjectrectangles>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="listItem.video">
+            <img class="picture-thumbnail" width="50px"
+                 [src]="listItem.thumbnailUrl"
+                 (click)="submitShow(listItem.currentRecord)"
+                 alt="{{listItem.video.name}}">
+        </ng-container>
+    </div>
+    <div class="col-2 type layout-big">
+        <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+            <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+            <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+            <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
+        </h5>
+        <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+        <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+            <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+            <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+            <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+        </ng-container>
+    </div>
+    <div class="col-4 layout-big">
+        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+        <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+            <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
+        </ng-container>
+        <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
+        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
+    </div>
+    <div class="col-2 ratetech layout-big">
+        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+    </div>
+    <div class="col-3 location layout-big">
+        <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
+        <app-cdoc-object-flags [flagobjects]="listItem.currentRecord.tdocflagobjects"
+                               [profile]="'list-item-flat-big'" class="float-right"></app-cdoc-object-flags>
+    </div>
+</ng-template>
+
+<ng-template #defaultTypeLayoutSmall>
+    <!--- SMALL -->
+    <div class="col-3 image layout-small">
+        <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
+            <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
+                   [checked]="isMultiActionSelectedForRecord()"
+                   (click)="onChangeMultiActionForRecord($event)">
+        </div>
+        <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+            <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+            <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+            <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
+        </h5>
+        <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+        <ng-container *ngIf="listItem.image">
+            <img class="picture-thumbnail" width="50px"
+                 [src]="listItem.thumbnailUrl"
+                 (click)="submitShowImage(listItem.currentRecord)"
+                 alt="{{listItem.image.name}}">
+        </ng-container>
+        <ng-container *ngIf="listItem.video">
+            <img class="picture-thumbnail" width="50px"
+                 [src]="listItem.thumbnailUrl"
+                 (click)="submitShow(listItem.currentRecord)"
+                 alt="{{listItem.video.name}}">
+        </ng-container>
+    </div>
+    <ng-container [ngSwitch]="listItem.currentRecord.type">
+        <ng-container *ngSwitchCase="'LOCATION'">
+            <div class="col-9 location layout-small">
+                <div class="">
+                    <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+                </div>
+                <div class="row">
+                    <div class="col-4 layout-small">
+                        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                    </div>
+                    <div class="col-8 layout-small">
+                        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
+                        <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                        <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+                        <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault="">
+            <div class="col-9 location layout-small">
+                <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
+                <div class="row">
+                    <div class="col-4 location layout-small">
+                        <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                    </div>
+                    <div class="col-8 location layout-small">
+                        <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                            <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
+                        </ng-container>
+                        <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                            <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                            <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+                            <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                        </ng-container>
+                        <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
+                        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #defaultTypeLayoutVerySmall>
+    <!--- VERYSMALL -->
+    <div class="col-3 image layout-verysmall">
+        <div class="multiaction-checkbox" *ngIf="isMultiActionTagSelected()">
+            <input type="checkbox" [disabled]="isMultiActionAvailableForRecord()"
+                   [checked]="isMultiActionSelectedForRecord()"
+                   (click)="onChangeMultiActionForRecord($event)">
+        </div>
+        <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
+            <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
+            <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
+            <span *ngIf="listItem.currentRecord.type !== 'LOCATION'">{{listItem.currentRecord.type | translate }}</span>
+        </h5>
+        <h5>{{listItem.currentRecord.subtype | translate }}</h5>
+        <ng-container *ngIf="listItem.image">
+            <img class="picture-thumbnail" width="50px"
+                 [src]="listItem.thumbnailUrl"
+                 (click)="submitShowImage(listItem.currentRecord)"
+                 alt="{{listItem.image.name}}">
+        </ng-container>
+        <ng-container *ngIf="listItem.video">
+            <img class="picture-thumbnail" width="50px"
+                 [src]="listItem.thumbnailUrl"
+                 (click)="submitShow(listItem.currentRecord)"
+                 alt="{{listItem.video.name}}">
+        </ng-container>
+    </div>
+    <ng-container [ngSwitch]="listItem.currentRecord.type">
+        <ng-container *ngSwitchCase="'LOCATION'">
+            <div class="col-9 location layout-verysmall">
+                <div class="">
+                    <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
+                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                    <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                    <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+                    <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                    <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault="">
+            <div class="col-9 location layout-verysmall">
+                <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
+                <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
+                    <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
+                </ng-container>
+                <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                    <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                    <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
+                    <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
+                    <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                </ng-container>
+                <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
+                <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>

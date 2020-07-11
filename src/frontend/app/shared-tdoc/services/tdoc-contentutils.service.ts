@@ -148,6 +148,20 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
             }
+        } else if (record.type === 'DESTINATION') {
+            const id = record.id.replace(/.*?_/, '');
+            if (type === 'LOCATION' && record.locId) {
+                filters['moreFilter'] = 'loc_id_i:' + record.locId;
+            } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
+                filters['moreFilter'] = 'destination_id_s:' + id;
+                filters['perPage'] = 12;
+            } else if (type === 'TRACK') {
+                filters['moreFilter'] = 'destination_id_ss:' + id;
+            } else if (type === 'TRIP') {
+                filters['moreFilter'] = 'destination_id_ss:' + id;
+            } else {
+                filters['moreFilter'] = 'destination_id_s:' + id;
+            }
         } else if (record.type === 'LOCATION') {
             if (type === 'LOCATION') {
                 filters['moreFilter'] = 'loc_parent_id_i:' + record.locId;

@@ -1,11 +1,12 @@
 SELECT i_id, i_dir, i_file FROM image WHERE i_date IS NULL;
 SELECT v_id, v_dir, v_file FROM video WHERE v_date IS NULL;
 
-SELECT k_id, MIN(k_datevon, i_datevon) AS calced_datevon, k_datevon, i_datevon,
+SELECT k_id, k_name, MIN(k_datevon, i_datevon) AS calced_datevon, k_datevon, i_datevon,
              MAX(k_datebis, i_datebis) AS calced_datebis, k_datebis, i_datebis
 FROM (
   SELECT
     kategorie.k_id,
+    k_name,
     k_datevon,
     MIN(i_date) AS i_datevon,
     k_datebis,
