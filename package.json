@@ -113,7 +113,7 @@
     "compression": "1.7.4",
     "core-js": "2.6.11",
     "cors": "2.8.5",
-    "deep-equal": "2.0.3",
+    "deep-equal": "1.1.1",
     "detect-browser": "4.8.0",
     "domino": "2.1.5",
     "express": "4.17.1",
