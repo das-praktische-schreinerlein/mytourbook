@@ -97,3 +97,10 @@ SET
                            '')
 WHERE toupdate.t_id=grouped.t_id;
 
+-- ##################
+-- optimize tables
+-- ##################
+ANALYZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
+REPAIR TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
+OPTIMIZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
+ANALYZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;

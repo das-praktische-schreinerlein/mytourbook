@@ -1,59 +1,72 @@
 <form [formGroup]="searchFormGroup" (ngSubmit)="onSubmitSearch($event)" class="form-control-sm">
+
     <div class="row visible-print-block">
         <div class="col-sm-12">
             Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter"></div>
         </div>
     </div>
 
-    <ng-template #noFilterValues><span class="col-form-label fullwidth">nichts zu filtern :-(</span></ng-template>
-
     <!-- infos -->
-    <ng-container>
-        <div class="row hidden-print">
-            <div class="col-sm-12">
-                Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter" (click)="updateFormState(true);"></div>
-                <ng-container *ngIf="!short">
-                    <button *ngIf="!showDashboardFilter && showDashboardFilterAvailable" class="btn btn-configure btn-sm float-right" (click)="showDashboardFilter = true; updateFormState();">
-                        <span i18n="button show dashboardFilterform|Buttontext to show dashboardFilterform@@button.searchform.show.dashboardFilterform">"Dashboard" filtern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="!showObjectDetection && showObjectDetectionAvailable" class="btn btn-configure btn-sm float-right" (click)="showObjectDetection = true; updateFormState();">
-                        <span i18n="button show ObjectDetectionDataform|Buttontext to show ObjectDetectiondataform@@button.searchform.show.ObjectDetectiondataform">"Objekterkennung" filtern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="!showMeta && showMetaAvailable" class="btn btn-configure btn-sm float-right" (click)="showMeta = true; updateFormState();">
-                        <span i18n="button show MetaDataform|Buttontext to show Metadataform@@button.searchform.show.Metadataform">"Metadaten" filtern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="!showDetails && showDetailsAvailable" class="btn btn-configure btn-sm float-right" (click)="showDetails = true; updateFormState();">
-                        <span i18n="button show Detailsform|Buttontext to show Detailsform@@button.searchform.show.Detailsform">"Details" filtern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="!showFulltext" class="btn btn-configure btn-sm float-right" (click)="showFulltext = true; updateFormState();">
-                        <span i18n="button show Fulltextform|Buttontext to show Fulltextform@@button.searchform.show.Fulltextform">"Text" filtern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="!showWhat" class="btn btn-configure btn-sm float-right" (click)="showWhat = true; updateFormState();">
-                        <span i18n="button show Whatform|Buttontext to show Whatform@@button.searchform.show.Whatform">"Was" filtern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="!showWhen && showWhenAvailable" class="btn btn-configure btn-sm float-right" (click)="showWhen = true; updateFormState();">
-                        <span i18n="button show Whenform|Buttontext to show Whatform@@button.searchform.show.Whenform">"Zeit" ändern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="!showWhere && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showWhere = true; updateFormState();">
-                        <span i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</span>
-                        <span>&#x21D3;</span></button>
-                    <button *ngIf="humanReadableSpecialFilter !== '' && !showSpecialFilter" class="btn btn-configure btn-sm float-right" (click)="showSpecialFilter = true; updateFormState();">
-                        <span i18n="button show Moreform|Buttontext to show Moreform@@button.searchform.show.Moreform">"Spezialfilter"</span>
-                        <span>&#x21D3;</span></button>
-                </ng-container>
-                <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="updateFormState(true);">
-                    <span i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</span>
-                    <span class="btn-action-icon">&#x21D3;</span></button>
-                <button *ngIf="!short && showForm" class="btn btn-action btn-sm float-right" (click)="updateFormState(false);">
-                    <span i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</span>
-                    <span class="btn-action-icon">&#x21D1;</span></button>
-            </div>
-        </div>
-    </ng-container>
-
+    <ng-container *ngTemplateOutlet="containerInfo"></ng-container>
 
     <!-- short searchform-->
     <ng-container *ngIf="short && showForm">
+        <ng-container *ngTemplateOutlet="containerShortSearchform"></ng-container>
+    </ng-container>
+
+    <!-- extended searchform-->
+    <ng-container *ngIf="!short && showForm">
+        <ng-container *ngTemplateOutlet="containerExtendedSearchform"></ng-container>
+    </ng-container>
+
+    <ng-template #noFilterValues><span class="col-form-label fullwidth">nichts zu filtern :-(</span></ng-template>
+
+    <ng-template #containerInfo>
+        <ng-container>
+            <div class="row hidden-print">
+                <div class="col-sm-12">
+                    Filter: <div [innerHTML]="humanReadableSearchForm" class="humanReadableSearchFilter" (click)="updateFormState(true);"></div>
+                    <ng-container *ngIf="!short">
+                        <button *ngIf="!showDashboardFilter && showDashboardFilterAvailable" class="btn btn-configure btn-sm float-right" (click)="showDashboardFilter = true; updateFormState();">
+                            <span i18n="button show dashboardFilterform|Buttontext to show dashboardFilterform@@button.searchform.show.dashboardFilterform">"Dashboard" filtern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="!showObjectDetection && showObjectDetectionAvailable" class="btn btn-configure btn-sm float-right" (click)="showObjectDetection = true; updateFormState();">
+                            <span i18n="button show ObjectDetectionDataform|Buttontext to show ObjectDetectiondataform@@button.searchform.show.ObjectDetectiondataform">"Objekterkennung" filtern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="!showMeta && showMetaAvailable" class="btn btn-configure btn-sm float-right" (click)="showMeta = true; updateFormState();">
+                            <span i18n="button show MetaDataform|Buttontext to show Metadataform@@button.searchform.show.Metadataform">"Metadaten" filtern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="!showDetails && showDetailsAvailable" class="btn btn-configure btn-sm float-right" (click)="showDetails = true; updateFormState();">
+                            <span i18n="button show Detailsform|Buttontext to show Detailsform@@button.searchform.show.Detailsform">"Details" filtern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="!showFulltext" class="btn btn-configure btn-sm float-right" (click)="showFulltext = true; updateFormState();">
+                            <span i18n="button show Fulltextform|Buttontext to show Fulltextform@@button.searchform.show.Fulltextform">"Text" filtern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="!showWhat" class="btn btn-configure btn-sm float-right" (click)="showWhat = true; updateFormState();">
+                            <span i18n="button show Whatform|Buttontext to show Whatform@@button.searchform.show.Whatform">"Was" filtern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="!showWhen && showWhenAvailable" class="btn btn-configure btn-sm float-right" (click)="showWhen = true; updateFormState();">
+                            <span i18n="button show Whenform|Buttontext to show Whatform@@button.searchform.show.Whenform">"Zeit" ändern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="!showWhere && showWhereAvailable" class="btn btn-configure btn-sm float-right" (click)="showWhere = true; updateFormState();">
+                            <span i18n="button show Whereform|Buttontext to show Whereform@@button.searchform.show.Whereform">"Ort" filtern</span>
+                            <span>&#x21D3;</span></button>
+                        <button *ngIf="humanReadableSpecialFilter !== '' && !showSpecialFilter" class="btn btn-configure btn-sm float-right" (click)="showSpecialFilter = true; updateFormState();">
+                            <span i18n="button show Moreform|Buttontext to show Moreform@@button.searchform.show.Moreform">"Spezialfilter"</span>
+                            <span>&#x21D3;</span></button>
+                    </ng-container>
+                    <button *ngIf="!showForm" class="btn btn-action btn-sm float-right" (click)="updateFormState(true);">
+                        <span i18n="button show form|Buttontext to show form@@button.searchform.show.form">Filter ändern</span>
+                        <span class="btn-action-icon">&#x21D3;</span></button>
+                    <button *ngIf="!short && showForm" class="btn btn-action btn-sm float-right" (click)="updateFormState(false);">
+                        <span i18n="button hide form|Buttontext to hide form@@button.searchform.hide.form">Filter ausblenden</span>
+                        <span class="btn-action-icon">&#x21D1;</span></button>
+                </div>
+            </div>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #containerShortSearchform>
         <div class="row hidden-print">
             <div [class]="('col-sm-12 form-inline input-group input-group-sm')">
                 <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('fulltext').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="fulltext label|Label for filter: fulltext@@label.searchform.tdoc.fulltext">Fulltext:</label>
@@ -75,7 +88,7 @@
                                          (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
             </div>
             <div [class]="(width4 + ' form-inline input-group input-group-sm')">
-               <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearby label|Label for filter: nearby@@label.searchform.tdoc.nearby">Nahe:</label>
+                <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearby label|Label for filter: nearby@@label.searchform.tdoc.nearby">Nahe:</label>
                 <input formControlName="nearbyAddress" type="text" (keydown.enter)="doLocationSearch('.nearbyAddressAutocompleteShort');" placeholder="Nahe" class="form-control nearbyAddressAutocompleteShort" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.tdoc.nearby">
                 <input formControlName="nearby" type="text" style="display: none">
                 <div class="input-group-addon"><span (click)="doLocationSearch('.nearbyAddressAutocompleteShort');">&#x27A4;</span></div>
@@ -83,14 +96,14 @@
                 <div class="input-group-addon"><span (click)="clearNearBy()">&#10008;</span></div>
             </div>
             <div [class]="(width4 + ' form-inline input-group input-group-sm')">
-               <label [class]="'col-xs-1 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.tdoc.nearbyDistance">Umkreis:</label>
+                <label [class]="'col-xs-1 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.tdoc.nearbyDistance">Umkreis:</label>
                 <input formControlName="nearbyDistance" type="number" (keydown.enter)="onSubmitSearch($event);" placeholder="Umkreis in km" class="form-control" (input)="onChangeSelect($event)"
                        i18n-placeholder="nearbyDistance placeholder|Placeholder for nearbyDistance@@placeholder.searchform.tdoc.nearbyDistance">
             </div>
         </div>
         <div class="row hidden-print">
             <div [class]="(width4 + ' input-group input-group-sm')">
-               <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
+                <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
                 <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
                     <ss-multiselect-dropdown [options]="optionsSelectWhen"
                                              [settings]="settingsSelectWhen"
@@ -103,7 +116,7 @@
                 </ng-container>
             </div>
             <div [class]="(width4 + ' input-group input-group-sm')">
-               <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
+                <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('actiontype').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
                 <ng-container *ngIf="optionsSelectActionType.length > 0; else noFilterValues">
                     <ss-multiselect-dropdown [options]="optionsSelectActionType"
                                              [settings]="settingsSelectActionType"
@@ -122,10 +135,9 @@
                     <span class="btn-action-icon">&#x21D1;</span></button>
             </div>
         </div>
-    </ng-container>
+    </ng-template>
 
-    <!-- extended searchform-->
-    <ng-container *ngIf="!short && showForm">
+    <ng-template #containerExtendedSearchform>
         <fieldset class="hidden-print" *ngIf="showDashboardFilter && showDashboardFilterAvailable">
             <legend i18n="details label|Label for fieldset: dashboardFilter@@label.searchform.tdoc.legend.dashboardFilter">&#x231b; Dashboard</legend>
             <div class="row">
@@ -154,7 +166,7 @@
             <legend i18n="where label|Label for fieldset: where@@label.searchform.tdoc.legend.where">&#x26f3; Wo</legend>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')">
-                   <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('where').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
+                    <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('where').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
                     <ss-multiselect-dropdown [options]="optionsSelectWhere"
                                              [settings]="settingsSelectWhere"
                                              [texts]="textsSelectWhere"
@@ -165,7 +177,7 @@
                                              (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                 </div>
                 <div [class]="(width4 + ' form-inline input-group input-group-sm')">
-                   <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearby label|Label for filter: nearby@@label.searchform.tdoc.nearby">Nahe:</label>
+                    <label [class]="'col-xs-3 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearby label|Label for filter: nearby@@label.searchform.tdoc.nearby">Nahe:</label>
                     <input formControlName="nearbyAddress" type="text" (keydown.enter)="doLocationSearch('.nearbyAddressAutocomplete');" placeholder="Nahe" class="form-control nearbyAddressAutocomplete" i18n-placeholder="nearby placeholder|Placeholder for nearby@@placeholder.searchform.tdoc.nearby">
                     <input formControlName="nearby" type="text" style="display: none">
                     <div class="input-group-addon"><span (click)="doLocationSearch('.nearbyAddressAutocomplete');">&#x27A4;</span></div>
@@ -173,7 +185,7 @@
                     <div class="input-group-addon"><span (click)="clearNearBy()">&#10008;</span></div>
                 </div>
                 <div [class]="(width2 + ' form-inline input-group input-group-sm')">
-                   <label [class]="'col-xs-1 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.tdoc.nearbyDistance">Umkreis:</label>
+                    <label [class]="'col-xs-1 col-form-label mr-2 ' + (searchFormGroup.get('nearbyAddress').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="nearbyDistance label|Label for filter: nearbyDistance@@label.searchform.tdoc.nearbyDistance">Umkreis:</label>
                     <input formControlName="nearbyDistance" type="number" (keydown.enter)="onSubmitSearch($event);" placeholder="Umkreis in km" class="form-control"
                            i18n-placeholder="nearbyDistance placeholder|Placeholder for nearbyDistance@@placeholder.searchform.tdoc.nearbyDistance">
                 </div>
@@ -239,7 +251,7 @@
             <legend i18n="when label|Label for fieldset: when@@label.searchform.tdoc.legend.when">&#x231a; Zeit</legend>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')">
-                   <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
+                    <label [class]="'col-form-label ' + (searchFormGroup.get('when').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="when label|Label for filter: when@@label.searchform.tdoc.when">When:</label>
                     <ng-container *ngIf="optionsSelectWhen.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectWhen"
                                                  [settings]="settingsSelectWhen"
@@ -252,7 +264,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataDuration').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataDuration label|Label for filter: techDataDuration@@label.searchform.tdoc.techDataDuration">Dauer:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataDuration').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataDuration label|Label for filter: techDataDuration@@label.searchform.tdoc.techDataDuration">Dauer:</label>
                     <ng-container *ngIf="optionsSelectTechDataDuration.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectTechDataDuration"
                                                  [settings]="settingsSelectTechDataDuration"
@@ -275,7 +287,7 @@
             <legend i18n="meta label|Label for fieldset: meta@@label.searchform.tdoc.legend.meta">&#x2764; Bewertung</legend>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersonalRateOverall.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('personalRateOverall').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="personalRateOverall label|Label for filter: personalRateOverall@@label.searchform.tdoc.personalRateOverall">Bewertung:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('personalRateOverall').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="personalRateOverall label|Label for filter: personalRateOverall@@label.searchform.tdoc.personalRateOverall">Bewertung:</label>
                     <ng-container *ngIf="optionsSelectPersonalRateOverall.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPersonalRateOverall"
                                                  [settings]="settingsSelectPersonalRateOverall"
@@ -288,7 +300,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersonalRateDifficulty.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('personalRateDifficulty').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="personalRateDifficulty label|Label for filter: personalRateDifficulty@@label.searchform.tdoc.personalRateDifficulty">Schwierigkeit:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('personalRateDifficulty').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="personalRateDifficulty label|Label for filter: personalRateDifficulty@@label.searchform.tdoc.personalRateDifficulty">Schwierigkeit:</label>
                     <ng-container *ngIf="optionsSelectPersonalRateDifficulty.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPersonalRateDifficulty"
                                                  [settings]="settingsSelectPersonalRateDifficulty"
@@ -308,8 +320,8 @@
             </div>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPlaylists.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('playlists').value.length > 0 ? 'label-active' : 'label-inactive')"
-                          i18n="playlists label|Label for filter: playlists@@label.searchform.tdoc.playlists">Playlist:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('playlists').value.length > 0 ? 'label-active' : 'label-inactive')"
+                           i18n="playlists label|Label for filter: playlists@@label.searchform.tdoc.playlists">Playlist:</label>
                     <ng-container *ngIf="optionsSelectPlaylists.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPlaylists"
                                                  [settings]="settingsSelectPlaylists"
@@ -336,8 +348,8 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectPersons.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('persons').value.length > 0 ? 'label-active' : 'label-inactive')"
-                          i18n="persons label|Label for filter: persons@@label.searchform.tdoc.persons">Personen:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('persons').value.length > 0 ? 'label-active' : 'label-inactive')"
+                           i18n="persons label|Label for filter: persons@@label.searchform.tdoc.persons">Personen:</label>
                     <ng-container *ngIf="optionsSelectPersons.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectPersons"
                                                  [settings]="settingsSelectPersons"
@@ -355,7 +367,7 @@
             <legend i18n="details label|Label for fieldset: details@@label.searchform.tdoc.legend.details">&#x231b; Details</legend>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')">
-                   <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('what').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="what label|Label for filter: what@@label.searchform.tdoc.what">What:</label>
+                    <label [class]="'col-xs-4 col-form-label mr-2 ' + (searchFormGroup.get('what').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="what label|Label for filter: what@@label.searchform.tdoc.what">What:</label>
                     <ng-container *ngIf="optionsSelectWhat.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectWhat"
                                                  [settings]="settingsSelectWhat"
@@ -368,7 +380,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techRateOverall').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techRateOverall label|Label for filter: techRateOverall@@label.searchform.tdoc.techRateOverall">Bewertung:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techRateOverall').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techRateOverall label|Label for filter: techRateOverall@@label.searchform.tdoc.techRateOverall">Bewertung:</label>
                     <ng-container *ngIf="optionsSelectTechRateOverall.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectTechRateOverall"
                                                  [settings]="settingsSelectTechRateOverall"
@@ -388,7 +400,7 @@
             </div>
             <div class="row">
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectTechDataDistance.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataDistance').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataDistance label|Label for filter: techDataDistance@@label.searchform.tdoc.techDataDistance">Strecke:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataDistance').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataDistance label|Label for filter: techDataDistance@@label.searchform.tdoc.techDataDistance">Strecke:</label>
                     <ng-container *ngIf="optionsSelectTechDataDistance.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectTechDataDistance"
                                                  [settings]="settingsSelectTechDataDistance"
@@ -401,7 +413,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectTechDataAltitudeMax.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataAltitudeMax').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataAltitudeMax label|Label for filter: techDataAltitudeMax@@label.searchform.tdoc.techDataAltitudeMax">Höhe:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataAltitudeMax').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataAltitudeMax label|Label for filter: techDataAltitudeMax@@label.searchform.tdoc.techDataAltitudeMax">Höhe:</label>
                     <ng-container *ngIf="optionsSelectTechDataAltitudeMax.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectTechDataAltitudeMax"
                                                  [settings]="settingsSelectTechDataAltitudeMax"
@@ -414,7 +426,7 @@
                     </ng-container>
                 </div>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectTechDataAscent.length > 0">
-                   <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataAscent').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataAscent label|Label for filter: techDataAscent@@label.searchform.tdoc.techDataAscent">Aufstieg:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('techDataAscent').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="techDataAscent label|Label for filter: techDataAscent@@label.searchform.tdoc.techDataAscent">Aufstieg:</label>
                     <ng-container *ngIf="optionsSelectTechDataAscent.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectTechDataAscent"
                                                  [settings]="settingsSelectTechDataAscent"
@@ -519,5 +531,5 @@
                 </div>
             </div>
         </fieldset>
-    </ng-container>
+    </ng-template>
 </form>

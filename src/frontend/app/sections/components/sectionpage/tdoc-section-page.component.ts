@@ -21,6 +21,7 @@ import {environment} from '../../../../environments/environment';
 import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/sectionpage/section-page.component';
 
 export interface TourDocSectionPageComponentAvailableTabs {
+    DESTINATION?: boolean;
     IMAGE?: boolean;
     ODIMGOBJECT?: boolean;
     VIDEO?: boolean;
@@ -56,6 +57,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     tdocSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
     routeSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
     availableTabs: TourDocSectionPageComponentAvailableTabs = {
+        DESTINATION: true,
         IMAGE: true,
         ROUTE: true,
         TRACK: true,
@@ -277,6 +279,10 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             nearBy: this.tdocSearchForm.nearby,
             personalRateDifficulty: this.tdocSearchForm.personalRateDifficulty,
             techRateOverall: this.tdocSearchForm.techRateOverall,
+            techDataDuration: this.tdocSearchForm.techDataDuration,
+            techDataDistance: this.tdocSearchForm.techDataDistance,
+            techDataAltitudeMax: this.tdocSearchForm.techDataAltitudeMax,
+            techDataAscent: this.tdocSearchForm.techDataAscent,
             nearbyAddress: this.tdocSearchForm.nearbyAddress,
             fulltext: this.tdocSearchForm.fulltext
         }));

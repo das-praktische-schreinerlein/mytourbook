@@ -2,6 +2,35 @@
  
 # Versions
  
+## 4.3.0
+- added new tourdoc-type: destination
+- improved create-doc-handling
+- common: added new field for entity-flags
+
+### new features
+- common: added new type: destination
+- common: added new field for entity-flags
+
+### improvements
+- documentation: added admin-hints
+- frontend: improved create-doc-handling
+- frontend: improved create-doc-handling
+- frontend: suggest routes
+- frontend: added new tour-types and keywords
+- frontend: improved labels and keywords
+- frontend: use internal templates
+
+### bug fixes
+- none
+ 
+### breaking changes
+- none
+
+### known issues
+- frontend: IE till 11 not functional (can block rendering sometimes)
+- frontendserver: angularuniversal-support broken
+
+
 ## 4.2.0
 - improved and fixed charts, maps and dashboard
 

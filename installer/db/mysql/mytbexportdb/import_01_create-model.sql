@@ -198,6 +198,7 @@ CREATE TABLE location (
   l_typ int(11) DEFAULT NULL,
   l_katids text COLLATE latin1_general_ci,
   l_tids text COLLATE latin1_general_ci,
+  l_dids text COLLATE latin1_general_ci,
   l_meta_shortdesc_md text COLLATE latin1_general_ci,
   l_meta_shortdesc_html text COLLATE latin1_general_ci,
   l_keywords text COLLATE latin1_general_ci,
@@ -209,6 +210,53 @@ CREATE TABLE location (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
+-- destination-data
+--
+DROP TABLE IF EXISTS destination;
+CREATE TABLE destination (
+  d_id VARCHAR(80),
+  l_id int(11) NOT NULL,
+  d_k_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
+  d_t_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
+  d_datevon date DEFAULT NULL,
+  d_name char(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_desc_gebiet varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_desc_ziel varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_keywords text COLLATE latin1_general_ci,
+  d_persons text COLLATE latin1_general_ci,
+  d_objects text COLLATE latin1_general_ci,
+  d_ele_max double DEFAULT NULL,
+  d_gps_lat float DEFAULT NULL,
+  d_gps_lon float DEFAULT NULL,
+  d_html_list mediumtext COLLATE latin1_general_ci,
+  d_rate varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_rate_ks varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_rate_firn varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_rate_gletscher varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_rate_klettern varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_rate_bergtour varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_rate_schneeschuh varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  d_rate_ausdauer int(11) DEFAULT '0',
+  d_rate_bildung int(11) DEFAULT '0',
+  d_rate_gesamt int(11) DEFAULT '0',
+  d_rate_kraft int(11) DEFAULT '0',
+  d_rate_mental int(11) DEFAULT '0',
+  d_rate_motive int(11) DEFAULT '0',
+  d_rate_schwierigkeit int(11) DEFAULT '0',
+  d_rate_wichtigkeit int(11) DEFAULT '0',
+  d_route_dauer double DEFAULT NULL,
+  d_route_hm double DEFAULT NULL,
+  d_route_m double DEFAULT NULL,
+  d_typ int(11) DEFAULT NULL,
+  d_dateshow date DEFAULT NULL,
+  PRIMARY KEY (d_id),
+  KEY idx_t__t_id (d_id),
+  KEY idx_t__l_id (l_id),
+  KEY d_gps_lat (d_gps_lat),
+  KEY d_gps_lon (d_gps_lon)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+--
 -- tour-data
 --
 DROP TABLE IF EXISTS tour;
@@ -216,6 +264,7 @@ CREATE TABLE tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
   l_id int(11) NOT NULL,
   k_id int(11) DEFAULT NULL,
+  d_id VARCHAR(80),
   t_k_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   t_datevon date DEFAULT NULL,
   t_name char(255) COLLATE latin1_general_ci DEFAULT NULL,
@@ -287,8 +336,11 @@ DROP TABLE IF EXISTS kategorie_full;
 CREATE TABLE kategorie_full (
   k_id int(11) NOT NULL AUTO_INCREMENT,
   t_id int(11) NOT NULL,
+  d_id VARCHAR(80) DEFAULT NULL,
   k_t_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   k_t_ids_full varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
+  k_d_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
+  k_d_ids_full varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   i_id int(11) DEFAULT NULL,
   l_id int(11) NOT NULL,
   tr_id int(11) NOT NULL,
@@ -325,6 +377,7 @@ CREATE TABLE kategorie_full (
   PRIMARY KEY (k_id),
   KEY idx_k__k_id (k_id),
   KEY idx_k__t_id (t_id),
+  KEY idx_k__d_id (d_id),
   KEY idx_k__l_id (l_id),
   KEY k_gps_lat (k_gps_lat),
   KEY k_gps_lon (k_gps_lon),
@@ -349,6 +402,7 @@ CREATE TABLE image (
   i_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11) NOT NULL,
   t_id int(11) DEFAULT NULL,
+  d_id VARCHAR(80) DEFAULT NULL,
   i_katname text COLLATE latin1_general_ci,
   i_katdesc text COLLATE latin1_general_ci,
   i_gesperrt int(11) DEFAULT NULL,
@@ -371,6 +425,7 @@ CREATE TABLE image (
   KEY idx_i__i_id (i_id),
   KEY idx_i__k_id (k_id),
   KEY idx_i__t_id (t_id),
+  KEY idx_i__d_id (t_id),
   KEY i_gps_lat (i_gps_lat),
   KEY i_gps_lon (i_gps_lon),
   KEY i_date (i_date),
@@ -387,6 +442,7 @@ CREATE TABLE video (
   v_id int(11) NOT NULL AUTO_INCREMENT,
   k_id int(11) NOT NULL,
   t_id int(11) DEFAULT NULL,
+  d_id VARCHAR(80) DEFAULT NULL,
   v_katname text COLLATE latin1_general_ci,
   v_katdesc text COLLATE latin1_general_ci,
   v_gesperrt int(11) DEFAULT NULL,

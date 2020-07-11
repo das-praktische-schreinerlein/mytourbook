@@ -23,6 +23,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         video_id_i: 'VIDEO',
         route_id_i: 'ROUTE',
         route_id_is: 'ROUTE',
+        destination_id_s: 'DESTINATION',
+        destination_id_ss: 'DESTINATION',
         loc_parent_id_i: 'LOCATION'};
 
     private splitter = '_,_';
@@ -292,6 +294,7 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         res.push(this.searchFormUtils.valueToHumanReadableText(tdocSearchForm.actiontype, 'hrt_actiontype', undefined, true));
 
         const when = (tdocSearchForm.when ? tdocSearchForm.when : '')
+            .replace(new RegExp('done', 'g'), '')
             .replace(new RegExp('year', 'g'), '')
             .replace(new RegExp('month', 'g'), 'Monat')
             .replace(new RegExp('week', 'g'), 'Woche');

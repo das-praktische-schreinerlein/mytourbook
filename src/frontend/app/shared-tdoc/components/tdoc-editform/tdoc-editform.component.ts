@@ -29,6 +29,7 @@ import {DOCUMENT} from '@angular/common';
 import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolocation.service';
 import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
+import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -36,7 +37,8 @@ import {LatLng} from 'leaflet';
     styleUrls: ['./tdoc-editform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TourDocEditformComponent extends CommonDocEditformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
+export class TourDocEditformComponent extends CommonDocEditformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
+    TourDocDataService> {
     private geoLocationService = new GeoLocationService();
     private trackStatisticService = new TrackStatisticService();
     private gpxParser = new GeoGpxParser();
@@ -241,7 +243,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     createNewGeoLocArea(): boolean {
-        let points = [];
+        const points = [];
         const geoLoc = this.editFormGroup.getRawValue()['geoLoc'];
         if (geoLoc !== undefined && geoLoc !== null && geoLoc.length > 0) {
             const lst = geoLoc ? geoLoc.split(',') : [];
@@ -284,6 +286,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         newGpx = GeoGpxParser.reformatXml(newGpx);
         this.setValue('gpsTrackSrc', newGpx);
         this.updateGeoLocMap();
+
         return false;
     }
 
@@ -372,7 +375,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             prefix = BeanUtils.getValue(config, 'components.tdoc-keywords.editPrefix');
         }
 
-        return {
+        const defaultConfig: CommonDocEditformComponentConfig = {
             suggestionConfigs: suggestionConfig,
             editPrefix: prefix,
             numBeanFieldConfig: {
@@ -402,7 +405,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'subTypeActiontype': {
                     labelPrefix: 'ac_',
                     values: [0, 1, 2, 3, 4, 5, 6, 101, 102, 103, 104, 105, 106, 110, 111,
-                        120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132]
+                        120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134]
                 },
                 'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
                 'tdocdatainfo.baseloc': {},
@@ -477,6 +480,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tripId': []
             }
         };
+
+        return defaultConfig;
     }
 
     protected prepareSubmitValues(values: {}): void {
@@ -535,10 +540,29 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 me.tdocSearchFormUtils.getPersonValues(tdocSearchResult), true, [], true);
 
-            const routeValues = me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getRouteValues(tdocSearchResult));
-            me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(
-                me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(routeValues, true, [],
-                    false), rawValues['routeId']);
+            const selectableRouteValues = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getRouteValues(tdocSearchResult)),
+                true, [], false);
+            const location = this.record.locHirarchie
+                ? TourDocAdapterResponseMapper.generateDoubletteValue(this.record.locHirarchie.replace(/.*-> /, ''))
+                : '';
+            let ordinaryRoutes: IMultiSelectOption[] = [];
+            const suggestedRoutes: IMultiSelectOption[] = [];
+            if (location && location.length > 0) {
+                selectableRouteValues.forEach(value => {
+                    if (TourDocAdapterResponseMapper.generateDoubletteValue(value.name).includes(location)) {
+                        const copy: IMultiSelectOption = { ...value};
+                        copy.name = '\uD83D\uDCA1 ' + copy.name;
+                        suggestedRoutes.push(copy);
+                    } else {
+                        ordinaryRoutes.push(value);
+                    }
+                });
+            } else {
+                ordinaryRoutes = selectableRouteValues;
+            }
+            const sortedRoutes: IMultiSelectOption[] = [].concat(suggestedRoutes).concat(ordinaryRoutes);
+            me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(sortedRoutes, rawValues['routeId']);
 
             const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getTrackValues(tdocSearchResult));
             me.optionsSelect['trackId'] = me.searchFormUtils.moveSelectedToTop(
