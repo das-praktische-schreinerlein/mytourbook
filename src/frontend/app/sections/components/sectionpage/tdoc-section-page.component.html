@@ -1,3 +1,34 @@
+<ng-container *ngIf="pdoc !== undefined">
+    <ng-container [ngSwitch]="searchFormLayout">
+        <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
+            <div class="container content-container sectionpage-stacked-sidebar-container" style="width: 25%; float: right">
+                <ng-container *ngTemplateOutlet="sidebarContainer"></ng-container>
+            </div>
+
+            <div class="sectionpage-stacked-left-content-container" style="width: 73%; display: inline-block;">
+                <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault="">
+            <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+            <ng-container *ngIf="pdoc.flgShowTopTen">
+                <div class="container content-container hidden-print">
+                    <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
+                    <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+                </div>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</ng-container>
+
 <ng-template #contentContainer>
     <div class="container content-container sectionpage-content-container" *ngIf="(pdoc.descHtml !== undefined && pdoc.descHtml.length > 0) || (pdoc.descMd !== undefined && pdoc.descMd.length > 0)">
         <img src="{{pdoc.image}}" width="170px" class="picture" style="float: left; margin: 0 15px 15px 0;" alt="{{pdoc.name}}" *ngIf="pdoc.image !== undefined && pdoc.image.length > 0">
@@ -81,6 +112,18 @@
                            [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
         <app-cdoc-tagcloud [label]="'Schwierigkeitsgrad'" [facetName]="'rate_tech_overall_ss'" [max]="50"
                            (columnClicked)="onTagcloudClicked($event, 'techRateOverall')"
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Dauer in h '" [facetName]="'data_tech_dur_facet_fs'" [max]="50"
+                           (columnClicked)="onTagcloudClicked($event, 'techDataDuration')"
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Länge in km'" [facetName]="'data_tech_dist_facets_fs'" [max]="50"
+                           (columnClicked)="onTagcloudClicked($event, 'techDataDistance')"
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Höhe in m'" [facetName]="'data_tech_alt_max_facet_is'" [max]="50"
+                           (columnClicked)="onTagcloudClicked($event, 'techDataAltitudeMax')"
+                           [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
+        <app-cdoc-tagcloud [label]="'Aufstieg in hm'" [facetName]="'data_tech_alt_asc_facet_is'" [max]="50"
+                           (columnClicked)="onTagcloudClicked($event, 'techDataAscent')"
                            [searchResult]="routeSearchResult"></app-cdoc-tagcloud>
     </ng-container>
 </ng-template>
@@ -168,6 +211,22 @@
                                             [loadFacets]="true"
                                             [layout]="Layout.FLAT"
                                             (searchResultFound)="onTopTenRouteResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Ziele" *ngIf="availableTabs.DESTINATION">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Ziele'"
+                                            i18n-label="label section-page DESTINATION|Label section-page DESTINATION@@linline-search.label.tdoc.DESTINATION"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page DESTINATION|SearchLinkLabel section-page DESTINATION@@linline-search.searchLinkLabel.tdoc.DESTINATION"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType('DESTINATION', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
@@ -305,6 +364,22 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+        <ngb-tab title="Ziele" *ngIf="availableTabs.DESTINATION">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Ziele'"
+                                            i18n-label="label section-page DESTINATION|Label section-page DESTINATION@@linline-search.label.tdoc.DESTINATION"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page DESTINATION|SearchLinkLabel section-page DESTINATION@@linline-search.searchLinkLabel.tdoc.DESTINATION"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType('DESTINATION', 'ratePers')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
         <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Tracks'"
@@ -375,35 +450,3 @@
         </div>
     </ng-container>
 </ng-template>
-
-
-<ng-container *ngIf="pdoc !== undefined">
-    <ng-container [ngSwitch]="searchFormLayout">
-        <ng-container *ngSwitchCase="SearchFormLayout.STACKED">
-            <div class="container content-container sectionpage-stacked-sidebar-container" style="width: 25%; float: right">
-                <ng-container *ngTemplateOutlet="sidebarContainer"></ng-container>
-            </div>
-
-            <div class="sectionpage-stacked-left-content-container" style="width: 73%; display: inline-block;">
-                <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
-                <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
-            </div>
-        </ng-container>
-        <ng-container *ngSwitchDefault="">
-            <ng-container *ngTemplateOutlet="contentContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="searchHintContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
-            <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
-            <ng-container *ngIf="pdoc.flgShowTopTen">
-                <div class="container content-container hidden-print">
-                    <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
-                    <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
-                </div>
-            </ng-container>
-        </ng-container>
-    </ng-container>
-</ng-container>

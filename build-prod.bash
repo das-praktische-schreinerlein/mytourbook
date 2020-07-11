@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 WORKSPACE="/cygdrive/f/Projekte/"
-MYCMSPROJECT="mytourbook_upgrade"
+MYCMSPROJECT="mytourbook_dev"
 
 echo "STEP: build server -> they need the node_modules"
 cd ${WORKSPACE}${MYCMSPROJECT}

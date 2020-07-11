@@ -67,7 +67,8 @@ describe('TourDocDataService', () => {
                             ],
                             'tdocvideos': [],
                             'tdocodimageobjects': [],
-                            'tdocnavigationobjects': []}));
+                            'tdocnavigationobjects': [],
+                            'tdocflagobjects': []}));
                     expect(knexRes.sqls[0]).toContain('where k_name || " " || COALESCE(k_meta_shortdesc,"", " ", l_name) LIKE "%bla%"' +
                         '  AND  ( "track"  IN ("TRACK"))' +
                         '   order by k_datevon ASC' +

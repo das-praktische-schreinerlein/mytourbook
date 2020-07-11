@@ -18,7 +18,7 @@ echo "OPTIONAL: index images"
 echo "OPEN: Do you want to index the images for similarity-search?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) cd ${MYTB}/sin && ./indexImages.sh; break;;
+        Yes ) cd ${MYTB}/sbin && ./indexImages.sh; break;;
         No) break;;
     esac
 done

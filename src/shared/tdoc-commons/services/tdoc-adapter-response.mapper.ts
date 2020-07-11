@@ -12,6 +12,7 @@ import {TourDocDataInfoRecordFactory} from '../model/records/tdocdatainfo-record
 import {TourDocObjectDetectionImageObjectRecordFactory} from '../model/records/tdocobjectdetectectionimageobject-record';
 import {TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
 import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
+import {TourDocFlagObjectRecordFactory} from '../model/records/tdocflagobject-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -251,6 +252,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'navigation_objects_txt')],
                 'navigation_objects_txt'));
+        this.mapDetailDataToAdapterDocument(mapper, 'flag_objects', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'flag_objects_txt')],
+                'flag_objects_txt'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
@@ -400,6 +405,23 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 record.set('tdocnavigationobjects',
                     this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocnavigationobject'],
                         TourDocNavigationObjectRecordFactory.instance, record, navDocs));
+                break;
+            case 'flag_objects':
+                let flagDocs = [];
+                docs.forEach(doc => {
+                    let fieldName;
+                    if (doc['flag_objects'] !== undefined && doc['flag_objects'] !== null) {
+                        fieldName = 'flag_objects';
+                    } else if (doc['flag_objects_txt'] !== undefined && doc['flag_objects_txt'] !== null) {
+                        fieldName = 'flag_objects_txt';
+                    }
+                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
+                        flagDocs = flagDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
+                    }
+                });
+                record.set('tdocflagobjects',
+                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocflagobject'],
+                        TourDocFlagObjectRecordFactory.instance, record, flagDocs));
                 break;
             case 'video':
                 const videoDocs = [];

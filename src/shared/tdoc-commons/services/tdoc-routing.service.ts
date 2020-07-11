@@ -8,6 +8,7 @@ export class TourDocRoutingService extends CommonDocRoutingService {
     constructor(protected commonRoutingService: CommonRoutingService) {
         super(commonRoutingService);
         this.lastSearchUrl = '/tdoc/search/';
+        this.lastAdminBaseUrl = '/tdocadmin/';
         this.lastBaseUrl = '/tdoc/';
     }
 }

@@ -22,9 +22,15 @@ export class TourDocSqlUtils {
         sql = sql.replace(/GetTechName\(([a-zA-Z0-9_.]+)\)/g,
             'REPLACE(REPLACE(LOWER($1), " ", "_"), "/", "_")');
         sql = sql.replace(/REGEXP_REPLACE\(/g, 'REPLACE(');
+// TODO flagObject + destination
         sql = sql.replace(/\(SELECT CONCAT\("navid=(.*?)", (.*?), ":::name=", COALESCE\((.*?), "null"\), ":::navtype=", "/g,
             'SELECT navigation_objects FROM (SELECT ("navid=$1" || $2 || ":::name=" || COALESCE($3, "null") || ":::navtype=');
-
+        sql = sql.replace(/CONCAT\((.*?), CAST\(COUNT\(DISTINCT (.*?)\) AS CHAR\)\)/g,
+            '$1 || CAST(COUNT(DISTINCT $2) AS CHAR(50))');
+        sql = sql.replace(/CONCAT\((.*?), CAST\(COUNT\(DISTINCT (.*?)\) AS CHAR\)\)/g,
+            '$1 || CAST(COUNT(DISTINCT $2) AS CHAR(50))');
+        sql = sql.replace(/CONCAT\((.*?), CAST\(COUNT\(DISTINCT (.*?)\) AS CHAR\)\)/g,
+            '$1 || CAST(COUNT(DISTINCT $2) AS CHAR(50))');
         return sql;
     }
 }

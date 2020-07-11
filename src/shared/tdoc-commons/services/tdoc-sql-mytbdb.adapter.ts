@@ -5,6 +5,7 @@ import {GenericSqlAdapter} from '@dps/mycms-commons/dist/search-commons/services
 import {TourDocAdapterResponseMapper} from './tdoc-adapter-response.mapper';
 import {
     FacetCacheUsageConfigurations,
+    LoadDetailDataConfig,
     TableConfig,
     WriteQueryData
 } from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
@@ -87,6 +88,22 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.actionTagODAdapter = new CommonSqlActionTagObjectDetectionAdapter(this.commonObjectDetectionAdapter);
     }
 
+    protected isActiveLoadDetailsMode(tableConfig: TableConfig, loadDetailDataConfig: LoadDetailDataConfig,
+                                      loadDetailsMode: string): boolean {
+        if (loadDetailDataConfig && loadDetailDataConfig.modes) {
+            if (!loadDetailsMode) {
+                // mode required but no mode set on options
+                return false;
+            }
+            if (loadDetailDataConfig.modes.indexOf(loadDetailsMode) < 0) {
+                // mode not set on options
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected extendTableConfigs() {
         this.sqlQueryBuilder.extendTableConfigs(TourDocSqlMytbDbConfig.tableConfigs);
     }
@@ -102,7 +119,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'route', 'image', 'video', 'news', 'odimgobject'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject'].map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
         facet = new Facet();
@@ -129,6 +146,15 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         const ids = params.where['id'];
         if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
             const tabKey = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
+            if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
+                return tabKey;
+            }
+
+            return undefined;
+        }
+
+        if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
+            const tabKey = ids.in[0].replace(/_.*/g, '').toLowerCase();
             if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
                 return tabKey;
             }

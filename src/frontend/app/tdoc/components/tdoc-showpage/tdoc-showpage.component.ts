@@ -35,6 +35,7 @@ export interface TourDocShowpageComponentAvailableTabs {
     LOCATION?: boolean;
     LOCATION_NEARBY?: boolean;
     NEWS?: boolean;
+    DESTINATION?: boolean;
     ROUTE?: boolean;
     ROUTE_NEARBY?: boolean;
     TRACK?: boolean;
@@ -106,6 +107,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     availableTabs: TourDocShowpageComponentAvailableTabs = {
         IMAGE: true,
         IMAGE_NEARBY: true,
+        DESTINATION: true,
         ROUTE: true,
         ROUTE_NEARBY: true,
         TRACK: true,
