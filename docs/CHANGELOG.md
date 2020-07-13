@@ -6,9 +6,10 @@
 - upgraded all dev-dependencies to latest
 - upgraded to angular 6
 - build: use peerDependencies
+- added a action to rate all media of a track: 
 
 ### new features
-- none
+- common: added a action to rate all media of a track
 
 ### improvements
 - build: upgraded all dev-dependencies to latest

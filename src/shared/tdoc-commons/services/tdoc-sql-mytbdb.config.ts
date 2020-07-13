@@ -4429,8 +4429,28 @@ export class TourDocSqlMytbDbConfig {
                 },
                 fieldSum: 'i_rate'
             },
+            'trackimages': {
+                fieldId: 'k_id',
+                table: 'image',
+                rateFields: {
+                    'gesamt': 'i_rate',
+                    'motive': 'i_rate_motive',
+                    'wichtigkeit': 'i_rate_wichtigkeit'
+                },
+                fieldSum: 'i_rate'
+            },
             'video': {
                 fieldId: 'v_id',
+                table: 'video',
+                rateFields: {
+                    'gesamt': 'v_rate',
+                    'motive': 'v_rate_motive',
+                    'wichtigkeit': 'v_rate_wichtigkeit'
+                },
+                fieldSum: 'v_rate'
+            },
+            'trackvideos': {
+                fieldId: 'k_id',
                 table: 'video',
                 rateFields: {
                     'gesamt': 'v_rate',

@@ -334,66 +334,6 @@
                     ]
                 },
                 {
-                    "key": "createBy",
-                    "type": "createBy",
-                    "name": "New Trip by Track",
-                    "shortName": "->*Trip",
-                    "payload": {
-                        "type": "TRIP"
-                    },
-                    "showFilter": [
-                        {
-                            "property": "dummy",
-                            "command": "EQ",
-                            "expectedValues": ["dummy"]
-                        }
-                    ],
-                    "recordAvailability": [
-                        {
-                            "property": "type",
-                            "command": "CSVIN",
-                            "expectedValues": ["TRACK", "track"]
-                        }
-                    ],
-                    "configAvailability": [
-                        {
-                            "property": "permissions.tdocWritable",
-                            "command": "EQ",
-                            "expectedValues": [true]
-                        }
-                    ]
-                },
-                {
-                    "key": "createBy",
-                    "type": "createBy",
-                    "name": "New News by Track",
-                    "shortName": "->*News",
-                    "payload": {
-                        "type": "NEWS"
-                    },
-                    "showFilter": [
-                        {
-                            "property": "dummy",
-                            "command": "EQ",
-                            "expectedValues": ["dummy"]
-                        }
-                    ],
-                    "recordAvailability": [
-                        {
-                            "property": "type",
-                            "command": "CSVIN",
-                            "expectedValues": ["TRACK", "track"]
-                        }
-                    ],
-                    "configAvailability": [
-                        {
-                            "property": "permissions.tdocWritable",
-                            "command": "EQ",
-                            "expectedValues": [true]
-                        }
-                    ]
-                },
-                {
                     "key": "persRate_motive_milestone",
                     "type": "tag",
                     "name": "M4* Personal Motive Meilenstein",
@@ -538,6 +478,37 @@
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "trackmedia_persRate_gesamt_reject",
+                    "type": "tag",
+                    "name": "\u274c Media Personal Gesamt Rejected",
+                    "shortName": "&#x274c",
+                    "payload": {
+                        "value": "-1",
+                        "ratekey": "gesamt"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
                         }
                     ],
                     "configAvailability": [
@@ -1265,6 +1236,37 @@
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "trackmedia_persRate_gesamt_reject",
+                    "type": "tag",
+                    "name": "\u274c Media Gesamt Rejected",
+                    "shortName": "&#x274c",
+                    "payload": {
+                        "value": "-1",
+                        "ratekey": "gesamt"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
                         }
                     ],
                     "configAvailability": [
