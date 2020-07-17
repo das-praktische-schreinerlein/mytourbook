@@ -6,7 +6,8 @@
 - upgraded all dev-dependencies to latest
 - upgraded to angular 6
 - build: use peerDependencies
-- added a action to rate all media of a track: 
+- added a action to rate all media of a track
+- improved list-layout 
 
 ### new features
 - common: added a action to rate all media of a track
@@ -14,6 +15,7 @@
 ### improvements
 - build: upgraded all dev-dependencies to latest
 - frontend: upgraded to angular 6
+- frontend: improved list-layout 
 
 ### bug fixes
 - frontend: IE now functional

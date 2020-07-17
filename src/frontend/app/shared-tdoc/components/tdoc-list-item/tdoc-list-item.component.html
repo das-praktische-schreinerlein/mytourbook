@@ -113,24 +113,26 @@
         <a [name]="listItem.currentRecord.id"></a>
         <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
         <div>
-            <div style="width: 100px; float: left">
+            <div class="teaser-image-container-outer">
                 <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
                     <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
                     <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
                     <span>{{listItem.currentRecord.type | translate }}</span>
                 </h5>
-                <ng-container *ngIf="listItem.image">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="listItem.thumbnailUrl"
-                         (click)="submitShowImage(listItem.currentRecord)"
-                         alt="{{listItem.image.name}}">
-                </ng-container>
-                <ng-container *ngIf="listItem.video">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="listItem.thumbnailUrl"
-                         (click)="submitShow(listItem.currentRecord)"
-                         alt="{{listItem.video.name}}">
-                </ng-container>
+                <div class="teaser-image-container-inner">
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="270px"
+                             [src]="listItem.previewUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="270px"
+                             [src]="listItem.previewUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </div>
             </div>
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
             <p class="card-text">
