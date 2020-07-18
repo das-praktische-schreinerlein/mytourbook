@@ -1353,36 +1353,8 @@ export class TourDocSqlMytbDbConfig {
             facetConfigs: {
                 // dashboard
                 'doublettes': {
-                    selectSql: 'SELECT COUNT(image_object.io_id) AS count, "doublettes" AS value,' +
-                        ' "doublettes" AS label, "true" AS id' +
-                        ' FROM image_object INNER JOIN (SELECT io_id AS id FROM image_object' +
-                        '                     WHERE CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                        ' ":::detector=", image_object.io_detector,' +
-                        ' ":::objX=", image_object.io_obj_x1,' +
-                        ' ":::objY=", image_object.io_obj_y1,' +
-                        ' ":::objWidth=", image_object.io_obj_width,' +
-                        ' ":::objHeight=", image_object.io_obj_height,' +
-                        ' ":::precision=", image_object.io_precision) IN' +
-                        '    (SELECT DISTINCT CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                        ' ":::detector=", image_object.io_detector,' +
-                        ' ":::objX=", image_object.io_obj_x1,' +
-                        ' ":::objY=", image_object.io_obj_y1,' +
-                        ' ":::objWidth=", image_object.io_obj_width,' +
-                        ' ":::objHeight=", image_object.io_obj_height,' +
-                        ' ":::precision=", image_object.io_precision)' +
-                        '     FROM image_object GROUP BY CONCAT(image_object.i_id, ":::key=", image_object.io_obj_type,' +
-                        ' ":::detector=", image_object.io_detector,' +
-                        ' ":::objX=", image_object.io_obj_x1,' +
-                        ' ":::objY=", image_object.io_obj_y1,' +
-                        ' ":::objWidth=", image_object.io_obj_width,' +
-                        ' ":::objHeight=", image_object.io_obj_height,' +
-                        ' ":::precision=", image_object.io_precision)' +
-                        '                    HAVING COUNT(*) > 1)' +
-                        '             ) doublettes' +
-                        '             ON image_object.io_id=doublettes.id',
-                    cache: {
-                        useCache: false
-                    }
+                    constValues: ['doublettes'],
+                    filterField: '"666dummy999"'
                 },
                 'conflictingRates': {
                     constValues: ['conflictingRates'],

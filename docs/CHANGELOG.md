@@ -16,6 +16,7 @@
 - build: upgraded all dev-dependencies to latest
 - frontend: upgraded to angular 6
 - frontend: improved list-layout 
+- backend: removed doublette-facet for imageobjects - its to slow
 
 ### bug fixes
 - frontend: IE now functional
