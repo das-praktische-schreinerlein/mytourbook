@@ -177,6 +177,16 @@ SET
 WHERE toupdate.t_id=grouped.t_id;
 
 -- ##################
+-- import-trackroutes
+-- ##################
+INSERT into kategorie_tour (t_id, k_id)
+    SELECT t_id, k_id
+    FROM testmytbdb.kategorie_tour where k_id IS NOT NULL AND t_ID IS NOT NULL;
+INSERT into kategorie_tour (t_id, k_id)
+    SELECT t_id, k_id
+    FROM testmytbdb.kategorie where k_id IS NOT NULL AND t_ID IS NOT NULL;
+
+-- ##################
 -- import-destinations
 -- ##################
 INSERT INTO destination (d_id,
@@ -244,7 +254,7 @@ UPDATE destination toupdate,
 SET
     toupdate.d_gps_lat=grouped.l_gps_lat,
     toupdate.d_gps_lon=grouped.l_gps_lon,
-    toupdate.d_dateshow=d_datevon,
+    toupdate.d_dateshow=d_datevon
 WHERE toupdate.d_id=grouped.d_id;
 
 

@@ -164,6 +164,42 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'location': {
                 'sort': 'loc_lochirarchie_s asc'
             },
+            'countImages': {
+                'sort': 'count_images_i asc'
+            },
+            'countImagesDesc': {
+                'sort': 'count_images_i desc'
+            },
+            'countNews': {
+                'sort': 'count_news_i asc'
+            },
+            'countNewsDesc': {
+                'sort': 'count_news_i desc'
+            },
+            'countRoutes': {
+                'sort': 'count_routes_i asc'
+            },
+            'countRoutesDesc': {
+                'sort': 'count_routes_i desc'
+            },
+            'countTracks': {
+                'sort': 'count_tracks_i asc'
+            },
+            'countTracksDesc': {
+                'sort': 'count_tracks_i desc'
+            },
+            'countTrips': {
+                'sort': 'count_trips_i asc'
+            },
+            'countTripsDesc': {
+                'sort': 'count_trips_i desc'
+            },
+            'countVideos': {
+                'sort': 'count_videos_i asc'
+            },
+            'countVideosDesc': {
+                'sort': 'count_videos_i desc'
+            },
             'relevance': {
             }
         },

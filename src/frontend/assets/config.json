@@ -1588,8 +1588,8 @@
         },
         "cdoc-object-flags":  {
             "allowedFlags": {
-                "list-item-flat-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT"],
-                "show-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT"]
+                "list-item-flat-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT"],
+                "show-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT"]
             },
             "modes": {
                 "list-item-flat-big": "short",
