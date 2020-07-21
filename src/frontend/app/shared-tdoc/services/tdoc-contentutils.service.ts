@@ -141,6 +141,10 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 12;
+            } else if (type === 'NEWS') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'DESTINATION') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'TRIP') {
