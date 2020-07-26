@@ -131,7 +131,6 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         }
         for (const relationName of TourDocRecord.tdocRelationNames) {
             record[relationName] = baseRecord.get(relationName);
-            console.error("record[relationName]", record[relationName]);
         }
 
         if (anonymizeMedia === true) {

@@ -8,6 +8,7 @@ export const TourDocExtendedObjectPropertyRecordSchema = new Schema({
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
+        category: {type: 'string'},
         name: {type: 'string'},
         value: {type: 'string'},
         tdoc_id: {type: 'string', indexed: true}
