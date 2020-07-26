@@ -217,33 +217,33 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
-            <entity name='flag_objects'
+            <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
-                        SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
-                        SELECT CONCAT("name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
-                        SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
-                        SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
-                        SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                     '>
-                <field column="flag_objects" name="flag_objects_txt"/>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'
@@ -532,21 +532,21 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
-            <entity name='flag_objects'
+            <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM kategorie_full
                               WHERE kategorie_full.k_id IN (${track.k_id})
                            UNION
-                        SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
                               FROM kategorie_full
                               WHERE kategorie_full.k_id IN (${track.k_id})
                            UNION
-                        SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
                               FROM kategorie_full
                               WHERE kategorie_full.k_id IN (${track.k_id})
                         '>
-                <field column="flag_objects" name="flag_objects_txt"/>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'
@@ -821,29 +821,29 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
-            <entity name='flag_objects'
+            <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS extended_object_properties
                               FROM tour
                               WHERE tour.t_id IN (${route.t_id})
                            UNION
-                        SELECT CONCAT("name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
                               FROM tour
                               WHERE tour.t_id IN (${route.t_id})
                            UNION
-                        SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
                               FROM tour
                               WHERE tour.t_id IN (${route.t_id})
                            UNION
-                        SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
                               FROM tour
                               WHERE tour.t_id IN (${route.t_id})
                            UNION
-                        SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
                               FROM tour
                               WHERE tour.t_id IN (${route.t_id})
                     '>
-                <field column="flag_objects" name="flag_objects_txt"/>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'
@@ -1030,33 +1030,33 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
-            <entity name='flag_objects'
+            <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS extended_object_properties
                               FROM location
                               WHERE location.l_id IN (${location.l_id})
                            UNION
-                        SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM location
                               WHERE location.l_id IN (${location.l_id})
                            UNION
-                        SELECT CONCAT("name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
                               FROM location
                               WHERE location.l_id IN (${location.l_id})
                            UNION
-                        SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
                               FROM location
                               WHERE location.l_id IN (${location.l_id})
                            UNION
-                        SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
                               FROM location
                               WHERE location.l_id IN (${location.l_id})
                            UNION
-                        SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
                               FROM location
                               WHERE location.l_id IN (${location.l_id})
                     '>
-                <field column="flag_objects" name="flag_objects_txt"/>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'
@@ -1600,25 +1600,25 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
-            <entity name='flag_objects'
+            <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM trip
                               WHERE trip.tr_id IN (${trip.tr_id})
                            UNION
-                        SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
                               FROM trip
                               WHERE trip.tr_id IN (${trip.tr_id})
                            UNION
-                        SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
                               FROM trip
                               WHERE trip.tr_id IN (${trip.tr_id})
                            UNION
-                        SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
                               FROM trip
                               WHERE trip.tr_id IN (${trip.tr_id})
                     '>
-                <field column="flag_objects" name="flag_objects_txt"/>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'
@@ -1848,29 +1848,29 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
-            <entity name='flag_objects'
+            <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM news
                               WHERE news.n_id IN (${news.n_id})
                            UNION
-                        SELECT CONCAT("name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
                               FROM news
                               WHERE news.n_id IN (${news.n_id})
                            UNION
-                        SELECT CONCAT("name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
                               FROM news
                               WHERE news.n_id IN (${news.n_id})
                            UNION
-                        SELECT CONCAT("name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
                               FROM news
                               WHERE news.n_id IN (${news.n_id})
                            UNION
-                        SELECT CONCAT("name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS flag_objects
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
                               FROM news
                               WHERE news.n_id IN (${news.n_id})
                     '>
-                <field column="flag_objects" name="flag_objects_txt"/>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'

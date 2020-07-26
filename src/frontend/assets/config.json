@@ -1586,8 +1586,8 @@
             "defaultShowKeyAsTooltip": true,
             "defaultFilterForNameToShowNameAndKey": ["bla", "Defa.*", "Default"]
         },
-        "cdoc-object-flags":  {
-            "allowedFlags": {
+        "cdoc-extended-object-properties":  {
+            "allowedExtendedObjectProperties": {
                 "list-item-flat-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT"],
                 "show-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT"]
             },

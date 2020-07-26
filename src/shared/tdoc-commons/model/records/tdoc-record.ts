@@ -39,7 +39,7 @@ import {
     TourDocNavigationObjectRecordFactory,
     TourDocNavigationObjectRecordValidator
 } from './tdocnavigationobject-record';
-import {TourDocFlagObjectRecord, TourDocFlagObjectRecordFactory, TourDocFlagObjectRecordValidator} from './tdocflagobject-record';
+import {TourDocExtendedObjectPropertyRecord, TourDocExtendedObjectPropertyRecordFactory, TourDocExtendedObjectPropertyRecordValidator} from './tdocextendedobjectproperty-record';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;
@@ -68,7 +68,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
 
 export class TourDocRecord extends CommonDocRecord implements TourDocRecordType {
     static tdocRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocimages', 'tdocvideos', 'tdocratepers',
-        'tdocratetech', 'tdocodimageobjects', 'tdocnavigationobjects', 'tdocflagobjects'];
+        'tdocratetech', 'tdocodimageobjects', 'tdocnavigationobjects', 'tdocextendedobjectproperties'];
     static tdocValidationRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech'];
     static tdocFields = {
         locId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
@@ -131,6 +131,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         }
         for (const relationName of TourDocRecord.tdocRelationNames) {
             record[relationName] = baseRecord.get(relationName);
+            console.error("record[relationName]", record[relationName]);
         }
 
         if (anonymizeMedia === true) {
@@ -220,11 +221,11 @@ export let TourDocRecordRelation: any = {
             // reference to related objects in memory
             localField: 'tdocnavigationobjects'
         },
-        tdocflagobject: {
+        tdocextendedobjectproperty: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related objects in memory
-            localField: 'tdocflagobjects'
+            localField: 'tdocextendedobjectproperties'
         }
     }
 };
@@ -266,8 +267,8 @@ export class TourDocRecordFactory extends CommonDocRecordFactory {
                 return TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocnavigationobjects':
                 return TourDocNavigationObjectRecordFactory.instance.getSanitizedValues(values, {});
-            case 'tdocflagobjects':
-                return TourDocFlagObjectRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdocextendedobjectproperties':
+                return TourDocExtendedObjectPropertyRecordFactory.instance.getSanitizedValues(values, {});
             default:
                 return super.getSanitizedRelationValues(relation, values);
         }
@@ -318,8 +319,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                     errFieldPrefix);
             case 'tdocnavigationobjects':
                 return TourDocNavigationObjectRecordValidator.instance.validate(<TourDocNavigationObjectRecord>doc, errFieldPrefix);
-            case 'tdocflagobjects':
-                return TourDocFlagObjectRecordValidator.instance.validate(<TourDocFlagObjectRecord>doc, errFieldPrefix);
+            case 'tdocextendedobjectproperties':
+                return TourDocExtendedObjectPropertyRecordValidator.instance.validate(<TourDocExtendedObjectPropertyRecord>doc, errFieldPrefix);
             default:
                 return super.validateRelationDoc(relation, doc, errFieldPrefix);
         }
@@ -343,8 +344,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocnavigationobjects':
                 return TourDocNavigationObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
-            case 'tdocflagobjects':
-                return TourDocFlagObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdocextendedobjectproperties':
+                return TourDocExtendedObjectPropertyRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             default:
                 return super.validateValueRelationDoc(relation, values, fieldPrefix, errFieldPrefix);
         }

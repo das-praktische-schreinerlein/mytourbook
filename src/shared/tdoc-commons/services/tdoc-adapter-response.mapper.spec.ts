@@ -25,8 +25,11 @@ import {TourDocObjectDetectionImageObjectRecordSchema} from '../model/schemas/td
 import {TourDocNavigationObjectRecord, TourDocNavigationObjectRecordRelation} from '../model/records/tdocnavigationobject-record';
 import {TourDocNavigationObjectRecordSchema} from '../model/schemas/tdocnavigationobject-record-schema';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
-import {TourDocFlagObjectRecord, TourDocFlagObjectRecordRelation} from '../model/records/tdocflagobject-record';
-import {TourDocFlagObjectRecordSchema} from '../model/schemas/tdocflagobject-record-schema';
+import {
+    TourDocExtendedObjectPropertyRecord,
+    TourDocExtendedObjectPropertyRecordRelation
+} from '../model/records/tdocextendedobjectproperty-record';
+import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
 
 describe('TourDocAdapterResponseMapper', () => {
     let datastore: TourDocDataStore;
@@ -55,8 +58,8 @@ describe('TourDocAdapterResponseMapper', () => {
             TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
         datastore.defineMapper('tdocnavigationobject', TourDocNavigationObjectRecord,
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
-        datastore.defineMapper('tdocflagobject', TourDocFlagObjectRecord,
-            TourDocFlagObjectRecordSchema, TourDocFlagObjectRecordRelation);
+        datastore.defineMapper('tdocextendedobjectproperty', TourDocExtendedObjectPropertyRecord,
+            TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
         mapper = datastore.getMapper('tdoc');
     });
 
@@ -99,7 +102,7 @@ describe('TourDocAdapterResponseMapper', () => {
                 'tdocvideos': [],
                 'tdocodimageobjects': [],
                 'tdocnavigationobjects': [],
-                'tdocflagobjects': []
+                'tdocextendedobjectproperties': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues,
                 TourDocSqlMytbDbConfig.tableConfigs.track.fieldMapping);
@@ -179,7 +182,7 @@ describe('TourDocAdapterResponseMapper', () => {
                         'id': '9000001TRACK_9'
                     }
                 ],
-                'tdocflagobjects': []
+                'tdocextendedobjectproperties': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
 

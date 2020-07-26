@@ -1,6 +1,6 @@
-<ng-container *ngIf="isVisible() && flagobjects && flagobjects.length > 0">
+<ng-container *ngIf="isVisible() && extendedObjectProperties && extendedObjectProperties.length > 0">
     <div class="techvaluetable datatechvaluetable">
-        <ng-container *ngFor="let flag of flagobjects">
+        <ng-container *ngFor="let flag of extendedObjectProperties">
             <ng-container *ngIf="isFlagVisible(flag)">
                 <ng-container *ngIf="isShortMode()">
                     <div class="entry short-entry" title="{{'flag.' + flag.name | translate}} {{flag.value}}">

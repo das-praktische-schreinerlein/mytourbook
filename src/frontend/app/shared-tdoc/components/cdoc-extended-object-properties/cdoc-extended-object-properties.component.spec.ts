@@ -2,17 +2,17 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {CommonDocObjectFlagsComponent} from './cdoc-object-flags.component';
+import {CommonDocExtendedObjectPropertiesComponent} from './cdoc-extended-object-properties.component';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/appservice-stubs';
 
-describe('CommonDocObjectFlagsComponent', () => {
-    let component: CommonDocObjectFlagsComponent;
-    let fixture: ComponentFixture<CommonDocObjectFlagsComponent>;
+describe('CommonDocExtendedObjectPropertiesComponent', () => {
+    let component: CommonDocExtendedObjectPropertiesComponent;
+    let fixture: ComponentFixture<CommonDocExtendedObjectPropertiesComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [CommonDocObjectFlagsComponent],
+            declarations: [CommonDocExtendedObjectPropertiesComponent],
             imports: [
                 TranslateModule.forRoot()
             ],
@@ -24,7 +24,7 @@ describe('CommonDocObjectFlagsComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CommonDocObjectFlagsComponent);
+        fixture = TestBed.createComponent(CommonDocExtendedObjectPropertiesComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

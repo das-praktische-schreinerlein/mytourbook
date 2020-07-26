@@ -68,8 +68,9 @@
                 <app-tdoc-keywords [record]="record"></app-tdoc-keywords>
                 <app-tdoc-persontags [record]="record"></app-tdoc-persontags>
                 <app-tdoc-datameta [record]="record"></app-tdoc-datameta>
-                <app-cdoc-object-flags [flagobjects]="record.tdocflagobjects"
-                                       [profile]="'show-big'"></app-cdoc-object-flags>
+                <app-cdoc-extended-object-properties [extendedObjectProperties]="record.tdocextendedobjectproperties"
+                                                     [categories]="['ENTITYCOUNT']"
+                                                     [profile]="'show-big'"></app-cdoc-extended-object-properties>
                 <app-cdoc-odobjectdetails [objects]="record.tdocodimageobjects"
                                           *ngIf="showItemObjectsFlag || record.type === 'ODIMGOBJECT'"></app-cdoc-odobjectdetails>
                 <div style="display: inline-block" *ngIf="!(showItemObjectsFlag || record.type === 'ODIMGOBJECT') && record.tdocodimageobjects && record.tdocodimageobjects.length > 0">
