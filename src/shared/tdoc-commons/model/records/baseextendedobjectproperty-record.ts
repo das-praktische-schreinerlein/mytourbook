@@ -15,21 +15,19 @@ export interface BaseExtendedObjectPropertyRecordType extends BaseEntityRecordTy
     value: any;
 }
 
-export class BaseExtendedObjectPropertyRecord extends BaseEntityRecord implements BaseExtendedObjectPropertyRecordType {
+export abstract class BaseExtendedObjectPropertyRecord extends BaseEntityRecord implements BaseExtendedObjectPropertyRecordType {
     static extendedObjectPropertyFields = {
         category: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
         name: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
         value: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.FULLTEXT, new HtmlValidationRule(false))
     };
 
-    tdoc_id: string;
     category: string;
     name: string;
     value: any;
 
     toString() {
         return 'BaseExtendedObjectPropertyRecord Record {\n' +
-            '  tdoc_id: ' + this.tdoc_id + ',\n' +
             '  id: ' + this.id + ',\n' +
             '  category: ' + this.category + ',\n' +
             '  name: ' + this.name + ',\n' +
