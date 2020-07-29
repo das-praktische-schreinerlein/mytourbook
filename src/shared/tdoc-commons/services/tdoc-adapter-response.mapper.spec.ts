@@ -30,6 +30,8 @@ import {
     TourDocExtendedObjectPropertyRecordRelation
 } from '../model/records/tdocextendedobjectproperty-record';
 import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
+import {TourDocRouteRecord, TourDocRouteRecordRelation} from '../model/records/tdocroute-record';
+import {TourDocRouteRecordSchema} from '../model/schemas/tdocroute-record-schema';
 
 describe('TourDocAdapterResponseMapper', () => {
     let datastore: TourDocDataStore;
@@ -60,6 +62,8 @@ describe('TourDocAdapterResponseMapper', () => {
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
         datastore.defineMapper('tdocextendedobjectproperty', TourDocExtendedObjectPropertyRecord,
             TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
+        datastore.defineMapper('tdocroute', TourDocRouteRecord,
+            TourDocRouteRecordSchema, TourDocRouteRecordRelation);
         mapper = datastore.getMapper('tdoc');
     });
 
@@ -102,7 +106,8 @@ describe('TourDocAdapterResponseMapper', () => {
                 'tdocvideos': [],
                 'tdocodimageobjects': [],
                 'tdocnavigationobjects': [],
-                'tdocextendedobjectproperties': []
+                'tdocextendedobjectproperties': [],
+                'tdocroutes': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues,
                 TourDocSqlMytbDbConfig.tableConfigs.track.fieldMapping);
@@ -182,7 +187,8 @@ describe('TourDocAdapterResponseMapper', () => {
                         'id': '9000001TRACK_9'
                     }
                 ],
-                'tdocextendedobjectproperties': []
+                'tdocextendedobjectproperties': [],
+                'tdocroutes': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
 

@@ -31,6 +31,8 @@ import {
     TourDocExtendedObjectPropertyRecordRelation
 } from '../model/records/tdocextendedobjectproperty-record';
 import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
+import {TourDocRouteRecord, TourDocRouteRecordRelation} from '../model/records/tdocroute-record';
+import {TourDocRouteRecordSchema} from '../model/schemas/tdocroute-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -89,6 +91,8 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
         this.dataStore.defineMapper('tdocextendedobjectproperty', TourDocExtendedObjectPropertyRecord,
             TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
+        this.dataStore.defineMapper('tdocroute', TourDocRouteRecord,
+            TourDocRouteRecordSchema, TourDocRouteRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {

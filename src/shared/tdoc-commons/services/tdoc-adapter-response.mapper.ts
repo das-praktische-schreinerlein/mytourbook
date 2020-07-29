@@ -13,6 +13,7 @@ import {TourDocObjectDetectionImageObjectRecordFactory} from '../model/records/t
 import {TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
 import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 import {TourDocExtendedObjectPropertyRecordFactory} from '../model/records/tdocextendedobjectproperty-record';
+import {TourDocRouteRecordFactory} from '../model/records/tdocroute-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -256,6 +257,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'extended_object_properties_txt')],
                 'extended_object_properties_txt'));
+        this.mapDetailDataToAdapterDocument(mapper, 'routes', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'routes_txt')],
+                'routes_txt'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
@@ -407,7 +412,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                         TourDocNavigationObjectRecordFactory.instance, record, navDocs));
                 break;
             case 'extended_object_properties':
-                let flagDocs = [];
+                let extObjPropsDocs = [];
                 docs.forEach(doc => {
                     let fieldName;
                     if (doc['extended_object_properties'] !== undefined && doc['extended_object_properties'] !== null) {
@@ -416,12 +421,29 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                         fieldName = 'extended_object_properties_txt';
                     }
                     if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        flagDocs = flagDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
+                        extObjPropsDocs = extObjPropsDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
                     }
                 });
                 record.set('tdocextendedobjectproperties',
                     this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocextendedobjectproperty'],
-                        TourDocExtendedObjectPropertyRecordFactory.instance, record, flagDocs));
+                        TourDocExtendedObjectPropertyRecordFactory.instance, record, extObjPropsDocs));
+                break;
+            case 'routes':
+                let routeDocs = [];
+                docs.forEach(doc => {
+                    let fieldName;
+                    if (doc['routes'] !== undefined && doc['routes'] !== null) {
+                        fieldName = 'routes';
+                    } else if (doc['routes_txt'] !== undefined && doc['routes_txt'] !== null) {
+                        fieldName = 'routes_txt';
+                    }
+                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
+                        routeDocs = routeDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
+                    }
+                });
+                record.set('tdocroutes',
+                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocroute'],
+                        TourDocRouteRecordFactory.instance, record, routeDocs));
                 break;
             case 'video':
                 const videoDocs = [];

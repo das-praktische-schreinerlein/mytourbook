@@ -102,6 +102,15 @@ export class TourDocSqlMytbDbConfig {
                     parameterNames: ['id']
                 },
                 {
+                    profile: 'routes',
+                    sql: '(SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),' +
+                        '   ":::full=", CAST(COALESCE(kt_full, "0") AS CHAR))' +
+                        '  AS routes' +
+                        '  FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (:id)' +
+                        '  ORDER BY t_name) ',
+                    parameterNames: ['id']
+                },
+                {
                     profile: 'keywords',
                     sql: 'SELECT GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                         'FROM kategorie INNER JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id' +
