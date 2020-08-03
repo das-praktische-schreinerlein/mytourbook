@@ -501,7 +501,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected prepareSubmitValues(values: {}): void {
-        // prepare gps
         if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
             values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
         }
@@ -511,7 +510,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             values['geoLon'] = lst.length > 1 ? lst[1] : undefined;
         }
 
-        // prepare routes
+        this.prepareRouteJoinSubmitValues(values);
+
+        return super.prepareSubmitValues(values);
+    }
+
+    protected prepareRouteJoinSubmitValues(values: {}): void {
         const subRoutes: {}[] = [];
         const joinName = 'subRoute';
 
@@ -530,8 +534,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             }
         }
         values['tdocroutes'] = subRoutes;
-
-        return super.prepareSubmitValues(values);
     }
 
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
@@ -544,6 +546,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             geoLocAddress: [record.name]
         };
 
+        this.appendRouteJoinsToDefaultFormValueConfig(record, valueConfig);
+
+        return valueConfig;
+    }
+
+    protected appendRouteJoinsToDefaultFormValueConfig(record: TourDocRecord, valueConfig: {}) {
         const subRoutes: TourDocRouteRecord[] = this.record.get('tdocroutes') || [];
         const joinName = 'subRoute';
 
@@ -559,8 +567,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         valueConfig[joinName + 'Id' + idx] = [];
         valueConfig[joinName + 'Full' + idx] = [];
         this.joinIndexes[joinName] = indexes;
-
-        return valueConfig;
     }
 
     protected postProcessFormValueConfig(record: TourDocRecord, formValueConfig: {}): void {
@@ -641,7 +647,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
         return true;
     }
-
 
     protected updateKeywordSuggestions(): boolean {
         super.updateKeywordSuggestions();
