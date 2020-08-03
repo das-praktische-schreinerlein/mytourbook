@@ -1,5 +1,13 @@
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {BaseJoinRecord, BaseJoinRecordType} from './basejoin-record';
+import {
+    GenericValidatorDatatypes,
+    WhiteListValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 // tslint:disable-next-line:no-empty-interface
 export interface TourDocRouteRecordType extends BaseJoinRecordType {
@@ -7,7 +15,10 @@ export interface TourDocRouteRecordType extends BaseJoinRecordType {
 }
 
 export class TourDocRouteRecord extends BaseJoinRecord implements TourDocRouteRecordType {
-    static routeFields = {...BaseJoinRecord.routeFields};
+    static routeFields = {...BaseJoinRecord.routeFields,
+        full: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME,
+            new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)),
+    };
 
     tdoc_id: string;
     full: boolean;
@@ -22,6 +33,7 @@ export class TourDocRouteRecord extends BaseJoinRecord implements TourDocRouteRe
             '  refId: ' + this.refId + '\n' +
             '  name: ' + this.name + ',\n' +
             '  type: ' + this.type + ',\n' +
+            '  full: ' + this.full + '\n' +
             '  tdoc_id: ' + this.tdoc_id + '' +
             '}';
     }
@@ -43,6 +55,8 @@ export class TourDocRouteRecordFactory extends BaseEntityRecordFactory {
     getSanitizedValues(values: {}, result: {}): {} {
         super.getSanitizedValues(values, result);
         this.sanitizeFieldValues(values, TourDocRouteRecord.routeFields, result, '');
+        result['full'] = result['full'] === true || result['full'] === 'true';
+
         return result;
     }
 }

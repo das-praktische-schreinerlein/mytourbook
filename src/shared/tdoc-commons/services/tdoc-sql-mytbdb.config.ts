@@ -8,6 +8,7 @@ import {KeywordModelConfigType} from '@dps/mycms-commons/dist/action-commons/act
 import {PlaylistModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {RateModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {ObjectDetectionModelConfigType} from '@dps/mycms-commons/dist/commons/model/common-sql-object-detection.model';
+import {JoinModelConfigType} from './common-sql-join.adapter';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
@@ -104,7 +105,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'routes',
                     sql: '(SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),' +
-                        '   ":::full=", CAST(COALESCE(kt_full, "0") AS CHAR))' +
+                        '   ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR))' +
                         '  AS routes' +
                         '  FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (:id)' +
                         '  ORDER BY t_name) ',
@@ -4443,6 +4444,19 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
+    public static readonly joinModelConfigType: JoinModelConfigType = {
+        tables: {
+            'track': {
+                baseTableIdField: 'k_id',
+                joinTable: 'kategorie_tour',
+                joinFieldMappings: {
+                    't_id': 'refId',
+                    'kt_full': 'full'
+                }
+            }
+        }
+    };
+
     public static readonly objectDetectionModelConfigType: ObjectDetectionModelConfigType = {
         objectTable: {
             fieldCategory: 'o_category',
@@ -4709,6 +4723,10 @@ export class TourDocSqlMytbDbConfig {
 
     public getRateModelConfigFor(): RateModelConfigType {
         return TourDocSqlMytbDbConfig.rateModelConfigType;
+    }
+
+    public getJoinModelConfigFor(): JoinModelConfigType {
+        return TourDocSqlMytbDbConfig.joinModelConfigType;
     }
 
     public getActionTagAssignConfig(): ActionTagAssignConfigType {

@@ -335,8 +335,6 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocNavigationObjectRecordValidator.instance.validate(<TourDocNavigationObjectRecord>doc, errFieldPrefix);
             case 'tdocextendedobjectproperties':
                 return TourDocExtendedObjectPropertyRecordValidator.instance.validate(<TourDocExtendedObjectPropertyRecord>doc, errFieldPrefix);
-            case 'tdocroutes':
-                return TourDocRouteRecordValidator.instance.validate(<TourDocExtendedObjectPropertyRecord>doc, errFieldPrefix);
             default:
                 return super.validateRelationDoc(relation, doc, errFieldPrefix);
         }

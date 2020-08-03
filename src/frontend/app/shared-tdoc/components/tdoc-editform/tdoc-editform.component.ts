@@ -30,6 +30,7 @@ import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolo
 import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
+import {TourDocRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdocroute-record';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -127,6 +128,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     geoLocRecords: TourDocRecord[] = [];
     trackStatistic: TrackStatistic = this.trackStatisticService.emptyStatistic();
     personTagSuggestions: string[] = [];
+    joinIndexes: {[key: string]: any[]} = {};
 
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
@@ -317,6 +319,20 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
+    joinElementChanged(formElement: any, joinName: string, idx: number, add: boolean) {
+        const indexes = this.joinIndexes[joinName];
+        if (add && indexes) {
+            if (idx === indexes[indexes.length - 1]) {
+                const newIdx = idx + 1;
+                this.editFormGroup.registerControl(joinName + 'Id' + newIdx, this.fb.control(undefined, undefined));
+                this.editFormGroup.registerControl(joinName + 'Full' + newIdx, this.fb.control(undefined, undefined));
+                indexes.push(newIdx);
+            }
+        }
+
+        return false;
+    }
+
     updateGpsTrackSrc(gpsTrackSrc: string): void {
         this.setValue('gpsTrackSrc', gpsTrackSrc);
         this.updateMap();
@@ -485,6 +501,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected prepareSubmitValues(values: {}): void {
+        // prepare gps
         if (values['gpsTrackSrc'] !== undefined && values['gpsTrackSrc'] !== null) {
             values['gpsTrackSrc'] = values['gpsTrackSrc'].replace(/\n/g, ' ').replace(/[ ]+/g, ' ');
         }
@@ -494,11 +511,31 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             values['geoLon'] = lst.length > 1 ? lst[1] : undefined;
         }
 
+        // prepare routes
+        const subRoutes: {}[] = [];
+        const joinName = 'subRoute';
+
+        const indexes = this.joinIndexes[joinName];
+        for (let idx = 1; idx <= indexes.length; idx ++) {
+            const refId = this.getStringFormValue(values, joinName + 'Id' + idx);
+            const full = this.getStringFormValue(values, joinName + 'Full' + idx);
+            if (refId !== undefined && refId !== 'undefined') {
+                subRoutes.push({
+                    tdoc_id: this.record.id,
+                    name: 'dummy',
+                    refId: refId,
+                    full: full ? true : false,
+                    type: 'subRoute'
+                })
+            }
+        }
+        values['tdocroutes'] = subRoutes;
+
         return super.prepareSubmitValues(values);
     }
 
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
-        return {
+        const valueConfig = {
             dateshow: [DateUtils.dateToLocalISOString(record.dateshow)],
             datestart: [DateUtils.dateToLocalISOString(record.datestart)],
             dateend: [DateUtils.dateToLocalISOString(record.dateend)],
@@ -506,6 +543,24 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             gpsTrackSrc: [record.gpsTrackSrc],
             geoLocAddress: [record.name]
         };
+
+        const subRoutes: TourDocRouteRecord[] = this.record.get('tdocroutes') || [];
+        const joinName = 'subRoute';
+
+        const indexes = [];
+        let idx = 1;
+        for (; idx <= subRoutes.length; idx ++) {
+            indexes.push(idx);
+            valueConfig[joinName + 'Id' + idx] = [subRoutes[idx - 1].refId];
+            valueConfig[joinName + 'Full' + idx] = [subRoutes[idx - 1].full];
+        }
+
+        indexes.push(idx);
+        valueConfig[joinName + 'Id' + idx] = [];
+        valueConfig[joinName + 'Full' + idx] = [];
+        this.joinIndexes[joinName] = indexes;
+
+        return valueConfig;
     }
 
     protected postProcessFormValueConfig(record: TourDocRecord, formValueConfig: {}): void {
@@ -608,6 +663,41 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         if (input.setSelectionRange) {
             input.focus();
             input.setSelectionRange(selectionStart, selectionEnd);
+        }
+    }
+
+    protected getNumberFormValue(values: {}, formKey: string): number {
+        if (!values[formKey]) {
+            return undefined;
+        }
+
+        if (Array.isArray(values[formKey])) {
+            return Number(values[formKey][0]);
+        } else {
+            return Number(values[formKey]);
+        }
+    }
+
+    protected getStringFormValue(values: {}, formKey: string): string {
+        if (!values[formKey]) {
+            return undefined;
+        }
+
+        if (Array.isArray(values[formKey])) {
+            return values[formKey][0] + '';
+        } else {
+            return values[formKey] + '';
+        }
+    }
+
+    protected getStringArrayFormValue(values: {}, formKey: string): string[] {
+        if (!values[formKey]) {
+            return undefined;
+        }
+        if (Array.isArray(values[formKey])) {
+            return values[formKey];
+        } else {
+            return [values[formKey]];
         }
     }
 }

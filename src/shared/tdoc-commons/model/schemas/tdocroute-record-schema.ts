@@ -10,6 +10,7 @@ export const TourDocRouteRecordSchema = new Schema({
     properties: {
         type: {type: 'string'},
         name: {type: 'string'},
+        full: {type: 'boolean'},
         refId: {type: 'string', indexed: true},
         tdoc_id: {type: 'string', indexed: true}
     }

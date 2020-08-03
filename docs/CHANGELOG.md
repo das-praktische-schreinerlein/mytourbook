@@ -7,10 +7,12 @@
 - upgraded to angular 6
 - build: use peerDependencies
 - added a action to rate all media of a track
-- improved list-layout 
+- improved list-layout
+- added possibility to edit multiroutes
 
 ### new features
 - common: added a action to rate all media of a track
+- common: added possibility to edit multiroutes
 
 ### improvements
 - build: upgraded all dev-dependencies to latest

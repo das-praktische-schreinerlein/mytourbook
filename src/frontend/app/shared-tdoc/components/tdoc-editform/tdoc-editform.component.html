@@ -74,6 +74,14 @@
             </div>
         </fieldset>
         <fieldset>
+            <legend i18n="dataAdditionalData label|Label for fieldset: dataAdditionalData@@label.editform.tdoc.legend.dataAdditionalData">&#x231a; Zusatzdaten</legend>
+            <div class="row">
+                <ng-container *ngFor="let idx of joinIndexes['subRoute']">
+                    <ng-container *ngTemplateOutlet="inputSubRoute;context:{key: 'subRoute', idx: idx, joinName: 'subRoute'}"></ng-container>
+                </ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
             <legend i18n="dataTech label|Label for fieldset: dataTech@@label.editform.tdoc.legend.dataTech">&#x231a; technische Daten</legend>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputNumber;context:{key: 'tdocdatatech.dist', formControlName: 'tdocdatatech_dist', recommend: trackStatistic.dist}"></ng-container>
@@ -401,6 +409,25 @@
                                      required="required"
                                      formControlName="routeId"
                                      ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
+    <ng-template #inputSubRoute let-key="key" let-idx="idx" let-joinName="joinName">
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="subRouteId label|Label for filter: subRouteId@@label.searchform.tdoc.subRouteId">SubRoute:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
+                                     [settings]="settingsSelectRoute"
+                                     [texts]="textsSelectRoute"
+                                     (onAdded)="joinElementChanged($event, joinName, idx, true)"
+                                     (onRemoved)="joinElementChanged($event, joinName, idx, false)"
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                     required="required"
+                                     formControlName="{{joinName + 'Id' + idx}}"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="subRouteFull label|Label for filter: subRouteFull@@label.searchform.tdoc.subRouteFull">Umfasst gesamten Track:</label>
+            <input type="checkbox" formControlName="{{joinName + 'Full'  + idx}}">
         </div>
     </ng-template>
 

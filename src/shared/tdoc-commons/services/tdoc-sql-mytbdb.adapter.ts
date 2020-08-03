@@ -49,6 +49,8 @@ import {
 import {CommonSqlRateAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {CommonSqlObjectDetectionAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-object-detection.adapter';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
+import {TourDocRouteRecord} from '../model/records/tdocroute-record';
+import {CommonSqlJoinAdapter} from './common-sql-join.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
@@ -62,6 +64,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     private readonly commonKeywordAdapter: CommonSqlKeywordAdapter;
     private readonly commonPlaylistAdapter: CommonSqlPlaylistAdapter;
     private readonly commonRateAdapter: CommonSqlRateAdapter;
+    private readonly commonJoinAdapter: CommonSqlJoinAdapter;
     private readonly commonObjectDetectionAdapter: CommonSqlObjectDetectionAdapter;
     private readonly dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
@@ -75,6 +78,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             this.dbModelConfig.getPlaylistModelConfigFor());
         this.commonRateAdapter = new CommonSqlRateAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getRateModelConfigFor());
+        this.commonJoinAdapter = new CommonSqlJoinAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getJoinModelConfigFor());
         this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.commonKeywordAdapter);
         this.actionTagAssignAdapter = new CommonSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagAssignConfig());
@@ -119,7 +124,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject']
+            .map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
         facet = new Facet();
@@ -211,14 +217,18 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
 
         const tabKey = props.type.toLowerCase();
         if (tabKey === 'track') {
-            return  new Promise<boolean>((allResolve, allReject) => {
+            return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setTrackKeywords(dbId, props.keywords, opts));
+                if (props.get('tdocroutes')) {
+                    const routes: TourDocRouteRecord[] = props.get('tdocroutes');
+                    promises.push(this.commonJoinAdapter.saveJoins(tabKey, dbId, routes, opts));
+                }
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setTrackKeywords failed:', reason);
+                    console.error('setTrackDetails failed:', reason);
                     return allReject(reason);
                 });
             });
