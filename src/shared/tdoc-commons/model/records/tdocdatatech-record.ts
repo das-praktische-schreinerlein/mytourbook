@@ -5,7 +5,11 @@ import {
     BaseEntityRecordType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {GenericValidatorDatatypes, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NumberValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export interface TourDocDataTechRecordType extends BaseEntityRecordType {
     altAsc: number;
@@ -29,7 +33,8 @@ export class TourDocDataTechRecord extends BaseEntityRecord implements TourDocDa
         dist: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(false, 0, 99999, undefined)),
         dur: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
-            new NumberValidationRule(false, 0, 999999, undefined))
+            new NumberValidationRule(false, 0, 999999, undefined)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
     altAsc: number;

@@ -1,7 +1,17 @@
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {BaseNavigationObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/basenavigationobject-record';
+import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export class TourDocNavigationObjectRecord extends BaseNavigationObjectRecord {
+    static navigationObjectFields = {
+        ...BaseNavigationObjectRecord.navigationObjectFields,
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
+    };
+
     tdoc_id: string;
 
     toString() {

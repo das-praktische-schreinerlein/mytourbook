@@ -5,7 +5,11 @@ import {
     BaseEntityRecordType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {GenericValidatorDatatypes, NameValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NameValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export interface TourDocDataInfoRecordType extends BaseEntityRecordType {
     baseloc: string;
@@ -19,7 +23,8 @@ export class TourDocDataInfoRecord extends BaseEntityRecord implements TourDocDa
         baseloc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         destloc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         guides: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
-        region: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false))
+        region: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
     baseloc: string;

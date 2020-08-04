@@ -6,6 +6,7 @@ import {
 import {BaseJoinRecord, BaseJoinRecordType} from './basejoin-record';
 import {
     GenericValidatorDatatypes,
+    IdValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
@@ -18,6 +19,7 @@ export class TourDocRouteRecord extends BaseJoinRecord implements TourDocRouteRe
     static routeFields = {...BaseJoinRecord.routeFields,
         full: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME,
             new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
     tdoc_id: string;

@@ -5,7 +5,11 @@ import {
     BaseEntityRecordType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {GenericValidatorDatatypes, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NumberValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export interface TourDocRatePersonalRecordType extends BaseEntityRecordType {
     ausdauer: number;
@@ -35,7 +39,8 @@ export class TourDocRatePersonalRecord extends BaseEntityRecord implements TourD
         schwierigkeit: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
             new NumberValidationRule(false, 0, 15, undefined)),
         wichtigkeit: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
-            new NumberValidationRule(false, -1, 15, undefined))
+            new NumberValidationRule(false, -1, 15, undefined)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
     ausdauer: number;

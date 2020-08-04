@@ -5,7 +5,11 @@ import {
     BaseEntityRecordType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {GenericValidatorDatatypes, NameValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NameValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export interface TourDocRateTechRecordType extends BaseEntityRecordType {
     bergtour: string;
@@ -25,7 +29,8 @@ export class TourDocRateTechRecord extends BaseEntityRecord implements TourDocRa
         klettern: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         ks: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         overall: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
-        schneeschuh: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false))
+        schneeschuh: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
     bergtour: string;

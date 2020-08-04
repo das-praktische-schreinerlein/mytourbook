@@ -1,5 +1,10 @@
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {BaseExtendedObjectPropertyRecord, BaseExtendedObjectPropertyRecordType} from './baseextendedobjectproperty-record';
+import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 // tslint:disable-next-line:no-empty-interface
 export interface TourDocExtendedObjectPropertyRecordType extends BaseExtendedObjectPropertyRecordType {
@@ -7,6 +12,11 @@ export interface TourDocExtendedObjectPropertyRecordType extends BaseExtendedObj
 
 export class TourDocExtendedObjectPropertyRecord extends BaseExtendedObjectPropertyRecord
     implements TourDocExtendedObjectPropertyRecordType {
+    static extendedObjectPropertyFields = {
+        ... BaseExtendedObjectPropertyRecord.extendedObjectPropertyFields,
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
+    };
+
     tdoc_id: string;
 
     toString() {
@@ -35,7 +45,7 @@ export class TourDocExtendedObjectPropertyRecordFactory extends BaseEntityRecord
 
     getSanitizedValues(values: {}, result: {}): {} {
         super.getSanitizedValues(values, result);
-        this.sanitizeFieldValues(values, BaseExtendedObjectPropertyRecord.extendedObjectPropertyFields, result, '');
+        this.sanitizeFieldValues(values, TourDocExtendedObjectPropertyRecord.extendedObjectPropertyFields, result, '');
         return result;
     }
 }
@@ -49,7 +59,7 @@ export class TourDocExtendedObjectPropertyRecordValidator extends BaseEntityReco
 
         const state = super.validateMyFieldRules(values, errors, fieldPrefix, errFieldPrefix);
 
-        return this.validateFieldRules(values, BaseExtendedObjectPropertyRecord.extendedObjectPropertyFields, fieldPrefix,
+        return this.validateFieldRules(values, TourDocExtendedObjectPropertyRecord.extendedObjectPropertyFields, fieldPrefix,
             errors, errFieldPrefix) && state;
     }
 }
