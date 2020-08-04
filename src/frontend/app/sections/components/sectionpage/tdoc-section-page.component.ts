@@ -23,6 +23,7 @@ import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pd
 export interface TourDocSectionPageComponentAvailableTabs {
     DESTINATION?: boolean;
     IMAGE?: boolean;
+    INFO?: boolean;
     ODIMGOBJECT?: boolean;
     VIDEO?: boolean;
     LOCATION?: boolean;
@@ -59,6 +60,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     availableTabs: TourDocSectionPageComponentAvailableTabs = {
         DESTINATION: true,
         IMAGE: true,
+        INFO: true,
         ROUTE: true,
         TRACK: true,
         LOCATION: true,
@@ -74,7 +76,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         ROUTE: true,
         LOCATION: true,
         TRIP: true,
-        NEWS: true
+        NEWS: true,
+        INFO: true
     };
 
     availableToDoDashboardRows: TourDocSectionPageComponentDashboardRows = {
@@ -203,11 +206,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'TRIP'
                     && recordType !== 'NEWS';
             case 'noLocation':
-                return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'TRIP' || recordType === 'LOCATION';
+                return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'TRIP' || recordType === 'LOCATION'
+                    || recordType === 'INFO';
             case 'noRoute':
                 return recordType === 'TRACK';
             case 'unrated':
-                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
+                    && recordType !== 'INFO';
             case 'todoKeywords':
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'LOCATION'
                     && recordType !== 'TRIP' && recordType !== 'NEWS';
@@ -236,9 +241,11 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             case 'objectDetectionOpen':
                 return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
             case 'rated':
-                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
+                    && recordType !== 'INFO';
             case 'rejected':
-                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
+                    && recordType !== 'INFO';
             case 'objectDetectionDone':
                 return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
         }

@@ -198,6 +198,7 @@
 <ng-template #bestMatching>
     <h5><span class="fx-bg-type" i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</span></h5>
     <ngb-tabset>
+
         <ngb-tab title="Routen" *ngIf="availableTabs.ROUTE">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Routen'"
@@ -214,6 +215,7 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+
         <ngb-tab title="Ziele" *ngIf="availableTabs.DESTINATION">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Ziele'"
@@ -230,6 +232,7 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+
         <ngb-tab title="Regionen" *ngIf="availableTabs.LOCATION">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Regionen'"
@@ -246,6 +249,7 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+
         <ngb-tab title="Bilder" *ngIf="availableTabs.IMAGE">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Bilder'"
@@ -262,6 +266,7 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+
         <ngb-tab title="Tracks" *ngIf="availableTabs.TRACK">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Tracks'"
@@ -278,6 +283,7 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+
         <ngb-tab title="Trips" *ngIf="availableTabs.TRIP">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Trips'"
@@ -294,6 +300,7 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+
         <ngb-tab title="Videos" *ngIf="availableTabs.VIDEO">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Videos'"
@@ -310,6 +317,24 @@
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
+
+        <ngb-tab title="Infos" *ngIf="availableTabs.INFO">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Infos'"
+                                            i18n-label="label section-page INFO|Label section-page INFO@@linline-search.label.tdoc.INFO"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page INFO|SearchLinkLabel section-page INFO@@linline-search.searchLinkLabel.tdoc.INFO"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType('INFO', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="true"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+
         <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Alles'"

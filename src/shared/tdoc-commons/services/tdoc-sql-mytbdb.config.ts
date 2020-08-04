@@ -446,7 +446,7 @@ export class TourDocSqlMytbDbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['track', 'route', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination'],
+                    constValues: ['track', 'route', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info'],
                     filterField: '"track"',
                     selectLimit: 1
                 },
@@ -506,6 +506,10 @@ export class TourDocSqlMytbDbConfig {
                 id: 'kategorie.k_id',
                 destination_id_s: 'dt.d_id',
                 destination_id_ss: 'dt.d_id',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 loc_id_i: 'kategorie.l_id',
                 loc_id_is: 'kategorie.l_id',
                 route_id_i: 'kategorie.t_id',
@@ -1077,7 +1081,7 @@ export class TourDocSqlMytbDbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination'],
+                    constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info'],
                     filterField: '"image"',
                     selectLimit: 1
                 },
@@ -1133,6 +1137,8 @@ export class TourDocSqlMytbDbConfig {
                 destination_id_ss: 'dt.d_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 video_id_is: '"666dummy999"',
                 video_id_i: '"666dummy999"',
                 route_id_i: 'kategorie.t_id',
@@ -1618,7 +1624,7 @@ export class TourDocSqlMytbDbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination'],
+                    constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info'],
                     filterField: '"odimgobject"',
                     selectLimit: 1
                 },
@@ -1676,6 +1682,8 @@ export class TourDocSqlMytbDbConfig {
                 id: 'image_object.io_id',
                 image_id_i: 'image.i_id',
                 image_id_is: 'image.i_id',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 video_id_is: '"666dummy999"',
                 video_id_i: '"666dummy999"',
                 route_id_i: 'kategorie.t_id',
@@ -2126,7 +2134,7 @@ export class TourDocSqlMytbDbConfig {
                     orderBy: 'value asc'
                 },
                 'type_txt': {
-                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject', 'destination'],
+                    constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject', 'destination', 'info'],
                     filterField: '"video"',
                     selectLimit: 1
                 },
@@ -2182,6 +2190,8 @@ export class TourDocSqlMytbDbConfig {
                 destination_id_ss: 'dt.d_id',
                 image_id_is: '"666dummy999"',
                 image_id_i: '"666dummy999"',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 video_id_i: 'video.v_id',
                 video_id_is: 'video.v_id',
                 route_id_i: 'kategorie.t_id',
@@ -2665,7 +2675,7 @@ export class TourDocSqlMytbDbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination'],
+                    constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info'],
                     filterField: '"route"',
                     selectLimit: 1
                 },
@@ -2749,6 +2759,10 @@ export class TourDocSqlMytbDbConfig {
                 id: 'tour.t_id',
                 destination_id_s: 'dt.d_id',
                 destination_id_ss: 'dt.d_id',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 route_id_i: 'tour.t_id',
                 route_id_is: 'tour.t_id',
                 video_id_is: '"666dummy999"',
@@ -3146,7 +3160,7 @@ export class TourDocSqlMytbDbConfig {
                     action: AdapterFilterActions.IN_NUMBER
                 },
                 'type_txt': {
-                    constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination'],
+                    constValues: ['route', 'track', 'image', 'odimgobject', 'video', 'location', 'trip', 'news', 'destination', 'info'],
                     filterField: '"destination"',
                     selectLimit: 1
                 },
@@ -3198,6 +3212,10 @@ export class TourDocSqlMytbDbConfig {
                 unRatedChildren: '"666dummy999"',
                 // common
                 id: 'destination.d_id',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 route_id_i: 'dtour.t_id',
                 route_id_is: 'dtour.t_id',
                 track_id_i: 'k.k_id',
@@ -3554,7 +3572,7 @@ export class TourDocSqlMytbDbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news', 'destination'],
+                    constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
                     filterField: '"location"',
                     selectLimit: 1
                 },
@@ -3601,6 +3619,10 @@ export class TourDocSqlMytbDbConfig {
                 loc_id_i: 'location.l_id',
                 loc_id_is: 'location.l_id',
                 loc_parent_id_i: 'l_parent_id',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 trip_id_is: '"666dummy999"',
                 html: 'CONCAT(l_name, " ", COALESCE(l_meta_shortdesc,""))'
             },
@@ -3780,8 +3802,8 @@ export class TourDocSqlMytbDbConfig {
                     filterField: '"666dummy999"'
                 },
                 'noLocation': {
-                    selectSql: 'SELECT COUNT(trip.tr_id) AS count, "loc_no_parentr_id_is" AS value,' +
-                        ' "loc_no_parentr_id_is" AS label, "true" AS id' +
+                    selectSql: 'SELECT COUNT(trip.tr_id) AS count, "noLocation" AS value,' +
+                        ' "noLocation" AS label, "true" AS id' +
                         ' FROM trip WHERE l_id IS NULL OR l_id IN (0,1 )',
                     filterField: 'trip.l_id',
                     action: AdapterFilterActions.IN
@@ -3907,7 +3929,7 @@ export class TourDocSqlMytbDbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
                     filterField: '"trip"',
                     selectLimit: 1
                 },
@@ -3973,6 +3995,8 @@ export class TourDocSqlMytbDbConfig {
                 id: 'trip.tr_id',
                 destination_id_s: 'dt.d_id',
                 destination_id_ss: 'dt.d_id',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 trip_id_i: 'trip.tr_id',
                 trip_id_is: 'trip.tr_id',
                 video_id_is: '"666dummy999"',
@@ -4024,6 +4048,329 @@ export class TourDocSqlMytbDbConfig {
                 desc_html_txt: 'tr_meta_shortdesc_html',
                 keywords_txt: 'tr_keywords',
                 name_s: 'tr_name',
+                type_s: 'type'
+            }
+        },
+        'info': {
+            key: 'info',
+            tableName: 'info',
+            selectFrom: 'info LEFT JOIN location ON location.l_id = info.l_id',
+            optionalGroupBy: [
+                {
+                    from: 'LEFT JOIN info_keyword ON info.if_id=info_keyword.if_id ' +
+                        'LEFT JOIN keyword ON info_keyword.kw_id=keyword.kw_id',
+                    triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS if_keywords']
+                },
+                {
+                    from: 'INNER JOIN (SELECT if_id AS id FROM info WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') + ' AS name' +
+                        '                  FROM info GROUP BY name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON info.if_id=doublettes.id',
+                    triggerParams: ['doublettes'],
+                    groupByFields: []
+                }
+            ],
+            groupbBySelectFieldList: true,
+            groupbBySelectFieldListIgnore: ['if_keywords'],
+            loadDetailData: [
+                {
+                    profile: 'navigation_objects',
+                    sql: '(SELECT CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM info WHERE if_id < (SELECT if_id FROM info WHERE if_id IN (:id))' +
+                        '  ORDER BY if_id DESC, if_id DESC LIMIT 1) ' +
+                        'UNION ' +
+                        ' (SELECT CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "SUCCESSOR")' +
+                        '  AS navigation_objects' +
+                        '  FROM info WHERE if_id > (SELECT if_id FROM info WHERE if_id IN (:id))' +
+                        '   ORDER BY if_id, if_id LIMIT 1)',
+                    parameterNames: ['id'],
+                    modes: ['details']
+                }
+            ],
+            selectFieldList: [
+                '"INFO" AS type',
+                'CONCAT("INFO", "_", info.if_id) AS id',
+                'CONCAT("if_", info.if_typ) AS subtype',
+                'info.if_id',
+                'info.l_id',
+                'info.if_name',
+                'if_publisher',
+                'info.if_url as if_reference',
+                'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,"")) AS html',
+                'CAST(l_geo_latdeg AS CHAR(50)) AS if_gps_lat',
+                'CAST(l_geo_longdeg AS CHAR(50)) AS if_gps_lon',
+                'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS if_gps_loc',
+                'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
+                'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
+                'if_gesperrt',
+                'if_meta_desc',
+                'if_meta_desc AS if_meta_desc_md',
+                'if_meta_desc AS if_meta_desc_html',
+                'if_meta_shortdesc',
+                'if_meta_shortdesc AS if_meta_shortdesc_md',
+                'if_meta_shortdesc AS if_meta_shortdesc_html'],
+            facetConfigs: {
+                // dashboard
+                'doublettes': {
+                    selectSql: 'SELECT COUNT(info.if_id) AS count, "doublettes" AS value,' +
+                        ' "doublettes" AS label, "true" AS id' +
+                        ' FROM info INNER JOIN (SELECT if_id AS id FROM info WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') +
+                        '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('if_name') + ' AS name' +
+                        '                  FROM info GROUP BY name HAVING COUNT(*) > 1)' +
+                        '             ) doublettes' +
+                        '             ON info.if_id=doublettes.id',
+                    cache: {
+                        useCache: false
+                    }
+                },
+                'conflictingRates': {
+                    constValues: ['conflictingRates'],
+                    filterField: '"666dummy999"'
+                },
+                'noCoordinates': {
+                    constValues: ['noCoordinates'],
+                    filterField: '"666dummy999"'
+                },
+                'noFavoriteChildren': {
+                    constValues: ['noFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noLocation': {
+                    selectSql: 'SELECT COUNT(info.if_id) AS count, "noLocation" AS value,' +
+                        ' "noLocation" AS label, "true" AS id' +
+                        ' FROM info WHERE l_id IS NULL OR l_id IN (0,1 )',
+                    filterField: 'info.l_id',
+                    action: AdapterFilterActions.IN
+                },
+                'noMainFavoriteChildren': {
+                    constValues: ['noMainFavoriteChildren'],
+                    filterField: '"666dummy999"'
+                },
+                'noRoute': {
+                    constValues: ['noRoute'],
+                    filterField: '"666dummy999"'
+                },
+                'noSubType': {
+                    constValues: ['noSubType'],
+                    filterField: '"666dummy999"'
+                },
+                'todoDesc': {
+                    selectSql: 'SELECT COUNT(info.if_id) AS count, "todoDesc" AS value,' +
+                        ' "todoDesc" AS label, "true" AS id' +
+                        ' FROM info WHERE if_meta_shortdesc LIKE "TODODESC" OR if_meta_desc LIKE "TODODESC"',
+                    filterField: 'info.if_meta_shortdesc',
+                    action: AdapterFilterActions.IN
+                },
+                'todoKeywords': {
+                    selectSql: 'SELECT COUNT(info.if_id) AS count, "todoKeywords" AS value,' +
+                        ' "todoKeywords" AS label, "true" AS id' +
+                        ' FROM info INNER JOIN info_keyword ON info.if_id=info_keyword.if_id' +
+                        ' INNER JOIN keyword ON info_keyword.kw_id=keyword.kw_id ' +
+                        'WHERE keyword.kw_name IN ("KW_TODOKEYWORDS")',
+                    filterField: 'keyword.kw_name',
+                    action: AdapterFilterActions.IN
+                },
+                'unrated': {
+                    constValues: ['unrated'],
+                    filterField: '"666dummy999"'
+                },
+                'unRatedChildren': {
+                    constValues: ['unRatedChildren'],
+                    filterField: '"666dummy999"'
+                },
+                // common
+                'id_notin_is': {
+                    filterField: 'CONCAT("INFO", "_", info.if_id)',
+                    action: AdapterFilterActions.NOTIN
+                },
+                'actiontype_ss': {
+                    noFacet: true
+                },
+                'blocked_is': {
+                    selectField: 'if_gesperrt'
+                },
+                'data_tech_alt_asc_facet_is': {
+                    noFacet: true
+                },
+                'data_tech_alt_max_facet_is': {
+                    noFacet: true
+                },
+                'data_tech_dist_facets_fs': {
+                    noFacet: true
+                },
+                'data_tech_dur_facet_fs': {
+                    noFacet: true
+                },
+                'done_ss': {
+                    noFacet: true
+                },
+                'keywords_txt': {
+                    selectSql: 'SELECT 0 AS count, ' +
+                        '  kw_name AS value ' +
+                        'FROM' +
+                        ' keyword' +
+                        ' WHERE kw_name like "KW_%"' +
+                        ' GROUP BY count, value' +
+                        ' ORDER BY value',
+                    filterField: 'kw_name',
+                    action: AdapterFilterActions.LIKEIN
+                },
+                'loc_id_i': {
+                    noFacet: true
+                },
+                'loc_lochirarchie_txt': {
+                    selectSql: 'SELECT COUNT(info.l_id) AS count, GetTechName(l_name) AS value,' +
+                        ' GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS label, location.l_id AS id' +
+                        ' FROM location LEFT JOIN info ON info.l_id = location.l_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label ASC',
+                    filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                    action: AdapterFilterActions.LIKE
+                },
+                'month_is': {
+                    noFacet: true
+                },
+                'news_id_i': {
+                    noFacet: true
+                },
+                'news_id_is': {
+                    noFacet: true
+                },
+                'objects_txt': {
+                    noFacet: true
+                },
+                'odcats_txt': {
+                    noFacet: true
+                },
+                'oddetectors_txt': {
+                    noFacet: true
+                },
+                'odkeys_txt': {
+                    noFacet: true
+                },
+                'odprecision_is': {
+                    noFacet: true
+                },
+                'odstates_ss': {
+                    noFacet: true
+                },
+                'persons_txt': {
+                    noFacet: true
+                },
+                'playlists_txt': {
+                    noFacet: true
+                },
+                'rate_pers_gesamt_is': {
+                    noFacet: true
+                },
+                'rate_pers_schwierigkeit_is': {
+                    noFacet: true
+                },
+                'rate_tech_overall_ss': {
+                    noFacet: true
+                },
+                'subtype_ss': {
+                    selectField: 'CONCAT("if_", info.if_typ)'
+                },
+                'type_txt': {
+                    constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination'],
+                    filterField: '"info"',
+                    selectLimit: 1
+                },
+                'week_is': {
+                    noFacet: true
+                },
+                'year_is': {
+                    noFacet: true
+                }
+            },
+            sortMapping: {
+                'name': 'if_name ASC',
+                'type': 'if_typ ASC',
+                'forExport': 'if_id ASC',
+                'location': 'l_lochirarchietxt ASC',
+                'relevance': 'if_id DESC'
+            },
+            spartialConfig: {
+                lat: 'l_geo_latdeg',
+                lon: 'l_geo_longdeg',
+                spatialField: 'geodist',
+                spatialSortKey: 'distance'
+            },
+            filterMapping: {
+                // dashboard
+                doublettes: '"doublettes"',
+                conflictingRates: '"666dummy999"',
+                noFavoriteChildren: '"666dummy999"',
+                noMainFavoriteChildren: '"666dummy999"',
+                noCoordinates: '"666dummy999"',
+                noLocation: 'info.l_id',
+                noRoute: '"666dummy999"',
+                noSubType: '"666dummy999"',
+                todoDesc: '"todoDesc"',
+                todoKeywords: 'keyword.kw_name',
+                unrated: '"666dummy999"',
+                unRatedChildren: '"666dummy999"',
+                // common
+                id: 'info.if_id',
+                destination_id_s: '"666dummy999"',
+                destination_id_ss: '"666dummy999"',
+                info_id_i: 'info.if_id',
+                info_id_is: 'info.if_id',
+                video_id_is: '"666dummy999"',
+                video_id_i: '"666dummy999"',
+                image_id_is: '"666dummy999"',
+                image_id_i: '"666dummy999"',
+                track_id_is: '"666dummy999"',
+                track_id_i: '"666dummy999"',
+                trip_id_is: '"666dummy999"',
+                trip_id_i: '"666dummy999"',
+                route_id_is: '"666dummy999"',
+                loc_id_i: 'info.l_id',
+                loc_id_is: 'info.l_id',
+                loc_lochirarchie_ids_txt: 'location.l_id',
+                l_lochirarchietxt: 'location.l_name',
+                html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""))'
+            },
+            writeMapping: {
+                'info.l_id': ':loc_id_i:',
+                'info.if_meta_desc': ':desc_txt:',
+                'info.if_meta_shortdesc': ':info_shortdesc_txt:',
+                'info.if_gesperrt': ':blocked_i:',
+//                'info.if_meta_shortdesc_md': ':desc_md_txt:',
+//                'info.if_meta_shortdesc_html': ':desc_html_txt:',
+                'info.if_publisher': ':info_publisher_s:',
+                'info.if_typ': ':subtype_s:',
+                'info.if_url': ':info_reference_s:',
+                'info.if_name': ':name_s:'
+            },
+            fieldMapping: {
+                id: 'id',
+                info_id_i: 'if_id',
+                info_id_is: 'if_id',
+                loc_id_i: 'l_id',
+                loc_id_is: 'l_id',
+                loc_lochirarchie_s: 'l_lochirarchietxt',
+                loc_lochirarchie_ids_s: 'l_lochirarchieids',
+                geo_lon_s: 'if_gps_lon',
+                geo_lat_s: 'if_gps_lat',
+                geo_loc_p: 'if_gps_loc',
+                blocked_i: 'if_gesperrt',
+                desc_txt: 'if_meta_desc',
+                desc_md_txt: 'if_meta_desc_md',
+                desc_html_txt: 'if_meta_desc_html',
+                info_name_s: 'if_name',
+                info_desc_txt: 'if_meta_desc',
+                info_shortdesc_txt: 'if_meta_shortdesc',
+                info_reference_s: 'if_reference',
+                info_publisher_s: 'if_publisher',
+                info_type_s: 'subtype',
+                keywords_txt: 'if_keywords',
+                name_s: 'if_name',
+                subtype_s: 'subtype',
                 type_s: 'type'
             }
         },
@@ -4254,7 +4601,7 @@ export class TourDocSqlMytbDbConfig {
                     noFacet: true
                 },
                 'type_txt': {
-                    constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination'],
+                    constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
                     filterField: '"news"',
                     selectLimit: 1
                 },
@@ -4321,6 +4668,8 @@ export class TourDocSqlMytbDbConfig {
                 news_id_is: 'news.n_id',
                 image_id_i: '"666dummy999"',
                 image_id_is: '"666dummy999"',
+                info_id_i: '"666dummy999"',
+                info_id_is: '"666dummy999"',
                 video_id_is: '"666dummy999"',
                 video_id_i: '"666dummy999"',
                 track_id_i: '"666dummy999"',
@@ -4378,6 +4727,9 @@ export class TourDocSqlMytbDbConfig {
             },
             'route': {
                 table: 'tour', joinTable: 'tour_keyword', fieldReference: 't_id'
+            },
+            'info': {
+                table: 'info', joinTable: 'info_keyword', fieldReference: 'if_id'
             },
             'location': {
                 table: 'location', joinTable: 'location_keyword', fieldReference: 'l_id'
@@ -4598,6 +4950,15 @@ export class TourDocSqlMytbDbConfig {
                         table: 'location', idField: 'l_id', referenceField: 'l_id'
                     }
                 }
+            },
+            'info': {
+                table: 'info',
+                idField: 'if_id',
+                references: {
+                    'loc_lochirarchie_txt': {
+                        table: 'location', idField: 'l_id', referenceField: 'l_id'
+                    }
+                }
             }
         }
     };
@@ -4621,6 +4982,9 @@ export class TourDocSqlMytbDbConfig {
             },
             'trip': {
                 table: 'trip', idField: 'tr_id', blockField: 'tr_gesperrt'
+            },
+            'info': {
+                table: 'info', idField: 'if_id', blockField: 'if_gesperrt'
             },
             'news': {
                 table: 'news', idField: 'n_id', blockField: 'n_gesperrt'
@@ -4691,6 +5055,12 @@ export class TourDocSqlMytbDbConfig {
             'news': {
                 table: 'news',
                 fieldId: 'n_id',
+                referenced: [],
+                joins: []
+            },
+            'info': {
+                table: 'info',
+                fieldId: 'if_id',
                 referenced: [],
                 joins: []
             },

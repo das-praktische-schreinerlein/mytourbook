@@ -52,6 +52,7 @@ import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-s
 import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-profilechart.component';
 import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
 import {CommonDocExtendedObjectPropertiesComponent} from './components/cdoc-extended-object-properties/cdoc-extended-object-properties.component';
+import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
 
 @NgModule({
     declarations: [
@@ -94,7 +95,8 @@ import {CommonDocExtendedObjectPropertiesComponent} from './components/cdoc-exte
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
-        CommonDocExtendedObjectPropertiesComponent
+        CommonDocExtendedObjectPropertiesComponent,
+        TourDocInfoComponent
     ],
     imports: [
         ToastrModule,
@@ -155,7 +157,8 @@ import {CommonDocExtendedObjectPropertiesComponent} from './components/cdoc-exte
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
-        CommonDocExtendedObjectPropertiesComponent
+        CommonDocExtendedObjectPropertiesComponent,
+        TourDocInfoComponent
     ]
 })
 export class SharedTourDocModule {}

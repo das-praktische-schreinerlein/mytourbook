@@ -36,6 +36,7 @@ export class TourDocEditpageComponent
     defaultSubImageLayout = Layout.SMALL;
     showResultListTrigger: {
         IMAGE: boolean|number;
+        INFO: boolean|number;
         VIDEO: boolean|number;
         LOCATION: boolean|number;
         NEWS: boolean|number;
@@ -45,6 +46,7 @@ export class TourDocEditpageComponent
         TRIP: boolean|number;
     } = {
         IMAGE: false,
+        INFO: false,
         VIDEO: false,
         LOCATION: false,
         NEWS: false,
@@ -55,6 +57,7 @@ export class TourDocEditpageComponent
     };
     availableTabs = {
         'IMAGE': true,
+        'INFO': true,
         'ROUTE': true,
         'TRACK': true,
         'LOCATION': true,
@@ -112,7 +115,7 @@ export class TourDocEditpageComponent
 
     protected doProcessAfterResolvedData(config: {}): void {
         this.trackRouten = [];
-        if (this.record !== undefined && this.record.gpsTrackBasefile || this.record.geoLoc !== undefined) {
+        if (this.record !== undefined && (this.record.gpsTrackBasefile || this.record.geoLoc !== undefined)) {
             this.tracks = [this.record];
         } else {
             this.tracks = [];

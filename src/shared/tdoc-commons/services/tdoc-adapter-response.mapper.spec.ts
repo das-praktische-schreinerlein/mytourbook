@@ -32,6 +32,8 @@ import {
 import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
 import {TourDocRouteRecord, TourDocRouteRecordRelation} from '../model/records/tdocroute-record';
 import {TourDocRouteRecordSchema} from '../model/schemas/tdocroute-record-schema';
+import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdocinfo-record';
+import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
 
 describe('TourDocAdapterResponseMapper', () => {
     let datastore: TourDocDataStore;
@@ -50,6 +52,7 @@ describe('TourDocAdapterResponseMapper', () => {
         datastore.defineMapper('tdoc', TourDocRecord, TourDocRecordSchema, TourDocRecordRelation);
         datastore.defineMapper('tdocdatatech', TourDocDataTechRecord, TourDocDataTechRecordSchema, TourDocDataTechRecordRelation);
         datastore.defineMapper('tdocdatainfo', TourDocDataInfoRecord, TourDocDataInfoRecordSchema, TourDocDataInfoRecordRelation);
+        datastore.defineMapper('tdocinfo', TourDocInfoRecord, TourDocInfoRecordSchema, TourDocInfoRecordRelation);
         datastore.defineMapper('tdocimage', TourDocImageRecord, TourDocImageRecordSchema, TourDocImageRecordRelation);
         datastore.defineMapper('tdocvideo', TourDocVideoRecord, TourDocVideoRecordSchema, TourDocVideoRecordRelation);
         datastore.defineMapper('tdocratepers', TourDocRatePersonalRecord, TourDocRatePersonalRecordSchema,

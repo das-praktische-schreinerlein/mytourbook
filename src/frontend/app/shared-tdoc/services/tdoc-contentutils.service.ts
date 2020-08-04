@@ -233,6 +233,16 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['perPage'] = 20;
                 filters['sort'] = 'dateAsc';
             }
+        } else if (record.type === 'INFO') {
+            filters['moreFilter'] = 'info_id_is:' + record.infoId;
+            if (type === 'IMAGE' || type === 'TOPIMAGE') {
+                filters['perPage'] = 12;
+            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
+                filters['perPage'] = 12;
+            } else if (type === 'TRACK' || type === 'TRIP') {
+                filters['perPage'] = 20;
+                filters['sort'] = 'dateAsc';
+            }
         }
 
         if (type === 'TOPIMAGE') {

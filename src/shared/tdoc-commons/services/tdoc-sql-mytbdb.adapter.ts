@@ -124,7 +124,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject']
+        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject', 'info']
             .map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
@@ -241,6 +241,18 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
                     console.error('setImageKeywords failed:', reason);
+                    return allReject(reason);
+                });
+            });
+        } else if (tabKey === 'info') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                promises.push(this.keywordsAdapter.setInfoKeywords(dbId, props.keywords, opts));
+
+                return Promise.all(promises).then(() => {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('setInfoKeywords failed:', reason);
                     return allReject(reason);
                 });
             });

@@ -9,10 +9,12 @@
 - added a action to rate all media of a track
 - improved list-layout
 - added possibility to edit multiroutes
+- added new tourdoc-type: info
 
 ### new features
 - common: added a action to rate all media of a track
 - common: added possibility to edit multiroutes
+- common: added new tourdoc-type: info
 
 ### improvements
 - build: upgraded all dev-dependencies to latest

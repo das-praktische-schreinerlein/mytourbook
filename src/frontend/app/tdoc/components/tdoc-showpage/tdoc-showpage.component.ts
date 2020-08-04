@@ -29,6 +29,7 @@ import {environment} from '../../../../environments/environment';
 export interface TourDocShowpageComponentAvailableTabs {
     IMAGE?: boolean;
     IMAGE_NEARBY?: boolean;
+    INFO?: boolean;
     ODIMGOBJECT?: boolean;
     VIDEO?: boolean;
     VIDEO_NEARBY?: boolean;
@@ -85,6 +86,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     defaultSubImageLayout = Layout.SMALL;
     showResultListTrigger: {
         IMAGE?: boolean|number;
+        INFO?: boolean|number;
         ODIMGOBJECT?: boolean|number;
         VIDEO?: boolean|number;
         LOCATION?: boolean|number;
@@ -95,6 +97,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRIP?: boolean|number;
     } = {
         IMAGE: false,
+        INFO: false,
         ODIMGOBJECT: false,
         VIDEO: false,
         LOCATION: false,
@@ -107,6 +110,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     availableTabs: TourDocShowpageComponentAvailableTabs = {
         IMAGE: true,
         IMAGE_NEARBY: true,
+        INFO: true,
         DESTINATION: true,
         ROUTE: true,
         ROUTE_NEARBY: true,

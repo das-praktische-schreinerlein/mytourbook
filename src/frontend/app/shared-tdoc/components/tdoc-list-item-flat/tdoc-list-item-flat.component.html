@@ -63,6 +63,7 @@
         <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
         </ng-container>
+        <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
         <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
     </div>
@@ -105,6 +106,7 @@
                  alt="{{listItem.video.name}}">
         </ng-container>
     </div>
+
     <ng-container [ngSwitch]="listItem.currentRecord.type">
         <ng-container *ngSwitchCase="'LOCATION'">
             <div class="col-9 location layout-small">
@@ -124,6 +126,7 @@
                 </div>
             </div>
         </ng-container>
+
         <ng-container *ngSwitchDefault="">
             <div class="col-9 location layout-small">
                 <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
@@ -136,6 +139,7 @@
                             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                         </ng-container>
                         <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                            <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
                             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                             <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
                             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
@@ -176,6 +180,7 @@
                  alt="{{listItem.video.name}}">
         </ng-container>
     </div>
+
     <ng-container [ngSwitch]="listItem.currentRecord.type">
         <ng-container *ngSwitchCase="'LOCATION'">
             <div class="col-9 location layout-verysmall">
@@ -196,6 +201,7 @@
                     <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                 </ng-container>
                 <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                    <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
                     <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
                     <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                     <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >

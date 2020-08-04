@@ -103,6 +103,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         }
 
         switch (type.toLowerCase()) {
+            case 'info':
             case 'location':
             case 'track':
             case 'route':
@@ -112,6 +113,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         }
 
         switch (type.toLowerCase()) {
+            case 'info':
             case 'news':
             case 'trip':
             case 'location':

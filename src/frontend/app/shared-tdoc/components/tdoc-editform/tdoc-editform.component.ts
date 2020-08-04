@@ -63,6 +63,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         'subType': IMultiSelectOption[];
         'subTypeActiontype': IMultiSelectOption[];
         'subTypeLocType': IMultiSelectOption[];
+        'subTypeInfoType': IMultiSelectOption[];
         'trackId': IMultiSelectOption[];
         'tripId': IMultiSelectOption[];
     };
@@ -424,10 +425,17 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                         120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134]
                 },
                 'subTypeLocType': {labelPrefix: 'loc_', values: [1, 2, 3, 4, 5, 6]},
+                'subTypeInfoType': {labelPrefix: 'if_', values: [1, 2]},
                 'tdocdatainfo.baseloc': {},
                 'tdocdatainfo.destloc': {},
                 'tdocdatainfo.guides': {},
                 'tdocdatainfo.region': {},
+                'tdocinfo.name': {},
+                'tdocinfo.desc': {},
+                'tdocinfo.shortDesc': {},
+                'tdocinfo.reference': {},
+                'tdocinfo.publisher': {},
+                'tdocinfo.type': {},
                 'tdocratetech.bergtour': {},
                 'tdocratetech.firn': {},
                 'tdocratetech.gletscher': {},
@@ -492,6 +500,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'subType': [],
                 'subTypeActiontype': [],
                 'subTypeLocType': [],
+                'subTypeInfoType': [],
                 'trackId': [],
                 'tripId': []
             }
@@ -571,7 +580,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
     protected postProcessFormValueConfig(record: TourDocRecord, formValueConfig: {}): void {
         if (formValueConfig['subtype'] && formValueConfig['subtype'].length > 0 && formValueConfig['subtype'][0]) {
-            formValueConfig['subtype'][0] = (formValueConfig['subtype'][0]  + '').replace(/ac_/g, '').replace(/loc_/g, '');
+            formValueConfig['subtype'][0] =
+                (formValueConfig['subtype'][0]  + '')
+                    .replace(/ac_/g, '')
+                    .replace(/loc_/g, '')
+                    .replace(/if_/g, '');
         }
     }
 

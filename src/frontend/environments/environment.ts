@@ -16,7 +16,7 @@ export const environment: AppEnvironment = {
     picsBaseUrl: 'http://localhost:4100/api/static/picturestore/',
     videoBaseUrl: 'http://localhost:4100/api/static/videos/',
     defaultSearchTypes: 'route,location,track,trip,news',
-    emptyDefaultSearchTypes: 'route,location,track,trip,news,image,video',
+    emptyDefaultSearchTypes: 'route,location,track,trip,news,image,video,info',
     useAssetStoreUrls: true,
     useAudioAssetStoreUrls: false,
     useVideoAssetStoreUrls: false,

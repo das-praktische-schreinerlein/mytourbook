@@ -33,6 +33,8 @@ import {
 import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
 import {TourDocRouteRecord, TourDocRouteRecordRelation} from '../model/records/tdocroute-record';
 import {TourDocRouteRecordSchema} from '../model/schemas/tdocroute-record-schema';
+import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdocinfo-record';
+import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -79,6 +81,7 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
         this.dataStore.defineMapper('tdoc', TourDocRecord, TourDocRecordSchema, TourDocRecordRelation);
         this.dataStore.defineMapper('tdocdatatech', TourDocDataTechRecord, TourDocDataTechRecordSchema, TourDocDataTechRecordRelation);
         this.dataStore.defineMapper('tdocdatainfo', TourDocDataInfoRecord, TourDocDataInfoRecordSchema, TourDocDataInfoRecordRelation);
+        this.dataStore.defineMapper('tdocinfo', TourDocInfoRecord, TourDocInfoRecordSchema, TourDocInfoRecordRelation);
         this.dataStore.defineMapper('tdocimage', TourDocImageRecord, TourDocImageRecordSchema, TourDocImageRecordRelation);
         this.dataStore.defineMapper('tdocvideo', TourDocVideoRecord, TourDocVideoRecordSchema, TourDocVideoRecordRelation);
         this.dataStore.defineMapper('tdocratepers', TourDocRatePersonalRecord, TourDocRatePersonalRecordSchema,
@@ -102,12 +105,13 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
     }
 
     protected defineIdMappings(): string[] {
-        return ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId', 'videoId'];
+        return ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId', 'videoId', 'infoId'];
     }
 
     protected defineTypeMappings(): {} {
         return {
             image: 'imageId',
+            info: 'infoId',
             video: 'videoId',
             track: 'trackId',
             location: 'locId',

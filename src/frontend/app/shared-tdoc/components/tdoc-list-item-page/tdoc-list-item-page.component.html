@@ -108,6 +108,7 @@
             </ng-container>
         </div>
         <h5><span class="fx-bg-name">{{listItem.currentRecord.name}}</span></h5>
+        <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
         <div id="desc"></div>
         {{ renderDesc() }}
         <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>

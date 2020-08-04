@@ -15,6 +15,7 @@ import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 import {TourDocExtendedObjectPropertyRecordFactory} from '../model/records/tdocextendedobjectproperty-record';
 import {TourDocRouteRecord, TourDocRouteRecordFactory} from '../model/records/tdocroute-record';
 import {BaseEntityRecordFactory} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -48,7 +49,9 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['route_id_i'] = props.routeId;
         values['track_id_i'] = props.trackId;
         values['trip_id_i'] = props.tripId;
+        values['info_id_i'] = props.infoId;
         values['news_id_i'] = props.newsId;
+
         values['blocked_i'] = props.blocked;
         values['dateshow_dt'] = props.dateshow;
         values['datestart_dt'] = props.datestart;
@@ -115,6 +118,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['rate_tech_klettern_s'] = BeanUtils.getValue(props, 'tdocratetech.klettern');
         values['rate_tech_bergtour_s'] = BeanUtils.getValue(props, 'tdocratetech.bergtour');
         values['rate_tech_schneeschuh_s'] = BeanUtils.getValue(props, 'tdocratetech.schneeschuh');
+
         values['rate_pers_ausdauer_i'] = BeanUtils.getValue(props, 'tdocratepers.ausdauer');
         values['rate_pers_bildung_i'] = BeanUtils.getValue(props, 'tdocratepers.bildung');
         values['rate_pers_gesamt_i'] = BeanUtils.getValue(props, 'tdocratepers.gesamt');
@@ -123,10 +127,18 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['rate_pers_motive_i'] = BeanUtils.getValue(props, 'tdocratepers.motive');
         values['rate_pers_schwierigkeit_i'] = BeanUtils.getValue(props, 'tdocratepers.schwierigkeit');
         values['rate_pers_wichtigkeit_i'] = BeanUtils.getValue(props, 'tdocratepers.wichtigkeit');
+
         values['data_info_guides_s'] = BeanUtils.getValue(props, 'tdocdatainfo.guides');
         values['data_info_region_s'] = BeanUtils.getValue(props, 'tdocdatainfo.region');
         values['data_info_baseloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.baseloc');
         values['data_info_destloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.destloc');
+
+        values['info_name_s'] = BeanUtils.getValue(props, 'tdocinfo.name');
+        values['info_desc_txt'] = BeanUtils.getValue(props, 'tdocinfo.desc');
+        values['info_shortdesc_txt'] = BeanUtils.getValue(props, 'tdocinfo.shortDesc');
+        values['info_publisher_s'] = BeanUtils.getValue(props, 'tdocinfo.publisher');
+        values['info_reference_s'] = BeanUtils.getValue(props, 'tdocinfo.reference');
+        values['info_type_s'] = BeanUtils.getValue(props, 'tdocinfo.type');
 
         return values;
     }
@@ -156,6 +168,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         const subConfigs: {propKey: string, mapperKey: string, factory: BaseEntityRecordFactory}[] = [
             { mapperKey: 'tdocdatatech', propKey: 'tdocdatatech', factory: TourDocDataTechRecordFactory.instance},
             { mapperKey: 'tdocdatainfo', propKey: 'tdocdatainfo', factory: TourDocDataInfoRecordFactory.instance},
+            { mapperKey: 'tdocinfo', propKey: 'tdocinfo', factory: TourDocInfoRecordFactory.instance},
             { mapperKey: 'tdocratepers', propKey: 'tdocratepers', factory: TourDocRatePersonalRecordFactory.instance},
             { mapperKey: 'tdocratetech', propKey: 'tdocratetech', factory: TourDocRateTechRecordFactory.instance}
         ];
@@ -208,6 +221,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
     mapResponseDocument(mapper: Mapper, doc: any, mapping: {}): Record {
         const dataTechMapper = mapper['datastore']._mappers['tdocdatatech'];
         const dataInfoMapper = mapper['datastore']._mappers['tdocdatainfo'];
+        const infoMapper = mapper['datastore']._mappers['tdocinfo'];
         const ratePersMapper = mapper['datastore']._mappers['tdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['tdocratetech'];
 
@@ -221,6 +235,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['trackId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'track_id_i', undefined);
         values['tripId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'trip_id_i', undefined);
         values['newsId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'news_id_i', undefined);
+        values['infoId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'info_id_i', undefined);
 
         const subtypeField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'subtypes_ss')];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
@@ -411,6 +426,28 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             record.set('tdocdatainfo', undefined);
         }
 
+        const infoValues = {};
+        infoValues['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_name_s', undefined);
+        infoValues['desc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_desc_txt', undefined);
+        infoValues['shortDesc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_shortdesc_txt', undefined);
+        infoValues['publisher'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_publisher_s', undefined);
+        infoValues['reference'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_reference_s', undefined);
+        infoValues['type'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_type_s', undefined);
+
+        let infoSet = false;
+        for (const field in infoValues) {
+            if (infoValues[field] !== undefined && (infoValues[field] + '').length > 0) {
+                infoSet = true;
+                break;
+            }
+        }
+
+        if (infoSet) {
+            record.set('tdocinfo', infoMapper.createRecord(
+                TourDocInfoRecordFactory.instance.getSanitizedValues(infoValues, {})));
+        } else {
+            record.set('tdocinfo', undefined);
+        }
         // console.log('mapResponseDocument record full:', record);
 
         return record;
