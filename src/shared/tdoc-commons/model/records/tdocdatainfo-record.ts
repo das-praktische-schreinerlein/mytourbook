@@ -1,7 +1,31 @@
-import {BaseDataInfoRecord} from './basedatainfo-record';
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecord,
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordType,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {GenericValidatorDatatypes, NameValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class TourDocDataInfoRecord extends BaseDataInfoRecord {
+export interface TourDocDataInfoRecordType extends BaseEntityRecordType {
+    baseloc: string;
+    destloc: string;
+    guides: string;
+    region: string;
+}
+
+export class TourDocDataInfoRecord extends BaseEntityRecord implements TourDocDataInfoRecordType {
+    static datainfoFields = {
+        baseloc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        destloc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        guides: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        region: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false))
+    };
+
+    baseloc: string;
+    destloc: string;
+    guides: string;
+    region: string;
     tdoc_id: string;
 
     toString() {

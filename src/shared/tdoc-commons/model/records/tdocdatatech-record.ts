@@ -1,7 +1,43 @@
-import {BaseDataTechRecord} from './basedatatech-record';
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecord,
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordType,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {GenericValidatorDatatypes, NumberValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class TourDocDataTechRecord extends BaseDataTechRecord {
+export interface TourDocDataTechRecordType extends BaseEntityRecordType {
+    altAsc: number;
+    altDesc: number;
+    altMax: number;
+    altMin: number;
+    dist: number;
+    dur: number;
+}
+
+export class TourDocDataTechRecord extends BaseEntityRecord implements TourDocDataTechRecordType {
+    static datatechFields = {
+        altAsc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 999999, undefined)),
+        altDesc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 999999, undefined)),
+        altMax: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 8850, undefined)),
+        altMin: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 10500, undefined)),
+        dist: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 99999, undefined)),
+        dur: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 999999, undefined))
+    };
+
+    altAsc: number;
+    altDesc: number;
+    altMax: number;
+    altMin: number;
+    dist: number;
+    dur: number;
     tdoc_id: string;
 
     toString() {
