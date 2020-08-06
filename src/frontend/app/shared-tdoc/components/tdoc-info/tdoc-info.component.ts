@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@ang
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {SafeHtml} from '@angular/platform-browser';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
-import {TourDocInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdocinfo-record';
+import {TourDocInfoRecordType} from '../../../../shared/tdoc-commons/model/records/tdocinfo-record';
 
 @Component({
     selector: 'app-tdoc-info',
@@ -11,7 +11,7 @@ import {TourDocInfoRecord} from '../../../../shared/tdoc-commons/model/records/t
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocInfoComponent extends AbstractInlineComponent {
-    tdocinfo: TourDocInfoRecord;
+    tdocinfo: TourDocInfoRecordType;
     guides: SafeHtml = '';
 
     @Input()

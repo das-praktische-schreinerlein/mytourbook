@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {TourDocDataInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdocdatainfo-record';
+import {TourDocDataInfoRecordType} from '../../../../shared/tdoc-commons/model/records/tdocdatainfo-record';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 
@@ -11,7 +11,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocDataInfoComponent extends AbstractInlineComponent {
-    tdocdatainfo: TourDocDataInfoRecord;
+    tdocdatainfo: TourDocDataInfoRecordType;
     guides: SafeHtml = '';
 
     @Input()
