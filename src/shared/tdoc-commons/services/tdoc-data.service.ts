@@ -31,8 +31,8 @@ import {
     TourDocExtendedObjectPropertyRecordRelation
 } from '../model/records/tdocextendedobjectproperty-record';
 import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
-import {TourDocRouteRecord, TourDocRouteRecordRelation} from '../model/records/tdocroute-record';
-import {TourDocRouteRecordSchema} from '../model/schemas/tdocroute-record-schema';
+import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordRelation} from '../model/records/tdoclinkedroute-record';
+import {TourDocLinkedRouteRecordSchema} from '../model/schemas/tdoclinkedroute-record-schema';
 import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdocinfo-record';
 import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
 
@@ -94,8 +94,8 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
         this.dataStore.defineMapper('tdocextendedobjectproperty', TourDocExtendedObjectPropertyRecord,
             TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
-        this.dataStore.defineMapper('tdocroute', TourDocRouteRecord,
-            TourDocRouteRecordSchema, TourDocRouteRecordRelation);
+        this.dataStore.defineMapper('tdoclinkedroute', TourDocLinkedRouteRecord,
+            TourDocLinkedRouteRecordSchema, TourDocLinkedRouteRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {

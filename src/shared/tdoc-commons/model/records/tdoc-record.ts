@@ -44,7 +44,7 @@ import {
     TourDocExtendedObjectPropertyRecordFactory,
     TourDocExtendedObjectPropertyRecordValidator
 } from './tdocextendedobjectproperty-record';
-import {TourDocRouteRecord, TourDocRouteRecordFactory, TourDocRouteRecordValidator} from './tdocroute-record';
+import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordFactory, TourDocLinkedRouteRecordValidator} from './tdoclinkedroute-record';
 import {TourDocInfoRecord, TourDocInfoRecordFactory, TourDocInfoRecordValidator} from './tdocinfo-record';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
@@ -75,7 +75,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
 
 export class TourDocRecord extends CommonDocRecord implements TourDocRecordType {
     static tdocRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocinfo', 'tdocimages', 'tdocvideos', 'tdocratepers',
-        'tdocratetech', 'tdocodimageobjects', 'tdocnavigationobjects', 'tdocextendedobjectproperties', 'tdocroutes'];
+        'tdocratetech', 'tdocodimageobjects', 'tdocnavigationobjects', 'tdocextendedobjectproperties', 'tdoclinkedroutes'];
     static tdocValidationRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech', 'tdocinfo'];
     static tdocFields = {
         locId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
@@ -241,11 +241,11 @@ export let TourDocRecordRelation: any = {
             // reference to related objects in memory
             localField: 'tdocextendedobjectproperties'
         },
-        tdocroute: {
+        tdoclinkedroute: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related objects in memory
-            localField: 'tdocroutes'
+            localField: 'tdoclinkedroutes'
         }
     }
 };
@@ -291,8 +291,8 @@ export class TourDocRecordFactory extends CommonDocRecordFactory {
                 return TourDocNavigationObjectRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocextendedobjectproperties':
                 return TourDocExtendedObjectPropertyRecordFactory.instance.getSanitizedValues(values, {});
-            case 'tdocroutes':
-                return TourDocRouteRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdoclinkedroutes':
+                return TourDocLinkedRouteRecordFactory.instance.getSanitizedValues(values, {});
             default:
                 return super.getSanitizedRelationValues(relation, values);
         }
@@ -340,8 +340,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocImageRecordValidator.instance.validate(<TourDocImageRecord>doc, errFieldPrefix);
             case 'tdocvideos':
                 return TourDocVideoRecordValidator.instance.validate(<TourDocVideoRecord>doc, errFieldPrefix);
-            case 'tdocroutes':
-                return TourDocRouteRecordValidator.instance.validate(<TourDocRouteRecord>doc, errFieldPrefix);
+            case 'tdoclinkedroutes':
+                return TourDocLinkedRouteRecordValidator.instance.validate(<TourDocLinkedRouteRecord>doc, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validate(<TourDocObjectDetectionImageObjectRecord>doc,
                     errFieldPrefix);
@@ -376,8 +376,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocNavigationObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocextendedobjectproperties':
                 return TourDocExtendedObjectPropertyRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
-            case 'tdocroutes':
-                return TourDocRouteRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdoclinkedroutes':
+                return TourDocLinkedRouteRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             default:
                 return super.validateValueRelationDoc(relation, values, fieldPrefix, errFieldPrefix);
         }

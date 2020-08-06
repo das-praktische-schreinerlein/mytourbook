@@ -1,19 +1,19 @@
-import {TourDocRouteRecord} from './tdocroute-record';
+import {TourDocLinkedRouteRecord} from './tdoclinkedroute-record';
 
-describe('TourDocRouteRecord', () => {
+describe('TourDocLinkedRouteRecord', () => {
     it('should create an instance', () => {
-        expect(new TourDocRouteRecord()).toBeTruthy();
+        expect(new TourDocLinkedRouteRecord()).toBeTruthy();
     });
 
     it('should accept values in the constructor', () => {
-        const tdoc = new TourDocRouteRecord({
+        const tdoc = new TourDocLinkedRouteRecord({
             name: 'hello',
             full: true
         });
         expect(tdoc.name).toEqual('hello');
         expect(tdoc.full).toEqual(true);
 
-        const tdoc2 = new TourDocRouteRecord({
+        const tdoc2 = new TourDocLinkedRouteRecord({
             name: 'hello',
             full: false
         });

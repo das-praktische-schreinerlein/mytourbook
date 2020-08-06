@@ -30,7 +30,7 @@ import {GeoLocationService} from '@dps/mycms-commons/dist/commons/services/geolo
 import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
-import {TourDocRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdocroute-record';
+import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedroute-record';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -542,7 +542,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 })
             }
         }
-        values['tdocroutes'] = subRoutes;
+        values['tdoclinkedroutes'] = subRoutes;
     }
 
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
@@ -561,7 +561,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected appendRouteJoinsToDefaultFormValueConfig(record: TourDocRecord, valueConfig: {}) {
-        const subRoutes: TourDocRouteRecord[] = this.record.get('tdocroutes') || [];
+        const subRoutes: TourDocLinkedRouteRecord[] = this.record.get('tdoclinkedroutes') || [];
         const joinName = 'subRoute';
 
         const indexes = [];

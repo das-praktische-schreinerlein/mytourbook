@@ -8,7 +8,7 @@ import {KeywordModelConfigType} from '@dps/mycms-commons/dist/action-commons/act
 import {PlaylistModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {RateModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {ObjectDetectionModelConfigType} from '@dps/mycms-commons/dist/commons/model/common-sql-object-detection.model';
-import {JoinModelConfigType} from './common-sql-join.adapter';
+import {JoinModelConfigsType} from './common-sql-join.adapter';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
@@ -103,10 +103,10 @@ export class TourDocSqlMytbDbConfig {
                     parameterNames: ['id']
                 },
                 {
-                    profile: 'routes',
+                    profile: 'linkedroutes',
                     sql: '(SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),' +
                         '   ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR))' +
-                        '  AS routes' +
+                        '  AS linkedroutes' +
                         '  FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (:id)' +
                         '  ORDER BY t_name) ',
                     parameterNames: ['id']
@@ -4469,7 +4469,8 @@ export class TourDocSqlMytbDbConfig {
                 'doublettes': {
                     selectSql: 'SELECT COUNT(news.n_id) AS count, "doublettes" AS value,' +
                         ' "doublettes" AS label, "true" AS id' +
-                        ' FROM news INNER JOIN (SELECT n_id AS id FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
+                        ' FROM news INNER JOIN (SELECT n_id AS id' +
+                        '              FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
                         '              IN (SELECT DISTINCT ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') + ' AS name' +
                         '                  FROM news GROUP BY name HAVING COUNT(*) > 1)' +
                         '             ) doublettes' +
@@ -4796,14 +4797,17 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
-    public static readonly joinModelConfigType: JoinModelConfigType = {
-        tables: {
-            'track': {
-                baseTableIdField: 'k_id',
-                joinTable: 'kategorie_tour',
-                joinFieldMappings: {
-                    't_id': 'refId',
-                    'kt_full': 'full'
+    public static readonly joinModelConfigType: JoinModelConfigsType = {
+        'linkedroutes': {
+            name: 'linkedroutes',
+            tables: {
+                'track': {
+                    baseTableIdField: 'k_id',
+                    joinTable: 'kategorie_tour',
+                    joinFieldMappings: {
+                        't_id': 'refId',
+                        'kt_full': 'full'
+                    }
                 }
             }
         }
@@ -5095,7 +5099,7 @@ export class TourDocSqlMytbDbConfig {
         return TourDocSqlMytbDbConfig.rateModelConfigType;
     }
 
-    public getJoinModelConfigFor(): JoinModelConfigType {
+    public getJoinModelConfigFor(): JoinModelConfigsType {
         return TourDocSqlMytbDbConfig.joinModelConfigType;
     }
 

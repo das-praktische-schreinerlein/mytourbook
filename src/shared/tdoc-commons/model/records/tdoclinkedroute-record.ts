@@ -11,11 +11,11 @@ import {
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 // tslint:disable-next-line:no-empty-interface
-export interface TourDocRouteRecordType extends BaseJoinRecordType {
+export interface TourDocLinkedRouteRecordType extends BaseJoinRecordType {
     full: boolean;
 }
 
-export class TourDocRouteRecord extends BaseJoinRecord implements TourDocRouteRecordType {
+export class TourDocLinkedRouteRecord extends BaseJoinRecord implements TourDocLinkedRouteRecordType {
     static routeFields = {...BaseJoinRecord.routeFields,
         full: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME,
             new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)),
@@ -30,7 +30,7 @@ export class TourDocRouteRecord extends BaseJoinRecord implements TourDocRouteRe
     }
 
     toString() {
-        return 'TourDocRouteRecord Record {\n' +
+        return 'TourDocLinkedRouteRecord Record {\n' +
             '  id: ' + this.id + ',\n' +
             '  refId: ' + this.refId + '\n' +
             '  name: ' + this.name + ',\n' +
@@ -41,41 +41,41 @@ export class TourDocRouteRecord extends BaseJoinRecord implements TourDocRouteRe
     }
 }
 
-export class TourDocRouteRecordFactory extends BaseEntityRecordFactory {
-    public static instance = new TourDocRouteRecordFactory();
+export class TourDocLinkedRouteRecordFactory extends BaseEntityRecordFactory {
+    public static instance = new TourDocLinkedRouteRecordFactory();
 
-    static createSanitized(values: {}): TourDocRouteRecord {
-        const sanitizedValues = TourDocRouteRecordFactory.instance.getSanitizedValues(values, {});
-        return new TourDocRouteRecord(sanitizedValues);
+    static createSanitized(values: {}): TourDocLinkedRouteRecord {
+        const sanitizedValues = TourDocLinkedRouteRecordFactory.instance.getSanitizedValues(values, {});
+        return new TourDocLinkedRouteRecord(sanitizedValues);
     }
 
-    static cloneSanitized(doc: TourDocRouteRecord): TourDocRouteRecord {
-        const sanitizedValues = TourDocRouteRecordFactory.instance.getSanitizedValuesFromObj(doc);
-        return new TourDocRouteRecord(sanitizedValues);
+    static cloneSanitized(doc: TourDocLinkedRouteRecord): TourDocLinkedRouteRecord {
+        const sanitizedValues = TourDocLinkedRouteRecordFactory.instance.getSanitizedValuesFromObj(doc);
+        return new TourDocLinkedRouteRecord(sanitizedValues);
     }
 
     getSanitizedValues(values: {}, result: {}): {} {
         super.getSanitizedValues(values, result);
-        this.sanitizeFieldValues(values, TourDocRouteRecord.routeFields, result, '');
+        this.sanitizeFieldValues(values, TourDocLinkedRouteRecord.routeFields, result, '');
         result['full'] = result['full'] === true || result['full'] === 'true';
 
         return result;
     }
 }
 
-export class TourDocRouteRecordValidator extends BaseEntityRecordValidator {
-    public static instance = new TourDocRouteRecordValidator();
+export class TourDocLinkedRouteRecordValidator extends BaseEntityRecordValidator {
+    public static instance = new TourDocLinkedRouteRecordValidator();
 
     validateMyFieldRules(values: {}, errors: string[], fieldPrefix?: string, errFieldPrefix?: string): boolean {
         fieldPrefix = fieldPrefix !== undefined ? fieldPrefix : '';
         errFieldPrefix = errFieldPrefix !== undefined ? errFieldPrefix : '';
 
         const state = super.validateMyFieldRules(values, errors, fieldPrefix, errFieldPrefix);
-        return this.validateFieldRules(values, TourDocRouteRecord.routeFields, fieldPrefix, errors, errFieldPrefix) && state;
+        return this.validateFieldRules(values, TourDocLinkedRouteRecord.routeFields, fieldPrefix, errors, errFieldPrefix) && state;
     }
 }
 
-export let TourDocRouteRecordRelation: any = {
+export let TourDocLinkedRouteRecordRelation: any = {
     belongsTo: {
         tdoc: {
             // database column

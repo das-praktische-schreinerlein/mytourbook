@@ -19,7 +19,12 @@ export interface JoinModelConfigTablesType {
 }
 
 export interface JoinModelConfigType {
+    name: string;
     tables: JoinModelConfigTablesType;
+}
+
+export interface JoinModelConfigsType {
+    [key: string]: JoinModelConfigType;
 }
 
 export class CommonSqlJoinAdapter {
@@ -27,27 +32,32 @@ export class CommonSqlJoinAdapter {
     private config: any;
     private readonly knex: any;
     private sqlQueryBuilder: SqlQueryBuilder;
-    private readonly joinModelConfig: JoinModelConfigType;
+    private readonly joinModelConfig: JoinModelConfigsType;
 
-    constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder, joinModelConfig: JoinModelConfigType) {
+    constructor(config: any, knex: any, sqlQueryBuilder: SqlQueryBuilder, joinModelConfig: JoinModelConfigsType) {
         this.config = config;
         this.knex = knex;
         this.sqlQueryBuilder = sqlQueryBuilder;
         this.joinModelConfig = joinModelConfig;
     }
 
-    public saveJoins(joinTableKey: string, dbId: number, joinRecords: BaseJoinRecordType[], opts: any):
+    public saveJoins(joinKey: string, baseTableKey: string, dbId: number, joinRecords: BaseJoinRecordType[], opts: any):
         Promise<any> {
         if (!utils.isInteger(dbId)) {
-            return utils.reject('setJoins ' + joinTableKey + ' id not an integer');
+            return utils.reject('setJoins ' + baseTableKey + ' id not an integer');
         }
-        if (!this.joinModelConfig.tables[joinTableKey]) {
-            return utils.reject('setJoins: ' + joinTableKey + ' - table not valid');
+        if (!this.joinModelConfig[joinKey]) {
+            return utils.reject('setJoins: ' + joinKey + ' -> ' + baseTableKey + ' - join not valid');
         }
-        const joinConfig = this.joinModelConfig.tables[joinTableKey];
-        const baseTableIdField = joinConfig.baseTableIdField;
-        const joinTable = joinConfig.joinTable;
-        const joinFields = joinConfig.joinFieldMappings;
+
+        const joinConfig = this.joinModelConfig[joinKey];
+        if (!joinConfig.tables[baseTableKey]) {
+            return utils.reject('setJoins: ' + joinKey + ' -> ' + baseTableKey + ' - table not valid');
+        }
+        const joinedTableConfig = joinConfig.tables[baseTableKey];
+        const baseTableIdField = joinedTableConfig.baseTableIdField;
+        const joinTable = joinedTableConfig.joinTable;
+        const joinFields = joinedTableConfig.joinFieldMappings;
 
         const deleteSqlQuery: RawSqlQueryData = {
             sql: 'DELETE FROM ' + joinTable + ' ' +

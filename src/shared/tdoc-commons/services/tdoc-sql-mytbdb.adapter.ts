@@ -49,7 +49,7 @@ import {
 import {CommonSqlRateAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {CommonSqlObjectDetectionAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-object-detection.adapter';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
-import {TourDocRouteRecord} from '../model/records/tdocroute-record';
+import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
 import {CommonSqlJoinAdapter} from './common-sql-join.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
@@ -220,9 +220,9 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setTrackKeywords(dbId, props.keywords, opts));
-                if (props.get('tdocroutes')) {
-                    const routes: TourDocRouteRecord[] = props.get('tdocroutes');
-                    promises.push(this.commonJoinAdapter.saveJoins(tabKey, dbId, routes, opts));
+                if (props.get('tdoclinkedroutes')) {
+                    const routes: TourDocLinkedRouteRecord[] = props.get('tdoclinkedroutes');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedroutes', tabKey, dbId, routes, opts));
                 }
 
                 return Promise.all(promises).then(() => {

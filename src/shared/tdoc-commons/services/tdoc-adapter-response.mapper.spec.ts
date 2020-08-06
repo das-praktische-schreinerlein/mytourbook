@@ -30,8 +30,8 @@ import {
     TourDocExtendedObjectPropertyRecordRelation
 } from '../model/records/tdocextendedobjectproperty-record';
 import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
-import {TourDocRouteRecord, TourDocRouteRecordRelation} from '../model/records/tdocroute-record';
-import {TourDocRouteRecordSchema} from '../model/schemas/tdocroute-record-schema';
+import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordRelation} from '../model/records/tdoclinkedroute-record';
+import {TourDocLinkedRouteRecordSchema} from '../model/schemas/tdoclinkedroute-record-schema';
 import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdocinfo-record';
 import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
 
@@ -65,8 +65,8 @@ describe('TourDocAdapterResponseMapper', () => {
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
         datastore.defineMapper('tdocextendedobjectproperty', TourDocExtendedObjectPropertyRecord,
             TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
-        datastore.defineMapper('tdocroute', TourDocRouteRecord,
-            TourDocRouteRecordSchema, TourDocRouteRecordRelation);
+        datastore.defineMapper('tdoclinkedroute', TourDocLinkedRouteRecord,
+            TourDocLinkedRouteRecordSchema, TourDocLinkedRouteRecordRelation);
         mapper = datastore.getMapper('tdoc');
     });
 
@@ -110,7 +110,7 @@ describe('TourDocAdapterResponseMapper', () => {
                 'tdocodimageobjects': [],
                 'tdocnavigationobjects': [],
                 'tdocextendedobjectproperties': [],
-                'tdocroutes': []
+                'tdoclinkedroutes': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues,
                 TourDocSqlMytbDbConfig.tableConfigs.track.fieldMapping);
@@ -191,7 +191,7 @@ describe('TourDocAdapterResponseMapper', () => {
                     }
                 ],
                 'tdocextendedobjectproperties': [],
-                'tdocroutes': []
+                'tdoclinkedroutes': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
 
