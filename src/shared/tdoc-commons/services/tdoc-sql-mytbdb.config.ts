@@ -2726,6 +2726,8 @@ export class TourDocSqlMytbDbConfig {
                     '      INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
                     '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
                     '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC',
+                'countInfos': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) ASC',
+                'countInfosDesc': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) DESC',
                 'countTracks': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
                     '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
                     '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC',
@@ -3648,6 +3650,10 @@ export class TourDocSqlMytbDbConfig {
                 'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) DESC',
                 'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC',
                 'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) DESC',
+                'countInfos': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +
+                    ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) ASC',
+                'countInfosDesc': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +
+                    ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) DESC',
                 'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id)  tour t_sort WHERE t_sort.l_id = location.l_id) ASC',
                 'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour t_sort WHERE t_sort.l_id = location.l_id) DESC',
                 'distance': 'geodist ASC',
@@ -4180,7 +4186,7 @@ export class TourDocSqlMytbDbConfig {
                         'SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(COUNT(DISTINCT location.l_id) AS CHAR)) AS extended_object_properties' +
                         '      FROM info' +
                         '      LEFT JOIN location_info ON info.if_id = location_info.if_id' +
-                        '      INEER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id' +
+                        '      INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id' +
                         '      WHERE info.if_id IN (:id)',
                     parameterNames: ['id']
                 },
@@ -4408,6 +4414,14 @@ export class TourDocSqlMytbDbConfig {
                 }
             },
             sortMapping: {
+                'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) ASC',
+                'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) DESC',
+                'countLocations': '(SELECT COUNT(DISTINCT location.l_id) FROM location' +
+                    ' LEFT JOIN location_info ON location.l_id = location_info.l_id' +
+                    ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) ASC',
+                'countLocationsDesc': '(SELECT COUNT(DISTINCT location.l_id) FROM location' +
+                    ' LEFT JOIN location_info ON location.l_id = location_info.l_id' +
+                    ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) DESC',
                 'name': 'if_name ASC',
                 'type': 'if_typ ASC',
                 'forExport': 'if_id ASC',
