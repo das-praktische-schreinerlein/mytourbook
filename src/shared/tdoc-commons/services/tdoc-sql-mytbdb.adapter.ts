@@ -51,6 +51,7 @@ import {CommonSqlObjectDetectionAdapter} from '@dps/mycms-commons/dist/action-co
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
 import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
 import {CommonSqlJoinAdapter} from './common-sql-join.adapter';
+import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
@@ -240,7 +241,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setImageKeywords failed:', reason);
+                    console.error('setImageDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -252,7 +253,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setInfoKeywords failed:', reason);
+                    console.error('setInfoDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -264,7 +265,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setVideoKeywords failed:', reason);
+                    console.error('setVideoDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -272,11 +273,15 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setRouteKeywords(dbId, props.keywords, opts));
+                if (props.get('tdoclinkedinfos')) {
+                    const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedinfos', tabKey, dbId, infos, opts));
+                }
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setRouteKeywords failed:', reason);
+                    console.error('setRouteDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -284,11 +289,15 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setLocationKeywords(dbId, props.keywords, opts));
+                if (props.get('tdoclinkedinfos')) {
+                    const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedinfos', tabKey, dbId, infos, opts));
+                }
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setLocationKeywords failed:', reason);
+                    console.error('setLocationDetails failed:', reason);
                     return allReject(reason);
                 });
             });

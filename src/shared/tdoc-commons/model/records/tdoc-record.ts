@@ -46,6 +46,7 @@ import {
 } from './tdocextendedobjectproperty-record';
 import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordFactory, TourDocLinkedRouteRecordValidator} from './tdoclinkedroute-record';
 import {TourDocInfoRecord, TourDocInfoRecordFactory, TourDocInfoRecordValidator} from './tdocinfo-record';
+import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordFactory, TourDocLinkedInfoRecordValidator} from './tdoclinkedinfo-record';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;
@@ -75,7 +76,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
 
 export class TourDocRecord extends CommonDocRecord implements TourDocRecordType {
     static tdocRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocinfo', 'tdocimages', 'tdocvideos', 'tdocratepers',
-        'tdocratetech', 'tdocodimageobjects', 'tdocnavigationobjects', 'tdocextendedobjectproperties', 'tdoclinkedroutes'];
+        'tdocratetech', 'tdocodimageobjects', 'tdocnavigationobjects', 'tdocextendedobjectproperties', 'tdoclinkedroutes', 'tdoclinkedinfos'];
     static tdocValidationRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech', 'tdocinfo'];
     static tdocFields = {
         locId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
@@ -246,6 +247,12 @@ export let TourDocRecordRelation: any = {
             foreignKey: 'tdoc_id',
             // reference to related objects in memory
             localField: 'tdoclinkedroutes'
+        },
+        tdoclinkedinfo: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdoclinkedinfos'
         }
     }
 };
@@ -293,6 +300,8 @@ export class TourDocRecordFactory extends CommonDocRecordFactory {
                 return TourDocExtendedObjectPropertyRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdoclinkedroutes':
                 return TourDocLinkedRouteRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdoclinkedinfos':
+                return TourDocLinkedInfoRecordFactory.instance.getSanitizedValues(values, {});
             default:
                 return super.getSanitizedRelationValues(relation, values);
         }
@@ -342,6 +351,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocVideoRecordValidator.instance.validate(<TourDocVideoRecord>doc, errFieldPrefix);
             case 'tdoclinkedroutes':
                 return TourDocLinkedRouteRecordValidator.instance.validate(<TourDocLinkedRouteRecord>doc, errFieldPrefix);
+            case 'tdoclinkedinfos':
+                return TourDocLinkedInfoRecordValidator.instance.validate(<TourDocLinkedInfoRecord>doc, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validate(<TourDocObjectDetectionImageObjectRecord>doc,
                     errFieldPrefix);
@@ -378,6 +389,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocExtendedObjectPropertyRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdoclinkedroutes':
                 return TourDocLinkedRouteRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdoclinkedinfos':
+                return TourDocLinkedInfoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             default:
                 return super.validateValueRelationDoc(relation, values, fieldPrefix, errFieldPrefix);
         }

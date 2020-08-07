@@ -103,6 +103,10 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
          return this.searchFormUtils.getFacetValues(searchResult, 'route_id_is', '', '');
     }
 
+    getInfoValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'info_id_is', '', '');
+    }
+
     getTrackValues(searchResult: TourDocSearchResult): any[] {
         return this.searchFormUtils.getFacetValues(searchResult, 'track_id_is', '', '');
     }

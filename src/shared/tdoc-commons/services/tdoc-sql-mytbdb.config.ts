@@ -2285,6 +2285,12 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS t_keywords']
                 },
                 {
+                    from: 'LEFT JOIN tour_info ON tour.t_id=tour_info.t_id ' +
+                        'LEFT JOIN info tif ON tour_info.if_id=tif.if_id ',
+                    triggerParams: ['id', 'info_id_i', 'info_id_is'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT tif.if_id ORDER BY tif.if_id SEPARATOR ", ") AS t_if_ids']
+                },
+                {
                     from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ' +
                         'LEFT JOIN kategorie ON kategorie_tour.k_id=kategorie.k_id OR kategorie.t_id=tour.t_id ',
                     triggerParams: ['id', 'track_id_i', 'track_id_is'],
@@ -2345,6 +2351,15 @@ export class TourDocSqlMytbDbConfig {
                     parameterNames: ['id']
                 },
                 {
+                    profile: 'linkedinfos',
+                    sql: '(SELECT CONCAT("type=", COALESCE(if_typ, "null"), ":::name=", COALESCE(if_name, "null"),' +
+                        '    ":::refId=", CAST(info.if_id AS CHAR))' +
+                        '  AS linkedinfos' +
+                        '  FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id WHERE tour_info.t_id IN (:id)' +
+                        '  ORDER BY if_name) ',
+                    parameterNames: ['id']
+                },
+                {
                     profile: 'keywords',
                     sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
                         'FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
@@ -2359,6 +2374,11 @@ export class TourDocSqlMytbDbConfig {
                         '       FROM trip INNER JOIN kategorie ON trip.tr_id=kategorie.tr_id' +
                         '       LEFT JOIN kategorie_tour ON kategorie.k_id = kategorie_tour.k_id' +
                         '       WHERE kategorie_tour.t_id IN (:id) OR kategorie.t_id IN (:id)' +
+                        '   UNION ' +
+                        'SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(COUNT(DISTINCT tour_info.if_id) AS CHAR)) AS extended_object_properties' +
+                        '      FROM info' +
+                        '      INNER JOIN tour_info ON tour_info.if_id = info.if_id' +
+                        '      WHERE tour_info.t_id IN (:id)' +
                         '   UNION ' +
                         'SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS extended_object_properties' +
                         '       FROM kategorie LEFT JOIN kategorie_tour ON kategorie.k_id = kategorie_tour.k_id' +
@@ -2566,6 +2586,15 @@ export class TourDocSqlMytbDbConfig {
                 'done_ss': {
                     selectField: 'CONCAT("DONE", (t_datevon IS NOT NULL))',
                     orderBy: 'value asc'
+                },
+                'info_id_is': {
+                    selectSql: 'SELECT COUNT(tour_info.if_id) AS count, info.if_id AS value,' +
+                        ' info.if_name AS label, info.if_id AS id' +
+                        ' FROM info LEFT JOIN tour_info ON tour_info.if_id = info.if_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label',
+                    filterFields: ['tif.if_id'],
+                    action: AdapterFilterActions.IN_NUMBER
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -3222,7 +3251,8 @@ export class TourDocSqlMytbDbConfig {
                 track_id_is: 'k.k_id',
                 video_id_is: '"666dummy999"',
                 video_id_i: '"666dummy999"',
-                trip_id_is: '"666dummy999"',
+                trip_id_is: 'kt_trip.tr_id',
+                trip_id_i: 'kt_trip.tr_id',
                 loc_id_i: 'destination.l_id',
                 loc_id_is: 'destination.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
@@ -3301,6 +3331,12 @@ export class TourDocSqlMytbDbConfig {
                     groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
                 },
                 {
+                    from: 'LEFT JOIN location_info ON location.l_id=location_info.l_id ' +
+                        'LEFT JOIN info lif ON location_info.if_id=lif.if_id OR location.l_id=lif.l_id ',
+                    triggerParams: ['id', 'info_id_i', 'info_id_is'],
+                    groupByFields: ['GROUP_CONCAT(DISTINCT lif.if_id ORDER BY lif.if_id SEPARATOR ", ") AS l_if_ids']
+                },
+                {
                     from: 'INNER JOIN (SELECT l_id AS id FROM location WHERE l_key' +
                         '              IN (SELECT DISTINCT l_key AS name' +
                         '                  FROM location GROUP BY name HAVING COUNT(*) > 1)' +
@@ -3352,10 +3388,25 @@ export class TourDocSqlMytbDbConfig {
                     modes: ['full']
                 },
                 {
+                    profile: 'linkedinfos',
+                    sql: '(SELECT CONCAT("type=", COALESCE(if_typ, "null"), ":::name=", COALESCE(if_name, "null"),' +
+                        '    ":::refId=", CAST(info.if_id AS CHAR))' +
+                        '  AS linkedinfos' +
+                        '  FROM info INNER JOIN location_info ON location_info.if_id = info.if_id WHERE location_info.l_id IN (:id)' +
+                        '  ORDER BY if_name) ',
+                    parameterNames: ['id']
+                },
+                {
                     profile: 'extended_object_properties',
                     sql: 'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour.t_id) AS CHAR)) AS extended_object_properties' +
                         '       FROM tour ' +
                         '       WHERE tour.l_id IN (:id)' +
+                        '   UNION ' +
+                        'SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(COUNT(DISTINCT info.if_id) AS CHAR)) AS extended_object_properties' +
+                        '      FROM info' +
+                        '      LEFT JOIN location_info ON info.if_id = location_info.if_id' +
+                        '      INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id' +
+                        '      WHERE location.l_id IN (:id)' +
                         '   UNION ' +
                         'SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS extended_object_properties' +
                         '      FROM kategorie' +
@@ -3509,6 +3560,15 @@ export class TourDocSqlMytbDbConfig {
                 },
                 'done_ss': {
                     noFacet: true
+                },
+                'info_id_is': {
+                    selectSql: 'SELECT COUNT(location_info.if_id) AS count, info.if_id AS value,' +
+                        ' info.if_name AS label, info.if_id AS id' +
+                        ' FROM info LEFT JOIN location_info ON location_info.if_id = info.if_id ' +
+                        ' GROUP BY value, label, id' +
+                        ' ORDER BY label',
+                    filterFields: ['lif.if_id'],
+                    action: AdapterFilterActions.IN_NUMBER
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -4057,6 +4117,41 @@ export class TourDocSqlMytbDbConfig {
             selectFrom: 'info LEFT JOIN location ON location.l_id = info.l_id',
             optionalGroupBy: [
                 {
+                    from: 'LEFT JOIN location_info ON info.if_id=location_info.if_id ' +
+                        'LEFT JOIN location lifl ON location_info.l_id=lifl.l_id OR info.l_id=lifl.l_id ',
+                    triggerParams: ['loc_id_i', 'loc_id_is', 'loc_lochirarchie_txt'],
+                    groupByFields: ['lifl.l_id', 'lifl.l_name']
+                },
+                {
+                    from: 'LEFT JOIN tour_info tift ON info.if_id = tift.if_id',
+                    triggerParams: ['route_id_i', 'route_id_is'],
+                    groupByFields: []
+                },
+                {
+                    from:
+                        'LEFT JOIN tour_info kift ON info.if_id = kift.if_id ' +
+                        'LEFT JOIN kategorie_tour kt ON kt.t_id=kift.t_id ' +
+                        'LEFT JOIN kategorie k ON k.k_id=kt.k_id OR k.t_id=kift.t_id ',
+                    triggerParams: ['track_id_i', 'track_id_is'],
+                    groupByFields: []
+                },
+                {
+                    from: 'LEFT JOIN tour_info nift ON info.if_id = nift.if_id ' +
+                        'LEFT JOIN kategorie_tour kt_kt ON nift.t_id=kt_kt.t_id ' +
+                        'LEFT JOIN kategorie kt_k ON kt_kt.k_id=kt_k.k_id OR nift.t_id=kt_k.t_id ' +
+                        'LEFT JOIN news kt_news ON kt_k.k_datevon >= kt_news.n_datevon AND kt_k.k_datevon <= kt_news.n_datebis ',
+                    triggerParams: ['news_id_i', 'news_id_is'],
+                    groupByFields: ['kt_news.n_id']
+                },
+                {
+                    from: 'LEFT JOIN tour_info trift ON info.if_id = trift.if_id ' +
+                        'LEFT JOIN kategorie_tour kt_kt ON trift.t_id=kt_kt.t_id ' +
+                        'LEFT JOIN kategorie kt_k ON kt_kt.k_id=kt_k.k_id OR kt_k.t_id=trift.t_id ' +
+                        'LEFT JOIN trip kt_trip ON kt_k.tr_id=kt_trip.tr_id',
+                    triggerParams: ['trip_id_i', 'trip_id_is'],
+                    groupByFields: ['kt_trip.tr_id']
+                },
+                {
                     from: 'LEFT JOIN info_keyword ON info.if_id=info_keyword.if_id ' +
                         'LEFT JOIN keyword ON info_keyword.kw_id=keyword.kw_id',
                     triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
@@ -4075,6 +4170,20 @@ export class TourDocSqlMytbDbConfig {
             groupbBySelectFieldList: true,
             groupbBySelectFieldListIgnore: ['if_keywords'],
             loadDetailData: [
+                {
+                    profile: 'extended_object_properties',
+                    sql: 'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour_info.t_id) AS CHAR)) AS extended_object_properties' +
+                        '      FROM info' +
+                        '      INNER JOIN tour_info ON tour_info.if_id = info.if_id' +
+                        '      WHERE info.if_id IN (:id)' +
+                        '   UNION ' +
+                        'SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(COUNT(DISTINCT location.l_id) AS CHAR)) AS extended_object_properties' +
+                        '      FROM info' +
+                        '      LEFT JOIN location_info ON info.if_id = location_info.if_id' +
+                        '      INEER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id' +
+                        '      WHERE info.if_id IN (:id)',
+                    parameterNames: ['id']
+                },
                 {
                     profile: 'navigation_objects',
                     sql: '(SELECT CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR")' +
@@ -4096,13 +4205,14 @@ export class TourDocSqlMytbDbConfig {
                 'CONCAT("if_", info.if_typ) AS subtype',
                 'info.if_id',
                 'info.l_id',
+                'info.l_id as if_l_id',
                 'info.if_name',
                 'if_publisher',
                 'info.if_url as if_reference',
                 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,"")) AS html',
-                'CAST(l_geo_latdeg AS CHAR(50)) AS if_gps_lat',
-                'CAST(l_geo_longdeg AS CHAR(50)) AS if_gps_lon',
-                'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS if_gps_loc',
+                'CAST(location.l_geo_latdeg AS CHAR(50)) AS if_gps_lat',
+                'CAST(location.l_geo_longdeg AS CHAR(50)) AS if_gps_lon',
+                'CONCAT(location.l_geo_latdeg, ",", location.l_geo_longdeg) AS if_gps_loc',
                 'GetLocationNameAncestry(location.l_id, location.l_name, " -> ") AS l_lochirarchietxt',
                 'GetLocationIdAncestry(location.l_id, ",") AS l_lochirarchieids',
                 'if_gesperrt',
@@ -4227,17 +4337,19 @@ export class TourDocSqlMytbDbConfig {
                         ' FROM location LEFT JOIN info ON info.l_id = location.l_id ' +
                         ' GROUP BY value, label, id' +
                         ' ORDER BY label ASC',
-                    filterField: 'GetTechName(GetLocationNameAncestry(location.l_id, location.l_name, " -> "))',
+                    filterField: 'GetTechName(GetLocationNameAncestry(lifl.l_id, lifl.l_name, " -> "))',
                     action: AdapterFilterActions.LIKE
                 },
                 'month_is': {
                     noFacet: true
                 },
                 'news_id_i': {
-                    noFacet: true
+                    filterFields: ['kt_news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
                 },
                 'news_id_is': {
-                    noFacet: true
+                    filterFields: ['kt_news.n_id'],
+                    action: AdapterFilterActions.IN_NUMBER
                 },
                 'objects_txt': {
                     noFacet: true
@@ -4275,6 +4387,14 @@ export class TourDocSqlMytbDbConfig {
                 'subtype_ss': {
                     selectField: 'CONCAT("if_", info.if_typ)'
                 },
+                'trip_id_i': {
+                    filterFields: ['kt_trip.tr_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
+                'trip_id_is': {
+                    filterFields: ['kt_trip.tr_id'],
+                    action: AdapterFilterActions.IN_NUMBER
+                },
                 'type_txt': {
                     constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination'],
                     filterField: '"info"',
@@ -4291,12 +4411,12 @@ export class TourDocSqlMytbDbConfig {
                 'name': 'if_name ASC',
                 'type': 'if_typ ASC',
                 'forExport': 'if_id ASC',
-                'location': 'l_lochirarchietxt ASC',
+                'location': 'location.l_lochirarchietxt ASC',
                 'relevance': 'if_id DESC'
             },
             spartialConfig: {
-                lat: 'l_geo_latdeg',
-                lon: 'l_geo_longdeg',
+                lat: 'location.l_geo_latdeg',
+                lon: 'location.l_geo_longdeg',
                 spatialField: 'geodist',
                 spatialSortKey: 'distance'
             },
@@ -4320,19 +4440,20 @@ export class TourDocSqlMytbDbConfig {
                 destination_id_ss: '"666dummy999"',
                 info_id_i: 'info.if_id',
                 info_id_is: 'info.if_id',
+                route_id_i: 'tift.t_id',
+                route_id_is: 'tift.t_id',
+                track_id_i: 'k.k_id',
+                track_id_is: 'k.k_id',
                 video_id_is: '"666dummy999"',
                 video_id_i: '"666dummy999"',
                 image_id_is: '"666dummy999"',
                 image_id_i: '"666dummy999"',
-                track_id_is: '"666dummy999"',
-                track_id_i: '"666dummy999"',
-                trip_id_is: '"666dummy999"',
-                trip_id_i: '"666dummy999"',
-                route_id_is: '"666dummy999"',
+                trip_id_is: 'kt_trip.tr_id',
+                trip_id_i: 'kt_trip.tr_id',
                 loc_id_i: 'info.l_id',
                 loc_id_is: 'info.l_id',
-                loc_lochirarchie_ids_txt: 'location.l_id',
-                l_lochirarchietxt: 'location.l_name',
+                loc_lochirarchie_ids_txt: 'lifl.l_id',
+                l_lochirarchietxt: 'lifl.l_name',
                 html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""))'
             },
             writeMapping: {
@@ -4351,8 +4472,8 @@ export class TourDocSqlMytbDbConfig {
                 id: 'id',
                 info_id_i: 'if_id',
                 info_id_is: 'if_id',
-                loc_id_i: 'l_id',
-                loc_id_is: 'l_id',
+                loc_id_i: 'if_l_id',
+                loc_id_is: 'if_l_id',
                 loc_lochirarchie_s: 'l_lochirarchietxt',
                 loc_lochirarchie_ids_s: 'l_lochirarchieids',
                 geo_lon_s: 'if_gps_lon',
@@ -4807,6 +4928,25 @@ export class TourDocSqlMytbDbConfig {
                     joinFieldMappings: {
                         't_id': 'refId',
                         'kt_full': 'full'
+                    }
+                }
+            }
+        },
+        'linkedinfos': {
+            name: 'linkedinfos',
+            tables: {
+                'location': {
+                    baseTableIdField: 'l_id',
+                    joinTable: 'location_info',
+                    joinFieldMappings: {
+                        'if_id': 'refId'
+                    }
+                },
+                'route': {
+                    baseTableIdField: 't_id',
+                    joinTable: 'tour_info',
+                    joinFieldMappings: {
+                        'if_id': 'refId'
                     }
                 }
             }

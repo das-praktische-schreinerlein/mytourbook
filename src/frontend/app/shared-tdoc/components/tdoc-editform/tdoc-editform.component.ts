@@ -31,6 +31,7 @@ import * as L from 'leaflet';
 import {LatLng} from 'leaflet';
 import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedroute-record';
+import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -60,6 +61,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         'locId': IMultiSelectOption[];
         'locIdParent': IMultiSelectOption[];
         'routeId': IMultiSelectOption[];
+        'infoId': IMultiSelectOption[];
         'subType': IMultiSelectOption[];
         'subTypeActiontype': IMultiSelectOption[];
         'subTypeLocType': IMultiSelectOption[];
@@ -74,6 +76,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     public settingsSelectRoute = this.defaultSelectSetting;
     public settingsSelectTrack = this.defaultSelectSetting;
     public settingsSelectTrip = this.defaultSelectSetting;
+    public settingsSelectInfo = this.defaultSelectSetting;
 
     public textsSelectWhere: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
@@ -121,6 +124,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         uncheckAll: 'Alle abwählen',
         checked: 'Trip ausgewählt',
         checkedPlural: 'Trip ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '--',
+        allSelected: 'alles'};
+    public textsSelectInfo: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Info ausgewählt',
+        checkedPlural: 'Info ausgewählt',
         searchPlaceholder: 'Find',
         defaultTitle: '--',
         allSelected: 'alles'};
@@ -497,6 +507,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'locId': [],
                 'locIdParent': [],
                 'routeId': [],
+                'infoId': [],
                 'subType': [],
                 'subTypeActiontype': [],
                 'subTypeLocType': [],
@@ -519,21 +530,22 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             values['geoLon'] = lst.length > 1 ? lst[1] : undefined;
         }
 
-        this.prepareRouteJoinSubmitValues(values);
+        this.prepareLinkedRoutesSubmitValues(values);
+        this.prepareLinkedInfosSubmitValues(values);
 
         return super.prepareSubmitValues(values);
     }
 
-    protected prepareRouteJoinSubmitValues(values: {}): void {
-        const subRoutes: {}[] = [];
-        const joinName = 'subRoute';
+    protected prepareLinkedRoutesSubmitValues(values: {}): void {
+        const joins: {}[] = [];
+        const joinName = 'linkedRoutes';
 
-        const indexes = this.joinIndexes[joinName];
-        for (let idx = 1; idx <= indexes.length; idx ++) {
+        const routeJoinIndexes = this.joinIndexes[joinName];
+        for (let idx = 1; idx <= routeJoinIndexes.length; idx ++) {
             const refId = this.getStringFormValue(values, joinName + 'Id' + idx);
             const full = this.getStringFormValue(values, joinName + 'Full' + idx);
             if (refId !== undefined && refId !== 'undefined') {
-                subRoutes.push({
+                joins.push({
                     tdoc_id: this.record.id,
                     name: 'dummy',
                     refId: refId,
@@ -542,7 +554,27 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 })
             }
         }
-        values['tdoclinkedroutes'] = subRoutes;
+        values['tdoclinkedroutes'] = joins;
+    }
+
+    protected prepareLinkedInfosSubmitValues(values: {}): void {
+        const joins: {}[] = [];
+        const joinName = 'linkedInfos';
+
+        const routeJoinIndexes = this.joinIndexes[joinName];
+        for (let idx = 1; idx <= routeJoinIndexes.length; idx ++) {
+            const refId = this.getStringFormValue(values, joinName + 'Id' + idx);
+            const type = this.getStringFormValue(values, joinName + 'Type' + idx);
+            if (refId !== undefined && refId !== 'undefined') {
+                joins.push({
+                    tdoc_id: this.record.id,
+                    name: 'dummy',
+                    refId: refId,
+                    type: 'dummy'
+                })
+            }
+        }
+        values['tdoclinkedinfos'] = joins;
     }
 
     protected createDefaultFormValueConfig(record: TourDocRecord): {} {
@@ -555,26 +587,43 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             geoLocAddress: [record.name]
         };
 
-        this.appendRouteJoinsToDefaultFormValueConfig(record, valueConfig);
+        this.appendLinkedRoutesToDefaultFormValueConfig(record, valueConfig);
+        this.appendLinkedInfosToDefaultFormValueConfig(record, valueConfig);
 
         return valueConfig;
     }
 
-    protected appendRouteJoinsToDefaultFormValueConfig(record: TourDocRecord, valueConfig: {}) {
-        const subRoutes: TourDocLinkedRouteRecord[] = this.record.get('tdoclinkedroutes') || [];
-        const joinName = 'subRoute';
+    protected appendLinkedRoutesToDefaultFormValueConfig(record: TourDocRecord, valueConfig: {}) {
+        const joinRecords: TourDocLinkedRouteRecord[] = this.record.get('tdoclinkedroutes') || [];
+        const joinName = 'linkedRoutes';
 
         const indexes = [];
         let idx = 1;
-        for (; idx <= subRoutes.length; idx ++) {
+        for (; idx <= joinRecords.length; idx ++) {
             indexes.push(idx);
-            valueConfig[joinName + 'Id' + idx] = [subRoutes[idx - 1].refId];
-            valueConfig[joinName + 'Full' + idx] = [subRoutes[idx - 1].full];
+            valueConfig[joinName + 'Id' + idx] = [joinRecords[idx - 1].refId];
+            valueConfig[joinName + 'Full' + idx] = [joinRecords[idx - 1].full];
         }
 
         indexes.push(idx);
         valueConfig[joinName + 'Id' + idx] = [];
         valueConfig[joinName + 'Full' + idx] = [];
+        this.joinIndexes[joinName] = indexes;
+    }
+
+    protected appendLinkedInfosToDefaultFormValueConfig(record: TourDocRecord, valueConfig: {}) {
+        const joinRecords: TourDocLinkedInfoRecord[] = this.record.get('tdoclinkedinfos') || [];
+        const joinName = 'linkedInfos';
+
+        const indexes = [];
+        let idx = 1;
+        for (; idx <= joinRecords.length; idx ++) {
+            indexes.push(idx);
+            valueConfig[joinName + 'Id' + idx] = [joinRecords[idx - 1].refId];
+        }
+
+        indexes.push(idx);
+        valueConfig[joinName + 'Id' + idx] = [];
         this.joinIndexes[joinName] = indexes;
     }
 
@@ -600,6 +649,10 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
 
         if (tdocSearchResult !== undefined) {
             const rawValues = this.editFormGroup.getRawValue();
+            const location = this.record.locHirarchie
+                ? TourDocAdapterResponseMapper.generateDoubletteValue(this.record.locHirarchie.replace(/.*-> /, ''))
+                : '';
+
             // console.log('update searchResult', tdocSearchResult);
             const whereValues = me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getWhereValues(tdocSearchResult));
             me.optionsSelect['locId'] = me.searchFormUtils.moveSelectedToTop(
@@ -617,9 +670,6 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             const selectableRouteValues = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
                 me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getRouteValues(tdocSearchResult)),
                 true, [], false);
-            const location = this.record.locHirarchie
-                ? TourDocAdapterResponseMapper.generateDoubletteValue(this.record.locHirarchie.replace(/.*-> /, ''))
-                : '';
             let ordinaryRoutes: IMultiSelectOption[] = [];
             const suggestedRoutes: IMultiSelectOption[] = [];
             if (location && location.length > 0) {
@@ -638,6 +688,27 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             const sortedRoutes: IMultiSelectOption[] = [].concat(suggestedRoutes).concat(ordinaryRoutes);
             me.optionsSelect['routeId'] = me.searchFormUtils.moveSelectedToTop(sortedRoutes, rawValues['routeId']);
 
+            const selectableInfoValues = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+                me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getInfoValues(tdocSearchResult)),
+                true, [], false);
+            let ordinaryInfos: IMultiSelectOption[] = [];
+            const suggestedInfos: IMultiSelectOption[] = [];
+            if (location && location.length > 0) {
+                selectableInfoValues.forEach(value => {
+                    if (TourDocAdapterResponseMapper.generateDoubletteValue(value.name).includes(location)) {
+                        const copy: IMultiSelectOption = { ...value};
+                        copy.name = '\uD83D\uDCA1 ' + copy.name;
+                        suggestedInfos.push(copy);
+                    } else {
+                        ordinaryInfos.push(value);
+                    }
+                });
+            } else {
+                ordinaryInfos = selectableInfoValues;
+            }
+            const sortedInfos: IMultiSelectOption[] = [].concat(suggestedInfos).concat(ordinaryInfos);
+            me.optionsSelect['infoId'] = me.searchFormUtils.moveSelectedToTop(sortedInfos, rawValues['infoId']);
+
             const trackValues = me.searchFormUtils.prepareExtendedSelectValues(me.tdocSearchFormUtils.getTrackValues(tdocSearchResult));
             me.optionsSelect['trackId'] = me.searchFormUtils.moveSelectedToTop(
                 me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(trackValues, true, [],
@@ -654,6 +725,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             me.optionsSelect['playlists'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
             me.optionsSelect['persons'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], true);
             me.optionsSelect['routeId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
+            me.optionsSelect['infoId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
             me.optionsSelect['trackId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
             me.optionsSelect['tripId'] = me.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList([], true, [], false);
         }

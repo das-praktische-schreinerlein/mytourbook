@@ -241,6 +241,16 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.TRIP"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.INFO"
+                                            [label]="'Infos'"
+                                            i18n-label="label inline-searchpage INFO|Label inline-searchpage INFO@@linline-search.label.tdoc.INFO"
+                                            [params]="getFiltersForType(record, 'INFO')"
+                                            [htmlId]="'INFO'"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.INFO"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRACK"
                                             [label]="'Tracks'"
                                             i18n-label="label inline-searchpage TRACK|Label inline-searchpage TRACK@@linline-search.label.tdoc.TRACK"
@@ -321,6 +331,16 @@
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.TRACK"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.INFO"
+                                            [label]="'Infos'"
+                                            i18n-label="label inline-searchpage INFO|Label inline-searchpage INFO@@linline-search.label.tdoc.INFO"
+                                            [params]="getFiltersForType(record, 'INFO')"
+                                            [htmlId]="'INFO'"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.INFO"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE_NEARBY"
                                             [label]="'Routen in der Nähe'"
                                             i18n-label="label inline-searchpage ROUTE_NEARBY|Label inline-searchpage ROUTE_NEARBY@@linline-search.label.tdoc.ROUTE_NEARBY"
@@ -398,6 +418,16 @@
                                             [layout]="Layout.FLAT"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.TRACK"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.INFO"
+                                            [label]="'Infos'"
+                                            i18n-label="label inline-searchpage INFO|Label inline-searchpage INFO@@linline-search.label.tdoc.INFO"
+                                            [params]="getFiltersForType(record, 'INFO')"
+                                            [htmlId]="'INFO'"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.INFO"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE_NEARBY"
                                             [label]="'Routen in der Nähe'"
@@ -480,6 +510,16 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.THIN"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.INFO"
+                                            [label]="'Infos'"
+                                            i18n-label="label inline-searchpage INFO|Label inline-searchpage INFO@@linline-search.label.tdoc.INFO"
+                                            [params]="getFiltersForType(record, 'INFO')"
+                                            [htmlId]="'INFO'"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.INFO"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
 
@@ -819,6 +859,22 @@
                                             [showForm]="false"
                                             [showResultList]="true"
                                             [layout]="Layout.FLAT"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.ROUTE"
+                                            [label]="'Routen'"
+                                            i18n-label="label inline-searchpage ROUTE|Label inline-searchpage ROUTE@@linline-search.label.tdoc.ROUTE"
+                                            [params]="getFiltersForType(record, 'ROUTE')"
+                                            [htmlId]="'ROUTE'"
+                                            [showForm]="false"
+                                            [loadFacets]="'actiontype_ss'"
+                                            [showTimetable]="'true'"
+                                            [loadTrack]="'true'"
+                                            [showItemMapFlag]="true"
+                                            (showItemOnMap)="onShowItemOnMap($event)"
+                                            (searchResultFound)="onRouteTracksFound($event)"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.ROUTE"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
         </ng-container>

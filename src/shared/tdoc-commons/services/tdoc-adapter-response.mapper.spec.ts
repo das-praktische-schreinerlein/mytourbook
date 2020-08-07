@@ -34,6 +34,8 @@ import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordRelation} from '../mod
 import {TourDocLinkedRouteRecordSchema} from '../model/schemas/tdoclinkedroute-record-schema';
 import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdocinfo-record';
 import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
+import {TourDocLinkedInfoRecordSchema} from '../model/schemas/tdoclinkedinfo-record-schema';
+import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordRelation} from '../model/records/tdoclinkedinfo-record';
 
 describe('TourDocAdapterResponseMapper', () => {
     let datastore: TourDocDataStore;
@@ -67,6 +69,8 @@ describe('TourDocAdapterResponseMapper', () => {
             TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
         datastore.defineMapper('tdoclinkedroute', TourDocLinkedRouteRecord,
             TourDocLinkedRouteRecordSchema, TourDocLinkedRouteRecordRelation);
+        datastore.defineMapper('tdoclinkedinfo', TourDocLinkedInfoRecord,
+            TourDocLinkedInfoRecordSchema, TourDocLinkedInfoRecordRelation);
         mapper = datastore.getMapper('tdoc');
     });
 
@@ -110,7 +114,8 @@ describe('TourDocAdapterResponseMapper', () => {
                 'tdocodimageobjects': [],
                 'tdocnavigationobjects': [],
                 'tdocextendedobjectproperties': [],
-                'tdoclinkedroutes': []
+                'tdoclinkedroutes': [],
+                'tdoclinkedinfos': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues,
                 TourDocSqlMytbDbConfig.tableConfigs.track.fieldMapping);
@@ -191,7 +196,8 @@ describe('TourDocAdapterResponseMapper', () => {
                     }
                 ],
                 'tdocextendedobjectproperties': [],
-                'tdoclinkedroutes': []
+                'tdoclinkedroutes': [],
+                'tdoclinkedinfos': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
 

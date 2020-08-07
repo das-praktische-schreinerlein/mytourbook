@@ -16,7 +16,7 @@ export interface TourDocLinkedRouteRecordType extends BaseJoinRecordType {
 }
 
 export class TourDocLinkedRouteRecord extends BaseJoinRecord implements TourDocLinkedRouteRecordType {
-    static routeFields = {...BaseJoinRecord.routeFields,
+    static routeFields = {...BaseJoinRecord.joinFields,
         full: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME,
             new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)),
         tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))

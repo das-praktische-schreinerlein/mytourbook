@@ -143,6 +143,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['perPage'] = 12;
             } else if (type === 'NEWS') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'INFO') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'DESTINATION') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'TRACK') {

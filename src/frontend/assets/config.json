@@ -1590,8 +1590,8 @@
         },
         "cdoc-extended-object-properties":  {
             "allowedExtendedObjectProperties": {
-                "list-item-flat-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT"],
-                "show-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT"]
+                "list-item-flat-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT"],
+                "show-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT"]
             },
             "modes": {
                 "list-item-flat-big": "short",

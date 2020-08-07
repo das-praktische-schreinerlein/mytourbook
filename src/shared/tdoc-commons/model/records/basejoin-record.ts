@@ -12,7 +12,7 @@ export interface BaseJoinRecordType extends BaseEntityRecordType {
 }
 
 export abstract class BaseJoinRecord extends BaseEntityRecord implements BaseJoinRecordType {
-    static routeFields = {
+    static joinFields = {
         name: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
         type: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
         refId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new NameValidationRule(true))

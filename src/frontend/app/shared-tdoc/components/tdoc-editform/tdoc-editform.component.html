@@ -51,6 +51,14 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataAdditionalData label|Label for fieldset: dataAdditionalData@@label.editform.tdoc.legend.dataAdditionalData">&#x231a; Zusatzdaten</legend>
+            <div class="row">
+                <ng-container *ngFor="let idx of joinIndexes['linkedInfos']">
+                    <ng-container *ngTemplateOutlet="inputLinkedInfo;context:{key: 'linkedInfo', idx: idx, joinName: 'linkedInfos'}"></ng-container>
+                </ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
@@ -80,8 +88,8 @@
         <fieldset>
             <legend i18n="dataAdditionalData label|Label for fieldset: dataAdditionalData@@label.editform.tdoc.legend.dataAdditionalData">&#x231a; Zusatzdaten</legend>
             <div class="row">
-                <ng-container *ngFor="let idx of joinIndexes['subRoute']">
-                    <ng-container *ngTemplateOutlet="inputSubRoute;context:{key: 'subRoute', idx: idx, joinName: 'subRoute'}"></ng-container>
+                <ng-container *ngFor="let idx of joinIndexes['linkedRoutes']">
+                    <ng-container *ngTemplateOutlet="inputLinkedRoute;context:{key: 'linkedRoute', idx: idx, joinName: 'linkedRoutes'}"></ng-container>
                 </ng-container>
             </div>
         </fieldset>
@@ -260,6 +268,14 @@
             </div>
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <fieldset>
+            <legend i18n="dataAdditionalData label|Label for fieldset: dataAdditionalData@@label.editform.tdoc.legend.dataAdditionalData">&#x231a; Zusatzdaten</legend>
+            <div class="row">
+                <ng-container *ngFor="let idx of joinIndexes['linkedInfos']">
+                    <ng-container *ngTemplateOutlet="inputLinkedInfo;context:{key: 'linkedInfo', idx: idx, joinName: 'linkedInfos'}"></ng-container>
+                </ng-container>
+            </div>
+        </fieldset>
         <fieldset>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
@@ -461,9 +477,9 @@
         </div>
     </ng-template>
 
-    <ng-template #inputSubRoute let-key="key" let-idx="idx" let-joinName="joinName">
+    <ng-template #inputLinkedRoute let-key="key" let-idx="idx" let-joinName="joinName">
         <div class="col-sm-6 input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2" i18n="subRouteId label|Label for filter: subRouteId@@label.searchform.tdoc.subRouteId">SubRoute:</label>
+            <label class="col-xs-3 col-form-label mr-2" i18n="linkedRoutesId label|Label for filter: linkedRoutesId@@label.searchform.tdoc.linkedRoutesId">LinkedRoutes:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
                                      [settings]="settingsSelectRoute"
                                      [texts]="textsSelectRoute"
@@ -475,8 +491,23 @@
                                      ngDefaultControl></ss-multiselect-dropdown>
         </div>
         <div class="col-sm-6 input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2" i18n="subRouteFull label|Label for filter: subRouteFull@@label.searchform.tdoc.subRouteFull">Umfasst gesamten Track:</label>
+            <label class="col-xs-3 col-form-label mr-2" i18n="linkedRoutesFull label|Label for filter: linkedRoutesFull@@label.searchform.tdoc.linkedRoutesFull">Umfasst gesamten Track:</label>
             <input type="checkbox" formControlName="{{joinName + 'Full'  + idx}}">
+        </div>
+    </ng-template>
+
+    <ng-template #inputLinkedInfo let-key="key" let-idx="idx" let-joinName="joinName">
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="linkedInfosId label|Label for filter: linkedInfosId@@label.searchform.tdoc.linkedInfosId">LinkedInfos:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['infoId']"
+                                     [settings]="settingsSelectInfo"
+                                     [texts]="textsSelectInfo"
+                                     (onAdded)="joinElementChanged($event, joinName, idx, true)"
+                                     (onRemoved)="joinElementChanged($event, joinName, idx, false)"
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                     required="required"
+                                     formControlName="{{joinName + 'Id' + idx}}"
+                                     ngDefaultControl></ss-multiselect-dropdown>
         </div>
     </ng-template>
 
