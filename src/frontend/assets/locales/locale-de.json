@@ -280,6 +280,7 @@
     "label.dashboardColumn.rated": "Bewerted",
     "label.dashboardColumn.rejected": "Aussortiert",
     "label.dashboardColumn.objectDetectionDone": "Bilderkennung abgeschlossen",
+    "label.linkedInfosRefDetails": "Details:",
     "label.tdoc.geoLoc": "Zentrums-Koordinate:",
     "label.tdoc.geoLocArea": "Area-Koordinaten (Gpx):",
     "label.tdoc.geoLocSource": "Ortssuche:",

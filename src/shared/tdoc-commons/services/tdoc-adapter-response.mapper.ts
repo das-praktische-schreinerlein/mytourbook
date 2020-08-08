@@ -142,6 +142,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['info_shortdesc_txt'] = BeanUtils.getValue(props, 'tdocinfo.shortDesc');
         values['info_publisher_s'] = BeanUtils.getValue(props, 'tdocinfo.publisher');
         values['info_reference_s'] = BeanUtils.getValue(props, 'tdocinfo.reference');
+        values['info_tif_ref_details_s'] = BeanUtils.getValue(props, 'tdocinfo.referenceDetails');
+        values['info_lif_ref_details_s'] = BeanUtils.getValue(props, 'tdocinfo.referenceDetails');
         values['info_type_s'] = BeanUtils.getValue(props, 'tdocinfo.type');
 
         return values;
@@ -170,7 +172,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     for (let idx = 0; idx < infos.length; idx++) {
                         infosSrc.push('type=subinfo' + this._fieldSeparator +
                             'name=' + infos[idx].name + this._fieldSeparator +
-                            'refId=' + infos[idx].refId + this._fieldSeparator);
+                            'refId=' + infos[idx].refId + this._fieldSeparator +
+                            'refDetails=' + infos[idx].refDetails);
                     }
 
                     result['linkedinfos_txt'] = infosSrc.join(this._objectSeparator);
@@ -455,6 +458,16 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         infoValues['publisher'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_publisher_s', undefined);
         infoValues['reference'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_reference_s', undefined);
         infoValues['type'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_type_s', undefined);
+        infoValues['referenceDetails'] = undefined;
+        for (const refDetail of [this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_tif_ref_details_s', undefined),
+            this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_lif_ref_details_s', undefined)]) {
+            if (refDetail === undefined) {
+                continue;
+            }
+            infoValues['referenceDetails'] = infoValues['referenceDetails'] || '';
+            infoValues['referenceDetails'] += refDetail;
+        }
+
 
         let infoSet = false;
         for (const field in infoValues) {

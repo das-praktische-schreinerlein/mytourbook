@@ -337,6 +337,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 const newIdx = idx + 1;
                 this.editFormGroup.registerControl(joinName + 'Id' + newIdx, this.fb.control(undefined, undefined));
                 this.editFormGroup.registerControl(joinName + 'Full' + newIdx, this.fb.control(undefined, undefined));
+                this.editFormGroup.registerControl(joinName + 'RefDetails' + newIdx, this.fb.control(undefined, undefined));
                 indexes.push(newIdx);
             }
         }
@@ -564,12 +565,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         const routeJoinIndexes = this.joinIndexes[joinName];
         for (let idx = 1; idx <= routeJoinIndexes.length; idx ++) {
             const refId = this.getStringFormValue(values, joinName + 'Id' + idx);
-            const type = this.getStringFormValue(values, joinName + 'Type' + idx);
+            const refDetails = this.getStringFormValue(values, joinName + 'RefDetails' + idx);
             if (refId !== undefined && refId !== 'undefined') {
                 joins.push({
                     tdoc_id: this.record.id,
                     name: 'dummy',
                     refId: refId,
+                    refDetails: refDetails,
                     type: 'dummy'
                 })
             }
@@ -620,10 +622,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         for (; idx <= joinRecords.length; idx ++) {
             indexes.push(idx);
             valueConfig[joinName + 'Id' + idx] = [joinRecords[idx - 1].refId];
+            valueConfig[joinName + 'RefDetails' + idx] = [joinRecords[idx - 1].refDetails];
         }
 
         indexes.push(idx);
         valueConfig[joinName + 'Id' + idx] = [];
+        valueConfig[joinName + 'RefDetails' + idx] = [];
         this.joinIndexes[joinName] = indexes;
     }
 

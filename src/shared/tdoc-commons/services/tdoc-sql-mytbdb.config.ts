@@ -2353,7 +2353,7 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'linkedinfos',
                     sql: '(SELECT CONCAT("type=", COALESCE(if_typ, "null"), ":::name=", COALESCE(if_name, "null"),' +
-                        '    ":::refId=", CAST(info.if_id AS CHAR))' +
+                        '    ":::refId=", CAST(info.if_id AS CHAR), ":::refDetails=", COALESCE(tour_info.tif_reference_details, "null"))' +
                         '  AS linkedinfos' +
                         '  FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id WHERE tour_info.t_id IN (:id)' +
                         '  ORDER BY if_name) ',
@@ -3392,7 +3392,8 @@ export class TourDocSqlMytbDbConfig {
                 {
                     profile: 'linkedinfos',
                     sql: '(SELECT CONCAT("type=", COALESCE(if_typ, "null"), ":::name=", COALESCE(if_name, "null"),' +
-                        '    ":::refId=", CAST(info.if_id AS CHAR))' +
+                        '    ":::refId=", CAST(info.if_id AS CHAR),' +
+                        '    ":::refDetails=", COALESCE(location_info.lif_reference_details, "null"))' +
                         '  AS linkedinfos' +
                         '  FROM info INNER JOIN location_info ON location_info.if_id = info.if_id WHERE location_info.l_id IN (:id)' +
                         '  ORDER BY if_name) ',
@@ -4126,12 +4127,13 @@ export class TourDocSqlMytbDbConfig {
                     from: 'LEFT JOIN location_info ON info.if_id=location_info.if_id ' +
                         'LEFT JOIN location lifl ON location_info.l_id=lifl.l_id OR info.l_id=lifl.l_id ',
                     triggerParams: ['loc_id_i', 'loc_id_is', 'loc_lochirarchie_txt'],
-                    groupByFields: ['lifl.l_id', 'lifl.l_name']
+                    groupByFields: ['lifl.l_id', 'lifl.l_name',
+                        'GROUP_CONCAT(DISTINCT COALESCE(lifl.lif_reference_details, "") ORDER BY lifl.lif_reference_details SEPARATOR ", ") AS lif_ref_details']
                 },
                 {
                     from: 'LEFT JOIN tour_info tift ON info.if_id = tift.if_id',
                     triggerParams: ['route_id_i', 'route_id_is'],
-                    groupByFields: []
+                    groupByFields: ['GROUP_CONCAT(DISTINCT COALESCE(tift.tif_reference_details, "") ORDER BY tift.tif_reference_details SEPARATOR ", ") AS tif_ref_details']
                 },
                 {
                     from:
@@ -4501,6 +4503,8 @@ export class TourDocSqlMytbDbConfig {
                 info_desc_txt: 'if_meta_desc',
                 info_shortdesc_txt: 'if_meta_shortdesc',
                 info_reference_s: 'if_reference',
+                info_tif_ref_details_s: 'tif_ref_details',
+                info_lif_ref_details_s: 'lif_ref_details',
                 info_publisher_s: 'if_publisher',
                 info_type_s: 'subtype',
                 keywords_txt: 'if_keywords',
@@ -4953,14 +4957,16 @@ export class TourDocSqlMytbDbConfig {
                     baseTableIdField: 'l_id',
                     joinTable: 'location_info',
                     joinFieldMappings: {
-                        'if_id': 'refId'
+                        'if_id': 'refId',
+                        'lif_reference_details': 'refDetails'
                     }
                 },
                 'route': {
                     baseTableIdField: 't_id',
                     joinTable: 'tour_info',
                     joinFieldMappings: {
-                        'if_id': 'refId'
+                        'if_id': 'refId',
+                        'tif_reference_details': 'refDetails'
                     }
                 }
             }

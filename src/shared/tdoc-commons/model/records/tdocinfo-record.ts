@@ -17,6 +17,7 @@ export interface TourDocInfoRecordType extends BaseEntityRecordType {
     shortDesc: string;
     publisher: string;
     reference: string;
+    referenceDetails: string;
     type: string;
 }
 
@@ -24,9 +25,10 @@ export class TourDocInfoRecord extends BaseEntityRecord implements TourDocInfoRe
     static infoFields = {
         name: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(true)),
         desc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.FULLTEXT, new DescValidationRule(false)),
-        shortDesc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new DescValidationRule(false)),
+        shortDesc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.FULLTEXT, new DescValidationRule(false)),
         publisher: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new DescValidationRule(false)),
         reference: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new DescValidationRule(false)),
+        referenceDetails: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new DescValidationRule(false)),
         type: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new KeyParamsValidationRule(true)),
         tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
@@ -36,6 +38,7 @@ export class TourDocInfoRecord extends BaseEntityRecord implements TourDocInfoRe
     shortDesc: string;
     publisher: string;
     reference: string;
+    referenceDetails: string;
     type: string;
     tdoc_id: string;
 
@@ -46,6 +49,7 @@ export class TourDocInfoRecord extends BaseEntityRecord implements TourDocInfoRe
             '  type: ' + this.type + ',\n' +
             '  publisher: ' + this.publisher + ',\n' +
             '  reference: ' + this.reference + ',\n' +
+            '  referenceDetails: ' + this.referenceDetails + ',\n' +
             '  shortDesc: ' + this.shortDesc + ',\n' +
             '  desc: ' + this.desc + ',\n' +
             '  tdoc_id: ' + this.tdoc_id + '' +

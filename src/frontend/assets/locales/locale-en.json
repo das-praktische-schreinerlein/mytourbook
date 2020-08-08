@@ -386,6 +386,7 @@
     "label.dashboardColumn.rated": "rated",
     "label.dashboardColumn.rejected": "rejected",
     "label.dashboardColumn.objectDetectionDone": "objectdetection finished",
+    "label.linkedInfosRefDetails": "details:",
     "label.odimgobject.detector.tfjs_cocossd_mobilenet_v1": "coco_mobilenet_v1",
     "label.odimgobject.detector.tfjs_cocossd_mobilenet_v2": "coco_mobilenet_v2",
     "label.odimgobject.detector.tfjs_cocossd_lite_mobilenet_v2": "coco_lite_mobilenet_v2",
