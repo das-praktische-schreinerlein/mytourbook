@@ -13,7 +13,7 @@ export const TourDocInfoRecordSchema = new Schema({
         shortDesc: {type: 'string'},
         publisher: {type: 'string'},
         reference: {type: 'string'},
-        referenceDetails: {type: 'string'},
+        linkedDetails: {type: 'string'},
         type: {type: 'string'},
         tdoc_id: {type: 'string', indexed: true}
     }

@@ -10,18 +10,17 @@ import {
     IdValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-// tslint:disable-next-line:no-empty-interface
 export interface TourDocLinkedInfoRecordType extends BaseJoinRecordType {
-    refDetails: string;
+    linkedDetails: string;
 }
 
 export class TourDocLinkedInfoRecord extends BaseJoinRecord implements TourDocLinkedInfoRecordType {
     static infoFields = {...BaseJoinRecord.joinFields,
-        refDetails: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new DescValidationRule(false)),
+        linkedDetails: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new DescValidationRule(false)),
         tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
-    refDetails: string;
+    linkedDetails: string;
     tdoc_id: string;
 
     getMediaId(): string {
@@ -34,7 +33,7 @@ export class TourDocLinkedInfoRecord extends BaseJoinRecord implements TourDocLi
             '  refId: ' + this.refId + '\n' +
             '  name: ' + this.name + ',\n' +
             '  type: ' + this.type + ',\n' +
-            '  refDetails: ' + this.refDetails + ',\n' +
+            '  linkedDetails: ' + this.linkedDetails + ',\n' +
             '  tdoc_id: ' + this.tdoc_id + '' +
             '}';
     }

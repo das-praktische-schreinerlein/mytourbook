@@ -11,7 +11,7 @@ export const TourDocLinkedInfoRecordSchema = new Schema({
         type: {type: 'string'},
         name: {type: 'string'},
         refId: {type: 'string', indexed: true},
-        refDetails: {type: 'string'},
+        linkedDetails: {type: 'string'},
         tdoc_id: {type: 'string', indexed: true}
     }
 });

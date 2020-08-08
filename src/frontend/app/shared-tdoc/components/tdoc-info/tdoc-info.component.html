@@ -3,8 +3,8 @@
         <ng-container [ngSwitch]="tdocinfo.type">
             <ng-container *ngSwitchCase="'if_1'">
                 <div *ngIf="tdocinfo.reference !== undefined && tdocinfo.reference.length > 0" class="entry"><div class="label">Basis-URL:</div><div class="value"><a href="{{tdocinfo.reference}}" target="_blank" nofollow>{{tdocinfo.reference}}</a></div></div>
-                <ng-container *ngIf="tdocinfo.referenceDetails !== undefined && tdocinfo.referenceDetails.length > 0">
-                    <div *ngFor="let url of tdocinfo.referenceDetails.split(', ')" class="entry"><div class="label">Detail-URL:</div><div class="value"><a href="{{url}}" target="_blank" nofollow>{{url}}</a></div></div>
+                <ng-container *ngIf="tdocinfo.linkedDetails !== undefined && tdocinfo.linkedDetails.length > 0">
+                    <div *ngFor="let url of tdocinfo.linkedDetails.split(', ')" class="entry"><div class="label">Detail-URL:</div><div class="value"><a href="{{url}}" target="_blank" nofollow>{{url}}</a></div></div>
                 </ng-container>
                 <div *ngIf="!small && tdocinfo.shortDesc !== undefined && tdocinfo.shortDesc.length > 0" class="entry"><div class="label">Kurzbeschreibung:</div><div class="value">{{tdocinfo.shortDesc}}</div></div>
                 <div *ngIf="!small && tdocinfo.publisher !== undefined && tdocinfo.publisher.length > 0" class="entry"><div class="label">Autor:</div><div class="value">{{tdocinfo.publisher}}</div></div>
@@ -12,14 +12,14 @@
 
             <ng-container *ngSwitchCase="'if_2'">
                 <div *ngIf="!small && tdocinfo.reference !== undefined && tdocinfo.reference.length > 0" class="entry"><div class="label">ISBN:</div><div class="value"><a href="{{tdocinfo.reference}}" target="_blank" nofollow>{{tdocinfo.reference}}</a></div></div>
-                <div *ngIf="tdocinfo.referenceDetails !== undefined && tdocinfo.referenceDetails.length > 0" class="entry"><div class="label">Seiten:</div><div class="value">{{tdocinfo.referenceDetails}}</div></div>
+                <div *ngIf="tdocinfo.linkedDetails !== undefined && tdocinfo.linkedDetails.length > 0" class="entry"><div class="label">Seiten:</div><div class="value">{{tdocinfo.linkedDetails}}</div></div>
                 <div *ngIf="!small && tdocinfo.shortDesc !== undefined && tdocinfo.shortDesc.length > 0" class="entry"><div class="label">Kurzbeschreibung:</div><div class="value">{{tdocinfo.shortDesc}}</div></div>
                 <div *ngIf="!small && tdocinfo.publisher !== undefined && tdocinfo.publisher.length > 0" class="entry"><div class="label">Autor/Verlag:</div><div class="value">{{tdocinfo.publisher}}</div></div>
             </ng-container>
 
             <ng-container *ngSwitchDefault>
                 <div *ngIf="!small && tdocinfo.reference !== undefined && tdocinfo.reference.length > 0" class="entry"><div class="label">Referenz:</div><div class="value"><a href="{{tdocinfo.reference}}" target="_blank" nofollow>{{tdocinfo.reference}}</a></div></div>
-                <div *ngIf="tdocinfo.referenceDetails !== undefined && tdocinfo.referenceDetails.length > 0" class="entry"><div class="label">Detail-Referenzen:</div><div class="value">{{tdocinfo.referenceDetails}}</div></div>
+                <div *ngIf="tdocinfo.linkedDetails !== undefined && tdocinfo.linkedDetails.length > 0" class="entry"><div class="label">Detail-Referenzen:</div><div class="value">{{tdocinfo.linkedDetails}}</div></div>
                 <div *ngIf="!small && tdocinfo.shortDesc !== undefined && tdocinfo.shortDesc.length > 0" class="entry"><div class="label">Kurzbeschreibung:</div><div class="value">{{tdocinfo.shortDesc}}</div></div>
                 <div *ngIf="!small && tdocinfo.publisher !== undefined && tdocinfo.publisher.length > 0" class="entry"><div class="label">Herausgeber:</div><div class="value">{{tdocinfo.publisher}}</div></div>
             </ng-container>
