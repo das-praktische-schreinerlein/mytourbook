@@ -154,6 +154,31 @@ CREATE TABLE news (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
+-- info-data
+--
+DROP TABLE IF EXISTS info;
+CREATE TABLE IF NOT EXISTS info (
+  if_id int(11) NOT NULL AUTO_INCREMENT,
+  l_id int(11) DEFAULT null,
+  kw_id int(11) DEFAULT NULL,
+  countRoutes int(11) DEFAULT 0,
+  countLocations int(11) DEFAULT 0,
+  if_gesperrt int(2) DEFAULT 0,
+  if_keywords text COLLATE latin1_general_ci,
+  if_meta_desc text COLLATE latin1_general_ci,
+  if_meta_shortdesc varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  if_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  if_publisher varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  if_typ int(11) DEFAULT NULL,
+  if_url varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  PRIMARY KEY (if_id),
+  KEY idx_if__if_id (if_id),
+  KEY idx_if__kw_id (kw_id),
+  KEY idx_if__l_id (l_id),
+  KEY idx_if__if_gesperrt (if_gesperrt)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+--
 -- trip-data
 --
 DROP TABLE IF EXISTS trip;
@@ -214,6 +239,7 @@ CREATE TABLE location (
   l_persons text COLLATE latin1_general_ci,
   l_objects text COLLATE latin1_general_ci,
   countImages int(11) DEFAULT 0,
+  countInfos int(11) DEFAULT 0,
   countNews int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
   countTrips int(11) DEFAULT 0,
@@ -222,6 +248,18 @@ CREATE TABLE location (
   KEY l_id (l_id),
   KEY l_gps_lat (l_gps_lat),
   KEY l_gps_lon (l_gps_lon)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+DROP TABLE IF EXISTS location_info;
+CREATE TABLE IF NOT EXISTS location_info (
+  lif_id int(11) NOT NULL AUTO_INCREMENT,
+  if_id int(11) NOT NULL,
+  l_id int(11) NOT NULL,
+  lif_linked_details varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  PRIMARY KEY (lif_id),
+  KEY idx_lif__lif_id (lif_id),
+  KEY idx_lif__if_id (if_id),
+  KEY idx_lif__l_id (l_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
@@ -265,6 +303,7 @@ CREATE TABLE destination (
   d_typ int(11) DEFAULT NULL,
   d_dateshow date DEFAULT NULL,
   countImages int(11) DEFAULT 0,
+  countInfos int(11) DEFAULT 0,
   countNews int(11) DEFAULT 0,
   countRoutes int(11) DEFAULT 0,
   countTrips int(11) DEFAULT 0,
@@ -344,6 +383,7 @@ CREATE TABLE tour (
   t_meta_shortdesc_html text COLLATE latin1_general_ci,
   t_dateshow date DEFAULT NULL,
   countImages int(11) DEFAULT 0,
+  countInfos int(11) DEFAULT 0,
   countNews int(11) DEFAULT 0,
   countTrips int(11) DEFAULT 0,
   countTracks int(11) DEFAULT 0,
@@ -355,6 +395,18 @@ CREATE TABLE tour (
   KEY t_gps_lat (t_gps_lat),
   KEY t_gps_lon (t_gps_lon)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+DROP TABLE IF EXISTS tour_info;
+CREATE TABLE IF NOT EXISTS tour_info (
+  tif_id int(11) NOT NULL AUTO_INCREMENT,
+  if_id int(11) NOT NULL,
+  t_id int(11) NOT NULL,
+  tif_linked_details varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  PRIMARY KEY (tif_id),
+  KEY idx_tif__tif_id (tif_id),
+  KEY idx_tif__if_id (if_id),
+  KEY idx_tif__t_id (t_id)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- track-data

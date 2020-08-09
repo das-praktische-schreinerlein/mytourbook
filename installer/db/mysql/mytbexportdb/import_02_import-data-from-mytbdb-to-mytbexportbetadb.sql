@@ -38,6 +38,32 @@ SET
                            COALESCE(l_keywords, ''), ' ');
 
 -- ##################
+-- import info
+-- ##################
+INSERT INTO info (if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url)
+    SELECT if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_name, if_publisher, if_typ, if_url
+    FROM testmytbdb.info;
+
+-- calc keywords
+UPDATE info toupdate,
+ (SELECT info.if_id AS if_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS if_keywords
+  FROM info LEFT JOIN testmytbdb.info_keyword mjoin ON info.if_id=mjoin.if_id LEFT JOIN testmytbdb.keyword mk ON mjoin.kw_id=mk.kw_id
+   GROUP BY info.if_id) grouped
+SET toupdate.if_keywords=grouped.if_keywords
+WHERE toupdate.if_id=grouped.if_id;
+
+-- remove todos
+UPDATE info SET if_meta_desc=REPLACE(if_meta_desc, 'TODODESC', '');
+UPDATE info SET if_meta_shortdesc=REPLACE(if_meta_shortdesc, 'TODODESC', '');
+
+-- ##################
+-- import-locationinfos
+-- ##################
+INSERT into location_info (lif_id, if_id, l_id, lif_linked_details)
+    SELECT lif_id, if_id, l_id, lif_linked_details
+    FROM testmytbdb.location_info where l_id IS NOT NULL AND if_ID IS NOT NULL;
+
+-- ##################
 -- import news
 -- ##################
 INSERT INTO news (n_id, w_id, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords)
@@ -185,6 +211,13 @@ INSERT into kategorie_tour (t_id, k_id)
 INSERT into kategorie_tour (t_id, k_id)
     SELECT t_id, k_id
     FROM testmytbdb.kategorie where k_id IS NOT NULL AND t_ID IS NOT NULL;
+
+-- ##################
+-- import-routeinfos
+-- ##################
+INSERT into tour_info (tif_id, if_id, t_id, tif_linked_details)
+    SELECT tif_id, if_id, t_id, tif_linked_details
+    FROM testmytbdb.tour_info where t_id IS NOT NULL AND if_ID IS NOT NULL;
 
 -- ##################
 -- import-destinations

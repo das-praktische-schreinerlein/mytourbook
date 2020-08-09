@@ -1329,7 +1329,7 @@ export class TourDocSqlMytbDbConfig {
                 'kategorie.tr_id',
                 'kategorie.l_id',
                 'COALESCE(persons.o_name, realobjects.o_name, i_meta_name, k_name) AS i_meta_name',
-                'CONCAT(COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""), " ", l_name) AS html',
+                'CONCAT(COALESCE(i_meta_name,""), " ", COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""), " ", l_name) AS html',
                 'i_gesperrt',
                 'i_date',
                 'DATE_FORMAT(i_date, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -1693,7 +1693,7 @@ export class TourDocSqlMytbDbConfig {
                 news_id_is: '"666dummy999"',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(COALESCE(i_meta_name,""), " ", l_name)'
+                html: 'CONCAT(COALESCE(i_meta_name,""), " ", COALESCE(persons.o_name,""), " ", COALESCE(realobjects.o_name,""), " ", l_name)'
             },
             // TODO: for import
             writeMapping: {
@@ -2425,7 +2425,7 @@ export class TourDocSqlMytbDbConfig {
                 'tour.t_id',
                 'tour.l_id',
                 't_name',
-                'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc,""), " ", l_name) AS html',
+                'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", l_name) AS html',
                 't_datevon AS t_date_show',
                 't_datevon',
                 'DATE_FORMAT(t_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -2803,7 +2803,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_id_is: 'tour.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(t_name, " ", COALESCE(t_meta_shortdesc,""), " ", l_name)'
+                html: 'CONCAT(t_name, " ", COALESCE(t_desc_gebiet, ""), " ", COALESCE(t_meta_shortdesc, ""), " ", l_name)'
             },
             writeMapping: {
                 'tour.l_id': ':loc_id_i:',
@@ -2912,7 +2912,13 @@ export class TourDocSqlMytbDbConfig {
             optionalGroupBy: [
                 {
                     from: 'LEFT JOIN tour dtour ON destination.d_id in (MD5(CONCAT(dtour.l_id, "_", dtour.t_desc_gebiet, "_", dtour.t_desc_ziel, "_", dtour.t_typ)))',
-                    triggerParams: ['route_id_i', 'route_id_is'],
+                    triggerParams: ['route_id_i', 'route_id_is', 'info_id_i', 'info_id_is'],
+                    groupByFields: []
+                },
+                {
+                    from: 'LEFT JOIN tour_info ON dtour.t_id=tour_info.t_id ' +
+                        'LEFT JOIN info tif ON tour_info.if_id=tif.if_id ',
+                    triggerParams: ['info_id_i', 'info_id_is'],
                     groupByFields: []
                 },
                 {
@@ -2973,7 +2979,7 @@ export class TourDocSqlMytbDbConfig {
                 'destination.d_id',
                 'destination.l_id',
                 'd_name',
-                'CONCAT(d_name, " ", l_name) AS html',
+                'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", l_name) AS html',
                 'd_datevon AS d_date_show',
                 'd_datevon',
                 'DATE_FORMAT(d_datevon, GET_FORMAT(DATE, "ISO")) AS dateonly',
@@ -3094,6 +3100,10 @@ export class TourDocSqlMytbDbConfig {
                 'done_ss': {
                     selectField: 'CONCAT("DONE", (d_datevon IS NOT NULL))',
                     orderBy: 'value asc'
+                },
+                'info_id_is': {
+                    filterFields: ['tif.if_id'],
+                    action: AdapterFilterActions.IN_NUMBER
                 },
                 'keywords_txt': {
                     selectSql: 'SELECT 0 AS count, ' +
@@ -3259,7 +3269,7 @@ export class TourDocSqlMytbDbConfig {
                 loc_id_is: 'destination.l_id',
                 loc_lochirarchie_ids_txt: 'location.l_id',
                 l_lochirarchietxt: 'location.l_name',
-                html: 'CONCAT(d_name, ""), " ", l_name)'
+                html: 'CONCAT(d_name, " ", COALESCE(d_desc_gebiet, ""), " ", l_name)'
             },
             writeMapping: {
             },
@@ -4124,16 +4134,22 @@ export class TourDocSqlMytbDbConfig {
             selectFrom: 'info LEFT JOIN location ON location.l_id = info.l_id',
             optionalGroupBy: [
                 {
-                    from: 'LEFT JOIN location_info ON info.if_id=location_info.if_id ' +
-                        'LEFT JOIN location lifl ON location_info.l_id=lifl.l_id OR info.l_id=lifl.l_id ',
+                    from: 'LEFT JOIN location_info lif ON info.if_id=lif.if_id ' +
+                        'LEFT JOIN location lifl ON lif.l_id=lifl.l_id OR info.l_id=lifl.l_id ',
                     triggerParams: ['loc_id_i', 'loc_id_is', 'loc_lochirarchie_txt'],
                     groupByFields: ['lifl.l_id', 'lifl.l_name',
-                        'GROUP_CONCAT(DISTINCT COALESCE(lifl.lif_linked_details, "") ORDER BY lifl.lif_linked_details SEPARATOR ", ") AS lif_ref_details']
+                        'GROUP_CONCAT(DISTINCT COALESCE(lif.lif_linked_details, "") ORDER BY lif.lif_linked_details SEPARATOR ", ") AS lif_ref_details']
                 },
                 {
-                    from: 'LEFT JOIN tour_info tift ON info.if_id = tift.if_id',
-                    triggerParams: ['route_id_i', 'route_id_is'],
+                    from: 'LEFT JOIN tour_info tift ON info.if_id = tift.if_id ' +
+                        'LEFT JOIN tour tiftour ON tift.t_id = tiftour.t_id',
+                    triggerParams: ['route_id_i', 'route_id_is', 'destination_id_s', 'destination_id_ss'],
                     groupByFields: ['GROUP_CONCAT(DISTINCT COALESCE(tift.tif_linked_details, "") ORDER BY tift.tif_linked_details SEPARATOR ", ") AS tif_ref_details']
+                },
+                {
+                    from: 'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(tiftour.l_id, "_", tiftour.t_desc_gebiet, "_", tiftour.t_desc_ziel, "_", tiftour.t_typ)))',
+                    triggerParams: ['destination_id_s', 'destination_id_ss'],
+                    groupByFields: []
                 },
                 {
                     from:
@@ -4217,7 +4233,8 @@ export class TourDocSqlMytbDbConfig {
                 'info.if_name',
                 'if_publisher',
                 'info.if_url as if_reference',
-                'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,"")) AS html',
+                'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), ' +
+                '     " ", COALESCE(if_url,"")) AS html',
                 'CAST(location.l_geo_latdeg AS CHAR(50)) AS if_gps_lat',
                 'CAST(location.l_geo_longdeg AS CHAR(50)) AS if_gps_lon',
                 'CONCAT(location.l_geo_latdeg, ",", location.l_geo_longdeg) AS if_gps_loc',
@@ -4452,8 +4469,8 @@ export class TourDocSqlMytbDbConfig {
                 unRatedChildren: '"666dummy999"',
                 // common
                 id: 'info.if_id',
-                destination_id_s: '"666dummy999"',
-                destination_id_ss: '"666dummy999"',
+                destination_id_s: 'dt.d_id',
+                destination_id_ss: 'dt.d_id',
                 info_id_i: 'info.if_id',
                 info_id_is: 'info.if_id',
                 route_id_i: 'tift.t_id',
@@ -4470,7 +4487,8 @@ export class TourDocSqlMytbDbConfig {
                 loc_id_is: 'info.l_id',
                 loc_lochirarchie_ids_txt: 'lifl.l_id',
                 l_lochirarchietxt: 'lifl.l_name',
-                html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""))'
+                html: 'CONCAT(if_name, " ", COALESCE(if_meta_shortdesc,""), " ", COALESCE(if_meta_desc,""), " ", COALESCE(if_publisher,""), ' +
+                    '     " ", COALESCE(if_url,""))'
             },
             writeMapping: {
                 'info.l_id': ':loc_id_i:',
