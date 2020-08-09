@@ -1,11 +1,184 @@
 <dataConfig>
     <dataSource type="JdbcDataSource"
                 driver="com.mysql.jdbc.Driver"
-                url="jdbc:mysql://localhost:3306/testmytbexportproddb"
-                user="testmytbexportproddb"
-                password="testmytbexportproddb"/>
+                url="jdbc:mysql://localhost:3306/mytbexportproddb"
+                user="root"
+                password=""/>
 
     <document>
+
+        <entity name="info"
+                pk="id"
+                query="
+                    select distinct info.if_id,
+                                    'INFO'                                                   as type,
+                                    concat('if_', info.if_typ)                               as subtype,
+                                    concat('INFO', '_', info.if_id)                          as id,
+                                    info.l_id,
+                                    info.countRoutes,
+                                    info.countLocations,
+                                    if_publisher,
+                                    if_typ,
+                                    if_url,
+                                    if_name,
+                                    if_meta_shortdesc,
+                                    if_meta_desc,
+                                    concat(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) as html,
+                                    if_keywords,
+                                    l_lochirarchietxt,
+                                    l_lochirarchieids
+                    from info left join location on info.l_id = location.l_id
+                    order by if_name"
+                deltaImportQuery="
+                    select distinct info.if_id,
+                                    'INFO'                                                   as type,
+                                    concat('if_', info.if_typ)                               as subtype,
+                                    concat('INFO', '_', info.if_id)                          as id,
+                                    info.l_id,
+                                    info.countRoutes,
+                                    info.countLocations,
+                                    if_publisher,
+                                    if_typ,
+                                    if_url,
+                                    if_name,
+                                    if_meta_shortdesc,
+                                    if_meta_desc,
+                                    concat(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) as html,
+                                    if_keywords,
+                                    l_lochirarchietxt,
+                                    l_lochirarchieids
+                    from info left join location on info.l_id = location.l_id
+                    WHERE info.if_id = '${dih.delta.id}'"
+                deltaQuery="SELECT if_id from info order by if_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="id" name="id"/>
+            <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
+            <field column="if_id" name="info_id_i"/>
+            <field column="if_id" name="info_id_is"/>
+
+            <field column="if_name" name="name_s" stripHTML="true" />
+            <field column="if_name" name="name_txt" stripHTML="true" />
+            <field column="if_publisher" name="info_publisher_s" stripHTML="true" />
+            <field column="if_url" name="info_reference_s" stripHTML="true" />
+            <field column="subtype" name="info_type_s" stripHTML="true" />
+            <field column="if_meta_desc" name="desc_txt" stripHTML="true" />
+            <field column="if_meta_desc" name="desc_md_txt" stripHTML="true" />
+            <field column="if_meta_desc" name="desc_html_txt" />
+            <field column="html" name="html_txt" />
+            <field column="if_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="dateonly" name="dateonly_s" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="subtype" name="subtype_s" />
+            <field column="subtype" name="subtype_ss" />
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countLocations" name="count_locations_i" />
+
+            <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='
+                        (
+                            SELECT
+                               CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                            FROM info
+                            WHERE if_name &lt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
+                            ORDER BY if_name DESC LIMIT 1
+                        )
+                        UNION
+                        (
+                            SELECT
+                                CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                            FROM info
+                            WHERE if_name &gt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
+                            ORDER BY if_name LIMIT 1
+                        )'>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
+            </entity>
+
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                              FROM info
+                              WHERE info.if_id IN (${info.if_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(countLocations AS CHAR)) AS extended_object_properties
+                              FROM info
+                              WHERE info.if_id IN (${info.if_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+            <entity name='tour'
+                    query="
+                        select tour.t_id, tour.d_id, t_keywords, concat('ac_', tour.t_typ) as actiontype
+                          FROM info
+                          INNER JOIN tour_info ON tour_info.if_id = info.if_id
+                          INNER JOIN tour ON tour_info.t_id = tour.t_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id from tour'"
+            >
+                <field column="t_id" name="route_id_i"/>
+                <field column="t_id" name="route_id_is"/>
+                <field column="d_id" name="destination_id_s" />
+                <field column="d_id" name="destination_id_ss" />
+                <field column="actiontype" name="actiontype_s" />
+                <field column="actiontype" name="actiontype_ss" />
+            </entity>
+            <entity name='destination'
+                    query="
+                        select distinct tour.d_id
+                          FROM info
+                          INNER JOIN tour_info ON tour_info.if_id = info.if_id
+                          INNER JOIN tour ON tour_info.t_id = tour.t_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select d_id, t_keywords from tour where t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id from tour'"
+            >
+                <field column="d_id" name="destination_id_s"/>
+                <field column="d_id" name="destination_id_ss"/>
+            </entity>
+            <entity name='location'
+                    query="
+                        select location.l_id, l_lochirarchieids, l_lochirarchietxt
+                          FROM info
+                          INNER JOIN location_info ON location_info.if_id = info.if_id
+                          INNER JOIN location ON location_info.l_id = location.l_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select l_id from location where l_id='${dih.delta.id}'"
+                    deltaQuery="SELECT l_id from location'"
+            >
+                <field column="l_id" name="route_id_i"/>
+                <field column="l_id" name="route_id_is"/>
+                <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+                <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
+                <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+                <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            </entity>
+            <entity name='destination'
+                    query="
+                        select destination.d_id, d_keywords, concat('ac_', destination.d_typ) as actiontype
+                          FROM info
+                          INNER JOIN tour_info ON tour_info.if_id = info.if_id
+                          INNER JOIN tour ON tour_info.t_id = tour.t_id
+                          INNER JOIN destination on destination.d_id=tour.d_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select d_id, d_keywords from destination where d_id='${dih.delta.id}'"
+                    deltaQuery="SELECT d_id from destination"
+            >
+                <field column="destination.d_id" name="destination_id_s" />
+                <field column="destination.d_id" name="destination_id_ss" />
+                <field column="actiontype" name="actiontype_s" />
+                <field column="actiontype" name="actiontype_ss" />
+            </entity>
+        </entity>
+
         <entity name="destination"
                 pk="id"
                 query="
@@ -16,6 +189,7 @@
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
+                           destination.countInfos,
                            destination.countNews,
                            destination.countRoutes,
                            destination.countTracks,
@@ -71,6 +245,7 @@
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
+                           destination.countInfos,
                            destination.countNews,
                            destination.countRoutes,
                            destination.countTracks,
@@ -137,8 +312,6 @@
             <field column="d_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="d_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="d_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="d_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-            <field column="d_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="dateonly" name="dateonly_s" />
             <field column="d_datevon" name="date_dt" />
@@ -188,6 +361,7 @@
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
             <field column="countImages" name="count_images_i" />
+            <field column="countInfos" name="count_infos_i" />
             <field column="countNews" name="count_news_i" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
@@ -227,6 +401,10 @@
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(countInfos AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
                         SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
@@ -262,8 +440,6 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
-                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='bericht'
                     query="
@@ -301,9 +477,6 @@
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
-                <field column="year" name="year_is" />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='tour'
                     query="select t_id from tour where d_id in ('${destination.d_id}')"
@@ -311,6 +484,20 @@
                     deltaQuery="SELECT t_id from tour'"
             >
                 <field column="t_id" name="route_id_is"/>
+            </entity>
+            <entity name='info'
+                    query="
+                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
+                          FROM tour
+                          INNER JOIN tour_info ON tour_info.t_id = tour.t_id
+                          INNER JOIN info ON tour_info.if_id = info.if_id
+                          WHERE tour.d_id IN ('${destination.d_id}')"
+                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id from info'"
+            >
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+                <field column="tif_ref_details" name="info_tif_linked_details_s"/>
             </entity>
         </entity>
 
@@ -462,7 +649,6 @@
             <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="k_datevon" name="date_dt" />
@@ -473,7 +659,6 @@
             <field column="done" name="done_ss" />
             <field column="week" name="week_is" />
             <field column="month" name="month_is" />
-            <field column="year" name="year_is" />
             <field column="k_gps_lat" name="geo_lat_s" />
             <field column="k_gps_lon" name="geo_lon_s" />
             <field column="k_gps_loc" name="geo_loc_p" type="location" />
@@ -562,8 +747,6 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
-                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='tour'
                     query="SELECT tour.t_id, d_id
@@ -600,6 +783,7 @@
                            tour.d_id,
                            tour.l_id,
                            tour.countImages,
+                           tour.countInfos,
                            tour.countNews,
                            tour.countTracks,
                            tour.countTrips,
@@ -665,6 +849,7 @@
                            tour.d_id,
                            tour.l_id,
                            tour.countImages,
+                           tour.countInfos,
                            tour.countNews,
                            tour.countTracks,
                            tour.countTrips,
@@ -741,7 +926,6 @@
             <field column="t_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="t_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="t_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="dateonly" name="dateonly_s" />
@@ -793,6 +977,7 @@
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
             <field column="countImages" name="count_images_i" />
+            <field column="countInfos" name="count_infos_i" />
             <field column="countNews" name="count_news_i" />
             <field column="countTracks" name="count_tracks_i" />
             <field column="countTrips" name="count_trips_i" />
@@ -861,8 +1046,6 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
-                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='bericht'
                     query="
@@ -899,9 +1082,6 @@
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
-                <field column="year" name="year_is" />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='destination'
                     query="select d_id from destination where d_id = '${route.d_id}'"
@@ -909,6 +1089,20 @@
                     deltaQuery="SELECT d_id from destination'"
             >
                 <field column="d_id" name="destination_id_ss"/>
+            </entity>
+            <entity name='info'
+                    query="
+                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
+                          FROM tour
+                          INNER JOIN tour_info ON tour_info.t_id = tour.t_id
+                          INNER JOIN info ON tour_info.if_id = info.if_id
+                          WHERE tour.t_id IN (${route.t_id})"
+                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id from info'"
+            >
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+                <field column="tif_ref_details" name="info_tif_linked_details_s"/>
             </entity>
         </entity>
 
@@ -921,6 +1115,7 @@
                            l_id,
                            l_parent_id,
                            location.countImages,
+                           location.countInfos,
                            location.countNews,
                            location.countRoutes,
                            location.countTracks,
@@ -950,6 +1145,7 @@
                            concat('LOCATION', '_', l_id)                                                                  as id,
                            l_id,
                            location.countImages,
+                           location.countInfos,
                            location.countNews,
                            location.countRoutes,
                            location.countTracks,
@@ -988,7 +1184,6 @@
             <field column="l_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="l_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="l_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="l_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="l_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="l_gps_lat" name="geo_lat_s" />
             <field column="l_gps_lon" name="geo_lon_s" />
@@ -1002,6 +1197,7 @@
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="countImages" name="count_images_i" />
+            <field column="countInfos" name="count_infos_i" />
             <field column="countNews" name="count_news_i" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
@@ -1072,8 +1268,6 @@
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
                 <field column="i_url" name="i_fav_url_txt" />
-                <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
 
             <entity name='tour'
@@ -1114,9 +1308,20 @@
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
-                <field column="year" name="year_is" />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
+            </entity>
+            <entity name='info'
+                    query="
+                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(lif_linked_details, '') ORDER BY lif_linked_details SEPARATOR ', ') AS lif_ref_details
+                          FROM location
+                          INNER JOIN location_info ON location_info.l_id = location.l_id
+                          INNER JOIN info ON location_info.if_id = info.if_id
+                          WHERE location.l_id IN (${location.l_id})"
+                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id from info'"
+            >
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+                <field column="lif_ref_details" name="info_lif_linked_details_s"/>
             </entity>
 
         </entity>
@@ -1243,7 +1448,6 @@
             <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="i_gps_lat" name="geo_lat_s" />
@@ -1267,7 +1471,6 @@
             <field column="i_date" name="date_dts" />
             <field column="week" name="week_is" />
             <field column="month" name="month_is" />
-            <field column="year" name="year_is" />
             <field column="i_id" name="i_fav_id_is" />
             <field column="i_date" name="i_fav_i_date_dts" />
             <field column="i_url" name="i_fav_url_txt" />
@@ -1402,7 +1605,6 @@
             <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="v_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="v_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="v_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_gpstracks_basefile" name="gpstracks_basefile_s" />
             <field column="v_gps_lat" name="geo_lat_s" />
@@ -1426,7 +1628,6 @@
             <field column="v_date" name="date_dts" />
             <field column="week" name="week_is" />
             <field column="month" name="month_is" />
-            <field column="year" name="year_is" />
             <field column="v_id" name="v_fav_id_is" />
             <field column="v_date" name="v_fav_v_date_dts" />
             <field column="v_url" name="v_fav_url_txt" />
@@ -1553,7 +1754,6 @@
             <field column="tr_meta_shortdesc_html2" name="desc_html_txt" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="tr_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="tr_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="tr_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="tr_dateshow" name="dateshow_dt" />
             <field column="datesort" name="datesort_dt" />
@@ -1706,14 +1906,11 @@
                 <field column="l_id" name="loc_id_i"/>
                 <field column="l_id" name="loc_id_is"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_datevon" name="date_dts" />
                 <field column="n_id" name="news_id_i"/>
                 <field column="n_id" name="news_id_is"/>
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
-                <field column="year" name="year_is" />
                 <field column="t_id" name="route_id_is"/>
                 <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
                 <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
@@ -1791,7 +1988,7 @@
                     WHERE news.n_id = '${dih.delta.id}'
                     group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2,
                              html, n_keywords"
-                deltaQuery="SELECT n_id from trip order by n_id'"
+                deltaQuery="SELECT n_id from info order by n_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1805,7 +2002,6 @@
             <field column="n_message_html2" name="desc_html_txt" />
             <field column="html" name="html_txt" />
             <field column="n_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-            <field column="n_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="n_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             <field column="n_date" name="dateshow_dt" />
             <field column="n_date" name="datesort_dt" />
@@ -1963,12 +2159,9 @@
             >
                 <field column="l_id" name="loc_id_i"/>
                 <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
-                <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
                 <field column="month" name="month_is" />
-                <field column="year" name="year_is" />
                 <field column="t_id" name="route_id_is"/>
                 <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
                 <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>

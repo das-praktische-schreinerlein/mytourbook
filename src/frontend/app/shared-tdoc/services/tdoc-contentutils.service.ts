@@ -165,6 +165,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['moreFilter'] = 'destination_id_ss:' + id;
             } else if (type === 'TRIP') {
                 filters['moreFilter'] = 'destination_id_ss:' + id;
+            } else if (type === 'INFO') {
+                filters['moreFilter'] = 'destination_id_ss:' + id;
             } else {
                 filters['moreFilter'] = 'destination_id_s:' + id;
             }
