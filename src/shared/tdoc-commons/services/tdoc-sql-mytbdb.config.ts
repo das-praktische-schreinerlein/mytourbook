@@ -5200,7 +5200,8 @@ export class TourDocSqlMytbDbConfig {
                 ],
                 joins: [
                     { table: 'kategorie_tour', fieldReference: 't_id' },
-                    { table: 'tour_keyword', fieldReference: 't_id' }
+                    { table: 'tour_keyword', fieldReference: 't_id' },
+                    { table: 'tour_info', fieldReference: 't_id' }
                 ]
             },
             'location': {
@@ -5208,13 +5209,17 @@ export class TourDocSqlMytbDbConfig {
                 fieldId: 'l_id',
                 referenced: [
                     { table: 'image', fieldReference: 'l_id' },
+                    { table: 'info', fieldReference: 'l_id' },
                     { table: 'kategorie', fieldReference: 'l_id' },
                     { table: 'location', fieldReference: 'l_parent_id' },
                     { table: 'tour', fieldReference: 'l_id' },
                     { table: 'trip', fieldReference: 'l_id' },
                     { table: 'video', fieldReference: 'l_id' }
                 ],
-                joins: []
+                joins: [
+                    { table: 'location_keyword', fieldReference: 'l_id' },
+                    { table: 'location_info', fieldReference: 'l_id' },
+                ]
             },
             'news': {
                 table: 'news',
@@ -5226,7 +5231,11 @@ export class TourDocSqlMytbDbConfig {
                 table: 'info',
                 fieldId: 'if_id',
                 referenced: [],
-                joins: []
+                joins: [
+                    { table: 'info_keyword', fieldReference: 'if_id' },
+                    { table: 'tour_info', fieldReference: 'if_id' },
+                    { table: 'location_info', fieldReference: 'if_id' }
+                ]
             },
             'trip': {
                 table: 'trip',
