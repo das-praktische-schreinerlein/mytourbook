@@ -18,6 +18,8 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
         trip_id_is: 'TRIP',
         news_id_i: 'NEWS',
         news_id_is: 'NEWS',
+        info_id_i: 'INFO',
+        info_id_is: 'INFO',
         loc_id_i: 'LOCATION',
         loc_lochirarchie_ids_txt: 'LOCATION',
         image_id_i: 'IMAGE',

@@ -49,7 +49,9 @@
                     </ng-container>
                 </ng-container>
 
-                <app-tdoc-info [record]="record"></app-tdoc-info>
+                <ng-container *ngIf="record.type === 'INFO'">
+                    <app-tdoc-info [record]="record"></app-tdoc-info>
+                </ng-container>
                 <div id="desc">
                 </div>
                 {{ renderDesc() }}
@@ -58,6 +60,9 @@
                 <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
                 <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
                 <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
+                <ng-container *ngIf="record.type !== 'INFO'">
+                    <app-tdoc-info [record]="record"></app-tdoc-info>
+                </ng-container>
                 <div class="tagcloud-container" *ngIf="record.type === 'LOCATION'">
                     <app-cdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
                                        [label]="'Was kann man hier tun?'"

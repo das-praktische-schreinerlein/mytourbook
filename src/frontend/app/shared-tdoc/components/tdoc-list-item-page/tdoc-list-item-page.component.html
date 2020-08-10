@@ -108,7 +108,7 @@
             </ng-container>
         </div>
         <h5><span class="fx-bg-name">{{listItem.currentRecord.name}}</span></h5>
-        <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
+        <app-tdoc-info [record]="listItem.currentRecord" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
         <div id="desc"></div>
         {{ renderDesc() }}
         <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
@@ -116,6 +116,7 @@
         <app-tdoc-ratetech [record]="listItem.currentRecord"></app-tdoc-ratetech>
         <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
         <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
+        <app-tdoc-info [record]="listItem.currentRecord" *ngIf="listItem.currentRecord.type !== 'INFO'"></app-tdoc-info>
         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>

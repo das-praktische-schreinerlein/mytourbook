@@ -135,7 +135,7 @@
                 </div>
             </div>
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
-            <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
+            <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
             <p class="card-text">
                 {{listItem.currentRecord.descTxt | truncate : 300 }}
             </p>
@@ -145,7 +145,6 @@
             <ngb-accordion #acc="ngbAccordion" activeIds="">
                 <ngb-panel title="Details" i18n-title="title accordion details|Title for details accordion@@accordion.details.tdoc.title">
                     <ng-template ngbPanelContent>
-                        <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
                         <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
                         <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord"></app-tdoc-ratepers-difficulty>
                         <app-tdoc-ratetech [record]="listItem.currentRecord"></app-tdoc-ratetech>
@@ -153,6 +152,7 @@
                         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
                         <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
+                        <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
                         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
                     </ng-template>
                 </ngb-panel>

@@ -225,6 +225,8 @@
     "hrt_keyword": "mit Schlüsselworten:",
     "hrt_fulltext": "enthält:",
     "hrt_moreFilter": "zusätzlich gefiltert nach:",
+    "hrt_info_id_i": "Spezialfilter Info:",
+    "hrt_info_id_is": "Spezialfilter Info:",
     "hrt_track_id_i": "Spezialfilter Track:",
     "hrt_trip_id_i": "Spezialfilter Trip:",
     "hrt_trip_id_is": "Spezialfilter Trips:",

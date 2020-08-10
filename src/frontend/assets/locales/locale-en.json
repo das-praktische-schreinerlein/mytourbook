@@ -331,6 +331,8 @@
     "hrt_keyword": "with keywords:",
     "hrt_fulltext": "contains:",
     "hrt_moreFilter": "additionally filtered by:",
+    "hrt_info_id_i": "special filter info:",
+    "hrt_info_id_is": "special filter info:",
     "hrt_track_id_i": "special filter track:",
     "hrt_trip_id_i": "special filter trip:",
     "hrt_trip_id_is": "special filter trip:",

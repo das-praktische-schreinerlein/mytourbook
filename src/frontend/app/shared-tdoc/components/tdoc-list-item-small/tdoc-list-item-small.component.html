@@ -90,12 +90,12 @@
                 </ng-container>
             </div>
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
-            <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
             <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
             <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
             <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
+            <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
             <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
         </div>
     </div>
