@@ -46,6 +46,7 @@ import {TourDocObjectDetectionObjectKeyEditFormComponent} from './shared-tdoc/co
 import {TourDocReplaceFormComponent} from './shared-tdoc/components/tdoc-replaceform/tdoc-replaceform.component';
 import {TourDocAssignFormComponent} from './shared-tdoc/components/tdoc-assignform/tdoc-assignform.component';
 import {TourDocKeywordTagFormComponent} from './shared-tdoc/components/tdoc-keywordtagform/tdoc-keywordtagform.component';
+import {TourDocAssignJoinFormComponent} from './shared-tdoc/components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 
 registerLocaleData(localeDe);
 
@@ -70,6 +71,7 @@ export function getAngulartics2Providers(): any {
         TourDocObjectDetectionObjectKeyEditFormComponent,
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
+        TourDocAssignJoinFormComponent,
         TourDocKeywordTagFormComponent],
     imports: [
         HttpClientModule,

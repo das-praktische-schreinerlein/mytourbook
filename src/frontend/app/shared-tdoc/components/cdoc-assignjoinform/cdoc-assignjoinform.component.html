@@ -1,0 +1,82 @@
+<div class="modal-header" *ngIf="records !== undefined && records.length > 0">
+    <h5><span class="fx-bg-type">{{recordType | translate }}</span>
+        <span class="fx-bg-name">{{records.length === 1 ? records[0].name : ''}} {{records.length === 1 ? 'ID: ' + records[0].id : ''}}</span></h5>
+    <button type="button" class="close" aria-label="Close" (click)="onCancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+    <form [formGroup]="assignFormGroup" class="form-control-sm" (ngSubmit)="onCancel()" *ngIf="records !== undefined && records.length > 0">
+        <fieldset>
+            <legend i18n="assignRecord label|Label for fieldset: assignRecord@@label.assignform.cdoc.legend.assignRecord">🖉 Neu zuordnen</legend>
+            <div class="row">
+                <div class="col-sm-2 form-inline input-group input-group-sm">
+                    <label class="col-form-label"
+                           i18n="referenceField label|Label for field: referenceField@@label.assignform.cdoc.referenceField">Referenz:</label>
+                </div>
+                <div class="col-sm-6 form-inline input-group input-group-sm">
+                    <ss-multiselect-dropdown [options]="optionsSelectReferenceField"
+                                             [settings]="settingsSelectReferenceField"
+                                             [texts]="textsSelectReferenceField"
+                                             formControlName="referenceField"
+                                             ngDefaultControl
+                                             (change)="onUpdateReferenceField()"
+                                             (dropdownClosed)="onUpdateReferenceField()"
+                                             (onRemoved)="onUpdateReferenceField()"
+                                             (onAdded)="onUpdateReferenceField()"
+                                             required="required"
+                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 form-inline input-group input-group-sm form-check-inline">
+                    <input formControlName="newIdOption" required="required" class="form-control form-check-input"
+                           type="radio" value="input"
+                           (change)="checkFormAndSetValidFlag()">
+                    <label class="col-sm-3 col-form-label mr-2 form-check-label"
+                           i18n="newId label|Label for field: newId@@label.assignform.cdoc.newIdInput">Id:</label>
+                </div>
+                <div class="col-sm-6 form-inline input-group input-group-sm">
+                    <input formControlName="newIdInput" required="required" class="form-control" type="text" placeholder="newId"
+                           (change)="checkFormAndSetValidFlag()"
+                           (focus)="assignFormGroup.patchValue({newIdOption: 'input'})"
+                           i18n-placeholder="newId placeholder|Placeholder for newId@@placeholder.assignform.cdoc.newId">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 form-inline input-group input-group-sm form-check-inline">
+                    <input formControlName="newIdOption" required="required" class="form-control form-check-input"
+                           (change)="checkFormAndSetValidFlag()"
+                           type="radio" value="select">
+                    <label class="col-sm-3 col-form-label mr-2 form-check-label"
+                           i18n="newId label|Label for field: newId@@label.assignform.cdoc.newIdSelect">Auswahl:</label>
+                </div>
+                <div class="col-sm-6 form-inline input-group input-group-sm">
+                    <ss-multiselect-dropdown [options]="optionsSelectNewId"
+                                             [settings]="settingsSelectNewId"
+                                             [texts]="textsSelectNewId"
+                                             *ngIf="optionsSelectNewId.length > 0"
+                                             (change)="onUpdateNewIdSelect()"
+                                             (dropdownClosed)="onUpdateNewIdSelect()"
+                                             (onRemoved)="onUpdateNewIdSelect()"
+                                             (onAdded)="onUpdateNewIdSelect()"
+                                             formControlName="newIdSelect"
+                                             ngDefaultControl
+                                             required="required"
+                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth">
+                    </ss-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <button type="submit" class="btn btn-action btn-sm"
+                            (click)="onSubmitAssignKey()"
+                            [disabled]="!validForSubmit"
+                            i18n="button assignRecord cdoc|Buttontext to assignRecord cdoc@@button.assignform.cdoc.assignRecord">Zuordnen</button>
+                    <button type="button" (click)="onCancel()" class="btn btn-action btn-sm">Abbrechen</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

@@ -53,6 +53,7 @@ import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-
 import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
 import {CommonDocExtendedObjectPropertiesComponent} from './components/cdoc-extended-object-properties/cdoc-extended-object-properties.component';
 import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
+import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 
 @NgModule({
     declarations: [
@@ -96,7 +97,8 @@ import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
         CommonDocExtendedObjectPropertiesComponent,
-        TourDocInfoComponent
+        TourDocInfoComponent,
+        TourDocAssignJoinFormComponent
     ],
     imports: [
         ToastrModule,
@@ -158,7 +160,8 @@ import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
         CommonDocExtendedObjectPropertiesComponent,
-        TourDocInfoComponent
+        TourDocInfoComponent,
+        TourDocAssignJoinFormComponent
     ]
 })
 export class SharedTourDocModule {}

@@ -52,10 +52,12 @@ import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectde
 import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
 import {CommonSqlJoinAdapter} from './common-sql-join.adapter';
 import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
+import {AssignJoinActionTagForm, CommonSqlActionTagAssignJoinAdapter} from './common-sql-actiontag-assignjoin.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
     private readonly actionTagAssignAdapter: CommonSqlActionTagAssignAdapter;
+    private readonly actionTagAssignJoinAdapter: CommonSqlActionTagAssignJoinAdapter;
     private readonly actionTagBlockAdapter: CommonSqlActionTagBlockAdapter;
     private readonly actionTagReplaceAdapter: CommonSqlActionTagReplaceAdapter;
     private readonly actionTagKeywordAdapter: CommonSqlActionTagKeywordAdapter;
@@ -84,6 +86,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.commonKeywordAdapter);
         this.actionTagAssignAdapter = new CommonSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagAssignConfig());
+        this.actionTagAssignJoinAdapter = new CommonSqlActionTagAssignJoinAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getActionTagAssignJoinConfig());
         this.actionTagBlockAdapter = new CommonSqlActionTagBlockAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagBlockConfig());
         this.actionTagReplaceAdapter = new CommonSqlActionTagReplaceAdapter(config, this.knex, this.sqlQueryBuilder,
@@ -348,6 +352,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return this.actionTagBlockAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'assign' && actionTagForm.key.startsWith('assign')) {
             return this.actionTagAssignAdapter.executeActionTagAssign(table, id, <AssignActionTagForm> actionTagForm, opts);
+        } else if (actionTagForm.type === 'assignjoin' && actionTagForm.key.startsWith('assignjoin')) {
+            return this.actionTagAssignJoinAdapter.executeActionTagAssignJoin(table, id, <AssignJoinActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'keyword' && actionTagForm.key.startsWith('keyword')) {
             return this.actionTagKeywordAdapter.executeActionTagKeyword(table, id, <KeywordActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {

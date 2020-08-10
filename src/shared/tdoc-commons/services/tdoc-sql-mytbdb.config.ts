@@ -9,6 +9,7 @@ import {PlaylistModelConfigType} from '@dps/mycms-commons/dist/action-commons/ac
 import {RateModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {ObjectDetectionModelConfigType} from '@dps/mycms-commons/dist/commons/model/common-sql-object-detection.model';
 import {JoinModelConfigsType} from './common-sql-join.adapter';
+import {ActionTagAssignJoinConfigType} from './common-sql-actiontag-assignjoin.adapter';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly personCategories = ['Person', 'person', 'Familie', 'family', 'friend', 'Freund'];
@@ -5145,6 +5146,37 @@ export class TourDocSqlMytbDbConfig {
         }
     };
 
+    public static readonly actionTagAssignJoinConfig: ActionTagAssignJoinConfigType = {
+        tables: {
+            'location': {
+                table: 'location',
+                idField: 'l_id',
+                references: {
+                    'info_id_is': {
+                        joinedTable: 'info',
+                        joinedIdField: 'if_id',
+                        joinTable: 'location_info',
+                        joinBaseIdField: 'l_id',
+                        joinReferenceField: 'if_id'
+                    }
+                }
+            },
+            'route': {
+                table: 'tour',
+                idField: 't_id',
+                references: {
+                    'info_id_is': {
+                        joinedTable: 'info',
+                        joinedIdField: 'if_id',
+                        joinTable: 'tour_info',
+                        joinBaseIdField: 't_id',
+                        joinReferenceField: 'if_id'
+                    }
+                }
+            }
+        }
+    };
+
     public static readonly actionTagBlockConfig: ActionTagBlockConfigType = {
         tables: {
             'image': {
@@ -5292,6 +5324,10 @@ export class TourDocSqlMytbDbConfig {
 
     public getActionTagAssignConfig(): ActionTagAssignConfigType {
         return TourDocSqlMytbDbConfig.actionTagAssignConfig;
+    }
+
+    public getActionTagAssignJoinConfig(): ActionTagAssignJoinConfigType {
+        return TourDocSqlMytbDbConfig.actionTagAssignJoinConfig;
     }
 
     public getActionTagBlockConfig(): ActionTagBlockConfigType {
