@@ -10,6 +10,7 @@ import {
     IdValidationRule,
     NumberValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonDocRecordRelationsType} from './base-types';
 
 export interface TourDocRatePersonalRecordType extends BaseEntityRecordType {
     ausdauer: number;
@@ -96,13 +97,14 @@ export class TourDocRatePersonalRecordValidator extends BaseEntityRecordValidato
 }
 
 
-export let TourDocRatePersonalRecordRelation: any = {
+export let TourDocRatePersonalRecordRelation: CommonDocRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

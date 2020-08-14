@@ -4,6 +4,7 @@ import {
     BaseEntityRecordType
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {GenericValidatorDatatypes, NameValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonDocRecordRelationsType} from './base-types';
 
 export interface BaseJoinRecordType extends BaseEntityRecordType {
     name: string;
@@ -32,13 +33,14 @@ export abstract class BaseJoinRecord extends BaseEntityRecord implements BaseJoi
     }
 }
 
-export let BaseJoinRecordRelation: any = {
+export let BaseJoinRecordRelation: CommonDocRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

@@ -2,6 +2,7 @@ import {BaseImageRecordFactory, BaseImageRecordValidator} from '@dps/mycms-commo
 import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
 import {BaseEntityRecordFieldConfig} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonDocRecordRelationsType} from './base-types';
 
 export class TourDocObjectDetectionImageObjectRecord extends BaseObjectDetectionImageObjectRecord {
     static objectDetectionImageObjectFields = {
@@ -56,13 +57,14 @@ export class TourDocObjectDetectionImageObjectRecordValidator extends BaseImageR
     }
 }
 
-export let TourDocObjectDetectionImageObjectRecordRelation: any = {
+export let TourDocObjectDetectionImageObjectRecordRelation: CommonDocRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

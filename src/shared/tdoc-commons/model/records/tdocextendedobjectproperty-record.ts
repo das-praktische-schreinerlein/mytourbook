@@ -5,6 +5,7 @@ import {
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {BaseExtendedObjectPropertyRecord, BaseExtendedObjectPropertyRecordType} from './baseextendedobjectproperty-record';
 import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonDocRecordRelationsType} from './base-types';
 
 // tslint:disable-next-line:no-empty-interface
 export interface TourDocExtendedObjectPropertyRecordType extends BaseExtendedObjectPropertyRecordType {
@@ -64,13 +65,14 @@ export class TourDocExtendedObjectPropertyRecordValidator extends BaseEntityReco
     }
 }
 
-export let TourDocExtendedObjectPropertyRecordRelation: any = {
+export let TourDocExtendedObjectPropertyRecordRelation: CommonDocRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

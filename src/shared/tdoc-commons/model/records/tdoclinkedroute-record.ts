@@ -9,6 +9,7 @@ import {
     IdValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonDocRecordRelationsType} from './base-types';
 
 // tslint:disable-next-line:no-empty-interface
 export interface TourDocLinkedRouteRecordType extends BaseJoinRecordType {
@@ -57,7 +58,7 @@ export class TourDocLinkedRouteRecordFactory extends BaseEntityRecordFactory {
     getSanitizedValues(values: {}, result: {}): {} {
         super.getSanitizedValues(values, result);
         this.sanitizeFieldValues(values, TourDocLinkedRouteRecord.routeFields, result, '');
-        result['full'] = result['full'] === true || result['full'] === 'true';
+        result['full'] = values['full'] === true || values['full'] === 'true' || values['full'] === '1' || values['full'] === 1;
 
         return result;
     }
@@ -75,13 +76,14 @@ export class TourDocLinkedRouteRecordValidator extends BaseEntityRecordValidator
     }
 }
 
-export let TourDocLinkedRouteRecordRelation: any = {
+export let TourDocLinkedRouteRecordRelation: CommonDocRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

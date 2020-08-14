@@ -5,6 +5,7 @@ import {
 } from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 import {BaseEntityRecordFieldConfig} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonDocRecordRelationsType} from './base-types';
 
 export class TourDocImageRecord extends BaseImageRecord {
     static tdocFields = {
@@ -61,13 +62,14 @@ export class TourDocImageRecordValidator extends BaseImageRecordValidator {
     }
 }
 
-export let TourDocImageRecordRelation: any = {
+export let TourDocImageRecordRelation: CommonDocRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

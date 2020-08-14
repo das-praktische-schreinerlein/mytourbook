@@ -47,6 +47,7 @@ import {
 import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordFactory, TourDocLinkedRouteRecordValidator} from './tdoclinkedroute-record';
 import {TourDocInfoRecord, TourDocInfoRecordFactory, TourDocInfoRecordValidator} from './tdocinfo-record';
 import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordFactory, TourDocLinkedInfoRecordValidator} from './tdoclinkedinfo-record';
+import {CommonDocRecordRelationsType} from './base-types';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;
@@ -74,10 +75,134 @@ export interface TourDocRecordType extends BaseEntityRecordType {
     techName: string;
 }
 
+
+export let TourDocRecordRelation: CommonDocRecordRelationsType = {
+    hasOne: {
+        tdocdatatech: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocdatatech',
+            mapperKey: 'tdocdatatech',
+            factory: TourDocDataTechRecordFactory.instance,
+            validator: TourDocDataTechRecordValidator.instance
+        },
+        tdocdatainfo: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocdatainfo',
+            mapperKey: 'tdocdatainfo',
+            factory: TourDocDataInfoRecordFactory.instance,
+            validator: TourDocDataInfoRecordValidator.instance
+        },
+        tdocinfo: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocinfo',
+            mapperKey: 'tdocinfo',
+            factory: TourDocInfoRecordFactory.instance,
+            validator: TourDocInfoRecordValidator.instance
+        },
+        tdocratepers: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocratepers',
+            mapperKey: 'tdocratepers',
+            factory: TourDocRatePersonalRecordFactory.instance,
+            validator: TourDocRatePersonalRecordValidator.instance
+        },
+        tdocratetech: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocratetech',
+            mapperKey: 'tdocratetech',
+            factory: TourDocRateTechRecordFactory.instance,
+            validator: TourDocRateTechRecordValidator.instance
+        }
+    },
+    hasMany: {
+        tdocimage: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocimages',
+            mapperKey: 'tdocimage',
+            factory: TourDocImageRecordFactory.instance,
+            validator: TourDocImageRecordValidator.instance
+        },
+        tdocvideo: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocvideos',
+            mapperKey: 'tdocvideo',
+            factory: TourDocVideoRecordFactory.instance,
+            validator: TourDocVideoRecordValidator.instance
+        },
+        tdocodimageobject: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocodimageobjects',
+            mapperKey: 'tdocodimageobject',
+            factory: TourDocObjectDetectionImageObjectRecordFactory.instance,
+            validator: TourDocObjectDetectionImageObjectRecordValidator.instance
+        },
+        tdocnavigationobject: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocnavigationobjects',
+            mapperKey: 'tdocnavigationobject',
+            factory: TourDocNavigationObjectRecordFactory.instance,
+            validator: TourDocNavigationObjectRecordValidator.instance
+        },
+        tdocextendedobjectproperty: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdocextendedobjectproperties',
+            mapperKey: 'tdocextendedobjectproperty',
+            factory: TourDocExtendedObjectPropertyRecordFactory.instance,
+            validator: TourDocExtendedObjectPropertyRecordValidator.instance
+        },
+        tdoclinkedroute: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdoclinkedroutes',
+            mapperKey: 'tdoclinkedroute',
+            factory: TourDocLinkedRouteRecordFactory.instance,
+            validator: TourDocLinkedRouteRecordValidator.instance
+        },
+        tdoclinkedinfo: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdoclinkedinfos',
+            mapperKey: 'tdoclinkedinfo',
+            factory: TourDocLinkedInfoRecordFactory.instance,
+            validator: TourDocLinkedInfoRecordValidator.instance
+        }
+    }
+};
+
 export class TourDocRecord extends CommonDocRecord implements TourDocRecordType {
-    static tdocRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocinfo', 'tdocimages', 'tdocvideos', 'tdocratepers',
-        'tdocratetech', 'tdocodimageobjects', 'tdocnavigationobjects', 'tdocextendedobjectproperties', 'tdoclinkedroutes', 'tdoclinkedinfos'];
-    static tdocValidationRelationNames = ['tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech', 'tdocinfo'];
+    static tdocRelationNames = []
+        .concat(TourDocRecordRelation.hasOne ? Object.keys(TourDocRecordRelation.hasOne).map(key => {
+            return TourDocRecordRelation.hasOne[key].localField;
+        }) : [])
+        .concat(TourDocRecordRelation.hasMany ? Object.keys(TourDocRecordRelation.hasMany).map(key => {
+            return TourDocRecordRelation.hasMany[key].localField;
+        }) : []);
+    static tdocValidationRelationNames = []
+        .concat(TourDocRecordRelation.hasOne ? Object.keys(TourDocRecordRelation.hasOne).map(key => {
+            return TourDocRecordRelation.hasOne[key].localField;
+        }) : []);
     static tdocFields = {
         locId: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
         locIdParent: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new DbIdValidationRule(false)),
@@ -177,85 +302,6 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         return TourDocRecordValidator.instance.isValid(this);
     }
 }
-
-export let TourDocRecordRelation: any = {
-    hasOne: {
-        tdocdatatech: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocdatatech'
-        },
-        tdocdatainfo: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocdatainfo'
-        },
-        tdocinfo: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocinfo'
-        },
-        tdocratepers: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocratepers'
-        },
-        tdocratetech: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocratetech'
-        }
-    },
-    hasMany: {
-        tdocimage: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocimages'
-        },
-        tdocvideo: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocvideos'
-        },
-        tdocodimageobject: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocodimageobjects'
-        },
-        tdocnavigationobject: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocnavigationobjects'
-        },
-        tdocextendedobjectproperty: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdocextendedobjectproperties'
-        },
-        tdoclinkedroute: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdoclinkedroutes'
-        },
-        tdoclinkedinfo: {
-            // database column
-            foreignKey: 'tdoc_id',
-            // reference to related objects in memory
-            localField: 'tdoclinkedinfos'
-        }
-    }
-};
 
 export class TourDocRecordFactory extends CommonDocRecordFactory {
     public static instance = new TourDocRecordFactory();
