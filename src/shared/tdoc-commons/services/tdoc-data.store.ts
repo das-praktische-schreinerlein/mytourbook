@@ -1,7 +1,7 @@
 import {GenericDataStore} from '@dps/mycms-commons/dist/search-commons/services/generic-data.store';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
-import {TourDocRecord} from '../model/records/tdoc-record';
+import {TourDocRecord, TourDocRecordRelation} from '../model/records/tdoc-record';
 import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 
@@ -19,8 +19,8 @@ export class TourDocTeamFilterConfig {
 
 export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
 
-    static UPDATE_RELATION = ['tdocinfo', 'tdocimage', 'tdocvideo', 'tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech',
-        'tdocodimageobject', 'tdocnavigationobject', 'tdocextendedobjectproperty', 'tdoclinkedroute', 'tdoclinkedinfo'];
+    static UPDATE_RELATION = [].concat(TourDocRecordRelation.hasOne ? Object.keys(TourDocRecordRelation.hasOne) : [])
+        .concat(TourDocRecordRelation.hasMany ? Object.keys(TourDocRecordRelation.hasMany) : []);
     private validMoreNumberFilterNames = {
         track_id_i: true,
         track_id_is:  true,

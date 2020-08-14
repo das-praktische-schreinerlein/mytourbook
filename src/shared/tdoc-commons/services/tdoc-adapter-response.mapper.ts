@@ -1,5 +1,5 @@
 import {Mapper, Record} from 'js-data';
-import {TourDocRecord, TourDocRecordFactory} from '../model/records/tdoc-record';
+import {TourDocRecord, TourDocRecordFactory, TourDocRecordRelation} from '../model/records/tdoc-record';
 import {TourDocImageRecord, TourDocImageRecordFactory} from '../model/records/tdocimage-record';
 import {MapperUtils} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
@@ -9,14 +9,13 @@ import {TourDocDataTechRecordFactory} from '../model/records/tdocdatatech-record
 import {TourDocRateTechRecordFactory} from '../model/records/tdocratetech-record';
 import {TourDocRatePersonalRecordFactory} from '../model/records/tdocratepers-record';
 import {TourDocDataInfoRecordFactory} from '../model/records/tdocdatainfo-record';
-import {TourDocObjectDetectionImageObjectRecordFactory} from '../model/records/tdocobjectdetectectionimageobject-record';
-import {TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
 import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
-import {TourDocExtendedObjectPropertyRecordFactory} from '../model/records/tdocextendedobjectproperty-record';
-import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordFactory} from '../model/records/tdoclinkedroute-record';
-import {BaseEntityRecordFactory} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
 import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
-import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordFactory} from '../model/records/tdoclinkedinfo-record';
+import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
+import {CommonDocRecordRelationsType, CommonDocRecordRelationType} from '../model/records/base-types';
+import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
+import {BaseEntityRecord} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -184,57 +183,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
     mapValuesToRecord(mapper: Mapper, values: {}): TourDocRecord {
         const record = TourDocRecordFactory.createSanitized(values);
-
-        const subConfigs: {propKey: string, mapperKey: string, factory: BaseEntityRecordFactory}[] = [
-            { mapperKey: 'tdocdatatech', propKey: 'tdocdatatech', factory: TourDocDataTechRecordFactory.instance},
-            { mapperKey: 'tdocdatainfo', propKey: 'tdocdatainfo', factory: TourDocDataInfoRecordFactory.instance},
-            { mapperKey: 'tdocinfo', propKey: 'tdocinfo', factory: TourDocInfoRecordFactory.instance},
-            { mapperKey: 'tdocratepers', propKey: 'tdocratepers', factory: TourDocRatePersonalRecordFactory.instance},
-            { mapperKey: 'tdocratetech', propKey: 'tdocratetech', factory: TourDocRateTechRecordFactory.instance}
-        ];
-        for (const subConfig of subConfigs) {
-            const subMapper = mapper['datastore']._mappers[subConfig.mapperKey];
-            let subValues = undefined;
-            for (const key in values) {
-                if (key.startsWith(subConfig.propKey + '.')) {
-                    const subKey = key.replace(subConfig.propKey + '.', '');
-                    subValues = subValues || {};
-                    subValues[subKey] = values[key];
-                }
-            }
-
-            if (subValues) {
-                record.set(subConfig.propKey, subMapper.createRecord(
-                    subConfig.factory.getSanitizedValues(subValues, {}))
-                );
-            } else {
-                record.set(subConfig.propKey, undefined);
-            }
-        }
-
-        const joinConfigs: {propKey: string, mapperKey: string, factory: BaseEntityRecordFactory}[] = [
-            {mapperKey: 'tdoclinkedroute', propKey: 'tdoclinkedroutes', factory: TourDocLinkedRouteRecordFactory.instance},
-            {mapperKey: 'tdoclinkedinfo', propKey: 'tdoclinkedinfos', factory: TourDocLinkedInfoRecordFactory.instance}
-        ];
-        for (const joinConfig of joinConfigs) {
-            const joinMapper = mapper['datastore']._mappers[joinConfig.mapperKey];
-            if (values[joinConfig.propKey]) {
-                const joinValues = values[joinConfig.propKey];
-                const joinRecords: Record[] = [];
-                for (const joinRecordProps of joinValues) {
-                    joinRecords.push(
-                        joinMapper.createRecord(
-                            joinConfig.factory.getSanitizedValues(joinRecordProps, {}))
-                    );
-                }
-
-                if (joinRecords.length > 0) {
-                    record.set(joinConfig.propKey, joinRecords);
-                } else {
-                    record.set(joinConfig.propKey, undefined);
-                }
-            }
-        }
+        this.mapValuesToSubRecords(mapper, values, record, TourDocRecordRelation);
 
         return record;
     }
@@ -513,98 +462,24 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 record.objects = ObjectUtils.mergePropertyValues(docs, 'i_objects', ', ');
                 break;
             case 'image_objectdetections':
-                let odDocs = [];
-                docs.forEach(doc => {
-                    const fieldName = 'i_objectdetections';
-                    if (doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        odDocs = odDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], this._objectSeparator,
-                            this._fieldSeparator, this._valueSeparator));
-                    }
-                });
-                record.set('tdocodimageobjects',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocodimageobject'],
-                        TourDocObjectDetectionImageObjectRecordFactory.instance, record, odDocs));
+                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocodimageobject'],
+                    ['i_objectdetections', 'i_objectdetections_txt'], record, docs);
                 break;
             case 'navigation_objects':
-                let navDocs = [];
-                docs.forEach(doc => {
-                    let fieldName;
-                    if (doc['navigation_objects'] !== undefined && doc['navigation_objects'] !== null) {
-                        fieldName = 'navigation_objects';
-                    } else if (doc['navigation_objects_txt'] !== undefined && doc['navigation_objects_txt'] !== null) {
-                        fieldName = 'navigation_objects_txt';
-                    }
-                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        navDocs = navDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], this._objectSeparator,
-                            this._fieldSeparator, this._valueSeparator));
-                    }
-                });
-                record.set('tdocnavigationobjects',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocnavigationobject'],
-                        TourDocNavigationObjectRecordFactory.instance, record, navDocs));
+                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocnavigationobject'],
+                    ['navigation_objects', 'navigation_objects_txt'], record, docs);
                 break;
             case 'extended_object_properties':
-                let extObjPropsDocs = [];
-                docs.forEach(doc => {
-                    let fieldName;
-                    if (doc['extended_object_properties'] !== undefined && doc['extended_object_properties'] !== null) {
-                        fieldName = 'extended_object_properties';
-                    } else if (doc['extended_object_properties_txt'] !== undefined && doc['extended_object_properties_txt'] !== null) {
-                        fieldName = 'extended_object_properties_txt';
-                    }
-                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        extObjPropsDocs = extObjPropsDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName],
-                            this._objectSeparator, this._fieldSeparator, this._valueSeparator));
-                    }
-                });
-                record.set('tdocextendedobjectproperties',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocextendedobjectproperty'],
-                        TourDocExtendedObjectPropertyRecordFactory.instance, record, extObjPropsDocs));
+                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocextendedobjectproperty'],
+                    ['extended_object_properties', 'extended_object_properties_txt'], record, docs);
                 break;
             case 'linkedroutes':
-                let routeDocs = [];
-                docs.forEach(doc => {
-                    let fieldName;
-                    if (doc['linkedroutes'] !== undefined && doc['linkedroutes'] !== null) {
-                        fieldName = 'linkedroutes';
-                    } else if (doc['linkedroutes_txt'] !== undefined && doc['linkedroutes_txt'] !== null) {
-                        fieldName = 'linkedroutes_txt';
-                    }
-                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        const objects = ObjectUtils.explodeValueToObjects(doc[fieldName], this._objectSeparator,
-                            this._fieldSeparator, this._valueSeparator);
-                        for (const object of objects) {
-                            object['full'] =
-                                object['full'] === '1' || object['full'] === 1 || object['full'] === true || object['full'] === 'true';
-                        }
-                        routeDocs = routeDocs.concat(objects);
-
-                    }
-                });
-                record.set('tdoclinkedroutes',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdoclinkedroute'],
-                        TourDocLinkedRouteRecordFactory.instance, record, routeDocs));
+                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedroute'],
+                    ['linkedroutes', 'linkedroutes_txt'], record, docs);
                 break;
             case 'linkedinfos':
-                let infoDocs = [];
-                docs.forEach(doc => {
-                    let fieldName;
-                    if (doc['linkedinfos'] !== undefined && doc['linkedinfos'] !== null) {
-                        fieldName = 'linkedinfos';
-                    } else if (doc['linkedinfos_txt'] !== undefined && doc['linkedinfos_txt'] !== null) {
-                        fieldName = 'linkedinfos_txt';
-                    }
-                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        const objects = ObjectUtils.explodeValueToObjects(doc[fieldName], this._objectSeparator,
-                            this._fieldSeparator, this._valueSeparator);
-                        infoDocs = infoDocs.concat(objects);
-
-                    }
-                });
-
-                record.set('tdoclinkedinfos',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdoclinkedinfo'],
-                        TourDocLinkedInfoRecordFactory.instance, record, infoDocs));
+                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedinfo'],
+                    ['linkedinfos', 'linkedinfos_txt'], record, docs);
                 break;
             case 'video':
                 const videoDocs = [];
@@ -631,5 +506,81 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 break;
         }
     }
+
+    explodeAndMapDetailResponseDocuments(mapper: Mapper, relation: CommonDocRecordRelationType, srcFields: string[],
+                                         record: BaseEntityRecord, docs: any[]): void {
+        if (docs === undefined) {
+            return;
+        }
+
+        let subDocs = [];
+        docs.forEach(doc => {
+            let fieldName;
+            for (const srcField of srcFields) {
+                if (doc[srcField] !== undefined && doc[srcField] !== null) {
+                    fieldName = srcField;
+                    break;
+                }
+            }
+            if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
+                const objects = ObjectUtils.explodeValueToObjects(doc[fieldName], this._objectSeparator,
+                    this._fieldSeparator, this._valueSeparator);
+                subDocs = subDocs.concat(objects);
+            }
+        });
+
+        record.set(relation.localField,
+            this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers[relation.mapperKey],
+                relation.factory, record, subDocs));
+    }
+
+    mapValuesToSubRecords(mapper: Mapper, values: {}, record: CommonDocRecord, relations: CommonDocRecordRelationsType) {
+        if (relations.hasOne) {
+            for (const relationKey in relations.hasOne) {
+                const relation: CommonDocRecordRelationType = relations.hasOne[relationKey];
+                const subMapper = mapper['datastore']._mappers[relation.mapperKey];
+                let subValues = undefined;
+                for (const key in values) {
+                    if (key.startsWith(relation.localField + '.')) {
+                        const subKey = key.replace(relation.localField + '.', '');
+                        subValues = subValues || {};
+                        subValues[subKey] = values[key];
+                    }
+                }
+
+                if (subValues) {
+                    record.set(relation.localField, subMapper.createRecord(
+                        relation.factory.getSanitizedValues(subValues, {}))
+                    );
+                } else {
+                    record.set(relation.localField, undefined);
+                }
+            }
+        }
+
+        if (relations.hasMany) {
+            for (const relationKey in relations.hasMany) {
+                const relation: CommonDocRecordRelationType = relations.hasMany[relationKey];
+                const joinMapper = mapper['datastore']._mappers[relation.mapperKey];
+                if (values[relation.localField]) {
+                    const joinValues = values[relation.localField];
+                    const joinRecords: Record[] = [];
+                    for (const joinRecordProps of joinValues) {
+                        joinRecords.push(
+                            joinMapper.createRecord(
+                                relation.factory.getSanitizedValues(joinRecordProps, {}))
+                        );
+                    }
+
+                    if (joinRecords.length > 0) {
+                        record.set(relation.localField, joinRecords);
+                    } else {
+                        record.set(relation.localField, undefined);
+                    }
+                }
+            }
+        }
+    }
+
 }
 
