@@ -153,6 +153,12 @@ describe('TourDocAdapterResponseMapper', () => {
                     'navid=TRACK_8:::name=Dienstreise 01.01.2000:::navtype=PREDECESSOR',
                     'navid=TRACK_10:::name=Ausflug Schlaubetal 01.01.2000:::navtype=SUCCESSOR'
                 ],
+                'linkedroutes_txt': [
+                    'type=subroute:::name=Dienstreise 01.01.2000:::refId=1200:::full=1',
+                    'type=subroute:::name=Dienstreise:::refId=1201:::full=true',
+                    'type=subroute:::name=Ausflug Schlaubetal 01.01.2000:::refId=1202:::full=false',
+                    'type=subroute:::name=Ausflug Schlaubetal:::refId=1203:::full=0'
+                ],
                 'i_fav_url_txt': [
                     'd__micha_bilder_digifotos_20000101-Liepnitzsee/IMAG0020.JPG'
                 ]
@@ -196,7 +202,40 @@ describe('TourDocAdapterResponseMapper', () => {
                     }
                 ],
                 'tdocextendedobjectproperties': [],
-                'tdoclinkedroutes': [],
+                'tdoclinkedroutes': [
+                    {
+                        'type': 'subroute',
+                        'name': 'Dienstreise 01.01.2000',
+                        'full': true,
+                        'refId': '1200',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000000TRACK_9'
+                    },
+                    {
+                        'type': 'subroute',
+                        'name': 'Dienstreise',
+                        'full': true,
+                        'refId': '1201',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000001TRACK_9'
+                    },
+                    {
+                        'type': 'subroute',
+                        'name': 'Ausflug Schlaubetal 01.01.2000',
+                        'full': false,
+                        'refId': '1202',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000002TRACK_9'
+                    },
+                    {
+                        'type': 'subroute',
+                        'name': 'Ausflug Schlaubetal',
+                        'full': false,
+                        'refId': '1203',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000003TRACK_9'
+                    }
+                ],
                 'tdoclinkedinfos': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
