@@ -2,6 +2,7 @@ import {
     BaseEntityRecord,
     BaseEntityRecordFactory,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
@@ -10,7 +11,6 @@ import {
     IdValidationRule,
     NameValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export interface TourDocRateTechRecordType extends BaseEntityRecordType {
     bergtour: string;
@@ -85,7 +85,7 @@ export class TourDocRateTechRecordValidator extends BaseEntityRecordValidator {
     }
 }
 
-export let TourDocRateTechRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocRateTechRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

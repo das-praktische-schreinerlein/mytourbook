@@ -2,10 +2,10 @@ import {TableConfig} from '@dps/mycms-commons/dist/search-commons/services/sql-q
 import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-block.adapter';
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
-import {ActionTagAssignJoinTableConfigType} from '../../services/common-sql-actiontag-assignjoin.adapter';
+import {ActionTagAssignJoinTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
-import {JoinModelConfigTableType} from '../../services/common-sql-join.adapter';
+import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 
 export class SqlMytbDbLocationConfig {
     public static readonly tableConfig: TableConfig = {

@@ -50,9 +50,12 @@ import {CommonSqlRateAdapter} from '@dps/mycms-commons/dist/action-commons/actio
 import {CommonSqlObjectDetectionAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-object-detection.adapter';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
 import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
-import {CommonSqlJoinAdapter} from './common-sql-join.adapter';
+import {CommonSqlJoinAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
-import {AssignJoinActionTagForm, CommonSqlActionTagAssignJoinAdapter} from './common-sql-actiontag-assignjoin.adapter';
+import {
+    AssignJoinActionTagForm,
+    CommonSqlActionTagAssignJoinAdapter
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;

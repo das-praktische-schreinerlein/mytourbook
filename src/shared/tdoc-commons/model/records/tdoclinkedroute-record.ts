@@ -1,15 +1,15 @@
 import {
     BaseEntityRecordFactory,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {BaseJoinRecord, BaseJoinRecordType} from './basejoin-record';
+import {BaseJoinRecord, BaseJoinRecordType} from '@dps/mycms-commons/dist/search-commons/model/records/basejoin-record';
 import {
     GenericValidatorDatatypes,
     IdValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 // tslint:disable-next-line:no-empty-interface
 export interface TourDocLinkedRouteRecordType extends BaseJoinRecordType {
@@ -76,7 +76,7 @@ export class TourDocLinkedRouteRecordValidator extends BaseEntityRecordValidator
     }
 }
 
-export let TourDocLinkedRouteRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocLinkedRouteRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

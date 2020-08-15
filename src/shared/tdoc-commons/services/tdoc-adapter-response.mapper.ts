@@ -13,9 +13,12 @@ import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
 import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
 import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
-import {CommonDocRecordRelationsType, CommonDocRecordRelationType} from '../model/records/base-types';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
-import {BaseEntityRecord} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecord,
+    BaseEntityRecordRelationsType,
+    BaseEntityRecordRelationType
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     protected mapperUtils = new MapperUtils();
@@ -507,7 +510,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         }
     }
 
-    explodeAndMapDetailResponseDocuments(mapper: Mapper, relation: CommonDocRecordRelationType, srcFields: string[],
+    explodeAndMapDetailResponseDocuments(mapper: Mapper, relation: BaseEntityRecordRelationType, srcFields: string[],
                                          record: BaseEntityRecord, docs: any[]): void {
         if (docs === undefined) {
             return;
@@ -534,10 +537,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 relation.factory, record, subDocs));
     }
 
-    mapValuesToSubRecords(mapper: Mapper, values: {}, record: CommonDocRecord, relations: CommonDocRecordRelationsType) {
+    mapValuesToSubRecords(mapper: Mapper, values: {}, record: CommonDocRecord, relations: BaseEntityRecordRelationsType) {
         if (relations.hasOne) {
             for (const relationKey in relations.hasOne) {
-                const relation: CommonDocRecordRelationType = relations.hasOne[relationKey];
+                const relation: BaseEntityRecordRelationType = relations.hasOne[relationKey];
                 const subMapper = mapper['datastore']._mappers[relation.mapperKey];
                 let subValues = undefined;
                 for (const key in values) {
@@ -560,7 +563,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
         if (relations.hasMany) {
             for (const relationKey in relations.hasMany) {
-                const relation: CommonDocRecordRelationType = relations.hasMany[relationKey];
+                const relation: BaseEntityRecordRelationType = relations.hasMany[relationKey];
                 const joinMapper = mapper['datastore']._mappers[relation.mapperKey];
                 if (values[relation.localField]) {
                     const joinValues = values[relation.localField];

@@ -51,7 +51,6 @@ import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/t
 import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-search-navigation/tdoc-simple-search-navigation.component';
 import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-profilechart.component';
 import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
-import {CommonDocExtendedObjectPropertiesComponent} from './components/cdoc-extended-object-properties/cdoc-extended-object-properties.component';
 import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
 import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 
@@ -96,7 +95,6 @@ import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/t
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
-        CommonDocExtendedObjectPropertiesComponent,
         TourDocInfoComponent,
         TourDocAssignJoinFormComponent
     ],
@@ -159,7 +157,6 @@ import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/t
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
-        CommonDocExtendedObjectPropertiesComponent,
         TourDocInfoComponent,
         TourDocAssignJoinFormComponent
     ]

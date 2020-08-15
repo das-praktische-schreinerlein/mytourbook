@@ -3,9 +3,11 @@ import {
     BaseImageRecordFactory,
     BaseImageRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
-import {BaseEntityRecordFieldConfig} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export class TourDocImageRecord extends BaseImageRecord {
     static tdocFields = {
@@ -62,7 +64,7 @@ export class TourDocImageRecordValidator extends BaseImageRecordValidator {
     }
 }
 
-export let TourDocImageRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocImageRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

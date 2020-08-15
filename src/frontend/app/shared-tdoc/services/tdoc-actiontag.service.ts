@@ -30,7 +30,7 @@ import {TourDocAssignFormComponent} from '../components/tdoc-assignform/tdoc-ass
 import {CommonDocReplaceFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component';
 import {CommonDocKeywordTagFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component';
 import {TourDocKeywordTagFormComponent} from '../components/tdoc-keywordtagform/tdoc-keywordtagform.component';
-import {CommonDocAssignJoinFormComponentResultType} from '../components/cdoc-assignjoinform/cdoc-assignjoinform.component';
+import {CommonDocAssignJoinFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
 import {TourDocAssignJoinFormComponent} from '../components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 
 @Injectable()

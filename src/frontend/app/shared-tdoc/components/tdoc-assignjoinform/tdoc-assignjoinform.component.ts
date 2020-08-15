@@ -8,12 +8,12 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {ToastrService} from 'ngx-toastr';
 import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
-import {CommonDocAssignJoinFormComponent} from '../cdoc-assignjoinform/cdoc-assignjoinform.component';
+import {CommonDocAssignJoinFormComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
 
 @Component({
     selector: 'app-tdoc-assignform',
-    templateUrl: '../cdoc-assignjoinform/cdoc-assignjoinform.component.html',
-    styleUrls: ['../cdoc-assignjoinform/cdoc-assignjoinform.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocAssignJoinFormComponent

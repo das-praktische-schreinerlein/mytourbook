@@ -2,6 +2,7 @@ import {
     BaseEntityRecord,
     BaseEntityRecordFactory,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
@@ -10,7 +11,6 @@ import {
     IdValidationRule,
     NumberValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export interface TourDocRatePersonalRecordType extends BaseEntityRecordType {
     ausdauer: number;
@@ -97,7 +97,7 @@ export class TourDocRatePersonalRecordValidator extends BaseEntityRecordValidato
 }
 
 
-export let TourDocRatePersonalRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocRatePersonalRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

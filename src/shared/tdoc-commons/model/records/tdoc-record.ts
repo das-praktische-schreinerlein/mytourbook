@@ -1,6 +1,7 @@
 import {
     BaseEntityRecord,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordType
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {
@@ -47,7 +48,6 @@ import {
 import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordFactory, TourDocLinkedRouteRecordValidator} from './tdoclinkedroute-record';
 import {TourDocInfoRecord, TourDocInfoRecordFactory, TourDocInfoRecordValidator} from './tdocinfo-record';
 import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordFactory, TourDocLinkedInfoRecordValidator} from './tdoclinkedinfo-record';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;
@@ -76,7 +76,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
 }
 
 
-export let TourDocRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocRecordRelation: BaseEntityRecordRelationsType = {
     hasOne: {
         tdocdatatech: {
             // database column

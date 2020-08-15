@@ -2,15 +2,17 @@ import {
     BaseEntityRecord,
     BaseEntityRecordFactory,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {
     DescValidationRule,
-    GenericValidatorDatatypes, IdValidationRule, KeyParamsValidationRule,
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    KeyParamsValidationRule,
     NameValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export interface TourDocInfoRecordType extends BaseEntityRecordType {
     name: string;
@@ -91,7 +93,7 @@ export class TourDocInfoRecordValidator extends BaseEntityRecordValidator {
     }
 }
 
-export let TourDocInfoRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocInfoRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

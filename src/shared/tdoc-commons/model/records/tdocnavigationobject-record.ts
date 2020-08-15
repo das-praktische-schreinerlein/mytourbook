@@ -1,11 +1,11 @@
 import {
     BaseEntityRecordFactory,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {BaseNavigationObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/basenavigationobject-record';
 import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export class TourDocNavigationObjectRecord extends BaseNavigationObjectRecord {
     static navigationObjectFields = {
@@ -60,7 +60,7 @@ export class TourDocNavigationObjectRecordValidator extends BaseEntityRecordVali
     }
 }
 
-export let TourDocNavigationObjectRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocNavigationObjectRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

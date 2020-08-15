@@ -3,9 +3,11 @@ import {
     BaseVideoRecordFactory,
     BaseVideoRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/basevideo-record';
-import {BaseEntityRecordFieldConfig} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export class TourDocVideoRecord extends BaseVideoRecord {
     static tdocFields = {
@@ -62,7 +64,7 @@ export class TourDocVideoRecordValidator extends BaseVideoRecordValidator {
     }
 }
 
-export let TourDocVideoRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocVideoRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

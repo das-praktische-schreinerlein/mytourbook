@@ -4,7 +4,7 @@ import {ActionTagBlockTableConfigType} from '@dps/mycms-commons/dist/action-comm
 import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-replace.adapter';
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
-import {JoinModelConfigTableType} from '../../services/common-sql-join.adapter';
+import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
 
 export class SqlMytbDbTrackConfig {
     public static readonly tableConfig: TableConfig = {

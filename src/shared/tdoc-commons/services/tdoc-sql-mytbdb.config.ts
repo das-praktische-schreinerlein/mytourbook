@@ -6,8 +6,8 @@ import {KeywordModelConfigType} from '@dps/mycms-commons/dist/action-commons/act
 import {PlaylistModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 import {RateModelConfigType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {ObjectDetectionModelConfigType} from '@dps/mycms-commons/dist/commons/model/common-sql-object-detection.model';
-import {JoinModelConfigsType} from './common-sql-join.adapter';
-import {ActionTagAssignJoinConfigType} from './common-sql-actiontag-assignjoin.adapter';
+import {JoinModelConfigsType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
+import {ActionTagAssignJoinConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 import {SqlMytbDbTrackConfig} from '../model/repository/sql-mytbdb-track.config';
 import {SqlMytbDbImageConfig} from '../model/repository/sql-mytbdb-image.config';
 import {SqlMytbDbOdImageObjectConfig} from '../model/repository/sql-mytbdb-odimageobject.config';

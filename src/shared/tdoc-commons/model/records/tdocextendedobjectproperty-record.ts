@@ -1,11 +1,14 @@
 import {
     BaseEntityRecordFactory,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {BaseExtendedObjectPropertyRecord, BaseExtendedObjectPropertyRecordType} from './baseextendedobjectproperty-record';
+import {
+    BaseExtendedObjectPropertyRecord,
+    BaseExtendedObjectPropertyRecordType
+} from '@dps/mycms-commons/dist/search-commons/model/records/baseextendedobjectproperty-record';
 import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 // tslint:disable-next-line:no-empty-interface
 export interface TourDocExtendedObjectPropertyRecordType extends BaseExtendedObjectPropertyRecordType {
@@ -65,7 +68,7 @@ export class TourDocExtendedObjectPropertyRecordValidator extends BaseEntityReco
     }
 }
 
-export let TourDocExtendedObjectPropertyRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocExtendedObjectPropertyRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column

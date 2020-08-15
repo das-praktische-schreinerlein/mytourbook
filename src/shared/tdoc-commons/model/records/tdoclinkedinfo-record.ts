@@ -1,15 +1,15 @@
 import {
     BaseEntityRecordFactory,
     BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {BaseJoinRecord, BaseJoinRecordType} from './basejoin-record';
+import {BaseJoinRecord, BaseJoinRecordType} from '@dps/mycms-commons/dist/search-commons/model/records/basejoin-record';
 import {
     DescValidationRule,
     GenericValidatorDatatypes,
     IdValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonDocRecordRelationsType} from './base-types';
 
 export interface TourDocLinkedInfoRecordType extends BaseJoinRecordType {
     linkedDetails: string;
@@ -73,7 +73,7 @@ export class TourDocLinkedInfoRecordValidator extends BaseEntityRecordValidator 
     }
 }
 
-export let TourDocLinkedInfoRecordRelation: CommonDocRecordRelationsType = {
+export let TourDocLinkedInfoRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
