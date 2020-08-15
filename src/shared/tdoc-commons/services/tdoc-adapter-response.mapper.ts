@@ -13,29 +13,17 @@ import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
 import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
 import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
-import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
-import {
-    BaseEntityRecord,
-    BaseEntityRecordRelationsType,
-    BaseEntityRecordRelationType
-} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
-    protected mapperUtils = new MapperUtils();
-    protected config: {} = {};
-
     private readonly _objectSeparator = ';;';
     private readonly _fieldSeparator = ':::';
     private readonly _valueSeparator = '=';
 
+    protected mapperUtils = new MapperUtils(this._objectSeparator, this._fieldSeparator, this._valueSeparator);
+    protected config: {} = {};
+
     public static generateDoubletteValue(value: string): string {
-        return value === undefined ? value :
-            value.toLowerCase()
-                .replace(/ß/g, 'ss')
-                .replace(/ö/g, 'oe')
-                .replace(/ü/g, 'ue')
-                .replace(/ä/g, 'ae')
-                .replace(/[^a-z0-9]/g, '');
+        return MapperUtils.generateDoubletteValue(value);
     }
 
     constructor(config: any) {
@@ -78,7 +66,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/,/g, ',,')
             .replace(/ /g, '_') : '');
         values['name_s'] = props.name;
-        values['key_s'] = TourDocAdapterResponseMapper.generateDoubletteValue(props.name);
+        values['key_s'] = MapperUtils.generateDoubletteValue(props.name);
         values['techname_s'] = props.techName;
         values['objects_txt'] =
             (props.objects ? props.objects.split(', ').join(',,') : '');
@@ -186,7 +174,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
 
     mapValuesToRecord(mapper: Mapper, values: {}): TourDocRecord {
         const record = TourDocRecordFactory.createSanitized(values);
-        this.mapValuesToSubRecords(mapper, values, record, TourDocRecordRelation);
+        this.mapperUtils.mapValuesToSubRecords(mapper, values, record, TourDocRecordRelation);
 
         return record;
     }
@@ -465,23 +453,23 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 record.objects = ObjectUtils.mergePropertyValues(docs, 'i_objects', ', ');
                 break;
             case 'image_objectdetections':
-                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocodimageobject'],
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocodimageobject'],
                     ['i_objectdetections', 'i_objectdetections_txt'], record, docs);
                 break;
             case 'navigation_objects':
-                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocnavigationobject'],
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocnavigationobject'],
                     ['navigation_objects', 'navigation_objects_txt'], record, docs);
                 break;
             case 'extended_object_properties':
-                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocextendedobjectproperty'],
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocextendedobjectproperty'],
                     ['extended_object_properties', 'extended_object_properties_txt'], record, docs);
                 break;
             case 'linkedroutes':
-                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedroute'],
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedroute'],
                     ['linkedroutes', 'linkedroutes_txt'], record, docs);
                 break;
             case 'linkedinfos':
-                this.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedinfo'],
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedinfo'],
                     ['linkedinfos', 'linkedinfos_txt'], record, docs);
                 break;
             case 'video':
@@ -509,81 +497,5 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 break;
         }
     }
-
-    explodeAndMapDetailResponseDocuments(mapper: Mapper, relation: BaseEntityRecordRelationType, srcFields: string[],
-                                         record: BaseEntityRecord, docs: any[]): void {
-        if (docs === undefined) {
-            return;
-        }
-
-        let subDocs = [];
-        docs.forEach(doc => {
-            let fieldName;
-            for (const srcField of srcFields) {
-                if (doc[srcField] !== undefined && doc[srcField] !== null) {
-                    fieldName = srcField;
-                    break;
-                }
-            }
-            if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                const objects = ObjectUtils.explodeValueToObjects(doc[fieldName], this._objectSeparator,
-                    this._fieldSeparator, this._valueSeparator);
-                subDocs = subDocs.concat(objects);
-            }
-        });
-
-        record.set(relation.localField,
-            this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers[relation.mapperKey],
-                relation.factory, record, subDocs));
-    }
-
-    mapValuesToSubRecords(mapper: Mapper, values: {}, record: CommonDocRecord, relations: BaseEntityRecordRelationsType) {
-        if (relations.hasOne) {
-            for (const relationKey in relations.hasOne) {
-                const relation: BaseEntityRecordRelationType = relations.hasOne[relationKey];
-                const subMapper = mapper['datastore']._mappers[relation.mapperKey];
-                let subValues = undefined;
-                for (const key in values) {
-                    if (key.startsWith(relation.localField + '.')) {
-                        const subKey = key.replace(relation.localField + '.', '');
-                        subValues = subValues || {};
-                        subValues[subKey] = values[key];
-                    }
-                }
-
-                if (subValues) {
-                    record.set(relation.localField, subMapper.createRecord(
-                        relation.factory.getSanitizedValues(subValues, {}))
-                    );
-                } else {
-                    record.set(relation.localField, undefined);
-                }
-            }
-        }
-
-        if (relations.hasMany) {
-            for (const relationKey in relations.hasMany) {
-                const relation: BaseEntityRecordRelationType = relations.hasMany[relationKey];
-                const joinMapper = mapper['datastore']._mappers[relation.mapperKey];
-                if (values[relation.localField]) {
-                    const joinValues = values[relation.localField];
-                    const joinRecords: Record[] = [];
-                    for (const joinRecordProps of joinValues) {
-                        joinRecords.push(
-                            joinMapper.createRecord(
-                                relation.factory.getSanitizedValues(joinRecordProps, {}))
-                        );
-                    }
-
-                    if (joinRecords.length > 0) {
-                        record.set(relation.localField, joinRecords);
-                    } else {
-                        record.set(relation.localField, undefined);
-                    }
-                }
-            }
-        }
-    }
-
 }
 
