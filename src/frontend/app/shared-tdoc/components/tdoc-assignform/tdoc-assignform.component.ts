@@ -38,7 +38,7 @@ export class TourDocAssignFormComponent
             case 'TRIP':
                 return ['loc_lochirarchie_txt'];
             case 'NEWS':
-                return ['loc_lochirarchie_txt'];
+                return [];
             case 'INFO':
                 return ['loc_lochirarchie_txt'];
             default:

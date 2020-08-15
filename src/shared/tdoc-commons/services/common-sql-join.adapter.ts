@@ -73,7 +73,8 @@ export class CommonSqlJoinAdapter {
             const values = [dbId];
             for (const destField in joinFields) {
                 fields.push(destField);
-                values.push(joinRecord[joinFields[destField]]);
+                const value = joinRecord[joinFields[destField]];
+                values.push(value === undefined || value === null || value === 'undefined' || value === 'null' ? null : value);
             }
             const insertSqlQuery: RawSqlQueryData = {
                 sql: 'INSERT INTO ' + joinTable + ' (' + fields.join(', ') + ') ' +
