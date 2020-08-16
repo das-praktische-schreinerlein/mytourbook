@@ -9,7 +9,7 @@ ALTER TABLE info ADD COLUMN if_publisher varchar(255) DEFAULT NULL;
 # add info-joins
 ############# */
 CREATE TABLE IF NOT EXISTS tour_info (
-  tif_id int(11) NOT NULL PRIMARY KEY,
+  tif_id int(11) PRIMARY KEY,
   if_id int(11) NOT NULL,
   t_id int(11) NOT NULL,
   tif_linked_details varchar(255) DEFAULT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS tour_info (
 );
 
 CREATE TABLE IF NOT EXISTS location_info (
-  lif_id int(11) NOT NULL PRIMARY KEY,
+  lif_id int(11) PRIMARY KEY,
   if_id int(11) NOT NULL,
   l_id int(11) NOT NULL,
   lif_linked_details varchar(255) DEFAULT NULL,

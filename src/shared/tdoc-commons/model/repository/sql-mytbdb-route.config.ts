@@ -87,11 +87,11 @@ export class SqlMytbDbRouteConfig {
             },
             {
                 profile: 'linkedinfos',
-                sql: '(SELECT CONCAT("type=", COALESCE(if_typ, "null"), ":::name=", COALESCE(if_name, "null"),' +
+                sql: 'SELECT CONCAT("type=", COALESCE(if_typ, "null"), ":::name=", COALESCE(if_name, "null"),' +
                     '    ":::refId=", CAST(info.if_id AS CHAR), ":::linkedDetails=", COALESCE(tour_info.tif_linked_details, "null"))' +
                     '  AS linkedinfos' +
                     '  FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id WHERE tour_info.t_id IN (:id)' +
-                    '  ORDER BY if_name) ',
+                    '  ORDER BY if_name',
                 parameterNames: ['id']
             },
             {

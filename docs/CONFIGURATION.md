@@ -109,7 +109,7 @@ The configuration-file to configure the backend-api-server.
 - pathes to images and tracks
 ```json
 {
-    "apiRouteTracksStaticDir": "D:/webs/www.michas-ausflugstipps.de/dataDB/tracks/",
+    "apiRouteTracksStaticDir": "F:/webs/www.michas-ausflugstipps.de/dataDB/tracks/",
     "apiRoutePicturesStaticDir": "D:/Bilder/www.michas-ausflugstipps.de/"
 }
 ```

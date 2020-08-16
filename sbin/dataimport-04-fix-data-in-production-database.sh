@@ -41,7 +41,7 @@ echo "    source installer/db/mysql/mytbdb/fixture-fix-track_image-blocked-defau
 echo "    source installer/db/mysql/mytbdb/fixture-fix-tracks-without-route.sql"
 echo "    source installer/db/mysql/mytbdb/fixture-fix-trackdates-by-imagedates.sql"
 echo "    source installer/db/mysql/mytbdb/fixture-fix-gpx-timecorrector.sql)"
-echo "YOUR TODO: generate gpx-track-files d:/webs/www.michas-ausflugstipps.de/libexec/gentracks.bat"
+echo "YOUR TODO: generate gpx-track-files F:/webs/www.michas-ausflugstipps.de/libexec/gentracks.bat"
 echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"
 echo "   mysql"
 echo "    source installer/db/mysql/mytbdb/fixture-fix-trackdates-by-gpstrackpoints.sql"

@@ -322,9 +322,9 @@ export class SqlMytbDbInfoConfig {
                 ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) DESC',
             'name': 'if_name ASC',
             'type': 'if_typ ASC',
-            'forExport': 'if_id ASC',
+            'forExport': 'info.if_id ASC',
             'location': 'location.l_lochirarchietxt ASC',
-            'relevance': 'if_id DESC'
+            'relevance': 'info.if_id DESC'
         },
         spartialConfig: {
             lat: 'location.l_geo_latdeg',
