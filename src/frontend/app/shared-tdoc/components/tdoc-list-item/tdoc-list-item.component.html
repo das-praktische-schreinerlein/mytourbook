@@ -154,6 +154,9 @@
                         <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
                         <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
                         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                        <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
+                                                             [categories]="['ENTITYCOUNT']"
+                                                             [profile]="'list-item-flat-big'"></app-cdoc-extended-object-properties>
                     </ng-template>
                 </ngb-panel>
                 <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">
