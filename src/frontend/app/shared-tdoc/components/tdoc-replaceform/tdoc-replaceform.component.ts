@@ -78,6 +78,8 @@ export class TourDocReplaceFormComponent
                 return 'ROUTE';
             case 'ROUTE':
                 return 'TRACK';
+            case 'INFO':
+                return 'ROUTE';
             case 'LOCATION':
                 return 'TRACK';
             case 'TRIP':
