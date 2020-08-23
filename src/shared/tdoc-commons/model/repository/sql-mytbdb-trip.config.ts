@@ -40,6 +40,32 @@ export class SqlMytbDbTripConfig {
                     '             ON trip.tr_id=doublettes.id',
                 triggerParams: ['doublettes'],
                 groupByFields: []
+            },
+            {
+                from: 'INNER JOIN (SELECT tr_id AS id FROM kategorie' +
+                    '     WHERE k_rate_motive > 0 AND k_id NOT IN ' +
+                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
+                    '  ON trip.tr_id=conflictingRates.id',
+                triggerParams: ['conflictingRates'],
+                groupByFields: []
+            },
+            {
+                from: 'INNER JOIN (SELECT tr_id AS id FROM kategorie' +
+                    '       WHERE k_id IN' +
+                    '           (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) unRatedChildren' +
+                    '   ON trip.tr_id=unRatedChildren.id',
+                triggerParams: ['unRatedChildren'],
+                groupByFields: []
+            },
+            {
+                from: 'INNER JOIN (SELECT tr_id AS id FROM kategorie' +
+                    '     WHERE k_id NOT IN ' +
+                    '       (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
+                    '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kategorie_favorites%"))' +
+                    '        AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
+                    ' ON trip.tr_id=noMainFavoriteChildren.id',
+                triggerParams: ['noMainFavoriteChildren'],
+                groupByFields: []
             }
         ],
         groupbBySelectFieldList: true,
@@ -153,8 +179,17 @@ export class SqlMytbDbTripConfig {
                 action: AdapterFilterActions.IN
             },
             'noMainFavoriteChildren': {
-                constValues: ['noMainFavoriteChildren'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(DISTINCT kategorie.tr_id) AS count, "noMainFavoriteChildren" AS value,' +
+                    ' "noMainFavoriteChildren" AS label, "true" AS id' +
+                    ' FROM kategorie ' +
+                    ' INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
+                    '     (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
+                    '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kategorie_favorites%"))' +
+                    '      AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
+                    ' ON kategorie.k_id=noMainFavoriteChildren.id WHERE kategorie.tr_id IS NOT NULL',
+                cache: {
+                    useCache: false
+                }
             },
             'noRoute': {
                 constValues: ['noRoute'],
@@ -180,8 +215,15 @@ export class SqlMytbDbTripConfig {
                 filterField: '"666dummy999"'
             },
             'unRatedChildren': {
-                constValues: ['unRatedChildren'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(DISTINCT kategorie.tr_id) AS count, "unRatedChildren" AS value,' +
+                    ' "unRatedChildren" AS label, "true" AS id' +
+                    ' FROM kategorie ' +
+                    ' INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id IN' +
+                    '      (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) unRatedChildren' +
+                    '   ON kategorie.k_id=unRatedChildren.id WHERE kategorie.tr_id IS NOT NULL',
+                cache: {
+                    useCache: false
+                }
             },
             // common
             'id_notin_is': {
@@ -324,9 +366,9 @@ export class SqlMytbDbTripConfig {
         filterMapping: {
             // dashboard
             doublettes: '"doublettes"',
-            conflictingRates: '"666dummy999"',
+            conflictingRates: '"conflictingRates"',
             noFavoriteChildren: '"666dummy999"',
-            noMainFavoriteChildren: '"666dummy999"',
+            noMainFavoriteChildren: '"noMainFavoriteChildren"',
             noCoordinates: '"666dummy999"',
             noLocation: 'trip.l_id',
             noRoute: '"666dummy999"',
@@ -334,7 +376,7 @@ export class SqlMytbDbTripConfig {
             todoDesc: '"todoDesc"',
             todoKeywords: 'keyword.kw_name',
             unrated: '"666dummy999"',
-            unRatedChildren: '"666dummy999"',
+            unRatedChildren: '"unRatedChildren"',
             // common
             id: 'trip.tr_id',
             destination_id_s: 'dt.d_id',

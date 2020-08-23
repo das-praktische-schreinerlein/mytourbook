@@ -222,7 +222,7 @@ export class SqlMytbDbTrackConfig {
                     ' "conflictingRates" AS label, "true" AS id' +
                     ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
                     '   k_rate_motive > 0 AND k_id NOT IN ' +
-                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 6))) conflictingRates' +
+                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
                     '  ON kategorie.k_id=conflictingRates.id',
                 cache: {
                     useCache: false

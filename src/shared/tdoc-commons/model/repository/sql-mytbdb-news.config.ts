@@ -19,6 +19,35 @@ export class SqlMytbDbNewsConfig {
                     '             ON news.n_id=doublettes.id',
                 triggerParams: ['doublettes'],
                 groupByFields: []
+            },
+            {
+                from: 'INNER JOIN (SELECT DISTINCT n_id AS id FROM news' +
+                    '     INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    '     WHERE k_rate_motive > 0 AND k_id NOT IN ' +
+                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
+                    '  ON news.n_id=conflictingRates.id',
+                triggerParams: ['conflictingRates'],
+                groupByFields: []
+            },
+            {
+                from: 'INNER JOIN (SELECT DISTINCT n_id AS id FROM news' +
+                    '     INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    '       WHERE k_id IN' +
+                    '           (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) unRatedChildren' +
+                    '   ON news.n_id=unRatedChildren.id',
+                triggerParams: ['unRatedChildren'],
+                groupByFields: []
+            },
+            {
+                from: 'INNER JOIN (SELECT DISTINCT n_id AS id FROM news' +
+                    '   INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    '     WHERE k_id NOT IN ' +
+                    '       (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
+                    '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kategorie_favorites%"))' +
+                    '        AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
+                    ' ON news.n_id=noMainFavoriteChildren.id',
+                triggerParams: ['noMainFavoriteChildren'],
+                groupByFields: []
             }
         ],
         loadDetailData: [
@@ -99,7 +128,7 @@ export class SqlMytbDbNewsConfig {
         facetConfigs: {
             // dashboard
             'doublettes': {
-                selectSql: 'SELECT COUNT(news.n_id) AS count, "doublettes" AS value,' +
+                selectSql: 'SELECT COUNT(DISTINCT news.n_id) AS count, "doublettes" AS value,' +
                     ' "doublettes" AS label, "true" AS id' +
                     ' FROM news INNER JOIN (SELECT n_id AS id' +
                     '              FROM news WHERE ' + TourDocSqlUtils.generateDoubletteNameSql('n_headline') +
@@ -128,8 +157,17 @@ export class SqlMytbDbNewsConfig {
                 filterField: '"666dummy999"'
             },
             'noMainFavoriteChildren': {
-                constValues: ['noMainFavoriteChildren'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(DISTINCT news.n_id) AS count, "noMainFavoriteChildren" AS value,' +
+                    ' "noMainFavoriteChildren" AS label, "true" AS id' +
+                    ' FROM news INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    ' INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id NOT IN ' +
+                    '     (SELECT DISTINCT k_ID FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.I_ID WHERE p_id IN ' +
+                    '          (SELECT DISTINCT p_id FROM playlist WHERE p_name like "%kategorie_favorites%"))' +
+                    '      AND k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) noMainFavoriteChildren' +
+                    ' ON kategorie.k_id=noMainFavoriteChildren.id',
+                cache: {
+                    useCache: false
+                }
             },
             'noRoute': {
                 constValues: ['noRoute'],
@@ -155,8 +193,15 @@ export class SqlMytbDbNewsConfig {
                 filterField: '"666dummy999"'
             },
             'unRatedChildren': {
-                constValues: ['unRatedChildren'],
-                filterField: '"666dummy999"'
+                selectSql: 'SELECT COUNT(DISTINCT news.n_id) AS count, "unRatedChildren" AS value,' +
+                    ' "unRatedChildren" AS label, "true" AS id' +
+                    ' FROM news INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    ' INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE k_id IN' +
+                    '      (SELECT DISTINCT k_ID FROM image WHERE i_rate = 0 OR i_rate IS NULL)) unRatedChildren' +
+                    '   ON kategorie.k_id=unRatedChildren.id',
+                cache: {
+                    useCache: false
+                }
             },
             // common
             'id_notin_is': {
@@ -284,9 +329,9 @@ export class SqlMytbDbNewsConfig {
         filterMapping: {
             // dashboard
             doublettes: '"doublettes"',
-            conflictingRates: '"666dummy999"',
+            conflictingRates: '"conflictingRates"',
             noFavoriteChildren: '"666dummy999"',
-            noMainFavoriteChildren: '"666dummy999"',
+            noMainFavoriteChildren: '"noMainFavoriteChildren"',
             noCoordinates: '"666dummy999"',
             noLocation: '"666dummy999"',
             noRoute: '"666dummy999"',
@@ -294,7 +339,7 @@ export class SqlMytbDbNewsConfig {
             todoDesc: '"todoDesc"',
             todoKeywords: 'keyword.kw_name',
             unrated: '"666dummy999"',
-            unRatedChildren: '"666dummy999"',
+            unRatedChildren: '"unRatedChildren"',
             // common
             id: 'news.n_id',
             news_id_i: 'news.n_id',

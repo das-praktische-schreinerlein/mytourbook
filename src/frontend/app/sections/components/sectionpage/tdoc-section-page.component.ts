@@ -221,13 +221,12 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             case 'doublettes':
                 return recordType !== 'ODIMGOBJECT';
             case 'conflictingRates':
-                return recordType === 'TRACK';
             case 'noFavoriteChildren':
                 return recordType === 'TRACK';
             case 'unRatedChildren':
-                return recordType === 'TRACK';
+                return recordType === 'TRACK' || recordType === 'NEWS' || recordType === 'TRIP';
             case 'noMainFavoriteChildren':
-                return recordType === 'TRACK' || recordType === 'ROUTE';
+                return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'NEWS' || recordType === 'TRIP';
             case 'noCoordinates':
                 return recordType === 'LOCATION';
             case 'objectDetectionCorrectionNeeded':
