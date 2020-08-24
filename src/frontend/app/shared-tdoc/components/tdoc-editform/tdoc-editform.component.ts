@@ -150,7 +150,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 protected platformService: PlatformService,
                 protected angularMarkdownService: AngularMarkdownService, protected angularHtmlService: AngularHtmlService,
                 protected tourDocNameSuggesterService: TourDocNameSuggesterService,
-                  protected tourDocDescSuggesterService: TourDocDescSuggesterService) {
+                protected tourDocDescSuggesterService: TourDocDescSuggesterService) {
         super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
     }
 
@@ -159,23 +159,27 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     recommendName(): void {
-        this.setValue('name', this.tourDocNameSuggesterService.suggest(
-            this.editFormGroup.getRawValue(),
-            {
+        this.tourDocNameSuggesterService.suggest(
+            this.editFormGroup.getRawValue(), {
                 optionsSelectLocId: this.optionsSelect.locId,
                 optionsSelectSubTypeActiontype: this.optionsSelect.subTypeActiontype,
                 personsFound: this.personsFound
             }
-        ));
+        ).then(name => {
+            this.setValue('name', name);
+        });
     }
 
     recommendDesc(): void {
-        this.setValue('descTxt', this.tourDocDescSuggesterService.suggest(
-            this.editFormGroup.getRawValue(),
-            {
-            }
-        ));
-        this.renderRecommendedDesc(true);
+        this.tourDocDescSuggesterService.suggest(
+            this.editFormGroup.getRawValue(), {}
+        ).then(desc => {
+            this.setValue('descTxt', desc);
+            this.renderRecommendedDesc(true);
+        }).catch(reason => {
+            this.setValue('descTxt', '');
+            this.renderRecommendedDesc(true);
+        });
     }
 
     renderRecommendedDesc(force: boolean): string {

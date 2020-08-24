@@ -21,7 +21,7 @@ export class TourDocNameSuggesterService implements SuggesterService {
     constructor(protected searchFormUtils: SearchFormUtils) {
     }
 
-    public suggest(form: {}, environment: TourDocNameSuggesterEnvironment): string {
+    public suggest(form: {}, environment: TourDocNameSuggesterEnvironment): Promise<string> {
         let suggestion = '';
 
         let actiontype = form['subtype'];
@@ -63,7 +63,9 @@ export class TourDocNameSuggesterService implements SuggesterService {
                 (new Date(form['dateend'])));
         }
 
-        return suggestion;
+        return new Promise<string>(resolve => {
+            resolve(suggestion);
+        });
     }
 
 }
