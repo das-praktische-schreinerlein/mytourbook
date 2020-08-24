@@ -28,6 +28,7 @@ import {environment} from '../../../../environments/environment';
 
 export interface TourDocShowpageComponentAvailableTabs {
     IMAGE?: boolean;
+    IMAGE_FAVORITES?: boolean;
     IMAGE_NEARBY?: boolean;
     INFO?: boolean;
     ODIMGOBJECT?: boolean;
@@ -109,6 +110,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     };
     availableTabs: TourDocShowpageComponentAvailableTabs = {
         IMAGE: true,
+        IMAGE_FAVORITES: false,
         IMAGE_NEARBY: true,
         INFO: true,
         DESTINATION: true,

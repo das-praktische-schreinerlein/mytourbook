@@ -42,10 +42,11 @@ export class SqlMytbDbTripConfig {
                 groupByFields: []
             },
             {
-                from: 'INNER JOIN (SELECT tr_id AS id FROM kategorie' +
-                    '     WHERE k_rate_motive > 0 AND k_id NOT IN ' +
-                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
-                    '  ON trip.tr_id=conflictingRates.id',
+                from: 'INNER JOIN (SELECT tr_id AS id FROM trip WHERE tr_id NOT IN (' +
+                    '      SELECT DISTINCT tr_id FROM kategorie' +
+                    '         WHERE k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate >= k_rate_motive OR i_rate >= 9)' +
+                    '         AND tr_id IS NOT NULL)) conflictingRates' +
+                    '  ON trip.tr_id = conflictingRates.id',
                 triggerParams: ['conflictingRates'],
                 groupByFields: []
             },
@@ -161,7 +162,7 @@ export class SqlMytbDbTripConfig {
             },
             'conflictingRates': {
                 constValues: ['conflictingRates'],
-                filterField: '"666dummy999"'
+                filterField: '"conflictingRates"'
             },
             'noCoordinates': {
                 constValues: ['noCoordinates'],
@@ -202,9 +203,9 @@ export class SqlMytbDbTripConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(trip.tr_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM trip WHERE tr_meta_shortdesc LIKE "TODODESC"',
+                    ' FROM trip WHERE tr_meta_shortdesc LIKE "TODODESC%"',
                 filterField: 'trip.tr_meta_shortdesc',
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
                 constValues: ['todoKeywords'],

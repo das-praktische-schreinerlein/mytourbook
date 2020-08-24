@@ -163,9 +163,10 @@
             </tr>
             <ng-container *ngFor="let dashboardRowType of dashboardRows">
                 <tr *ngIf="availableDashboardRows[dashboardRowType]">
-                    <td>{{ 'label.dashboardColumn.' + dashboardRowType | translate}}</td>
+                    <td class="dashboardcolumn-available">{{ 'label.dashboardColumn.' + dashboardRowType | translate}}</td>
                     <ng-container *ngFor="let type of dashboardColumns">
-                        <td *ngIf="availableDashboardColumns[type]">
+                        <td *ngIf="availableDashboardColumns[type]"
+                            [ngClass]="getDashboardVisibilityForType(dashboardRowType, type) ? 'dashboardcolumn-available' : 'dashboardcolumn-unavailable'">
                             <app-tdoc-dashboard-searchcolumn [baseSearchUrl]="baseSearchUrl"
                                                              [params]="getDashboardFiltersForType(dashboardRowType, type, 'forExport')"
                                                              [showOnlyIfRecordsFound]="false"

@@ -396,6 +396,37 @@
                     ]
                 },
                 {
+                    "key": "persRate_wichtigkeit_album",
+                    "type": "tag",
+                    "name": "W3* Personal Wichtigkeit Album",
+                    "shortName": "W3*",
+                    "payload": {
+                        "value": "9",
+                        "ratekey": "wichtigkeit"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.wichtigkeit",
+                            "command": "GE",
+                            "expectedValues": [9]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "persRate_wichtigkeit_milestone",
                     "type": "tag",
                     "name": "W4* Personal Wichtigkeit Meilenstein",
@@ -1587,6 +1618,7 @@
             "allowedQueryParams": [],
             "availableTabs": {
                 "IMAGE": true,
+                "IMAGE_FAVORITES": true,
                 "IMAGE_NEARBY": true,
                 "INFO": true,
                 "ODIMGOBJECT": true,

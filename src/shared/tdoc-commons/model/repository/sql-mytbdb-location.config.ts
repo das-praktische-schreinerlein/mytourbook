@@ -204,9 +204,9 @@ export class SqlMytbDbLocationConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(location.l_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM location WHERE l_meta_shortdesc LIKE "TODODESC"',
+                    ' FROM location WHERE l_meta_shortdesc LIKE "TODODESC%"',
                 filterField: 'location.l_meta_shortdesc',
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
                 selectSql: 'SELECT COUNT(location.l_id) AS count, "todoKeywords" AS value,' +

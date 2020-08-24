@@ -255,9 +255,9 @@ export class SqlMytbDbRouteConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(tour.t_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM tour WHERE t_datevon IS NOT NULL AND t_meta_shortdesc LIKE "TODODESC"',
+                    ' FROM tour WHERE t_datevon IS NOT NULL AND t_meta_shortdesc LIKE "TODODESC%"',
                 filterField: 't_datevon IS NOT NULL AND tour.t_meta_shortdesc',
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
                 selectSql: 'SELECT COUNT(tour.t_id) AS count, "todoKeywords" AS value,' +

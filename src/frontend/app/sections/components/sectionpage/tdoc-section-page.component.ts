@@ -221,6 +221,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             case 'doublettes':
                 return recordType !== 'ODIMGOBJECT';
             case 'conflictingRates':
+                return recordType === 'TRACK' || recordType === 'NEWS' || recordType === 'TRIP';
             case 'noFavoriteChildren':
                 return recordType === 'TRACK';
             case 'unRatedChildren':

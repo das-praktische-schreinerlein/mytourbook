@@ -46,9 +46,12 @@ export class SqlMytbDbTrackConfig {
                 groupByFields: []
             },
             {
-                from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
-                    '   k_rate_motive > 0 AND k_id NOT IN ' +
-                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
+                from: 'INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie' +
+                    '      WHERE k_rate_motive > 0' +
+                    '       AND k_id NOT IN  (SELECT DISTINCT k_ID FROM image' +
+                    '            WHERE i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6 AND kategorie.k_id=image.k_id)' +
+                    '       AND EXISTS (SELECT DISTINCT k_ID FROM image WHERE kategorie.k_id=image.k_id AND i_rate>0)' +
+                    '  ) conflictingRates' +
                     '  ON kategorie.k_id=conflictingRates.id',
                 triggerParams: ['conflictingRates'],
                 groupByFields: []
@@ -220,9 +223,12 @@ export class SqlMytbDbTrackConfig {
             'conflictingRates': {
                 selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "conflictingRates" AS value,' +
                     ' "conflictingRates" AS label, "true" AS id' +
-                    ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie WHERE' +
-                    '   k_rate_motive > 0 AND k_id NOT IN ' +
-                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
+                    ' FROM kategorie INNER JOIN (SELECT DISTINCT k_id AS id FROM kategorie' +
+                    '      WHERE k_rate_motive > 0' +
+                    '       AND k_id NOT IN  (SELECT DISTINCT k_ID FROM image' +
+                    '            WHERE i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6 AND kategorie.k_id=image.k_id)' +
+                    '       AND EXISTS (SELECT DISTINCT k_ID FROM image WHERE kategorie.k_id=image.k_id AND i_rate > 0)' +
+                    '  ) conflictingRates' +
                     '  ON kategorie.k_id=conflictingRates.id',
                 cache: {
                     useCache: false
@@ -281,7 +287,7 @@ export class SqlMytbDbTrackConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(kategorie.k_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM kategorie WHERE k_meta_shortdesc LIKE "TODODESC"',
+                    ' FROM kategorie WHERE k_meta_shortdesc LIKE "TODODESC%"',
                 filterField: 'kategorie.k_meta_shortdesc',
                 action: AdapterFilterActions.LIKE
             },

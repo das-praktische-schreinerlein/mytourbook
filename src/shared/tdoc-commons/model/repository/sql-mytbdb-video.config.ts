@@ -228,9 +228,9 @@ export class SqlMytbDbVideoConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(video.k_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM video WHERE v_meta_shortdesc LIKE "TODODESC"',
+                    ' FROM video WHERE v_meta_shortdesc LIKE "TODODESC%"',
                 filterField: 'video.v_meta_shortdesc',
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
                 selectSql: 'SELECT COUNT(video.v_id) AS count, "todoKeywords" AS value,' +

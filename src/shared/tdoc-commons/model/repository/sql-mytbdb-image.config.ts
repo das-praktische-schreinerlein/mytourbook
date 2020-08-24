@@ -249,9 +249,9 @@ export class SqlMytbDbImageConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(image.k_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM image WHERE i_meta_shortdesc LIKE "TODODESC"',
+                    ' FROM image WHERE i_meta_shortdesc LIKE "TODODESC%"',
                 filterField: 'image.i_meta_shortdesc',
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
                 selectSql: 'SELECT COUNT(image.i_id) AS count, "todoKeywords" AS value,' +

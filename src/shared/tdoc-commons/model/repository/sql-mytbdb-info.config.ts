@@ -13,11 +13,9 @@ export class SqlMytbDbInfoConfig {
         selectFrom: 'info LEFT JOIN location ON location.l_id = info.l_id',
         optionalGroupBy: [
             {
-                from: 'LEFT JOIN location_info lif ON info.if_id=lif.if_id ' +
-                    'LEFT JOIN location lifl ON lif.l_id=lifl.l_id OR info.l_id=lifl.l_id ',
+                from: 'LEFT JOIN location lifl ON info.l_id=lifl.l_id ',
                 triggerParams: ['loc_id_i', 'loc_id_is', 'loc_lochirarchie_txt'],
-                groupByFields: ['lifl.l_id', 'lifl.l_name',
-                    'GROUP_CONCAT(DISTINCT COALESCE(lif.lif_linked_details, "") ORDER BY lif.lif_linked_details SEPARATOR ", ") AS lif_ref_details']
+                groupByFields: ['lifl.l_id', 'lifl.l_name']
             },
             {
                 from: 'LEFT JOIN tour_info tift ON info.if_id = tift.if_id ' +
@@ -68,7 +66,13 @@ export class SqlMytbDbInfoConfig {
                     '             ON info.if_id=doublettes.id',
                 triggerParams: ['doublettes'],
                 groupByFields: []
-            }
+            },
+            {
+                from: 'INNER JOIN (SELECT if_id AS id FROM info WHERE l_id IS NULL OR l_id IN (0)) noLocation' +
+                    '             ON info.if_id=noLocation.id',
+                triggerParams: ['noLocation'],
+                groupByFields: []
+            },
         ],
         groupbBySelectFieldList: true,
         groupbBySelectFieldListIgnore: ['if_keywords'],
@@ -155,7 +159,7 @@ export class SqlMytbDbInfoConfig {
             'noLocation': {
                 selectSql: 'SELECT COUNT(info.if_id) AS count, "noLocation" AS value,' +
                     ' "noLocation" AS label, "true" AS id' +
-                    ' FROM info WHERE l_id IS NULL OR l_id IN (0,1 )',
+                    ' FROM info WHERE l_id IS NULL OR l_id IN (0)',
                 filterField: 'info.l_id',
                 action: AdapterFilterActions.IN
             },
@@ -174,9 +178,9 @@ export class SqlMytbDbInfoConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(info.if_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM info WHERE if_meta_shortdesc LIKE "TODODESC" OR if_meta_desc LIKE "TODODESC"',
+                    ' FROM info WHERE if_meta_shortdesc LIKE "TODODESC%" OR if_meta_desc LIKE "TODODESC%"',
                 filterField: 'info.if_meta_shortdesc',
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
                 selectSql: 'SELECT COUNT(info.if_id) AS count, "todoKeywords" AS value,' +
@@ -323,7 +327,7 @@ export class SqlMytbDbInfoConfig {
             'name': 'if_name ASC',
             'type': 'if_typ ASC',
             'forExport': 'info.if_id ASC',
-            'location': 'location.l_lochirarchietxt ASC',
+            'location': 'l_lochirarchietxt ASC, if_name ASC',
             'relevance': 'info.if_id DESC'
         },
         spartialConfig: {

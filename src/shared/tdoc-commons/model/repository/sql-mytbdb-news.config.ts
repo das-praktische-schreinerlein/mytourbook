@@ -21,10 +21,14 @@ export class SqlMytbDbNewsConfig {
                 groupByFields: []
             },
             {
-                from: 'INNER JOIN (SELECT DISTINCT n_id AS id FROM news' +
-                    '     INNER JOIN kategorie ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
-                    '     WHERE k_rate_motive > 0 AND k_id NOT IN ' +
-                    '       (SELECT DISTINCT k_ID FROM image WHERE (i_rate >= k_rate_motive OR i_rate >= 9 OR i_rate = 6))) conflictingRates' +
+                from: 'INNER JOIN (SELECT DISTINCT n_id AS id FROM news WHERE n_id NOT IN (' +
+                    '      SELECT DISTINCT n_id FROM kategorie' +
+                    '         INNER JOIN news ON (kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    '         WHERE k_id IN (SELECT DISTINCT k_ID FROM image WHERE i_rate >= k_rate_motive OR i_rate >= 9)' +
+                    '    UNION' +
+                    '      SELECT DISTINCT n_id FROM news WHERE NOT EXISTS (SELECT k_id from kategorie' +
+                    '           WHERE kategorie.k_datevon >= news.n_datevon AND kategorie.k_datevon <= news.n_datebis)' +
+                    '      )) conflictingRates' +
                     '  ON news.n_id=conflictingRates.id',
                 triggerParams: ['conflictingRates'],
                 groupByFields: []
@@ -142,7 +146,7 @@ export class SqlMytbDbNewsConfig {
             },
             'conflictingRates': {
                 constValues: ['conflictingRates'],
-                filterField: '"666dummy999"'
+                filterField: '"conflictingRates"'
             },
             'noCoordinates': {
                 constValues: ['noCoordinates'],
@@ -180,9 +184,9 @@ export class SqlMytbDbNewsConfig {
             'todoDesc': {
                 selectSql: 'SELECT COUNT(news.n_id) AS count, "todoDesc" AS value,' +
                     ' "todoDesc" AS label, "true" AS id' +
-                    ' FROM news WHERE n_message LIKE "TODODESC"',
+                    ' FROM news WHERE n_message LIKE "TODODESC%"',
                 filterField: 'news.n_message',
-                action: AdapterFilterActions.IN
+                action: AdapterFilterActions.LIKE
             },
             'todoKeywords': {
                 constValues: ['todoKeywords'],
