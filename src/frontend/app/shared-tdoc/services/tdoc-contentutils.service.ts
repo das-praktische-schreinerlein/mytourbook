@@ -257,6 +257,14 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             filters['type'] = 'IMAGE';
             filters['sort'] = 'ratePers';
             filters['perPage'] = 4;
+        } if (type === 'IMAGE_FAVORITES') {
+            if (!filters['moreFilter']) {
+                filters['moreFilter'] = '';
+            }
+            filters['moreFilter'] += '_,_personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
+            filters['type'] = 'IMAGE';
+            filters['sort'] = 'dateAsc';
+            filters['perPage'] = 12;
         } else if (type === 'TOPVIDEO') {
             if (!filters['moreFilter']) {
                 filters['moreFilter'] = '';
@@ -265,6 +273,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             filters['type'] = 'VIDEO';
             filters['sort'] = 'ratePers';
             filters['perPage'] = 4;
+        } else if (type === 'INFO') {
+            filters['sort'] = 'location';
         }
 
         if (minPerPage && minPerPage > 0 && minPerPage > filters['perPage']) {

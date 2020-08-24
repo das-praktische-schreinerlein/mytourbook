@@ -64,7 +64,7 @@
             </div>
         </fieldset>
         <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
         </div>
     </ng-template>
 
@@ -325,7 +325,7 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
         </div>
     </ng-template>
 
@@ -538,10 +538,16 @@
         </div>
     </ng-template>
 
-    <ng-template #inputDesc>
-        <div class="col-sm-12 form-inline input-group input-group-sm">
+    <ng-template #inputDesc let-recommend="recommend">
+        <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-form-block">
             <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Markdown:</label>
-            <textarea formControlName="descTxt" class="form-control" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.tdoc.desc"></textarea>
+            <span class="" *ngIf="recommend === true" (click)="recommendDesc()">&#x27F8; Generate</span>
+            <textarea formControlName="descTxt" class="form-control recommended-desc-form" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.tdoc.desc"></textarea>
+        </div>
+        <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-preview-block">
+            <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Vorschau:</label>
+            <span class="" (click)="renderRecommendedDesc(true)">&#x27F8; Update</span>
+            <div id="recommendedDesc">{{renderRecommendedDesc(false)}}</div>
         </div>
     </ng-template>
 

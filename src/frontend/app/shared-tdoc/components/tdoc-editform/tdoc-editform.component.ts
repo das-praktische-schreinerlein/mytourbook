@@ -11,14 +11,10 @@ import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TrackStatistic, TrackStatisticService} from '@dps/mycms-frontend-commons/dist/angular-maps/services/track-statistic.service';
 import {GeoGpxParser} from '@dps/mycms-frontend-commons/dist/angular-maps/services/geogpx.parser';
-import {
-    KeywordsState,
-    StructuredKeywordState
-} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {StructuredKeywordState} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {isArray} from 'util';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {
@@ -32,6 +28,11 @@ import {LatLng} from 'leaflet';
 import {TourDocAdapterResponseMapper} from '../../../../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import {TourDocLinkedRouteRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedroute-record';
 import {TourDocLinkedInfoRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedinfo-record';
+import {TourDocNameSuggesterService} from '../../services/tdoc-name-suggester.service';
+import {TourDocDescSuggesterService} from '../../services/tdoc-desc-suggester.service';
+import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
+import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
+import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -46,6 +47,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     private gpxParser = new GeoGpxParser();
     private personsFound: StructuredKeywordState[] = [];
     private geoLocMap: L.Map;
+    private flgDescRendered = false;
 
     public optionsSelect: {
         'tdocratepers.gesamt': IMultiSelectOption[];
@@ -144,7 +146,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
                 protected searchFormUtils: SearchFormUtils, protected tdocDataService: TourDocDataService,
-                protected contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document) {
+                protected contentUtils: TourDocContentUtils, @Inject(DOCUMENT) private document,
+                protected platformService: PlatformService,
+                protected angularMarkdownService: AngularMarkdownService, protected angularHtmlService: AngularHtmlService,
+                protected tourDocNameSuggesterService: TourDocNameSuggesterService,
+                  protected tourDocDescSuggesterService: TourDocDescSuggesterService) {
         super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
     }
 
@@ -153,47 +159,38 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     recommendName(): void {
-        let name = '';
+        this.setValue('name', this.tourDocNameSuggesterService.suggest(
+            this.editFormGroup.getRawValue(),
+            {
+                optionsSelectLocId: this.optionsSelect.locId,
+                optionsSelectSubTypeActiontype: this.optionsSelect.subTypeActiontype,
+                personsFound: this.personsFound
+            }
+        ));
+    }
 
-        let actiontype = this.editFormGroup.getRawValue()['subtype'];
-        if (this.editFormGroup.getRawValue()['subtype'] !== undefined) {
-            if (!isArray(actiontype)) {
-                actiontype = [actiontype];
+    recommendDesc(): void {
+        this.setValue('descTxt', this.tourDocDescSuggesterService.suggest(
+            this.editFormGroup.getRawValue(),
+            {
             }
-            const selectedActionTypes = this.searchFormUtils.extractSelected(this.optionsSelect.subTypeActiontype, actiontype);
-            if (selectedActionTypes.length > 0) {
-                name += selectedActionTypes[0].name;
-            }
-        }
-        if (this.personsFound.length > 0) {
-            const persons = [];
-            this.personsFound.forEach(personGroup => {
-                personGroup.keywords.forEach(person => {
-                    if (person.state === KeywordsState.SET) {
-                        persons.push(person.keyword);
-                    }
-                });
-            });
+        ));
+        this.renderRecommendedDesc(true);
+    }
 
-            name += ' mit ' + persons.join(', ');
-        }
-
-        let locId = this.editFormGroup.getRawValue()['locId'];
-        if (this.editFormGroup.getRawValue()['locId'] !== undefined) {
-            if (!isArray(locId)) {
-                locId = [locId];
-            }
-            const selectedLocIds = this.searchFormUtils.extractSelected(this.optionsSelect.locId, locId);
-            if (selectedLocIds.length > 0) {
-                name += ' bei ' + selectedLocIds[0].name.replace(/.* -> /g, '').replace(/ \(\d+\)/, '');
-            }
+    renderRecommendedDesc(force: boolean): string {
+        if ((this.flgDescRendered || !this.record) && !force) {
+            return;
         }
 
-        if (this.editFormGroup.getRawValue()['datestart'] !== undefined && this.editFormGroup.getRawValue()['dateend'] !== undefined) {
-            name += ' ' + DateUtils.formatDateRange((new Date(this.editFormGroup.getRawValue()['datestart'])),
-                (new Date(this.editFormGroup.getRawValue()['dateend'])));
+        const desc = this.editFormGroup.getRawValue()['descTxt'] || '';
+        if (!this.platformService.isClient()) {
+            return desc;
         }
-        this.setValue('name', name);
+
+        this.flgDescRendered = this.angularMarkdownService.renderMarkdown('#recommendedDesc', desc, true);
+
+        return '';
     }
 
     doGeoLocationSearch(selector) {
@@ -642,6 +639,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     }
 
     protected updateFormComponents(): void {
+        this.flgDescRendered = false;
         super.updateFormComponents();
         this.updateMap();
         this.updateGeoLocMap();

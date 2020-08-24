@@ -19,6 +19,8 @@ import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-com
 import {Router} from '@angular/router';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {TourDocNameSuggesterService} from '../../services/tdoc-name-suggester.service';
+import {TourDocDescSuggesterService} from '../../services/tdoc-desc-suggester.service';
 
 describe('TourDocEditformComponent', () => {
     let component: TourDocEditformComponent;
@@ -43,6 +45,8 @@ describe('TourDocEditformComponent', () => {
                 SearchParameterUtils,
                 CommonDocContentUtils,
                 TourDocContentUtils,
+                TourDocNameSuggesterService,
+                TourDocDescSuggesterService,
                 { provide: GenericAppService, useValue: new AppServiceStub() }
             ],
             schemas: [NO_ERRORS_SCHEMA]

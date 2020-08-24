@@ -13,6 +13,27 @@ textarea.nowrap {
     overflow: auto;
 }
 
+.recommended-desc-form-block {
+    align-items: first baseline;
+}
+
+
+.recommended-desc-preview-block {
+    align-items: first baseline;
+}
+
+
+.recommended-desc-form {
+    width: 100%;
+    max-width: 1000px;
+}
+
+#recommendedDesc {
+    border: 1px solid lightgray;
+    width: 100%;
+    max-width: 1000px;
+}
+
 table.trackSegmentStatistics td, table.trackSegmentStatistics th {
     border: 1px solid black;
 }

@@ -47,6 +47,8 @@ import {TourDocReplaceFormComponent} from './shared-tdoc/components/tdoc-replace
 import {TourDocAssignFormComponent} from './shared-tdoc/components/tdoc-assignform/tdoc-assignform.component';
 import {TourDocKeywordTagFormComponent} from './shared-tdoc/components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 import {TourDocAssignJoinFormComponent} from './shared-tdoc/components/tdoc-assignjoinform/tdoc-assignjoinform.component';
+import {TourDocNameSuggesterService} from './shared-tdoc/services/tdoc-name-suggester.service';
+import {TourDocDescSuggesterService} from './shared-tdoc/services/tdoc-desc-suggester.service';
 
 registerLocaleData(localeDe);
 
@@ -114,7 +116,9 @@ export function getAngulartics2Providers(): any {
         { provide: PlatformService, useClass: PlatformService},
         LayoutService,
         TourDocActionTagService,
-        TourDocPlaylistService
+        TourDocPlaylistService,
+        TourDocNameSuggesterService,
+        TourDocDescSuggesterService
     ],
     bootstrap: [AppComponent]
 })
