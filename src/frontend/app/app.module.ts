@@ -49,6 +49,11 @@ import {TourDocKeywordTagFormComponent} from './shared-tdoc/components/tdoc-keyw
 import {TourDocAssignJoinFormComponent} from './shared-tdoc/components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 import {TourDocNameSuggesterService} from './shared-tdoc/services/tdoc-name-suggester.service';
 import {TourDocDescSuggesterService} from './shared-tdoc/services/tdoc-desc-suggester.service';
+import {TourDocTripDescSuggesterService} from './shared-tdoc/services/tdoc-trip-desc-suggester.service';
+import {TourDocLocationDescSuggesterService} from './shared-tdoc/services/tdoc-location-desc-suggester.service';
+import {TourDocNewsDescSuggesterService} from './shared-tdoc/services/tdoc-news-desc-suggester.service';
+import {TourDocRouteDescSuggesterService} from './shared-tdoc/services/tdoc-route-desc-suggester.service';
+import {TourDocTrackDescSuggesterService} from './shared-tdoc/services/tdoc-track-desc-suggester.service';
 
 registerLocaleData(localeDe);
 
@@ -118,7 +123,12 @@ export function getAngulartics2Providers(): any {
         TourDocActionTagService,
         TourDocPlaylistService,
         TourDocNameSuggesterService,
-        TourDocDescSuggesterService
+        TourDocDescSuggesterService,
+        TourDocLocationDescSuggesterService,
+        TourDocNewsDescSuggesterService,
+        TourDocRouteDescSuggesterService,
+        TourDocTrackDescSuggesterService,
+        TourDocTripDescSuggesterService
     ],
     bootstrap: [AppComponent]
 })

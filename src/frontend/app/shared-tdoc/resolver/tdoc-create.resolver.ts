@@ -8,6 +8,7 @@ import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {ResolvedData} from '@dps/mycms-frontend-commons/dist/angular-commons/resolver/resolver.utils';
+import {TourDocStringUtils} from '../services/tdoc-string-utils';
 
 @Injectable()
 export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<TourDocRecord, TourDocSearchForm,
@@ -22,12 +23,9 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         const res = super.resolve(route, state);
             res.then(value => {
                 if (value.data !== undefined) {
-                    let name = value.data.name;
+                    const name = value.data.name;
                     if (name !== undefined && name !== null ) {
-                        for (const replacement of this.getNameReplacements()) {
-                            name = name.replace(replacement[0], replacement[1]);
-                        }
-                        value.data.name = name;
+                        value.data.name = TourDocStringUtils.doReplacements(name, this.getNameReplacements());
                     }
                 }
 
@@ -81,9 +79,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
             values['trackId'] = tdoc.trackId;
             let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null ? tdoc.locHirarchie : '';
             locHirarchie = locHirarchie.replace(/^OFFEN -> /, '');
-            for (const replacement of this.getLocationReplacements()) {
-                locHirarchie = locHirarchie.replace(replacement[0], replacement[1]);
-            }
+            locHirarchie = TourDocStringUtils.doReplacements(locHirarchie, this.getLocationReplacements())
 
             const locs = locHirarchie.split(/ -> /);
             if (locs.length > 3) {
@@ -141,16 +137,8 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
 
     protected getCommonReplacements(configKey: string): [RegExp, string][] {
         const config = this.myAppService.getAppConfig();
-        const replacementConfig = [];
         const value = BeanUtils.getValue(config, configKey);
-        if (Array.isArray(value)) {
-            for (const replacement of value) {
-                if (Array.isArray(replacement) && replacement.length === 2) {
-                    replacementConfig.push([new RegExp(replacement[0]), replacement[1]]);
-                }
-            }
-        }
 
-        return replacementConfig;
+        return TourDocStringUtils.createReplacementsFromConfigArray(value);
     }
 }

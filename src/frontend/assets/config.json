@@ -1700,9 +1700,61 @@
             ],
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (durch |von |ab |bei |in |nach )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
             ]
 
+        },
+        "tdoc-location-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nAber am Besten ihr schaut selbst :-)\n",
+            "headingTemplate": "\n{{MAINITEM.name}} als Teil der TODO_PARENTREGION liegt umgeben von TODO_NACHBARN.\n\nMit seinen wunderschönen Bergen, Wäldern, Seen, Museen lädt es geradezu für einen Besuch ein\n\n**Routenempfehlungen**\n"
+        },
+        "tdoc-news-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "tripListItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/trip/{{LISTITEM.id}})\n",
+            "tripTrackListItemTemplate": "  - [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "footerTemplate": "\nSo, auf zum nächsten Schwung :-)\n\nViele Grüße an Alle und gehabt euch wohl\n\n*Euer Micha*\n",
+            "headingTemplate": "**Moin Sonnens,**\n\nund wie schon wieder neue Bilder...\n\nBlimBlamBlum\n\n"
+        },
+        "tdoc-route-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nMehr dazu hier.\n",
+            "headingTemplate": "**Was für eine Tour**\n\n"
+        },
+        "tdoc-track-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/route/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nMehr dazu hier.\n",
+            "headingTemplate": "**Was für ein Ausflug**\n\n"
+        },
+        "tdoc-trip-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nMehr dazu hier.\n",
+            "headingTemplate": "**Was für ein Trip**\n\n"
         }
     },
     "services": {

@@ -25,6 +25,11 @@ import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {NgxMdModule} from 'ngx-md';
+import {TourDocTripDescSuggesterService} from '../../services/tdoc-trip-desc-suggester.service';
+import {TourDocLocationDescSuggesterService} from '../../services/tdoc-location-desc-suggester.service';
+import {TourDocNewsDescSuggesterService} from '../../services/tdoc-news-desc-suggester.service';
+import {TourDocRouteDescSuggesterService} from '../../services/tdoc-route-desc-suggester.service';
+import {TourDocTrackDescSuggesterService} from '../../services/tdoc-track-desc-suggester.service';
 
 describe('TourDocEditformComponent', () => {
     let component: TourDocEditformComponent;
@@ -52,6 +57,11 @@ describe('TourDocEditformComponent', () => {
                 TourDocContentUtils,
                 TourDocNameSuggesterService,
                 TourDocDescSuggesterService,
+                TourDocNewsDescSuggesterService,
+                TourDocLocationDescSuggesterService,
+                TourDocRouteDescSuggesterService,
+                TourDocTrackDescSuggesterService,
+                TourDocTripDescSuggesterService,
                 PlatformService,
                 AngularMarkdownService,
                 AngularHtmlService,
