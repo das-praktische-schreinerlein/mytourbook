@@ -122,7 +122,6 @@ export class SqlMytbDbOdImageObjectConfig {
             'k_gpstracks_basefile',
             'i_meta_shortdesc',
             'i_meta_shortdesc AS i_meta_shortdesc_md',
-            'i_meta_shortdesc AS i_meta_shortdesc_html',
             'CAST(i_gps_lat AS CHAR(50)) AS i_gps_lat',
             'CAST(i_gps_lon AS CHAR(50)) AS i_gps_lon',
             'CONCAT(i_gps_lat, ",", i_gps_lon) AS i_gps_loc',

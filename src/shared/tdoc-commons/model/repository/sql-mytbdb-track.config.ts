@@ -182,7 +182,6 @@ export class SqlMytbDbTrackConfig {
             'k_gpstracks_basefile',
             'k_meta_shortdesc',
             'k_meta_shortdesc AS k_meta_shortdesc_md',
-            'k_meta_shortdesc AS k_meta_shortdesc_html',
             'CAST(l_geo_latdeg AS CHAR(50)) AS k_gps_lat',
             'CAST(l_geo_longdeg AS CHAR(50)) AS k_gps_lon',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS k_gps_loc',

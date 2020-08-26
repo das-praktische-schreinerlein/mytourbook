@@ -170,7 +170,6 @@ export class SqlMytbDbRouteConfig {
             't_gpstracks_basefile',
             't_meta_shortdesc',
             't_meta_shortdesc AS t_meta_shortdesc_md',
-            't_meta_shortdesc AS t_meta_shortdesc_html',
             'CAST(l_geo_latdeg AS CHAR(50)) AS t_gps_lat',
             'CAST(l_geo_longdeg AS CHAR(50)) AS t_gps_lon',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS t_gps_loc',

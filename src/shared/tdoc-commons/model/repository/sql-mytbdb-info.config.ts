@@ -128,8 +128,7 @@ export class SqlMytbDbInfoConfig {
             'if_meta_desc AS if_meta_desc_md',
             'if_meta_desc AS if_meta_desc_html',
             'if_meta_shortdesc',
-            'if_meta_shortdesc AS if_meta_shortdesc_md',
-            'if_meta_shortdesc AS if_meta_shortdesc_html'],
+            'if_meta_shortdesc AS if_meta_shortdesc_md'],
         facetConfigs: {
             // dashboard
             'doublettes': {

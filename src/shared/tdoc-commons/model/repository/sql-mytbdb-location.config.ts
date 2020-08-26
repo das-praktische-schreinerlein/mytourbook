@@ -140,7 +140,6 @@ export class SqlMytbDbLocationConfig {
             'l_gesperrt',
             'l_meta_shortdesc',
             'l_meta_shortdesc AS l_meta_shortdesc_md',
-            'l_meta_shortdesc AS l_meta_shortdesc_html',
             'CAST(l_geo_latdeg AS CHAR(50)) AS l_geo_latdeg',
             'CAST(l_geo_longdeg AS CHAR(50)) AS l_geo_longdeg',
             'CONCAT(l_geo_latdeg, ",", l_geo_longdeg) AS l_gps_loc',

@@ -127,8 +127,7 @@ export class SqlMytbDbNewsConfig {
             'YEAR(n_date) AS year',
             'n_gesperrt',
             'n_message',
-            'n_message AS n_message_md',
-            'n_message AS n_message_html'],
+            'n_message AS n_message_md'],
         facetConfigs: {
             // dashboard
             'doublettes': {

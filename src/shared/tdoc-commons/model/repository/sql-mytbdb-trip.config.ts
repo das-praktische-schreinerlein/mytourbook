@@ -144,8 +144,7 @@ export class SqlMytbDbTripConfig {
             'MAX(k_altitude_max) AS k_altitude_max',
             'SUM(k_distance) AS k_distance_sum',
             'tr_meta_shortdesc',
-            'tr_meta_shortdesc AS tr_meta_shortdesc_md',
-            'tr_meta_shortdesc AS tr_meta_shortdesc_html'],
+            'tr_meta_shortdesc AS tr_meta_shortdesc_md'],
         facetConfigs: {
             // dashboard
             'doublettes': {

@@ -155,7 +155,6 @@ export class SqlMytbDbVideoConfig {
             'k_gpstracks_basefile',
             'v_meta_shortdesc',
             'v_meta_shortdesc AS v_meta_shortdesc_md',
-            'v_meta_shortdesc AS v_meta_shortdesc_html',
             'CAST(v_gps_lat AS CHAR(50)) AS v_gps_lat',
             'CAST(v_gps_lon AS CHAR(50)) AS v_gps_lon',
             'CONCAT(v_gps_lat, ",", v_gps_lon) AS v_gps_loc',
