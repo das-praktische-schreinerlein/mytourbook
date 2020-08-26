@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {SuggesterService} from './suggester.service';
+import {SuggesterService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/suggester.service';
 import {TourDocTripDescSuggesterService} from './tdoc-trip-desc-suggester.service';
 import {TourDocLocationDescSuggesterService} from './tdoc-location-desc-suggester.service';
 import {TourDocNewsDescSuggesterService} from './tdoc-news-desc-suggester.service';
-import {CommonDocListSuggesterEnvironment} from './common-doc-list-suggester.service';
+import {CommonDocListSuggesterEnvironment} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-list-suggester.service';
 import {TourDocTrackDescSuggesterService} from './tdoc-track-desc-suggester.service';
 import {TourDocRouteDescSuggesterService} from './tdoc-route-desc-suggester.service';
 

@@ -5,7 +5,7 @@ import {
     CommonDocListSuggesterConfiguration,
     CommonDocListSuggesterEnvironment,
     CommonDocListSuggesterService
-} from './common-doc-list-suggester.service';
+} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-list-suggester.service';
 import {TourDocSearchForm} from '../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';

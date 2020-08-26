@@ -7,7 +7,7 @@ import {
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
-import {SuggesterEnvironment, SuggesterService} from './suggester.service';
+import {SuggesterEnvironment, SuggesterService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/suggester.service';
 
 export interface TourDocNameSuggesterEnvironment extends SuggesterEnvironment {
     optionsSelectSubTypeActiontype: IMultiSelectOption[]

@@ -8,7 +8,7 @@ import {TourDocSearchResult} from '../../../shared/tdoc-commons/model/container/
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {ResolvedData} from '@dps/mycms-frontend-commons/dist/angular-commons/resolver/resolver.utils';
-import {TourDocStringUtils} from '../services/tdoc-string-utils';
+import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 @Injectable()
 export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<TourDocRecord, TourDocSearchForm,
@@ -25,7 +25,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
                 if (value.data !== undefined) {
                     const name = value.data.name;
                     if (name !== undefined && name !== null ) {
-                        value.data.name = TourDocStringUtils.doReplacements(name, this.getNameReplacements());
+                        value.data.name = StringUtils.doReplacements(name, this.getNameReplacements());
                     }
                 }
 
@@ -79,7 +79,7 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
             values['trackId'] = tdoc.trackId;
             let locHirarchie = tdoc.locHirarchie !== undefined && tdoc.locHirarchie !== null ? tdoc.locHirarchie : '';
             locHirarchie = locHirarchie.replace(/^OFFEN -> /, '');
-            locHirarchie = TourDocStringUtils.doReplacements(locHirarchie, this.getLocationReplacements())
+            locHirarchie = StringUtils.doReplacements(locHirarchie, this.getLocationReplacements())
 
             const locs = locHirarchie.split(/ -> /);
             if (locs.length > 3) {
@@ -139,6 +139,6 @@ export class TourDocRecordCreateResolver extends CommonDocRecordCreateResolver<T
         const config = this.myAppService.getAppConfig();
         const value = BeanUtils.getValue(config, configKey);
 
-        return TourDocStringUtils.createReplacementsFromConfigArray(value);
+        return StringUtils.createReplacementsFromConfigArray(value);
     }
 }

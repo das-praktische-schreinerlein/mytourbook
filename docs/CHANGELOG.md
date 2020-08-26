@@ -10,17 +10,22 @@
 - improved list-layout
 - added possibility to edit multiroutes
 - added new tourdoc-type: info
+- improved dashboard-layout and added columns for news+trip
+- edit-form - introduced suggester for name+desc, added desc-preview
 
 ### new features
 - common: added a action to rate all media of a track
 - common: added possibility to edit multiroutes
 - common: added new tourdoc-type: info
+- frontend: edit-form - introduced suggester for name+desc, added desc-preview
 
 ### improvements
 - build: upgraded all dev-dependencies to latest
 - frontend: upgraded to angular 6
 - frontend: improved list-layout 
 - backend: removed doublette-facet for imageobjects - its to slow
+- backend: improved mapper, model, decoupled functionality and configurations
+- common: improved dashboard-layout and added columns for news+trip
 
 ### bug fixes
 - frontend: IE now functional
