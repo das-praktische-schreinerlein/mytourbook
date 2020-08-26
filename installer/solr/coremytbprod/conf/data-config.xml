@@ -1,9 +1,9 @@
 <dataConfig>
     <dataSource type="JdbcDataSource"
                 driver="com.mysql.jdbc.Driver"
-                url="jdbc:mysql://localhost:3306/mytbexportproddb"
-                user="root"
-                password=""/>
+                url="jdbc:mysql://localhost:3306/testmytbexportproddb"
+                user="testmytbexportproddb"
+                password="testmytbexportproddb"/>
 
     <document>
 
@@ -64,8 +64,7 @@
             <field column="if_url" name="info_reference_s" stripHTML="true" />
             <field column="subtype" name="info_type_s" stripHTML="true" />
             <field column="if_meta_desc" name="desc_txt" stripHTML="true" />
-            <field column="if_meta_desc" name="desc_md_txt" stripHTML="true" />
-            <field column="if_meta_desc" name="desc_html_txt" />
+            <field column="if_meta_desc" name="desc_md_txt" stripHTML="false" />
             <field column="html" name="html_txt" />
             <field column="if_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="dateonly" name="dateonly_s" />
@@ -309,8 +308,7 @@
             <field column="d_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="d_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="d_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="d_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="d_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="d_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -653,8 +651,7 @@
             <field column="k_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -934,8 +931,7 @@
             <field column="t_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="t_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="t_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="t_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="t_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -1202,8 +1198,7 @@
             <field column="l_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="l_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="l_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="l_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="l_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="l_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="l_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="l_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -1476,8 +1471,7 @@
             <field column="k_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -1635,8 +1629,7 @@
             <field column="k_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="v_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="v_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="v_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -1785,8 +1778,7 @@
             <field column="tr_name" name="name_s" stripHTML="true" />
             <field column="tr_name" name="name_txt" stripHTML="true" />
             <field column="tr_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="tr_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="tr_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="tr_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="tr_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="tr_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
@@ -2037,8 +2029,7 @@
             <field column="n_headline" name="name_s" stripHTML="true" />
             <field column="n_headline" name="name_txt" stripHTML="true" />
             <field column="n_message_html" name="desc_txt" stripHTML="true" />
-            <field column="n_message_md" name="desc_md_txt" stripHTML="true" />
-            <field column="n_message_html2" name="desc_html_txt" />
+            <field column="n_message_md" name="desc_md_txt" stripHTML="false" />
             <field column="html" name="html_txt" />
             <field column="n_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="n_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
