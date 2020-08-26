@@ -29,6 +29,7 @@
 
 ### bug fixes
 - frontend: IE now functional
+- backend: dont map text to html-fields because markdown-fields should be rendered
  
 ### breaking changes
 - build: upgraded all dev-dependencies to latest
