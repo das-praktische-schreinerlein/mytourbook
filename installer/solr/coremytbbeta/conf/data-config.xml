@@ -1993,7 +1993,7 @@
                                     'NEWS'                                                   as type,
                                     concat('NEWS', '_', news.n_id)                           as id,
                                     news.countImages,
-                                    news.countImagesTop
+                                    news.countImagesTop,
                                     news.countRoutes,
                                     news.countTracks,
                                     news.countTrips,
