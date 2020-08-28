@@ -253,7 +253,7 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             if (!filters['moreFilter']) {
                 filters['moreFilter'] = '';
             }
-            filters['moreFilter'] += '_,_personalRateOverall:8,9,10,11,12,13,14,15';
+            filters['moreFilter'] += '_,_personalRateOverall:6,7,8,9,10,11,12,13,14,15';
             filters['type'] = 'IMAGE';
             filters['sort'] = 'ratePers';
             filters['perPage'] = 4;

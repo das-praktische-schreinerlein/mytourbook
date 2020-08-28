@@ -77,7 +77,9 @@
                     <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
                     <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                     <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
-                    <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    </ng-container>
                 </ng-template>
             </ngb-panel>
         </ngb-accordion>
@@ -153,7 +155,9 @@
                         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
                         <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
                         <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
-                        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                        <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                            <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                        </ng-container>
                         <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
                                                              [categories]="['ENTITYCOUNT']"
                                                              [profile]="'list-item-flat-big'"></app-cdoc-extended-object-properties>

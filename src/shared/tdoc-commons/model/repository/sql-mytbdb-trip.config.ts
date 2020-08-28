@@ -98,6 +98,14 @@ export class SqlMytbDbTripConfig {
                     '      FROM image INNER JOIN kategorie ON image.k_id = kategorie.k_id' +
                     '      WHERE kategorie.tr_id IN (:id)' +
                     '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM image INNER JOIN kategorie ON image.k_id = kategorie.k_id' +
+                    '      WHERE kategorie.tr_id IN (:id) AND i_rate >= 6' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_FAV_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM image INNER JOIN kategorie ON image.k_id = kategorie.k_id' +
+                    '      WHERE kategorie.tr_id IN (:id) AND i_rate > 0' +
+                    '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM video INNER JOIN kategorie ON video.k_id = kategorie.k_id' +
                     '      WHERE kategorie.tr_id IN (:id)',
@@ -333,6 +341,12 @@ export class SqlMytbDbTripConfig {
             'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
                 '     WHERE k_sort.tr_id = trip.tr_id) DESC',
+            'countImagesTop': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
+                '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
+                '     WHERE k_sort.tr_id = trip.tr_id AND i_sort.i_rate >= 6) ASC',
+            'countImagesTopDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
+                '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
+                '     WHERE k_sort.tr_id = trip.tr_id AND i_sort.i_rate >= 6) DESC',
             'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +

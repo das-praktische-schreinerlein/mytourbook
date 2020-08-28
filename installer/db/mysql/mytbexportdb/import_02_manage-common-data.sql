@@ -40,6 +40,7 @@ UPDATE kategorie_full SET k_objects=REGEXP_REPLACE(k_objects, ',CommonFace', '')
 update kategorie_full
 set
     countImages=(select COUNT(DISTINCT image.i_id) FROM image WHERE image.k_id = kategorie_full.k_id),
+    countImagesTop=(select COUNT(DISTINCT image.i_id) FROM image WHERE image.k_id = kategorie_full.k_id AND i_rate >= 6),
     countVideos=(select COUNT(DISTINCT video.v_id) FROM video WHERE video.k_id = kategorie_full.k_id),
     countRoutes=(select COUNT(DISTINCT kategorie_tour.t_id) FROM kategorie_tour WHERE kategorie_tour.k_id = kategorie_full.k_id);
 
@@ -47,6 +48,7 @@ set
 update tour
 set
     countImages=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE kategorie_full.t_id=tour.t_id),
+    countImagesTop=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE kategorie_full.t_id=tour.t_id AND i_rate >= 6),
     countInfos=(select COUNT(DISTINCT info.if_id) FROM info LEFT JOIN tour_info ON info.if_id=tour_info.if_id WHERE tour_info.t_id=tour.t_id),
     countVideos=(select COUNT(DISTINCT video.v_id) FROM video INNER JOIN kategorie_full ON video.k_id=kategorie_full.k_id WHERE kategorie_full.t_id=tour.t_id),
     countTracks=(select COUNT(DISTINCT kategorie_tour.k_id) FROM kategorie_tour WHERE kategorie_tour.t_id = tour.t_id),
@@ -57,6 +59,7 @@ set
 update destination
 set
     countImages=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id INNER JOIN tour ON kategorie_full.t_id=tour.t_id WHERE tour.d_id=destination.d_id),
+    countImagesTop=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id INNER JOIN tour ON kategorie_full.t_id=tour.t_id WHERE tour.d_id=destination.d_id AND i_rate >= 6),
     countInfos=(select COUNT(DISTINCT info.if_id) FROM info INNER JOIN tour_info ON info.if_id=tour_info.if_id INNER JOIN tour ON tour.t_id=tour_info.t_id WHERE tour.d_id=destination.d_id),
     countVideos=(select COUNT(DISTINCT video.v_id) FROM video INNER JOIN kategorie_full ON video.k_id=kategorie_full.k_id INNER JOIN tour ON kategorie_full.t_id=tour.t_id WHERE tour.d_id=destination.d_id),
     countRoutes=(select COUNT(DISTINCT tour.t_id) FROM tour WHERE tour.d_id=destination.d_id),
@@ -68,6 +71,7 @@ set
 update location
 set
     countImages=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE FIND_IN_SET(kategorie_full.k_id, location.l_katids)),
+    countImagesTop=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE FIND_IN_SET(kategorie_full.k_id, location.l_katids) AND i_rate >= 6),
     countInfos=(select COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id=location_info.if_id WHERE location_info.l_id=location.l_id OR info.l_id=location.l_id),
     countVideos=(select COUNT(DISTINCT video.v_id) FROM video INNER JOIN kategorie_full ON video.k_id=kategorie_full.k_id WHERE FIND_IN_SET(kategorie_full.k_id, location.l_katids)),
     countTracks=(select COUNT(DISTINCT kategorie_full.k_id) FROM kategorie_full WHERE FIND_IN_SET(kategorie_full.k_id, location.l_katids)),
@@ -79,6 +83,7 @@ set
 update trip
 set
     countImages=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE kategorie_full.tr_id = trip.tr_id),
+    countImagesTop=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE kategorie_full.tr_id = trip.tr_id AND i_rate >= 6),
     countVideos=(select COUNT(DISTINCT video.v_id) FROM video INNER JOIN kategorie_full ON video.k_id=kategorie_full.k_id WHERE kategorie_full.tr_id = trip.tr_id),
     countTracks=(select COUNT(DISTINCT kategorie_full.k_id) FROM kategorie_full WHERE kategorie_full.tr_id = trip.tr_id),
     countRoutes=(select COUNT(DISTINCT kategorie_tour.t_id) FROM kategorie_full INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id WHERE kategorie_full.tr_id = trip.tr_id);
@@ -87,6 +92,7 @@ set
 update news
 set
     countImages=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE kategorie_full.n_id = news.n_id),
+    countImagesTop=(select COUNT(DISTINCT image.i_id) FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id WHERE kategorie_full.n_id = news.n_id AND i_rate >= 6),
     countVideos=(select COUNT(DISTINCT video.v_id) FROM video INNER JOIN kategorie_full ON video.k_id=kategorie_full.k_id WHERE kategorie_full.n_id = news.n_id),
     countTrips=(select COUNT(DISTINCT kategorie_full.tr_id) FROM kategorie_full WHERE kategorie_full.n_id = news.n_id),
     countTracks=(select COUNT(DISTINCT kategorie_full.k_id) FROM kategorie_full WHERE kategorie_full.n_id = news.n_id),

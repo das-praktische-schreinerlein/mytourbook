@@ -172,6 +172,12 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'countImagesDesc': {
                 'sort': 'count_images_i desc'
             },
+            'countImagesTop': {
+                'sort': 'count_images_top_i asc'
+            },
+            'countImagesTopDesc': {
+                'sort': 'count_images_top_i desc'
+            },
             'countInfos': {
                 'sort': 'count_infos_i asc'
             },

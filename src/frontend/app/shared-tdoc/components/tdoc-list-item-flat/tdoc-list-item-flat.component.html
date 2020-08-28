@@ -65,7 +65,9 @@
         </ng-container>
         <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
         <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
-        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
+        <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+            <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
+        </ng-container>
     </div>
     <div class="col-2 ratetech layout-big">
         <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >

@@ -106,6 +106,10 @@ export class SqlMytbDbLocationConfig {
                     '      FROM image INNER JOIN kategorie ON image.k_id = kategorie.k_id' +
                     '      WHERE kategorie.l_id IN (:id)' +
                     '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM image INNER JOIN kategorie ON image.k_id = kategorie.k_id' +
+                    '      WHERE kategorie.l_id IN (:id) AND i_rate >= 6' +
+                    '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video.v_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM video INNER JOIN kategorie ON video.k_id = kategorie.k_id' +
                     '      WHERE kategorie.l_id IN (:id)',
@@ -335,6 +339,10 @@ export class SqlMytbDbLocationConfig {
         sortMapping: {
             'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) ASC',
             'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) DESC',
+            'countImagesTop': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
+                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) ASC',
+            'countImagesTopDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
+                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) DESC',
             'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC',
             'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) DESC',
             'countInfos': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +

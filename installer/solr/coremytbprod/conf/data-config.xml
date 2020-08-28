@@ -188,6 +188,7 @@
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
+                           destination.countImagesTop,
                            destination.countInfos,
                            destination.countNews,
                            destination.countRoutes,
@@ -244,6 +245,7 @@
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
+                           destination.countImagesTop,
                            destination.countInfos,
                            destination.countNews,
                            destination.countRoutes,
@@ -361,6 +363,7 @@
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
             <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
             <field column="countInfos" name="count_infos_i" />
             <field column="countNews" name="count_news_i" />
             <field column="countRoutes" name="count_routes_i" />
@@ -414,6 +417,10 @@
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
                         SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
                               FROM destination
                               WHERE destination.d_id IN ("${destination.d_id}")
                            UNION
@@ -521,6 +528,7 @@
                            kategorie_full.tr_id,
                            kategorie_full.l_id,
                            kategorie_full.countImages,
+                           kategorie_full.countImagesTop,
                            kategorie_full.countRoutes,
                            kategorie_full.countVideos,
                            n_id,
@@ -582,6 +590,7 @@
                            kategorie_full.k_d_ids,
                            kategorie_full.l_id,
                            kategorie_full.countImages,
+                           kategorie_full.countImagesTop,
                            kategorie_full.countRoutes,
                            kategorie_full.countVideos,
                            n_id,
@@ -699,6 +708,7 @@
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
             <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countVideos" name="count_videos_i" />
 
@@ -730,6 +740,10 @@
                               WHERE kategorie_full.k_id IN (${track.k_id})
                            UNION
                         SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM kategorie_full
+                              WHERE kategorie_full.k_id IN (${track.k_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
                               FROM kategorie_full
                               WHERE kategorie_full.k_id IN (${track.k_id})
                            UNION
@@ -791,6 +805,7 @@
                            tour.d_id,
                            tour.l_id,
                            tour.countImages,
+                           tour.countImagesTop,
                            tour.countInfos,
                            tour.countNews,
                            tour.countTracks,
@@ -857,6 +872,7 @@
                            tour.d_id,
                            tour.l_id,
                            tour.countImages,
+                           tour.countImagesTop,
                            tour.countInfos,
                            tour.countNews,
                            tour.countTracks,
@@ -985,6 +1001,7 @@
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
             <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
             <field column="countInfos" name="count_infos_i" />
             <field column="countNews" name="count_news_i" />
             <field column="countTracks" name="count_tracks_i" />
@@ -1033,6 +1050,10 @@
                               WHERE tour.t_id IN (${route.t_id})
                            UNION
                         SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
                               FROM tour
                               WHERE tour.t_id IN (${route.t_id})
                            UNION
@@ -1132,6 +1153,7 @@
                            l_id,
                            l_parent_id,
                            location.countImages,
+                           location.countImagesTop,
                            location.countInfos,
                            location.countNews,
                            location.countRoutes,
@@ -1162,6 +1184,7 @@
                            concat('LOCATION', '_', l_id)                                                                  as id,
                            l_id,
                            location.countImages,
+                           location.countImagesTop,
                            location.countInfos,
                            location.countNews,
                            location.countRoutes,
@@ -1214,6 +1237,7 @@
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
             <field column="countInfos" name="count_infos_i" />
             <field column="countNews" name="count_news_i" />
             <field column="countRoutes" name="count_routes_i" />
@@ -1266,6 +1290,10 @@
                               WHERE location.l_id IN (${location.l_id})
                            UNION
                         SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
                               FROM location
                               WHERE location.l_id IN (${location.l_id})
                            UNION
@@ -1697,6 +1725,7 @@
                                     concat('TRIP', '_', trip.tr_id)                              as id,
                                     trip.l_id,
                                     trip.countImages,
+                                    trip.countImagesTop,
                                     trip.countRoutes,
                                     trip.countTracks,
                                     trip.countVideos,
@@ -1735,6 +1764,7 @@
                                     concat('TRIP', '_', trip.tr_id)                              as id,
                                     trip.l_id,
                                     trip.countImages,
+                                    trip.countImagesTop,
                                     trip.countRoutes,
                                     trip.countTracks,
                                     trip.countVideos,
@@ -1803,6 +1833,7 @@
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <!--            <field column="dur" name="data_tech_dur_f" />   -->
             <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
             <field column="countVideos" name="count_videos_i" />
@@ -1839,6 +1870,10 @@
                               WHERE trip.tr_id IN (${trip.tr_id})
                            UNION
                         SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM trip
+                              WHERE trip.tr_id IN (${trip.tr_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
                               FROM trip
                               WHERE trip.tr_id IN (${trip.tr_id})
                            UNION
@@ -1958,6 +1993,7 @@
                                     'NEWS'                                                   as type,
                                     concat('NEWS', '_', news.n_id)                           as id,
                                     news.countImages,
+                                    news.countImagesTop
                                     news.countRoutes,
                                     news.countTracks,
                                     news.countTrips,
@@ -1991,6 +2027,7 @@
                                     'NEWS'                                                   as type,
                                     concat('NEWS', '_', news.n_id)                           as id,
                                     news.countImages,
+                                    news.countImagesTop,
                                     news.countRoutes,
                                     news.countTracks,
                                     news.countTrips,
@@ -2049,6 +2086,7 @@
             <field column="altMaxFacet" name="data_tech_alt_max_facet_is" />
             <field column="dist" name="data_tech_dist_f" />
             <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countTracks" name="count_tracks_i" />
             <field column="countTrips" name="count_trips_i" />
@@ -2090,6 +2128,10 @@
                               WHERE news.n_id IN (${news.n_id})
                            UNION
                         SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM news
+                              WHERE news.n_id IN (${news.n_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
                               FROM news
                               WHERE news.n_id IN (${news.n_id})
                            UNION
