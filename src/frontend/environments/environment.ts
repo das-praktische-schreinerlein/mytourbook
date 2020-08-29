@@ -14,6 +14,7 @@ export const environment: AppEnvironment = {
     tracksBaseUrl: 'http://localhost:4100/api/assets/trackstore/',
     audioBaseUrl: 'http://localhost:4100/api/static/audiostore/',
     picsBaseUrl: 'http://localhost:4100/api/static/picturestore/',
+    picsPreviewPathResolution: 'x300',
     videoBaseUrl: 'http://localhost:4100/api/static/videos/',
     defaultSearchTypes: 'route,location,track,trip,news',
     emptyDefaultSearchTypes: 'route,location,track,trip,news,image,video,info',

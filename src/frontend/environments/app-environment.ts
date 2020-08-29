@@ -6,6 +6,7 @@ export interface AppEnvironment extends CommonEnvironment {
     tracksBaseUrl: string;
     audioBaseUrl: string;
     picsBaseUrl: string;
+    picsPreviewPathResolution: string;
     videoBaseUrl: string;
     useVideoAssetStoreUrls: boolean;
     useAudioAssetStoreUrls: boolean;
