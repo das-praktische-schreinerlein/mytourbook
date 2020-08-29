@@ -29,10 +29,10 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
 import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
-import {CommonDocContentUtils} from '@dps//mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchform-utils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 
 describe('TourDocAlbumpageComponent', () => {
     let component: TourDocAlbumpageComponent;
@@ -68,7 +68,7 @@ describe('TourDocAlbumpageComponent', () => {
                 PlatformService,
                 LayoutService,
                 TourDocPlaylistService,
-                CommonDocContentUtils,
+                TourDocContentUtils,
                 TourDocActionTagService,
                 TourDocSearchFormUtils
             ],

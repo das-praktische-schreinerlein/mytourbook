@@ -28,10 +28,10 @@ import {TourDocSearchFormUtils} from '../../../shared-tdoc/services/tdoc-searchf
 import {TourDocActionTagService} from '../../../shared-tdoc/services/tdoc-actiontag.service';
 import {TourDocAlbumService} from '../../../shared-tdoc/services/tdoc-album.service';
 import {TourDocPlaylistService} from '../../../shared-tdoc/services/tdoc-playlist.service';
-import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
+import {TourDocContentUtils} from '../../../shared-tdoc/services/tdoc-contentutils.service';
 
 describe('TourDocSearchpageComponent', () => {
     let component: TourDocSearchpageComponent;
@@ -69,7 +69,7 @@ describe('TourDocSearchpageComponent', () => {
                 TourDocActionTagService,
                 TourDocAlbumService,
                 TourDocPlaylistService,
-                CommonDocContentUtils
+                TourDocContentUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

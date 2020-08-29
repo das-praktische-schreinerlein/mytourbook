@@ -14,12 +14,12 @@ import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/t
 import {DynamicComponentService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/dynamic-components.service';
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {TourDocPlaylistService} from '../../services/tdoc-playlist.service';
-import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
+import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 
 describe('TourDocActionsComponent', () => {
     let component: TourDocActionsComponent;
@@ -44,7 +44,7 @@ describe('TourDocActionsComponent', () => {
                 ComponentFactoryResolver,
                 TourDocActionTagService,
                 TourDocPlaylistService,
-                CommonDocContentUtils,
+                TourDocContentUtils,
                 CommonDocRoutingService,
                 CommonRoutingService
             ],
