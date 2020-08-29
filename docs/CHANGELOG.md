@@ -34,6 +34,10 @@
 ### breaking changes
 - build: upgraded all dev-dependencies to latest
 - build: use peerDependencies
+- common: used x300 instead of x600 for image-preview -> run scaleImages to create non-existing images
+```
+run node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.json
+```
 
 ### known issues
 - frontendserver: angularuniversal-support broken
