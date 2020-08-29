@@ -708,23 +708,26 @@ export class TourDocMediaManagerModule {
         const readNextImage = function(): Promise<any> {
             return me.dataService.search(searchForm, opts).then(
                 function searchDone(searchResult: TourDocSearchResult) {
+                    const startTime2 = (new Date()).getTime();
                     let promises: Promise<any>[] = [];
                     for (const tdoc of searchResult.currentRecords) {
                         promises = promises.concat(cb(tdoc));
                     }
 
                     return Promise.all(promises).then(() => {
-                        const dur = Math.round(((new Date()).getTime() - startTime) / 1000);
+                        const durWhole = Math.round(((new Date()).getTime() - startTime) / 1000 + 1);
+                        const dur = Math.round(((new Date()).getTime() - startTime2) / 1000 + 1);
                         const alreadyDone = searchForm.pageNum * searchForm.perPage;
-                        const performance = Math.round(alreadyDone / dur + 1);
+                        const performance = searchResult.currentRecords.length / dur;
+                        const performanceWhole = alreadyDone / durWhole;
                         console.log('DONE processed page ' +
                             searchForm.pageNum +
                             ' [' + ((searchForm.pageNum - 1) * searchForm.perPage + 1) +
                             '-' + alreadyDone + ']' +
                             ' / ' + Math.round(searchResult.recordCount / searchForm.perPage + 1) +
                             ' [' + searchResult.recordCount + ']' +
-                            ' in ' + dur + 's' +
-                            ' with ' + performance + ' per s' +
+                            ' in ' + dur + ' (' + durWhole + ') s' +
+                            ' with ' + Math.round(performance + 1) + ' ('  + Math.round(performanceWhole + 1) + ') per s' +
                             ' approximately ' + Math.round(((searchResult.recordCount - alreadyDone) / performance + 1) / 60) + 'min left'
                     );
                         searchForm.pageNum++;
