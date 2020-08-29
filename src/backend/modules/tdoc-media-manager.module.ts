@@ -706,17 +706,17 @@ export class TourDocMediaManagerModule {
         const me = this;
         const startTime = (new Date()).getTime();
         const readNextImage = function(): Promise<any> {
+            const startTime2 = (new Date()).getTime();
             return me.dataService.search(searchForm, opts).then(
                 function searchDone(searchResult: TourDocSearchResult) {
-                    const startTime2 = (new Date()).getTime();
                     let promises: Promise<any>[] = [];
                     for (const tdoc of searchResult.currentRecords) {
                         promises = promises.concat(cb(tdoc));
                     }
 
                     return Promise.all(promises).then(() => {
-                        const durWhole = Math.round(((new Date()).getTime() - startTime) / 1000 + 1);
-                        const dur = Math.round(((new Date()).getTime() - startTime2) / 1000 + 1);
+                        const durWhole = ((new Date()).getTime() - startTime + 1) / 1000 ;
+                        const dur = ((new Date()).getTime() - startTime2 + 1) / 1000;
                         const alreadyDone = searchForm.pageNum * searchForm.perPage;
                         const performance = searchResult.currentRecords.length / dur;
                         const performanceWhole = alreadyDone / durWhole;
@@ -726,7 +726,7 @@ export class TourDocMediaManagerModule {
                             '-' + alreadyDone + ']' +
                             ' / ' + Math.round(searchResult.recordCount / searchForm.perPage + 1) +
                             ' [' + searchResult.recordCount + ']' +
-                            ' in ' + dur + ' (' + durWhole + ') s' +
+                            ' in ' + Math.round(dur + 1) + ' (' + Math.round(durWhole + 1) + ') s' +
                             ' with ' + Math.round(performance + 1) + ' ('  + Math.round(performanceWhole + 1) + ') per s' +
                             ' approximately ' + Math.round(((searchResult.recordCount - alreadyDone) / performance + 1) / 60) + 'min left'
                     );
