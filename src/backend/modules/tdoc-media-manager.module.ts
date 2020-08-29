@@ -90,7 +90,7 @@ export class TourDocMediaManagerModule {
     public scaleImages(searchForm: TourDocSearchForm): Promise<{}> {
         const me = this;
         const callback = function(tdoc: TourDocRecord) {
-            return [me.scaleTourDocRecord(tdoc, 100), me.scaleTourDocRecord(tdoc, 600)];
+            return [me.scaleTourDocRecord(tdoc, 100), me.scaleTourDocRecord(tdoc, 300), me.scaleTourDocRecord(tdoc, 600)];
         };
 
         return this.processSearchForms(searchForm, callback, 1);

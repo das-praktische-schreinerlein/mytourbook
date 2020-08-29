@@ -14,6 +14,7 @@ import {
 import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
 import LatLng = L.LatLng;
 import {ChartElement} from '../components/visjs-profilechart/visjs-profilechart.component';
+import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 
 export interface TourDocItemData extends CommonItemData {
     tracks?: TourDocRecord[];
@@ -73,6 +74,10 @@ export class DefaultTrackColors extends TrackColors {
 export class TourDocContentUtils extends CommonDocContentUtils {
     constructor(sanitizer: DomSanitizer, cdocRoutingService: CommonDocRoutingService, appService: GenericAppService) {
         super(sanitizer, cdocRoutingService, appService);
+    }
+
+    getPreview(image: BaseImageRecord): string {
+        return this.getImageUrl(image, 'x300');
     }
 
     getLocationHierarchy(record: TourDocRecord, lastOnly: boolean): any[] {

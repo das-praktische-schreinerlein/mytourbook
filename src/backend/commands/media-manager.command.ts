@@ -73,7 +73,7 @@ export class MediaManagerCommand implements AbstractCommand {
                     const additionalMappingsSrc = JSON.parse(fs.readFileSync(additionalMappingsJson, {encoding: 'utf8'}));
                     if (additionalMappingsSrc['files']) {
                         const possibleLocalPaths = [];
-                        ['full', 'x100', 'x400', 'x600', 'x1400'].forEach(resolution => {
+                        ['full', 'x100', 'x300', 'x600', 'x1400'].forEach(resolution => {
                             const path = backendConfig['apiRoutePicturesStaticDir'] + '/' +
                                 (backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + resolution + '/';
                             possibleLocalPaths.push(path);
