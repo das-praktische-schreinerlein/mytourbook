@@ -16,6 +16,7 @@ import * as knex from 'knex';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import * as Promise_serial from 'promise-serial';
 import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
+import {GenericSearchOptions} from '@dps/mycms-commons/dist/search-commons/services/generic-search.service';
 
 export interface FileInfoType {
     created: Date;
@@ -84,16 +85,26 @@ export class TourDocMediaManagerModule {
             return [me.readAndUpdateDateFromTourDocRecord(tdoc)];
         };
 
-        return this.processSearchForms(searchForm, callback, 1);
+        return this.processSearchForms(searchForm, callback, 1, {
+            loadDetailsMode: undefined,
+            loadTrack: false,
+            showFacets: false,
+            showForm: false
+        });
     }
 
-    public scaleImages(searchForm: TourDocSearchForm): Promise<{}> {
+    public scaleImages(searchForm: TourDocSearchForm, parallel: number): Promise<{}> {
         const me = this;
         const callback = function(tdoc: TourDocRecord) {
             return [me.scaleTourDocRecord(tdoc, 100), me.scaleTourDocRecord(tdoc, 300), me.scaleTourDocRecord(tdoc, 600)];
         };
 
-        return this.processSearchForms(searchForm, callback, 1);
+        return this.processSearchForms(searchForm, callback, parallel, {
+            loadDetailsMode: undefined,
+            loadTrack: false,
+            showFacets: false,
+            showForm: false
+        });
     }
 
     public readAndUpdateDateFromTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
@@ -688,13 +699,14 @@ export class TourDocMediaManagerModule {
         return knex(options.knexOpts);
     }
 
-    private processSearchForms(searchForm: TourDocSearchForm, cb, parallel: number): Promise<{}> {
+    private processSearchForms(searchForm: TourDocSearchForm, cb, parallel: number, opts: GenericSearchOptions): Promise<{}> {
         searchForm.perPage = parallel;
         searchForm.pageNum = 1;
 
         const me = this;
+        const startTime = (new Date()).getTime();
         const readNextImage = function(): Promise<any> {
-            return me.dataService.search(searchForm).then(
+            return me.dataService.search(searchForm, opts).then(
                 function searchDone(searchResult: TourDocSearchResult) {
                     let promises: Promise<any>[] = [];
                     for (const tdoc of searchResult.currentRecords) {
@@ -702,6 +714,19 @@ export class TourDocMediaManagerModule {
                     }
 
                     return Promise.all(promises).then(() => {
+                        const dur = Math.round(((new Date()).getTime() - startTime) / 1000);
+                        const alreadyDone = searchForm.pageNum * searchForm.perPage;
+                        const performance = Math.round(alreadyDone / dur + 1);
+                        console.log('DONE processed page ' +
+                            searchForm.pageNum +
+                            ' [' + ((searchForm.pageNum - 1) * searchForm.perPage + 1) +
+                            '-' + alreadyDone + ']' +
+                            ' / ' + Math.round(searchResult.recordCount / searchForm.perPage + 1) +
+                            ' [' + searchResult.recordCount + ']' +
+                            ' in ' + dur + 's' +
+                            ' with ' + performance + ' per s' +
+                            ' approximately ' + Math.round(((searchResult.recordCount - alreadyDone) / performance + 1) / 60) + 'min left'
+                    );
                         searchForm.pageNum++;
 
                         if (searchForm.pageNum < (searchResult.recordCount / searchForm.perPage + 1)) {

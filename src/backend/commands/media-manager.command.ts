@@ -39,7 +39,8 @@ export class MediaManagerCommand implements AbstractCommand {
 
                 break;
             case 'scaleImages':
-                promise = tdocManagerModule.scaleImages(new TourDocSearchForm({ type: 'image', sort: 'dateAsc'}));
+                const parallel: number = argv['parallel'] = argv['parallel'] || 5;
+                promise = tdocManagerModule.scaleImages(new TourDocSearchForm({ type: 'image', sort: 'dateAsc'}), parallel);
 
                 break;
             case 'generateTourDocsFromMediaDir':

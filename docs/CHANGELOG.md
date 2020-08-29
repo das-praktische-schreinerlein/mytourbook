@@ -36,7 +36,7 @@
 - build: use peerDependencies
 - common: used x300 instead of x600 for image-preview -> run scaleImages to create non-existing images
 ```
-run node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.json
+run node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.json --debug --parallel 10
 ```
 
 ### known issues
