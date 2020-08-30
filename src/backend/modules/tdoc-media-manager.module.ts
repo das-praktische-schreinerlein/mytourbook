@@ -40,6 +40,11 @@ export interface FileSystemDBSyncType {
     records: DBFileInfoType[];
 }
 
+export interface ProcessingOptions {
+    ignoreErrors: number;
+    parallel: number
+}
+
 export class TourDocMediaManagerModule {
     private readonly dataService: TourDocDataService;
     private readonly backendConfig: {};
@@ -79,32 +84,32 @@ export class TourDocMediaManagerModule {
         this.knex = this.createKnex(backendConfig);
     }
 
-    public readMediaDates(searchForm: TourDocSearchForm): Promise<{}> {
+    public readMediaDates(searchForm: TourDocSearchForm, processingOptions: ProcessingOptions): Promise<{}> {
         const me = this;
         const callback = function(tdoc: TourDocRecord) {
             return [me.readAndUpdateDateFromTourDocRecord(tdoc)];
         };
 
-        return this.processSearchForms(searchForm, callback, 1, {
+        return this.processSearchForms(searchForm, callback, {
             loadDetailsMode: undefined,
             loadTrack: false,
             showFacets: false,
             showForm: false
-        });
+        }, processingOptions);
     }
 
-    public scaleImages(searchForm: TourDocSearchForm, parallel: number): Promise<{}> {
+    public scaleImages(searchForm: TourDocSearchForm, processingOptions: ProcessingOptions): Promise<{}> {
         const me = this;
         const callback = function(tdoc: TourDocRecord) {
             return [me.scaleTourDocRecord(tdoc, 100), me.scaleTourDocRecord(tdoc, 300), me.scaleTourDocRecord(tdoc, 600)];
         };
 
-        return this.processSearchForms(searchForm, callback, parallel, {
+        return this.processSearchForms(searchForm, callback, {
             loadDetailsMode: undefined,
             loadTrack: false,
             showFacets: false,
             showForm: false
-        });
+        }, processingOptions);
     }
 
     public readAndUpdateDateFromTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
@@ -422,8 +427,8 @@ export class TourDocMediaManagerModule {
             const fullPath = (baseDir + '/' + filePath).replace(/[\\\/]+/g, '/');
             const checkPreferredSqlQuery: RawSqlQueryData = {
                 sql:
-                    'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
-                    '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
+                    'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
                     '      ? AS matchingDetails, 0 AS matchingScore' +
                     '  FROM image' +
                     '  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER(?)',
@@ -699,12 +704,14 @@ export class TourDocMediaManagerModule {
         return knex(options.knexOpts);
     }
 
-    private processSearchForms(searchForm: TourDocSearchForm, cb, parallel: number, opts: GenericSearchOptions): Promise<{}> {
-        searchForm.perPage = parallel;
-        searchForm.pageNum = 1;
+    private processSearchForms(searchForm: TourDocSearchForm, cb, opts: GenericSearchOptions,
+                               processingOptions: ProcessingOptions): Promise<{}> {
+        searchForm.perPage = processingOptions.parallel;
+        searchForm.pageNum = Number.isInteger(searchForm.pageNum) ? searchForm.pageNum : 1;
 
         const me = this;
         const startTime = (new Date()).getTime();
+        let errorCount = 0;
         const readNextImage = function(): Promise<any> {
             const startTime2 = (new Date()).getTime();
             return me.dataService.search(searchForm, opts).then(
@@ -714,7 +721,7 @@ export class TourDocMediaManagerModule {
                         promises = promises.concat(cb(tdoc));
                     }
 
-                    return Promise.all(promises).then(() => {
+                    const processResults = function(results, error): Promise<any> {
                         const durWhole = ((new Date()).getTime() - startTime + 1) / 1000 ;
                         const dur = ((new Date()).getTime() - startTime2 + 1) / 1000;
                         const alreadyDone = searchForm.pageNum * searchForm.perPage;
@@ -729,7 +736,7 @@ export class TourDocMediaManagerModule {
                             ' in ' + Math.round(dur + 1) + ' (' + Math.round(durWhole + 1) + ') s' +
                             ' with ' + Math.round(performance + 1) + ' ('  + Math.round(performanceWhole + 1) + ') per s' +
                             ' approximately ' + Math.round(((searchResult.recordCount - alreadyDone) / performance + 1) / 60) + 'min left'
-                    );
+                        );
                         searchForm.pageNum++;
 
                         if (searchForm.pageNum < (searchResult.recordCount / searchForm.perPage + 1)) {
@@ -737,6 +744,19 @@ export class TourDocMediaManagerModule {
                         } else {
                             return utils.resolve('WELL DONE');
                         }
+                    };
+
+                    return Promise.all(promises).then((results) => {
+                        return processResults(results, undefined);
+                    }).catch(reason => {
+                        errorCount = errorCount + 1;
+                        if (processingOptions.ignoreErrors > errorCount) {
+                            console.warn('SKIP ERROR: ' + errorCount + ' of possible ' + processingOptions.ignoreErrors, reason);
+                            return processResults([], undefined);
+                        }
+
+                        console.error('UNSKIPPABLE ERROR: ' + errorCount + ' of possible ' + processingOptions.ignoreErrors, reason);
+                        return utils.reject(reason);
                     });
                 }
             ).catch(function searchError(error) {
