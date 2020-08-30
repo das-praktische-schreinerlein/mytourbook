@@ -1,5 +1,4 @@
 import {Mapper, utils} from 'js-data';
-import {TourDocImageRecord} from '../shared/tdoc-commons/model/records/tdocimage-record';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
 import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchform';
@@ -9,152 +8,39 @@ import * as readdirp from 'readdirp';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
 import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
-import {TourDocVideoRecord} from '../shared/tdoc-commons/model/records/tdocvideo-record';
-import * as ffmpeg from 'fluent-ffmpeg';
 import {SqlConnectionConfig} from './tdoc-dataservice.module';
 import * as knex from 'knex';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
-import * as Promise_serial from 'promise-serial';
 import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
-import {GenericSearchOptions} from '@dps/mycms-commons/dist/search-commons/services/generic-search.service';
+import {CommonDocMediaManagerModule, DBFileInfoType, FileInfoType, FileSystemDBSyncType} from './cdoc-media-manager.module';
 
-export interface FileInfoType {
-    created: Date;
-    lastModified: Date;
-    exifDate: Date;
-    name: string;
-    dir: string;
-    size: number;
-    type: string;
-}
-export type FileSystemDBSyncMatchingType = 'EXIFDATE' | 'FILEDATE' | 'FILENAME' | 'FILEDIRANDNAME' | 'FILESIZE' | 'FILENAMEANDDATE'
-    | 'SIMILARITY';
-export interface DBFileInfoType extends FileInfoType {
-    id: string;
-    matching: FileSystemDBSyncMatchingType;
-    matchingDetails: string;
-    matchingScore: number;
-}
-export interface FileSystemDBSyncType {
-    file: FileInfoType;
-    records: DBFileInfoType[];
-}
-
-export interface ProcessingOptions {
-    ignoreErrors: number;
-    parallel: number
-}
-
-export class TourDocMediaManagerModule {
-    private readonly dataService: TourDocDataService;
-    private readonly backendConfig: {};
+export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourDocRecord, TourDocSearchForm,
+TourDocSearchResult, TourDocDataService> {
     private readonly knex;
     private readonly sqlQueryBuilder: SqlQueryBuilder;
 
-    private static mapDBResultOnFileInfoType(dbResult: any, records: DBFileInfoType[]): void {
-        for (let i = 0; i <= dbResult.length; i++) {
-            if (dbResult[i] !== undefined) {
-                const entry: DBFileInfoType = {
-                    dir: undefined,
-                    exifDate: undefined,
-                    id: undefined,
-                    created: undefined,
-                    lastModified: undefined,
-                    matching: undefined,
-                    matchingDetails: undefined,
-                    matchingScore: undefined,
-                    name: undefined,
-                    size: undefined,
-                    type: undefined
-                };
-                for (const key in dbResult[i]) {
-                    if (dbResult[i].hasOwnProperty(key)) {
-                        entry[key] = dbResult[i][key];
-                    }
-                }
-                records.push(entry);
-            }
-        }
-    }
-
-    constructor(backendConfig, dataService: TourDocDataService, private mediaManager: MediaManagerModule) {
-        this.dataService = dataService;
-        this.backendConfig = backendConfig;
+    constructor(backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule) {
+        super(backendConfig, dataService, mediaManager);
         this.sqlQueryBuilder = new SqlQueryBuilder();
         this.knex = this.createKnex(backendConfig);
     }
 
-    public readMediaDates(searchForm: TourDocSearchForm, processingOptions: ProcessingOptions): Promise<{}> {
-        const me = this;
-        const callback = function(tdoc: TourDocRecord) {
-            return [me.readAndUpdateDateFromTourDocRecord(tdoc)];
-        };
+    public updateDateOfCommonDocRecord(tdoc: TourDocRecord, myDate: Date): Promise<{}> {
+        const date = DateUtils.dateToLocalISOString(myDate).toString();
 
-        return this.processSearchForms(searchForm, callback, {
-            loadDetailsMode: undefined,
-            loadTrack: false,
-            showFacets: false,
-            showForm: false
-        }, processingOptions);
-    }
+        for (const key of ['datestart', 'dateend', 'dateshow']) {
+            tdoc[key] = date;
+        }
 
-    public scaleImages(searchForm: TourDocSearchForm, processingOptions: ProcessingOptions): Promise<{}> {
-        const me = this;
-        const callback = function(tdoc: TourDocRecord) {
-            return [me.scaleTourDocRecord(tdoc, 100), me.scaleTourDocRecord(tdoc, 300), me.scaleTourDocRecord(tdoc, 600)];
-        };
-
-        return this.processSearchForms(searchForm, callback, {
-            loadDetailsMode: undefined,
-            loadTrack: false,
-            showFacets: false,
-            showForm: false
-        }, processingOptions);
-    }
-
-    public readAndUpdateDateFromTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
-        const me = this;
-        return this.readMetadataForTourDocRecord(tdoc).then(value => {
-            // Exif-dates are not in UTC they are in localtimezone
-            if (value === undefined || value === null) {
-                console.warn('no exif found for ' + tdoc.id + ' details:' + tdoc);
-                return utils.resolve({});
-            }
-
-            let creationDate = BeanUtils.getValue(value, 'exif.DateTimeOriginal');
-            if (creationDate === undefined || creationDate === null) {
-                creationDate = new Date(BeanUtils.getValue(value, 'format.tags.creation_time'));
-            }
-
-            if (creationDate === undefined || creationDate === null) {
-                console.warn('no exif.DateTimeOriginal or format.tags.creation_time found for ' + tdoc.id +
-                    ' details:' + tdoc + ' exif:' + creationDate);
-                return utils.resolve({});
-            }
-
-            const myDate = new Date();
-            myDate.setHours(creationDate.getUTCHours(), creationDate.getUTCMinutes(), creationDate.getUTCSeconds(),
-                creationDate.getUTCMilliseconds());
-            myDate.setFullYear(creationDate.getUTCFullYear(), creationDate.getUTCMonth(), creationDate.getUTCDate());
-            const date = DateUtils.dateToLocalISOString(myDate).toString();
-            for (const key of ['datestart', 'dateend', 'dateshow']) {
-                tdoc[key] = date;
-            }
-
-            return me.dataService.updateById(tdoc.id, tdoc);
-        });
+        return this.dataService.updateById(tdoc.id, tdoc);
     }
 
     public generateTourDocRecordsFromMediaDir(baseDir: string): Promise<TourDocRecord[]> {
         const mapper: Mapper = this.dataService.getMapper('tdoc');
         const responseMapper = new TourDocAdapterResponseMapper(this.backendConfig);
-        const mediaTypes = {
-            'jpg': 'IMAGE',
-            'JPG': 'IMAGE',
-            'MP4': 'VIDEO',
-            'mp4': 'VIDEO'
-        };
+        const mediaTypes = this.getFileExtensionToTypeMappings();
         const fileExtensions = [];
+        // tslint:disable-next-line:forin
         for (const mediaType in mediaTypes) {
             fileExtensions.push('*.' + mediaType);
         }
@@ -282,143 +168,31 @@ export class TourDocMediaManagerModule {
         });
     }
 
-    public findCorrespondingTourDocRecordsForMedia(baseDir: string, additionalMappings: {[key: string]: FileSystemDBSyncType}):
-        Promise<FileSystemDBSyncType[]> {
-        const me = this;
-        const mediaTypes = {
-            'jpg': 'IMAGE',
-            'jpeg': 'IMAGE',
-            'JPG': 'IMAGE',
-            'JPEG': 'IMAGE',
-            'MP4': 'VIDEO',
-            'mp4': 'VIDEO'
-        };
-        const fileExtensions = [];
-        for (const mediaType in mediaTypes) {
-            fileExtensions.push('*.' + mediaType);
-        }
-        const settings = {
-            root: baseDir,
-            entryType: 'files',
-            // Filter files with js and json extension
-            fileFilter: fileExtensions,
-            // Filter by directory
-            directoryFilter: [ '!.git', '!*modules' ],
-            // Work with files up to 1 subdirectory deep
-            depth: 10
-        };
-
-        const entries: FileSystemDBSyncType[] = [];
-
-        return new Promise<FileSystemDBSyncType[]>((resolve, reject) => {
-            readdirp(settings, function fileCallBack(fileRes) {
-                const path = fileRes['path'].replace(/\\/g, '/');
-                const file = fileRes['name'].replace(/\\/g, '/');
-                const dir = fileRes['parentDir'].replace(/\\/g, '/');
-                const cdate = fileRes['stat']['ctime'];
-                const mdate = fileRes['stat']['mtime'];
-                const size = fileRes['stat']['size'];
-                const extension = file.split('.').splice(-1);
-                const type = mediaTypes[extension];
-                if (type === undefined) {
-                    console.warn('SKIP file - unknown extension', path);
-                    return;
-                }
-
-                const fileInfo: FileInfoType = {
-                    dir: dir,
-                    created: cdate,
-                    lastModified: mdate,
-                    exifDate: undefined,
-                    name: file,
-                    size: size,
-                    type: type
-                };
-                const records: DBFileInfoType[] = [];
-                entries.push({file: fileInfo, records: records});
-            }, function allCallBack(errors) {
-                if (errors) {
-                    errors.forEach(function (err) {
-                        return reject(err);
-                    });
-                }
-                resolve(entries);
-            });
-        }).then(fileSystemTourDocSyncEntries => {
-            const promises = fileSystemTourDocSyncEntries.map(fileSystemTourDocSyncEntry => {
-                return function () {
-                    return me.findTourDocRecordsForFileInfo(baseDir, fileSystemTourDocSyncEntry.file, additionalMappings).then(records => {
-                        if (records !== undefined) {
-                            fileSystemTourDocSyncEntry.records = records;
-                        }
-                        return utils.resolve(true);
-                    }).catch(function onError(error) {
-                        return utils.reject(error);
-                    });
-                };
-            });
-            const results = Promise_serial(promises, {parallelize: 1});
-
-            return results.then(() => {
-                return utils.resolve(fileSystemTourDocSyncEntries);
-            }).catch(errors => {
-                return utils.reject(errors);
-            });
-        });
-    }
-
-    public readMetadataForTourDocRecord(tdoc: TourDocRecord): Promise<{}> {
+    public readMetadataForCommonDocRecord(tdoc: TourDocRecord): Promise<{}> {
         const tdocImages = tdoc.get('tdocimages');
         if (tdocImages !== undefined  && tdocImages.length > 0) {
-            return this.readExifForTourDocImageRecord(tdocImages[0]);
+            return this.readExifForCommonDocImageRecord(tdocImages[0]);
         }
         const tdocVideos = tdoc.get('tdocvideos');
         if (tdocVideos !== undefined  && tdocVideos.length > 0) {
-            return this.readMetadataForTourDocVideoRecord(tdocVideos[0]);
+            return this.readMetadataForCommonDocVideoRecord(tdocVideos[0]);
         }
 
         console.warn('no image or video found for ' + tdoc.id);
         return utils.resolve({});
     }
 
-    public readExifForTourDocImageRecord(tdocImage: TourDocImageRecord): Promise<{}> {
-        return this.mediaManager.readExifForImage(this.backendConfig['apiRoutePicturesStaticDir'] + '/'
-            + (this.backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + 'full/' +  tdocImage.fileName);
-    }
-
-    public readMetadataForTourDocVideoRecord(tdocVideo: TourDocVideoRecord): Promise<{}> {
-        return new Promise<{}>((resolve, reject) => {
-            ffmpeg.ffprobe(this.backendConfig['apiRouteVideosStaticDir'] + '/'
-                + (this.backendConfig['apiRouteStoredVideosResolutionPrefix'] || '') + 'full/' +  tdocVideo.fileName,
-                function(err, metadata) {
-                    if (err) {
-                        reject('error while reading video-metadata: ' + err);
-                    }
-
-                    resolve(metadata);
-                });
-        });
-    }
-
-    public scaleTourDocRecord(tdoc: TourDocRecord, width: number): Promise<{}> {
+    public scaleCommonDocRecordMediaWidth(tdoc: TourDocRecord, width: number): Promise<{}> {
         const tdocImages = tdoc.get('tdocimages');
         if (tdocImages === undefined  || tdocImages.length === 0) {
             console.warn('no image found for ' + tdoc.id);
             return utils.resolve({});
         }
 
-        return this.scaleTourDocImageRecord(tdocImages[0], width);
+        return this.scaleCommonDocImageRecord(tdocImages[0], width);
     }
 
-    public scaleTourDocImageRecord(tdocImage: TourDocImageRecord, width: number): Promise<{}> {
-        return this.mediaManager.scaleImage(this.backendConfig['apiRoutePicturesStaticDir'] + '/'
-            + (this.backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + 'full/' +  tdocImage.fileName,
-            this.backendConfig['apiRoutePicturesStaticDir'] + '/'
-            + (this.backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + 'x' + width + '/' +  tdocImage.fileName,
-            width);
-    }
-
-    public findTourDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType,
+    public findCommonDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType,
                                          additionalMappings: {[key: string]: FileSystemDBSyncType}): Promise<DBFileInfoType[]> {
         return new Promise<DBFileInfoType[]>((resolve, reject) => {
             const createdInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.created).getTime() / 1000);
@@ -428,7 +202,7 @@ export class TourDocMediaManagerModule {
             const checkPreferredSqlQuery: RawSqlQueryData = {
                 sql:
                     'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
-                    '       i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
+                    '      i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
                     '      ? AS matchingDetails, 0 AS matchingScore' +
                     '  FROM image' +
                     '  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER(?)',
@@ -437,8 +211,8 @@ export class TourDocMediaManagerModule {
                     fileInfo.name]
             };
             checkPreferredSqlQuery.sql += ' UNION ' +
-                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
-                '      i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
+                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                '      i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
                 '      ? AS matchingDetails, 0 AS matchingScore' +
                 '  FROM image' +
                 '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
@@ -446,8 +220,8 @@ export class TourDocMediaManagerModule {
                 'dir: ' + fileInfo.dir + ' filename:' + fileInfo.name,
                 filePath]);
             checkPreferredSqlQuery.sql += ' UNION ' +
-                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created, i_date AS lastModified,' +
-                '      i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
+                'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir, i_date AS created,' +
+                '      i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
                 '      ? AS matchingDetails,' +
                 '      0.25 AS matchingScore' +
                 '  FROM image' +
@@ -702,70 +476,6 @@ export class TourDocMediaManagerModule {
             }
         };
         return knex(options.knexOpts);
-    }
-
-    private processSearchForms(searchForm: TourDocSearchForm, cb, opts: GenericSearchOptions,
-                               processingOptions: ProcessingOptions): Promise<{}> {
-        searchForm.perPage = processingOptions.parallel;
-        searchForm.pageNum = Number.isInteger(searchForm.pageNum) ? searchForm.pageNum : 1;
-
-        const me = this;
-        const startTime = (new Date()).getTime();
-        let errorCount = 0;
-        const readNextImage = function(): Promise<any> {
-            const startTime2 = (new Date()).getTime();
-            return me.dataService.search(searchForm, opts).then(
-                function searchDone(searchResult: TourDocSearchResult) {
-                    let promises: Promise<any>[] = [];
-                    for (const tdoc of searchResult.currentRecords) {
-                        promises = promises.concat(cb(tdoc));
-                    }
-
-                    const processResults = function(results, error): Promise<any> {
-                        const durWhole = ((new Date()).getTime() - startTime + 1) / 1000 ;
-                        const dur = ((new Date()).getTime() - startTime2 + 1) / 1000;
-                        const alreadyDone = searchForm.pageNum * searchForm.perPage;
-                        const performance = searchResult.currentRecords.length / dur;
-                        const performanceWhole = alreadyDone / durWhole;
-                        console.log('DONE processed page ' +
-                            searchForm.pageNum +
-                            ' [' + ((searchForm.pageNum - 1) * searchForm.perPage + 1) +
-                            '-' + alreadyDone + ']' +
-                            ' / ' + Math.round(searchResult.recordCount / searchForm.perPage + 1) +
-                            ' [' + searchResult.recordCount + ']' +
-                            ' in ' + Math.round(dur + 1) + ' (' + Math.round(durWhole + 1) + ') s' +
-                            ' with ' + Math.round(performance + 1) + ' ('  + Math.round(performanceWhole + 1) + ') per s' +
-                            ' approximately ' + Math.round(((searchResult.recordCount - alreadyDone) / performance + 1) / 60) + 'min left'
-                        );
-                        searchForm.pageNum++;
-
-                        if (searchForm.pageNum < (searchResult.recordCount / searchForm.perPage + 1)) {
-                            return readNextImage();
-                        } else {
-                            return utils.resolve('WELL DONE');
-                        }
-                    };
-
-                    return Promise.all(promises).then((results) => {
-                        return processResults(results, undefined);
-                    }).catch(reason => {
-                        errorCount = errorCount + 1;
-                        if (processingOptions.ignoreErrors > errorCount) {
-                            console.warn('SKIP ERROR: ' + errorCount + ' of possible ' + processingOptions.ignoreErrors, reason);
-                            return processResults([], undefined);
-                        }
-
-                        console.error('UNSKIPPABLE ERROR: ' + errorCount + ' of possible ' + processingOptions.ignoreErrors, reason);
-                        return utils.reject(reason);
-                    });
-                }
-            ).catch(function searchError(error) {
-                console.error('error thrown: ', error);
-                return utils.reject(error);
-            });
-        };
-
-        return readNextImage();
     }
 
 }
