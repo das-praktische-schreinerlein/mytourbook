@@ -1,7 +1,58 @@
-import {BaseRatePersonalRecord} from './baseratepers-record';
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecord,
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
+    BaseEntityRecordType,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NumberValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class TourDocRatePersonalRecord extends BaseRatePersonalRecord {
+export interface TourDocRatePersonalRecordType extends BaseEntityRecordType {
+    ausdauer: number;
+    bildung: number;
+    gesamt: number;
+    kraft: number;
+    mental: number;
+    motive: number;
+    schwierigkeit: number;
+    wichtigkeit: number;
+}
+
+export class TourDocRatePersonalRecord extends BaseEntityRecord implements TourDocRatePersonalRecordType {
+    static ratepersonalFields = {
+        ausdauer: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 15, undefined)),
+        bildung: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 15, undefined)),
+        gesamt: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, -1, 15, undefined)),
+        kraft: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 15, undefined)),
+        mental: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 15, undefined)),
+        motive: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, -1, 15, undefined)),
+        schwierigkeit: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 15, undefined)),
+        wichtigkeit: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, -1, 15, undefined)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
+    };
+
+    ausdauer: number;
+    bildung: number;
+    gesamt: number;
+    kraft: number;
+    mental: number;
+    motive: number;
+    schwierigkeit: number;
+    wichtigkeit: number;
+
     tdoc_id: string;
 
     toString() {
@@ -46,13 +97,14 @@ export class TourDocRatePersonalRecordValidator extends BaseEntityRecordValidato
 }
 
 
-export let TourDocRatePersonalRecordRelation: any = {
+export let TourDocRatePersonalRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

@@ -27,6 +27,10 @@
         <ng-container *ngSwitchCase="'NEWS'">
             <ng-container *ngTemplateOutlet="formNews"></ng-container>
         </ng-container>
+
+        <ng-container *ngSwitchCase="'INFO'">
+            <ng-container *ngTemplateOutlet="formInfo"></ng-container>
+        </ng-container>
     </ng-container>
 
     <ng-template #formLocation>
@@ -47,12 +51,20 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataAdditionalData label|Label for fieldset: dataAdditionalData@@label.editform.tdoc.legend.dataAdditionalData">&#x231a; Zusatzdaten</legend>
+            <div class="row">
+                <ng-container *ngFor="let idx of joinIndexes['linkedInfos']">
+                    <ng-container *ngTemplateOutlet="inputLinkedInfo;context:{key: 'linkedInfo', idx: idx, joinName: 'linkedInfos'}"></ng-container>
+                </ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
         <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
         </div>
     </ng-template>
 
@@ -71,6 +83,14 @@
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
                 <ng-container *ngTemplateOutlet="inputRoute"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="dataAdditionalData label|Label for fieldset: dataAdditionalData@@label.editform.tdoc.legend.dataAdditionalData">&#x231a; Zusatzdaten</legend>
+            <div class="row">
+                <ng-container *ngFor="let idx of joinIndexes['linkedRoutes']">
+                    <ng-container *ngTemplateOutlet="inputLinkedRoute;context:{key: 'linkedRoute', idx: idx, joinName: 'linkedRoutes'}"></ng-container>
+                </ng-container>
             </div>
         </fieldset>
         <fieldset>
@@ -111,7 +131,7 @@
         </fieldset>
         <fieldset>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
         </fieldset>
         <fieldset>
@@ -249,13 +269,21 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
+            <legend i18n="dataAdditionalData label|Label for fieldset: dataAdditionalData@@label.editform.tdoc.legend.dataAdditionalData">&#x231a; Zusatzdaten</legend>
+            <div class="row">
+                <ng-container *ngFor="let idx of joinIndexes['linkedInfos']">
+                    <ng-container *ngTemplateOutlet="inputLinkedInfo;context:{key: 'linkedInfo', idx: idx, joinName: 'linkedInfos'}"></ng-container>
+                </ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
         <fieldset>
             <div class="row">
-                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+                <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
             </div>
         </fieldset>
         <fieldset>
@@ -279,7 +307,7 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
         </div>
     </ng-template>
 
@@ -297,8 +325,40 @@
         </fieldset>
         <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <div class="row">
-            <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            <ng-container *ngTemplateOutlet="inputDesc;context:{recommend: true}"></ng-container>
         </div>
+    </ng-template>
+
+    <ng-template #formInfo>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+                <ng-container *ngTemplateOutlet="inputInfotype"></ng-container>
+            </div>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend i18n="dataInfo label|Label for fieldset: dataInfo@@label.editform.tdoc.legend.dataInfo">&#x26f3; Daten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocinfo.shortDesc', formControlName: 'tdocinfo_shortDesc'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocinfo.reference', formControlName: 'tdocinfo_reference'}"></ng-container>
+                <ng-container *ngTemplateOutlet="inputText;context:{key: 'tdocinfo.publisher', formControlName: 'tdocinfo_publisher'}"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </fieldset>
     </ng-template>
 
     <ng-template #inputName>
@@ -378,6 +438,19 @@
         </div>
     </ng-template>
 
+    <ng-template #inputInfotype>
+        <div class="col-sm-4 input-group input-group-sm">
+            <label class="col-xs-4 col-form-label mr-2" i18n="infotype label|Label for filter: infotype@@label.searchform.tdoc.infotype">Infotype:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['subTypeInfoType']"
+                                     [settings]="settingsSelectActionType"
+                                     [texts]="textsSelectActionType"
+                                     required="required"
+                                     formControlName="subtype"
+                                     ngDefaultControl
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"></ss-multiselect-dropdown>
+        </div>
+    </ng-template>
+
     <ng-template #inputActiontype>
         <div class="col-sm-4 input-group input-group-sm">
             <label class="col-xs-4 col-form-label mr-2" i18n="actiontype label|Label for filter: actiontype@@label.searchform.tdoc.actiontype">Action:</label>
@@ -402,6 +475,41 @@
                                      formControlName="routeId"
                                      ngDefaultControl></ss-multiselect-dropdown>
         </div>
+    </ng-template>
+
+    <ng-template #inputLinkedRoute let-key="key" let-idx="idx" let-joinName="joinName">
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="linkedRoutesId label|Label for filter: linkedRoutesId@@label.searchform.tdoc.linkedRoutesId">LinkedRoutes:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
+                                     [settings]="settingsSelectRoute"
+                                     [texts]="textsSelectRoute"
+                                     (onAdded)="joinElementChanged($event, joinName, idx, true)"
+                                     (onRemoved)="joinElementChanged($event, joinName, idx, false)"
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                     required="required"
+                                     formControlName="{{joinName + 'Id' + idx}}"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="linkedRoutesFull label|Label for filter: linkedRoutesFull@@label.searchform.tdoc.linkedRoutesFull">Umfasst gesamten Track:</label>
+            <input type="checkbox" formControlName="{{joinName + 'Full'  + idx}}">
+        </div>
+    </ng-template>
+
+    <ng-template #inputLinkedInfo let-key="key" let-idx="idx" let-joinName="joinName">
+        <div class="col-sm-6 input-group input-group-sm">
+            <label class="col-xs-3 col-form-label mr-2" i18n="linkedInfosId label|Label for filter: linkedInfosId@@label.searchform.tdoc.linkedInfosId">LinkedInfos:</label>
+            <ss-multiselect-dropdown [options]="optionsSelect['infoId']"
+                                     [settings]="settingsSelectInfo"
+                                     [texts]="textsSelectInfo"
+                                     (onAdded)="joinElementChanged($event, joinName, idx, true)"
+                                     (onRemoved)="joinElementChanged($event, joinName, idx, false)"
+                                     class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                     required="required"
+                                     formControlName="{{joinName + 'Id' + idx}}"
+                                     ngDefaultControl></ss-multiselect-dropdown>
+        </div>
+        <ng-container *ngTemplateOutlet="inputText;context:{key: joinName + 'LinkedDetails', formControlName: joinName + 'LinkedDetails'  + idx}"></ng-container>
     </ng-template>
 
     <ng-template #inputTrack>
@@ -430,10 +538,16 @@
         </div>
     </ng-template>
 
-    <ng-template #inputDesc>
-        <div class="col-sm-12 form-inline input-group input-group-sm">
+    <ng-template #inputDesc let-recommend="recommend">
+        <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-form-block">
             <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Markdown:</label>
-            <textarea formControlName="descTxt" class="form-control" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.tdoc.desc"></textarea>
+            <span class="" *ngIf="recommend === true" (click)="recommendDesc()">&#x27F8; Generate</span>
+            <textarea formControlName="descTxt" class="form-control recommended-desc-form" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.tdoc.desc"></textarea>
+        </div>
+        <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-preview-block">
+            <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Vorschau:</label>
+            <span class="" (click)="renderRecommendedDesc(true)">&#x27F8; Update</span>
+            <div id="recommendedDesc">{{renderRecommendedDesc(false)}}</div>
         </div>
     </ng-template>
 

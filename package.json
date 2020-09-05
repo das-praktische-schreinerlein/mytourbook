@@ -25,7 +25,7 @@
     "build-beta-en": "ng build frontend --base-href=/mytbbeta/en/ --configuration=beta-en --aot true --output-path dist/static/mytbbeta/en",
     "build-prod": "npm run build-prod-de && npm run build-prod-en && npm run build-after-copy-overrides-dist-prod",
     "build-prod-de": "ng build frontend --base-href=/mytb/de/ --configuration=prod-de --aot true --output-path dist/static/mytb/de ",
-    "build-prod-en": "ng build frontend --base-href=/mytb/en/ --configuration=prod-de --aot true --output-path dist/static/mytb/en",
+    "build-prod-en": "ng build frontend --base-href=/mytb/en/ --configuration=prod-en --aot true --output-path dist/static/mytb/en",
     "build-after-copy-overrides-config": "cpx --verbose \"overrides/after-build/config/**/*.*\" config/",
     "build-after-copy-overrides-dist-dev": "cpx --verbose \"overrides/after-build/dist/mytbdev/**/*.*\" dist/static/mytbdev/ && cpx \"overrides/after-build/dist/mytbdev/**/*.*\" dist/mytbdev-server/",
     "build-after-copy-overrides-dist-beta": "cpx --verbose \"overrides/after-build/dist/mytbbeta/**/*.*\" dist/static/mytbbeta/ && cpx \"overrides/after-build/dist/mytbbeta**/*.*\" dist/mytbbeta-server/",

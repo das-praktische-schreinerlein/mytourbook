@@ -3,7 +3,7 @@ import express from 'express';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 
 export enum PictureResolutions {
-    'x100', 'x400', 'x600'
+    'x100', 'x300', 'x600'
 }
 export enum TrackFormats {
     'gpx', 'json'

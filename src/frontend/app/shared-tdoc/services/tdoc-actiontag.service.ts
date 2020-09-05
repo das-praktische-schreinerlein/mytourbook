@@ -30,6 +30,8 @@ import {TourDocAssignFormComponent} from '../components/tdoc-assignform/tdoc-ass
 import {CommonDocReplaceFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-replaceform/cdoc-replaceform.component';
 import {CommonDocKeywordTagFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-keywordtagform/cdoc-keywordtagform.component';
 import {TourDocKeywordTagFormComponent} from '../components/tdoc-keywordtagform/tdoc-keywordtagform.component';
+import {CommonDocAssignJoinFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
+import {TourDocAssignJoinFormComponent} from '../components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 
 @Injectable()
 export class TourDocActionTagService extends CommonDocActionTagService<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
@@ -55,6 +57,8 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
             return this.processActionTagEventReplace(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'assign') {
             return this.processActionTagEventAssign(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'assignjoin') {
+            return this.processActionTagEventAssignJoin(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'keyword') {
             return this.processActionTagEventKeywordTag(actionTagEvent, actionTagEventEmitter);
         } else {
@@ -69,6 +73,8 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
             return this.processMultiActionTagEventReplace(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'assign') {
             return this.processMultiActionTagEventAssign(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'assignjoin') {
+            return this.processMultiActionTagEventAssignJoin(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'keyword') {
             return this.processMultiActionTagEventKeywordTag(actionTagEvent, actionTagEventEmitter);
         } else {
@@ -148,6 +154,32 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
         const promise = this.processMultiActionFormTagEvent(multiActionTagEvent, multiActionTagEventEmitter, formResultObservable);
 
         const modalRef = this.modalService.open(TourDocAssignFormComponent);
+        modalRef.componentInstance.records = multiActionTagEvent.records;
+        modalRef.componentInstance.resultObservable = formResultObservable;
+
+        return promise;
+    }
+
+    protected processActionTagEventAssignJoin(actionTagEvent: ActionTagEvent,
+                                          actionTagEventEmitter: EventEmitter<ActionTagEvent>): Promise<TourDocRecord> {
+        return  new Promise<TourDocRecord>((resolve, reject) => {
+            this.processMultiActionTagEventAssignJoin(CommonDocActionTagService.actionTagEventToMultiActionTagEvent(actionTagEvent),
+                CommonDocActionTagService.actionTagEventEmitterToMultiActionTagEventEmitter(actionTagEventEmitter)).then(value => {
+                resolve(value !== undefined && value.length > 0 ? value[0] : undefined);
+            }).catch(reason => {
+                reject(reason);
+            });
+        });
+    }
+
+    protected processMultiActionTagEventAssignJoin(multiActionTagEvent: MultiRecordActionTagEvent,
+                                               multiActionTagEventEmitter: EventEmitter<MultiRecordActionTagEvent>):
+        Promise<TourDocRecord[]> {
+        const formResultObservable: Subject<CommonDocAssignJoinFormComponentResultType> =
+            new Subject<CommonDocAssignJoinFormComponentResultType>();
+        const promise = this.processMultiActionFormTagEvent(multiActionTagEvent, multiActionTagEventEmitter, formResultObservable);
+
+        const modalRef = this.modalService.open(TourDocAssignJoinFormComponent);
         modalRef.componentInstance.records = multiActionTagEvent.records;
         modalRef.componentInstance.resultObservable = formResultObservable;
 

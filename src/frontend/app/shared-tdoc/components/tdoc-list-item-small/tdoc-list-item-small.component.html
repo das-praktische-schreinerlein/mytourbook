@@ -48,7 +48,9 @@
                 </ng-container>
                 <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                     <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers >
-                    <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    </ng-container>
                 </ng-container>
                 <ng-container *ngIf="!short">
                     <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsSmall'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
@@ -95,7 +97,10 @@
             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
             <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
             <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
-            <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+            <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
+            <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+            </ng-container>
         </div>
     </div>
 </ng-template>

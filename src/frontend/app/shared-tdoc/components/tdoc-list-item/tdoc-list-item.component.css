@@ -24,3 +24,13 @@ div.picture-small {
     border-radius: 10px;
 }
 
+div.teaser-image-container-outer {
+    width: 100%;
+    float: left
+}
+div.teaser-image-container-inner {
+    width: 100%;
+    max-height:200px;
+    overflow: hidden;
+}
+

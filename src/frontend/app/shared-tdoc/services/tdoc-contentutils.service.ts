@@ -14,6 +14,8 @@ import {
 import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
 import LatLng = L.LatLng;
 import {ChartElement} from '../components/visjs-profilechart/visjs-profilechart.component';
+import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
+import {environment} from '../../../environments/environment';
 
 export interface TourDocItemData extends CommonItemData {
     tracks?: TourDocRecord[];
@@ -73,6 +75,10 @@ export class DefaultTrackColors extends TrackColors {
 export class TourDocContentUtils extends CommonDocContentUtils {
     constructor(sanitizer: DomSanitizer, cdocRoutingService: CommonDocRoutingService, appService: GenericAppService) {
         super(sanitizer, cdocRoutingService, appService);
+    }
+
+    getPreview(image: BaseImageRecord): string {
+        return this.getImageUrl(image, environment.picsPreviewPathResolution || 'x300');
     }
 
     getLocationHierarchy(record: TourDocRecord, lastOnly: boolean): any[] {
@@ -141,6 +147,12 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else if (type === 'IMAGE' || type === 'TOPIMAGE' || type === 'VIDEO' || type === 'TOPVIDEO') {
                 filters['moreFilter'] = 'route_id_i:' + record.routeId;
                 filters['perPage'] = 12;
+            } else if (type === 'NEWS') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'INFO') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
+            } else if (type === 'DESTINATION') {
+                filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'route_id_is:' + record.routeId;
             } else if (type === 'TRIP') {
@@ -158,6 +170,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             } else if (type === 'TRACK') {
                 filters['moreFilter'] = 'destination_id_ss:' + id;
             } else if (type === 'TRIP') {
+                filters['moreFilter'] = 'destination_id_ss:' + id;
+            } else if (type === 'INFO') {
                 filters['moreFilter'] = 'destination_id_ss:' + id;
             } else {
                 filters['moreFilter'] = 'destination_id_s:' + id;
@@ -229,16 +243,34 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['perPage'] = 20;
                 filters['sort'] = 'dateAsc';
             }
+        } else if (record.type === 'INFO') {
+            filters['moreFilter'] = 'info_id_is:' + record.infoId;
+            if (type === 'IMAGE' || type === 'TOPIMAGE') {
+                filters['perPage'] = 12;
+            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
+                filters['perPage'] = 12;
+            } else if (type === 'TRACK' || type === 'TRIP') {
+                filters['perPage'] = 20;
+                filters['sort'] = 'dateAsc';
+            }
         }
 
         if (type === 'TOPIMAGE') {
             if (!filters['moreFilter']) {
                 filters['moreFilter'] = '';
             }
-            filters['moreFilter'] += '_,_personalRateOverall:8,9,10,11,12,13,14,15';
+            filters['moreFilter'] += '_,_personalRateOverall:6,7,8,9,10,11,12,13,14,15';
             filters['type'] = 'IMAGE';
             filters['sort'] = 'ratePers';
             filters['perPage'] = 4;
+        } if (type === 'IMAGE_FAVORITES') {
+            if (!filters['moreFilter']) {
+                filters['moreFilter'] = '';
+            }
+            filters['moreFilter'] += '_,_personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
+            filters['type'] = 'IMAGE';
+            filters['sort'] = 'dateAsc';
+            filters['perPage'] = 12;
         } else if (type === 'TOPVIDEO') {
             if (!filters['moreFilter']) {
                 filters['moreFilter'] = '';
@@ -247,6 +279,8 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             filters['type'] = 'VIDEO';
             filters['sort'] = 'ratePers';
             filters['perPage'] = 4;
+        } else if (type === 'INFO') {
+            filters['sort'] = 'location';
         }
 
         if (minPerPage && minPerPage > 0 && minPerPage > filters['perPage']) {

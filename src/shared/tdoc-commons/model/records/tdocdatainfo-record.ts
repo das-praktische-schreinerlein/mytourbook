@@ -1,7 +1,37 @@
-import {BaseDataInfoRecord} from './basedatainfo-record';
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecord,
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
+    BaseEntityRecordType,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NameValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class TourDocDataInfoRecord extends BaseDataInfoRecord {
+export interface TourDocDataInfoRecordType extends BaseEntityRecordType {
+    baseloc: string;
+    destloc: string;
+    guides: string;
+    region: string;
+}
+
+export class TourDocDataInfoRecord extends BaseEntityRecord implements TourDocDataInfoRecordType {
+    static datainfoFields = {
+        baseloc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        destloc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        guides: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        region: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
+    };
+
+    baseloc: string;
+    destloc: string;
+    guides: string;
+    region: string;
     tdoc_id: string;
 
     toString() {
@@ -49,13 +79,14 @@ export class TourDocDataInfoRecordValidator extends BaseEntityRecordValidator {
     }
 }
 
-export let TourDocDataInfoRecordRelation: any = {
+export let TourDocDataInfoRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

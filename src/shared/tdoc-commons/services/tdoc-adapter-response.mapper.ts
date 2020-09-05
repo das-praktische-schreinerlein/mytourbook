@@ -1,5 +1,5 @@
 import {Mapper, Record} from 'js-data';
-import {TourDocRecord, TourDocRecordFactory} from '../model/records/tdoc-record';
+import {TourDocRecord, TourDocRecordFactory, TourDocRecordRelation} from '../model/records/tdoc-record';
 import {TourDocImageRecord, TourDocImageRecordFactory} from '../model/records/tdocimage-record';
 import {MapperUtils} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
@@ -9,23 +9,21 @@ import {TourDocDataTechRecordFactory} from '../model/records/tdocdatatech-record
 import {TourDocRateTechRecordFactory} from '../model/records/tdocratetech-record';
 import {TourDocRatePersonalRecordFactory} from '../model/records/tdocratepers-record';
 import {TourDocDataInfoRecordFactory} from '../model/records/tdocdatainfo-record';
-import {TourDocObjectDetectionImageObjectRecordFactory} from '../model/records/tdocobjectdetectectionimageobject-record';
-import {TourDocNavigationObjectRecordFactory} from '../model/records/tdocnavigationobject-record';
 import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
-import {TourDocFlagObjectRecordFactory} from '../model/records/tdocflagobject-record';
+import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
+import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
+import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
-    protected mapperUtils = new MapperUtils();
+    private readonly _objectSeparator = ';;';
+    private readonly _fieldSeparator = ':::';
+    private readonly _valueSeparator = '=';
+
+    protected mapperUtils = new MapperUtils(this._objectSeparator, this._fieldSeparator, this._valueSeparator);
     protected config: {} = {};
 
     public static generateDoubletteValue(value: string): string {
-        return value === undefined ? value :
-            value.toLowerCase()
-                .replace(/ß/g, 'ss')
-                .replace(/ö/g, 'oe')
-                .replace(/ü/g, 'ue')
-                .replace(/ä/g, 'ae')
-                .replace(/[^a-z0-9]/g, '');
+        return MapperUtils.generateDoubletteValue(value);
     }
 
     constructor(config: any) {
@@ -42,7 +40,9 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['route_id_i'] = props.routeId;
         values['track_id_i'] = props.trackId;
         values['trip_id_i'] = props.tripId;
+        values['info_id_i'] = props.infoId;
         values['news_id_i'] = props.newsId;
+
         values['blocked_i'] = props.blocked;
         values['dateshow_dt'] = props.dateshow;
         values['datestart_dt'] = props.datestart;
@@ -66,7 +66,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/,/g, ',,')
             .replace(/ /g, '_') : '');
         values['name_s'] = props.name;
-        values['key_s'] = TourDocAdapterResponseMapper.generateDoubletteValue(props.name);
+        values['key_s'] = MapperUtils.generateDoubletteValue(props.name);
         values['techname_s'] = props.techName;
         values['objects_txt'] =
             (props.objects ? props.objects.split(', ').join(',,') : '');
@@ -91,6 +91,12 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             const video: TourDocVideoRecord = props.get('tdocvideos')[0];
             values['v_fav_url_txt'] = video.fileName;
         }
+        if (props.get('tdoclinkedroutes') && props.get('tdoclinkedroutes').length > 0) {
+            this.mapDetailDataToAdapterDocument({}, 'linkedroutes', props, values);
+        }
+        if (props.get('tdoclinkedinfos') && props.get('tdoclinkedinfos').length > 0) {
+            this.mapDetailDataToAdapterDocument({}, 'linkedinfos', props, values);
+        }
 
         values['data_tech_alt_asc_i'] = BeanUtils.getValue(props, 'tdocdatatech.altAsc');
         values['data_tech_alt_desc_i'] = BeanUtils.getValue(props, 'tdocdatatech.altDesc');
@@ -106,6 +112,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['rate_tech_klettern_s'] = BeanUtils.getValue(props, 'tdocratetech.klettern');
         values['rate_tech_bergtour_s'] = BeanUtils.getValue(props, 'tdocratetech.bergtour');
         values['rate_tech_schneeschuh_s'] = BeanUtils.getValue(props, 'tdocratetech.schneeschuh');
+
         values['rate_pers_ausdauer_i'] = BeanUtils.getValue(props, 'tdocratepers.ausdauer');
         values['rate_pers_bildung_i'] = BeanUtils.getValue(props, 'tdocratepers.bildung');
         values['rate_pers_gesamt_i'] = BeanUtils.getValue(props, 'tdocratepers.gesamt');
@@ -114,34 +121,60 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['rate_pers_motive_i'] = BeanUtils.getValue(props, 'tdocratepers.motive');
         values['rate_pers_schwierigkeit_i'] = BeanUtils.getValue(props, 'tdocratepers.schwierigkeit');
         values['rate_pers_wichtigkeit_i'] = BeanUtils.getValue(props, 'tdocratepers.wichtigkeit');
+
         values['data_info_guides_s'] = BeanUtils.getValue(props, 'tdocdatainfo.guides');
         values['data_info_region_s'] = BeanUtils.getValue(props, 'tdocdatainfo.region');
         values['data_info_baseloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.baseloc');
         values['data_info_destloc_s'] = BeanUtils.getValue(props, 'tdocdatainfo.destloc');
 
+        values['info_name_s'] = BeanUtils.getValue(props, 'tdocinfo.name');
+        values['info_desc_txt'] = BeanUtils.getValue(props, 'tdocinfo.desc');
+        values['info_shortdesc_txt'] = BeanUtils.getValue(props, 'tdocinfo.shortDesc');
+        values['info_publisher_s'] = BeanUtils.getValue(props, 'tdocinfo.publisher');
+        values['info_reference_s'] = BeanUtils.getValue(props, 'tdocinfo.reference');
+        values['info_tif_linked_details_s'] = BeanUtils.getValue(props, 'tdocinfo.linkedDetails');
+        values['info_lif_linked_details_s'] = BeanUtils.getValue(props, 'tdocinfo.linkedDetails');
+        values['info_type_s'] = BeanUtils.getValue(props, 'tdocinfo.type');
+
         return values;
+    }
+
+    mapDetailDataToAdapterDocument(mapping: {}, profile: string, props: any, result: {}): void {
+        switch (profile) {
+            case 'linkedroutes':
+                if (props.get('tdoclinkedroutes') && props.get('tdoclinkedroutes').length > 0) {
+                    const routes: TourDocLinkedRouteRecord[] = props.get('tdoclinkedroutes');
+                    const routesSrc: string [] = [];
+                    for (let idx = 0; idx < routes.length; idx++) {
+                        routesSrc.push('type=subroute' + this._fieldSeparator +
+                            'name=' + routes[idx].name + this._fieldSeparator +
+                            'refId=' + routes[idx].refId + this._fieldSeparator +
+                            'full=' + routes[idx].full);
+                    }
+
+                    result['linkedroutes_txt'] = routesSrc.join(this._objectSeparator);
+                }
+                break;
+            case 'linkedinfos':
+                if (props.get('tdoclinkedinfos') && props.get('tdoclinkedinfos').length > 0) {
+                    const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
+                    const infosSrc: string [] = [];
+                    for (let idx = 0; idx < infos.length; idx++) {
+                        infosSrc.push('type=subinfo' + this._fieldSeparator +
+                            'name=' + infos[idx].name + this._fieldSeparator +
+                            'refId=' + infos[idx].refId + this._fieldSeparator +
+                            'linkedDetails=' + infos[idx].linkedDetails);
+                    }
+
+                    result['linkedinfos_txt'] = infosSrc.join(this._objectSeparator);
+                }
+                break;
+        }
     }
 
     mapValuesToRecord(mapper: Mapper, values: {}): TourDocRecord {
         const record = TourDocRecordFactory.createSanitized(values);
-
-        for (const mapperKey of ['tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech']) {
-            const subMapper = mapper['datastore']._mappers[mapperKey];
-            let subValues = undefined;
-            for (const key in values) {
-                if (key.startsWith(mapperKey + '.')) {
-                    const subKey = key.replace(mapperKey + '.', '');
-                    subValues = subValues || {};
-                    subValues[subKey] = values[key];
-                }
-            }
-
-            if (subValues) {
-                record.set(mapperKey, subMapper.createRecord(subValues));
-            } else {
-                record.set(mapperKey, undefined);
-            }
-        }
+        this.mapperUtils.mapValuesToSubRecords(mapper, values, record, TourDocRecordRelation);
 
         return record;
     }
@@ -149,6 +182,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
     mapResponseDocument(mapper: Mapper, doc: any, mapping: {}): Record {
         const dataTechMapper = mapper['datastore']._mappers['tdocdatatech'];
         const dataInfoMapper = mapper['datastore']._mappers['tdocdatainfo'];
+        const infoMapper = mapper['datastore']._mappers['tdocinfo'];
         const ratePersMapper = mapper['datastore']._mappers['tdocratepers'];
         const rateTechMapper = mapper['datastore']._mappers['tdocratetech'];
 
@@ -162,6 +196,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['trackId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'track_id_i', undefined);
         values['tripId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'trip_id_i', undefined);
         values['newsId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'news_id_i', undefined);
+        values['infoId'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'info_id_i', undefined);
 
         const subtypeField = doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'subtypes_ss')];
         if (subtypeField !== undefined && Array.isArray(subtypeField)) {
@@ -240,22 +275,30 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         const record: TourDocRecord = <TourDocRecord>mapper.createRecord(
             TourDocRecordFactory.instance.getSanitizedValues(values, {}));
 
-        this.mapDetailDataToAdapterDocument(mapper, 'image', record,
+        this.mapDetailResponseDocuments(mapper, 'image', record,
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'i_fav_url_txt')],
                 'i_fav_url_txt'));
-        this.mapDetailDataToAdapterDocument(mapper, 'video', record,
+        this.mapDetailResponseDocuments(mapper, 'video', record,
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'v_fav_url_txt')],
                 'v_fav_url_txt'));
-        this.mapDetailDataToAdapterDocument(mapper, 'navigation_objects', record,
+        this.mapDetailResponseDocuments(mapper, 'navigation_objects', record,
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'navigation_objects_txt')],
                 'navigation_objects_txt'));
-        this.mapDetailDataToAdapterDocument(mapper, 'flag_objects', record,
+        this.mapDetailResponseDocuments(mapper, 'extended_object_properties', record,
             ObjectUtils.mapValueToObjects(
-                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'flag_objects_txt')],
-                'flag_objects_txt'));
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'extended_object_properties_txt')],
+                'extended_object_properties_txt'));
+        this.mapDetailResponseDocuments(mapper, 'linkedroutes', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedroutes_txt')],
+                'linkedroutes_txt'));
+        this.mapDetailResponseDocuments(mapper, 'linkedinfos', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedinfos_txt')],
+                'linkedinfos_txt'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
@@ -348,12 +391,44 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             record.set('tdocdatainfo', undefined);
         }
 
+        const infoValues = {};
+        infoValues['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_name_s', undefined);
+        infoValues['desc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_desc_txt', undefined);
+        infoValues['shortDesc'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_shortdesc_txt', undefined);
+        infoValues['publisher'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_publisher_s', undefined);
+        infoValues['reference'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_reference_s', undefined);
+        infoValues['type'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_type_s', undefined);
+        infoValues['linkedDetails'] = undefined;
+        for (const refDetail of [this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_tif_linked_details_s', undefined),
+            this.mapperUtils.getMappedAdapterValue(mapping, doc, 'info_lif_linked_details_s', undefined)]) {
+            if (refDetail === undefined) {
+                continue;
+            }
+            infoValues['linkedDetails'] = infoValues['linkedDetails'] || '';
+            infoValues['linkedDetails'] += refDetail;
+        }
+
+
+        let infoSet = false;
+        for (const field in infoValues) {
+            if (infoValues[field] !== undefined && (infoValues[field] + '').length > 0) {
+                infoSet = true;
+                break;
+            }
+        }
+
+        if (infoSet) {
+            record.set('tdocinfo', infoMapper.createRecord(
+                TourDocInfoRecordFactory.instance.getSanitizedValues(infoValues, {})));
+        } else {
+            record.set('tdocinfo', undefined);
+        }
         // console.log('mapResponseDocument record full:', record);
 
         return record;
     }
 
-    mapDetailDataToAdapterDocument(mapper: Mapper, profile: string, src: Record, docs: any[]): void {
+    mapDetailResponseDocuments(mapper: Mapper, profile: string, src: Record, docs: any[]): void {
         const record: TourDocRecord = <TourDocRecord>src;
         switch (profile) {
             case 'image':
@@ -378,50 +453,24 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 record.objects = ObjectUtils.mergePropertyValues(docs, 'i_objects', ', ');
                 break;
             case 'image_objectdetections':
-                let odDocs = [];
-                docs.forEach(doc => {
-                    const fieldName = 'i_objectdetections';
-                    if (doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        odDocs = odDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
-                    }
-                });
-                record.set('tdocodimageobjects',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocodimageobject'],
-                        TourDocObjectDetectionImageObjectRecordFactory.instance, record, odDocs));
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocodimageobject'],
+                    ['i_objectdetections', 'i_objectdetections_txt'], record, docs);
                 break;
             case 'navigation_objects':
-                let navDocs = [];
-                docs.forEach(doc => {
-                    let fieldName;
-                    if (doc['navigation_objects'] !== undefined && doc['navigation_objects'] !== null) {
-                        fieldName = 'navigation_objects';
-                    } else if (doc['navigation_objects_txt'] !== undefined && doc['navigation_objects_txt'] !== null) {
-                        fieldName = 'navigation_objects_txt';
-                    }
-                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        navDocs = navDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
-                    }
-                });
-                record.set('tdocnavigationobjects',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocnavigationobject'],
-                        TourDocNavigationObjectRecordFactory.instance, record, navDocs));
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocnavigationobject'],
+                    ['navigation_objects', 'navigation_objects_txt'], record, docs);
                 break;
-            case 'flag_objects':
-                let flagDocs = [];
-                docs.forEach(doc => {
-                    let fieldName;
-                    if (doc['flag_objects'] !== undefined && doc['flag_objects'] !== null) {
-                        fieldName = 'flag_objects';
-                    } else if (doc['flag_objects_txt'] !== undefined && doc['flag_objects_txt'] !== null) {
-                        fieldName = 'flag_objects_txt';
-                    }
-                    if (fieldName !== undefined && doc[fieldName] !== undefined && doc[fieldName] !== null) {
-                        flagDocs = flagDocs.concat(ObjectUtils.explodeValueToObjects(doc[fieldName], ';;', ':::', '='));
-                    }
-                });
-                record.set('tdocflagobjects',
-                    this.mapperUtils.mapDetailDocsToDetailRecords(mapper['datastore']._mappers['tdocflagobject'],
-                        TourDocFlagObjectRecordFactory.instance, record, flagDocs));
+            case 'extended_object_properties':
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdocextendedobjectproperty'],
+                    ['extended_object_properties', 'extended_object_properties_txt'], record, docs);
+                break;
+            case 'linkedroutes':
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedroute'],
+                    ['linkedroutes', 'linkedroutes_txt'], record, docs);
+                break;
+            case 'linkedinfos':
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedinfo'],
+                    ['linkedinfos', 'linkedinfos_txt'], record, docs);
                 break;
             case 'video':
                 const videoDocs = [];

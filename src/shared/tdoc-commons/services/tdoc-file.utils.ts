@@ -29,6 +29,7 @@ export class TourDocFileUtils {
             rate_pers_wichtigkeit_is: 'rate_pers_wichtigkeit_i',
             loc_lochirarchie_txt: 'loc_lochirarchie_s',
             track_id_is: 'track_id_i',
+            info_id_is: 'info_id_i',
             route_id_is: 'route_id_i',
             loc_id_is: 'loc_id_i',
             trip_id_is: 'trip_id_i',

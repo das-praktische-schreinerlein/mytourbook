@@ -1,7 +1,49 @@
-import {BaseDataTechRecord} from './basedatatech-record';
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecord,
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
+    BaseEntityRecordType,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NumberValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class TourDocDataTechRecord extends BaseDataTechRecord {
+export interface TourDocDataTechRecordType extends BaseEntityRecordType {
+    altAsc: number;
+    altDesc: number;
+    altMax: number;
+    altMin: number;
+    dist: number;
+    dur: number;
+}
+
+export class TourDocDataTechRecord extends BaseEntityRecord implements TourDocDataTechRecordType {
+    static datatechFields = {
+        altAsc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 999999, undefined)),
+        altDesc: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 999999, undefined)),
+        altMax: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 8850, undefined)),
+        altMin: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 10500, undefined)),
+        dist: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 99999, undefined)),
+        dur: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
+            new NumberValidationRule(false, 0, 999999, undefined)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
+    };
+
+    altAsc: number;
+    altDesc: number;
+    altMax: number;
+    altMin: number;
+    dist: number;
+    dur: number;
     tdoc_id: string;
 
     toString() {
@@ -51,13 +93,14 @@ export class TourDocDataTechRecordValidator extends BaseEntityRecordValidator {
     }
 }
 
-export let TourDocDataTechRecordRelation: any = {
+export let TourDocDataTechRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

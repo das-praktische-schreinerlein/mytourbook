@@ -24,7 +24,7 @@
     "playlistExportUseImageAssetStoreUrls": true,
     "playlistExportUseVideoAssetStoreUrls": false,
     "playlistExportMaxM3uRecordAllowed": 10000,
-    "imageMagicAppPath": "D:\\ProgrammeShared\\ImageMagick-7.0.7-Q16\\",
+    "imageMagicAppPath": "F:\\ProgrammeShared\\ImageMagick\\",
     "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
     "tdocWritable": true,
     "mapperConfig": {

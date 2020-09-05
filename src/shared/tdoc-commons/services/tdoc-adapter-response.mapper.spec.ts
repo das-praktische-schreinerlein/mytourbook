@@ -25,8 +25,17 @@ import {TourDocObjectDetectionImageObjectRecordSchema} from '../model/schemas/td
 import {TourDocNavigationObjectRecord, TourDocNavigationObjectRecordRelation} from '../model/records/tdocnavigationobject-record';
 import {TourDocNavigationObjectRecordSchema} from '../model/schemas/tdocnavigationobject-record-schema';
 import {TourDocSqlMytbDbConfig} from './tdoc-sql-mytbdb.config';
-import {TourDocFlagObjectRecord, TourDocFlagObjectRecordRelation} from '../model/records/tdocflagobject-record';
-import {TourDocFlagObjectRecordSchema} from '../model/schemas/tdocflagobject-record-schema';
+import {
+    TourDocExtendedObjectPropertyRecord,
+    TourDocExtendedObjectPropertyRecordRelation
+} from '../model/records/tdocextendedobjectproperty-record';
+import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
+import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordRelation} from '../model/records/tdoclinkedroute-record';
+import {TourDocLinkedRouteRecordSchema} from '../model/schemas/tdoclinkedroute-record-schema';
+import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdocinfo-record';
+import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
+import {TourDocLinkedInfoRecordSchema} from '../model/schemas/tdoclinkedinfo-record-schema';
+import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordRelation} from '../model/records/tdoclinkedinfo-record';
 
 describe('TourDocAdapterResponseMapper', () => {
     let datastore: TourDocDataStore;
@@ -45,6 +54,7 @@ describe('TourDocAdapterResponseMapper', () => {
         datastore.defineMapper('tdoc', TourDocRecord, TourDocRecordSchema, TourDocRecordRelation);
         datastore.defineMapper('tdocdatatech', TourDocDataTechRecord, TourDocDataTechRecordSchema, TourDocDataTechRecordRelation);
         datastore.defineMapper('tdocdatainfo', TourDocDataInfoRecord, TourDocDataInfoRecordSchema, TourDocDataInfoRecordRelation);
+        datastore.defineMapper('tdocinfo', TourDocInfoRecord, TourDocInfoRecordSchema, TourDocInfoRecordRelation);
         datastore.defineMapper('tdocimage', TourDocImageRecord, TourDocImageRecordSchema, TourDocImageRecordRelation);
         datastore.defineMapper('tdocvideo', TourDocVideoRecord, TourDocVideoRecordSchema, TourDocVideoRecordRelation);
         datastore.defineMapper('tdocratepers', TourDocRatePersonalRecord, TourDocRatePersonalRecordSchema,
@@ -55,8 +65,12 @@ describe('TourDocAdapterResponseMapper', () => {
             TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
         datastore.defineMapper('tdocnavigationobject', TourDocNavigationObjectRecord,
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
-        datastore.defineMapper('tdocflagobject', TourDocFlagObjectRecord,
-            TourDocFlagObjectRecordSchema, TourDocFlagObjectRecordRelation);
+        datastore.defineMapper('tdocextendedobjectproperty', TourDocExtendedObjectPropertyRecord,
+            TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
+        datastore.defineMapper('tdoclinkedroute', TourDocLinkedRouteRecord,
+            TourDocLinkedRouteRecordSchema, TourDocLinkedRouteRecordRelation);
+        datastore.defineMapper('tdoclinkedinfo', TourDocLinkedInfoRecord,
+            TourDocLinkedInfoRecordSchema, TourDocLinkedInfoRecordRelation);
         mapper = datastore.getMapper('tdoc');
     });
 
@@ -99,7 +113,9 @@ describe('TourDocAdapterResponseMapper', () => {
                 'tdocvideos': [],
                 'tdocodimageobjects': [],
                 'tdocnavigationobjects': [],
-                'tdocflagobjects': []
+                'tdocextendedobjectproperties': [],
+                'tdoclinkedroutes': [],
+                'tdoclinkedinfos': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues,
                 TourDocSqlMytbDbConfig.tableConfigs.track.fieldMapping);
@@ -136,6 +152,12 @@ describe('TourDocAdapterResponseMapper', () => {
                 'navigation_objects_txt': [
                     'navid=TRACK_8:::name=Dienstreise 01.01.2000:::navtype=PREDECESSOR',
                     'navid=TRACK_10:::name=Ausflug Schlaubetal 01.01.2000:::navtype=SUCCESSOR'
+                ],
+                'linkedroutes_txt': [
+                    'type=subroute:::name=Dienstreise 01.01.2000:::refId=1200:::full=1',
+                    'type=subroute:::name=Dienstreise:::refId=1201:::full=true',
+                    'type=subroute:::name=Ausflug Schlaubetal 01.01.2000:::refId=1202:::full=false',
+                    'type=subroute:::name=Ausflug Schlaubetal:::refId=1203:::full=0'
                 ],
                 'i_fav_url_txt': [
                     'd__micha_bilder_digifotos_20000101-Liepnitzsee/IMAG0020.JPG'
@@ -179,7 +201,42 @@ describe('TourDocAdapterResponseMapper', () => {
                         'id': '9000001TRACK_9'
                     }
                 ],
-                'tdocflagobjects': []
+                'tdocextendedobjectproperties': [],
+                'tdoclinkedroutes': [
+                    {
+                        'type': 'subroute',
+                        'name': 'Dienstreise 01.01.2000',
+                        'full': true,
+                        'refId': '1200',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000000TRACK_9'
+                    },
+                    {
+                        'type': 'subroute',
+                        'name': 'Dienstreise',
+                        'full': true,
+                        'refId': '1201',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000001TRACK_9'
+                    },
+                    {
+                        'type': 'subroute',
+                        'name': 'Ausflug Schlaubetal 01.01.2000',
+                        'full': false,
+                        'refId': '1202',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000002TRACK_9'
+                    },
+                    {
+                        'type': 'subroute',
+                        'name': 'Ausflug Schlaubetal',
+                        'full': false,
+                        'refId': '1203',
+                        'tdoc_id': 'TRACK_9',
+                        'id': '9000003TRACK_9'
+                    }
+                ],
+                'tdoclinkedinfos': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
 

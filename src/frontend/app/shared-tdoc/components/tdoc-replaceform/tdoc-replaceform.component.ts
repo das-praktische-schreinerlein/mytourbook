@@ -58,6 +58,8 @@ export class TourDocReplaceFormComponent
                 return 'track_id_is';
             case 'ROUTE':
                 return 'route_id_is';
+            case 'INFO':
+                return 'info_id_is';
             case 'LOCATION':
                 return 'loc_lochirarchie_txt';
             case 'TRIP':
@@ -76,6 +78,8 @@ export class TourDocReplaceFormComponent
                 return 'ROUTE';
             case 'ROUTE':
                 return 'TRACK';
+            case 'INFO':
+                return 'ROUTE';
             case 'LOCATION':
                 return 'TRACK';
             case 'TRIP':

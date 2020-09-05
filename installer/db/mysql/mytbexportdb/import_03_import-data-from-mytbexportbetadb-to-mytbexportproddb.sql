@@ -7,17 +7,26 @@ INSERT INTO location SELECT * FROM testmytbexportbetadb.location;
 TRUNCATE TABLE news;
 INSERT INTO news SELECT * FROM testmytbexportbetadb.news;
 
+TRUNCATE TABLE info;
+INSERT INTO info SELECT * FROM testmytbexportbetadb.info;
+
+TRUNCATE TABLE location_info;
+INSERT INTO location_info SELECT * FROM testmytbexportbetadb.location_info;
+
 TRUNCATE TABLE trip;
 INSERT INTO trip SELECT * FROM testmytbexportbetadb.trip;
 
 TRUNCATE TABLE kategorie_full;
 INSERT INTO kategorie_full SELECT * FROM testmytbexportbetadb.kategorie_full;
 
-TRUNCATE TABLE destianation;
-INSERT INTO destianation SELECT * FROM testmytbexportbetadb.destianation;
+TRUNCATE TABLE destination;
+INSERT INTO destination SELECT * FROM testmytbexportbetadb.destination;
 
 TRUNCATE TABLE tour;
 INSERT INTO tour SELECT * FROM testmytbexportbetadb.tour;
+
+TRUNCATE TABLE tour_info;
+INSERT INTO tour_info SELECT * FROM testmytbexportbetadb.tour_info;
 
 TRUNCATE TABLE image;
 INSERT INTO image SELECT * FROM testmytbexportbetadb.image;

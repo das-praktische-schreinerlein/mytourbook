@@ -23,6 +23,7 @@ import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pd
 export interface TourDocSectionPageComponentAvailableTabs {
     DESTINATION?: boolean;
     IMAGE?: boolean;
+    INFO?: boolean;
     ODIMGOBJECT?: boolean;
     VIDEO?: boolean;
     LOCATION?: boolean;
@@ -59,6 +60,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     availableTabs: TourDocSectionPageComponentAvailableTabs = {
         DESTINATION: true,
         IMAGE: true,
+        INFO: true,
         ROUTE: true,
         TRACK: true,
         LOCATION: true,
@@ -74,7 +76,8 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         ROUTE: true,
         LOCATION: true,
         TRIP: true,
-        NEWS: true
+        NEWS: true,
+        INFO: true
     };
 
     availableToDoDashboardRows: TourDocSectionPageComponentDashboardRows = {
@@ -128,12 +131,12 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         filters['nearBy'] = this.tdocSearchForm.nearby;
         filters['nearbyAddress'] = this.tdocSearchForm.nearbyAddress;
         filters['fulltext'] = this.tdocSearchForm.fulltext;
-
         return filters;
     }
 
     getDashboardFiltersForType(profile: string, recordType: string, sort?: string): any {
         const filters = this.getFiltersForType(recordType, sort);
+        const splitter = this.searchFormConverter.splitter;
         switch (profile) {
             // dashboard
             case 'doublettes':
@@ -148,45 +151,46 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             case 'todoKeywords':
             case 'unrated':
             case 'unRatedChildren':
-                filters['dashboardFilter'] = filters['dashboardFilter'] ? filters['dashboardFilter'] + ';' : '';
+                filters['dashboardFilter'] = filters['dashboardFilter'] ? filters['dashboardFilter'] + splitter : '';
                 filters['dashboardFilter'] += profile;
                 break;
             // Others
             case 'rated':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
                 break;
             case 'rejected':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'personalRateOverall:-1';
                 break;
             case 'objectDetectionOpen':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'objectDetectionState:OPEN';
                 break;
             case 'objectDetectionToDo':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED,RUNNING_MANUAL_DETAIL_NEEDED,' +
-                    'RUNNING_SUGGESTED';
+                    'RUNNING_SUGGESTED' + splitter + 'personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
                 break;
             case 'objectDetectionDetailNeeded':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'objectDetectionState:RUNNING_MANUAL_DETAIL_NEEDED';
                 break;
             case 'objectDetectionCorrectionNeeded':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'objectDetectionState:RUNNING_MANUAL_CORRECTION_NEEDED';
                 break;
             case 'objectDetectionSuggested':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
-                filters['moreFilter'] += 'objectDetectionState:RUNNING_SUGGESTED';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
+                filters['moreFilter'] += 'objectDetectionState:RUNNING_SUGGESTED' +
+                    splitter + 'personalRateOverall:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15';
                 break;
             case 'objectDetectionError':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'objectDetectionState:ERROR';
                 break;
             case 'objectDetectionDone':
-                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + ';' : '';
+                filters['moreFilter'] = filters['moreFilter'] ? filters['moreFilter'] + splitter : '';
                 filters['moreFilter'] += 'objectDetectionState:RUNNING_NO_SUGGESTION,' +
                     'RUNNING_MANUAL_APPROVED,RUNNING_MANUAL_REJECTED,RUNNING_MANUAL_DETAILED,' +
                     'DONE_APPROVAL_PROCESSED,DONE_REJECTION_PROCESSED,DONE_CORRECTION_PROCESSED,DONE_DETAIL_PROCESSED';
@@ -202,11 +206,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'TRIP'
                     && recordType !== 'NEWS';
             case 'noLocation':
-                return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'TRIP' || recordType === 'LOCATION';
+                return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'TRIP' || recordType === 'LOCATION'
+                    || recordType === 'INFO';
             case 'noRoute':
                 return recordType === 'TRACK';
             case 'unrated':
-                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
+                    && recordType !== 'INFO';
             case 'todoKeywords':
                 return recordType !== 'ODIMGOBJECT' && recordType !== 'IMAGE' && recordType !== 'VIDEO' && recordType !== 'LOCATION'
                     && recordType !== 'TRIP' && recordType !== 'NEWS';
@@ -215,13 +221,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             case 'doublettes':
                 return recordType !== 'ODIMGOBJECT';
             case 'conflictingRates':
-                return recordType === 'TRACK';
+                return recordType === 'TRACK' || recordType === 'NEWS' || recordType === 'TRIP';
             case 'noFavoriteChildren':
                 return recordType === 'TRACK';
             case 'unRatedChildren':
-                return recordType === 'TRACK';
+                return recordType === 'TRACK' || recordType === 'NEWS' || recordType === 'TRIP';
             case 'noMainFavoriteChildren':
-                return recordType === 'TRACK' || recordType === 'ROUTE';
+                return recordType === 'TRACK' || recordType === 'ROUTE' || recordType === 'NEWS' || recordType === 'TRIP';
             case 'noCoordinates':
                 return recordType === 'LOCATION';
             case 'objectDetectionCorrectionNeeded':
@@ -235,9 +241,11 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             case 'objectDetectionOpen':
                 return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
             case 'rated':
-                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
+                    && recordType !== 'INFO';
             case 'rejected':
-                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS';
+                return recordType !== 'ODIMGOBJECT' && recordType !== 'LOCATION' && recordType !== 'TRIP' && recordType !== 'NEWS'
+                    && recordType !== 'INFO';
             case 'objectDetectionDone':
                 return recordType === 'ODIMGOBJECT' || recordType === 'IMAGE';
         }

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
-import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
+import {TourDocRecord, TourDocRecordType} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 
 @Component({
@@ -9,7 +9,7 @@ import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocDataMetaComponent extends AbstractInlineComponent {
-    tdocdatameta: TourDocRecord;
+    tdocdatameta: TourDocRecordType;
 
     @Input()
     public record: TourDocRecord;

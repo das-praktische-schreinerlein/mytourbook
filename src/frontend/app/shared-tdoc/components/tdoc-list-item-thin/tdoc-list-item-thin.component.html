@@ -11,7 +11,9 @@
             <span *ngIf="mapFlagAvailable" (click)="submitShowItemOnMap(listItem.currentRecord)"
                   [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
             <ng-container *ngIf="listItem.currentRecord.geoDistance > 0"><app-tdoc-distance [record]="listItem.currentRecord"></app-tdoc-distance><br /></ng-container>
+
             <ng-container [ngSwitch]="true">
+
                 <ng-container *ngSwitchCase="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'ODIMGOBJECT'">
                     <ng-container *ngIf="listItem.image">
                         <img class="picture-thumbnail" width="50px"
@@ -20,6 +22,7 @@
                              alt="{{listItem.image.name}}">
                     </ng-container>
                 </ng-container>
+
                 <ng-container *ngSwitchCase="listItem.currentRecord.type === 'VIDEO'">
                     <ng-container *ngIf="listItem.video">
                         <img class="picture-thumbnail" width="50px"
@@ -28,6 +31,7 @@
                              alt="{{listItem.video.name}}">
                     </ng-container>
                 </ng-container>
+
                 <ng-container *ngSwitchDefault="">
                     {{listItem.currentRecord.type | translate }}<br />
                     {{listItem.currentRecord.subtype | translate }}
@@ -44,6 +48,7 @@
         </ng-container>
         <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
             <div class="col-2 layout-big">
+                <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>
                 <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                 <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
             </div>
@@ -86,6 +91,7 @@
                     {{listItem.currentRecord.subtype | translate }}
                 </ng-container>
             </ng-container>
+            <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>
             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
         </div>
@@ -137,6 +143,7 @@
                     {{listItem.currentRecord.subtype | translate }}
                 </ng-container>
             </ng-container>
+            <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>
             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
         </div>

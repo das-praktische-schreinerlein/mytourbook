@@ -16,6 +16,10 @@ export class TourDocSqlMytbDbKeywordAdapter {
         return this.setGenericKeywords('image', dbId, keywords, opts);
     }
 
+    public setInfoKeywords(dbId: number, keywords: string, opts: any): Promise<any> {
+        return this.setGenericKeywords('info', dbId, keywords, opts);
+    }
+
     public setVideoKeywords(dbId: number, keywords: string, opts: any): Promise<any> {
         return this.setGenericKeywords('video', dbId, keywords, opts);
     }

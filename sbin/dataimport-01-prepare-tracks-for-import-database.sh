@@ -93,7 +93,7 @@ else
   done
 fi
 
-echo "OPTIONAL YOUR TODO: fix exif-date run this command in a windows-shell 'D:\\ProgrammePortable\\exiftool\\exiftool -ext jpg -overwrite_original_in_place -preserve -DateTimeOriginal-=\"0:0:0 7:40:0\" ${W_DIGIFOTOS_BASEDIR}import-READY\\${IMPORTKEY}_Blablum\\CIMG6228.JPG'"
+echo "OPTIONAL YOUR TODO: fix exif-date run this command in a windows-shell 'F:\\ProgrammePortable\\exiftool\\exiftool -ext jpg -overwrite_original_in_place -preserve -DateTimeOriginal-=\"0:0:0 7:40:0\" ${W_DIGIFOTOS_BASEDIR}import-READY\\${IMPORTKEY}_Blablum\\CIMG6228.JPG'"
 echo "OPEN: Can we poceed the next steps ?"
 select yn in "Yes"; do
     case $yn in

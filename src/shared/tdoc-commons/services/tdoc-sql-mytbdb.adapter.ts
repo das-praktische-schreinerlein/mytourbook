@@ -49,10 +49,18 @@ import {
 import {CommonSqlRateAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-rate.adapter';
 import {CommonSqlObjectDetectionAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-object-detection.adapter';
 import {TourDocSqlMytbDbObjectDetectionAdapter} from './tdoc-sql-mytbdb-objectdetection.adapter';
+import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
+import {CommonSqlJoinAdapter} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
+import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
+import {
+    AssignJoinActionTagForm,
+    CommonSqlActionTagAssignJoinAdapter
+} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
     private readonly actionTagAssignAdapter: CommonSqlActionTagAssignAdapter;
+    private readonly actionTagAssignJoinAdapter: CommonSqlActionTagAssignJoinAdapter;
     private readonly actionTagBlockAdapter: CommonSqlActionTagBlockAdapter;
     private readonly actionTagReplaceAdapter: CommonSqlActionTagReplaceAdapter;
     private readonly actionTagKeywordAdapter: CommonSqlActionTagKeywordAdapter;
@@ -62,6 +70,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     private readonly commonKeywordAdapter: CommonSqlKeywordAdapter;
     private readonly commonPlaylistAdapter: CommonSqlPlaylistAdapter;
     private readonly commonRateAdapter: CommonSqlRateAdapter;
+    private readonly commonJoinAdapter: CommonSqlJoinAdapter;
     private readonly commonObjectDetectionAdapter: CommonSqlObjectDetectionAdapter;
     private readonly dbModelConfig: TourDocSqlMytbDbConfig = new TourDocSqlMytbDbConfig();
 
@@ -75,9 +84,13 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             this.dbModelConfig.getPlaylistModelConfigFor());
         this.commonRateAdapter = new CommonSqlRateAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getRateModelConfigFor());
+        this.commonJoinAdapter = new CommonSqlJoinAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getJoinModelConfigFor());
         this.keywordsAdapter = new TourDocSqlMytbDbKeywordAdapter(config, this.knex, this.commonKeywordAdapter);
         this.actionTagAssignAdapter = new CommonSqlActionTagAssignAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagAssignConfig());
+        this.actionTagAssignJoinAdapter = new CommonSqlActionTagAssignJoinAdapter(config, this.knex, this.sqlQueryBuilder,
+            this.dbModelConfig.getActionTagAssignJoinConfig());
         this.actionTagBlockAdapter = new CommonSqlActionTagBlockAdapter(config, this.knex, this.sqlQueryBuilder,
             this.dbModelConfig.getActionTagBlockConfig());
         this.actionTagReplaceAdapter = new CommonSqlActionTagReplaceAdapter(config, this.knex, this.sqlQueryBuilder,
@@ -119,7 +132,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     protected getDefaultFacets(): Facets {
         const facets = new Facets();
         let facet = new Facet();
-        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject'].map(value => {return [value, 0]; });
+        facet.facet = ['trip', 'location', 'track', 'destination', 'route', 'image', 'video', 'news', 'odimgobject', 'info']
+            .map(value => {return [value, 0]; });
         facet.selectLimit = 1;
         facets.facets.set('type_txt', facet);
         facet = new Facet();
@@ -211,14 +225,18 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
 
         const tabKey = props.type.toLowerCase();
         if (tabKey === 'track') {
-            return  new Promise<boolean>((allResolve, allReject) => {
+            return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setTrackKeywords(dbId, props.keywords, opts));
+                if (props.get('tdoclinkedroutes')) {
+                    const routes: TourDocLinkedRouteRecord[] = props.get('tdoclinkedroutes');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedroutes', tabKey, dbId, routes, opts));
+                }
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setTrackKeywords failed:', reason);
+                    console.error('setTrackDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -230,7 +248,19 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setImageKeywords failed:', reason);
+                    console.error('setImageDetails failed:', reason);
+                    return allReject(reason);
+                });
+            });
+        } else if (tabKey === 'info') {
+            return new Promise<boolean>((allResolve, allReject) => {
+                const promises = [];
+                promises.push(this.keywordsAdapter.setInfoKeywords(dbId, props.keywords, opts));
+
+                return Promise.all(promises).then(() => {
+                    return allResolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('setInfoDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -242,7 +272,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setVideoKeywords failed:', reason);
+                    console.error('setVideoDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -250,11 +280,15 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setRouteKeywords(dbId, props.keywords, opts));
+                if (props.get('tdoclinkedinfos')) {
+                    const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedinfos', tabKey, dbId, infos, opts));
+                }
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setRouteKeywords failed:', reason);
+                    console.error('setRouteDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -262,11 +296,15 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return new Promise<boolean>((allResolve, allReject) => {
                 const promises = [];
                 promises.push(this.keywordsAdapter.setLocationKeywords(dbId, props.keywords, opts));
+                if (props.get('tdoclinkedinfos')) {
+                    const infos: TourDocLinkedInfoRecord[] = props.get('tdoclinkedinfos');
+                    promises.push(this.commonJoinAdapter.saveJoins('linkedinfos', tabKey, dbId, infos, opts));
+                }
 
                 return Promise.all(promises).then(() => {
                     return allResolve(true);
                 }).catch(function errorSearch(reason) {
-                    console.error('setLocationKeywords failed:', reason);
+                    console.error('setLocationDetails failed:', reason);
                     return allReject(reason);
                 });
             });
@@ -307,10 +345,18 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return this.actionTagODAdapter.executeActionTagObjectsKey(table, id, <ObjectsKeyActionTagForm> actionTagForm, opts);
         } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('persRate_')) {
             return this.actionTagRateAdapter.executeActionTagRate(table, id, <RateActionTagForm> actionTagForm, opts);
+        } else if ((table === 'track') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('trackmedia_persRate')) {
+            return this.actionTagRateAdapter.executeActionTagRate('trackimages', id, <RateActionTagForm> actionTagForm, opts).then(
+                () => {
+                    return this.actionTagRateAdapter.executeActionTagRate('trackvideos', id, <RateActionTagForm> actionTagForm, opts);
+                }
+            );
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {
             return this.actionTagBlockAdapter.executeActionTagBlock(table, id, actionTagForm, opts);
         } else if (actionTagForm.type === 'assign' && actionTagForm.key.startsWith('assign')) {
             return this.actionTagAssignAdapter.executeActionTagAssign(table, id, <AssignActionTagForm> actionTagForm, opts);
+        } else if (actionTagForm.type === 'assignjoin' && actionTagForm.key.startsWith('assignjoin')) {
+            return this.actionTagAssignJoinAdapter.executeActionTagAssignJoin(table, id, <AssignJoinActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'keyword' && actionTagForm.key.startsWith('keyword')) {
             return this.actionTagKeywordAdapter.executeActionTagKeyword(table, id, <KeywordActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {

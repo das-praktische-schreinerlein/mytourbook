@@ -3,10 +3,10 @@
 -- ------------------------------------
 DROP VIEW IF EXISTS DESTINATION;
 CREATE VIEW  DESTINATION AS
-SELECT MD5(COALESCE(tour.l_id, "") || "_" ||
-           COALESCE(t_desc_gebiet, "") || "_" ||
-           COALESCE(t_desc_ziel, "") || "_" ||
-           COALESCE(t_typ, ""))                                        AS d_id,
+SELECT REPLACE(REPLACE(LOWER(COALESCE(tour.l_id, "") || "_" ||
+            COALESCE(t_desc_gebiet, "") || "_" ||
+            COALESCE(t_desc_ziel, "") || "_" ||
+            COALESCE(t_typ, "")), " ", "_"), "/", "_")                 AS d_id,
        tour.l_id,
        t_desc_gebiet AS d_desc_gebiet,
        t_desc_ziel AS d_desc_ziel,

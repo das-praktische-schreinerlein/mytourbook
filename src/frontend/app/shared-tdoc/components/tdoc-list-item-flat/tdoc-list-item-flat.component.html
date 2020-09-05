@@ -63,8 +63,11 @@
         <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
         </ng-container>
+        <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
         <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
-        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
+        <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+            <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
+        </ng-container>
     </div>
     <div class="col-2 ratetech layout-big">
         <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
@@ -72,8 +75,9 @@
     <div class="col-3 location layout-big">
         <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
         <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>
-        <app-cdoc-object-flags [flagobjects]="listItem.currentRecord.tdocflagobjects"
-                               [profile]="'list-item-flat-big'" class="float-right"></app-cdoc-object-flags>
+        <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
+                                             [categories]="['ENTITYCOUNT']"
+                                             [profile]="'list-item-flat-big'" class="float-right"></app-cdoc-extended-object-properties>
     </div>
 </ng-template>
 
@@ -104,6 +108,7 @@
                  alt="{{listItem.video.name}}">
         </ng-container>
     </div>
+
     <ng-container [ngSwitch]="listItem.currentRecord.type">
         <ng-container *ngSwitchCase="'LOCATION'">
             <div class="col-9 location layout-small">
@@ -123,6 +128,7 @@
                 </div>
             </div>
         </ng-container>
+
         <ng-container *ngSwitchDefault="">
             <div class="col-9 location layout-small">
                 <div class=""><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a></div>
@@ -135,6 +141,7 @@
                             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                         </ng-container>
                         <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                            <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
                             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                             <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
                             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
@@ -175,6 +182,7 @@
                  alt="{{listItem.video.name}}">
         </ng-container>
     </div>
+
     <ng-container [ngSwitch]="listItem.currentRecord.type">
         <ng-container *ngSwitchCase="'LOCATION'">
             <div class="col-9 location layout-verysmall">
@@ -195,6 +203,7 @@
                     <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                 </ng-container>
                 <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                    <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
                     <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
                     <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                     <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >

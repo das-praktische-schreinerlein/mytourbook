@@ -26,8 +26,17 @@ import {
 import {TourDocObjectDetectionImageObjectRecordSchema} from '../model/schemas/tdocobjectdetectionimageobject-record-schema';
 import {TourDocNavigationObjectRecord, TourDocNavigationObjectRecordRelation} from '../model/records/tdocnavigationobject-record';
 import {TourDocNavigationObjectRecordSchema} from '../model/schemas/tdocnavigationobject-record-schema';
-import {TourDocFlagObjectRecord, TourDocFlagObjectRecordRelation} from '../model/records/tdocflagobject-record';
-import {TourDocFlagObjectRecordSchema} from '../model/schemas/tdocflagobject-record-schema';
+import {
+    TourDocExtendedObjectPropertyRecord,
+    TourDocExtendedObjectPropertyRecordRelation
+} from '../model/records/tdocextendedobjectproperty-record';
+import {TourDocExtendedObjectPropertyRecordSchema} from '../model/schemas/tdocextendedobjectproperty-record-schema';
+import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordRelation} from '../model/records/tdoclinkedroute-record';
+import {TourDocLinkedRouteRecordSchema} from '../model/schemas/tdoclinkedroute-record-schema';
+import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdocinfo-record';
+import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
+import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordRelation} from '../model/records/tdoclinkedinfo-record';
+import {TourDocLinkedInfoRecordSchema} from '../model/schemas/tdoclinkedinfo-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -74,6 +83,7 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
         this.dataStore.defineMapper('tdoc', TourDocRecord, TourDocRecordSchema, TourDocRecordRelation);
         this.dataStore.defineMapper('tdocdatatech', TourDocDataTechRecord, TourDocDataTechRecordSchema, TourDocDataTechRecordRelation);
         this.dataStore.defineMapper('tdocdatainfo', TourDocDataInfoRecord, TourDocDataInfoRecordSchema, TourDocDataInfoRecordRelation);
+        this.dataStore.defineMapper('tdocinfo', TourDocInfoRecord, TourDocInfoRecordSchema, TourDocInfoRecordRelation);
         this.dataStore.defineMapper('tdocimage', TourDocImageRecord, TourDocImageRecordSchema, TourDocImageRecordRelation);
         this.dataStore.defineMapper('tdocvideo', TourDocVideoRecord, TourDocVideoRecordSchema, TourDocVideoRecordRelation);
         this.dataStore.defineMapper('tdocratepers', TourDocRatePersonalRecord, TourDocRatePersonalRecordSchema,
@@ -84,8 +94,12 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             TourDocObjectDetectionImageObjectRecordSchema, TourDocObjectDetectionImageObjectRecordRelation);
         this.dataStore.defineMapper('tdocnavigationobject', TourDocNavigationObjectRecord,
             TourDocNavigationObjectRecordSchema, TourDocNavigationObjectRecordRelation);
-        this.dataStore.defineMapper('tdocflagobject', TourDocFlagObjectRecord,
-            TourDocFlagObjectRecordSchema, TourDocFlagObjectRecordRelation);
+        this.dataStore.defineMapper('tdocextendedobjectproperty', TourDocExtendedObjectPropertyRecord,
+            TourDocExtendedObjectPropertyRecordSchema, TourDocExtendedObjectPropertyRecordRelation);
+        this.dataStore.defineMapper('tdoclinkedroute', TourDocLinkedRouteRecord,
+            TourDocLinkedRouteRecordSchema, TourDocLinkedRouteRecordRelation);
+        this.dataStore.defineMapper('tdoclinkedinfo', TourDocLinkedInfoRecord,
+            TourDocLinkedInfoRecordSchema, TourDocLinkedInfoRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {
@@ -95,12 +109,13 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
     }
 
     protected defineIdMappings(): string[] {
-        return ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId', 'videoId'];
+        return ['locId', 'locIdParent', 'routeId', 'trackId', 'tripId', 'newsId', 'imageId', 'videoId', 'infoId'];
     }
 
     protected defineTypeMappings(): {} {
         return {
             image: 'imageId',
+            info: 'infoId',
             video: 'videoId',
             track: 'trackId',
             location: 'locId',

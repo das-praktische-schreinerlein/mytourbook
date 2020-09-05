@@ -210,3 +210,15 @@ a.dismiss::after {
 a.dismiss > svg {
     display: none !IMPORTANT;
 }
+
+
+
+/*******************
+ * Extended-Objects
+ *******************/
+app-cdoc-extended-object-properties div.label {
+    min-width: 15px !IMPORTANT;
+}
+app-cdoc-extended-object-properties div.value {
+    min-width: 15px !IMPORTANT;
+}

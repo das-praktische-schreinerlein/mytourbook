@@ -39,6 +39,7 @@
 
     <div class="container content-container">
         <ng-container [ngSwitch]="record.type">
+
             <ng-container *ngSwitchCase="'LOCATION'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
                                             [label]="'Unterregionen'"
@@ -109,6 +110,7 @@
                                             [showResultList]="showResultListTrigger.TRACK"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
+
             <ng-container *ngSwitchCase="'ROUTE'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
                                             [label]="'Region'"
@@ -166,6 +168,7 @@
                                             [showResultList]="showResultListTrigger.TRACK"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
+
             <ng-container *ngSwitchCase="'TRACK'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trip'"
@@ -227,6 +230,7 @@
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
+
             <ng-container *ngSwitchCase="'VIDEO'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trip'"
@@ -274,6 +278,7 @@
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
+
             <ng-container *ngSwitchCase="'IMAGE'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trip'"
@@ -321,6 +326,7 @@
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
+
             <ng-container *ngSwitchCase="'TRIP'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
                                             [label]="'Region'"
@@ -387,6 +393,7 @@
                                             [layout]="Layout.THIN"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
+
             <ng-container *ngSwitchCase="'NEWS'">
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.TRIP"
                                             [label]="'Trip'"
@@ -441,6 +448,19 @@
                                             [layout]="Layout.THIN"
                                             [searchLinkLabel]="'Durchsuchen'"
                                             [showResultList]="showResultListTrigger.ROUTE"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'INFO'">
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.LOCATION"
+                                            [label]="'Region'"
+                                            i18n-label="label inline-searchpage LOCATION|Label inline-searchpage LOCATION@@linline-search.label.tdoc.LOCATION"
+                                            [params]="getFiltersForType(record, 'LOCATION')"
+                                            [htmlId]="'LOCATION'"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [layout]="Layout.FLAT"
+                                            [searchLinkLabel]="'Durchsuchen'"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
         </ng-container>

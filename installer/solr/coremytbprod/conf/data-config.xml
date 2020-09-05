@@ -6,6 +6,178 @@
                 password="testmytbexportproddb"/>
 
     <document>
+
+        <entity name="info"
+                pk="id"
+                query="
+                    select distinct info.if_id,
+                                    'INFO'                                                   as type,
+                                    concat('if_', info.if_typ)                               as subtype,
+                                    concat('INFO', '_', info.if_id)                          as id,
+                                    info.l_id,
+                                    info.countRoutes,
+                                    info.countLocations,
+                                    if_publisher,
+                                    if_typ,
+                                    if_url,
+                                    if_name,
+                                    if_meta_shortdesc,
+                                    if_meta_desc,
+                                    concat(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) as html,
+                                    if_keywords,
+                                    l_lochirarchietxt,
+                                    l_lochirarchieids
+                    from info left join location on info.l_id = location.l_id
+                    order by if_name"
+                deltaImportQuery="
+                    select distinct info.if_id,
+                                    'INFO'                                                   as type,
+                                    concat('if_', info.if_typ)                               as subtype,
+                                    concat('INFO', '_', info.if_id)                          as id,
+                                    info.l_id,
+                                    info.countRoutes,
+                                    info.countLocations,
+                                    if_publisher,
+                                    if_typ,
+                                    if_url,
+                                    if_name,
+                                    if_meta_shortdesc,
+                                    if_meta_desc,
+                                    concat(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) as html,
+                                    if_keywords,
+                                    l_lochirarchietxt,
+                                    l_lochirarchieids
+                    from info left join location on info.l_id = location.l_id
+                    WHERE info.if_id = '${dih.delta.id}'"
+                deltaQuery="SELECT if_id from info order by if_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="id" name="id"/>
+            <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
+            <field column="if_id" name="info_id_i"/>
+            <field column="if_id" name="info_id_is"/>
+
+            <field column="if_name" name="name_s" stripHTML="true" />
+            <field column="if_name" name="name_txt" stripHTML="true" />
+            <field column="if_publisher" name="info_publisher_s" stripHTML="true" />
+            <field column="if_url" name="info_reference_s" stripHTML="true" />
+            <field column="subtype" name="info_type_s" stripHTML="true" />
+            <field column="if_meta_desc" name="desc_txt" stripHTML="true" />
+            <field column="if_meta_desc" name="desc_md_txt" stripHTML="false" />
+            <field column="html" name="html_txt" />
+            <field column="if_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
+            <field column="dateonly" name="dateonly_s" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="subtype" name="subtype_s" />
+            <field column="subtype" name="subtype_ss" />
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countLocations" name="count_locations_i" />
+
+            <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='
+                        (
+                            SELECT
+                               CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                            FROM info
+                            WHERE if_name &lt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
+                            ORDER BY if_name DESC LIMIT 1
+                        )
+                        UNION
+                        (
+                            SELECT
+                                CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                            FROM info
+                            WHERE if_name &gt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
+                            ORDER BY if_name LIMIT 1
+                        )'>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
+            </entity>
+
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                              FROM info
+                              WHERE info.if_id IN (${info.if_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(countLocations AS CHAR)) AS extended_object_properties
+                              FROM info
+                              WHERE info.if_id IN (${info.if_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+            <entity name='tour'
+                    query="
+                        select tour.t_id, tour.d_id, t_keywords, concat('ac_', tour.t_typ) as actiontype
+                          FROM info
+                          INNER JOIN tour_info ON tour_info.if_id = info.if_id
+                          INNER JOIN tour ON tour_info.t_id = tour.t_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id from tour'"
+            >
+                <field column="t_id" name="route_id_i"/>
+                <field column="t_id" name="route_id_is"/>
+                <field column="d_id" name="destination_id_s" />
+                <field column="d_id" name="destination_id_ss" />
+                <field column="actiontype" name="actiontype_s" />
+                <field column="actiontype" name="actiontype_ss" />
+            </entity>
+            <entity name='destination'
+                    query="
+                        select distinct tour.d_id
+                          FROM info
+                          INNER JOIN tour_info ON tour_info.if_id = info.if_id
+                          INNER JOIN tour ON tour_info.t_id = tour.t_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select d_id, t_keywords from tour where t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id from tour'"
+            >
+                <field column="d_id" name="destination_id_s"/>
+                <field column="d_id" name="destination_id_ss"/>
+            </entity>
+            <entity name='location'
+                    query="
+                        select location.l_id, l_lochirarchieids, l_lochirarchietxt
+                          FROM info
+                          INNER JOIN location_info ON location_info.if_id = info.if_id
+                          INNER JOIN location ON location_info.l_id = location.l_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select l_id from location where l_id='${dih.delta.id}'"
+                    deltaQuery="SELECT l_id from location'"
+            >
+                <field column="l_id" name="route_id_i"/>
+                <field column="l_id" name="route_id_is"/>
+                <field column="l_lochirarchieids" name="loc_lochirarchie_ids_s" regex="[ ]+" replaceWith="_"/>
+                <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
+                <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+                <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            </entity>
+            <entity name='destination'
+                    query="
+                        select destination.d_id, d_keywords, concat('ac_', destination.d_typ) as actiontype
+                          FROM info
+                          INNER JOIN tour_info ON tour_info.if_id = info.if_id
+                          INNER JOIN tour ON tour_info.t_id = tour.t_id
+                          INNER JOIN destination on destination.d_id=tour.d_id
+                          WHERE info.if_id IN (${info.if_id})"
+                    deltaImportQuery="select d_id, d_keywords from destination where d_id='${dih.delta.id}'"
+                    deltaQuery="SELECT d_id from destination"
+            >
+                <field column="destination.d_id" name="destination_id_s" />
+                <field column="destination.d_id" name="destination_id_ss" />
+                <field column="actiontype" name="actiontype_s" />
+                <field column="actiontype" name="actiontype_ss" />
+            </entity>
+        </entity>
+
         <entity name="destination"
                 pk="id"
                 query="
@@ -15,6 +187,14 @@
                            concat('DESTINATION', '_', destination.d_id)                                                                     as id,
                            destination.d_id,
                            destination.l_id,
+                           destination.countImages,
+                           destination.countImagesTop,
+                           destination.countInfos,
+                           destination.countNews,
+                           destination.countRoutes,
+                           destination.countTracks,
+                           destination.countTrips,
+                           destination.countVideos,
                            d_name,
                            concat( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) as html,
                            d_dateshow,
@@ -64,6 +244,14 @@
                            concat('DESTINATION', '_', destination.d_id)                                                                     as id,
                            destination.d_id,
                            destination.l_id,
+                           destination.countImages,
+                           destination.countImagesTop,
+                           destination.countInfos,
+                           destination.countNews,
+                           destination.countRoutes,
+                           destination.countTracks,
+                           destination.countTrips,
+                           destination.countVideos,
                            d_name,
                            concat( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) as html,
                            d_dateshow,
@@ -121,6 +309,8 @@
             <field column="d_name" name="name_s" stripHTML="true" />
             <field column="d_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
+            <field column="d_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
+            <field column="d_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="d_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="d_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -172,6 +362,14 @@
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
+            <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
+            <field column="countInfos" name="count_infos_i" />
+            <field column="countNews" name="count_news_i" />
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countTracks" name="count_tracks_i" />
+            <field column="countTrips" name="count_trips_i" />
+            <field column="countVideos" name="count_videos_i" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -196,17 +394,53 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(countInfos AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
+                              FROM destination
+                              WHERE destination.d_id IN ("${destination.d_id}")
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
             <entity name='image'
                     query="
                         select
                              image.i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
-                        from image,
-                             kategorie_full
-                        where image.k_id = kategorie_full.k_id
-                            and (image.k_id in (${destination.d_k_ids} 0)
-                                   or find_in_set('&quot;${destination.d_id}&quot;', k_d_ids) &gt; 0)
-                            and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
+                        FROM image INNER JOIN kategorie_full ON image.k_id = kategorie_full.k_id
+                             INNER JOIN tour ON tour.t_id=kategorie_full.t_id
+                        WHERE
+                            tour.d_id = '${destination.d_id}'
+                            AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
+                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
@@ -218,7 +452,7 @@
             </entity>
             <entity name='bericht'
                     query="
-                        select k_id,
+                        select kategorie_full.k_id,
                                tr_id,
                                n_id,
                                k_dateshow,
@@ -228,9 +462,10 @@
                                year(k_datevon)  as year,
                                k_persons,
                                k_objects
-                        from kategorie_full
-                        where k_id in (${destination.d_k_ids} 0)
-                           or find_in_set('&quot;${destination.d_id}&quot;', k_d_ids) &gt; 0
+                        from kategorie_full INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
+                             INNER JOIN tour ON tour.t_id=kategorie_tour.t_id
+                        WHERE
+                            tour.d_id = '${destination.d_id}'
                         order by k_datevon asc"
                     deltaImportQuery="
                         select tr_id,
@@ -262,6 +497,20 @@
             >
                 <field column="t_id" name="route_id_is"/>
             </entity>
+            <entity name='info'
+                    query="
+                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
+                          FROM tour
+                          INNER JOIN tour_info ON tour_info.t_id = tour.t_id
+                          INNER JOIN info ON tour_info.if_id = info.if_id
+                          WHERE tour.d_id IN ('${destination.d_id}') GROUP BY info.if_id"
+                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id from info'"
+            >
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+                <field column="tif_ref_details" name="info_tif_linked_details_s"/>
+            </entity>
         </entity>
 
         <entity name="track"
@@ -278,6 +527,10 @@
                            kategorie_full.k_d_ids,
                            kategorie_full.tr_id,
                            kategorie_full.l_id,
+                           kategorie_full.countImages,
+                           kategorie_full.countImagesTop,
+                           kategorie_full.countRoutes,
+                           kategorie_full.countVideos,
                            n_id,
                            k_name,
                            k_html,
@@ -336,6 +589,10 @@
                            kategorie_full.k_t_ids,
                            kategorie_full.k_d_ids,
                            kategorie_full.l_id,
+                           kategorie_full.countImages,
+                           kategorie_full.countImagesTop,
+                           kategorie_full.countRoutes,
+                           kategorie_full.countVideos,
                            n_id,
                            k_name,
                            k_html,
@@ -403,8 +660,7 @@
             <field column="k_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="k_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -451,6 +707,10 @@
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
+            <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countVideos" name="count_videos_i" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -473,6 +733,27 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                              FROM kategorie_full
+                              WHERE kategorie_full.k_id IN (${track.k_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM kategorie_full
+                              WHERE kategorie_full.k_id IN (${track.k_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
+                              FROM kategorie_full
+                              WHERE kategorie_full.k_id IN (${track.k_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
+                              FROM kategorie_full
+                              WHERE kategorie_full.k_id IN (${track.k_id})
+                        '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
             <entity name='image'
                     query="
                         select i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
@@ -490,15 +771,21 @@
                 <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='tour'
-                    query="select t_id, d_id from tour where find_in_set(t_id, '${track.k_t_ids}') &gt; 0"
-                    deltaImportQuery="select t_id from tour where t_id='${dih.delta.id}'"
+                    query="SELECT tour.t_id, d_id
+                        FROM tour INNER JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id
+                        WHERE kategorie_tour.k_id = ${track.k_id}"
+                    deltaImportQuery="select t_id from tour WHERE t_id=${dih.delta.id}"
                     deltaQuery="SELECT t_id from tour'"
             >
                 <field column="t_id" name="route_id_is"/>
                 <field column="d_id" name="destination_id_ss"/>
             </entity>
             <entity name='destination'
-                    query="select d_id from destination where find_in_set(d_id, '${track.k_d_ids}') &gt; 0"
+                    query="select destination.d_id
+                        FROM destination INNER JOIN tour ON tour.d_id=destination.d_id
+                            INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id
+                        WHERE
+                            kategorie_tour.k_id = ${track.k_id}"
                     deltaImportQuery="select d_id from destination where d_id='${dih.delta.id}'"
                     deltaQuery="SELECT d_id from destination'"
             >
@@ -517,6 +804,13 @@
                            tour.t_id,
                            tour.d_id,
                            tour.l_id,
+                           tour.countImages,
+                           tour.countImagesTop,
+                           tour.countInfos,
+                           tour.countNews,
+                           tour.countTracks,
+                           tour.countTrips,
+                           tour.countVideos,
                            t_name,
                            t_html_list,
                            concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
@@ -577,6 +871,13 @@
                            tour.t_id,
                            tour.d_id,
                            tour.l_id,
+                           tour.countImages,
+                           tour.countImagesTop,
+                           tour.countInfos,
+                           tour.countNews,
+                           tour.countTracks,
+                           tour.countTrips,
+                           tour.countVideos,
                            t_name,
                            t_html_list,
                            concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
@@ -646,8 +947,7 @@
             <field column="t_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="t_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="t_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="t_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="t_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="t_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -700,6 +1000,13 @@
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
             <field column="schwierigkeit" name="rate_pers_schwierigkeit_is" />
+            <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
+            <field column="countInfos" name="count_infos_i" />
+            <field column="countNews" name="count_news_i" />
+            <field column="countTracks" name="count_tracks_i" />
+            <field column="countTrips" name="count_trips_i" />
+            <field column="countVideos" name="count_videos_i" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -724,16 +1031,46 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(countInfos AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
+                              FROM tour
+                              WHERE tour.t_id IN (${route.t_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
             <entity name='image'
                     query="
                         select
                              image.i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
-                        from image,
-                             kategorie_full
-                        where image.k_id = kategorie_full.k_id
-                            and (image.k_id in (${route.t_k_ids} 0)
-                                   or image.k_id in (${route.k_id})
-                                   or find_in_set(${route.t_id}, k_t_ids) &gt; 0)
+                        FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
+                        WHERE
+                            kategorie_full.t_id = ${route.t_id}
                             and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
                     deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
@@ -747,7 +1084,7 @@
             </entity>
             <entity name='bericht'
                     query="
-                        select k_id,
+                        SELECT kategorie_full.k_id,
                                tr_id,
                                n_id,
                                k_dateshow,
@@ -757,11 +1094,10 @@
                                year(k_datevon)  as year,
                                k_persons,
                                k_objects
-                        from kategorie_full
-                        where k_id in (${route.t_k_ids} 0)
-                           or k_id in (${route.k_id})
-                           or find_in_set(${route.t_id}, k_t_ids) &gt; 0
-                        order by k_datevon asc"
+                        FROM kategorie_full
+                            INNER JOIN kategorie_tour ON kategorie_full.k_id = kategorie_tour.k_id
+                        WHERE kategorie_tour.t_id = ${route.t_id}
+                        ORDER BY k_datevon asc"
                     deltaImportQuery="
                         select tr_id,
                                k_dateshow,
@@ -786,11 +1122,25 @@
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='destination'
-                    query="select d_id from destination where find_in_set(d_id, '${track.k_d_ids}') &gt; 0"
+                    query="select d_id from destination where d_id = '${route.d_id}'"
                     deltaImportQuery="select d_id from destination where d_id='${dih.delta.id}'"
                     deltaQuery="SELECT d_id from destination'"
             >
                 <field column="d_id" name="destination_id_ss"/>
+            </entity>
+            <entity name='info'
+                    query="
+                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
+                          FROM tour
+                          INNER JOIN tour_info ON tour_info.t_id = tour.t_id
+                          INNER JOIN info ON tour_info.if_id = info.if_id
+                          WHERE tour.t_id IN (${route.t_id}) GROUP BY info.if_id"
+                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id from info'"
+            >
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+                <field column="tif_ref_details" name="info_tif_linked_details_s"/>
             </entity>
         </entity>
 
@@ -802,6 +1152,14 @@
                            concat('LOCATION', '_', l_id)                                                                  as id,
                            l_id,
                            l_parent_id,
+                           location.countImages,
+                           location.countImagesTop,
+                           location.countInfos,
+                           location.countNews,
+                           location.countRoutes,
+                           location.countTracks,
+                           location.countTrips,
+                           location.countVideos,
                            l_name,
                            l_html,
                            l_meta_shortdesc_md,
@@ -825,6 +1183,14 @@
                     select 'LOCATION'                                                                                     as type,
                            concat('LOCATION', '_', l_id)                                                                  as id,
                            l_id,
+                           location.countImages,
+                           location.countImagesTop,
+                           location.countInfos,
+                           location.countNews,
+                           location.countRoutes,
+                           location.countTracks,
+                           location.countTrips,
+                           location.countVideos,
                            l_name,
                            l_html,
                            l_meta_shortdesc_md,
@@ -855,8 +1221,7 @@
             <field column="l_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="l_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="l_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="l_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="l_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="l_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="l_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="l_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -871,6 +1236,14 @@
             <field column="l_lochirarchieids" name="loc_lochirarchie_ids_txt" regex="[ ]+" replaceWith="_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
+            <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
+            <field column="countInfos" name="count_infos_i" />
+            <field column="countNews" name="count_news_i" />
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countTracks" name="count_tracks_i" />
+            <field column="countTrips" name="count_trips_i" />
+            <field column="countVideos" name="count_videos_i" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -892,6 +1265,43 @@
                             ORDER BY l_lochirarchietxt, l_id LIMIT 1
                         )'>
                 <field column="navigation_objects" name="navigation_objects_txt"/>
+            </entity>
+
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=NEWS_COUNT:::value=", CAST(countNews AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(countInfos AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
+                              FROM location
+                              WHERE location.l_id IN (${location.l_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'
@@ -952,6 +1362,20 @@
                 <field column="year" name="year_is" />
                 <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
+            </entity>
+            <entity name='info'
+                    query="
+                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(lif_linked_details, '') ORDER BY lif_linked_details SEPARATOR ', ') AS lif_ref_details
+                          FROM location
+                          INNER JOIN location_info ON location_info.l_id = location.l_id
+                          INNER JOIN info ON location_info.if_id = info.if_id
+                          WHERE location.l_id IN (${location.l_id}) GROUP BY info.if_id"
+                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id from info'"
+            >
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+                <field column="lif_ref_details" name="info_lif_linked_details_s"/>
             </entity>
 
         </entity>
@@ -1075,8 +1499,7 @@
             <field column="k_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="i_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="i_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -1234,8 +1657,7 @@
             <field column="k_name" name="name_txt" stripHTML="true" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="k_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="k_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="k_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="v_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="v_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
             <field column="v_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
@@ -1302,6 +1724,11 @@
                                     'TRIP'                                                       as type,
                                     concat('TRIP', '_', trip.tr_id)                              as id,
                                     trip.l_id,
+                                    trip.countImages,
+                                    trip.countImagesTop,
+                                    trip.countRoutes,
+                                    trip.countTracks,
+                                    trip.countVideos,
                                     tr_dateshow,
                                     tr_datevon                                                   as datesort,
                                     tr_datevon,
@@ -1336,6 +1763,11 @@
                                     'TRIP'                                                       as type,
                                     concat('TRIP', '_', trip.tr_id)                              as id,
                                     trip.l_id,
+                                    trip.countImages,
+                                    trip.countImagesTop,
+                                    trip.countRoutes,
+                                    trip.countTracks,
+                                    trip.countVideos,
                                     tr_dateshow,
                                     tr_datevon                                                   as datesort,
                                     tr_datevon,
@@ -1376,8 +1808,7 @@
             <field column="tr_name" name="name_s" stripHTML="true" />
             <field column="tr_name" name="name_txt" stripHTML="true" />
             <field column="tr_meta_shortdesc_html" name="desc_txt" stripHTML="true" />
-            <field column="tr_meta_shortdesc_md" name="desc_md_txt" stripHTML="true" />
-            <field column="tr_meta_shortdesc_html2" name="desc_html_txt" />
+            <field column="tr_meta_shortdesc_md" name="desc_md_txt" stripHTML="false" />
             <field column="html" name="html_txt" stripHTML="true" />
             <field column="tr_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="tr_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
@@ -1401,6 +1832,11 @@
             <field column="l_lochirarchietxt" name="loc_lochirarchie_s" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <field column="l_lochirarchietxt" name="loc_lochirarchie_txt" regex="[- \/()+;\.]+(?!\\n)|(([a-zA-Z0-9 _]),{1,1}(?!,))|(^ ,{1,1}(?!,))" replaceWith="$2_"/>
             <!--            <field column="dur" name="data_tech_dur_f" />   -->
+            <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countTracks" name="count_tracks_i" />
+            <field column="countVideos" name="count_videos_i" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -1421,6 +1857,31 @@
                             ORDER BY tr_datevon, tr_id LIMIT 1
                         )'>
                 <field column="navigation_objects" name="navigation_objects_txt"/>
+            </entity>
+
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                              FROM trip
+                              WHERE trip.tr_id IN (${trip.tr_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
+                              FROM trip
+                              WHERE trip.tr_id IN (${trip.tr_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM trip
+                              WHERE trip.tr_id IN (${trip.tr_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
+                              FROM trip
+                              WHERE trip.tr_id IN (${trip.tr_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
+                              FROM trip
+                              WHERE trip.tr_id IN (${trip.tr_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
             <entity name='image'
@@ -1457,7 +1918,7 @@
                         from destination inner join tour on destination.d_id=tour.d_id
                         where t_id in (select t_id from kategorie_full where tr_id in (${trip.tr_id}))"
                     deltaImportQuery="select d_id, d_keywords from destination where d_id='${dih.delta.id}'"
-                    deltaQuery="SELECT d_id from destination'"
+                    deltaQuery="SELECT d_id from destination"
             >
                 <field column="destination.d_id" name="destination_id_s" />
                 <field column="destination.d_id" name="destination_id_ss" />
@@ -1531,6 +1992,12 @@
                     select distinct news.n_id,
                                     'NEWS'                                                   as type,
                                     concat('NEWS', '_', news.n_id)                           as id,
+                                    news.countImages,
+                                    news.countImagesTop,
+                                    news.countRoutes,
+                                    news.countTracks,
+                                    news.countTrips,
+                                    news.countVideos,
                                     n_date,
                                     n_date                                                   as dateshow,
                                     DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
@@ -1559,6 +2026,12 @@
                     select distinct news.n_id,
                                     'NEWS'                                                   as type,
                                     concat('NEWS', '_', news.n_id)                           as id,
+                                    news.countImages,
+                                    news.countImagesTop,
+                                    news.countRoutes,
+                                    news.countTracks,
+                                    news.countTrips,
+                                    news.countVideos,
                                     n_date,
                                     n_date                                                   as dateshow,
                                     DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
@@ -1583,7 +2056,7 @@
                     WHERE news.n_id = '${dih.delta.id}'
                     group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2,
                              html, n_keywords"
-                deltaQuery="SELECT n_id from trip order by n_id'"
+                deltaQuery="SELECT n_id from info order by n_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1593,8 +2066,7 @@
             <field column="n_headline" name="name_s" stripHTML="true" />
             <field column="n_headline" name="name_txt" stripHTML="true" />
             <field column="n_message_html" name="desc_txt" stripHTML="true" />
-            <field column="n_message_md" name="desc_md_txt" stripHTML="true" />
-            <field column="n_message_html2" name="desc_html_txt" />
+            <field column="n_message_md" name="desc_md_txt" stripHTML="false" />
             <field column="html" name="html_txt" />
             <field column="n_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
             <field column="n_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
@@ -1613,6 +2085,12 @@
             <field column="altMinFacet" name="data_tech_alt_min_facet_is" />
             <field column="altMaxFacet" name="data_tech_alt_max_facet_is" />
             <field column="dist" name="data_tech_dist_f" />
+            <field column="countImages" name="count_images_i" />
+            <field column="countImagesTop" name="count_images_top_i" />
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countTracks" name="count_tracks_i" />
+            <field column="countTrips" name="count_trips_i" />
+            <field column="countVideos" name="count_videos_i" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -1634,6 +2112,36 @@
                         )'>
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
+
+            <entity name='extended_object_properties'
+                    query='
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                              FROM news
+                              WHERE news.n_id IN (${news.n_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(countTrips AS CHAR)) AS extended_object_properties
+                              FROM news
+                              WHERE news.n_id IN (${news.n_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(countTracks AS CHAR)) AS extended_object_properties
+                              FROM news
+                              WHERE news.n_id IN (${news.n_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM news
+                              WHERE news.n_id IN (${news.n_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(countImagesTop AS CHAR)) AS extended_object_properties
+                              FROM news
+                              WHERE news.n_id IN (${news.n_id})
+                           UNION
+                        SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
+                              FROM news
+                              WHERE news.n_id IN (${news.n_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
             <entity name='image'
                     query="
                         select i_id, i_date, concat(i_dir, '/', i_file) as i_url
@@ -1650,9 +2158,12 @@
             </entity>
             <entity name='tour'
                     query="
-                        select t_id, d_id, t_keywords, concat('ac_', tour.t_typ) as actiontype
-                        from tour
-                        where t_id in (select t_id from kategorie_full where n_id in (${news.n_id}))"
+                        select tour.t_id, tour.d_id, t_keywords, concat('ac_', tour.t_typ) as actiontype
+                          FROM news
+                          INNER JOIN kategorie_full ON (kategorie_full.n_id = news.n_id)
+                          INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
+                          INNER JOIN tour ON kategorie_tour.t_id = tour.t_id
+                          WHERE news.n_id IN (${news.n_id})"
                     deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
                     deltaQuery="SELECT t_id from tour'"
             >
@@ -1664,10 +2175,14 @@
             <entity name='destination'
                     query="
                         select destination.d_id, d_keywords, concat('ac_', destination.d_typ) as actiontype
-                        from destination inner join tour on destination.d_id=tour.d_id
-                        where t_id in (select t_id from kategorie_full where n_id in (${news.n_id}))"
+                          FROM news
+                          INNER JOIN kategorie_full ON (kategorie_full.n_id = news.n_id)
+                          INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
+                          INNER JOIN tour ON kategorie_tour.t_id = tour.t_id
+                          INNER JOIN destination on destination.d_id=tour.d_id
+                          WHERE news.n_id IN (${news.n_id})"
                     deltaImportQuery="select d_id, d_keywords from destination where d_id='${dih.delta.id}'"
-                    deltaQuery="SELECT d_id from destination'"
+                    deltaQuery="SELECT d_id from destination"
             >
                 <field column="destination.d_id" name="destination_id_s" />
                 <field column="destination.d_id" name="destination_id_ss" />

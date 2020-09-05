@@ -1,7 +1,17 @@
 import {BaseImageRecordFactory, BaseImageRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
+import {
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export class TourDocObjectDetectionImageObjectRecord extends BaseObjectDetectionImageObjectRecord {
+    static objectDetectionImageObjectFields = {
+        ...BaseObjectDetectionImageObjectRecord.objectDetectionImageObjectFields,
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
+    }
+
     tdoc_id: string;
 
     toString() {
@@ -49,13 +59,14 @@ export class TourDocObjectDetectionImageObjectRecordValidator extends BaseImageR
     }
 }
 
-export let TourDocObjectDetectionImageObjectRecordRelation: any = {
+export let TourDocObjectDetectionImageObjectRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

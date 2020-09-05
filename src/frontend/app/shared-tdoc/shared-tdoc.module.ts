@@ -51,7 +51,8 @@ import {TourDocKeywordTagFormComponent} from './components/tdoc-keywordtagform/t
 import {TourDocSimpleSearchNavigationComponent} from './components/tdoc-simple-search-navigation/tdoc-simple-search-navigation.component';
 import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-profilechart.component';
 import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
-import {CommonDocObjectFlagsComponent} from './components/cdoc-object-flags/cdoc-object-flags.component';
+import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
+import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 
 @NgModule({
     declarations: [
@@ -94,7 +95,8 @@ import {CommonDocObjectFlagsComponent} from './components/cdoc-object-flags/cdoc
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
-        CommonDocObjectFlagsComponent
+        TourDocInfoComponent,
+        TourDocAssignJoinFormComponent
     ],
     imports: [
         ToastrModule,
@@ -155,7 +157,8 @@ import {CommonDocObjectFlagsComponent} from './components/cdoc-object-flags/cdoc
         TourDocSimpleSearchNavigationComponent,
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
-        CommonDocObjectFlagsComponent
+        TourDocInfoComponent,
+        TourDocAssignJoinFormComponent
     ]
 })
 export class SharedTourDocModule {}

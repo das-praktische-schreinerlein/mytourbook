@@ -3,7 +3,7 @@ import express from 'express';
 import * as vidStreamer from 'vid-streamer';
 
 export enum VideoResolutions {
-    'x100', 'x400', 'x600'
+    'x100', 'x300', 'x600'
 }
 
 export class VideoServerModule {

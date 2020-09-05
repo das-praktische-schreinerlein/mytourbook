@@ -1,7 +1,7 @@
 import {GenericDataStore} from '@dps/mycms-commons/dist/search-commons/services/generic-data.store';
 import {TourDocSearchResult} from '../model/container/tdoc-searchresult';
 import {TourDocSearchForm} from '../model/forms/tdoc-searchform';
-import {TourDocRecord} from '../model/records/tdoc-record';
+import {TourDocRecord, TourDocRecordRelation} from '../model/records/tdoc-record';
 import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 
@@ -19,8 +19,8 @@ export class TourDocTeamFilterConfig {
 
 export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
 
-    static UPDATE_RELATION = ['tdocimage', 'tdocvideo', 'tdocdatatech', 'tdocdatainfo', 'tdocratepers', 'tdocratetech',
-        'tdocodimageobject', 'tdocnavigationobject', 'tdocflagobject'];
+    static UPDATE_RELATION = [].concat(TourDocRecordRelation.hasOne ? Object.keys(TourDocRecordRelation.hasOne) : [])
+        .concat(TourDocRecordRelation.hasMany ? Object.keys(TourDocRecordRelation.hasMany) : []);
     private validMoreNumberFilterNames = {
         track_id_i: true,
         track_id_is:  true,
@@ -28,6 +28,8 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         trip_id_is: true,
         news_id_i: true,
         news_id_is: true,
+        info_id_i: true,
+        info_id_is: true,
         loc_id_i: true,
         loc_lochirarchie_ids_txt: true,
         image_id_i: true,

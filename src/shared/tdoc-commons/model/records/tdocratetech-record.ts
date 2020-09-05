@@ -1,7 +1,47 @@
-import {BaseRateTechRecord} from './baseratetech-record';
-import {BaseEntityRecordFactory, BaseEntityRecordValidator} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    BaseEntityRecord,
+    BaseEntityRecordFactory,
+    BaseEntityRecordFieldConfig,
+    BaseEntityRecordRelationsType,
+    BaseEntityRecordType,
+    BaseEntityRecordValidator
+} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {
+    GenericValidatorDatatypes,
+    IdValidationRule,
+    NameValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class TourDocRateTechRecord extends BaseRateTechRecord {
+export interface TourDocRateTechRecordType extends BaseEntityRecordType {
+    bergtour: string;
+    firn: string;
+    gletscher: string;
+    klettern: string;
+    ks: string;
+    overall: string;
+    schneeschuh: string;
+}
+
+export class TourDocRateTechRecord extends BaseEntityRecord implements TourDocRateTechRecordType {
+    static ratetechFields = {
+        bergtour: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        firn: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        gletscher: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        klettern: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        ks: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        overall: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        schneeschuh: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
+    };
+
+    bergtour: string;
+    firn: string;
+    gletscher: string;
+    klettern: string;
+    ks: string;
+    overall: string;
+    schneeschuh: string;
+
     tdoc_id: string;
 
     toString() {
@@ -45,13 +85,14 @@ export class TourDocRateTechRecordValidator extends BaseEntityRecordValidator {
     }
 }
 
-export let TourDocRateTechRecordRelation: any = {
+export let TourDocRateTechRecordRelation: BaseEntityRecordRelationsType = {
     belongsTo: {
         tdoc: {
             // database column
             foreignKey: 'tdoc_id',
             // reference to related object in memory
-            localField: 'tdoc'
+            localField: 'tdoc',
+            mapperKey: 'tdoc'
         }
     }
 };

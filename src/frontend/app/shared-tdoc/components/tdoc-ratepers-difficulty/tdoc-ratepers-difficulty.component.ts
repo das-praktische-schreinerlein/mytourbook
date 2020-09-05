@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
 import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {TourDocRatePersonalRecord} from '../../../../shared/tdoc-commons/model/records/tdocratepers-record';
+import {TourDocRatePersonalRecordType} from '../../../../shared/tdoc-commons/model/records/tdocratepers-record';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
 import {MathUtils} from '@dps/mycms-commons/dist/commons/utils/math.utils';
 
@@ -11,7 +11,7 @@ import {MathUtils} from '@dps/mycms-commons/dist/commons/utils/math.utils';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocRatePersonalDifficultyComponent extends AbstractInlineComponent {
-    tdocratepers: TourDocRatePersonalRecord;
+    tdocratepers: TourDocRatePersonalRecordType;
 
     @Input()
     public record: TourDocRecord;

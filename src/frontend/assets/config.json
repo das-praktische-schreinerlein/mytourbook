@@ -156,7 +156,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -334,66 +334,6 @@
                     ]
                 },
                 {
-                    "key": "createBy",
-                    "type": "createBy",
-                    "name": "New Trip by Track",
-                    "shortName": "->*Trip",
-                    "payload": {
-                        "type": "TRIP"
-                    },
-                    "showFilter": [
-                        {
-                            "property": "dummy",
-                            "command": "EQ",
-                            "expectedValues": ["dummy"]
-                        }
-                    ],
-                    "recordAvailability": [
-                        {
-                            "property": "type",
-                            "command": "CSVIN",
-                            "expectedValues": ["TRACK", "track"]
-                        }
-                    ],
-                    "configAvailability": [
-                        {
-                            "property": "permissions.tdocWritable",
-                            "command": "EQ",
-                            "expectedValues": [true]
-                        }
-                    ]
-                },
-                {
-                    "key": "createBy",
-                    "type": "createBy",
-                    "name": "New News by Track",
-                    "shortName": "->*News",
-                    "payload": {
-                        "type": "NEWS"
-                    },
-                    "showFilter": [
-                        {
-                            "property": "dummy",
-                            "command": "EQ",
-                            "expectedValues": ["dummy"]
-                        }
-                    ],
-                    "recordAvailability": [
-                        {
-                            "property": "type",
-                            "command": "CSVIN",
-                            "expectedValues": ["TRACK", "track"]
-                        }
-                    ],
-                    "configAvailability": [
-                        {
-                            "property": "permissions.tdocWritable",
-                            "command": "EQ",
-                            "expectedValues": [true]
-                        }
-                    ]
-                },
-                {
                     "key": "persRate_motive_milestone",
                     "type": "tag",
                     "name": "M4* Personal Motive Meilenstein",
@@ -438,6 +378,37 @@
                             "property": "tdocratepers.motive",
                             "command": "GE",
                             "expectedValues": [14]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "persRate_wichtigkeit_album",
+                    "type": "tag",
+                    "name": "W3* Personal Wichtigkeit Album",
+                    "shortName": "W3*",
+                    "payload": {
+                        "value": "9",
+                        "ratekey": "wichtigkeit"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "tdocratepers.wichtigkeit",
+                            "command": "GE",
+                            "expectedValues": [9]
                         }
                     ],
                     "recordAvailability": [
@@ -549,6 +520,37 @@
                     ]
                 },
                 {
+                    "key": "trackmedia_persRate_gesamt_reject",
+                    "type": "tag",
+                    "name": "\u274c Media Personal Gesamt Rejected",
+                    "shortName": "&#x274c",
+                    "payload": {
+                        "value": "-1",
+                        "ratekey": "gesamt"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "keyword",
                     "type": "keyword",
                     "name": "\uD83C\uDFF7 Keyword",
@@ -566,7 +568,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -596,7 +598,37 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "assignjoin",
+                    "type": "assignjoin",
+                    "name": "\uD83D\uDD89 AssignJoin",
+                    "multiRecordTag": true,
+                    "shortName": "&#x1f589;",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["LOCATION", "location", "ROUTE", "route"]
                         }
                     ],
                     "configAvailability": [
@@ -626,7 +658,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -655,7 +687,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -744,7 +776,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -956,7 +988,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -981,7 +1013,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -1006,7 +1038,37 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "assignjoin",
+                    "type": "assignjoin",
+                    "name": "\uD83D\uDD89 AssignJoin",
+                    "multiRecordTag": true,
+                    "shortName": "&#x1f589;",
+                    "payload": {
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["LOCATION", "location", "ROUTE", "route"]
                         }
                     ],
                     "configAvailability": [
@@ -1276,6 +1338,37 @@
                     ]
                 },
                 {
+                    "key": "trackmedia_persRate_gesamt_reject",
+                    "type": "tag",
+                    "name": "\u274c Media Gesamt Rejected",
+                    "shortName": "&#x274c",
+                    "payload": {
+                        "value": "-1",
+                        "ratekey": "gesamt"
+                    },
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["TRACK", "track"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "local_album_current",
                     "type": "albumtag",
                     "name": "\u2764 set local Album",
@@ -1297,7 +1390,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -1325,7 +1418,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -1354,7 +1447,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
                         }
                     ],
                     "configAvailability": [
@@ -1518,14 +1611,16 @@
             ]
         },
         "tdoc-searchpage": {
-            "availableCreateActionTypes": "ROUTE,LOCATION,NEWS,TRIP"
+            "availableCreateActionTypes": "ROUTE,LOCATION,NEWS,TRIP,INFO"
         },
         "tdoc-showpage": {
             "showBigImages": false,
             "allowedQueryParams": [],
             "availableTabs": {
                 "IMAGE": true,
+                "IMAGE_FAVORITES": true,
                 "IMAGE_NEARBY": true,
+                "INFO": true,
                 "ODIMGOBJECT": true,
                 "DESTINATION": true,
                 "ROUTE": true,
@@ -1549,6 +1644,7 @@
             "availableTabs": {
                 "DESTINATION": true,
                 "IMAGE": true,
+                "INFO": true,
                 "ROUTE": true,
                 "TRACK": true,
                 "LOCATION": true,
@@ -1584,10 +1680,10 @@
             "defaultShowKeyAsTooltip": true,
             "defaultFilterForNameToShowNameAndKey": ["bla", "Defa.*", "Default"]
         },
-        "cdoc-object-flags":  {
-            "allowedFlags": {
-                "list-item-flat-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT"],
-                "show-big": ["IMAGE_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT"]
+        "cdoc-extended-object-properties":  {
+            "allowedExtendedObjectProperties": {
+                "list-item-flat-big": ["IMAGE_COUNT", "IMAGE_TOP_COUNT", "IMAGE_FAV_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT"],
+                "show-big": ["IMAGE_COUNT", "IMAGE_TOP_COUNT", "IMAGE_FAV_COUNT", "VIDEO_COUNT", "ADDITIONAL_ROUTE_COUNT", "TRACK_COUNT", "ROUTE_COUNT", "TRIP_COUNT", "NEWS_COUNT", "INFO_COUNT", "LOCATION_COUNT"]
             },
             "modes": {
                 "list-item-flat-big": "short",
@@ -1604,14 +1700,67 @@
             ],
             "nameReplacements": [
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
-                ["mit .*? (durch |von |ab |bei |in |nach )+", "$1"]
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
             ]
 
+        },
+        "tdoc-location-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nAber am Besten ihr schaut selbst :-)\n",
+            "headingTemplate": "\n{{MAINITEM.name}} als Teil der TODO_PARENTREGION liegt umgeben von TODO_NACHBARN.\n\nMit seinen wunderschönen Bergen, Wäldern, Seen, Museen lädt es geradezu für einen Besuch ein\n\n**Routenempfehlungen**\n"
+        },
+        "tdoc-news-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "tripListItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/trip/{{LISTITEM.id}})\n",
+            "tripTrackListItemTemplate": "  - [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "footerTemplate": "\nSo, auf zum nächsten Schwung :-)\n\nViele Grüße an Alle und gehabt euch wohl\n\n*Euer Micha*\n",
+            "headingTemplate": "**Moin Sonnens,**\n\nund wie schon wieder neue Bilder...\n\nBlimBlamBlum\n\n"
+        },
+        "tdoc-route-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nMehr dazu hier.\n",
+            "headingTemplate": "**Was für eine Tour**\n\n"
+        },
+        "tdoc-track-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/route/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nMehr dazu hier.\n",
+            "headingTemplate": "**Was für ein Ausflug**\n\n"
+        },
+        "tdoc-trip-desc-suggester": {
+            "nameReplacements": [
+                [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
+                ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
+            ],
+            "listItemTemplate": "- [{{LISTITEM.name}}](sections/start/show/track/{{LISTITEM.id}})\n",
+            "listItemsFallbackTemplate": "",
+            "footerTemplate": "\nMehr dazu hier.\n",
+            "headingTemplate": "**Was für ein Trip**\n\n"
         }
     },
     "services": {
         "seo": {
             "tdocIndexableTypes": [
+                "INFO",
                 "ROUTE",
                 "LOCATION",
                 "NEWS"

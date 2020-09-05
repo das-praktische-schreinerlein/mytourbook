@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {TourDocRecord} from '../../../shared/tdoc-commons/model/records/tdoc-record';
 import {CommonDocPlaylistService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-playlist.service';
-import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
+import {TourDocContentUtils} from './tdoc-contentutils.service';
 
 @Injectable()
 export class TourDocPlaylistService extends CommonDocPlaylistService<TourDocRecord> {
 
-    constructor(protected contentUtils: CommonDocContentUtils) {
+    constructor(protected contentUtils: TourDocContentUtils) {
         super();
     }
 

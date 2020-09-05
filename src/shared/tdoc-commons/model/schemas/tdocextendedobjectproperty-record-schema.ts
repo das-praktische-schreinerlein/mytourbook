@@ -1,13 +1,14 @@
 import {Schema} from 'js-data';
 import {BaseEntityRecordSchema} from '@dps/mycms-commons/dist/search-commons/model/schemas/base-entity-record-schema';
 
-export const TourDocFlagObjectRecordSchema = new Schema({
+export const TourDocExtendedObjectPropertyRecordSchema = new Schema({
     $schema: 'http://json-schema.org/draft-04/schema#',
-    title: 'TourDocFlagObject',
-    description: 'Schema for a TourDocFlagObject Record.',
+    title: 'TourDocExtendedObjectProperty',
+    description: 'Schema for a TourDocExtendedObjectProperty Record.',
     extends: BaseEntityRecordSchema,
     type: 'object',
     properties: {
+        category: {type: 'string'},
         name: {type: 'string'},
         value: {type: 'string'},
         tdoc_id: {type: 'string', indexed: true}

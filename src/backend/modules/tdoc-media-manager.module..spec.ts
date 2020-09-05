@@ -1,11 +1,12 @@
 /* tslint:disable:no-unused-variable */
 import {forkJoin} from 'rxjs';
 import {TestHelper} from '@dps/mycms-commons/dist/testing/test-helper';
-import {FileInfoType, FileSystemDBSyncType, TourDocMediaManagerModule} from './tdoc-media-manager.module';
+import {TourDocMediaManagerModule} from './tdoc-media-manager.module';
 import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
 import * as os from 'os';
 import {utils} from 'js-data';
 import {RawSqlQueryData} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
+import {FileInfoType, FileSystemDBSyncType} from './cdoc-media-manager.module';
 
 describe('TourDocMediaManagerModule', () => {
     const backendConfig = {
@@ -59,7 +60,7 @@ describe('TourDocMediaManagerModule', () => {
     };
     const preferedMatchingSql: RawSqlQueryData = {
         sql: 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
-            ' i_date AS created, i_date AS lastModified,      i_date AS exifDate,' +
+            ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
             ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
             '      ? AS matchingDetails, 0 AS matchingScore' +
             '  FROM image  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER(?)',
@@ -69,7 +70,7 @@ describe('TourDocMediaManagerModule', () => {
     };
     preferedMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
-        ' i_date AS created, i_date AS lastModified,      i_date AS exifDate,' +
+        ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
         '      ? AS matchingDetails, 0 AS matchingScore' +
         '  FROM image  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
@@ -79,7 +80,7 @@ describe('TourDocMediaManagerModule', () => {
     ]);
     preferedMatchingSql.sql += ' UNION ' +
         'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
-        ' i_date AS created, i_date AS lastModified,      i_date AS exifDate,' +
+        ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
         '      ? AS matchingDetails,      0.25 AS matchingScore' +
         '  FROM image  WHERE LOWER(i_file) = LOWER(?)' +
@@ -255,7 +256,7 @@ describe('TourDocMediaManagerModule', () => {
         service = new TestTourDocMediaManagerModule(backendConfig, null, mediaManagerModule);
     });
 
-    describe('findTourDocRecordsForFileInfo matching none found', () => {
+    describe('findCommonDocRecordsForFileInfo matching none found', () => {
         it('should return searchResult and correct sql', done => {
             service.myKnex.resetTestResults([
                 [],
@@ -264,7 +265,7 @@ describe('TourDocMediaManagerModule', () => {
             ]);
             const additionalMappings: {[key: string]: FileSystemDBSyncType} = {};
             forkJoin(
-                service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
+                service.findCommonDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {
                     // THEN: get Track
@@ -289,7 +290,7 @@ describe('TourDocMediaManagerModule', () => {
         });
     });
 
-    describe('findTourDocRecordsForFileInfo matching prefered one found', () => {
+    describe('findCommonDocRecordsForFileInfo matching prefered one found', () => {
         it('should return searchResult and correct sql', done => {
             service.myKnex.resetTestResults([
                 [    {
@@ -308,7 +309,7 @@ describe('TourDocMediaManagerModule', () => {
             ]);
             const additionalMappings: {[key: string]: FileSystemDBSyncType} = {};
             forkJoin(
-                service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
+                service.findCommonDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {
                     // THEN: get Track
@@ -342,7 +343,7 @@ describe('TourDocMediaManagerModule', () => {
         });
     });
 
-    describe('findTourDocRecordsForFileInfo matching fallback one found', () => {
+    describe('findCommonDocRecordsForFileInfo matching fallback one found', () => {
         it('should return searchResult and correct sql', done => {
             service.myKnex.resetTestResults([
                 [],
@@ -361,7 +362,7 @@ describe('TourDocMediaManagerModule', () => {
             ]);
             const additionalMappings: {[key: string]: FileSystemDBSyncType} = {};
             forkJoin(
-                service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
+                service.findCommonDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {
                     // THEN: get Track
@@ -397,7 +398,7 @@ describe('TourDocMediaManagerModule', () => {
         });
     });
 
-    describe('findTourDocRecordsForFileInfo matching fallback with additionalMappings one found', () => {
+    describe('findCommonDocRecordsForFileInfo matching fallback with additionalMappings one found', () => {
         it('should return searchResult and correct sql', done => {
             service.myKnex.resetTestResults([
                 [],
@@ -435,7 +436,7 @@ describe('TourDocMediaManagerModule', () => {
                 }
             };
             forkJoin(
-                service.findTourDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
+                service.findCommonDocRecordsForFileInfo(basedir, fileInfo, additionalMappings)
             ).subscribe(
                 results => {
                     // THEN: get Track

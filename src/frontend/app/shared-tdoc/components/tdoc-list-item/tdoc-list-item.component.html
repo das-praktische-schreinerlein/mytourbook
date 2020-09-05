@@ -77,7 +77,9 @@
                     <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
                     <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                     <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
-                    <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                    </ng-container>
                 </ng-template>
             </ngb-panel>
         </ngb-accordion>
@@ -113,26 +115,29 @@
         <a [name]="listItem.currentRecord.id"></a>
         <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="false"></app-tdoc-linked-loc-hierarchy></h5>
         <div>
-            <div style="width: 100px; float: left">
+            <div class="teaser-image-container-outer">
                 <h5 (click)="submitShowItemOnMap(listItem.currentRecord)">
                     <span *ngIf="mapFlagAvailable" [innerHTML]="listItem.currentRecord | tdocmapcode: idx+1 : mapFlagSymbol"></span>
                     <app-tdoc-distance *ngIf="listItem.currentRecord.geoDistance > 0" [record]="listItem.currentRecord"></app-tdoc-distance>
                     <span>{{listItem.currentRecord.type | translate }}</span>
                 </h5>
-                <ng-container *ngIf="listItem.image">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="listItem.thumbnailUrl"
-                         (click)="submitShowImage(listItem.currentRecord)"
-                         alt="{{listItem.image.name}}">
-                </ng-container>
-                <ng-container *ngIf="listItem.video">
-                    <img class="picture-thumbnail" width="50px"
-                         [src]="listItem.thumbnailUrl"
-                         (click)="submitShow(listItem.currentRecord)"
-                         alt="{{listItem.video.name}}">
-                </ng-container>
+                <div class="teaser-image-container-inner">
+                    <ng-container *ngIf="listItem.image">
+                        <img class="picture-thumbnail" width="270px"
+                             [src]="listItem.previewUrl"
+                             (click)="submitShowImage(listItem.currentRecord)"
+                             alt="{{listItem.image.name}}">
+                    </ng-container>
+                    <ng-container *ngIf="listItem.video">
+                        <img class="picture-thumbnail" width="270px"
+                             [src]="listItem.previewUrl"
+                             (click)="submitShow(listItem.currentRecord)"
+                             alt="{{listItem.video.name}}">
+                    </ng-container>
+                </div>
             </div>
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+            <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
             <p class="card-text">
                 {{listItem.currentRecord.descTxt | truncate : 300 }}
             </p>
@@ -149,7 +154,13 @@
                         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
                         <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
-                        <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                        <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
+                        <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                            <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
+                        </ng-container>
+                        <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
+                                                             [categories]="['ENTITYCOUNT']"
+                                                             [profile]="'list-item-flat-big'"></app-cdoc-extended-object-properties>
                     </ng-template>
                 </ngb-panel>
                 <ngb-panel *ngIf="listItem.currentRecord.gpsTrackBasefile || (listItem.currentRecord.geoLat != undefined && listItem.currentRecord.geoLon != undefined)" title="Map" i18n-title="title accordion map|Title for map accordion@@accordion.map.tdoc.title">

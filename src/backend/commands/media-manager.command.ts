@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {TourDocSearchForm} from '../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {FileSystemDBSyncType, TourDocMediaManagerModule} from '../modules/tdoc-media-manager.module';
+import {TourDocMediaManagerModule} from '../modules/tdoc-media-manager.module';
 import {utils} from 'js-data';
 import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc-adapter-response.mapper';
 import * as os from 'os';
@@ -9,6 +9,7 @@ import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/m
 import {CommonMediaManagerCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-media-manager.command';
 import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
+import {FileSystemDBSyncType, ProcessingOptions} from '../modules/cdoc-media-manager.module';
 
 export class MediaManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
@@ -29,17 +30,37 @@ export class MediaManagerCommand implements AbstractCommand {
         const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
 
         let promise: Promise<any>;
+        let searchForm: TourDocSearchForm;
+        const processingOptions: ProcessingOptions = {
+            ignoreErrors: Number.parseInt(argv['ignoreErrors'], 10) || 0,
+            parallel: Number.parseInt(argv['parallel'], 10)
+        };
+        const pageNum = Number.parseInt(argv['pageNum'], 10);
         switch (action) {
             case 'readImageDates':
-                promise = tdocManagerModule.readMediaDates(new TourDocSearchForm({ type: 'image', sort: 'dateAsc'}));
+                processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
+                searchForm = new TourDocSearchForm({ type: 'image', sort: 'dateAsc',
+                    pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                console.log('START processing: readMediaDates', searchForm, processingOptions);
 
+                promise = tdocManagerModule.readAndUpdateMediaDates(searchForm, processingOptions);
                 break;
             case 'readVideoDates':
-                promise = tdocManagerModule.readMediaDates(new TourDocSearchForm({ type: 'video', sort: 'dateAsc'}));
+                processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
+                searchForm = new TourDocSearchForm({ type: 'video', sort: 'dateAsc',
+                    pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                console.log('START processing: readMediaDates', searchForm, processingOptions);
+
+                promise = tdocManagerModule.readAndUpdateMediaDates(searchForm, processingOptions);
 
                 break;
             case 'scaleImages':
-                promise = tdocManagerModule.scaleImages(new TourDocSearchForm({ type: 'image', sort: 'dateAsc'}));
+                processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 5;
+                searchForm = new TourDocSearchForm({ type: 'image', sort: 'dateAsc',
+                    pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                console.log('START processing: scaleImages', searchForm, processingOptions);
+
+                promise = tdocManagerModule.scaleImagesToDefaultWidth(searchForm, processingOptions);
 
                 break;
             case 'generateTourDocsFromMediaDir':
@@ -48,6 +69,8 @@ export class MediaManagerCommand implements AbstractCommand {
                     promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR [-force true/false]');
                     return promise;
                 }
+
+                console.log('START processing: generateTourDocRecordsFromMediaDir', importDir);
 
                 promise = tdocManagerModule.generateTourDocRecordsFromMediaDir(importDir);
                 promise.then(value => {
@@ -66,14 +89,17 @@ export class MediaManagerCommand implements AbstractCommand {
                     promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR');
                     return promise;
                 }
+
                 const additionalMappingsJson = argv['additionalMappingsFile'];
+                console.log('START processing: findCorrespondingTourDocRecordsForMedia', additionalMappingsJson);
+
                 let additionalMappings: {[key: string]: FileSystemDBSyncType};
                 if (additionalMappingsJson) {
                     additionalMappings = {};
                     const additionalMappingsSrc = JSON.parse(fs.readFileSync(additionalMappingsJson, {encoding: 'utf8'}));
                     if (additionalMappingsSrc['files']) {
                         const possibleLocalPaths = [];
-                        ['full', 'x100', 'x400', 'x600', 'x1400'].forEach(resolution => {
+                        ['full', 'x100', 'x300', 'x600', 'x1400'].forEach(resolution => {
                             const path = backendConfig['apiRoutePicturesStaticDir'] + '/' +
                                 (backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + resolution + '/';
                             possibleLocalPaths.push(path);
@@ -95,7 +121,7 @@ export class MediaManagerCommand implements AbstractCommand {
                     }
                 }
 
-                promise = tdocManagerModule.findCorrespondingTourDocRecordsForMedia(importDir, additionalMappings);
+                promise = tdocManagerModule.findCorrespondingCommonDocRecordsForMedia(importDir, additionalMappings);
                 promise.then(value => {
                     console.log(JSON.stringify({
                         tdocs: value,
