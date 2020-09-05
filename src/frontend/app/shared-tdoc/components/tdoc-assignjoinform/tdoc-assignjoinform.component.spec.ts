@@ -14,7 +14,6 @@ import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testi
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {TourDocAssignJoinFormComponent} from './tdoc-assignjoinform.component';
 import {FormBuilder} from '@angular/forms';
-import {NgbModalStack} from '@ng-bootstrap/ng-bootstrap/modal/modal-stack';
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../../shared/tdoc-commons/services/tdoc-data.store';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
@@ -40,7 +39,6 @@ describe('TourDocAssignJoinFormComponent', () => {
                 { provide: GenericAppService, useValue: new AppServiceStub() },
                 FormBuilder,
                 NgbModal,
-                NgbModalStack,
                 NgbActiveModal,
                 CommonRoutingService,
                 CommonDocRoutingService,

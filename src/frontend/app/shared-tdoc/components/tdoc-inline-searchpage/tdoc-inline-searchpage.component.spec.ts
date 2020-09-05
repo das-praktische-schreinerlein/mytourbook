@@ -23,9 +23,9 @@ import {TourDocSearchFormUtils} from '../../services/tdoc-searchform-utils.servi
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {TourDocAlbumService} from '../../services/tdoc-album.service';
 import {TourDocPlaylistService} from '../../services/tdoc-playlist.service';
-import {CommonDocContentUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 import {NgbModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 
 describe('TourDocInlineSearchpageComponent', () => {
     let component: TourDocInlineSearchpageComponent;
@@ -57,7 +57,7 @@ describe('TourDocInlineSearchpageComponent', () => {
                 TourDocActionTagService,
                 TourDocAlbumService,
                 TourDocPlaylistService,
-                CommonDocContentUtils
+                TourDocContentUtils
             ],
             schemas: [NO_ERRORS_SCHEMA]
         }).compileComponents();

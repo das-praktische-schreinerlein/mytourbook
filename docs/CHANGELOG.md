@@ -2,6 +2,28 @@
  
 # Versions
  
+## 6.0.0
+- upgraded all dev-dependencies to latest
+- upgraded to angular 7
+
+### new features
+- none
+
+### improvements
+- none
+
+### bug fixes
+- none
+ 
+### breaking changes
+- build: upgraded all dev-dependencies to latest
+- build: use angular-7
+
+### known issues
+- frontendserver: angularuniversal-support broken
+
+
+
 ## 5.0.0
 - upgraded all dev-dependencies to latest
 - upgraded to angular 6
