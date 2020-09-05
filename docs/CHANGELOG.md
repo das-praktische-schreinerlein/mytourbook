@@ -48,6 +48,7 @@
 - backend: removed doublette-facet for imageobjects - its to slow
 - backend: improved mapper, model, decoupled functionality and configurations
 - common: improved dashboard-layout and added columns for news+trip
+- backend: improved media-manager, logging, dont read facets from db, do scaling parallel
 
 ### bug fixes
 - frontend: IE now functional
@@ -61,6 +62,7 @@
 ```
 run node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.json --debug --parallel 10
 ```
+- backend: dont map text to html-fields because markdown-fields should be rendered
 
 ### known issues
 - frontendserver: angularuniversal-support broken

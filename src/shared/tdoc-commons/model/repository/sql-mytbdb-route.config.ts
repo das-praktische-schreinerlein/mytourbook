@@ -423,7 +423,7 @@ export class SqlMytbDbRouteConfig {
             'track_id_is': {
                 selectSql: 'SELECT COUNT(kategorie.k_id) AS count, kategorie.k_id AS value,' +
                     ' kategorie.k_name AS label, kategorie.k_id AS id' +
-                    ' FROM kategorie INNER JOIN tour ON kategorie.t_id = tour.t_id ' +
+                    ' FROM kategorie LEFT JOIN tour ON kategorie.t_id = tour.t_id ' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
                 filterFields: ['kategorie.k_id'],
