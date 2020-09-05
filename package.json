@@ -133,7 +133,7 @@
     "js-data": "3.0.8",
     "js-data-express": "1.0.1",
     "js-data-http": "3.0.1",
-    "knex": "0.16.5",
+    "knex": "0.19.5",
     "leaflet": "1.6.0",
     "leaflet-editable-polyline": "1.0.8",
     "leaflet.markercluster": "1.4.1",
