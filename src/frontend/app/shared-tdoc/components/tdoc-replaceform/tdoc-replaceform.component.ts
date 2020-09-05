@@ -97,10 +97,20 @@ export class TourDocReplaceFormComponent
             const recordTechNames = me.records.map(record =>
                 TourDocAdapterResponseMapper.generateDoubletteValue((<TourDocRecord>record).techName));
             keyValues.sort((a, b) => {
-                const res = a[4].localeCompare(b[4]);
+                if (a[4] === undefined && b[4] !== undefined) {
+                    return -1;
+                } else if (a[4] !== undefined && b[4] === undefined) {
+                    return 1;
+                }
+
+                let res = 0;
+                if (a[4] !== undefined && b[4] !== undefined) {
+                    res = a[4].localeCompare(b[4])
+                }
                 if (res === 0) {
                     return a[5].toString().localeCompare(b[5].toString());
                 }
+
                 for (const recordTechName of recordTechNames) {
                     if (TourDocAdapterResponseMapper.generateDoubletteValue(a[1]).localeCompare(recordTechName) === 0) {
                         return -1;

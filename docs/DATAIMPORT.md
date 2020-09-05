@@ -33,26 +33,27 @@ cd sbin
 ## manage data in import-database
  
 ### data-management: basics 
-- [locations](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/location/10/1)
-- [create trips](http://localhost:4002/mytbdev/de/tdocadmin/create/TRIP)
-- [create news with timeframe over all tracks](http://localhost:4002/mytbdev/de/tdocadmin/create/NEWS)
+- [dashboard](http://localhost:4001/mytbdev/de/#)
+- [locations](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:noSubType/forExport/location/10/1)
+- [create trips](http://localhost:4001/mytbdev/de/tdocadmin/create/TRIP)
+- [create news with timeframe over all tracks](http://localhost:4001/mytbdev/de/tdocadmin/create/NEWS)
 
 ### data-management: tracks 
-- [manage track: type/persons/GPS-tracks/date](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1) 
+- [manage track: type/persons/GPS-tracks/date,trackname](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:noSubType/forExport/track/10/1) 
   - HINT: use gpx-trackfiles from garmin archive-folder
-- [generate and change tracknames](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
-- [manage rating/keywords](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
+- [manage rating](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:unrated/forExport/track/10/1)
+- [manage keywords](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:todoKeywords/forExport/track/10/1)
 - OPTIONAL - fix track-data if needed
   - connect to database (via gui or cli and run script manually)
   - [SQL mytbdb: fix trackdates in sqlite-database](installer/db/sqlite/mytbdb/fix-trackdates-by-imagedates.sql)
   - [SQL mytbdb: delete kategorie which are not used](installer/db/sqlite/mytbdb/delete-tracks-unused.sql)
 
 ### data-management: image-rating
-- [select favorite images](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
-- [identify persons](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/ungefiltert/relevance/track/10/1)
-- [rate favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
-- [add additional playlists for favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
-- [block private images from favorites](http://localhost:4002/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
+- [identify persons](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:unRatedChildren/forExport/track/10/1)
+- [select favorite images](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:unRatedChildren/forExport/track/10/1)
+- [add additional playlists for favorites](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:noMainFavoriteChildren/forExport/track/10/1)
+- [rate favorites](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:noMainFavoriteChildren/forExport/track/10/1)
+- [block private images from favorites](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/personalRateOverall:5,6,7,8,9,10,11,12,13,14,15/dateAsc/image/99/1)
 
 ## import tracks from import-database to production-database 
 - do import
@@ -64,12 +65,10 @@ cd sbin
 ## manage data in production-database
 
 ### data-management: touren/location
-- [tracks: assign existing routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/date/track/50/1)
-- [manage location: sublocations of ImportXXX...](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/Import/egal/date/location/10/1)
-- [create new routes](http://localhost:4002/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/egal/route_id_is:1/ratePers/track/50/1)
+- [tracks: assign existing routes](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:noRoute/forExport/track/10/1)
+- [manage location: sublocations of ImportXXX...](http://localhost:4001/mytbdev/de/tdoc/search/jederzeit/ueberall/alles/Import/egal/date/location/10/1)
+- [create new routes](http://localhost:4001/mytbdev/de/sections/start/search/jederzeit/ueberall/alles/egal/dashboardFilter:noRoute/forExport/track/10/1)
 - assign additional tracks to new routes
-- [assign multi-route-tracks in legacy-system](http://localhost:8080/mediadb2/admin/Kategorie_TourEdit.do?CURTABLE=KATEGORIE&CURPAGE=popupshowkategorietouren&CURID=2316)
-- [SQL mytbdb mysql: route set minDate](installer/db/mysql/mytbdb/update-tour-min-dates.sql)
 
 ### OPTIONAL data-management: sync with external playlist-directories
 - check playlist-directory with images against database
