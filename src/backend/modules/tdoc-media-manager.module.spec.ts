@@ -6,7 +6,7 @@ import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/m
 import * as os from 'os';
 import {utils} from 'js-data';
 import {RawSqlQueryData} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
-import {FileInfoType, FileSystemDBSyncType} from './cdoc-media-manager.module';
+import {FileInfoType, FileSystemDBSyncType} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
 
 describe('TourDocMediaManagerModule', () => {
     const backendConfig = {

@@ -16,7 +16,7 @@ const debug = argv['debug'] || false;
 if (!debug) {
     console.log = function() {};
 }
-if (!debug || debug === true || parseInt(debug, 10) < 1) {
+if (!debug || debug === false || parseInt(debug, 10) < 1) {
     console.trace = function() {};
     console.debug = function() {};
 }

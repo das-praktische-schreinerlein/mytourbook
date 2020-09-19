@@ -12,7 +12,12 @@ import {SqlConnectionConfig} from './tdoc-dataservice.module';
 import * as knex from 'knex';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {RawSqlQueryData, SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
-import {CommonDocMediaManagerModule, DBFileInfoType, FileInfoType, FileSystemDBSyncType} from './cdoc-media-manager.module';
+import {
+    CommonDocMediaManagerModule,
+    DBFileInfoType,
+    FileInfoType,
+    FileSystemDBSyncType
+} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
 
 export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourDocRecord, TourDocSearchForm,
 TourDocSearchResult, TourDocDataService> {
@@ -469,12 +474,14 @@ TourDocSearchResult, TourDocDataService> {
         if (sqlConfig === undefined) {
             throw new Error('config for TourDocSqlMytbDbAdapter not exists');
         }
+
         const options = {
             knexOpts: {
                 client: sqlConfig.client,
                 connection: sqlConfig.connection
             }
         };
+
         return knex(options.knexOpts);
     }
 

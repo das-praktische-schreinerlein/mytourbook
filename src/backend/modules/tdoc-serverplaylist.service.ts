@@ -19,12 +19,12 @@ export class TourDocServerPlaylistService extends CommonDocPlaylistService<TourD
     }
 
     generateM3uEntityPath(pathPrefix: string, record: TourDocRecord): string {
-        if (record['tdocimages'] && record['tdocimages'].length > 0) {
-            return this.getImageUrl(record['tdocimages'][0], 'x600', '');
-        } else if (record['tdocvideos'] && record['tdocvideos'].length > 0) {
+        if (record['tdocvideos'] && record['tdocvideos'].length > 0) {
             return this.getVideoUrl(record['tdocvideos'][0], 'x600', '');
         } else if (record['tdocaudios'] && record['tdocaudios'].length > 0) {
             return this.getAudioUrl(record['tdocaudios'][0], 'full', '');
+        } else if (record['tdocimages'] && record['tdocimages'].length > 0) {
+            return this.getImageUrl(record['tdocimages'][0], 'x600', '');
         }
 
         return undefined;

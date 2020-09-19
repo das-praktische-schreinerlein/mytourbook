@@ -9,7 +9,7 @@ import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/m
 import {CommonMediaManagerCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-media-manager.command';
 import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
-import {FileSystemDBSyncType, ProcessingOptions} from '../modules/cdoc-media-manager.module';
+import {FileSystemDBSyncType, ProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
 
 export class MediaManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
