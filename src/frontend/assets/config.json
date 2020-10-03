@@ -458,7 +458,7 @@
                     ]
                 },
                 {
-                    "key": "persRate_motive_phantastic",
+                    "key": "persRate_wichtigkeit_phantastic",
                     "type": "tag",
                     "name": "W5* Personal Wichtigkeit Phantastic",
                     "shortName": "W5*",
