@@ -6,10 +6,19 @@ const minimist = require ('minimist');
 const nodeModules = {};
 fs.readdirSync('node_modules')
     .filter(function(x) {
-        return ['.bin'].indexOf(x) === -1;
+        if (['.bin'].indexOf(x) === -1) {
+            return true;
+        }
+
+        console.error("filter .bin: ", x);
+        return false;
     })
     .forEach(function(mod) {
-        nodeModules[mod] = 'commonjs ' + mod;
+        if (mod.match(/redis/) || mod.match(/knex/) || mod.match(/sqlite/) ||
+            mod.match(/mysql/) || mod.match(/vid-streamer/) || mod.match(/fluent-ffmpeg/)) {
+            console.error("module as commonsjs: ", mod);
+            nodeModules[mod] = 'commonjs ' + mod;
+        }
     });
 
 const argv = minimist(process.argv.slice(2));
@@ -45,11 +54,7 @@ module.exports = {
     mode: 'production',
     target: 'node',
     // this makes sure we include node_modules and other 3rd party libraries
-    externals: {
-        include: /(node_modules|main\..*\.js)/,
-        exclude: /(.*redis.*)/
-    },
-     // nodeModules,
+    externals: nodeModules,
     output: {
         path: path.join(__dirname, distPath),
         filename: 'frontendserverAngular.js'
