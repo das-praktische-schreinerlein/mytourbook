@@ -348,7 +348,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         } else if ((table === 'track') && actionTagForm.type === 'tag' && actionTagForm.key.startsWith('trackmedia_persRate')) {
             return this.actionTagRateAdapter.executeActionTagRate('trackimages', id, <RateActionTagForm> actionTagForm, opts).then(
                 () => {
-                    return this.actionTagRateAdapter.executeActionTagRate('trackvideos', id, <RateActionTagForm> actionTagForm, opts);
+                    return this.actionTagRateAdapter.executeActionTagRateWithGreatestCheck('trackvideos', id,
+                        <RateActionTagForm> actionTagForm, opts);
                 }
             );
         } else if (actionTagForm.type === 'tag' && actionTagForm.key.startsWith('blocked')) {
