@@ -1,0 +1,35 @@
+{
+  "name": "mytourbook-frontend",
+  "version": "6.0.0",
+  "license": "Apache-2.0",
+  "angular-cli": {},
+  "scripts": {
+    "electron-rebuild": "npm run electron-ebuild-sqlite3",
+    "electron-rebuild-sqlite3": "..\\node_modules\\.bin\\electron-rebuild -f -w sqlite3",
+    "backend-serve-dev": "node dist/backend/backend.js",
+    "backend-serve-beta": "node dist/backend/backend.js -c config/backend.beta.json -f config/firewall.beta.json",
+    "backend-serve-prod": "node dist/backend/backend.js -c config/backend.prod.json -f config/firewall.beta.json",
+    "frontendserver-serve-dev-de": "node dist/frontendserver-dev-de/frontendserver.js -c config/backend.json -f config/firewall.json --frontend config/frontend.json",
+    "frontendserver-serve-beta-de": "node dist/frontendserver-beta-de/frontendserver.js -c config/backend.beta.json -f config/firewall.beta.json --frontend config/frontend.beta.json",
+    "frontendserver-serve-prod-de": "node dist/frontendserver-de/frontendserver.js -c config/backend.prod.json -f config/firewall.prod.json --frontend config/frontend.prod.json",
+    "generate-sitemaps": "node dist/backend/serverAdmin.js --command generateSitemap config/sitemap-de.json && node dist/backend/serverAdmin.js --command generateSitemap config/sitemap-en.json",
+    "init-cache-dev": "node dist/backend/serverAdmin.js -c config/backend.json --command initCache ",
+    "init-cache-beta": "node dist/backend/serverAdmin.js -c config/backend.beta.json --command initCache",
+    "init-cache-prod": "node dist/backend/serverAdmin.js -c config/backend.prod.json --command initCache",
+    "init-frontendserver-cache-dev-de": "node dist/frontendserver-dev-de/frontendserverAdmin.js",
+    "init-frontendserver-cache-beta-de": "node dist/frontendserver-beta-de/frontendserverAdmin.js -c config/backend.beta.json",
+    "init-frontendserver-cache-prod-de": "node dist/frontendserver-de/frontendserverAdmin.js -c config/backend.prod.json"
+  },
+  "private": true,
+  "optionalDeps // do copy these to deps if needed": {},
+  "dependencies": {
+    "axios": "0.19.2",
+    "fluent-ffmpeg": "2.1.2",
+    "knex": "0.19.5",
+    "mysql": "2.18.1",
+    "redis": "3.0.2",
+    "sqlite3": "4.2.0",
+    "vid-streamer": "1.0.0"
+  },
+  "devDependencies": {}
+}
