@@ -7,6 +7,7 @@ import * as os from 'os';
 import {utils} from 'js-data';
 import {RawSqlQueryData} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 import {FileInfoType, FileSystemDBSyncType} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
+import {BackendConfigType} from './backend.commons';
 
 describe('TourDocMediaManagerModule', () => {
     const backendConfig = {
@@ -15,7 +16,8 @@ describe('TourDocMediaManagerModule', () => {
             'connection': {
                 'filename': ':memory:'
             }
-        }
+        },
+        imageMagicAppPath: undefined
     };
 
     class TestMediaManagerModule extends MediaManagerModule {
@@ -30,14 +32,14 @@ describe('TourDocMediaManagerModule', () => {
 
     class TestTourDocMediaManagerModule extends TourDocMediaManagerModule {
         public myKnex;
-        protected createKnex(localBackendConfig: {}): any {
+        protected createKnex(localBackendConfig: BackendConfigType): any {
             this.myKnex = TestHelper.createKnex(backendConfig.TourDocSqlMytbDbAdapter.client, []);
             return this.myKnex;
         }
     }
 
     let service: TestTourDocMediaManagerModule;
-    const mediaManagerModule = new TestMediaManagerModule(backendConfig['imageMagicAppPath'], os.tmpdir());
+    const mediaManagerModule = new TestMediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
 
     const basedir = 'bladir';
     const fileInfo: FileInfoType = {

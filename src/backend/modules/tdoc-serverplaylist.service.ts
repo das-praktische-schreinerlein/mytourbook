@@ -35,10 +35,10 @@ export class TourDocServerPlaylistService extends CommonDocPlaylistService<TourD
             return undefined;
         }
 
-        if (this.config['useAudioAssetStoreUrls'] === true) {
-            return this.config['audioBaseUrl'] + resolution + '/' + audio['tdoc_id'];
+        if (this.config.useAudioAssetStoreUrls === true) {
+            return this.config.audioBaseUrl + resolution + '/' + audio['tdoc_id'];
         } else {
-            return this.config['audioBaseUrl'] + audio.fileName + (suffix ? suffix : '');
+            return this.config.audioBaseUrl + audio.fileName + (suffix ? suffix : '');
         }
     }
 
@@ -47,10 +47,10 @@ export class TourDocServerPlaylistService extends CommonDocPlaylistService<TourD
             return undefined;
         }
 
-        if (this.config['useImageAssetStoreUrls'] === true) {
-            return this.config['imageBaseUrl'] + resolution + '/' + image['tdoc_id'];
+        if (this.config.useImageAssetStoreUrls === true) {
+            return this.config.imageBaseUrl + resolution + '/' + image['tdoc_id'];
         } else {
-            return this.config['imageBaseUrl'] + 'pics_' + resolution + '/' + image.fileName + (suffix ? suffix : '');
+            return this.config.imageBaseUrl + 'pics_' + resolution + '/' + image.fileName + (suffix ? suffix : '');
         }
     }
 
@@ -59,10 +59,10 @@ export class TourDocServerPlaylistService extends CommonDocPlaylistService<TourD
             return undefined;
         }
 
-        if (this.config['useVideoAssetStoreUrls'] === true) {
-            return this.config['videoBaseUrl'] + resolution + '/' + video['tdoc_id'];
+        if (this.config.useVideoAssetStoreUrls === true) {
+            return this.config.videoBaseUrl + resolution + '/' + video['tdoc_id'];
         } else {
-            return this.config['videoBaseUrl'] + 'video_' + resolution + '/' + video.fileName + (suffix ? suffix : '');
+            return this.config.videoBaseUrl + 'video_' + resolution + '/' + video.fileName + (suffix ? suffix : '');
         }
     }
 

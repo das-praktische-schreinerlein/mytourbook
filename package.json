@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "angular-cli": {},
   "scripts": {
-    "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js && npm run build-after-copy-overrides-config",
+    "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js && npm run build-after-copy-overrides-config && npm run build-after-copy-overrides-package",
     "backend-build-and-serve-dev": "npm run backend-build && npm run backend-serve-dev",
     "backend-serve-dev": "node dist/backend/backend.js",
     "backend-serve-dev-import": "node dist/backend/backend.js -c config/backend.import.json -f config/firewall.json",
@@ -26,6 +26,7 @@
     "build-prod": "npm run build-prod-de && npm run build-prod-en && npm run build-after-copy-overrides-dist-prod",
     "build-prod-de": "ng build frontend --base-href=/mytb/de/ --configuration=prod-de --aot true --output-path dist/static/mytb/de ",
     "build-prod-en": "ng build frontend --base-href=/mytb/en/ --configuration=prod-en --aot true --output-path dist/static/mytb/en",
+    "build-after-copy-overrides-package": "cpx --verbose package-dist.json dist/",
     "build-after-copy-overrides-config": "cpx --verbose \"overrides/after-build/config/**/*.*\" config/",
     "build-after-copy-overrides-dist-dev": "cpx --verbose \"overrides/after-build/dist/mytbdev/**/*.*\" dist/static/mytbdev/ && cpx \"overrides/after-build/dist/mytbdev/**/*.*\" dist/mytbdev-server/",
     "build-after-copy-overrides-dist-beta": "cpx --verbose \"overrides/after-build/dist/mytbbeta/**/*.*\" dist/static/mytbbeta/ && cpx \"overrides/after-build/dist/mytbbeta**/*.*\" dist/mytbbeta-server/",

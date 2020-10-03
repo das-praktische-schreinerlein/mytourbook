@@ -9,27 +9,21 @@ import {PDocDataServiceModule} from './modules/pdoc-dataservice.module';
 import {TourDocDataServiceModule} from './modules/tdoc-dataservice.module';
 import {TourDocDataService} from './shared/tdoc-commons/services/tdoc-data.service';
 import {AssetsServerModule} from './modules/assets-server.module';
-import {CacheConfig, DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
+import {DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {TourDocWriterServerModule} from './modules/tdoc-writer-server.module';
 import {VideoServerModule} from './modules/video-server.module';
 import {TourDocPlaylistServerModule} from './modules/tdoc-playlist-server.module';
+import {CommonServerConfigType} from '@dps/mycms-server-commons/dist/server-commons/server.commons';
+import {BackendConfigType} from './modules/backend.commons';
 
-export interface ServerConfig {
-    apiDataPrefix: string;
-    apiAssetsPrefix: string;
-    apiPublicPrefix: string;
-    filePathErrorDocs: string;
-    backendConfig: {
-        cacheConfig: CacheConfig;
-    };
-    firewallConfig: FirewallConfig;
+export interface ServerConfig extends CommonServerConfigType<BackendConfigType, FirewallConfig> {
 }
 
 export class ServerModuleLoader {
     public static loadModules(app, serverConfig: ServerConfig) {
-        const writable = serverConfig.backendConfig['tdocWritable'] === true || serverConfig.backendConfig['tdocWritable'] === 'true';
-        const apiVideoServerEnabled = serverConfig.backendConfig['apiVideoServerEnabled'] === true
-            || serverConfig.backendConfig['apiVideoServerEnabled'] === 'true';
+        const writable = serverConfig.backendConfig.tdocWritable === true || <any>serverConfig.backendConfig.tdocWritable === 'true';
+        const apiVideoServerEnabled = serverConfig.backendConfig.apiVideoServerEnabled === true
+            || <any>serverConfig.backendConfig.apiVideoServerEnabled === 'true';
 
         ConfigureServerModule.configureServer(app, serverConfig.backendConfig);
         if (!writable) {

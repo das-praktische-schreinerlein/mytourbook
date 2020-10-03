@@ -5,11 +5,13 @@ import {
     RedisQueueConfig
 } from '../shared/tdoc-commons/services/common-queued-object-detection-processing.service';
 import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
+import {BackendConfigType} from './backend.commons';
 
 export class TourDocObjectDetectionManagerModule extends CommonQueuedObjectDetectionProcessingService {
-    private backendConfig: ObjectDetectionManagerBackendConfig;
+    private backendConfig: BackendConfigType & ObjectDetectionManagerBackendConfig;
 
-    constructor(backendConfig: ObjectDetectionManagerBackendConfig, dataStore: CommonObjectDetectionProcessingDatastore) {
+    constructor(backendConfig: BackendConfigType & ObjectDetectionManagerBackendConfig,
+                dataStore: CommonObjectDetectionProcessingDatastore) {
         super(dataStore);
         this.backendConfig = backendConfig;
     }
@@ -23,7 +25,7 @@ export class TourDocObjectDetectionManagerModule extends CommonQueuedObjectDetec
     }
 
     protected getBasePathForImages(): string {
-        return this.backendConfig['apiRoutePicturesStaticDir'] + '/pics_full';
+        return this.backendConfig.apiRoutePicturesStaticDir + '/pics_full';
     }
 
     protected getConfiguredAvailableDetectors(): string[] {

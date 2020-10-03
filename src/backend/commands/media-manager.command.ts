@@ -18,14 +18,14 @@ export class MediaManagerCommand implements AbstractCommand {
 
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
-        const writable = backendConfig['tdocWritable'] === true || backendConfig['tdocWritable'] === 'true';
+        const writable = backendConfig.tdocWritable === true || backendConfig.tdocWritable === 'true';
         const dataService = TourDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
         const action = argv['action'];
         const importDir = argv['importDir'];
         if (writable) {
             dataService.setWritable(true);
         }
-        const mediaManagerModule = new MediaManagerModule(backendConfig['imageMagicAppPath'], os.tmpdir());
+        const mediaManagerModule = new MediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
         const tdocManagerModule = new TourDocMediaManagerModule(backendConfig, dataService, mediaManagerModule);
         const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
 
@@ -100,8 +100,8 @@ export class MediaManagerCommand implements AbstractCommand {
                     if (additionalMappingsSrc['files']) {
                         const possibleLocalPaths = [];
                         ['full', 'x100', 'x300', 'x600', 'x1400'].forEach(resolution => {
-                            const path = backendConfig['apiRoutePicturesStaticDir'] + '/' +
-                                (backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + resolution + '/';
+                            const path = backendConfig.apiRoutePicturesStaticDir + '/' +
+                                (backendConfig.apiRouteStoredPicturesResolutionPrefix || '') + resolution + '/';
                             possibleLocalPaths.push(path);
                             possibleLocalPaths.push(path.replace(/[\\\/]+/g, '/'));
                             possibleLocalPaths.push(path.toLowerCase());
@@ -126,10 +126,10 @@ export class MediaManagerCommand implements AbstractCommand {
                     console.log(JSON.stringify({
                         tdocs: value,
                         fileBaseDir: importDir,
-                        dbImageBaseDir: backendConfig['apiRoutePicturesStaticDir'] + '/' +
-                            (backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '') + 'full/',
-                        dbVideoBaseDir: backendConfig['apiRouteVideosStaticDir'] + '/'
-                            + (backendConfig['apiRouteStoredVideosResolutionPrefix'] || '') + 'full/'
+                        dbImageBaseDir: backendConfig.apiRoutePicturesStaticDir + '/' +
+                            (backendConfig.apiRouteStoredPicturesResolutionPrefix || '') + 'full/',
+                        dbVideoBaseDir: backendConfig.apiRouteVideosStaticDir + '/'
+                            + (backendConfig.apiRouteStoredVideosResolutionPrefix || '') + 'full/'
                     }, undefined, ' '));
                 });
 

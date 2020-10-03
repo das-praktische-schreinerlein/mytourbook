@@ -11,6 +11,9 @@
 
 ### improvements
 - moved features to commons
+- backend: use configuration-types
+- backend: improved build to include all non-binary deps to build
+- build: added package-dist.json to install binary-deps on server
 
 ### bug fixes
 - none

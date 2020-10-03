@@ -1,20 +1,21 @@
 import proxy from 'http-proxy-middleware';
 import express from 'express';
 import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
+import {BackendConfigType} from './backend.commons';
 
 export enum PictureResolutions {
-    'x100', 'x300', 'x600'
+    'x100' = 'x100', 'x300' = 'x300', 'x600' = 'x600'
 }
 export enum TrackFormats {
-    'gpx', 'json'
+    'gpx'= 'gpx', 'json' = 'json'
 }
 
 export class AssetsServerModule {
-    public static configureStaticTrackRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
-        if (backendConfig['apiRouteTracks'] && backendConfig['apiRouteTracksStaticDir']) {
-            if (backendConfig['apiRouteTracksStaticEnabled'] !== true) {
+    public static configureStaticTrackRoutes(app: express.Application, apiPrefix: string, backendConfig: BackendConfigType) {
+        if (backendConfig.apiRouteTracks && backendConfig.apiRouteTracksStaticDir) {
+            if (backendConfig.apiRouteTracksStaticEnabled !== true) {
                 console.warn('SKIP route track NOT Enabled:',
-                    apiPrefix + backendConfig['apiRouteTracks'] + ' to ' + backendConfig['apiRouteTracksStaticDir']);
+                    apiPrefix + backendConfig.apiRouteTracks + ' to ' + backendConfig.apiRouteTracksStaticDir);
                 return;
             }
 
@@ -27,22 +28,22 @@ export class AssetsServerModule {
             };
 
             console.log('configure route track:',
-                apiPrefix + backendConfig['apiRouteTracks'] + ' to ' + backendConfig['apiRouteTracksStaticDir']);
-            app.use(apiPrefix + backendConfig['apiRouteTracks'], express.static(backendConfig['apiRouteTracksStaticDir'], options));
-        } else if (backendConfig['apiRouteTracks'] && backendConfig['proxyTrackRouteToUrl']) {
+                apiPrefix + backendConfig.apiRouteTracks + ' to ' + backendConfig.apiRouteTracksStaticDir);
+            app.use(apiPrefix + backendConfig.apiRouteTracks, express.static(backendConfig.apiRouteTracksStaticDir, options));
+        } else if (backendConfig.apiRouteTracks && backendConfig.proxyTrackRouteToUrl) {
             console.log('configure route trackproxy:',
-                apiPrefix + backendConfig['apiRouteTracks'] + ' to ' + backendConfig['proxyTrackRouteToUrl']);
-            app.use(apiPrefix + backendConfig['apiRouteTracks'],
-                proxy.createProxyMiddleware({target: backendConfig['proxyTrackRouteToUrl'], changeOrigin: true}));
+                apiPrefix + backendConfig.apiRouteTracks + ' to ' + backendConfig.proxyTrackRouteToUrl);
+            app.use(apiPrefix + backendConfig.apiRouteTracks,
+                proxy.createProxyMiddleware({target: backendConfig.proxyTrackRouteToUrl, changeOrigin: true}));
         }
     }
 
-    public static configureStoredTrackRoutes(app: express.Application, apiPrefix: string, backendConfig: {},
+    public static configureStoredTrackRoutes(app: express.Application, apiPrefix: string, backendConfig: BackendConfigType,
                                                errorFile: string, filePathErrorDocs: string) {
-        if (backendConfig['apiRouteStoredTracks'] && backendConfig['apiRouteTracksStaticDir']) {
+        if (backendConfig.apiRouteStoredTracks && backendConfig.apiRouteTracksStaticDir) {
             console.log('configure route trackstore:',
-                apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveTdocByTdocId'
-                + ' to ' + backendConfig['apiRouteTracksStaticDir']);
+                apiPrefix + backendConfig.apiRouteStoredTracks + ':trackFormat/:resolveTdocByTdocId'
+                + ' to ' + backendConfig.apiRouteTracksStaticDir);
             app.param('trackFormat', function(req, res, next, trackFormat) {
                 req['trackFormat'] = undefined;
                 if (Object.keys(TrackFormats).indexOf(trackFormat) < 0) {
@@ -52,7 +53,7 @@ export class AssetsServerModule {
                 return next();
             });
             // use id: param to read from solr
-            app.route(apiPrefix + backendConfig['apiRouteStoredTracks'] + ':trackFormat/:resolveTdocByTdocId')
+            app.route(apiPrefix + backendConfig.apiRouteStoredTracks + ':trackFormat/:resolveTdocByTdocId')
                 .all(function(req, res, next) {
                     if (req.method !== 'GET') {
                         return next('not allowed');
@@ -69,17 +70,17 @@ export class AssetsServerModule {
                     }
                     res.status(200);
                     res.sendFile(tdoc.gpsTrackBasefile + '.' + trackFormat,
-                        {root: backendConfig['apiRouteTracksStaticDir']});
+                        {root: backendConfig.apiRouteTracksStaticDir});
                     return;
                 });
         }
     }
 
-    public static configureStaticPictureRoutes(app: express.Application, apiPrefix: string, backendConfig: {}) {
-        if (backendConfig['apiRoutePictures'] && backendConfig['apiRoutePicturesStaticDir']) {
-            if (backendConfig['apiRoutePicturesStaticEnabled'] !== true) {
+    public static configureStaticPictureRoutes(app: express.Application, apiPrefix: string, backendConfig: BackendConfigType) {
+        if (backendConfig.apiRoutePictures && backendConfig.apiRoutePicturesStaticDir) {
+            if (backendConfig.apiRoutePicturesStaticEnabled !== true) {
                 console.warn('SKIP route pictures NOT Enabled:',
-                    apiPrefix + backendConfig['apiRoutePictures'] + ' to ' + backendConfig['apiRoutePicturesStaticDir']);
+                    apiPrefix + backendConfig.apiRoutePictures + ' to ' + backendConfig.apiRoutePicturesStaticDir);
                 return;
             }
 
@@ -92,22 +93,22 @@ export class AssetsServerModule {
             };
 
             console.log('configure route picturestatic:',
-                apiPrefix + backendConfig['apiRoutePictures'] + ' to ' + backendConfig['apiRoutePicturesStaticDir']);
-            app.use(apiPrefix + backendConfig['apiRoutePictures'], express.static(backendConfig['apiRoutePicturesStaticDir'], options));
-        } else if (backendConfig['apiRoutePictures'] && backendConfig['proxyPicturesRouteToUrl']) {
+                apiPrefix + backendConfig.apiRoutePictures + ' to ' + backendConfig.apiRoutePicturesStaticDir);
+            app.use(apiPrefix + backendConfig.apiRoutePictures, express.static(backendConfig.apiRoutePicturesStaticDir, options));
+        } else if (backendConfig.apiRoutePictures && backendConfig.proxyPicturesRouteToUrl) {
             console.log('configure route pictureproxy:',
-                apiPrefix +  backendConfig['apiRoutePictures'] + ' to ' + backendConfig['proxyPicturesRouteToUrl']);
-            app.use(apiPrefix + backendConfig['apiRoutePictures'],
-                proxy.createProxyMiddleware({target: backendConfig['proxyPicturesRouteToUrl'], changeOrigin: true}));
+                apiPrefix +  backendConfig.apiRoutePictures + ' to ' + backendConfig.proxyPicturesRouteToUrl);
+            app.use(apiPrefix + backendConfig.apiRoutePictures,
+                proxy.createProxyMiddleware({target: backendConfig.proxyPicturesRouteToUrl, changeOrigin: true}));
         }
     }
 
-    public static configureStoredPictureRoutes(app: express.Application, apiPrefix: string, backendConfig: {},
+    public static configureStoredPictureRoutes(app: express.Application, apiPrefix: string, backendConfig: BackendConfigType,
                                                errorFile: string, filePathErrorDocs: string) {
-        if (backendConfig['apiRouteStoredPictures'] && backendConfig['apiRoutePicturesStaticDir']) {
+        if (backendConfig.apiRouteStoredPictures && backendConfig.apiRoutePicturesStaticDir) {
             console.log('configure route picturestore:',
-                apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveTdocByTdocId'
-                + ' to ' + backendConfig['apiRoutePicturesStaticDir']);
+                apiPrefix + backendConfig.apiRouteStoredPictures + ':resolution/:resolveTdocByTdocId'
+                + ' to ' + backendConfig.apiRoutePicturesStaticDir);
             app.param('resolution', function(req, res, next, resolution) {
                 req['resolution'] = undefined;
                 if (Object.keys(PictureResolutions).indexOf(resolution) < 0) {
@@ -117,7 +118,7 @@ export class AssetsServerModule {
                 return next();
             });
             // use id: param to read from solr
-            app.route(apiPrefix + backendConfig['apiRouteStoredPictures'] + ':resolution/:resolveTdocByTdocId')
+            app.route(apiPrefix + backendConfig.apiRouteStoredPictures + ':resolution/:resolveTdocByTdocId')
                 .all(function(req, res, next) {
                     if (req.method !== 'GET') {
                         return next('not allowed');
@@ -134,9 +135,9 @@ export class AssetsServerModule {
                         return;
                     }
                     res.status(200);
-                    res.sendFile((backendConfig['apiRouteStoredPicturesResolutionPrefix'] || '')
+                    res.sendFile((backendConfig.apiRouteStoredPicturesResolutionPrefix || '')
                         + resolution + '/' + tdoc['tdocimages'][0]['fileName'],
-                        {root: backendConfig['apiRoutePicturesStaticDir']});
+                        {root: backendConfig.apiRoutePicturesStaticDir});
                     return;
                 });
         }

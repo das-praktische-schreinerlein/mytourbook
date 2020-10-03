@@ -18,6 +18,7 @@ import {
     FileInfoType,
     FileSystemDBSyncType
 } from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
+import {BackendConfigType} from './backend.commons';
 
 export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourDocRecord, TourDocSearchForm,
 TourDocSearchResult, TourDocDataService> {
@@ -468,9 +469,9 @@ TourDocSearchResult, TourDocDataService> {
         });
     }
 
-    protected createKnex(backendConfig: {}): any {
+    protected createKnex(backendConfig: BackendConfigType): any {
         // configure adapter
-        const sqlConfig: SqlConnectionConfig = backendConfig['TourDocSqlMytbDbAdapter'];
+        const sqlConfig: SqlConnectionConfig = backendConfig.TourDocSqlMytbDbAdapter;
         if (sqlConfig === undefined) {
             throw new Error('config for TourDocSqlMytbDbAdapter not exists');
         }

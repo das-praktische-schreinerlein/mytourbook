@@ -13,6 +13,7 @@ import {FacetCacheUtils} from '@dps/mycms-commons/dist/search-commons/services/f
 import {MysqlFacetCacheAdapter} from '@dps/mycms-commons/dist/facetcache-commons/model/mysql-facetcache.adapter';
 import {Sqlite3FacetCacheAdapter} from '@dps/mycms-commons/dist/facetcache-commons/model/sqlite3-facetcache.adapter';
 import {TourDocFacetCacheService} from '../modules/tdoc-facetcache.service';
+import {BackendConfigType} from '../modules/backend.commons';
 
 export class FacetCacheManagerCommand extends AbstractFacetCacheManagerCommand implements AbstractCommand {
     protected configureCommonFacetCacheService(argv: string[]): FacetCacheService {
@@ -29,7 +30,7 @@ export class FacetCacheManagerCommand extends AbstractFacetCacheManagerCommand i
 
         const sqlQueryBuilder = new SqlQueryBuilder();
         let tableConfigs: TableConfigs;
-        const adapterName = backendConfig['tdocDataStoreAdapter'];
+        const adapterName = backendConfig.tdocDataStoreAdapter;
         switch (adapterName) {
             case 'TourDocSqlMytbDbAdapter':
                 tableConfigs = TourDocSqlMytbDbConfig.tableConfigs;
@@ -65,9 +66,9 @@ export class FacetCacheManagerCommand extends AbstractFacetCacheManagerCommand i
         }
     }
 
-    protected createKnex(backendConfig: {}): any {
+    protected createKnex(backendConfig: BackendConfigType): any {
         // configure adapter
-        const sqlConfig: SqlConnectionConfig = backendConfig[backendConfig['tdocDataStoreAdapter']];
+        const sqlConfig: SqlConnectionConfig = backendConfig[backendConfig.tdocDataStoreAdapter];
         if (sqlConfig === undefined) {
             throw new Error('config for tdocDataStoreAdapter not exists');
         }

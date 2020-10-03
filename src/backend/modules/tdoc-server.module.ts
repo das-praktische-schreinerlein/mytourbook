@@ -6,10 +6,11 @@ import {TourDocRecord} from '../shared/tdoc-commons/model/records/tdoc-record';
 import {DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {CommonDocServerModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-server.module';
 import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/forms/cdoc-searchform';
+import {BackendConfigType} from './backend.commons';
 
 export class TourDocServerModule extends CommonDocServerModule<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
     public static configureRoutes(app: express.Application, apiPrefix: string, dataService: TourDocDataService,
-                                  cache: DataCacheModule, backendConfig: {}): TourDocServerModule {
+                                  cache: DataCacheModule, backendConfig: BackendConfigType): TourDocServerModule {
         const tdocServerModule = new TourDocServerModule(dataService, cache);
         CommonDocServerModule.configureServerRoutes(app, apiPrefix, tdocServerModule, cache, backendConfig);
         return tdocServerModule;

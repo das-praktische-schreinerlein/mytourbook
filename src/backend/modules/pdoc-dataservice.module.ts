@@ -6,11 +6,12 @@ import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdo
 import * as fs from 'fs';
 import marked from 'marked';
 import htmlToText from 'html-to-text';
+import {BackendConfigType} from './backend.commons';
 
 export class PDocDataServiceModule {
     private static dataServices = new Map<string, PDocDataService>();
 
-    public static getDataService(profile: string, backendConfig: {}, locale: string): PDocDataService {
+    public static getDataService(profile: string, backendConfig: BackendConfigType, locale: string): PDocDataService {
         if (!this.dataServices.has(profile)) {
             this.dataServices.set(profile, PDocDataServiceModule.createDataService(backendConfig, locale));
         }
@@ -18,7 +19,7 @@ export class PDocDataServiceModule {
         return this.dataServices.get(profile);
     }
 
-    private static createDataService(backendConfig: {}, locale: string): PDocDataService {
+    private static createDataService(backendConfig: BackendConfigType, locale: string): PDocDataService {
         // configure store
         const dataStore: PDocDataStore = new PDocDataStore(new SearchParameterUtils());
         const dataService: PDocDataService = new PDocDataService(dataStore);
@@ -32,7 +33,7 @@ export class PDocDataServiceModule {
             smartypants: true
         });
 
-        const fileName = backendConfig['filePathPDocJson'].replace('.json', '-' + locale + '.json');
+        const fileName = backendConfig.filePathPDocJson.replace('.json', '-' + locale + '.json');
         const docs: any[] = JSON.parse(fs.readFileSync(fileName, { encoding: 'utf8' })).pdocs;
         for (const doc of docs) {
             if (!doc['descHtml']) {
