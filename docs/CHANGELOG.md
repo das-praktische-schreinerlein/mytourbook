@@ -14,6 +14,8 @@
 - backend: use configuration-types
 - backend: improved build to include all non-binary deps to build
 - build: added package-dist.json to install binary-deps on server
+- backend: use extended security-features (blacklist, whitelists) per profile
+- frontend: added download-link for images 
 
 ### bug fixes
 - none

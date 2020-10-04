@@ -670,6 +670,30 @@
                     ]
                 },
                 {
+                    "key": "link_download_image",
+                    "type": "link",
+                    "name": "Download Image",
+                    "shortName": "\uD83D\uDCE5",
+                    "payload": {
+                        "url": "http://localhost:4100/api/static/picturestore/x600/{{id}}",
+                        "target": "download",
+                        "replacements": {
+                            "id": "record.id"
+                        }
+                    },
+                    "showFilter": [
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
+                },
+                {
                     "key": "blocked",
                     "type": "tag",
                     "name": "\uD83D\uDEAB Block from public",

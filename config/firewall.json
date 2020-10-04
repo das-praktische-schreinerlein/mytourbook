@@ -57,6 +57,10 @@
             "file": "image.png"
         }
     },
+    "allowLocalHostOnly": true,
+    "allowLocalNetOnly": false,
+    "whiteListIps": [
+    ],
     "blackListIps": [
     ],
     "dnsBLConfig": {
