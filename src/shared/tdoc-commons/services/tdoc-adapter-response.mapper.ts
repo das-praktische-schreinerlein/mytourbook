@@ -255,11 +255,11 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['name'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'name_s', undefined);
         values['techName'] = values['name'] ? values['name'].replace(/[- \/()+;.]+/g, '_').toLowerCase() : '';
         values['objects'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'objects_txt', '')
-            .split(',,').join(', ');
+            .replace(/[,]+/, ',').split(',').join(', ');
         values['persons'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'persons_txt', '')
-            .split(',,').join(', ');
+            .replace(/[,]+/, ',').split(',').join(', ');
         values['playlists'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'playlists_txt', '')
-            .split(',,').join(', ');
+            .replace(/[,]+/, ',').split(',').join(', ');
         values['subtype'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'subtype_s', undefined);
         values['type'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'type_s', undefined);
         values['locHirarchie'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'loc_lochirarchie_s', '')
