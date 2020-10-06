@@ -265,7 +265,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     protected createNearByFilter(record: TourDocRecord): string {
         return record.geoLat !== undefined
             ? 'nearby:' + [record.geoLat, record.geoLon, 1].join('_') +
-                '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/, '')
+                '_,_nearbyAddress:' + record.locHirarchie.replace(/[^-a-zA-Z0-9_.äüöÄÜÖß]+/g, '')
             : 'blimblamblummichgibtesnicht';
     }
 
