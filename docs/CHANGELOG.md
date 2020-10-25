@@ -19,6 +19,8 @@
 - frontend: added download-link for images
 - scripts: improved sbin-scripts
 - backend: added media-export
+- frontend: use player-events of commons
+- backend: use default-implementation of extractTable
 
 ### bug fixes
 - none
