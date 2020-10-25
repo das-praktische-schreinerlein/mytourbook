@@ -2,6 +2,7 @@
 # exit on error
 set -e
 CWD=$(pwd)
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 function dofail {
     cd $CWD
     printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
@@ -11,7 +12,7 @@ function dofail {
 echo "start - fix data in production-database"
 
 echo "now: configure linux vars: run sbin/configure-environment.bash"
-source configure-environment.bash
+source ${SCRIPTPATH}/configure-environment.bash
 
 
 echo "OPTIONAL: index images"
@@ -59,7 +60,7 @@ select yn in "Yes"; do
     esac
 done
 
-echo "YOUR TODO: start object-queue-receiver in a separate shell 'cd ${MYTB} && node dist/backend/serverAdmin.js --command objectDetectionManager --action receiveQueueResponses --debug 1 && cd $CWD"
+echo "YOUR TODO: start object-queue-receiver in a separate shell 'cd ${MYTB} && node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.json --command objectDetectionManager --action receiveQueueResponses --debug 1 && cd $CWD"
 echo "OPEN: Can we proceed the next steps?"
 select yn in "Yes"; do
     case $yn in
@@ -69,8 +70,8 @@ done
 
 echo "now: send to queue (2 runs -> to get picasa-files blocked till picasa finished)"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command objectDetectionManager --action sendQueueRequests --detector picasafile --maxPerRun 2000 --debug 1
-node dist/backend/serverAdmin.js --command objectDetectionManager --action sendQueueRequests --detector tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,faceapi --maxPerRun 2000 --debug 1
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.json --command objectDetectionManager --action sendQueueRequests --detector picasafile --maxPerRun 2000 --debug 1
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.json --command objectDetectionManager --action sendQueueRequests --detector tfjs_cocossd_mobilenet_v1,tfjs_cocossd_mobilenet_v2,tfjs_cocossd_lite_mobilenet_v2,tfjs_mobilenet_v1,faceapi --maxPerRun 2000 --debug 1
 cd $CWD
 
 echo "done - fix data in production-database"

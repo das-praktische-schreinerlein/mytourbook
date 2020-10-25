@@ -255,7 +255,7 @@ describe('TourDocMediaManagerModule', () => {
     };
 
     beforeEach(() => {
-        service = new TestTourDocMediaManagerModule(backendConfig, null, mediaManagerModule);
+        service = new TestTourDocMediaManagerModule(backendConfig, null, mediaManagerModule, null, null);
     });
 
     describe('findCommonDocRecordsForFileInfo matching none found', () => {

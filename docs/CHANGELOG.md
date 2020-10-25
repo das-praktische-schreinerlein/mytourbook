@@ -5,6 +5,7 @@
 ## 6.0.0
 - upgraded all dev-dependencies to latest
 - upgraded to angular 7
+- added media-export
 
 ### new features
 - none
@@ -15,7 +16,9 @@
 - backend: improved build to include all non-binary deps to build
 - build: added package-dist.json to install binary-deps on server
 - backend: use extended security-features (blacklist, whitelists) per profile
-- frontend: added download-link for images 
+- frontend: added download-link for images
+- scripts: improved sbin-scripts
+- backend: added media-export
 
 ### bug fixes
 - none

@@ -670,9 +670,9 @@
                     ]
                 },
                 {
-                    "key": "link_download_image",
+                    "key": "link_download_image_store",
                     "type": "link",
-                    "name": "Download Image",
+                    "name": "Download Image Store",
                     "shortName": "\uD83D\uDCE5",
                     "payload": {
                         "url": "http://localhost:4100/api/static/picturestore/x600/{{id}}",
@@ -688,6 +688,54 @@
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
+                },
+                {
+                    "key": "link_download_image_static",
+                    "type": "link",
+                    "name": "Download Image Static",
+                    "shortName": "\uD83D\uDCE5",
+                    "payload": {
+                        "url": "http://localhost:4100/api/static/pictures/pics_x600/{{id}}",
+                        "target": "download",
+                        "replacements": {
+                            "id": "record.tdocimages[0].fileName"
+                        }
+                    },
+                    "showFilter": [
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image"]
+                        }
+                    ],
+                    "configAvailability": [
+                    ]
+                },
+                {
+                    "key": "link_download_video_static",
+                    "type": "link",
+                    "name": "Download Video Static",
+                    "shortName": "\uD83D\uDCE5",
+                    "payload": {
+                        "url": "http://localhost:4100/api/static/videos/video_x600/{{id}}",
+                        "target": "download",
+                        "replacements": {
+                            "id": "record.tdocvideos[0].fileName"
+                        }
+                    },
+                    "showFilter": [
+                    ],
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [

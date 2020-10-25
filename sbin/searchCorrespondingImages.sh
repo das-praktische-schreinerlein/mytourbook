@@ -2,6 +2,7 @@
 # exit on error
 set -e
 CWD=$(pwd)
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 function dofail {
     cd $CWD
     printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
@@ -22,7 +23,7 @@ LIRESEARCHER_FEATURES=OpponentHistogram,ColorLayout,SimpleColorHistogram
 LIRESEARCHER_MAXDIFFERENCESCORE=8
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
-source ./configure-environment.bash
+source ${SCRIPTPATH}/configure-environment.bash
 
 echo "now: check search-folder"
 if [ ! -d "${SEARCHDIR}" ]; then
@@ -32,16 +33,17 @@ fi
 
 if [ "${USESIMILARITYINDEX}" != "" ]; then
     echo "now: check image with image-index: ${SEARCHDIR}"
+    cd ${LIRETOOLS}/sbin
     ${LIRETOOLS}/sbin/searchIndexedImages.sh "$SEARCHDIR" "$W_MYTB_INDEXDIR" "$LIRESEARCHER_FEATURES" "$LIRESEARCHER_MAXDIFFERENCESCORE" "1" "$LIRESEARCHER_NUMTHREADS"
     cd ${CWD}
     echo "now: check images and image-index-result with database: ${SEARCHDIR}"
     cd ${MYTB}
-    node dist/backend/serverAdmin.js --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --additionalMappingsFile $SEARCHDIR/findFilesInLireIndex.json --debug true > $SEARCHDIR/findFilesInDb.tmp && sed -e '/DONE - command finished/,$d' $SEARCHDIR/findFilesInDb.tmp > $SEARCHDIR/findFilesInDb.json
+    node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --additionalMappingsFile $SEARCHDIR/findFilesInLireIndex.json --debug true > $SEARCHDIR/findFilesInDb.tmp && sed -e '/DONE - command finished/,$d' $SEARCHDIR/findFilesInDb.tmp > $SEARCHDIR/findFilesInDb.json
     cd ${CWD}
 else
     echo "now: check images with database: ${SEARCHDIR}"
     cd ${MYTB}
-    node dist/backend/serverAdmin.js --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --debug true > $SEARCHDIR/findFilesInDb.tmp && sed -e '/DONE - command finished/,$d' $SEARCHDIR/findFilesInDb.tmp > $SEARCHDIR/findFilesInDb.json
+    node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --debug true > $SEARCHDIR/findFilesInDb.tmp && sed -e '/DONE - command finished/,$d' $SEARCHDIR/findFilesInDb.tmp > $SEARCHDIR/findFilesInDb.json
     cd ${CWD}
 fi
 

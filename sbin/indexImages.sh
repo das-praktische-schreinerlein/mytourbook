@@ -2,6 +2,7 @@
 # exit on error
 set -e
 CWD=$(pwd)
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 function dofail {
     cd $CWD
     printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
@@ -13,9 +14,10 @@ LIREINDEXER_NUMTHREADS=8
 LIREINDEXER_FEATURES=CEDD,FCTH,OpponentHistogram,ColorLayout,JCD,SimpleColorHistogram
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
-source ./configure-environment.bash
+source ${SCRIPTPATH}/configure-environment.bash
 
 echo "now: running indexing mytb-images from '$W_MYTB_INDEXSRC_MEDIADIR' to '$W_MYTB_INDEXDIR'"
+cd ${LIRETOOLS}/sbin
 ${LIRETOOLS}/sbin/indexImages.sh "$W_MYTB_INDEXSRC_MEDIADIR" "$W_MYTB_INDEXDIR" "$LIREINDEXER_FEATURES" "$LIREINDEXER_NUMTHREADS"
 cd ${CWD}
 

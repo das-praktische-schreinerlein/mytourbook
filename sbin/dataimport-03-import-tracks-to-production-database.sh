@@ -2,6 +2,7 @@
 # exit on error
 set -e
 CWD=$(pwd)
+SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 function dofail {
     cd $CWD
     printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
@@ -27,11 +28,11 @@ done
 echo "start - import track to production-database"
 
 echo "now: configure linux vars: run configure-environment.bash"
-source configure-environment.bash
+source ${SCRIPTPATH}/configure-environment.bash
 
 echo "now: initialize production-database (mysql)"
 cd ${MYTB}
-node_modules/.bin/db-migrate up --migrations-dir migrations/mytbdb --config config/db-migrate-database.json --env mytbdb_mysql
+node_modules/.bin/db-migrate up --migrations-dir migrations/mytbdb --config ${CONFIG_BASEDIR}db-migrate-database.json --env mytbdb_mysql
 cd $CWD
 
 echo "YOUR TODO: start facetcache for production-database in separate shell' cd ${MYTB} && npm run backend-start-server-managed-facetcache-dev && cd $CWD'"
@@ -46,7 +47,7 @@ echo "now: export import-database"
 if [[ ! -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" && ! -f "${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json" ]]; then
   echo "now: create image-export-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command exportTourDoc  -c config/backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+  node dist/backend/serverAdmin.js --debug --command exportTourDoc  -c ${CONFIG_BASEDIR}backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
   cd $CWD
 else
   if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" ]; then
@@ -76,8 +77,8 @@ done
 
 echo "now: import into production-database"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c config/backend.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
-mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json
+node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c ${CONFIG_BASEDIR}backend.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+mv ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json
 cd $CWD
 
 echo "YOUR TODO: update appIds after check"
