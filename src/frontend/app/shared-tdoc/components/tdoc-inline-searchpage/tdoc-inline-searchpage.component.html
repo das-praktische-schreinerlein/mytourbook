@@ -51,6 +51,10 @@
                            [layout]="layout"
                            [short]="short"
                            (show)="onShowDoc($event)"
+                           [playRecord]="curPlayingRecord"
+                           [playerIdPrefix]="playerIdPrefix"
+                           (playerStarted)="onPlayerStarted($event)"
+                           (playerStopped)="onPlayerStopped($event)"
                            (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list>
         </div>
         <div class="container" *ngIf="showResultList">

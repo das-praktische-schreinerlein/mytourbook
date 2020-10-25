@@ -27,6 +27,7 @@
                 <app-tdoc-list [searchResult]="searchResult"
                                [baseSearchUrl]="baseSearchUrl"
                                [layout]="layout"
+                               [playRecord]="curPlayingRecord"
                                (playerStarted)="onPlayerStarted($event)"
                                (playerStopped)="onPlayerStopped($event)"
                                (show)="onShowDoc($event)"></app-tdoc-list>

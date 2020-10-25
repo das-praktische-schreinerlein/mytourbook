@@ -53,7 +53,7 @@ export class TourDocListItemPageComponent extends AbstractInlineComponent {
     public layout: Layout;
 
     @Input()
-    public short? = false;
+    public short ? = false;
 
     @Input()
     public showItemObjectsFlag?: false;

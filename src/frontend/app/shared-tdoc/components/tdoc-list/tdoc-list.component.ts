@@ -25,12 +25,6 @@ export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, 
     @Output()
     public showItemOnMap: EventEmitter<CommonDocRecord> = new EventEmitter();
 
-    @Output()
-    public playerStarted: EventEmitter<TourDocRecord> = new EventEmitter();
-
-    @Output()
-    public playerStopped: EventEmitter<TourDocRecord> = new EventEmitter();
-
     public Layout = Layout;
 
     private lightboxAlbumConfig: CommonDocLightboxAlbumConfig = {
@@ -50,14 +44,6 @@ export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, 
             this.show.emit(record);
         }
         return false;
-    }
-
-    onPlayerStarted(tdoc: TourDocRecord) {
-        this.playerStarted.emit(tdoc);
-    }
-
-    onPlayerStopped(tdoc: TourDocRecord) {
-        this.playerStopped.emit(tdoc);
     }
 
     onShowItemOnMap(tdoc: TourDocRecord) {

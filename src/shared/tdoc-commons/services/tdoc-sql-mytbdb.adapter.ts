@@ -143,42 +143,6 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
         return facets;
     }
 
-    protected extractTable(params: AdapterQuery): string {
-        if (params.where === undefined) {
-            return undefined;
-        }
-
-        const types = params.where['type_txt'];
-        if (types !== undefined && types.in !== undefined && types.in.length === 1) {
-            const tabKey = types.in[0].toLowerCase();
-            if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
-                return tabKey;
-            }
-            return undefined;
-        }
-
-        const ids = params.where['id'];
-        if (ids !== undefined && ids.in_number !== undefined && ids.in_number.length === 1) {
-            const tabKey = ids.in_number[0].replace(/_.*/g, '').toLowerCase();
-            if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
-                return tabKey;
-            }
-
-            return undefined;
-        }
-
-        if (ids !== undefined && ids.in !== undefined && ids.in.length === 1) {
-            const tabKey = ids.in[0].replace(/_.*/g, '').toLowerCase();
-            if (this.dbModelConfig.getTableConfigForTableKey(tabKey) !== undefined) {
-                return tabKey;
-            }
-
-            return undefined;
-        }
-
-        return undefined;
-    }
-
     protected queryTransformToAdapterWriteQuery(method: string, mapper: Mapper, props: any, opts: any): WriteQueryData {
         const query = super.queryTransformToAdapterWriteQuery(method, mapper, props, opts);
         if (query.tableConfig.key === 'image') {

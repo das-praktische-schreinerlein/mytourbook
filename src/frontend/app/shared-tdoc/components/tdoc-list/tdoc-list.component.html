@@ -26,6 +26,8 @@
                                 [multiActionManager]="multiActionManager"
                                 (show)="onShow($event)"
                                 (showImage)="onShowImage($event)"
+                                (playerStarted)="onPlayerStarted($event)"
+                                (playerStopped)="onPlayerStopped($event)"
                                 (showItemOnMap)="onShowItemOnMap($event)"
                                 *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-small>
         </ng-container>
@@ -42,6 +44,8 @@
                                       [multiActionManager]="multiActionManager"
                                       (show)="onShow($event)"
                                       (showImage)="onShowImage($event)"
+                                      (playerStarted)="onPlayerStarted($event)"
+                                      (playerStopped)="onPlayerStopped($event)"
                                       (showItemOnMap)="onShowItemOnMap($event)"
                                       *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-flat>
         </ng-container>
@@ -58,6 +62,8 @@
                                      [multiActionManager]="multiActionManager"
                                      (show)="onShow($event)"
                                      (showImage)="onShowImage($event)"
+                                     (playerStarted)="onPlayerStarted($event)"
+                                     (playerStopped)="onPlayerStopped($event)"
                                      (showItemOnMap)="onShowItemOnMap($event)"
                                      *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-thin>
         </ng-container>
@@ -74,6 +80,8 @@
                                 [multiActionManager]="multiActionManager"
                                 (show)="onShow($event)"
                                 (showImage)="onShowImage($event)"
+                                (playerStarted)="onPlayerStarted($event)"
+                                (playerStopped)="onPlayerStopped($event)"
                                 (showItemOnMap)="onShowItemOnMap($event)"
                                 *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item>
         </ng-container>
