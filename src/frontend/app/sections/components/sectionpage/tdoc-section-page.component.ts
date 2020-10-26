@@ -110,7 +110,10 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                 filters['perPage'] = 5;
             }
         } else {
-            filters['perPage'] = 5;
+            filters['perPage'] = 6;
+            if (this.layoutSize && this.layoutSize.width > 1300 && this.layoutSize.width < 1400) {
+                filters['perPage'] = 5;
+            }
         }
 
         if (sort) {
