@@ -33,11 +33,7 @@ module.exports = {
     },
     module: {
         rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loaders: ['babel']
-            }
+            { test: /\.ts$/, loader: 'ts-loader' }
         ],
     },
     externals: nodeModules,

@@ -5,13 +5,13 @@ import {enableProdMode} from '@angular/core';
 import * as express from 'express';
 import {join} from 'path';
 import {FirewallConfig} from '@dps/mycms-server-commons/dist/server-commons/firewall.commons';
-import {CacheConfig} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {ConfigureServerModule} from '@dps/mycms-server-commons/dist/server-commons/configure-server.module';
 import {FirewallModule} from '@dps/mycms-server-commons/dist/server-commons/firewall.module';
 import {AngularUniversalFrontendServerModule} from './angular-universal-frontend-server.module';
 import * as fs from 'fs';
 import {DnsBLModule} from '@dps/mycms-server-commons/dist/server-commons/dnsbl.module';
 import {CacheModeType, ServerModuleConfig} from './simple-frontend-server.module';
+import {BackendConfigType} from './backend.commons';
 
 const minimist = require ('minimist');
 
@@ -29,9 +29,7 @@ const filePathFirewallConfigJson = argv['f'] || argv['firewall'] || 'config/fire
 
 export interface ServerConfig {
     filePathErrorDocs: string;
-    backendConfig: {
-        cacheConfig: CacheConfig;
-    };
+    backendConfig: BackendConfigType;
     firewallConfig: FirewallConfig;
     frontendConfig: {
         port: number,

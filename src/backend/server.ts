@@ -1,4 +1,5 @@
-import express from 'express';
+// These are important and needed before anything else
+import * as express from 'express';
 import * as fs from 'fs';
 import minimist from 'minimist';
 import {ServerConfig, ServerModuleLoader} from './server-module.loader';

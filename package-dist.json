@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "angular-cli": {},
   "scripts": {
-    "electron-rebuild": "npm run electron-ebuild-sqlite3",
+    "electron-rebuild": "npm run electron-rebuild-sqlite3",
     "electron-rebuild-sqlite3": "..\\node_modules\\.bin\\electron-rebuild -f -w sqlite3",
     "backend-serve-dev": "node dist/backend/backend.js",
     "backend-serve-beta": "node dist/backend/backend.js -c config/backend.beta.json -f config/firewall.beta.json",

@@ -111,7 +111,7 @@ export class SimpleFrontendServerModule {
     }
 
     protected createCacheFilename(url: string): string {
-        return url.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '-'
+        return url.replace(/[^a-z0-9]/gi, '_').toLocaleLowerCase() + '-'
             + require('crypto').createHash('md5').update(url).digest('hex')
             + '.html';
     }
