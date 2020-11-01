@@ -125,6 +125,22 @@ export class MediaManagerCommand implements AbstractCommand {
                     personalRateOverall: personalRateOverall,
                     sort: 'm3uExport',
                     pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+
+                const rateMinFilter = argv['rateMinFilter'];
+                if (rateMinFilter !== undefined && Number.isInteger(rateMinFilter)) {
+                    const rateFilters = [];
+                    for (let i = Number.parseInt(rateMinFilter, 10); i >= 0 && i <= 15; i++) {
+                        rateFilters.push(i + '');
+                    }
+                    if (rateFilters.length > 0) {
+                        searchForm.personalRateOverall = rateFilters.join(',');
+                    }
+                }
+                const blockedFilter = argv['showNonBlockedOnly'];
+                if (blockedFilter !== undefined && blockedFilter.toLowerCase() !== 'showall') {
+                    searchForm.moreFilter = 'blocked_i:null,0';
+                }
+
                 console.log('START processing: ' + action, searchForm, exportDir, processingOptions);
 
                 promise = tdocManagerModule.exportMediaFiles(searchForm, <MediaExportProcessingOptions & ProcessingOptions> {

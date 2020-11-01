@@ -11,32 +11,44 @@ function dofail {
 
 # check parameters
 if [ "$#" -lt 1 ]; then
-    dofail "USAGE: dataexport.playlist.sh EXPORTDIR [PLAYLISTNAME PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE] \nFATAL: requires 1 parameters " 1
+    dofail "USAGE: dataexport.playlist.sh EXPORTDIR [PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE RATEMINFILTER BLOCKEDFILTER] \nFATAL: requires 1 parameters " 1
     exit 1
 fi
 
 EXPORTDIR=$1
-PLAYLISTNAME=$2
-PLAYLISTFILE=${3:-${PLAYLISTNAME}}
+PLAYLISTNAMEFILTER=$2
+PLAYLISTFILE=${3:-${PLAYLISTNAMEFILTER}}
 RESOLUTIONPROFILE=${4:-default}
 DIPROFILE=${5:-default}
 FILEPROFILE=${6:-default}
+CONFIGPROFILE=${7}
+RATEMINFILTER=${8}
+SHOWNONBLOCKEDONLY=${9:showall}
 
 # check parameters
 if [ ! -d "${EXPORTDIR}" ]; then
     dofail "USAGE: dataexport.playlist.sh EXPORTDIR \nFATAL: EXPORTDIR not exists " 1
 fi
 if [ -d "${EXPORTDIR}/${PLAYLISTFILE}" ]; then
-    dofail "USAGE: dataexport.playlist.sh EXPORTDIR PLAYLISTNAME PLAYLISTFILE \nFATAL: PLAYLISTFILE is directory " 1
+    dofail "USAGE: dataexport.playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE \nFATAL: PLAYLISTFILE is directory " 1
 fi
 
-echo "start - prepare file export: playlist='${PLAYLISTNAME}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
+echo "start - prepare file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
 
+# chekc parameters
+CONFGFILE=${CONFIG_BASEDIR}backend.json
+if [ "${CONFIGPROFILE}" != "" ]; then
+    CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
+fi
+if [ ! -f "${CONFGFILE}" ]; then
+    dofail "USAGE: dataexport.playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE \nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
+fi
+
 if [ "${AUTOSTARTEXPORT}" != "true" ]; then
-  echo "OPEN: Do you want to start image export: playlist='${PLAYLISTNAME}' to '${EXPORTDIR}' m3u='${PLAYLISTFILE}'  directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'?"
+  echo "OPEN: Do you want to start image export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' m3u='${PLAYLISTFILE}'  directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'?"
   select yn in "Yes" "No"; do
       case $yn in
           Yes ) break;;
@@ -47,7 +59,7 @@ fi
 
 echo "now: generate export"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  -c ${CONFIG_BASEDIR}backend.json --exportDir "$EXPORTDIR" --directoryProfile ${DIPROFILE} --fileNameProfile ${FILEPROFILE} --resolutionProfile ${RESOLUTIONPROFILE} --parallel 20 --playlists "${PLAYLISTNAME}" --exportName "${PLAYLISTFILE}-images"
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  -c ${CONFIG_BASEDIR}backend.json --exportDir "$EXPORTDIR" --directoryProfile ${DIPROFILE} --fileNameProfile ${FILEPROFILE} --resolutionProfile ${RESOLUTIONPROFILE} --parallel 20 --playlists "${PLAYLISTNAME}" --exportName "${PLAYLISTFILE}-videos"
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
 
-echo "done - file export: playlist='${PLAYLISTNAME}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"
+echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"

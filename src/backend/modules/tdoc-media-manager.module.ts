@@ -23,14 +23,13 @@ import {TourDocMediaFileImportManager} from './tdoc-mediafile-import.service';
 
 export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourDocRecord, TourDocSearchForm,
     TourDocSearchResult, TourDocDataService, TourDocServerPlaylistService, TourDocExportService> {
-    private readonly knex;
+    private knex;
     private readonly sqlQueryBuilder: SqlQueryBuilder;
 
-    constructor(backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule,
+    constructor(protected backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule,
                 exportService: TourDocExportService, protected mediaFileImportManager: TourDocMediaFileImportManager) {
         super(backendConfig, dataService, mediaManager, exportService);
         this.sqlQueryBuilder = new SqlQueryBuilder();
-        this.knex = this.createKnex(backendConfig);
     }
 
     public updateDateOfCommonDocRecord(tdoc: TourDocRecord, myDate: Date): Promise<{}> {
@@ -74,6 +73,7 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
 
     public findCommonDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType,
                                            additionalMappings: {[key: string]: FileSystemDBSyncType}): Promise<DBFileInfoType[]> {
+        this.initKnex();
         return new Promise<DBFileInfoType[]>((resolve, reject) => {
             const createdInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.created).getTime() / 1000);
             const lastModInSecondsSinceEpoch = Math.round(DateUtils.parseDate(fileInfo.lastModified).getTime() / 1000);
@@ -341,6 +341,12 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                 return reject(reason);
             });
         });
+    }
+
+    protected initKnex(): void {
+        if (this.knex === undefined) {
+            this.knex = this.createKnex(this.backendConfig);
+        }
     }
 
     protected createKnex(backendConfig: BackendConfigType): any {
