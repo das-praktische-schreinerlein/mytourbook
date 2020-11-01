@@ -136,7 +136,7 @@ export class MediaManagerCommand implements AbstractCommand {
                         searchForm.personalRateOverall = rateFilters.join(',');
                     }
                 }
-                const blockedFilter = argv['showNonBlockedOnly'];
+                const blockedFilter = argv['showNonBlockedOnly'] + '';
                 if (blockedFilter !== undefined && blockedFilter.toLowerCase() !== 'showall') {
                     searchForm.moreFilter = 'blocked_i:null,0';
                 }

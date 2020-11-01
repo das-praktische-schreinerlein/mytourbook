@@ -38,7 +38,7 @@ echo "start - prepare file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORT
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
 
-# chekc parameters
+# check parameters
 CONFGFILE=${CONFIG_BASEDIR}backend.json
 if [ "${CONFIGPROFILE}" != "" ]; then
     CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
