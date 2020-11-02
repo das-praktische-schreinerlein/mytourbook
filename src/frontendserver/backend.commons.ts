@@ -9,7 +9,6 @@ import {
     CommonSqlConnectionConfigType,
     CommonVideoBackendConfigType
 } from '@dps/mycms-server-commons/dist/backend-commons/modules/backend.commons';
-import {ObjectDetectionManagerBackendConfig} from '../shared/tdoc-commons/services/common-queued-object-detection-processing.service';
 
 // tslint:disable-next-line:no-empty-interface
 export interface KeywordMapperConfigType extends CommonKeywordMapperConfigType {
@@ -30,8 +29,7 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
     CommonTrackBackendConfigType,
     CommonAudioBackendConfigType<KeywordMapperConfigType, CacheConfig>,
     CommonImageBackendConfigType<KeywordMapperConfigType, CacheConfig>,
-    CommonVideoBackendConfigType<KeywordMapperConfigType, CacheConfig>,
-    ObjectDetectionManagerBackendConfig {
+    CommonVideoBackendConfigType<KeywordMapperConfigType, CacheConfig> {
     tdocDataStoreAdapter: string,
     tdocWritable: boolean,
     TourDocSqlMytbDbAdapter: SqlConnectionConfigType

@@ -87,7 +87,7 @@ echo "OPTIONAL: read image-dates"
 echo "OPEN: Do you want to read the image-dates?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command imageManager --action readImageDates -c ${CONFIG_BASEDIR}backend.import.json; break;;
+        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command imageManager --action readImageDates --debug true -c ${CONFIG_BASEDIR}backend.import.json; break;;
         No) break;;
     esac
 done
@@ -96,21 +96,21 @@ echo "OPTIONAL: read video-dates"
 echo "OPEN: Do you want to read the video-dates?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command imageManager --action readVideoDates -c ${CONFIG_BASEDIR}backend.import.json; break;;
+        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command imageManager --action readVideoDates --debug true -c ${CONFIG_BASEDIR}backend.import.json; break;;
         No) break;;
     esac
 done
 
 echo "now: create scaled image-copies"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.import.json
+node dist/backend/serverAdmin.js --command imageManager --action scaleImages --debug true -c config/backend.import.json
 cd $CWD
 
 echo "now: create scaled video-copies"
 cd ${MYTB}
-node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action generateVideoScreenshotFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import//video_screenshot/ --debug true
-node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action generateVideoPreviewFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_thumbnail/ --debug true
-node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action scaleVideosFromMediaDirToMP4 --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_x600/ --debug true
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action generateVideoScreenshotFromMediaDir --debug true --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import//video_screenshot/ --debug true
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action generateVideoPreviewFromMediaDir --debug true --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_thumbnail/ --debug true
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action scaleVideosFromMediaDirToMP4 --debug true --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_x600/ --debug true
 cd $CWD
 
 echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"
