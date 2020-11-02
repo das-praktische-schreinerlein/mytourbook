@@ -15,7 +15,7 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 IMPORTKEY=$1
-./setImportDirectory.sh $IMPORTKEY
+${SCRIPTPATH}/setImportDirectory.sh $IMPORTKEY
 
 echo "OPEN: Do you want to import tracks from import-database to production-database?"
 select yn in "Yes" "No"; do
