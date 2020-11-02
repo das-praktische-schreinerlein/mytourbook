@@ -8,6 +8,9 @@ import {utils} from 'js-data';
 import {RawSqlQueryData} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 import {FileInfoType, FileSystemDBSyncType} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
 import {BackendConfigType} from './backend.commons';
+import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
+import {TourDocExportService} from './tdoc-export.service';
+import {TourDocMediaFileImportManager} from './tdoc-mediafile-import.service';
 
 describe('TourDocMediaManagerModule', () => {
     const backendConfig = {
@@ -32,6 +35,12 @@ describe('TourDocMediaManagerModule', () => {
 
     class TestTourDocMediaManagerModule extends TourDocMediaManagerModule {
         public myKnex;
+        constructor(protected backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule,
+                    exportService: TourDocExportService, protected mediaFileImportManager: TourDocMediaFileImportManager) {
+            super(backendConfig, dataService, mediaManager, exportService, mediaFileImportManager);
+            this.initKnex();
+        }
+
         protected createKnex(localBackendConfig: BackendConfigType): any {
             this.myKnex = TestHelper.createKnex(backendConfig.TourDocSqlMytbDbAdapter.client, []);
             return this.myKnex;
