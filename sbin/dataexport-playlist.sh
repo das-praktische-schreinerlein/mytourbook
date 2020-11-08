@@ -15,13 +15,13 @@ if [ "$#" -lt 1 ]; then
     exit 1
 fi
 
-EXPORTDIR=$1
-PLAYLISTNAMEFILTER=$2
-PLAYLISTFILE=${3:-${PLAYLISTNAMEFILTER}}
-RESOLUTIONPROFILE=${4:-default}
-DIPROFILE=${5:-default}
-FILEPROFILE=${6:-default}
-CONFIGPROFILE=${7}
+CONFIGPROFILE=${1}
+EXPORTDIR=$2
+PLAYLISTNAMEFILTER=$3
+PLAYLISTFILE=${4:-${PLAYLISTNAMEFILTER}}
+RESOLUTIONPROFILE=${5:-default}
+DIPROFILE=${6:-default}
+FILEPROFILE=${7:-default}
 RATEMINFILTER=${8}
 SHOWNONBLOCKEDONLY=${9:showall}
 
@@ -39,12 +39,9 @@ echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
 
 # check parameters
-CONFGFILE=${CONFIG_BASEDIR}backend.json
-if [ "${CONFIGPROFILE}" != "" ]; then
-    CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
-fi
+CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
 if [ ! -f "${CONFGFILE}" ]; then
-    dofail "USAGE: dataexport.playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE \nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
+    dofail "USAGE: dataexport-playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE \nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
 fi
 
 if [ "${AUTOSTARTEXPORT}" != "true" ]; then

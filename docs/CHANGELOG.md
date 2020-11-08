@@ -22,6 +22,7 @@
 - backend: added media-export
 - frontend: use player-events of commons
 - backend: use default-implementation of extractTable
+- use current deps in package-lock.version
 
 ### bug fixes
 - none
@@ -29,6 +30,7 @@
 ### breaking changes
 - build: upgraded all dev-dependencies to latest
 - build: use angular-7
+- configuration: removed default-config and renamed default-environment to dev
 
 ### known issues
 - frontendserver: angularuniversal-support broken
@@ -71,7 +73,7 @@
 - frontend: configure preview-resolution in environment
 - common: used x300 instead of x600 for image-preview -> run scaleImages to create non-existing images
 ```
-run node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.json --debug --parallel 10
+run node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.dev.json --debug --parallel 10
 ```
 - backend: dont map text to html-fields because markdown-fields should be rendered
 

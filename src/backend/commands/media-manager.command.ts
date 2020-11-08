@@ -22,7 +22,12 @@ export class MediaManagerCommand implements AbstractCommand {
         argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);
         argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
 
-        const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+        const filePathConfigJson = argv['c'] || argv['backend'];
+        if (filePathConfigJson === undefined) {
+            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
+            process.exit(-1);
+        }
+
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
         const writable = backendConfig.tdocWritable === true || backendConfig.tdocWritable === 'true';
         const dataService = TourDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);

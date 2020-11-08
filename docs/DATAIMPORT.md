@@ -19,7 +19,7 @@ source installer/db/mysql/mytbexportdb/init_02_create-user.sql
 ``` 
 
 ### configure local environments
-- copy orig from config and configure a ```backend.import.json``` and ```backend.json``` with another port and SqlMytbDb in ```overrides/after-build/config```
+- copy orig from config and configure a ```backend.import.json``` and ```backend.dev.json``` with another port and SqlMytbDb in ```overrides/after-build/config```
 - configure ```src/frontend/environments/environment.ts``` to use this as backend-url 
 
 ## import tracks to import-database

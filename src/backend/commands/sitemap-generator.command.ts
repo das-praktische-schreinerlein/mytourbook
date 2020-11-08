@@ -13,8 +13,13 @@ import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 export class SiteMapGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {
-        const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+        const filePathConfigJson = argv['c'] || argv['backend'];
         const filePathSitemapConfigJson = argv['s'] || argv['sitemap'] || argv['_'][0];
+        if (filePathConfigJson === undefined || filePathSitemapConfigJson === undefined) {
+            console.error('ERROR - parameters required backendConfig: "-c | --backend" sitemapConfig: "-s | --sitemap"');
+            process.exit(-1);
+        }
+
         const generatorConfig = {
             backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'})),
             sitemapConfig: JSON.parse(fs.readFileSync(filePathSitemapConfigJson, {encoding: 'utf8'}))

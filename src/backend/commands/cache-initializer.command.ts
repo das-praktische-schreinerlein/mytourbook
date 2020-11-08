@@ -8,7 +8,12 @@ import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.serv
 
 export class CacheInitializerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
-        const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+        const filePathConfigJson = argv['c'] || argv['backend'];
+        if (filePathConfigJson === undefined) {
+            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
+            process.exit(-1);
+        }
+
         const serverConfig: ServerConfig = {
             apiDataPrefix: '/api/v1',
             apiAssetsPrefix: '/api/assets',

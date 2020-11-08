@@ -7,8 +7,13 @@ import {ServerConfig, ServerModuleLoader} from './server-module.loader';
 const argv = minimist(process.argv.slice(2));
 
 const debug = argv['debug'] || false;
-const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
-const filePathFirewallConfigJson = argv['f'] || argv['firewall'] || 'config/firewall.json';
+const filePathConfigJson = argv['c'] || argv['backend'];
+const filePathFirewallConfigJson = argv['f'] || argv['firewall'];
+if (filePathConfigJson === undefined || filePathFirewallConfigJson === undefined) {
+    console.error('ERROR - parameters required backendConfig: "-c | --backend" firewallConfig: "-f | --firewall"');
+    process.exit(-1);
+}
+
 const serverConfig: ServerConfig = {
     apiDataPrefix: '/api/v1',
     apiAssetsPrefix: '/api/assets',

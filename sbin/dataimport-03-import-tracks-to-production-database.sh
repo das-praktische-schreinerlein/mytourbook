@@ -77,7 +77,7 @@ done
 
 echo "now: import into production-database"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c ${CONFIG_BASEDIR}backend.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c ${CONFIG_BASEDIR}backend.dev.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
 mv ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json
 cd $CWD
 

@@ -16,7 +16,12 @@ export class TourDocExporterCommand implements AbstractCommand {
         const perRun = 999;
         const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];
 
-        const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+        const filePathConfigJson = argv['c'] || argv['backend'];
+        if (filePathConfigJson === undefined) {
+            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
+            process.exit(-1);
+        }
+
         const serverConfig = {
             backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
             readOnly: false

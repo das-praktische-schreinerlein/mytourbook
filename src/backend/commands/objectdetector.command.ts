@@ -7,7 +7,12 @@ import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/
 
 export class ObjectDetectionManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
-        const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+        const filePathConfigJson = argv['c'] || argv['backend'];
+        if (filePathConfigJson === undefined) {
+            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
+            process.exit(-1);
+        }
+
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
 
         const detectionDataStore: CommonObjectDetectionProcessingDatastore =

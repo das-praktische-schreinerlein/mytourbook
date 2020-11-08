@@ -12,7 +12,12 @@ import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
 
 export class RedirectGeneratorCommand implements AbstractCommand {
     public process(argv): Promise<any> {
-        const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.json';
+        const filePathConfigJson = argv['c'] || argv['backend'];
+        if (filePathConfigJson === undefined) {
+            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
+            process.exit(-1);
+        }
+
         const generatorConfig = {
             backendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'})),
         };

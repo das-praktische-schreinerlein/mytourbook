@@ -23,7 +23,12 @@ const staticFolder = join(process.cwd(), 'dist/static');
 const distProfile = 'DIST_PROFILE';
 const distServerProfile = 'DIST_SERVER_PROFILE';
 
-const filePathConfigJson = argv['frontend'] || 'config/frontend.json';
+const filePathConfigJson = argv['frontend'];
+if (filePathConfigJson === undefined) {
+    console.error('ERROR - parameters required frontendConfig:  "--frontend"');
+    process.exit(-1);
+}
+
 const siteMapBaseUrl = argv['sitemapbase'] || 'https://www.michas-ausflugstipps.de/mytb/de/';
 
 export interface ServerConfig {
