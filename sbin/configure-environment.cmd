@@ -1,5 +1,7 @@
-set CONFIG_BASEDIR=config\
-set MYTB=..\
+SET MYSCRIPTPATH=%~dp0
+set MYCMS=%MYSCRIPTPATH%..\
+set CONFIG_BASEDIR=%MYCMS%config\
+set MYTB=%MYSCRIPTPATH%..\
 set MYTBTOOLS=%MYTB%\sbin\
 set LIRETOOLS=F:\Projekte\liretools\
 
