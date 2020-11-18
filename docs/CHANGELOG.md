@@ -25,7 +25,7 @@
 - use current deps in package-lock.version
 
 ### bug fixes
-- none
+- frontendserver: fixed angular-universal-support
  
 ### breaking changes
 - build: upgraded all dev-dependencies to latest
@@ -33,7 +33,7 @@
 - configuration: removed default-config and renamed default-environment to dev
 
 ### known issues
-- frontendserver: angularuniversal-support broken
+- none
 
 
 

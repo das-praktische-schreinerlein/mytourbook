@@ -13,7 +13,7 @@ import {ModuleMapLoaderModule} from '@nguniversal/module-map-ngfactory-loader';
         ModuleMapLoaderModule
     ],
     providers: [
-        { provide: LOCALE_ID, useValue: 'de'},
+        { provide: LOCALE_ID, useValue: 'de'}
     ],
     // Since the bootstrapped component is not inherited from your
     // imported AppModule, it needs to be repeated here.

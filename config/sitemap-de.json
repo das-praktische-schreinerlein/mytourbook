@@ -1,7 +1,7 @@
 {
     "fileDir": "dist/",
-    "sitemapBaseUrl": "http://localhost:4200/",
-    "showBaseUrl": "http://localhost:4200/",
+    "sitemapBaseUrl": "http://localhost:4001/mytbdev/de/",
+    "showBaseUrl": "http://localhost:4001/mytbdev/de/",
     "locale": "de",
     "perPage": 999,
     "tdocSearchForm": {

@@ -22,6 +22,7 @@ const maxNotCached = argv['maxNotCached'] || 999999;
 const staticFolder = join(process.cwd(), 'dist/static');
 const distProfile = 'DIST_PROFILE';
 const distServerProfile = 'DIST_SERVER_PROFILE';
+const localSitemapUrl = argv['localSitemapUrl'];
 
 const filePathConfigJson = argv['frontend'];
 if (filePathConfigJson === undefined) {
@@ -58,11 +59,11 @@ app.listen(port, function () {
 });
 
 const siteBaseUrl = 'http://localhost:' + port + '/' + distProfile;
-const defaultSiteMaps = [siteMapBaseUrl + 'sitemap-tdoc-de.xml', siteMapBaseUrl + 'sitemap-pdoc-de.xml'];
+const defaultSiteMaps = [siteMapBaseUrl + 'sitemap-pdoc-de.xml', siteMapBaseUrl + 'sitemap-tdoc-de.xml'];
 const siteUrls = [];
 let notCached = 0;
 
-const getsiteUrl = function (nr) {
+const getsiteUrl = function (nr: number) {
     if (nr >= siteUrls.length) {
         process.exit(0);
         return;
@@ -73,52 +74,72 @@ const getsiteUrl = function (nr) {
         console.warn('SKIP - illegal url:' + url);
     }
     return Axios(url).then(response => {
-            if (response.status === 200) {
-                console.log('DONE - ' + (nr + 1) + '/' + siteUrls.length + ' got cached url:' + url, response.status);
-            } else {
-                console.log('DONE - ' + (nr + 1) + '/' + siteUrls.length + ' got not cached url:' + url, response.status);
-                notCached = notCached + 1;
-                if (notCached >= maxNotCached) {
-                    console.warn('WARNING - stopped after ' + (nr + 1) + '/' + siteUrls.length + ' with not cached:' + notCached, siteUrls);
-                    process.exit(2);
-                    return;
-                }
+        if (response.status === 200) {
+            console.log('DONE - ' + (nr + 1) + '/' + siteUrls.length + ' got cached url:' + url, response.status);
+        } else {
+            console.log('DONE - ' + (nr + 1) + '/' + siteUrls.length + ' got not cached url:' + url, response.status);
+            notCached = notCached + 1;
+            if (notCached >= maxNotCached) {
+                console.warn('WARNING - stopped after ' + (nr + 1) + '/' + siteUrls.length + ' with not cached:' + notCached, siteUrls);
+                process.exit(2);
+                return;
             }
-            return getsiteUrl(nr + 1);
-        }).catch(error => {
-            console.warn('WARNING - got error for url:' + url, error);
-            return getsiteUrl(nr + 1);
-        });
+        }
+        return getsiteUrl(nr + 1);
+    }).catch(error => {
+        console.warn('WARNING - got error for url:' + url, error);
+        return getsiteUrl(nr + 1);
+    });
 };
 
-sitemaps.sitemapsInRobots(siteMapBaseUrl + 'robots.txt', function(err, siteMaps) {
-    if (err) {
-        console.error('error while parsing robots.txt', err);
-        process.exit(2);
-    }
-    if (!siteMaps || siteMaps.length <= 0) {
-       siteMaps = defaultSiteMaps;
-    }
-
+const parseSiteMaps = function (siteMaps: string[]) {
     sitemaps.parseSitemaps(siteMaps,
         function(url) {
             siteUrls.push(url.toString().replace(siteMapBaseUrl, siteBaseUrl));
-        }, function(err2, siteMaps2) {
+        }, function(err, siteMaps2) {
+            if (err) {
+                console.error('error while parsing sitemaps', err);
+                process.exit(2);
+            }
+
+            console.log('parsed sitemaps:', siteMaps2);
+            console.log('crawl urls:', siteUrls);
+
+            // disable debug-logging
+            if (!debug) {
+                console.log('no debug mode - deactivate debug', debug);
+                console.debug = function() {};
+                console.log = function() {};
+            }
+
+            return getsiteUrl(0);
+        });
+}
+
+if (localSitemapUrl) {
+    sitemaps.parseSitemaps(localSitemapUrl, function () {}, function(err, siteMaps) {
         if (err) {
-            console.error('error while parsing sitemaps', err);
+            console.error('error while parsing localSitemapUrl', localSitemapUrl, err);
             process.exit(2);
         }
 
-        console.log('parsed sitemaps:', siteMaps2);
-        console.log('crawl urls:', siteUrls);
-
-        // disable debug-logging
-        if (!debug) {
-            console.log('no debug mode - deactivate debug', debug);
-            console.debug = function() {};
-            console.log = function() {};
+        if (!siteMaps || siteMaps.length <= 0) {
+            siteMaps = defaultSiteMaps;
         }
 
-        return getsiteUrl(0);
+        parseSiteMaps(siteMaps);
     });
-});
+} else {
+    sitemaps.sitemapsInRobots(siteMapBaseUrl + 'robots.txt', function(err, siteMaps) {
+        if (err) {
+            console.error('error while parsing ' + siteMapBaseUrl + 'robots.txt', err);
+            process.exit(2);
+        }
+        if (!siteMaps || siteMaps.length <= 0) {
+            siteMaps = defaultSiteMaps;
+        }
+
+        parseSiteMaps(siteMaps);
+    });
+}
+

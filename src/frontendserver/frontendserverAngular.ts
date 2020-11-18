@@ -1,7 +1,6 @@
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
-import {enableProdMode} from '@angular/core';
 import * as express from 'express';
 import {join} from 'path';
 import {FirewallConfig} from '@dps/mycms-server-commons/dist/server-commons/firewall.commons';
@@ -17,8 +16,6 @@ const minimist = require ('minimist');
 
 const argv = minimist(process.argv.slice(2));
 
-// Faster server renders w/ Prod mode (dev mode never needed)
-enableProdMode();
 const debug = argv['debug'] || false;
 const staticFolder = join(process.cwd(), 'dist/static');
 const distProfile = 'DIST_PROFILE';
