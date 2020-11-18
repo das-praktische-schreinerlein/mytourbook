@@ -5,7 +5,7 @@
     "locale": "de",
     "perPage": 999,
     "tdocSearchForm": {
-        "type": "track,route,location,trip,news",
+        "type": "news",
         "sort": "relevance"
     }
 }
