@@ -49,8 +49,6 @@ echo "STEP: build server -> they need the node_modules"
 cd ${WORKSPACE}${MYCMSPROJECT}
 npm run backend-test || exit
 npm run backend-build || exit
-npm run frontendserver-build-server-dev-de || exit
-npm run frontendserver-build-admin-dev-de || exit
 
 #echo "STEP: backup redundant node_modules"
 #cd ${WORKSPACE}mycms-commons
@@ -68,3 +66,6 @@ cd ${WORKSPACE}${MYCMSPROJECT}
 npm run testCoverage || exit
 npm run build-dev || exit
 npm run frontendserver-build-dev-de || exit
+npm run frontendserver-build-server-dev-de || exit
+npm run frontendserver-build-angularserver-dev-de || exit
+npm run frontendserver-build-admin-dev-de || exit
