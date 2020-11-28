@@ -12,7 +12,7 @@ For more information take a look at documentation:
 - [administration instructions](docs/ADMIN.md)
 - [credits for used libraries](docs/CREDITS.md)
 
-MyTourBook is a reimplentation based on the lessons learned from my old projects for managing and publishing my page [legacy www.michas-ausflugstipps.de](http://www.michas-ausflugstipps.de/index.php)
+MyTourBook is a reimplementation based on the lessons learned from my old projects for managing and publishing my page [legacy www.michas-ausflugstipps.de](http://www.michas-ausflugstipps.de/index.php)
 
 - mediadb: managing tracks, images and metadata   
 - [Mat-ImageImportEditor](https://github.com/das-praktische-schreinerlein/Mat-ImageImportEditor): prepare Imageimports

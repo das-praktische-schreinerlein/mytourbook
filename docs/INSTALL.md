@@ -153,7 +153,7 @@ Copy startscript `installer/linux/init.d/mytb*` to `/etc/init.d/` and change pat
 
 Copy files to server
 ```
-package.json
+package-dist.json
 dist
 config
 error_docs
@@ -172,7 +172,7 @@ rm -fr error_docs
 mv $IMPORTDIR/error_docs $APPDIR
 
 rm -fr package.json 
-mv $IMPORTDIR/package.json $APPDIR
+mv $IMPORTDIR/package-dist.json $APPDIR/package.json
 ```
 
 Install packages
