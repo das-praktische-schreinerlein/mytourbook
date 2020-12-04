@@ -160,10 +160,16 @@ cd $CWD
 
 echo "now: generate import-files"
 cd ${MYTB}
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json
 node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp
 sed -e '/DONE - command finished/,$d' ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp | sed -e '0,/.*sqlite does not support inserting default values/d' | sed -e '0,/START processing: generateTourDocRecordsFromMediaDir/d' > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json
 node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp
 sed -e '/DONE - command finished/,$d' ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp | sed -e '0,/.*sqlite does not support inserting default values/d' | sed -e '0,/START processing: generateTourDocRecordsFromMediaDir/d' > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp
 
 echo "OPTIONAL YOUR TODO: fix import-files (location-names...)"
 echo "OPEN: Did fix this files in editor '${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json'?"

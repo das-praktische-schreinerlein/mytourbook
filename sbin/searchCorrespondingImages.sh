@@ -31,6 +31,10 @@ if [ ! -d "${SEARCHDIR}" ]; then
     exit 1
 fi
 
+rm -f $SEARCHDIR/findFilesInLireIndex.tmp
+rm -f $SEARCHDIR/findFilesInLireIndex.json
+rm -f $SEARCHDIR/findFilesInDb.tmp
+rm -f $SEARCHDIR/findFilesInDb.json
 if [ "${USESIMILARITYINDEX}" != "" ]; then
     echo "now: check image with image-index: ${SEARCHDIR}"
     cd ${LIRETOOLS}/sbin
@@ -38,6 +42,7 @@ if [ "${USESIMILARITYINDEX}" != "" ]; then
     cd ${CWD}
     echo "now: check images and image-index-result with database: ${SEARCHDIR}"
     cd ${MYTB}
+
     node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --additionalMappingsFile $SEARCHDIR/findFilesInLireIndex.json --debug true > $SEARCHDIR/findFilesInDb.tmp && sed -e '/DONE - command finished/,$d' $SEARCHDIR/findFilesInDb.tmp > $SEARCHDIR/findFilesInDb.json
     cd ${CWD}
 else
@@ -46,5 +51,7 @@ else
     node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --debug true > $SEARCHDIR/findFilesInDb.tmp && sed -e '/DONE - command finished/,$d' $SEARCHDIR/findFilesInDb.tmp > $SEARCHDIR/findFilesInDb.json
     cd ${CWD}
 fi
+rm -f $SEARCHDIR/findFilesInLireIndex.tmp
+rm -f $SEARCHDIR/findFilesInDb.tmp
 
 echo "done - find correspnding mytb-images for images in search-folder: ${SEARCHDIR}'"
