@@ -134,7 +134,7 @@ fi
 
 echo "now: convert videos: avi/mov... to mp4"
 cd ${MYTB}
-node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --debug true
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --debug true
 cd $CWD
 
 echo "now: rotate mp4-videos"
@@ -160,14 +160,12 @@ cd $CWD
 
 echo "now: generate import-files"
 cd ${MYTB}
-rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log
 rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json
-rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp
+rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log
 rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json
-node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp
-sed -e '/DONE - command finished/,$d' ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp | sed -e '0,/.*sqlite does not support inserting default values/d' | sed -e '0,/START processing: generateTourDocRecordsFromMediaDir/d' > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json
-node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/ --debug true > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp
-sed -e '/DONE - command finished/,$d' ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp | sed -e '0,/.*sqlite does not support inserting default values/d' | sed -e '0,/START processing: generateTourDocRecordsFromMediaDir/d' > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log
+node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json > ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log
 rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.tmp
 rm -f ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.tmp
 

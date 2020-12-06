@@ -20,7 +20,7 @@ import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backe
 export class MediaManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);
-        argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
+        argv['outputFile'] = TourDocFileUtils.normalizeCygwinPath(argv['outputFile']);
 
         const filePathConfigJson = argv['c'] || argv['backend'];
         if (filePathConfigJson === undefined) {
@@ -28,11 +28,17 @@ export class MediaManagerCommand implements AbstractCommand {
             process.exit(-1);
         }
 
+        const action = argv['action'];
+        const importDir = argv['importDir'];
+        const outputFile = argv['outputFile'];
+        if (outputFile !== undefined && fs.existsSync(outputFile)) {
+            console.error(action + ' outputFile must not exist', argv);
+            return utils.reject(action + ' outputFile must not exist');
+        }
+
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
         const writable = backendConfig.tdocWritable === true || backendConfig.tdocWritable === 'true';
         const dataService = TourDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
-        const action = argv['action'];
-        const importDir = argv['importDir'];
         if (writable) {
             dataService.setWritable(true);
         }
@@ -160,7 +166,12 @@ export class MediaManagerCommand implements AbstractCommand {
             case 'generateTourDocsFromMediaDir':
                 if (importDir === undefined) {
                     console.error(action + ' missing parameter - usage: --importDir INPUTDIR', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR [-force true/false]');
+                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputFile outputFile [-force true/false]');
+                    return promise;
+                }
+                if (outputFile === undefined) {
+                    console.error(action + ' missing parameter - usage: --outputFile OUTPUTFILE', argv);
+                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputFile outputFile [-force true/false]');
                     return promise;
                 }
 
@@ -173,7 +184,7 @@ export class MediaManagerCommand implements AbstractCommand {
                     for (const tdoc of value) {
                         tdocs.push(responseMapper.mapToAdapterDocument({}, tdoc));
                     }
-                    console.log(JSON.stringify({ tdocs: tdocs}, undefined, ' '));
+                    fs.writeFileSync(outputFile, JSON.stringify({ tdocs: tdocs}, undefined, ' '));
                 });
 
                 break;
@@ -181,6 +192,11 @@ export class MediaManagerCommand implements AbstractCommand {
                 if (importDir === undefined) {
                     console.error(action + ' missing parameter - usage: --importDir INPUTDIR', argv);
                     promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR');
+                    return promise;
+                }
+                if (outputFile === undefined) {
+                    console.error(action + ' missing parameter - usage: --outputFile OUTPUTFILE', argv);
+                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputFile outputFile [-force true/false]');
                     return promise;
                 }
 
@@ -217,7 +233,7 @@ export class MediaManagerCommand implements AbstractCommand {
 
                 promise = tdocManagerModule.findCorrespondingCommonDocRecordsForMedia(importDir, additionalMappings);
                 promise.then(value => {
-                    console.log(JSON.stringify({
+                    fs.writeFileSync(outputFile, JSON.stringify({
                         tdocs: value,
                         fileBaseDir: importDir,
                         dbImageBaseDir: backendConfig.apiRoutePicturesStaticDir + '/' +

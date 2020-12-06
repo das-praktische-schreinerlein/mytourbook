@@ -1,5 +1,5 @@
 echo off
-rem job for autorotating jpg-files<br>
+rem job for autorotating jpg-files
 rem     requires JPEG-EXIF autorotate - http://pilpi.net/software/JPEG-EXIF_autorotate.php
 rem     F:\public_projects\MatImageImportEditor\sbin\autorotateImagesInFolder.bat D:\Bilder\digifotos\test
 
