@@ -19,7 +19,9 @@ import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backe
 
 export class MediaManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
+        // importDir and outputDir are used in CommonMediaManagerCommand too
         argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);
+        argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
         argv['outputFile'] = TourDocFileUtils.normalizeCygwinPath(argv['outputFile']);
 
         const filePathConfigJson = argv['c'] || argv['backend'];
