@@ -30,6 +30,7 @@ export interface TourDocShowpageComponentAvailableTabs {
     IMAGE?: boolean;
     IMAGE_FAVORITES?: boolean;
     IMAGE_NEARBY?: boolean;
+    IMAGE_SIMILAR?: boolean;
     INFO?: boolean;
     ODIMGOBJECT?: boolean;
     VIDEO?: boolean;
@@ -94,6 +95,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         NEWS?: boolean|number;
         ROUTE?: boolean|number;
         TOPIMAGE?: boolean|number;
+        IMAGE_SIMILAR?: boolean|number;
         TRACK?: boolean|number;
         TRIP?: boolean|number;
     } = {
@@ -105,6 +107,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         NEWS: false,
         ROUTE: false,
         TOPIMAGE: false,
+        IMAGE_SIMILAR: false,
         TRACK: false,
         TRIP: false
     };
@@ -112,6 +115,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         IMAGE: true,
         IMAGE_FAVORITES: false,
         IMAGE_NEARBY: true,
+        IMAGE_SIMILAR: true,
         INFO: true,
         DESTINATION: true,
         ROUTE: true,

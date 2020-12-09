@@ -34,6 +34,11 @@ export class SqlMytbDbImageConfig {
                 groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
             },
             {
+                from: 'INNER JOIN image_similar ON image.i_id=image_similar.i_similar_id',
+                triggerParams: ['image_similar_id_i'],
+                groupByFields: ['i_similar_id']
+            },
+            {
                 from: 'LEFT JOIN image_object ON image.i_id=image_object.i_id ' +
                     'LEFT JOIN objects ON image_object.io_obj_type=objects.o_key',
                 triggerParams: ['id', 'odstates_ss', 'odprecision_is', 'odcats_txt', 'odkeys_txt', 'oddetectors_txt'],
@@ -535,6 +540,7 @@ export class SqlMytbDbImageConfig {
             destination_id_s: 'dt.d_id',
             destination_id_ss: 'dt.d_id',
             image_id_i: 'image.i_id',
+            image_similar_id_i: 'image_similar.i_id',
             image_id_is: 'image.i_id',
             info_id_i: '"666dummy999"',
             info_id_is: '"666dummy999"',

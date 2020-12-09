@@ -23,6 +23,13 @@ select yn in "Yes" "No"; do
         No) break;;
     esac
 done
+echo "OPEN: Do you want to indexSimilarity the images for similarity-search on imported images - attention will be run more than a hour?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) cd ${MYTB}/sbin && ./indexSimilarImages.sh; break;;
+        No) break;;
+    esac
+done
 
 echo "YOUR TODO: start backend with production-profile in separate shell (stop backend with import-profile before) 'cd ${MYTB} && npm run backend-serve-dev && cd $CWD'"
 echo "YOUR TODO: start frontend with production-profile in separate shell (if not already startet) 'cd ${MYTB} && npm run frontendserver-serve-dev-de && cd $CWD'"

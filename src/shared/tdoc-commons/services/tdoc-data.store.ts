@@ -33,6 +33,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         loc_id_i: true,
         loc_lochirarchie_ids_txt: true,
         image_id_i: true,
+        image_similar_id_i: true,
         video_id_i: true,
         route_id_i: true,
         route_id_is: true,

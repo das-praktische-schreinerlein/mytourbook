@@ -190,7 +190,13 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             if (type === 'TRACK' && record.trackId) {
                 filters['moreFilter'] = 'track_id_i:' + record.trackId;
             } else if (type === 'TOPIMAGE') {
+                filters['type'] = 'IMAGE';
                 filters['moreFilter'] = 'track_id_i:' + -1;
+            } else if (type === 'IMAGE_SIMILAR') {
+                filters['type'] = 'IMAGE';
+                filters['moreFilter'] = 'image_similar_id_i:' + record.imageId;
+                filters['sort'] = 'ratePers';
+                filters['perPage'] = 50;
             } else if (type === 'ROUTE' && record.trackId) {
                 filters['moreFilter'] = 'track_id_is:' + record.trackId;
             } else if (type === 'LOCATION' && record.locId) {

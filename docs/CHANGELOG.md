@@ -8,7 +8,11 @@
 - added media-export
 
 ### new features
-- none
+- frontend: added download-link for images
+- backend: added media-export
+- backend: use extended security-features (blacklist, whitelists) per profile
+- backend: added import of similar images-rating 
+- frontend: added similar images to image-show-page
 
 ### improvements
 - moved features to commons
@@ -16,10 +20,7 @@
 - backend: improved build to include all non-binary deps to build
 - build: improved build
 - build: added package-dist.json to install binary-deps on server
-- backend: use extended security-features (blacklist, whitelists) per profile
-- frontend: added download-link for images
 - scripts: improved sbin-scripts
-- backend: added media-export
 - frontend: use player-events of commons
 - backend: use default-implementation of extractTable
 - use current deps in package-lock.version

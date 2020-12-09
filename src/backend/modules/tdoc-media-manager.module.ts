@@ -20,6 +20,7 @@ import {BackendConfigType} from './backend.commons';
 import {TourDocServerPlaylistService} from './tdoc-serverplaylist.service';
 import {TourDocExportService} from './tdoc-export.service';
 import {TourDocMediaFileImportManager} from './tdoc-mediafile-import.service';
+import * as Promise_serial from 'promise-serial';
 
 export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourDocRecord, TourDocSearchForm,
     TourDocSearchResult, TourDocDataService, TourDocServerPlaylistService, TourDocExportService> {
@@ -69,6 +70,43 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
         }
 
         return this.scaleCommonDocImageRecord(tdocImages[0], width);
+    }
+
+    public prepareAdditionalMappings(additionalMappingsSrc: string, mapKeyTo: boolean): {[key: string]: FileSystemDBSyncType} {
+        if (!additionalMappingsSrc['files']) {
+            return {};
+        }
+
+        const additionalMappings: {[key: string]: FileSystemDBSyncType} = {};
+        const possibleLocalPaths = [];
+        ['full', 'x100', 'x300', 'x600', 'x1400'].forEach(resolution => {
+            const path = this.backendConfig.apiRoutePicturesStaticDir + '/' +
+                (this.backendConfig.apiRouteStoredPicturesResolutionPrefix || '') + resolution + '/';
+            possibleLocalPaths.push(path);
+            possibleLocalPaths.push(path.replace(/[\\\/]+/g, '/'));
+            possibleLocalPaths.push(path.toLowerCase());
+            possibleLocalPaths.push(path.replace(/[\\\/]+/g, '/').toLowerCase());
+        });
+        const fileRecords: FileSystemDBSyncType[] = additionalMappingsSrc['files'];
+        fileRecords.forEach(fileRecord => {
+            fileRecord.records.forEach(record => {
+                record.dir = record.dir.replace(/[\\\/]+/g, '/');
+                possibleLocalPaths.forEach(possibleLocalPath => {
+                    record.dir = record.dir.replace(possibleLocalPath, '');
+                });
+            });
+
+            if (mapKeyTo) {
+                fileRecord.file.dir = fileRecord.file.dir.replace(/[\\\/]+/g, '/');
+                possibleLocalPaths.forEach(possibleLocalPath => {
+                    fileRecord.file.dir = fileRecord.file.dir.replace(possibleLocalPath, '');
+                });
+            }
+            const fileInfoKey = (fileRecord.file.dir + '/' + fileRecord.file.name).replace(/[\\\/]+/g, '/');
+            additionalMappings[fileInfoKey.toLowerCase()] = fileRecord;
+        });
+
+        return additionalMappings;
     }
 
     public findCommonDocRecordsForFileInfo(baseDir: string, fileInfo: FileInfoType,
@@ -340,6 +378,96 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                 console.error('findTourDocRecordsForFileInfo ' + fileInfo + ' failed:', reason);
                 return reject(reason);
             });
+        });
+    }
+
+    public insertSimilarMatchings(additionalMappings: {[key: string]: FileSystemDBSyncType}): Promise<{}> {
+        this.initKnex();
+        const me = this;
+        return new Promise<{}>((allResolve, allReject) => {
+            const promises = [];
+            for (const fileInfoKey in additionalMappings) {
+                if (!additionalMappings.hasOwnProperty(fileInfoKey)) {
+                    console.warn('SKIP - non existing fileInfoKey', fileInfoKey);
+                    continue;
+                }
+
+                promises.push(function () {
+                    return me.insertSimilarMatching(fileInfoKey, additionalMappings[fileInfoKey.toLowerCase()]);
+                });
+            }
+
+            return Promise_serial(promises, {parallelize: 1}).then(() => {
+                return allResolve('DONE - insertSimilarMatchings');
+            }).catch(reason => {
+                return allReject(reason);
+            });
+        });
+    }
+
+    private insertSimilarMatching(fileInfoKey: string, additionalMapping: FileSystemDBSyncType): Promise<any> {
+        const me = this;
+        // first read baseFile
+        const checkBaseFileSqlQuery: RawSqlQueryData = {
+            sql:
+                'SELECT DISTINCT i_id as id' +
+                '  FROM image' +
+                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)',
+            parameters: [
+                fileInfoKey.toLowerCase()
+            ]
+        };
+
+        console.log('CHECK import fileInfoKey in database', fileInfoKey, additionalMapping.records.length + 1);
+        return SqlUtils.executeRawSqlQueryData(me.knex, checkBaseFileSqlQuery).then(readDbResults => {
+            // delete refs for basefile
+            const readResult = me.sqlQueryBuilder.extractDbResult(readDbResults, me.knex.client['config']['client']);
+            if (readResult === undefined || readResult.length < 1) {
+                console.warn('NOT FOUND fileInfoKey in database', fileInfoKey);
+                return Promise.resolve();
+            }
+
+            console.log('DO import fileInfoKey in database', fileInfoKey, additionalMapping.records.length + 1);
+            console.log('readResult', readResult);
+
+            const id = readResult[0]['id'];
+            const deleteSqlQuery: RawSqlQueryData = {
+                sql:
+                    'DELETE FROM IMAGE_SIMILAR WHERE i_id in (?)',
+                parameters: [id]
+            };
+            return SqlUtils.executeRawSqlQueryData(me.knex, deleteSqlQuery).then(() => {
+                const updatePromises = [];
+                additionalMapping.records.forEach(record => {
+                    const recordPath = (record.dir + '/' + record.name).replace(/\\/g, '/');
+                    const insertSqlQuery: RawSqlQueryData = {
+                        sql:
+                            'INSERT INTO IMAGE_SIMILAR (I_ID, I_SIMILAR_ID, IS_MATCHING, IS_MATCHINGDETAILS, IS_MATCHINGSCORE)' +
+                            '  SELECT DISTINCT ? as I_ID, IMAGE.I_ID as I_SIMILAR_ID,' +
+                            '       ? AS matching,' +
+                            '       ? AS matchingDetails,' +
+                            '       ? AS matchingScore' +
+                            '  FROM image' +
+                            '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?) AND IMAGE.I_ID <> ?',
+                        parameters: [
+                            id,
+                            record.matching,
+                            record.matchingDetails,
+                            record.matchingScore,
+                            recordPath,
+                            id
+                        ]
+                    };
+                    updatePromises.push(SqlUtils.executeRawSqlQueryData(me.knex, insertSqlQuery));
+                });
+
+                return Promise.all(updatePromises).then(() => {
+                    return utils.resolve(true);
+                }).catch(function errorSearch(reason) {
+                    console.error('insertSimilarMatchings failed:', reason);
+                    return utils.reject(reason);
+                });
+            })
         });
     }
 

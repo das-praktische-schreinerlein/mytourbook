@@ -207,30 +207,8 @@ export class MediaManagerCommand implements AbstractCommand {
 
                 let additionalMappings: {[key: string]: FileSystemDBSyncType};
                 if (additionalMappingsJson) {
-                    additionalMappings = {};
                     const additionalMappingsSrc = JSON.parse(fs.readFileSync(additionalMappingsJson, {encoding: 'utf8'}));
-                    if (additionalMappingsSrc['files']) {
-                        const possibleLocalPaths = [];
-                        ['full', 'x100', 'x300', 'x600', 'x1400'].forEach(resolution => {
-                            const path = backendConfig.apiRoutePicturesStaticDir + '/' +
-                                (backendConfig.apiRouteStoredPicturesResolutionPrefix || '') + resolution + '/';
-                            possibleLocalPaths.push(path);
-                            possibleLocalPaths.push(path.replace(/[\\\/]+/g, '/'));
-                            possibleLocalPaths.push(path.toLowerCase());
-                            possibleLocalPaths.push(path.replace(/[\\\/]+/g, '/').toLowerCase());
-                        });
-                        const fileRecords: FileSystemDBSyncType[] = additionalMappingsSrc['files'];
-                        fileRecords.forEach(fileRecord => {
-                            fileRecord.records.forEach(record => {
-                                record.dir = record.dir.replace(/[\\\/]+/g, '/');
-                                possibleLocalPaths.forEach(possibleLocalPath => {
-                                    record.dir = record.dir.replace(possibleLocalPath, '');
-                                });
-                            });
-                            const fileInfoKey = (fileRecord.file.dir + '/' + fileRecord.file.name).replace(/[\\\/]+/g, '/');
-                            additionalMappings[fileInfoKey.toLowerCase()] = fileRecord;
-                        });
-                    }
+                    additionalMappings = tdocManagerModule.prepareAdditionalMappings(additionalMappingsSrc, false);
                 }
 
                 promise = tdocManagerModule.findCorrespondingCommonDocRecordsForMedia(importDir, additionalMappings);
@@ -244,6 +222,26 @@ export class MediaManagerCommand implements AbstractCommand {
                             + (backendConfig.apiRouteStoredVideosResolutionPrefix || '') + 'full/'
                     }, undefined, ' '));
                 });
+
+                break;
+            case 'insertSimilarMatchings':
+                const additionalImportMappingsJson = argv['additionalMappingsFile'];
+                if (additionalImportMappingsJson === undefined) {
+                    console.error(action + ' missing parameter - usage: --additionalMappingsFile ADDITIONALMAPPINGSFILE', argv);
+                    promise = utils.reject(action + ' missing parameter - usage: --additionalMappingsFile additionalMappingsFile [-force true/false]');
+                    return promise;
+                }
+
+                console.log('START processing: insertSimilarMatchings', additionalImportMappingsJson);
+
+                let additionalImportMappings: {[key: string]: FileSystemDBSyncType};
+                if (additionalImportMappingsJson) {
+                    const additionalImportMappingsSrc = JSON.parse(fs.readFileSync(additionalImportMappingsJson, {encoding: 'utf8'}));
+                    additionalImportMappings = tdocManagerModule.prepareAdditionalMappings(additionalImportMappingsSrc, true);
+                }
+
+                console.log('Do insertSimilarMatchings', Object.keys(additionalImportMappings).length);
+                promise = tdocManagerModule.insertSimilarMatchings(additionalImportMappings);
 
                 break;
             default:

@@ -1692,6 +1692,7 @@
                 "IMAGE": true,
                 "IMAGE_FAVORITES": true,
                 "IMAGE_NEARBY": true,
+                "IMAGE_SIMILAR": true,
                 "INFO": true,
                 "ODIMGOBJECT": true,
                 "DESTINATION": true,
