@@ -52,6 +52,6 @@ else
     cd ${CWD}
 fi
 rm -f "$SEARCHDIR/findFilesInLireIndex.tmp"
-rm -f "$SEARCHDIR/findFilesInDb.tmp""
+rm -f "$SEARCHDIR/findFilesInDb.tmp"
 
-echo "done - find correspnding mytb-images for images in search-folder: ${SEARCHDIR}'"
+echo "done - find correspnding mytb-images for images in search-folder: '${SEARCHDIR}'"
