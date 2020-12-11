@@ -48,7 +48,6 @@ if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json" ]; then
   cd ${MYTB}
   node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c ${CONFIG_BASEDIR}backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
   mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-images.json
-  rm  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.tmp || echo ""
   cd $CWD
 else
   echo "WARNING: image-import-file not exists '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json'?"
@@ -68,7 +67,6 @@ if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
   cd ${MYTB}
   node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c ${CONFIG_BASEDIR}backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
   mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-videos.json
-  rm  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.tmp || echo ""
   cd $CWD
 else
   echo "WARNING: video-import-file not exists '${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json'?"

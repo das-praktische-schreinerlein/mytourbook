@@ -13,7 +13,7 @@ echo "start - indexing mytb-images"
 LIRESEARCHER_NUMTHREADS=8
 LIRESEARCHER_FEATURES=OpponentHistogram,ColorLayout,SimpleColorHistogram
 LIRESEARCHER_MAXDIFFERENCESCORE=30
-LIRESEARCHER_SHOWSIMILARHITS=20
+LIRESEARCHER_SHOWSIMILARHITS=10
 
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
