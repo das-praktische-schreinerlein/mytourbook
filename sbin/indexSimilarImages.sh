@@ -38,7 +38,8 @@ for CHUNKFILE in indexSimilarFilesInLireIndex_chunk*.json; do
   tail -n 3 $CHUNKFILE
 cd ${MYTB}
   echo "now: import similarity images in database: '$W_MYTB_INDEXDIR/$CHUNKFILE'"
-  node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action insertSimilarMatchings --debug true --additionalMappingsFile $W_MYTB_INDEXDIR/$CHUNKFILE
+  rm -f $MYTB_INDEXDIR/$CHUNKFILE.log
+  node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action insertSimilarMatchings --debug true --additionalMappingsFile $W_MYTB_INDEXDIR/$CHUNKFILE > "$MYTB_INDEXDIR/$CHUNKFILE.log"
 done
 cd ${CWD}
 

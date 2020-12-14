@@ -123,7 +123,7 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                     '      i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
                     '      ? AS matchingDetails, 0 AS matchingScore' +
                     '  FROM image' +
-                    '  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER(?)',
+                    '  WHERE BINARY LOWER(CONCAT(I_dir, "_", i_file)) = BINARY LOWER(?)',
                 parameters: [
                     'filename:' + fileInfo.name,
                     fileInfo.name]
@@ -133,7 +133,7 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                 '      i_date AS lastModified, i_date AS exifDate, "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
                 '      ? AS matchingDetails, 0 AS matchingScore' +
                 '  FROM image' +
-                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+                '  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)';
             checkPreferredSqlQuery.parameters =  checkPreferredSqlQuery.parameters.concat([
                 'dir: ' + fileInfo.dir + ' filename:' + fileInfo.name,
                 filePath]);
@@ -267,7 +267,7 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                                 '       ? AS matchingDetails,' +
                                 '       ? AS matchingScore' +
                                 '  FROM image' +
-                                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+                                '  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)';
                             checkFallBackSqlQuery.parameters =  checkFallBackSqlQuery.parameters.concat([
                                 record.matching,
                                 record.matchingDetails,
@@ -412,7 +412,7 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
             sql:
                 'SELECT DISTINCT i_id as id' +
                 '  FROM image' +
-                '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)',
+                '  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)',
             parameters: [
                 fileInfoKey.toLowerCase()
             ]
@@ -442,7 +442,7 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                         sql:
                             'SELECT DISTINCT i_id as id' +
                             '  FROM image' +
-                            '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)',
+                            '  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)',
                         parameters: [
                             recordPath.toLowerCase()
                         ]

@@ -74,7 +74,7 @@ describe('TourDocMediaManagerModule', () => {
             ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
             ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
             '      ? AS matchingDetails, 0 AS matchingScore' +
-            '  FROM image  WHERE LOWER(CONCAT(I_dir, "_", i_file)) = LOWER(?)',
+            '  FROM image  WHERE BINARY LOWER(CONCAT(I_dir, "_", i_file)) = BINARY LOWER(?)',
         parameters: [
             'filename:testfile.jpg',
             'testfile.jpg']
@@ -84,7 +84,7 @@ describe('TourDocMediaManagerModule', () => {
         ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
         '      ? AS matchingDetails, 0 AS matchingScore' +
-        '  FROM image  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+        '  FROM image  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)';
     preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
         'dir: testdir filename:testfile.jpg',
         'testdir/testfile.jpg'
@@ -236,7 +236,7 @@ describe('TourDocMediaManagerModule', () => {
         ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type,       ? AS matching,' +
         '       ? AS matchingDetails,       ? AS matchingScore' +
-        '  FROM image  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)';
+        '  FROM image  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)';
     fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
         'SIMILARITY',
         'OpponentHistogram',
