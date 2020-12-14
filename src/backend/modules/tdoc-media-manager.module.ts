@@ -382,7 +382,6 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
     }
 
     public insertSimilarMatchings(additionalMappings: {[key: string]: FileSystemDBSyncType}): Promise<{}> {
-        this.initKnex();
         const me = this;
         return new Promise<{}>((allResolve, allReject) => {
             const promises = [];
@@ -405,7 +404,8 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
         });
     }
 
-    private insertSimilarMatching(fileInfoKey: string, additionalMapping: FileSystemDBSyncType): Promise<any> {
+    public insertSimilarMatching(fileInfoKey: string, additionalMapping: FileSystemDBSyncType): Promise<any> {
+        this.initKnex();
         const me = this;
         // first read baseFile
         const checkBaseFileSqlQuery: RawSqlQueryData = {
@@ -418,7 +418,6 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
             ]
         };
 
-        console.log('CHECK import fileInfoKey in database', fileInfoKey, additionalMapping.records.length + 1);
         return SqlUtils.executeRawSqlQueryData(me.knex, checkBaseFileSqlQuery).then(readDbResults => {
             // delete refs for basefile
             const readResult = me.sqlQueryBuilder.extractDbResult(readDbResults, me.knex.client['config']['client']);
@@ -428,7 +427,6 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
             }
 
             console.log('DO import fileInfoKey in database', fileInfoKey, additionalMapping.records.length + 1);
-            console.log('readResult', readResult);
 
             const id = readResult[0]['id'];
             const deleteSqlQuery: RawSqlQueryData = {
@@ -440,25 +438,47 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                 const updatePromises = [];
                 additionalMapping.records.forEach(record => {
                     const recordPath = (record.dir + '/' + record.name).replace(/\\/g, '/');
-                    const insertSqlQuery: RawSqlQueryData = {
+                    const checkSimilarFileSqlQuery: RawSqlQueryData = {
                         sql:
-                            'INSERT INTO IMAGE_SIMILAR (I_ID, I_SIMILAR_ID, IS_MATCHING, IS_MATCHINGDETAILS, IS_MATCHINGSCORE)' +
-                            '  SELECT DISTINCT ? as I_ID, IMAGE.I_ID as I_SIMILAR_ID,' +
-                            '       ? AS matching,' +
-                            '       ? AS matchingDetails,' +
-                            '       ? AS matchingScore' +
+                            'SELECT DISTINCT i_id as id' +
                             '  FROM image' +
-                            '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?) AND IMAGE.I_ID <> ?',
+                            '  WHERE LOWER(CONCAT(I_dir, "/", i_file)) = LOWER(?)',
                         parameters: [
-                            id,
-                            record.matching,
-                            record.matchingDetails,
-                            record.matchingScore,
-                            recordPath,
-                            id
+                            recordPath.toLowerCase()
                         ]
                     };
-                    updatePromises.push(SqlUtils.executeRawSqlQueryData(me.knex, insertSqlQuery));
+
+                    const promise = SqlUtils.executeRawSqlQueryData(me.knex, checkSimilarFileSqlQuery).then(readSimilarDbResults => {
+                        // delete refs for basefile
+                        const readSimilarResult = me.sqlQueryBuilder.extractDbResult(readSimilarDbResults,
+                            me.knex.client['config']['client']);
+                        if (readSimilarResult === undefined || readSimilarResult.length < 1) {
+                            console.warn('NOT FOUND similar fileInfoKey in database', fileInfoKey, recordPath);
+                            return Promise.resolve();
+                        }
+
+                        const linkId = readSimilarResult[0]['id'];
+                        if (linkId === id) {
+                            console.log('SAME ID similar fileInfoKey in database', fileInfoKey, recordPath);
+                            return Promise.resolve();
+                        }
+
+                        console.log('DO import similar fileInfoKey in database', fileInfoKey, recordPath);
+                        const insertSqlQuery: RawSqlQueryData = {
+                            sql:
+                                'INSERT INTO IMAGE_SIMILAR (I_ID, I_SIMILAR_ID, IS_MATCHING, IS_MATCHINGDETAILS, IS_MATCHINGSCORE)' +
+                                '  VALUES (?, ?, ?, ?, ?)',
+                            parameters: [
+                                id,
+                                linkId,
+                                record.matching,
+                                record.matchingDetails,
+                                record.matchingScore
+                            ]
+                        };
+                        return SqlUtils.executeRawSqlQueryData(me.knex, insertSqlQuery);
+                    });
+                    updatePromises.push(promise);
                 });
 
                 return Promise.all(updatePromises).then(() => {
