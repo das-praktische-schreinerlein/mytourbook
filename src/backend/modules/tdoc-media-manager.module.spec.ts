@@ -37,7 +37,7 @@ describe('TourDocMediaManagerModule', () => {
         public myKnex;
         constructor(protected backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule,
                     exportService: TourDocExportService, protected mediaFileImportManager: TourDocMediaFileImportManager) {
-            super(backendConfig, dataService, mediaManager, exportService, mediaFileImportManager);
+            super(backendConfig, dataService, mediaManager, exportService, mediaFileImportManager, {});
             this.initKnex();
         }
 
