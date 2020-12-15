@@ -29,14 +29,15 @@ cd ${CWD}
 echo "now: split by 10000 entries: '$MYTB_INDEXDIR/indexSimilarFilesInLireIndex.json'"
 cd ${MYTB_INDEXDIR}
 rm -f indexSimilarFilesInLireIndex_chunk*.json
-awk '/{  "file":/ { f = 1 } f' < indexSimilarFilesInLireIndex.json | sed -n '/dummydir",   "name": "dummyfile"/q;p' | awk '/"file":/ { delim++ } { file = sprintf("indexSimilarFilesInLireIndex_chunk%s.json", int(delim / 10000)); print >> file; }'
+awk '/{"file":/ { f = 1 } f' < indexSimilarFilesInLireIndex.json | sed -n '/dummydir","name":"dummyfile"/q;p' | awk '/"file":/ { delim++ } { file = sprintf("indexSimilarFilesInLireIndex_chunk%s.json", int(delim / 10000)); print >> file; }'
 
 for CHUNKFILE in indexSimilarFilesInLireIndex_chunk*.json; do
-  sed -i '1s/^/{  "files": [\n/' $CHUNKFILE
-  echo '{  "file":     {  "dir": "F:\\Projekte\\liretools\\dummydir",   "name": "dummyfile"}, "records":     []}  ]}' >> $CHUNKFILE
+  cd ${MYTB_INDEXDIR}
+  sed -i '1s/^/{"files":[\n/' $CHUNKFILE
+  echo '{"file":{"dir":"F:\\Projekte\\liretools\\dummydir","name":"dummyfile"},"records":[]}]}' >> $CHUNKFILE
   head -n 3 $CHUNKFILE
   tail -n 3 $CHUNKFILE
-cd ${MYTB}
+  cd ${MYTB}
   echo "now: import similarity images in database: '$W_MYTB_INDEXDIR/$CHUNKFILE'"
   rm -f $MYTB_INDEXDIR/$CHUNKFILE.log
   node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action insertSimilarMatchings --debug true --additionalMappingsFile $W_MYTB_INDEXDIR/$CHUNKFILE > "$MYTB_INDEXDIR/$CHUNKFILE.log"
