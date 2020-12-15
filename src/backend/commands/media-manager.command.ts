@@ -59,7 +59,7 @@ export class MediaManagerCommand implements AbstractCommand {
         const tourDocMediaFileImportManager = new TourDocMediaFileImportManager(backendConfig, dataService);
         const mediaManagerModule = new MediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
         const tdocManagerModule = new TourDocMediaManagerModule(backendConfig, dataService, mediaManagerModule, tourDocExportManager,
-            tourDocMediaFileImportManager);
+            tourDocMediaFileImportManager, {});
         const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
 
         let promise: Promise<any>;

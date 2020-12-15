@@ -26,11 +26,14 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
     TourDocSearchResult, TourDocDataService, TourDocServerPlaylistService, TourDocExportService> {
     private knex;
     private readonly sqlQueryBuilder: SqlQueryBuilder;
+    protected readFileCache: {};
 
     constructor(protected backendConfig, dataService: TourDocDataService, mediaManager: MediaManagerModule,
-                exportService: TourDocExportService, protected mediaFileImportManager: TourDocMediaFileImportManager) {
+                exportService: TourDocExportService, protected mediaFileImportManager: TourDocMediaFileImportManager,
+                readFileCache: {}) {
         super(backendConfig, dataService, mediaManager, exportService);
         this.sqlQueryBuilder = new SqlQueryBuilder();
+        this.readFileCache = readFileCache;
     }
 
     public updateDateOfCommonDocRecord(tdoc: TourDocRecord, myDate: Date): Promise<{}> {
@@ -408,27 +411,15 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
         this.initKnex();
         const me = this;
         // first read baseFile
-        const checkBaseFileSqlQuery: RawSqlQueryData = {
-            sql:
-                'SELECT DISTINCT i_id as id' +
-                '  FROM image' +
-                '  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)',
-            parameters: [
-                fileInfoKey.toLowerCase()
-            ]
-        };
-
-        return SqlUtils.executeRawSqlQueryData(me.knex, checkBaseFileSqlQuery).then(readDbResults => {
-            // delete refs for basefile
-            const readResult = me.sqlQueryBuilder.extractDbResult(readDbResults, me.knex.client['config']['client']);
-            if (readResult === undefined || readResult.length < 1) {
+        return me.readFileId(fileInfoKey).then(id => {
+            if (id === undefined) {
                 console.warn('NOT FOUND fileInfoKey in database', fileInfoKey);
                 return Promise.resolve();
             }
 
-            console.log('DO import fileInfoKey in database', fileInfoKey, additionalMapping.records.length + 1);
+            console.log('DO import fileInfoKey in database', fileInfoKey, id, additionalMapping.records.length + 1);
 
-            const id = readResult[0]['id'];
+            // delete refs for basefile
             const deleteSqlQuery: RawSqlQueryData = {
                 sql:
                     'DELETE FROM IMAGE_SIMILAR WHERE i_id in (?)',
@@ -437,33 +428,20 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
             return SqlUtils.executeRawSqlQueryData(me.knex, deleteSqlQuery).then(() => {
                 const updatePromises = [];
                 additionalMapping.records.forEach(record => {
+                    // read similar-file
                     const recordPath = (record.dir + '/' + record.name).replace(/\\/g, '/');
-                    const checkSimilarFileSqlQuery: RawSqlQueryData = {
-                        sql:
-                            'SELECT DISTINCT i_id as id' +
-                            '  FROM image' +
-                            '  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)',
-                        parameters: [
-                            recordPath.toLowerCase()
-                        ]
-                    };
-
-                    const promise = SqlUtils.executeRawSqlQueryData(me.knex, checkSimilarFileSqlQuery).then(readSimilarDbResults => {
-                        // delete refs for basefile
-                        const readSimilarResult = me.sqlQueryBuilder.extractDbResult(readSimilarDbResults,
-                            me.knex.client['config']['client']);
-                        if (readSimilarResult === undefined || readSimilarResult.length < 1) {
-                            console.warn('NOT FOUND similar fileInfoKey in database', fileInfoKey, recordPath);
+                    const promise = me.readFileId(recordPath).then(linkId => {
+                        if (linkId === undefined) {
+                            console.warn('NOT FOUND similar fileInfoKey in database', fileInfoKey, id, recordPath);
                             return Promise.resolve();
                         }
 
-                        const linkId = readSimilarResult[0]['id'];
                         if (linkId === id) {
-                            console.log('SAME ID similar fileInfoKey in database', fileInfoKey, recordPath);
+                            console.log('SAME ID similar fileInfoKey in database', fileInfoKey, id, recordPath, linkId);
                             return Promise.resolve();
                         }
 
-                        console.log('DO import similar fileInfoKey in database', fileInfoKey, recordPath);
+                        console.log('DO import similar fileInfoKey in database', fileInfoKey, id, recordPath, linkId);
                         const insertSqlQuery: RawSqlQueryData = {
                             sql:
                                 'INSERT INTO IMAGE_SIMILAR (I_ID, I_SIMILAR_ID, IS_MATCHING, IS_MATCHINGDETAILS, IS_MATCHINGSCORE)' +
@@ -478,6 +456,7 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                         };
                         return SqlUtils.executeRawSqlQueryData(me.knex, insertSqlQuery);
                     });
+
                     updatePromises.push(promise);
                 });
 
@@ -488,6 +467,41 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
                     return utils.reject(reason);
                 });
             })
+        });
+    }
+
+    protected readFileId(filePath: string): Promise<any> {
+        if (this.readFileCache !== undefined && this.readFileCache.hasOwnProperty(filePath)) {
+            console.log('DEBUG - use readFileCache-result', filePath, this.readFileCache[filePath])
+            return Promise.resolve(this.readFileCache[filePath]);
+        }
+
+        const me = this;
+        const checkSimilarFileSqlQuery: RawSqlQueryData = {
+            sql:
+                'SELECT DISTINCT i_id as id' +
+                '  FROM image' +
+                '  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)',
+            parameters: [
+                filePath.toLowerCase()
+            ]
+        };
+
+        return SqlUtils.executeRawSqlQueryData(me.knex, checkSimilarFileSqlQuery).then(readSimilarDbResults => {
+            const readSimilarResult = me.sqlQueryBuilder.extractDbResult(readSimilarDbResults,
+                me.knex.client['config']['client']);
+            if (readSimilarResult === undefined || readSimilarResult.length < 1) {
+                if (me.readFileCache !== undefined) {
+                    me.readFileCache[filePath] = undefined;
+                }
+                return Promise.resolve();
+            }
+
+            const id = readSimilarResult[0]['id'];
+            if (me.readFileCache !== undefined) {
+                me.readFileCache[filePath] = id;
+            }
+            return Promise.resolve(id);
         });
     }
 
