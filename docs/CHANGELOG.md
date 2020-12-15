@@ -24,6 +24,7 @@
 - frontend: use player-events of commons
 - backend: use default-implementation of extractTable
 - use current deps in package-lock.version
+- added multi-playlist-tag
 
 ### bug fixes
 - frontendserver: fixed angular-universal-support
