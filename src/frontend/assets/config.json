@@ -1224,6 +1224,74 @@
                     ]
                 },
                 {
+                    "key": "set_playlists_all_album",
+                    "type": "tag",
+                    "name": "Playlists",
+                    "shortName": "Playlists",
+                    "payload": {
+                        "playlistkey": ""
+                    },
+                    "flgUseInput": true,
+                    "inputFieldName": "playlistkey",
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ],
+                    "showFilter": [
+                    ],
+                    "profileAvailability": [
+                        {
+                            "property": "type",
+                            "command": "EQ",
+                            "expectedValues": ["albumpage"]
+                        }
+                    ]
+                },
+                {
+                    "key": "unset_playlists_all_album",
+                    "type": "tag",
+                    "name": "Unset Playlists",
+                    "shortName": "Unset Playlists",
+                    "payload": {
+                        "playlistkey": ""
+                    },
+                    "flgUseInput": true,
+                    "inputFieldName": "playlistkey",
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocActionTagWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ],
+                    "showFilter": [
+                    ],
+                    "profileAvailability": [
+                        {
+                            "property": "type",
+                            "command": "EQ",
+                            "expectedValues": ["albumpage"]
+                        }
+                    ]
+                },
+                {
                     "key": "playlists_favorites",
                     "type": "tag",
                     "name": "F2* Favorites",
