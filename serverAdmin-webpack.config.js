@@ -14,7 +14,7 @@ fs.readdirSync('node_modules')
     })
     .forEach(function(mod) {
         if (mod.match(/redis/) || mod.match(/knex/) || mod.match(/sqlite/) ||
-            mod.match(/mysql/) || mod.match(/vid-streamer/) || mod.match(/fluent-ffmpeg/)) {
+            mod.match(/mysql/) || mod.match(/vid-streamer/) || mod.match(/fluent-ffmpeg/) || mod.match(/db-migrate/)) {
             console.error("module as commonsjs: ", mod);
             nodeModules[mod] = 'commonjs ' + mod;
         }
