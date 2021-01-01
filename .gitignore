@@ -50,6 +50,7 @@ Thumbs.db
 /src/backend/shared-node
 /src/out-tsc
 /cache/
+/contrib
 !/overrides/.gitkeep
 !/overrides/after-build/.gitkeep
 overrides/after-build/config/*

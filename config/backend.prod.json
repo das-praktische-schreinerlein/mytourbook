@@ -31,7 +31,7 @@
         "replaceKeywordPatterns": []
     },
     "TourDocSolrAdapter": {
-        "solrCoreTourDoc": "http://localhost:8983/solr/coremytbprod/",
+        "solrCoreTourDoc": "http://localhost:9999/solr/coremytbprod/",
         "solrCoreTourDocReadUsername": "mytbread",
         "solrCoreTourDocReadPassword": "SolrRocks"
     },

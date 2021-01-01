@@ -1,0 +1,67 @@
+{
+    "authentication": {
+        "blockUnknown": true,
+        "class": "solr.BasicAuthPlugin",
+        "credentials": {
+            "alladmin": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mycmsadmin": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mycmsupdate": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mycmsread": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mytbadmin": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mytbupdate": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mytbread": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c="
+        }
+    },
+    "authorization": {
+        "class": "solr.RuleBasedAuthorizationPlugin",
+        "permissions": [
+            {
+                "role": "role_dataimport",
+                "path": ["/dataimport", "/dataimportmysql", "/dataimportsqlite"],
+                "collection": null,
+                "method": [
+                    "GET",
+                    "POST"
+                ],
+                "index": 1
+            },
+            {
+                "role": "role_update",
+                "name": "update",
+                "index": 2
+            },
+            {
+                "role": "role_read",
+                "name": "read",
+                "index": 2
+            },
+            {
+                "role": "role_alladmin",
+                "name": "all",
+                "index": 3
+            }
+        ],
+        "user-role": {
+            "alladmin": [
+                "role_dataimport",
+                "role_alladmin"
+            ],
+            "mycmsadmin": [
+                "role_read",
+                "role_update",
+                "role_dataimport"
+            ],
+            "mycmsupdate": [
+                "role_read",
+                "role_update"
+            ],
+            "mycmsread": "role_read",
+            "mytbadmin": [
+                "role_read",
+                "role_update",
+                "role_dataimport"
+            ],
+            "mytbread": "role_read"
+        }
+    }
+}

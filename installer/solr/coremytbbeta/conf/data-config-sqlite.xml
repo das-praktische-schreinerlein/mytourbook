@@ -1,19 +1,19 @@
 <dataConfig>
     <dataSource type="JdbcDataSource"
-                driver="com.mysql.jdbc.Driver"
-                url="jdbc:mysql://localhost:3306/testmytbexportbetadb"
-                user="testmytbexportbetadb"
-                password="testmytbexportbetadb"/>
+                driver="org.sqlite.JDBC"
+                url="${dataimport.sqlite.jdbcUrl}"
+                user="${dataimport.sqlite.jdbcUser}"
+                password="${dataimport.sqlite.jdbcPassword}"/>
 
     <document>
 
         <entity name="info"
                 pk="id"
                 query="
-                    select distinct info.if_id,
-                                    'INFO'                                                   as type,
-                                    concat('if_', info.if_typ)                               as subtype,
-                                    concat('INFO', '_', info.if_id)                          as id,
+                    SELECT DISTINCT info.if_id,
+                                    'INFO'                                                   AS type,
+                                    CONCAT('if_', info.if_typ)                               AS subtype,
+                                    CONCAT('INFO', '_', info.if_id)                          AS id,
                                     info.l_id,
                                     info.countRoutes,
                                     info.countLocations,
@@ -23,17 +23,17 @@
                                     if_name,
                                     if_meta_shortdesc,
                                     if_meta_desc,
-                                    concat(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) as html,
+                                    CONCAT(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) AS html,
                                     if_keywords,
                                     l_lochirarchietxt,
                                     l_lochirarchieids
-                    from info left join location on info.l_id = location.l_id
-                    order by if_name"
+                    FROM info LEFT JOIN location ON info.l_id = location.l_id
+                    ORDER BY if_name"
                 deltaImportQuery="
-                    select distinct info.if_id,
-                                    'INFO'                                                   as type,
-                                    concat('if_', info.if_typ)                               as subtype,
-                                    concat('INFO', '_', info.if_id)                          as id,
+                    SELECT DISTINCT info.if_id,
+                                    'INFO'                                                   AS type,
+                                    CONCAT('if_', info.if_typ)                               AS subtype,
+                                    CONCAT('INFO', '_', info.if_id)                          AS id,
                                     info.l_id,
                                     info.countRoutes,
                                     info.countLocations,
@@ -43,13 +43,13 @@
                                     if_name,
                                     if_meta_shortdesc,
                                     if_meta_desc,
-                                    concat(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) as html,
+                                    CONCAT(if_name, ' ', if_keywords, ' ', if_meta_shortdesc, ' ', if_meta_desc) AS html,
                                     if_keywords,
                                     l_lochirarchietxt,
                                     l_lochirarchieids
-                    from info left join location on info.l_id = location.l_id
+                    FROM info LEFT JOIN location ON info.l_id = location.l_id
                     WHERE info.if_id = '${dih.delta.id}'"
-                deltaQuery="SELECT if_id from info order by if_id'"
+                deltaQuery="SELECT if_id FROM info ORDER BY if_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -82,17 +82,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                               CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM info
                             WHERE if_name &lt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
                             ORDER BY if_name DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                             FROM info
                             WHERE if_name &gt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
                             ORDER BY if_name LIMIT 1
@@ -102,11 +98,11 @@
 
             <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                         SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM info
                               WHERE info.if_id IN (${info.if_id})
                            UNION
-                        SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(countLocations AS CHAR)) AS extended_object_properties
+                         SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(countLocations AS CHAR)) AS extended_object_properties
                               FROM info
                               WHERE info.if_id IN (${info.if_id})
                     '>
@@ -115,13 +111,13 @@
 
             <entity name='tour'
                     query="
-                        select tour.t_id, tour.d_id, t_keywords, concat('ac_', tour.t_typ) as actiontype
+                         SELECT tour.t_id, tour.d_id, t_keywords, CONCAT('ac_', tour.t_typ) AS actiontype
                           FROM info
                           INNER JOIN tour_info ON tour_info.if_id = info.if_id
                           INNER JOIN tour ON tour_info.t_id = tour.t_id
                           WHERE info.if_id IN (${info.if_id})"
-                    deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
-                    deltaQuery="SELECT t_id from tour'"
+                    deltaImportQuery="select t_id, t_keywords FROM tour WHERE t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id FROM tour'"
             >
                 <field column="t_id" name="route_id_i"/>
                 <field column="t_id" name="route_id_is"/>
@@ -132,26 +128,26 @@
             </entity>
             <entity name='destination'
                     query="
-                        select distinct tour.d_id
+                         SELECT DISTINCT tour.d_id
                           FROM info
                           INNER JOIN tour_info ON tour_info.if_id = info.if_id
                           INNER JOIN tour ON tour_info.t_id = tour.t_id
                           WHERE info.if_id IN (${info.if_id})"
-                    deltaImportQuery="select d_id, t_keywords from tour where t_id='${dih.delta.id}'"
-                    deltaQuery="SELECT t_id from tour'"
+                    deltaImportQuery="select d_id, t_keywords FROM tour WHERE t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id FROM tour'"
             >
                 <field column="d_id" name="destination_id_s"/>
                 <field column="d_id" name="destination_id_ss"/>
             </entity>
             <entity name='location'
                     query="
-                        select location.l_id, l_lochirarchieids, l_lochirarchietxt
+                        SELECT location.l_id, l_lochirarchieids, l_lochirarchietxt
                           FROM info
                           INNER JOIN location_info ON location_info.if_id = info.if_id
                           INNER JOIN location ON location_info.l_id = location.l_id
                           WHERE info.if_id IN (${info.if_id})"
-                    deltaImportQuery="select l_id from location where l_id='${dih.delta.id}'"
-                    deltaQuery="SELECT l_id from location'"
+                    deltaImportQuery="select l_id FROM location WHERE l_id='${dih.delta.id}'"
+                    deltaQuery="SELECT l_id FROM location'"
             >
                 <field column="l_id" name="route_id_i"/>
                 <field column="l_id" name="route_id_is"/>
@@ -162,14 +158,14 @@
             </entity>
             <entity name='destination'
                     query="
-                        select destination.d_id, d_keywords, concat('ac_', destination.d_typ) as actiontype
+                        SELECT destination.d_id, d_keywords, CONCAT('ac_', destination.d_typ) AS actiontype
                           FROM info
                           INNER JOIN tour_info ON tour_info.if_id = info.if_id
                           INNER JOIN tour ON tour_info.t_id = tour.t_id
-                          INNER JOIN destination on destination.d_id=tour.d_id
+                          INNER JOIN destination ON destination.d_id=tour.d_id
                           WHERE info.if_id IN (${info.if_id})"
-                    deltaImportQuery="select d_id, d_keywords from destination where d_id='${dih.delta.id}'"
-                    deltaQuery="SELECT d_id from destination"
+                    deltaImportQuery="select d_id, d_keywords FROM destination WHERE d_id='${dih.delta.id}'"
+                    deltaQuery="SELECT d_id FROM destination"
             >
                 <field column="destination.d_id" name="destination_id_s" />
                 <field column="destination.d_id" name="destination_id_ss" />
@@ -181,10 +177,10 @@
         <entity name="destination"
                 pk="id"
                 query="
-                    select 'DESTINATION'                                                                                             as type,
-                           concat('ac_', destination.d_typ)                                                                           as actiontype,
-                           concat('ac_', destination.d_typ)                                                                           as subtype,
-                           concat('DESTINATION', '_', destination.d_id)                                                                     as id,
+                    SELECT 'DESTINATION'                                                                                             AS type,
+                           CONCAT('ac_', destination.d_typ)                                                                           AS actiontype,
+                           CONCAT('ac_', destination.d_typ)                                                                           AS subtype,
+                           CONCAT('DESTINATION', '_', destination.d_id)                                                                     AS id,
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
@@ -196,52 +192,52 @@
                            destination.countTrips,
                            destination.countVideos,
                            d_name,
-                           concat( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) as html,
-                           d_dateshow,
-                           d_datevon                                                                                           as datesort,
-                           d_datevon,
-                           DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
-                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             as done,
+                           CONCAT( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) AS html,
+                           d_dateshow || 'Z',
+                           d_datevon || 'Z'                                                                                           AS datesort,
+                           d_datevon || 'Z',
+                           DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
+                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             AS done,
                            d_keywords,
                            d_rate_gesamt,
                            d_gps_lat,
                            d_gps_lon,
-                           concat(d_gps_lat, ',', d_gps_lon)                                                                   as d_gps_loc,
+                           CONCAT(d_gps_lat, ',', d_gps_lon)                                                                   AS d_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            d_k_ids,
-                           `D_ELE_MAX`                                                                                         as altMax,
-                           `D_ROUTE_HM`                                                                                        as altAsc,
-                           `D_ROUTE_M`                                                                                         as dist,
-                           `D_ROUTE_DAUER`                                                                                     as dur,
-                           `D_RATE`                                                                                            as overall,
-                           `D_RATE_KS`                                                                                         as ks,
-                           `D_RATE_FIRN`                                                                                       as firn,
-                           `D_RATE_GLETSCHER`                                                                                  as gletscher,
-                           `D_RATE_KLETTERN`                                                                                   as klettern,
-                           `D_RATE_BERGTOUR`                                                                                   as bergdestination,
-                           `D_RATE_SCHNEESCHUH`                                                                                as schneeschuh,
-                           `D_RATE_AUSDAUER`                                                                                   as ausdauer,
-                           `D_RATE_BILDUNG`                                                                                    as bildung,
-                           `D_RATE_GESAMT`                                                                                     as gesamt,
-                           `D_RATE_KRAFT`                                                                                      as kraft,
-                           `D_RATE_MENTAL`                                                                                     as mental,
-                           `D_RATE_MOTIVE`                                                                                     as motive,
-                           `D_RATE_SCHWIERIGKEIT`                                                                              as schwierigkeit,
-                           `D_RATE_WICHTIGKEIT`                                                                                as wichtigkeit,
-                           round((D_ROUTE_HM / 500)) * 500                                                                     as altAscFacet,
-                           round((D_ELE_MAX / 500)) * 500                                                                      as altMaxFacet,
-                           round((D_ROUTE_M / 5)) * 5                                                                          as distFacet,
-                           ROUND(ROUND(D_ROUTE_DAUER * 2) / 2, 1)                                                              as durFacet,
-                           D_DESC_GEBIET                                                                                       as region,
-                           D_DESC_ZIEL                                                                                         as destloc
-                    from destination,
+                           `D_ELE_MAX`                                                                                         AS altMax,
+                           `D_ROUTE_HM`                                                                                        AS altAsc,
+                           `D_ROUTE_M`                                                                                         AS dist,
+                           `D_ROUTE_DAUER`                                                                                     AS dur,
+                           `D_RATE`                                                                                            AS overall,
+                           `D_RATE_KS`                                                                                         AS ks,
+                           `D_RATE_FIRN`                                                                                       AS firn,
+                           `D_RATE_GLETSCHER`                                                                                  AS gletscher,
+                           `D_RATE_KLETTERN`                                                                                   AS klettern,
+                           `D_RATE_BERGTOUR`                                                                                   AS bergdestination,
+                           `D_RATE_SCHNEESCHUH`                                                                                AS schneeschuh,
+                           `D_RATE_AUSDAUER`                                                                                   AS ausdauer,
+                           `D_RATE_BILDUNG`                                                                                    AS bildung,
+                           `D_RATE_GESAMT`                                                                                     AS gesamt,
+                           `D_RATE_KRAFT`                                                                                      AS kraft,
+                           `D_RATE_MENTAL`                                                                                     AS mental,
+                           `D_RATE_MOTIVE`                                                                                     AS motive,
+                           `D_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
+                           `D_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
+                           ROUND((D_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
+                           ROUND((D_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
+                           ROUND((D_ROUTE_M / 5)) * 5                                                                          AS distFacet,
+                           ROUND(ROUND(D_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           D_DESC_GEBIET                                                                                       AS region,
+                           D_DESC_ZIEL                                                                                         AS destloc
+                    FROM destination,
                          location
-                    where destination.l_id = location.l_id
-                    order by d_datevon, d_id"
+                    WHERE destination.l_id = location.l_id
+                    ORDER BY d_datevon, d_id"
                 deltaImportQuery="
-                    select 'DESTINATION'                                                                                             as type,
-                           concat('DESTINATION', '_', destination.d_id)                                                                     as id,
+                    SELECT 'DESTINATION'                                                                                             AS type,
+                           CONCAT('DESTINATION', '_', destination.d_id)                                                                     AS id,
                            destination.d_id,
                            destination.l_id,
                            destination.countImages,
@@ -253,50 +249,50 @@
                            destination.countTrips,
                            destination.countVideos,
                            d_name,
-                           concat( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) as html,
-                           d_dateshow,
-                           d_datevon                                                                                           as datesort,
-                           d_datevon,
-                           DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
-                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             as done,
+                           CONCAT( d_name, ' ', d_keywords, ' ', l_lochirarchietxt) AS html,
+                           d_dateshow || 'Z',
+                           d_datevon || 'Z'                                                                                          AS datesort,
+                           d_datevon || 'Z',
+                           DATE_FORMAT(d_datevon, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
+                           CONCAT('DONE', (d_datevon IS NOT NULL))                                                             AS done,
                            d_keywords,
                            d_rate_gesamt,
                            d_gps_lat,
                            d_gps_lon,
-                           concat(d_gps_lat, ',', d_gps_lon)                                                                   as d_gps_loc,
+                           CONCAT(d_gps_lat, ',', d_gps_lon)                                                                   AS d_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            d_k_ids,
-                           `D_ELE_MAX`                                                                                         as altMax,
-                           `D_ROUTE_HM`                                                                                        as altAsc,
-                           `D_ROUTE_M`                                                                                         as dist,
-                           `D_ROUTE_DAUER`                                                                                     as dur,
-                           `D_RATE`                                                                                            as overall,
-                           `D_RATE_KS`                                                                                         as ks,
-                           `D_RATE_FIRN`                                                                                       as firn,
-                           `D_RATE_GLETSCHER`                                                                                  as gletscher,
-                           `D_RATE_KLETTERN`                                                                                   as klettern,
-                           `D_RATE_BERGTOUR`                                                                                   as bergdestination,
-                           `D_RATE_SCHNEESCHUH`                                                                                as schneeschuh,
-                           `D_RATE_AUSDAUER`                                                                                   as ausdauer,
-                           `D_RATE_BILDUNG`                                                                                    as bildung,
-                           `D_RATE_GESAMT`                                                                                     as gesamt,
-                           `D_RATE_KRAFT`                                                                                      as kraft,
-                           `D_RATE_MENTAL`                                                                                     as mental,
-                           `D_RATE_MOTIVE`                                                                                     as motive,
-                           `D_RATE_SCHWIERIGKEIT`                                                                              as schwierigkeit,
-                           `D_RATE_WICHTIGKEIT`                                                                                as wichtigkeit,
-                           round((D_ROUTE_HM / 500)) * 500                                                                     as altAscFacet,
-                           round((D_ELE_MAX / 500)) * 500                                                                      as altMaxFacet,
-                           round((D_ROUTE_M / 5)) * 5                                                                          as distFacet,
-                           ROUND(ROUND(D_ROUTE_DAUER * 2) / 2, 1)                                                              as durFacet,
-                           D_DESC_GEBIET                                                                                       as region,
-                           D_DESC_ZIEL                                                                                         as destloc
-                    from destination,
+                           `D_ELE_MAX`                                                                                         AS altMax,
+                           `D_ROUTE_HM`                                                                                        AS altAsc,
+                           `D_ROUTE_M`                                                                                         AS dist,
+                           `D_ROUTE_DAUER`                                                                                     AS dur,
+                           `D_RATE`                                                                                            AS overall,
+                           `D_RATE_KS`                                                                                         AS ks,
+                           `D_RATE_FIRN`                                                                                       AS firn,
+                           `D_RATE_GLETSCHER`                                                                                  AS gletscher,
+                           `D_RATE_KLETTERN`                                                                                   AS klettern,
+                           `D_RATE_BERGTOUR`                                                                                   AS bergdestination,
+                           `D_RATE_SCHNEESCHUH`                                                                                AS schneeschuh,
+                           `D_RATE_AUSDAUER`                                                                                   AS ausdauer,
+                           `D_RATE_BILDUNG`                                                                                    AS bildung,
+                           `D_RATE_GESAMT`                                                                                     AS gesamt,
+                           `D_RATE_KRAFT`                                                                                      AS kraft,
+                           `D_RATE_MENTAL`                                                                                     AS mental,
+                           `D_RATE_MOTIVE`                                                                                     AS motive,
+                           `D_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
+                           `D_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
+                           ROUND((D_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
+                           ROUND((D_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
+                           ROUND((D_ROUTE_M / 5)) * 5                                                                          AS distFacet,
+                           ROUND(ROUND(D_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           D_DESC_GEBIET                                                                                       AS region,
+                           D_DESC_ZIEL                                                                                         AS destloc
+                    FROM destination,
                          location
-                    where destination.l_id = location.l_id
-                      and destination.d_id = '${dih.delta.id}'"
-                deltaQuery="SELECT D_id from destination order by d_datevon, d_id'"
+                    WHERE destination.l_id = location.l_id
+                      AND destination.d_id = '${dih.delta.id}'"
+                deltaQuery="SELECT D_id FROM destination ORDER BY d_datevon, d_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -374,18 +370,14 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
                             FROM destination LEFT JOIN location ON destination.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, d_name) &lt;
                                 (SELECT CONCAT(L_lochirarchietxt, d_name) FROM destination LEFT JOIN location ON destination.l_id = location.l_id WHERE d_id IN ("${destination.d_id}"))
                             ORDER BY CONCAT(L_lochirarchietxt, d_name) DESC, d_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
                             FROM destination LEFT JOIN location ON destination.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, d_name) &gt;
                                 (SELECT CONCAT(L_lochirarchietxt, d_name) FROM destination LEFT JOIN location ON destination.l_id = location.l_id WHERE d_id IN ("${destination.d_id}"))
@@ -434,15 +426,17 @@
             <entity name='image'
                     query="
                         select
-                             image.i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
+                             image.i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id = kategorie_full.k_id
                              INNER JOIN tour ON tour.t_id=kategorie_full.t_id
                         WHERE
                             tour.d_id = '${destination.d_id}'
                             AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
-                    deltaQuery="SELECT i_id from image'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        FROM image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id FROM image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
@@ -452,33 +446,33 @@
             </entity>
             <entity name='bericht'
                     query="
-                        select kategorie_full.k_id,
+                        SELECT kategorie_full.k_id,
                                tr_id,
                                n_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                k_persons,
                                k_objects
-                        from kategorie_full INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
+                        FROM kategorie_full INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
                              INNER JOIN tour ON tour.t_id=kategorie_tour.t_id
                         WHERE
                             tour.d_id = '${destination.d_id}'
-                        order by k_datevon asc"
+                        ORDER BY k_datevon asc"
                     deltaImportQuery="
-                        select tr_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                        SELECT tr_id,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                k_persons,
                                k_objects
-                        from kategorie_full
-                        where k_id = '${dih.delta.id}'"
-                    deltaQuery="SELECT k_id from kategorie_full'"
+                        FROM kategorie_full
+                        WHERE k_id = '${dih.delta.id}'"
+                    deltaQuery="SELECT k_id FROM kategorie_full'"
             >
                 <field column="tr_id" name="trip_id_is"/>
                 <field column="n_id" name="news_id_is"/>
@@ -491,21 +485,21 @@
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='tour'
-                    query="select t_id from tour where d_id in ('${destination.d_id}')"
-                    deltaImportQuery="select t_id from tour where t_id='${dih.delta.id}'"
-                    deltaQuery="SELECT t_id from tour'"
+                    query="select t_id FROM tour WHERE d_id in ('${destination.d_id}')"
+                    deltaImportQuery="select t_id FROM tour WHERE t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id FROM tour'"
             >
                 <field column="t_id" name="route_id_is"/>
             </entity>
             <entity name='info'
                     query="
-                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
+                        SELECT info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
                           FROM tour
                           INNER JOIN tour_info ON tour_info.t_id = tour.t_id
                           INNER JOIN info ON tour_info.if_id = info.if_id
                           WHERE tour.d_id IN ('${destination.d_id}') GROUP BY info.if_id"
-                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
-                    deltaQuery="SELECT if_id from info'"
+                    deltaImportQuery="select info.if_id FROM info WHERE if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id FROM info'"
             >
                 <field column="if_id" name="info_id_i"/>
                 <field column="if_id" name="info_id_is"/>
@@ -516,10 +510,10 @@
         <entity name="track"
                 pk="id"
                 query="
-                    select 'TRACK'                                                                                        as type,
-                           concat('ac_', kategorie_full.k_type)                                                           as actiontype,
-                           concat('ac_', kategorie_full.k_type)                                                           as subtype,
-                           concat('TRACK', '_', kategorie_full.k_id)                                                      as id,
+                    SELECT 'TRACK'                                                                                        AS type,
+                           CONCAT('ac_', kategorie_full.k_type)                                                           AS actiontype,
+                           CONCAT('ac_', kategorie_full.k_type)                                                           AS subtype,
+                           CONCAT('TRACK', '_', kategorie_full.k_id)                                                      AS id,
                            kategorie_full.k_id,
                            kategorie_full.t_id,
                            kategorie_full.d_id,
@@ -534,55 +528,55 @@
                            n_id,
                            k_name,
                            k_html,
-                           concat(k_html, ' ', k_name, ' ', k_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
-                           k_dateshow,
-                           k_datevon                                                                                      as datesort,
-                           k_datevon,
-                           DATE_FORMAT(k_datevon, GET_FORMAT(DATE, 'ISO'))                                                as dateonly,
-                           CONCAT('DONE', (k_datevon IS NOT NULL))                                                        as done,
-                           week(k_datevon)                                                                                AS week,
-                           month(k_datevon)                                                                               as month,
-                           year(k_datevon)                                                                                as year,
+                           CONCAT(k_html, ' ', k_name, ' ', k_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
+                           k_dateshow || 'Z',
+                           k_datevon || 'Z'                                                                                      AS datesort,
+                           k_datevon || 'Z',
+                           DATE_FORMAT(k_datevon, GET_FORMAT(DATE, 'ISO'))                                                AS dateonly,
+                           CONCAT('DONE', (k_datevon IS NOT NULL))                                                        AS done,
+                           WEEK(k_datevon)                                                                                AS week,
+                           MONTH(k_datevon)                                                                               AS month,
+                           YEAR(k_datevon)                                                                                AS year,
                            k_gpstracks_basefile,
                            k_keywords,
                            k_persons,
                            k_objects,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                                                          as k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                                                          AS k_meta_shortdesc_html2,
                            k_rate_gesamt,
                            k_gps_lat,
                            k_gps_lon,
-                           concat(k_gps_lat, ',', k_gps_lon)                                                              as k_gps_loc,
+                           CONCAT(k_gps_lat, ',', k_gps_lon)                                                              AS k_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `K_ALTITUDE_ASC`                                                                               as altAsc,
-                           `K_ALTITUDE_DESC`                                                                              as altDesc,
-                           `K_ALTITUDE_MIN`                                                                               as altMin,
-                           `K_ALTITUDE_MAX`                                                                               as altMax,
-                           `K_DISTANCE`                                                                                   as dist,
-                           `K_RATE_AUSDAUER`                                                                              as ausdauer,
-                           `K_RATE_BILDUNG`                                                                               as bildung,
-                           `K_RATE_GESAMT`                                                                                as gesamt,
-                           `K_RATE_KRAFT`                                                                                 as kraft,
-                           `K_RATE_MENTAL`                                                                                as mental,
-                           `K_RATE_MOTIVE`                                                                                as motive,
-                           `K_RATE_SCHWIERIGKEIT`                                                                         as schwierigkeit,
-                           `K_RATE_WICHTIGKEIT`                                                                           as wichtigkeit,
-                           round((K_ALTITUDE_ASC / 500)) * 500                                                            as altAscFacet,
-                           round((K_ALTITUDE_MAX / 500)) * 500                                                            as altMaxFacet,
-                           round((K_DISTANCE / 5)) * 5                                                                    as distFacet,
-                           TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600                                             as dur,
-                           ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600 * 2) / 2, 1)                    as durFacet
-                    from kategorie_full,
+                           `K_ALTITUDE_ASC`                                                                               AS altAsc,
+                           `K_ALTITUDE_DESC`                                                                              AS altDesc,
+                           `K_ALTITUDE_MIN`                                                                               AS altMin,
+                           `K_ALTITUDE_MAX`                                                                               AS altMax,
+                           `K_DISTANCE`                                                                                   AS dist,
+                           `K_RATE_AUSDAUER`                                                                              AS ausdauer,
+                           `K_RATE_BILDUNG`                                                                               AS bildung,
+                           `K_RATE_GESAMT`                                                                                AS gesamt,
+                           `K_RATE_KRAFT`                                                                                 AS kraft,
+                           `K_RATE_MENTAL`                                                                                AS mental,
+                           `K_RATE_MOTIVE`                                                                                AS motive,
+                           `K_RATE_SCHWIERIGKEIT`                                                                         AS schwierigkeit,
+                           `K_RATE_WICHTIGKEIT`                                                                           AS wichtigkeit,
+                           ROUND((K_ALTITUDE_ASC / 500)) * 500                                                            AS altAscFacet,
+                           ROUND((K_ALTITUDE_MAX / 500)) * 500                                                            AS altMaxFacet,
+                           ROUND((K_DISTANCE / 5)) * 5                                                                    AS distFacet,
+                           TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600                                             AS dur,
+                           ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600 * 2) / 2, 1)                    AS durFacet
+                    FROM kategorie_full,
                          location
-                    where kategorie_full.l_id = location.l_id
-                    order by k_datevon"
+                    WHERE kategorie_full.l_id = location.l_id
+                    ORDER BY k_datevon"
                 deltaImportQuery="
-                    select 'TRACK'                                                                                        as type,
-                           concat('ac_', kategorie_full.k_type)                                                           as actiontype,
-                           concat('ac_', kategorie_full.k_type)                                                           as subtype,
-                           concat('TRACK', '_', kategorie_full.k_id)                                                      as id,
+                    SELECT 'TRACK'                                                                                        AS type,
+                           CONCAT('ac_', kategorie_full.k_type)                                                           AS actiontype,
+                           CONCAT('ac_', kategorie_full.k_type)                                                           AS subtype,
+                           CONCAT('TRACK', '_', kategorie_full.k_id)                                                      AS id,
                            kategorie_full.k_id,
                            kategorie_full.t_id,
                            kategorie_full.d_id,
@@ -596,51 +590,51 @@
                            n_id,
                            k_name,
                            k_html,
-                           concat(k_html, ' ', k_name, ' ', k_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
-                           k_dateshow,
-                           k_datevon                                                                                      as datesort,
-                           k_datevon,
-                           DATE_FORMAT(k_datevon, GET_FORMAT(DATE, 'ISO'))                                                as dateonly,
-                           CONCAT('DONE', (k_datevon IS NOT NULL))                                                        as done,
-                           week(k_datevon)                                                                                AS month,
-                           month(k_datevon)                                                                               as month,
-                           year(k_datevon)                                                                                as year,
+                           CONCAT(k_html, ' ', k_name, ' ', k_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
+                           k_dateshow || 'Z',
+                           k_datevon || 'Z'                                                                                      AS datesort,
+                           k_datevon || 'Z',
+                           DATE_FORMAT(k_datevon, GET_FORMAT(DATE, 'ISO'))                                                AS dateonly,
+                           CONCAT('DONE', (k_datevon IS NOT NULL))                                                        AS done,
+                           WEEK(k_datevon)                                                                                AS month,
+                           MONTH(k_datevon)                                                                               AS month,
+                           YEAR(k_datevon)                                                                                AS year,
                            k_gpstracks_basefile,
                            k_keywords,
                            k_persons,
                            k_objects,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                                                          as k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                                                          AS k_meta_shortdesc_html2,
                            k_rate_gesamt,
                            k_gps_lat,
                            k_gps_lon,
-                           concat(k_gps_lat, ',', k_gps_lon)                                                              as k_gps_loc,
+                           CONCAT(k_gps_lat, ',', k_gps_lon)                                                              AS k_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `K_ALTITUDE_ASC`                                                                               as altAsc,
-                           `K_ALTITUDE_DESC`                                                                              as altDesc,
-                           `K_ALTITUDE_MIN`                                                                               as altMin,
-                           `K_ALTITUDE_MAX`                                                                               as altMax,
-                           `K_DISTANCE`                                                                                   as dist,
-                           `K_RATE_AUSDAUER`                                                                              as ausdauer,
-                           `K_RATE_BILDUNG`                                                                               as bildung,
-                           `K_RATE_GESAMT`                                                                                as gesamt,
-                           `K_RATE_KRAFT`                                                                                 as kraft,
-                           `K_RATE_MENTAL`                                                                                as mental,
-                           `K_RATE_MOTIVE`                                                                                as motive,
-                           `K_RATE_SCHWIERIGKEIT`                                                                         as schwierigkeit,
-                           `K_RATE_WICHTIGKEIT`                                                                           as wichtigkeit,
-                           round((K_ALTITUDE_ASC / 500)) * 500                                                            as altAscFacet,
-                           round((K_ALTITUDE_MAX / 500)) * 500                                                            as altMaxFacet,
-                           round((K_DISTANCE / 5)) * 5                                                                    as distFacet,
-                           TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600                                             as dur,
-                           ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600 * 2) / 2, 1)                    as durFacet
-                    from kategorie_full,
+                           `K_ALTITUDE_ASC`                                                                               AS altAsc,
+                           `K_ALTITUDE_DESC`                                                                              AS altDesc,
+                           `K_ALTITUDE_MIN`                                                                               AS altMin,
+                           `K_ALTITUDE_MAX`                                                                               AS altMax,
+                           `K_DISTANCE`                                                                                   AS dist,
+                           `K_RATE_AUSDAUER`                                                                              AS ausdauer,
+                           `K_RATE_BILDUNG`                                                                               AS bildung,
+                           `K_RATE_GESAMT`                                                                                AS gesamt,
+                           `K_RATE_KRAFT`                                                                                 AS kraft,
+                           `K_RATE_MENTAL`                                                                                AS mental,
+                           `K_RATE_MOTIVE`                                                                                AS motive,
+                           `K_RATE_SCHWIERIGKEIT`                                                                         AS schwierigkeit,
+                           `K_RATE_WICHTIGKEIT`                                                                           AS wichtigkeit,
+                           ROUND((K_ALTITUDE_ASC / 500)) * 500                                                            AS altAscFacet,
+                           ROUND((K_ALTITUDE_MAX / 500)) * 500                                                            AS altMaxFacet,
+                           ROUND((K_DISTANCE / 5)) * 5                                                                    AS distFacet,
+                           TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600                                             AS dur,
+                           ROUND(ROUND(TIME_TO_SEC(TIMEDIFF(K_DATEBIS, K_DATEVON)) / 3600 * 2) / 2, 1)                    AS durFacet
+                    FROM kategorie_full,
                          location
-                    where kategorie_full.l_id = location.l_id
-                      and kategorie_full.k_id = '${dih.delta.id}'"
-                deltaQuery="SELECT k_id from kategorie_full'"
+                    WHERE kategorie_full.l_id = location.l_id
+                      AND kategorie_full.k_id = '${dih.delta.id}'"
+                deltaQuery="SELECT k_id FROM kategorie_full'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -715,17 +709,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                   CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
                             FROM kategorie_full
                             WHERE k_datevon &lt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))
                             ORDER BY k_datevon DESC, k_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
                             FROM kategorie_full
                             WHERE k_datevon &gt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))
                             ORDER BY k_datevon, k_id LIMIT 1
@@ -756,13 +746,15 @@
 
             <entity name='image'
                     query="
-                        select i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
-                        from image
-                        where k_id = '${track.k_id}'
-                        order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        FROM image
+                        WHERE k_id = '${track.k_id}'
+                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
-                    deltaQuery="SELECT i_id from image'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        FROM image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id FROM image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
@@ -774,8 +766,8 @@
                     query="SELECT tour.t_id, d_id
                         FROM tour INNER JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id
                         WHERE kategorie_tour.k_id = ${track.k_id}"
-                    deltaImportQuery="select t_id from tour WHERE t_id=${dih.delta.id}"
-                    deltaQuery="SELECT t_id from tour'"
+                    deltaImportQuery="select t_id FROM tour WHERE t_id=${dih.delta.id}"
+                    deltaQuery="SELECT t_id FROM tour'"
             >
                 <field column="t_id" name="route_id_is"/>
                 <field column="d_id" name="destination_id_ss"/>
@@ -786,8 +778,8 @@
                             INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id
                         WHERE
                             kategorie_tour.k_id = ${track.k_id}"
-                    deltaImportQuery="select d_id from destination where d_id='${dih.delta.id}'"
-                    deltaQuery="SELECT d_id from destination'"
+                    deltaImportQuery="select d_id FROM destination WHERE d_id='${dih.delta.id}'"
+                    deltaQuery="SELECT d_id FROM destination'"
             >
                 <field column="d_id" name="destination_id_ss"/>
             </entity>
@@ -796,10 +788,10 @@
         <entity name="route"
                 pk="id"
                 query="
-                    select 'ROUTE'                                                                                             as type,
-                           concat('ac_', tour.t_typ)                                                                           as actiontype,
-                           concat('ac_', tour.t_typ)                                                                           as subtype,
-                           concat('ROUTE', '_', tour.t_id)                                                                     as id,
+                    SELECT 'ROUTE'                                                                                             AS type,
+                           CONCAT('ac_', tour.t_typ)                                                                           AS actiontype,
+                           CONCAT('ac_', tour.t_typ)                                                                           AS subtype,
+                           CONCAT('ROUTE', '_', tour.t_id)                                                                     AS id,
                            tour.k_id,
                            tour.t_id,
                            tour.d_id,
@@ -813,60 +805,60 @@
                            tour.countVideos,
                            t_name,
                            t_html_list,
-                           concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
-                           t_dateshow,
-                           t_datevon                                                                                           as datesort,
-                           t_datevon,
-                           DATE_FORMAT(t_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
-                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             as done,
+                           CONCAT(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
+                           t_dateshow || 'Z',
+                           t_datevon || 'Z'                                                                                           AS datesort,
+                           t_datevon || 'Z',
+                           DATE_FORMAT(t_datevon, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
+                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             AS done,
                            t_gpstracks_basefile,
                            t_keywords,
                            t_persons,
                            t_objects,
                            t_meta_shortdesc_md,
                            t_meta_shortdesc_html,
-                           t_meta_shortdesc_html                                                                               as t_meta_shortdesc_html2,
+                           t_meta_shortdesc_html                                                                               AS t_meta_shortdesc_html2,
                            t_rate_gesamt,
                            t_gps_lat,
                            t_gps_lon,
-                           concat(t_gps_lat, ',', t_gps_lon)                                                                   as t_gps_loc,
+                           CONCAT(t_gps_lat, ',', t_gps_lon)                                                                   AS t_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            t_k_ids,
-                           `T_ELE_MAX`                                                                                         as altMax,
-                           `T_ROUTE_HM`                                                                                        as altAsc,
-                           `T_ROUTE_M`                                                                                         as dist,
-                           `T_ROUTE_DAUER`                                                                                     as dur,
-                           `T_RATE`                                                                                            as overall,
-                           `T_RATE_KS`                                                                                         as ks,
-                           `T_RATE_FIRN`                                                                                       as firn,
-                           `T_RATE_GLETSCHER`                                                                                  as gletscher,
-                           `T_RATE_KLETTERN`                                                                                   as klettern,
-                           `T_RATE_BERGTOUR`                                                                                   as bergtour,
-                           `T_RATE_SCHNEESCHUH`                                                                                as schneeschuh,
-                           `T_RATE_AUSDAUER`                                                                                   as ausdauer,
-                           `T_RATE_BILDUNG`                                                                                    as bildung,
-                           `T_RATE_GESAMT`                                                                                     as gesamt,
-                           `T_RATE_KRAFT`                                                                                      as kraft,
-                           `T_RATE_MENTAL`                                                                                     as mental,
-                           `T_RATE_MOTIVE`                                                                                     as motive,
-                           `T_RATE_SCHWIERIGKEIT`                                                                              as schwierigkeit,
-                           `T_RATE_WICHTIGKEIT`                                                                                as wichtigkeit,
-                           round((T_ROUTE_HM / 500)) * 500                                                                     as altAscFacet,
-                           round((T_ELE_MAX / 500)) * 500                                                                      as altMaxFacet,
-                           round((T_ROUTE_M / 5)) * 5                                                                          as distFacet,
-                           ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              as durFacet,
-                           T_DESC_FUEHRER_FULL                                                                                 as guides,
-                           T_DESC_GEBIET                                                                                       as region,
-                           T_DESC_TALORT                                                                                       as baseloc,
-                           T_DESC_ZIEL                                                                                         as destloc
-                    from tour,
+                           `T_ELE_MAX`                                                                                         AS altMax,
+                           `T_ROUTE_HM`                                                                                        AS altAsc,
+                           `T_ROUTE_M`                                                                                         AS dist,
+                           `T_ROUTE_DAUER`                                                                                     AS dur,
+                           `T_RATE`                                                                                            AS overall,
+                           `T_RATE_KS`                                                                                         AS ks,
+                           `T_RATE_FIRN`                                                                                       AS firn,
+                           `T_RATE_GLETSCHER`                                                                                  AS gletscher,
+                           `T_RATE_KLETTERN`                                                                                   AS klettern,
+                           `T_RATE_BERGTOUR`                                                                                   AS bergtour,
+                           `T_RATE_SCHNEESCHUH`                                                                                AS schneeschuh,
+                           `T_RATE_AUSDAUER`                                                                                   AS ausdauer,
+                           `T_RATE_BILDUNG`                                                                                    AS bildung,
+                           `T_RATE_GESAMT`                                                                                     AS gesamt,
+                           `T_RATE_KRAFT`                                                                                      AS kraft,
+                           `T_RATE_MENTAL`                                                                                     AS mental,
+                           `T_RATE_MOTIVE`                                                                                     AS motive,
+                           `T_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
+                           `T_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
+                           ROUND((T_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
+                           ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
+                           ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
+                           ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_DESC_FUEHRER_FULL                                                                                 AS guides,
+                           T_DESC_GEBIET                                                                                       AS region,
+                           T_DESC_TALORT                                                                                       AS baseloc,
+                           T_DESC_ZIEL                                                                                         AS destloc
+                    FROM tour,
                          location
-                    where tour.l_id = location.l_id
-                    order by t_datevon, t_id"
+                    WHERE tour.l_id = location.l_id
+                    ORDER BY t_datevon, t_id"
                 deltaImportQuery="
-                    select 'ROUTE'                                                                                             as type,
-                           concat('ROUTE', '_', tour.t_id)                                                                     as id,
+                    SELECT 'ROUTE'                                                                                             AS type,
+                           CONCAT('ROUTE', '_', tour.t_id)                                                                     AS id,
                            tour.k_id,
                            tour.t_id,
                            tour.d_id,
@@ -880,58 +872,58 @@
                            tour.countVideos,
                            t_name,
                            t_html_list,
-                           concat(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
-                           t_dateshow,
-                           t_datevon                                                                                           as datesort,
-                           t_datevon,
-                           DATE_FORMAT(t_datevon, GET_FORMAT(DATE, 'ISO'))                                                     as dateonly,
-                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             as done,
+                           CONCAT(t_html_list, ' ', t_name, ' ', t_keywords, ' ', t_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
+                           t_dateshow || 'Z',
+                           t_datevon || 'Z'                                                                                           AS datesort,
+                           t_datevon || 'Z',
+                           DATE_FORMAT(t_datevon, GET_FORMAT(DATE, 'ISO'))                                                     AS dateonly,
+                           CONCAT('DONE', (t_datevon IS NOT NULL))                                                             AS done,
                            t_gpstracks_basefile,
                            t_keywords,
                            t_persons,
                            t_objects,
                            t_meta_shortdesc_md,
                            t_meta_shortdesc_html,
-                           t_meta_shortdesc_html                                                                               as t_meta_shortdesc_html2,
+                           t_meta_shortdesc_html                                                                               AS t_meta_shortdesc_html2,
                            t_rate_gesamt,
                            t_gps_lat,
                            t_gps_lon,
-                           concat(t_gps_lat, ',', t_gps_lon)                                                                   as t_gps_loc,
+                           CONCAT(t_gps_lat, ',', t_gps_lon)                                                                   AS t_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            t_k_ids,
-                           `T_ELE_MAX`                                                                                         as altMax,
-                           `T_ROUTE_HM`                                                                                        as altAsc,
-                           `T_ROUTE_M`                                                                                         as dist,
-                           `T_ROUTE_DAUER`                                                                                     as dur,
-                           `T_RATE`                                                                                            as overall,
-                           `T_RATE_KS`                                                                                         as ks,
-                           `T_RATE_FIRN`                                                                                       as firn,
-                           `T_RATE_GLETSCHER`                                                                                  as gletscher,
-                           `T_RATE_KLETTERN`                                                                                   as klettern,
-                           `T_RATE_BERGTOUR`                                                                                   as bergtour,
-                           `T_RATE_SCHNEESCHUH`                                                                                as schneeschuh,
-                           `T_RATE_AUSDAUER`                                                                                   as ausdauer,
-                           `T_RATE_BILDUNG`                                                                                    as bildung,
-                           `T_RATE_GESAMT`                                                                                     as gesamt,
-                           `T_RATE_KRAFT`                                                                                      as kraft,
-                           `T_RATE_MENTAL`                                                                                     as mental,
-                           `T_RATE_MOTIVE`                                                                                     as motive,
-                           `T_RATE_SCHWIERIGKEIT`                                                                              as schwierigkeit,
-                           `T_RATE_WICHTIGKEIT`                                                                                as wichtigkeit,
-                           round((T_ROUTE_HM / 500)) * 500                                                                     as altAscFacet,
-                           round((T_ELE_MAX / 500)) * 500                                                                      as altMaxFacet,
-                           round((T_ROUTE_M / 5)) * 5                                                                          as distFacet,
-                           ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              as durFacet,
-                           T_DESC_FUEHRER_FULL                                                                                 as guides,
-                           T_DESC_GEBIET                                                                                       as region,
-                           T_DESC_TALORT                                                                                       as baseloc,
-                           T_DESC_ZIEL                                                                                         as destloc
-                    from tour,
+                           `T_ELE_MAX`                                                                                         AS altMax,
+                           `T_ROUTE_HM`                                                                                        AS altAsc,
+                           `T_ROUTE_M`                                                                                         AS dist,
+                           `T_ROUTE_DAUER`                                                                                     AS dur,
+                           `T_RATE`                                                                                            AS overall,
+                           `T_RATE_KS`                                                                                         AS ks,
+                           `T_RATE_FIRN`                                                                                       AS firn,
+                           `T_RATE_GLETSCHER`                                                                                  AS gletscher,
+                           `T_RATE_KLETTERN`                                                                                   AS klettern,
+                           `T_RATE_BERGTOUR`                                                                                   AS bergtour,
+                           `T_RATE_SCHNEESCHUH`                                                                                AS schneeschuh,
+                           `T_RATE_AUSDAUER`                                                                                   AS ausdauer,
+                           `T_RATE_BILDUNG`                                                                                    AS bildung,
+                           `T_RATE_GESAMT`                                                                                     AS gesamt,
+                           `T_RATE_KRAFT`                                                                                      AS kraft,
+                           `T_RATE_MENTAL`                                                                                     AS mental,
+                           `T_RATE_MOTIVE`                                                                                     AS motive,
+                           `T_RATE_SCHWIERIGKEIT`                                                                              AS schwierigkeit,
+                           `T_RATE_WICHTIGKEIT`                                                                                AS wichtigkeit,
+                           ROUND((T_ROUTE_HM / 500)) * 500                                                                     AS altAscFacet,
+                           ROUND((T_ELE_MAX / 500)) * 500                                                                      AS altMaxFacet,
+                           ROUND((T_ROUTE_M / 5)) * 5                                                                          AS distFacet,
+                           ROUND(ROUND(T_ROUTE_DAUER * 2) / 2, 1)                                                              AS durFacet,
+                           T_DESC_FUEHRER_FULL                                                                                 AS guides,
+                           T_DESC_GEBIET                                                                                       AS region,
+                           T_DESC_TALORT                                                                                       AS baseloc,
+                           T_DESC_ZIEL                                                                                         AS destloc
+                    FROM tour,
                          location
-                    where tour.l_id = location.l_id
-                      and tour.t_id = '${dih.delta.id}'"
-                deltaQuery="SELECT T_id from tour order by t_datevon, t_id'"
+                    WHERE tour.l_id = location.l_id
+                      AND tour.t_id = '${dih.delta.id}'"
+                deltaQuery="SELECT T_id FROM tour ORDER BY t_datevon, t_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1011,18 +1003,14 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
                             FROM tour LEFT JOIN location ON tour.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, t_name) &lt;
                                 (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))
                             ORDER BY CONCAT(L_lochirarchietxt, t_name) DESC, t_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
                             FROM tour LEFT JOIN location ON tour.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, t_name) &gt;
                                 (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))
@@ -1066,15 +1054,17 @@
 
             <entity name='image'
                     query="
-                        select
-                             image.i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
+                        SELECT
+                             image.i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                         WHERE
                             kategorie_full.t_id = ${route.t_id}
-                            and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
-                    deltaQuery="SELECT i_id from image'"
+                            AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
+                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
+                    deltaImportQuery="
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        FROM image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id FROM image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
@@ -1087,11 +1077,11 @@
                         SELECT kategorie_full.k_id,
                                tr_id,
                                n_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                k_persons,
                                k_objects
                         FROM kategorie_full
@@ -1099,17 +1089,17 @@
                         WHERE kategorie_tour.t_id = ${route.t_id}
                         ORDER BY k_datevon asc"
                     deltaImportQuery="
-                        select tr_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                        SELECT tr_id,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                k_persons,
                                k_objects
-                        from kategorie_full
-                        where k_id = '${dih.delta.id}'"
-                    deltaQuery="SELECT k_id from kategorie_full'"
+                        FROM kategorie_full
+                        WHERE k_id = '${dih.delta.id}'"
+                    deltaQuery="SELECT k_id FROM kategorie_full'"
             >
                 <field column="tr_id" name="trip_id_is"/>
                 <field column="n_id" name="news_id_is"/>
@@ -1122,21 +1112,21 @@
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
             <entity name='destination'
-                    query="select d_id from destination where d_id = '${route.d_id}'"
-                    deltaImportQuery="select d_id from destination where d_id='${dih.delta.id}'"
-                    deltaQuery="SELECT d_id from destination'"
+                    query="select d_id FROM destination WHERE d_id = '${route.d_id}'"
+                    deltaImportQuery="select d_id FROM destination WHERE d_id='${dih.delta.id}'"
+                    deltaQuery="SELECT d_id FROM destination'"
             >
                 <field column="d_id" name="destination_id_ss"/>
             </entity>
             <entity name='info'
                     query="
-                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
-                          FROM tour
-                          INNER JOIN tour_info ON tour_info.t_id = tour.t_id
-                          INNER JOIN info ON tour_info.if_id = info.if_id
-                          WHERE tour.t_id IN (${route.t_id}) GROUP BY info.if_id"
-                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
-                    deltaQuery="SELECT if_id from info'"
+                        SELECT info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
+                        FROM tour
+                        INNER JOIN tour_info ON tour_info.t_id = tour.t_id
+                        INNER JOIN info ON tour_info.if_id = info.if_id
+                        WHERE tour.t_id IN (${route.t_id}) GROUP BY info.if_id"
+                    deltaImportQuery="select info.if_id FROM info WHERE if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id FROM info'"
             >
                 <field column="if_id" name="info_id_i"/>
                 <field column="if_id" name="info_id_is"/>
@@ -1147,9 +1137,9 @@
         <entity name="location"
                 pk="id"
                 query="
-                    select 'LOCATION'                                                                                     as type,
-                           concat('loc_', location.l_typ)                                                                 as subtype,
-                           concat('LOCATION', '_', l_id)                                                                  as id,
+                    SELECT 'LOCATION'                                                                                     AS type,
+                           CONCAT('loc_', location.l_typ)                                                                 AS subtype,
+                           CONCAT('LOCATION', '_', l_id)                                                                  AS id,
                            l_id,
                            l_parent_id,
                            location.countImages,
@@ -1164,11 +1154,11 @@
                            l_html,
                            l_meta_shortdesc_md,
                            l_meta_shortdesc_html,
-                           l_meta_shortdesc_html                                                                          as l_meta_shortdesc_html2,
-                           concat(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
+                           l_meta_shortdesc_html                                                                          AS l_meta_shortdesc_html2,
+                           CONCAT(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
                            l_gps_lat,
                            l_gps_lon,
-                           concat(l_gps_lat, ',', l_gps_lon)                                                              as l_gps_loc,
+                           CONCAT(l_gps_lat, ',', l_gps_lon)                                                              AS l_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            l_katids,
@@ -1177,11 +1167,11 @@
                            l_keywords,
                            l_persons,
                            l_objects
-                    from location
-                    order by l_typ asc, l_name"
+                    FROM location
+                    ORDER BY l_typ asc, l_name"
                 deltaImportQuery="
-                    select 'LOCATION'                                                                                     as type,
-                           concat('LOCATION', '_', l_id)                                                                  as id,
+                    SELECT 'LOCATION'                                                                                     AS type,
+                           CONCAT('LOCATION', '_', l_id)                                                                  AS id,
                            l_id,
                            location.countImages,
                            location.countImagesTop,
@@ -1195,11 +1185,11 @@
                            l_html,
                            l_meta_shortdesc_md,
                            l_meta_shortdesc_html,
-                           l_meta_shortdesc_html                                                                          as l_meta_shortdesc_html2,
-                           concat(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
+                           l_meta_shortdesc_html                                                                          AS l_meta_shortdesc_html2,
+                           CONCAT(l_html, ' ', l_name, ' ', l_keywords, ' ', l_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
                            l_gps_lat,
                            l_gps_lon,
-                           concat(l_gps_lat, ',', l_gps_lon)                                                              as l_gps_loc,
+                           CONCAT(l_gps_lat, ',', l_gps_lon)                                                              AS l_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
                            l_katids,
@@ -1208,9 +1198,9 @@
                            l_keywords,
                            l_persons,
                            l_objects
-                    from location
-                    WHERE l_id = '${dih.delta.id}'"
-                deltaQuery="SELECT l_id from location order by l_typ asc, l_id'"
+                    FROM location
+                   WHERE l_id = '${dih.delta.id}'"
+                deltaQuery="SELECT l_id FROM location ORDER BY l_typ asc, l_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1248,18 +1238,14 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects,
+                        (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects,
                                 l_lochirarchietxt
                             FROM location
                             WHERE l_lochirarchietxt &lt; (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id}))
                             ORDER BY l_lochirarchietxt DESC, l_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects, l_lochirarchietxt
+                        (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects, l_lochirarchietxt
                             FROM location
                             WHERE l_lochirarchietxt &gt; (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id}))
                             ORDER BY l_lochirarchietxt, l_id LIMIT 1
@@ -1306,13 +1292,15 @@
 
             <entity name='image'
                     query="
-                        select i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
-                        from image
-                        where k_id in (${location.l_katids} 0)
-                          and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
-                    deltaQuery="SELECT i_id from image'"
+                       SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        FROM image
+                        WHERE k_id in (${location.l_katids} 0)
+                          AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
+                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                    deltaImportQuery="
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        FROM image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id FROM image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
@@ -1322,9 +1310,9 @@
             </entity>
 
             <entity name='tour'
-                    query="select t_id, t_keywords, concat('ac_', tour.t_typ) as actiontype from tour where t_id in (${location.l_tids} 0)"
-                    deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
-                    deltaQuery="SELECT t_id from tour'"
+                    query="select t_id, t_keywords, CONCAT('ac_', tour.t_typ) AS actiontype FROM tour WHERE t_id in (${location.l_tids} 0)"
+                    deltaImportQuery="select t_id, t_keywords FROM tour WHERE t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id FROM tour'"
             >
                 <field column="t_keywords" name="keywords_txt" regex="[ ]+" replaceWith=" " />
                 <field column="actiontype" name="actiontype_s" />
@@ -1332,29 +1320,29 @@
             </entity>
             <entity name='bericht'
                     query="
-                        select tr_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                        SELECT tr_id,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                k_persons,
                                k_objects
-                        from kategorie_full
-                        where k_id in (${location.l_katids} 0)
-                        order by k_datevon asc"
+                        FROM kategorie_full
+                        WHERE k_id in (${location.l_katids} 0)
+                        ORDER BY k_datevon asc"
                     deltaImportQuery="
-                        select tr_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                        SELECT tr_id,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                k_persons,
                                k_objects
-                        from kategorie_full
-                        where k_id = {'dih.delta.id}'"
-                    deltaQuery="SELECT k_id from kategorie_full'">
+                        FROM kategorie_full
+                        WHERE k_id = {'dih.delta.id}'"
+                    deltaQuery="SELECT k_id FROM kategorie_full'">
                 <field column="tr_id" name="trip_id_is"/>
                 <field column="k_datevon" name="date_dts" />
                 <field column="week" name="week_is" />
@@ -1365,13 +1353,13 @@
             </entity>
             <entity name='info'
                     query="
-                        select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(lif_linked_details, '') ORDER BY lif_linked_details SEPARATOR ', ') AS lif_ref_details
+                        SELECT info.if_id, GROUP_CONCAT(DISTINCT COALESCE(lif_linked_details, '') ORDER BY lif_linked_details SEPARATOR ', ') AS lif_ref_details
                           FROM location
                           INNER JOIN location_info ON location_info.l_id = location.l_id
                           INNER JOIN info ON location_info.if_id = info.if_id
                           WHERE location.l_id IN (${location.l_id}) GROUP BY info.if_id"
-                    deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
-                    deltaQuery="SELECT if_id from info'"
+                    deltaImportQuery="select info.if_id FROM info WHERE if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id FROM info'"
             >
                 <field column="if_id" name="info_id_i"/>
                 <field column="if_id" name="info_id_is"/>
@@ -1383,11 +1371,11 @@
         <entity name="image"
                 pk="id"
                 query="
-                    select 'IMAGE'                                                                                           as type,
-                           concat('ac_', kategorie_full.k_type)                                                              as actiontype,
-                           concat('ac_', kategorie_full.k_type)                                                              as subtype,
-                           concat('IMAGE', '_', image.i_id)                                                                  as id,
-                           concat(i_dir, '/', i_file)                                                                        as i_url,
+                    SELECT 'IMAGE'                                                                                           AS type,
+                           CONCAT('ac_', kategorie_full.k_type)                                                              AS actiontype,
+                           CONCAT('ac_', kategorie_full.k_type)                                                              AS subtype,
+                           CONCAT('IMAGE', '_', image.i_id)                                                                  AS id,
+                           CONCAT(i_dir, '/', i_file)                                                                        AS i_url,
                            image.i_id,
                            image.k_id,
                            kategorie_full.tr_id,
@@ -1398,45 +1386,45 @@
                            k_name,
                            i_katname,
                            i_katdesc,
-                           concat(i_katdesc, ' ', k_name, ' ', i_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
-                           week(i_date)                                                                                      AS week,
-                           month(i_date)                                                                                     as month,
-                           year(i_date)                                                                                      as year,
-                           i_dateshow,
-                           i_date                                                                                            as datesort,
-                           i_date,
-                           DATE_FORMAT(i_date, GET_FORMAT(DATE, 'ISO'))                                                      as dateonly,
-                           CONCAT('DONE', (i_date IS NOT NULL))                                                              as done,
+                           CONCAT(i_katdesc, ' ', k_name, ' ', i_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
+                           WEEK(i_date)                                                                                      AS week,
+                           MONTH(i_date)                                                                                     AS month,
+                           YEAR(i_date)                                                                                      AS year,
+                           i_dateshow || 'Z',
+                           i_date || 'Z'                                                                                            AS datesort,
+                           i_date || 'Z',
+                           DATE_FORMAT(i_date, GET_FORMAT(DATE, 'ISO'))                                                      AS dateonly,
+                           CONCAT('DONE', (i_date IS NOT NULL))                                                              AS done,
                            k_gpstracks_basefile,
                            i_keywords,
                            i_persons,
                            i_objects,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                                                             as k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                                                             AS k_meta_shortdesc_html2,
                            i_rate,
                            i_gps_lat,
                            i_gps_lon,
-                           concat(i_gps_lat, ',', i_gps_lon)                                                                 as i_gps_loc,
+                           CONCAT(i_gps_lat, ',', i_gps_lon)                                                                 AS i_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `I_GPS_ELE`                                                                                       as altMax,
-                           `I_RATE`                                                                                          as gesamt,
-                           `I_RATE_MOTIVE`                                                                                   as motive,
-                           `I_RATE_WICHTIGKEIT`                                                                              as wichtigkeit,
-                           round((I_GPS_ELE / 500)) * 500                                                                    as altMaxFacet
-                    from image,
+                           `I_GPS_ELE`                                                                                       AS altMax,
+                           `I_RATE`                                                                                          AS gesamt,
+                           `I_RATE_MOTIVE`                                                                                   AS motive,
+                           `I_RATE_WICHTIGKEIT`                                                                              AS wichtigkeit,
+                           ROUND((I_GPS_ELE / 500)) * 500                                                                    AS altMaxFacet
+                    FROM image,
                          kategorie_full,
                          location
-                    where kategorie_full.l_id = location.l_id
-                      and image.k_id = kategorie_full.k_id
-                    order by i_date, i_id"
+                    WHERE kategorie_full.l_id = location.l_id
+                      AND image.k_id = kategorie_full.k_id
+                    ORDER BY i_date, image.i_id"
                 deltaImportQuery="
-                    select 'IMAGE'                                                  as type,
-                           concat('ac_', kategorie_full.k_type)                     as actiontype,
-                           concat('ac_', kategorie_full.k_type)                     as subtype,
-                           concat('IMAGE', '_', image.i_id)                         as id,
-                           concat(i_dir, '/', i_file)                               as i_url,
+                    SELECT 'IMAGE'                                                  AS type,
+                           CONCAT('ac_', kategorie_full.k_type)                     AS actiontype,
+                           CONCAT('ac_', kategorie_full.k_type)                     AS subtype,
+                           CONCAT('IMAGE', '_', image.i_id)                         AS id,
+                           CONCAT(i_dir, '/', i_file)                               AS i_url,
                            image.i_id,
                            image.k_id,
                            kategorie_full.n_id,
@@ -1446,40 +1434,40 @@
                            k_name,
                            i_katname,
                            i_katdesc,
-                           concat(i_katdesc, ' ', k_name, ' ', k_meta_shortdesc_md) as html,
-                           week(i_date)                                             AS week,
-                           month(i_date)                                            as month,
-                           year(i_date)                                             as year,
-                           i_dateshow,
-                           i_date                                                   as datesort,
-                           i_date,
-                           DATE_FORMAT(i_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
-                           CONCAT('DONE', (i_date IS NOT NULL))                     as done,
+                           CONCAT(i_katdesc, ' ', k_name, ' ', k_meta_shortdesc_md) AS html,
+                           WEEK(i_date)                                             AS week,
+                           MONTH(i_date)                                            AS month,
+                           YEAR(i_date)                                             AS year,
+                           i_dateshow || 'Z',
+                           i_date || 'Z'                                                   AS datesort,
+                           i_date || 'Z',
+                           DATE_FORMAT(i_date, GET_FORMAT(DATE, 'ISO'))             AS dateonly,
+                           CONCAT('DONE', (i_date IS NOT NULL))                     AS done,
                            k_gpstracks_basefile,
                            i_keywords,
                            i_persons,
                            i_objects,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                    as k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                    AS k_meta_shortdesc_html2,
                            i_rate,
                            i_gps_lat,
                            i_gps_lon,
-                           concat(i_gps_lat, ',', i_gps_lon)                        as i_gps_loc,
+                           CONCAT(i_gps_lat, ',', i_gps_lon)                        AS i_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `I_GPS_ELE`                                              as altMax,
-                           `I_RATE`                                                 as gesamt,
-                           `I_RATE_MOTIVE`                                          as motive,
-                           `I_RATE_WICHTIGKEIT`                                     as wichtigkeit,
-                           round((I_GPS_ELE / 500)) * 500                           as altMaxFacet
-                    from image,
+                           `I_GPS_ELE`                                              AS altMax,
+                           `I_RATE`                                                 AS gesamt,
+                           `I_RATE_MOTIVE`                                          AS motive,
+                           `I_RATE_WICHTIGKEIT`                                     AS wichtigkeit,
+                           ROUND((I_GPS_ELE / 500)) * 500                           AS altMaxFacet
+                    FROM image,
                          kategorie_full,
                          location
-                    where kategorie_full.l_id = location.l_id
-                      and image.k_id = kategorie_full.k_id
-                      and image.i_id = '${dih.delta.id}'"
-                deltaQuery="SELECT i_id from image order by i_date, i_id'"
+                    WHERE kategorie_full.l_id = location.l_id
+                      AND image.k_id = kategorie_full.k_id
+                      AND image.i_id = '${dih.delta.id}'"
+                deltaQuery="SELECT i_id FROM image ORDER BY i_date, i_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1540,11 +1528,11 @@
         <entity name="video"
                 pk="id"
                 query="
-                    select 'VIDEO'                                                                                           as type,
-                           concat('ac_', kategorie_full.k_type)                                                              as actiontype,
-                           concat('ac_', kategorie_full.k_type)                                                              as subtype,
-                           concat('VIDEO', '_', video.v_id)                                                                  as id,
-                           concat(v_dir, '/', v_file)                                                                        as v_url,
+                    SELECT 'VIDEO'                                                                                           AS type,
+                           CONCAT('ac_', kategorie_full.k_type)                                                              AS actiontype,
+                           CONCAT('ac_', kategorie_full.k_type)                                                              AS subtype,
+                           CONCAT('VIDEO', '_', video.v_id)                                                                  AS id,
+                           CONCAT(v_dir, '/', v_file)                                                                        AS v_url,
                            video.v_id,
                            video.k_id,
                            kategorie_full.tr_id,
@@ -1555,45 +1543,45 @@
                            k_name,
                            v_katname,
                            v_katdesc,
-                           concat(v_katdesc, ' ', k_name, ' ', v_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) as html,
-                           week(v_date)                                                                                      AS week,
-                           month(v_date)                                                                                     as month,
-                           year(v_date)                                                                                      as year,
-                           v_dateshow,
-                           v_date                                                                                            as datesort,
-                           v_date,
-                           DATE_FORMAT(v_date, GET_FORMAT(DATE, 'ISO'))                                                      as dateonly,
-                           CONCAT('DONE', (v_date IS NOT NULL))                                                              as done,
+                           CONCAT(v_katdesc, ' ', k_name, ' ', v_keywords, ' ', k_meta_shortdesc_md, ' ', l_lochirarchietxt) AS html,
+                           WEEK(v_date)                                                                                      AS week,
+                           MONTH(v_date)                                                                                     AS month,
+                           YEAR(v_date)                                                                                      AS year,
+                           v_dateshow || 'Z',
+                           v_date || 'Z'                                                                                            AS datesort,
+                           v_date || 'Z',
+                           DATE_FORMAT(v_date, GET_FORMAT(DATE, 'ISO'))                                                      AS dateonly,
+                           CONCAT('DONE', (v_date IS NOT NULL))                                                              AS done,
                            k_gpstracks_basefile,
                            v_keywords,
                            v_persons,
                            v_objects,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                                                             as k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                                                             AS k_meta_shortdesc_html2,
                            v_rate,
                            v_gps_lat,
                            v_gps_lon,
-                           concat(v_gps_lat, ',', v_gps_lon)                                                                 as v_gps_loc,
+                           CONCAT(v_gps_lat, ',', v_gps_lon)                                                                 AS v_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `V_GPS_ELE`                                                                                       as altMax,
-                           `V_RATE`                                                                                          as gesamt,
-                           `V_RATE_MOTIVE`                                                                                   as motive,
-                           `V_RATE_WICHTIGKEIT`                                                                              as wichtigkeit,
-                           round((V_GPS_ELE / 500)) * 500                                                                    as altMaxFacet
-                    from video,
+                           `V_GPS_ELE`                                                                                       AS altMax,
+                           `V_RATE`                                                                                          AS gesamt,
+                           `V_RATE_MOTIVE`                                                                                   AS motive,
+                           `V_RATE_WICHTIGKEIT`                                                                              AS wichtigkeit,
+                           ROUND((V_GPS_ELE / 500)) * 500                                                                    AS altMaxFacet
+                    FROM video,
                          kategorie_full,
                          location
-                    where kategorie_full.l_id = location.l_id
-                      and video.k_id = kategorie_full.k_id
-                    order by v_date, v_id"
+                    WHERE kategorie_full.l_id = location.l_id
+                      AND video.k_id = kategorie_full.k_id
+                    ORDER BY v_date, video.v_id"
                 deltaImportQuery="
-                    select 'VIDEO'                                                  as type,
-                           concat('ac_', kategorie_full.k_type)                     as actiontype,
-                           concat('ac_', kategorie_full.k_type)                     as subtype,
-                           concat('VIDEO', '_', video.v_id)                         as id,
-                           concat(v_dir, '/', v_file)                               as v_url,
+                    SELECT 'VIDEO'                                                  AS type,
+                           CONCAT('ac_', kategorie_full.k_type)                     AS actiontype,
+                           CONCAT('ac_', kategorie_full.k_type)                     AS subtype,
+                           CONCAT('VIDEO', '_', video.v_id)                         AS id,
+                           CONCAT(v_dir, '/', v_file)                               AS v_url,
                            video.v_id,
                            video.k_id,
                            kategorie_full.d_id,
@@ -1603,41 +1591,40 @@
                            k_name,
                            v_katname,
                            v_katdesc,
-                           concat(v_katdesc, ' ', k_name, ' ', k_meta_shortdesc_md) as html,
-                           week(v_date)                                             AS week,
-                           month(v_date)                                            as month,
-                           year(v_date)                                             as year,
-                           v_dateshow,
-                           v_date                                                   as datesort,
-                           v_date,
-                           DATE_FORMAT(v_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
-                           CONCAT('DONE', (v_date IS NOT NULL))                     as done,
+                           CONCAT(v_katdesc, ' ', k_name, ' ', k_meta_shortdesc_md) AS html,
+                           WEEK(v_date)                                             AS week,
+                           MONTH(v_date)                                            AS month,
+                           YEAR(v_date)                                             AS year,
+                           v_dateshow || 'Z',
+                           v_date || 'Z'                                                   AS datesort,
+                           v_date || 'Z',
+                           DATE_FORMAT(v_date, GET_FORMAT(DATE, 'ISO'))             AS dateonly,
+                           CONCAT('DONE', (v_date IS NOT NULL))                     AS done,
                            k_gpstracks_basefile,
                            v_keywords,
                            v_persons,
                            v_objects,
                            k_meta_shortdesc_md,
                            k_meta_shortdesc_html,
-                           k_meta_shortdesc_html                                    as k_meta_shortdesc_html2,
+                           k_meta_shortdesc_html                                    AS k_meta_shortdesc_html2,
                            v_rate,
                            v_gps_lat,
                            v_gps_lon,
-                           concat(v_gps_lat, ',', v_gps_lon)                        as v_gps_loc,
+                           CONCAT(v_gps_lat, ',', v_gps_lon)                        AS v_gps_loc,
                            l_lochirarchietxt,
                            l_lochirarchieids,
-                           `V_GPS_ELE`                                              as altMax,
-                           `V_RATE`                                                 as gesamt,
-                           `V_RATE_MOTIVE`                                          as motive,
-                           `V_RATE_WICHTIGKEIT`                                     as wichtigkeit,
-                           round((V_GPS_ELE / 500)) * 500                           as altMaxFacet
-                    from video,
+                           `V_GPS_ELE`                                              AS altMax,
+                           `V_RATE`                                                 AS gesamt,
+                           `V_RATE_MOTIVE`                                          AS motive,
+                           `V_RATE_WICHTIGKEIT`                                     AS wichtigkeit,
+                           ROUND((V_GPS_ELE / 500)) * 500                           AS altMaxFacet
+                    FROM video,
                          kategorie_full,
                          location
-                    where kategorie_full.l_id = location.l_id
-                      and video.k_id = kategorie_full.k_id
-                      and video.v_id = '${dih.delta.id}'
-                    "
-                deltaQuery="SELECT v_id from video order by v_date, v_id'"
+                   WHERE kategorie_full.l_id = location.l_id
+                      AND video.k_id = kategorie_full.k_id
+                      AND video.v_id = '${dih.delta.id}'"
+                deltaQuery="SELECT v_id FROM video ORDER BY v_date, v_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1697,17 +1684,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM video
                             WHERE v_date &lt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))
                             ORDER BY v_date DESC, v_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                              FROM video
                              WHERE v_date &gt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))
                              ORDER BY v_date, v_id LIMIT 1
@@ -1720,85 +1703,85 @@
         <entity name="trip"
                 pk="id"
                 query="
-                    select distinct trip.tr_id,
-                                    'TRIP'                                                       as type,
-                                    concat('TRIP', '_', trip.tr_id)                              as id,
+                    SELECT DISTINCT trip.tr_id,
+                                    'TRIP'                                                       AS type,
+                                    CONCAT('TRIP', '_', trip.tr_id)                              AS id,
                                     trip.l_id,
                                     trip.countImages,
                                     trip.countImagesTop,
                                     trip.countRoutes,
                                     trip.countTracks,
                                     trip.countVideos,
-                                    tr_dateshow,
-                                    tr_datevon                                                   as datesort,
-                                    tr_datevon,
-                                    DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, 'ISO'))             as dateonly,
-                                    CONCAT('DONE', (tr_datevon IS NOT NULL))                     as done,
-                                    TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon)) / 3600         as dur,
+                                    tr_dateshow || 'Z',
+                                    tr_datevon || 'Z'                                                   AS datesort,
+                                    tr_datevon || 'Z',
+                                    DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, 'ISO'))             AS dateonly,
+                                    CONCAT('DONE', (tr_datevon IS NOT NULL))                     AS done,
+                                    TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon)) / 3600         AS dur,
                                     tr_name,
                                     tr_meta_shortdesc_md,
                                     tr_meta_shortdesc_html,
-                                    tr_meta_shortdesc_html                                       as tr_meta_shortdesc_html2,
-                                    concat(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) as html,
+                                    tr_meta_shortdesc_html                                       AS tr_meta_shortdesc_html2,
+                                    CONCAT(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) AS html,
                                     tr_keywords,
                                     tr_persons,
                                     tr_objects,
                                     l_lochirarchietxt,
                                     l_lochirarchieids,
-                                    sum(K_ALTITUDE_ASC)                                          as altAsc,
-                                    sum(K_ALTITUDE_DESC)                                         as altDesc,
-                                    max(K_ALTITUDE_MAX)                                          as altMax,
-                                    max(round((K_ALTITUDE_MAX / 500)) * 500)                     as altMaxFacet,
-                                    min(K_ALTITUDE_MIN)                                          as altMin,
-                                    min(round((K_ALTITUDE_MIN / 500)) * 500)                     as altMinFacet,
-                                    sum(K_DISTANCE)                                              as dist
-                    from trip
-                             inner join kategorie_full on trip.tr_id = kategorie_full.tr_id
-                             left join location on trip.l_id = location.l_id
-                    group by trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md,
+                                    SUM(K_ALTITUDE_ASC)                                          AS altAsc,
+                                    SUM(K_ALTITUDE_DESC)                                         AS altDesc,
+                                    MAX(K_ALTITUDE_MAX)                                          AS altMax,
+                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                     AS altMaxFacet,
+                                    MIN(K_ALTITUDE_MIN)                                          AS altMin,
+                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                     AS altMinFacet,
+                                    SUM(K_DISTANCE)                                              AS dist
+                    FROM trip
+                             inner join kategorie_full ON trip.tr_id = kategorie_full.tr_id
+                             LEFT JOIN location ON trip.l_id = location.l_id
+                    GROUP BY trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md,
                              tr_meta_shortdesc_html, tr_meta_shortdesc_html2, html, tr_keywords, l_lochirarchietxt, l_lochirarchieids
-                    order by tr_datevon"
+                    ORDER BY tr_datevon"
                 deltaImportQuery="
-                    select distinct trip.tr_id,
-                                    'TRIP'                                                       as type,
-                                    concat('TRIP', '_', trip.tr_id)                              as id,
+                    SELECT DISTINCT trip.tr_id,
+                                    'TRIP'                                                       AS type,
+                                    CONCAT('TRIP', '_', trip.tr_id)                              AS id,
                                     trip.l_id,
                                     trip.countImages,
                                     trip.countImagesTop,
                                     trip.countRoutes,
                                     trip.countTracks,
                                     trip.countVideos,
-                                    tr_dateshow,
-                                    tr_datevon                                                   as datesort,
-                                    tr_datevon,
-                                    DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, 'ISO'))             as dateonly,
-                                    CONCAT('DONE', (tr_datevon IS NOT NULL))                     as done,
-                                    TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon)) / 3600         as dur,
+                                    tr_dateshow || 'Z',
+                                    tr_datevon || 'Z'                                                   AS datesort,
+                                    tr_datevon || 'Z',
+                                    DATE_FORMAT(tr_datevon, GET_FORMAT(DATE, 'ISO'))             AS dateonly,
+                                    CONCAT('DONE', (tr_datevon IS NOT NULL))                     AS done,
+                                    TIME_TO_SEC(TIMEDIFF(tr_datebis, tr_datevon)) / 3600         AS dur,
                                     tr_name,
                                     tr_meta_shortdesc_md,
                                     tr_meta_shortdesc_html,
-                                    tr_meta_shortdesc_html                                       as tr_meta_shortdesc_html2,
-                                    concat(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) as html,
+                                    tr_meta_shortdesc_html                                       AS tr_meta_shortdesc_html2,
+                                    CONCAT(tr_name, ' ', tr_keywords, ' ', tr_meta_shortdesc_md) AS html,
                                     tr_keywords,
                                     tr_persons,
                                     tr_objects,
                                     l_lochirarchietxt,
                                     l_lochirarchieids,
-                                    sum(K_ALTITUDE_ASC)                                          as altAsc,
-                                    sum(K_ALTITUDE_DESC)                                         as altDesc,
-                                    max(K_ALTITUDE_MAX)                                          as altMax,
-                                    max(round((K_ALTITUDE_MAX / 500)) * 500)                     as altMaxFacet,
-                                    min(K_ALTITUDE_MIN)                                          as altMin,
-                                    min(round((K_ALTITUDE_MIN / 500)) * 500)                     as altMinFacet,
-                                    sum(K_DISTANCE)                                              as dist
-                    from trip
-                             inner join kategorie_full on trip.tr_id = kategorie_full.tr_id
-                             left join location on trip.l_id = location.l_id
-                    where trip.tr_id = '${dih.delta.id}'
-                    group by trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md,
+                                    SUM(K_ALTITUDE_ASC)                                          AS altAsc,
+                                    SUM(K_ALTITUDE_DESC)                                         AS altDesc,
+                                    MAX(K_ALTITUDE_MAX)                                          AS altMax,
+                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                     AS altMaxFacet,
+                                    MIN(K_ALTITUDE_MIN)                                          AS altMin,
+                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                     AS altMinFacet,
+                                    SUM(K_DISTANCE)                                              AS dist
+                    FROM trip
+                             inner join kategorie_full ON trip.tr_id = kategorie_full.tr_id
+                             LEFT JOIN location ON trip.l_id = location.l_id
+                    WHERE trip.tr_id = '${dih.delta.id}'
+                    GROUP BY trip.tr_id, type, id, tr_dateshow, datesort, tr_datevon, dateonly, dur, tr_name, tr_meta_shortdesc_md,
                              tr_meta_shortdesc_html, tr_meta_shortdesc_html2, html, tr_keywords, l_lochirarchietxt, l_lochirarchieids
-                    order by tr_datevon"
-                deltaQuery="SELECT tr_id from trip where tr_id in (select tr_id from kategorie_full) order by tr_id'"
+                    ORDER BY tr_datevon"
+                deltaQuery="SELECT tr_id FROM trip WHERE tr_id in (select tr_id FROM kategorie_full) ORDER BY tr_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -1841,17 +1824,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM trip
                             WHERE tr_datevon &lt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))
                             ORDER BY tr_datevon DESC, tr_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                             FROM trip
                             WHERE tr_datevon &gt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))
                             ORDER BY tr_datevon, tr_id LIMIT 1
@@ -1886,13 +1865,15 @@
 
             <entity name='image'
                     query="
-                        select i_id, i_date, concat(i_dir, '/', i_file) as i_url
-                        from image
-                        where k_id in (select k_id from kategorie_full where tr_id in (${trip.tr_id}))
-                          and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
-                        order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
-                    deltaQuery="SELECT i_id from image'"
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url
+                        FROM image
+                        WHERE k_id in (select k_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))
+                          AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
+                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
+                    deltaImportQuery="
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url
+                        FROM image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id FROM image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
@@ -1901,11 +1882,11 @@
 
             <entity name='tour'
                     query="
-                        select t_id, d_id, t_keywords, concat('ac_', tour.t_typ) as actiontype
-                        from tour
-                        where t_id in (select t_id from kategorie_full where tr_id in (${trip.tr_id}))"
-                    deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
-                    deltaQuery="SELECT t_id from tour'"
+                        SELECT t_id, d_id, t_keywords, CONCAT('ac_', tour.t_typ) AS actiontype
+                        FROM tour
+                        WHERE t_id in (select t_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))"
+                    deltaImportQuery="select t_id, t_keywords FROM tour WHERE t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id FROM tour'"
             >
                 <field column="d_id" name="destination_id_s" />
                 <field column="d_id" name="destination_id_ss" />
@@ -1914,11 +1895,11 @@
             </entity>
             <entity name='destination'
                     query="
-                        select destination.d_id, d_keywords, concat('ac_', destination.d_typ) as actiontype
-                        from destination inner join tour on destination.d_id=tour.d_id
-                        where t_id in (select t_id from kategorie_full where tr_id in (${trip.tr_id}))"
-                    deltaImportQuery="select d_id, d_keywords from destination where d_id='${dih.delta.id}'"
-                    deltaQuery="SELECT d_id from destination"
+                        SELECT destination.d_id, d_keywords, CONCAT('ac_', destination.d_typ) AS actiontype
+                        FROM destination inner join tour ON destination.d_id=tour.d_id
+                        WHERE t_id in (select t_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))"
+                    deltaImportQuery="select d_id, d_keywords FROM destination WHERE d_id='${dih.delta.id}'"
+                    deltaQuery="SELECT d_id FROM destination"
             >
                 <field column="destination.d_id" name="destination_id_s" />
                 <field column="destination.d_id" name="destination_id_ss" />
@@ -1927,43 +1908,43 @@
             </entity>
             <entity name='bericht'
                     query="
-                        select kategorie_full.l_id,
+                        SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                t_id,
                                k_keywords,
                                k_persons,
                                k_objects,
                                l_lochirarchietxt,
                                l_lochirarchieids
-                        from kategorie_full,
+                        FROM kategorie_full,
                              location
-                        where kategorie_full.l_id = location.l_id
-                          and tr_id in (${trip.tr_id})
-                        order by k_datevon asc"
+                        WHERE kategorie_full.l_id = location.l_id
+                          AND tr_id in (${trip.tr_id})
+                        ORDER BY k_datevon asc"
                     deltaImportQuery="
-                        select kategorie_full.l_id,
+                        SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                t_id,
                                k_keywords,
                                k_persons,
                                k_objects,
                                l_lochirarchietxt,
                                l_lochirarchieids
-                        from kategorie_full,
+                        FROM kategorie_full,
                              location
-                        where kategorie_full.l_id = location.l_id
-                          and k_id = '${dih.delta.id}'"
-                    deltaQuery="SELECT k_id from kategorie_full'"
+                        WHERE kategorie_full.l_id = location.l_id
+                          AND k_id = '${dih.delta.id}'"
+                    deltaQuery="SELECT k_id FROM kategorie_full'"
                     transformer="HTMLStripTransformer,RegexTransformer"
             >
                 <field column="l_id" name="loc_id_i"/>
@@ -1989,74 +1970,74 @@
         <entity name="news"
                 pk="id"
                 query="
-                    select distinct news.n_id,
-                                    'NEWS'                                                   as type,
-                                    concat('NEWS', '_', news.n_id)                           as id,
+                    SELECT DISTINCT news.n_id,
+                                    'NEWS'                                                   AS type,
+                                    CONCAT('NEWS', '_', news.n_id)                           AS id,
                                     news.countImages,
                                     news.countImagesTop,
                                     news.countRoutes,
                                     news.countTracks,
                                     news.countTrips,
                                     news.countVideos,
-                                    n_date,
-                                    n_date                                                   as dateshow,
-                                    DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
-                                    CONCAT('DONE', (n_date IS NOT NULL))                     as done,
+                                    n_date || 'Z',
+                                    n_date || 'Z'                                                   AS dateshow,
+                                    DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             AS dateonly,
+                                    CONCAT('DONE', (n_date IS NOT NULL))                     AS done,
                                     n_headline,
                                     n_message_md,
                                     n_message_html,
-                                    n_message_html                                           as n_message_html2,
-                                    concat(n_headline, ' ', n_keywords, ' ', n_message_html) as html,
+                                    n_message_html                                           AS n_message_html2,
+                                    CONCAT(n_headline, ' ', n_keywords, ' ', n_message_html) AS html,
                                     n_keywords,
                                     n_persons,
                                     n_objects,
-                                    sum(K_ALTITUDE_ASC)                                      as altAsc,
-                                    sum(K_ALTITUDE_DESC)                                     as altDesc,
-                                    max(K_ALTITUDE_MAX)                                      as altMax,
-                                    max(round((K_ALTITUDE_MAX / 500)) * 500)                 as altMaxFacet,
-                                    min(K_ALTITUDE_MIN)                                      as altMin,
-                                    min(round((K_ALTITUDE_MIN / 500)) * 500)                 as altMinFacet,
-                                    sum(K_DISTANCE)                                          as dist
-                    from news
-                             left join kategorie_full on news.n_id = kategorie_full.n_id
-                    group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2,
+                                    SUM(K_ALTITUDE_ASC)                                      AS altAsc,
+                                    SUM(K_ALTITUDE_DESC)                                     AS altDesc,
+                                    MAX(K_ALTITUDE_MAX)                                      AS altMax,
+                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                 AS altMaxFacet,
+                                    MIN(K_ALTITUDE_MIN)                                      AS altMin,
+                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                 AS altMinFacet,
+                                    SUM(K_DISTANCE)                                          AS dist
+                    FROM news
+                             LEFT JOIN kategorie_full ON news.n_id = kategorie_full.n_id
+                    GROUP BY news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2,
                              html, n_keywords
-                    order by n_date"
+                    ORDER BY n_date"
                 deltaImportQuery="
-                    select distinct news.n_id,
-                                    'NEWS'                                                   as type,
-                                    concat('NEWS', '_', news.n_id)                           as id,
+                    SELECT DISTINCT news.n_id,
+                                    'NEWS'                                                   AS type,
+                                    CONCAT('NEWS', '_', news.n_id)                           AS id,
                                     news.countImages,
                                     news.countImagesTop,
                                     news.countRoutes,
                                     news.countTracks,
                                     news.countTrips,
                                     news.countVideos,
-                                    n_date,
-                                    n_date                                                   as dateshow,
-                                    DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             as dateonly,
-                                    CONCAT('DONE', (n_date IS NOT NULL))                     as done,
+                                    n_date || 'Z',
+                                    n_date || 'Z'                                                   AS dateshow,
+                                    DATE_FORMAT(n_date, GET_FORMAT(DATE, 'ISO'))             AS dateonly,
+                                    CONCAT('DONE', (n_date IS NOT NULL))                     AS done,
                                     n_headline,
                                     n_message_md,
                                     n_message_html,
-                                    n_message_html                                           as n_message_html2,
-                                    concat(n_headline, ' ', n_keywords, ' ', n_message_html) as html,
+                                    n_message_html                                           AS n_message_html2,
+                                    CONCAT(n_headline, ' ', n_keywords, ' ', n_message_html) AS html,
                                     n_keywords,
                                     n_persons,
                                     n_objects,
-                                    sum(K_ALTITUDE_ASC)                                      as altAsc,
-                                    sum(K_ALTITUDE_DESC)                                     as altDesc,
-                                    max(K_ALTITUDE_MAX)                                      as altMax,
-                                    max(round((K_ALTITUDE_MAX / 500)) * 500)                 as altMaxFacet,
-                                    min(K_ALTITUDE_MIN)                                      as altMin,
-                                    min(round((K_ALTITUDE_MIN / 500)) * 500)                 as altMinFacet,
-                                    sum(K_DISTANCE)                                          as dist
-                    from news
-                             left join kategorie_full on news.n_id = kategorie_full.n_id
+                                    SUM(K_ALTITUDE_ASC)                                      AS altAsc,
+                                    SUM(K_ALTITUDE_DESC)                                     AS altDesc,
+                                    MAX(K_ALTITUDE_MAX)                                      AS altMax,
+                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                 AS altMaxFacet,
+                                    MIN(K_ALTITUDE_MIN)                                      AS altMin,
+                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                 AS altMinFacet,
+                                    SUM(K_DISTANCE)                                          AS dist
+                    FROM news
+                             LEFT JOIN kategorie_full ON news.n_id = kategorie_full.n_id
                     WHERE news.n_id = '${dih.delta.id}'
-                    group by news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2,
+                    GROUP BY news.n_id, type, id, n_date, dateshow, dateonly, n_headline, n_message_md, n_message_html, n_message_html2,
                              html, n_keywords"
-                deltaQuery="SELECT n_id from info order by n_id'"
+                deltaQuery="SELECT n_id FROM info ORDER BY n_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
             <field column="id" name="id"/>
@@ -2095,17 +2076,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                               CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM news
                             WHERE n_datevon &lt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))
                             ORDER BY n_datevon DESC, n_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                             FROM news
                             WHERE n_datevon &gt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))
                             ORDER BY n_datevon, n_id LIMIT 1
@@ -2144,13 +2121,15 @@
 
             <entity name='image'
                     query="
-                        select i_id, i_date, concat(i_dir, '/', i_file) as i_url
-                        from image
-                        where k_id in (select k_id from kategorie_full where n_id in (${news.n_id}))
-                        order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url
+                        FROM image
+                        WHERE k_id in (select k_id FROM kategorie_full WHERE n_id in (${news.n_id}))
+                        ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
-                    deltaQuery="SELECT i_id from image'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url
+                        FROM image WHERE i_id='${dih.delta.id}'"
+                    deltaQuery="SELECT i_id FROM image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
                 <field column="i_date" name="i_fav_i_date_dts" />
@@ -2158,14 +2137,14 @@
             </entity>
             <entity name='tour'
                     query="
-                        select tour.t_id, tour.d_id, t_keywords, concat('ac_', tour.t_typ) as actiontype
+                        SELECT tour.t_id, tour.d_id, t_keywords, CONCAT('ac_', tour.t_typ) AS actiontype
                           FROM news
                           INNER JOIN kategorie_full ON (kategorie_full.n_id = news.n_id)
                           INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
                           INNER JOIN tour ON kategorie_tour.t_id = tour.t_id
                           WHERE news.n_id IN (${news.n_id})"
-                    deltaImportQuery="select t_id, t_keywords from tour where t_id='${dih.delta.id}'"
-                    deltaQuery="SELECT t_id from tour'"
+                    deltaImportQuery="select t_id, t_keywords FROM tour WHERE t_id='${dih.delta.id}'"
+                    deltaQuery="SELECT t_id FROM tour'"
             >
                 <field column="d_id" name="destination_id_s" />
                 <field column="d_id" name="destination_id_ss" />
@@ -2174,15 +2153,15 @@
             </entity>
             <entity name='destination'
                     query="
-                        select destination.d_id, d_keywords, concat('ac_', destination.d_typ) as actiontype
+                        SELECT destination.d_id, d_keywords, CONCAT('ac_', destination.d_typ) AS actiontype
                           FROM news
                           INNER JOIN kategorie_full ON (kategorie_full.n_id = news.n_id)
                           INNER JOIN kategorie_tour ON kategorie_tour.k_id = kategorie_full.k_id
                           INNER JOIN tour ON kategorie_tour.t_id = tour.t_id
-                          INNER JOIN destination on destination.d_id=tour.d_id
+                          INNER JOIN destination ON destination.d_id=tour.d_id
                           WHERE news.n_id IN (${news.n_id})"
-                    deltaImportQuery="select d_id, d_keywords from destination where d_id='${dih.delta.id}'"
-                    deltaQuery="SELECT d_id from destination"
+                    deltaImportQuery="select d_id, d_keywords FROM destination WHERE d_id='${dih.delta.id}'"
+                    deltaQuery="SELECT d_id FROM destination"
             >
                 <field column="destination.d_id" name="destination_id_s" />
                 <field column="destination.d_id" name="destination_id_ss" />
@@ -2191,43 +2170,43 @@
             </entity>
             <entity name='bericht'
                     query="
-                        select kategorie_full.l_id,
+                        SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                t_id,
                                k_keywords,
                                k_persons,
                                k_objects,
                                l_lochirarchietxt,
                                l_lochirarchieids
-                        from kategorie_full,
+                        FROM kategorie_full,
                              location
-                        where kategorie_full.l_id = location.l_id
-                          and n_id in (${news.n_id})
-                        order by k_datevon asc"
+                        WHERE kategorie_full.l_id = location.l_id
+                          AND n_id in (${news.n_id})
+                        ORDER BY k_datevon asc"
                     deltaImportQuery="
-                        select kategorie_full.l_id,
+                        SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow,
-                               k_datevon,
-                               week(k_datevon)  AS week,
-                               month(k_datevon) as month,
-                               year(k_datevon)  as year,
+                               k_dateshow || 'Z',
+                               k_datevon || 'Z',
+                               WEEK(k_datevon)  AS week,
+                               MONTH(k_datevon) AS month,
+                               YEAR(k_datevon)  AS year,
                                t_id,
                                k_keywords,
                                k_persons,
                                k_objects,
                                l_lochirarchietxt,
                                l_lochirarchieids
-                        from kategorie_full,
+                        FROM kategorie_full,
                              location
-                        where kategorie_full.l_id = location.l_id
-                          and k_id = '${dih.delta.id}'"
-                    deltaQuery="SELECT k_id from kategorie_full'"
+                        WHERE kategorie_full.l_id = location.l_id
+                          AND k_id = '${dih.delta.id}'"
+                    deltaQuery="SELECT k_id FROM kategorie_full'"
                     transformer="HTMLStripTransformer,RegexTransformer"
             >
                 <field column="l_id" name="loc_id_i"/>

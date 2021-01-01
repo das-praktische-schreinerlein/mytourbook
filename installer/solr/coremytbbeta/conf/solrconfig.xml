@@ -858,11 +858,21 @@
   -->
 
 
-	<requestHandler name="/dataimport" class="org.apache.solr.handler.dataimport.DataImportHandler">
-		<lst name="defaults">
-		<str name="config">data-config.xml</str>
-		</lst>
-	</requestHandler>
+  <requestHandler name="/dataimport" class="org.apache.solr.handler.dataimport.DataImportHandler">
+    <lst name="defaults">
+      <str name="config">${dataimport.defaultprofile}</str>
+    </lst>
+  </requestHandler>
+  <requestHandler name="/dataimportmysql" class="org.apache.solr.handler.dataimport.DataImportHandler">
+    <lst name="defaults">
+      <str name="config">data-config-mysql.xml</str>
+    </lst>
+  </requestHandler>
+  <requestHandler name="/dataimportsqlite" class="org.apache.solr.handler.dataimport.DataImportHandler">
+    <lst name="defaults">
+      <str name="config">data-config-sqlite.xml</str>
+    </lst>
+  </requestHandler>
 
   <!-- Solr Cell Update Request Handler
 
@@ -1258,7 +1268,7 @@
        http://wiki.apache.org/solr/UpdateRequestProcessor
 
     -->
-  
+
   <!-- Add unknown fields to the schema 
   
        An example field type guessing update processor that will

@@ -1,6 +1,6 @@
 <dataConfig>
     <dataSource type="JdbcDataSource"
-                driver="com.mysql.jdbc.Driver"
+                driver="org.mariadb.jdbc.Driver"
                 url="jdbc:mysql://localhost:3306/testmytbexportproddb"
                 user="testmytbexportproddb"
                 password="testmytbexportproddb"/>
@@ -82,17 +82,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                               CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM info
                             WHERE if_name &lt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
                             ORDER BY if_name DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=INFO_", if_id, ":::name=", COALESCE(if_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                             FROM info
                             WHERE if_name &gt; (SELECT if_name FROM info WHERE if_id IN (${info.if_id}))
                             ORDER BY if_name LIMIT 1
@@ -102,11 +98,11 @@
 
             <entity name='extended_object_properties'
                     query='
-                        SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
+                         SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(countRoutes AS CHAR)) AS extended_object_properties
                               FROM info
                               WHERE info.if_id IN (${info.if_id})
                            UNION
-                        SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(countLocations AS CHAR)) AS extended_object_properties
+                         SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(countLocations AS CHAR)) AS extended_object_properties
                               FROM info
                               WHERE info.if_id IN (${info.if_id})
                     '>
@@ -374,18 +370,14 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
                             FROM destination LEFT JOIN location ON destination.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, d_name) &lt;
                                 (SELECT CONCAT(L_lochirarchietxt, d_name) FROM destination LEFT JOIN location ON destination.l_id = location.l_id WHERE d_id IN ("${destination.d_id}"))
                             ORDER BY CONCAT(L_lochirarchietxt, d_name) DESC, d_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=DESTINATION_", d_id, ":::name=", COALESCE(d_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
                             FROM destination LEFT JOIN location ON destination.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, d_name) &gt;
                                 (SELECT CONCAT(L_lochirarchietxt, d_name) FROM destination LEFT JOIN location ON destination.l_id = location.l_id WHERE d_id IN ("${destination.d_id}"))
@@ -441,7 +433,9 @@
                             tour.d_id = '${destination.d_id}'
                             AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
+                        from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
@@ -715,17 +709,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                   CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
                             FROM kategorie_full
                             WHERE k_datevon &lt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))
                             ORDER BY k_datevon DESC, k_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=TRACK_", k_id, ":::name=", COALESCE(k_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
                             FROM kategorie_full
                             WHERE k_datevon &gt; (SELECT k_datevon FROM kategorie_full WHERE k_id IN (${track.k_id}))
                             ORDER BY k_datevon, k_id LIMIT 1
@@ -761,7 +751,9 @@
                         where k_id = '${track.k_id}'
                         order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
+                        from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
@@ -1011,18 +1003,14 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "PREDECESSOR")  AS navigation_objects
                             FROM tour LEFT JOIN location ON tour.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, t_name) &lt;
                                 (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))
                             ORDER BY CONCAT(L_lochirarchietxt, t_name) DESC, t_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
+                        (SELECT CONCAT("navid=ROUTE_", t_id, ":::name=", COALESCE(t_name, "null"), ":::navtype=", "SUCCESSOR")  AS navigation_objects
                             FROM tour LEFT JOIN location ON tour.l_id = location.l_id
                             WHERE CONCAT(L_lochirarchietxt, t_name) &gt;
                                 (SELECT CONCAT(L_lochirarchietxt, t_name) FROM tour LEFT JOIN location ON tour.l_id = location.l_id WHERE t_id IN (${route.t_id}))
@@ -1073,7 +1061,9 @@
                             kategorie_full.t_id = ${route.t_id}
                             and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
+                        from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
@@ -1131,10 +1121,10 @@
             <entity name='info'
                     query="
                         select info.if_id, GROUP_CONCAT(DISTINCT COALESCE(tif_linked_details, '') ORDER BY tif_linked_details SEPARATOR ', ') AS tif_ref_details
-                          FROM tour
-                          INNER JOIN tour_info ON tour_info.t_id = tour.t_id
-                          INNER JOIN info ON tour_info.if_id = info.if_id
-                          WHERE tour.t_id IN (${route.t_id}) GROUP BY info.if_id"
+                        FROM tour
+                        INNER JOIN tour_info ON tour_info.t_id = tour.t_id
+                        INNER JOIN info ON tour_info.if_id = info.if_id
+                        WHERE tour.t_id IN (${route.t_id}) GROUP BY info.if_id"
                     deltaImportQuery="select info.if_id from info where if_id='${dih.delta.id}'"
                     deltaQuery="SELECT if_id from info'"
             >
@@ -1248,18 +1238,14 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects,
+                        (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects,
                                 l_lochirarchietxt
                             FROM location
                             WHERE l_lochirarchietxt &lt; (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id}))
                             ORDER BY l_lochirarchietxt DESC, l_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects, l_lochirarchietxt
+                        (SELECT CONCAT("navid=LOCATION_", l_id, ":::name=", COALESCE(l_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects, l_lochirarchietxt
                             FROM location
                             WHERE l_lochirarchietxt &gt; (SELECT l_lochirarchietxt FROM location WHERE l_id IN (${location.l_id}))
                             ORDER BY l_lochirarchietxt, l_id LIMIT 1
@@ -1311,7 +1297,9 @@
                         where k_id in (${location.l_katids} 0)
                           and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects from image WHERE i_id='${dih.delta.id}'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url, i_persons, i_objects
+                        from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
@@ -1430,7 +1418,7 @@
                          location
                     where kategorie_full.l_id = location.l_id
                       and image.k_id = kategorie_full.k_id
-                    order by i_date, i_id"
+                    order by i_date, image.i_id"
                 deltaImportQuery="
                     select 'IMAGE'                                                  as type,
                            concat('ac_', kategorie_full.k_type)                     as actiontype,
@@ -1587,7 +1575,7 @@
                          location
                     where kategorie_full.l_id = location.l_id
                       and video.k_id = kategorie_full.k_id
-                    order by v_date, v_id"
+                    order by v_date, video.v_id"
                 deltaImportQuery="
                     select 'VIDEO'                                                  as type,
                            concat('ac_', kategorie_full.k_type)                     as actiontype,
@@ -1635,8 +1623,7 @@
                          location
                     where kategorie_full.l_id = location.l_id
                       and video.k_id = kategorie_full.k_id
-                      and video.v_id = '${dih.delta.id}'
-                    "
+                      and video.v_id = '${dih.delta.id}'"
                 deltaQuery="SELECT v_id from video order by v_date, v_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -1697,17 +1684,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM video
                             WHERE v_date &lt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))
                             ORDER BY v_date DESC, v_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=VIDEO_", v_id, ":::name=", COALESCE(v_katname, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                              FROM video
                              WHERE v_date &gt; (SELECT v_date FROM video WHERE v_id IN (${video.v_id}))
                              ORDER BY v_date, v_id LIMIT 1
@@ -1841,17 +1824,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                                CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM trip
                             WHERE tr_datevon &lt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))
                             ORDER BY tr_datevon DESC, tr_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=TRIP_", tr_id, ":::name=", COALESCE(tr_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                             FROM trip
                             WHERE tr_datevon &gt; (SELECT tr_datevon FROM trip WHERE tr_id IN (${trip.tr_id}))
                             ORDER BY tr_datevon, tr_id LIMIT 1
@@ -1891,7 +1870,9 @@
                         where k_id in (select k_id from kategorie_full where tr_id in (${trip.tr_id}))
                           and (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url
+                        from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
                 <field column="i_id" name="i_fav_id_is" />
@@ -2095,17 +2076,13 @@
             <!-- child='true' -->
             <entity name='navigation_objects'
                     query='
-                        (
-                            SELECT
-                               CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
                             FROM news
                             WHERE n_datevon &lt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))
                             ORDER BY n_datevon DESC, n_id DESC LIMIT 1
                         )
                         UNION
-                        (
-                            SELECT
-                                CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                        (SELECT CONCAT("navid=NEWS_", n_id, ":::name=", COALESCE(n_headline, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
                             FROM news
                             WHERE n_datevon &gt; (SELECT n_datevon FROM news WHERE n_id IN (${news.n_id}))
                             ORDER BY n_datevon, n_id LIMIT 1
@@ -2149,7 +2126,9 @@
                         where k_id in (select k_id from kategorie_full where n_id in (${news.n_id}))
                         order by I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
-                    deltaImportQuery="SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url from image WHERE i_id='${dih.delta.id}'"
+                    deltaImportQuery="
+                        SELECT i_id, i_date, concat(i_dir, '/', i_file) as i_url
+                        from image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id from image'"
             >
                 <field column="i_id" name="i_fav_id_is" />

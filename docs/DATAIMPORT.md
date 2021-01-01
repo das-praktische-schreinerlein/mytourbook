@@ -91,6 +91,7 @@ cd sbin
 mysql -u testmytbexportbetadb -p testmytbexportbetadb
 use testmytbexportbetadb
 source installer/db/mysql/mytbexportdb/import_01_create-model.sql;
+source installer/db/mysql/mytbexportdb/import_02_configure-mytbdb-to-mytbexportbetadb;
 source installer/db/mysql/mytbexportdb/import_02_import-data-from-mytbdb-to-mytbexportbetadb.sql;
 exit;
 ```
@@ -106,7 +107,7 @@ exit;
 ```
 - import from mytbexportbetadb to beta-solr
 ```bash
-curl "http://localhost:8983/solr/coremytbbeta/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true&verbose=true"
+curl --user mytbadmin:SolrRocks "http://localhost:8983/solr/coremytbbeta/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true&verbose=true"
 ```
 
 ## export to prod-solr
@@ -116,9 +117,10 @@ mysql -u testmytbexportproddb -p testmytbexportproddb
 use testmytbexportproddb
 source installer/db/mysql/mytbexportdb/import_01_create-model.sql;
 source installer/db/mysql/mytbexportdb/import_03_import-data-from-mytbexportbetadb-to-mytbexportproddb.sql;
+source installer/db/mysql/mytbexportdb/import_03_clean-private-data;
 ```
 - manually run sql-scripts to manipulate data
 - import from mytbexportbetadb to beta-solr
 ```bash
-curl "http://localhost:8983/solr/coremytbprod/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true&verbose=true"
+curl --user mytbadmin:SolrRocks "http://localhost:8983/solr/coremytbprod/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true&verbose=true"
 ```
