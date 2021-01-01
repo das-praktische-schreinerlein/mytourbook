@@ -111,7 +111,7 @@
 
             <entity name='tour'
                     query="
-                         SELECT tour.t_id, tour.d_id, t_keywords, CONCAT('ac_', tour.t_typ) AS actiontype
+                        SELECT tour.t_id, tour.d_id, t_keywords, CONCAT('ac_', tour.t_typ) AS actiontype
                           FROM info
                           INNER JOIN tour_info ON tour_info.if_id = info.if_id
                           INNER JOIN tour ON tour_info.t_id = tour.t_id
@@ -128,7 +128,7 @@
             </entity>
             <entity name='destination'
                     query="
-                         SELECT DISTINCT tour.d_id
+                        SELECT DISTINCT tour.d_id
                           FROM info
                           INNER JOIN tour_info ON tour_info.if_id = info.if_id
                           INNER JOIN tour ON tour_info.t_id = tour.t_id
@@ -425,7 +425,7 @@
 
             <entity name='image'
                     query="
-                        select
+                        SELECT
                              image.i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id = kategorie_full.k_id
                              INNER JOIN tour ON tour.t_id=kategorie_full.t_id
@@ -1199,7 +1199,7 @@
                            l_persons,
                            l_objects
                     FROM location
-                   WHERE l_id = '${dih.delta.id}'"
+                    WHERE l_id = '${dih.delta.id}'"
                 deltaQuery="SELECT l_id FROM location ORDER BY l_typ asc, l_id'"
                 transformer="HTMLStripTransformer,RegexTransformer"
         >
@@ -1292,7 +1292,7 @@
 
             <entity name='image'
                     query="
-                       SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z', CONCAT(i_dir, '/', i_file) AS i_url, i_persons, i_objects
                         FROM image
                         WHERE k_id in (${location.l_katids} 0)
                           AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
@@ -1621,7 +1621,7 @@
                     FROM video,
                          kategorie_full,
                          location
-                   WHERE kategorie_full.l_id = location.l_id
+                    WHERE kategorie_full.l_id = location.l_id
                       AND video.k_id = kategorie_full.k_id
                       AND video.v_id = '${dih.delta.id}'"
                 deltaQuery="SELECT v_id FROM video ORDER BY v_date, v_id'"
@@ -1731,9 +1731,9 @@
                                     SUM(K_ALTITUDE_ASC)                                          AS altAsc,
                                     SUM(K_ALTITUDE_DESC)                                         AS altDesc,
                                     MAX(K_ALTITUDE_MAX)                                          AS altMax,
-                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                     AS altMaxFacet,
+                                    MAX(ROUND((K_ALTITUDE_MAX / 500)) * 500)                     AS altMaxFacet,
                                     MIN(K_ALTITUDE_MIN)                                          AS altMin,
-                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                     AS altMinFacet,
+                                    MIN(ROUND((K_ALTITUDE_MIN / 500)) * 500)                     AS altMinFacet,
                                     SUM(K_DISTANCE)                                              AS dist
                     FROM trip
                              inner join kategorie_full ON trip.tr_id = kategorie_full.tr_id
@@ -1770,9 +1770,9 @@
                                     SUM(K_ALTITUDE_ASC)                                          AS altAsc,
                                     SUM(K_ALTITUDE_DESC)                                         AS altDesc,
                                     MAX(K_ALTITUDE_MAX)                                          AS altMax,
-                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                     AS altMaxFacet,
+                                    MAX(ROUND((K_ALTITUDE_MAX / 500)) * 500)                     AS altMaxFacet,
                                     MIN(K_ALTITUDE_MIN)                                          AS altMin,
-                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                     AS altMinFacet,
+                                    MIN(ROUND((K_ALTITUDE_MIN / 500)) * 500)                     AS altMinFacet,
                                     SUM(K_DISTANCE)                                              AS dist
                     FROM trip
                              inner join kategorie_full ON trip.tr_id = kategorie_full.tr_id
@@ -1994,9 +1994,9 @@
                                     SUM(K_ALTITUDE_ASC)                                      AS altAsc,
                                     SUM(K_ALTITUDE_DESC)                                     AS altDesc,
                                     MAX(K_ALTITUDE_MAX)                                      AS altMax,
-                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                 AS altMaxFacet,
+                                    MAX(ROUND((K_ALTITUDE_MAX / 500)) * 500)                 AS altMaxFacet,
                                     MIN(K_ALTITUDE_MIN)                                      AS altMin,
-                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                 AS altMinFacet,
+                                    MIN(ROUND((K_ALTITUDE_MIN / 500)) * 500)                 AS altMinFacet,
                                     SUM(K_DISTANCE)                                          AS dist
                     FROM news
                              LEFT JOIN kategorie_full ON news.n_id = kategorie_full.n_id
@@ -2028,9 +2028,9 @@
                                     SUM(K_ALTITUDE_ASC)                                      AS altAsc,
                                     SUM(K_ALTITUDE_DESC)                                     AS altDesc,
                                     MAX(K_ALTITUDE_MAX)                                      AS altMax,
-                                    MAX(round((K_ALTITUDE_MAX / 500)) * 500)                 AS altMaxFacet,
+                                    MAX(ROUND((K_ALTITUDE_MAX / 500)) * 500)                 AS altMaxFacet,
                                     MIN(K_ALTITUDE_MIN)                                      AS altMin,
-                                    MIN(round((K_ALTITUDE_MIN / 500)) * 500)                 AS altMinFacet,
+                                    MIN(ROUND((K_ALTITUDE_MIN / 500)) * 500)                 AS altMinFacet,
                                     SUM(K_DISTANCE)                                          AS dist
                     FROM news
                              LEFT JOIN kategorie_full ON news.n_id = kategorie_full.n_id
