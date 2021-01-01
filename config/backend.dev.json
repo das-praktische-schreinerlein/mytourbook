@@ -39,7 +39,7 @@
             "password": "",
             "database": "testmytbdb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mytbdb_import.sqlite"
+            "filename": "F:/playground/mytb-test/mytdatabase/mytbdb.sqlite"
         },
         "facetCacheUsage": {
             "active": true,
@@ -62,7 +62,7 @@
         }
     },
     "TourDocItemsJsAdapter": {
-        "dataFile": "D:/Bilder/mytbbase/test/mytb.json"
+        "dataFile": "F:/playground/mytb-test/mytdatabase/mytb.json"
     },
     "TourDocSqlMytbExportDbAdapter": {
         "client": "mysql",
@@ -72,11 +72,11 @@
             "password": "",
             "database": "mytbexportbetadb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mytbexportbetadb.sqlite"
+            "filename": "F:/playground/mytb-test/mytdatabase/mytbexportbetadb.sqlite"
         }
     },
     "TourDocSolrAdapter": {
-        "solrCoreTourDoc": "http://localhost:8983/solr/coremytbbeta/",
+        "solrCoreTourDoc": "http://localhost:9999/solr/coremytbbeta/",
         "solrCoreTourDocReadUsername": "mytbread",
         "solrCoreTourDocReadPassword": "SolrRocks"
     },

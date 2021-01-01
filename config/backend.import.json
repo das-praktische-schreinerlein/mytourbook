@@ -49,12 +49,23 @@
         },
         "facetCacheConfig": {
             "datastore": {
-                "scriptPath": "installer/db/sqlite/facetcache"
+                "scriptPath": "node_modules/@dps/mycms-commons/dist/facetcache-commons/model/db/mysql"
             },
             "facets": [
             ],
             "checkInterval": 2
         }
+    },
+    "TourDocSqlMytbExportDbAdapter": {
+        "client": "sqlite3",
+        "connection": {
+            "filename": "F:/playground/mytb-test/mytbbase/import/mytbexportbetadb.sqlite"
+        }
+    },
+    "TourDocSolrAdapter": {
+        "solrCoreTourDoc": "http://localhost:9999/solr/coremytbbeta/",
+        "solrCoreTourDocReadUsername": "mytbread",
+        "solrCoreTourDocReadPassword": "SolrRocks"
     },
     "objectDetectionConfig": {
         "redisQueue": {
@@ -62,7 +73,7 @@
             "port": "6379",
             "pass": "blablub",
             "db": "",
-            "ns": "rsmq",
+            "ns": "rsmq-test",
             "requestQueue": "mycms-objectdetector-request",
             "responseQueue": "mycms-objectdetector-response",
             "errorQueue": "mycms-objectdetector-error"

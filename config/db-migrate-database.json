@@ -1,7 +1,7 @@
 {
     "mytbdb_sqlite3": {
         "driver": "sqlite3",
-        "filename": "D:/Bilder/mytbbase/test/mytbdb.sqlite"
+        "filename": "F:/playground/mytb-test/mytdatabase/mytbdb.sqlite"
     },
     "mytbdb_import_sqlite3": {
         "driver": "sqlite3",
@@ -13,28 +13,6 @@
         "user": "root",
         "password": "",
         "database": "testmytbdb",
-        "port": "3306",
-        "multipleStatements": true
-    },
-    "mytbexportdb_sqlite3": {
-        "driver": "sqlite3",
-        "filename": "D:/Bilder/mytbbase/test/mytbexportdb.sqlite"
-    },
-    "mytbexportbetadb_mysql": {
-        "driver": "mysql",
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "testmytbexportbetadb",
-        "port": "3306",
-        "multipleStatements": true
-    },
-    "mytbexportproddb_mysql": {
-        "driver": "mysql",
-        "host": "localhost",
-        "user": "root",
-        "password": "",
-        "database": "testmytbexportproddb",
         "port": "3306",
         "multipleStatements": true
     }

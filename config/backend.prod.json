@@ -43,7 +43,7 @@
             "password": "",
             "database": "testmytbexportproddb",
             "port": "3306",
-            "filename": "D:/Bilder/mytbbase/test/mytbexportproddb.sqlite"
+            "filename": "F:/playground/mytb-test/mytdatabase/mytbexportproddb.sqlite"
         }
     },
     "cacheConfig": {
