@@ -1,10 +1,13 @@
 {
   "name": "mytourbook-frontend",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "license": "Apache-2.0",
   "angular-cli": {},
+  "config": {
+    "solrdownloadurl": "https://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz"
+  },
   "scripts": {
-    "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js && npm run build-after-copy-overrides-config",
+    "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js && npm run build-after-copy-contrib && npm run build-after-copy-contrib-solrlang && npm run build-after-copy-overrides-config",
     "backend-build-and-serve-dev": "npm run backend-build && npm run backend-serve-dev",
     "backend-serve-dev": "node dist/backend/backend.js -c config/backend.dev.json -f config/firewall.dev.json",
     "backend-serve-dev-import": "node dist/backend/backend.js -c config/backend.import.json -f config/firewall.dev.json",
@@ -26,6 +29,8 @@
     "build-prod": "npm run build-prod-de && npm run build-prod-en && npm run build-after-copy-overrides-dist-prod",
     "build-prod-de": "ng build frontend --base-href=/mytb/de/ --configuration=prod-de --aot true --output-path dist/static/mytb/de ",
     "build-prod-en": "ng build frontend --base-href=/mytb/en/ --configuration=prod-en --aot true --output-path dist/static/mytb/en",
+    "build-after-copy-contrib": "cpx --verbose \"contrib/**/*\" dist/contrib/ && cpx --verbose \"installer/solr/**/*\" dist/contrib/solr/server/solr/",
+    "build-after-copy-contrib-solrlang": "cpx --verbose \"contrib/solr/contrib/lang/*.*\" dist/contrib/solr/server/solr/coremytbbeta/conf/lang/ && cpx --verbose \"contrib/solr/contrib/lang/*.*\" dist/contrib/solr/server/solr/coremytbprod/conf/lang/",
     "build-after-copy-overrides-config": "cpx --verbose \"overrides/after-build/config/**/*.*\" config/",
     "build-after-copy-overrides-dist-dev": "cpx --verbose \"overrides/after-build/dist/mytbdev/**/*.*\" dist/static/mytbdev/ && cpx \"overrides/after-build/dist/mytbdev/**/*.*\" dist/mytbdev-server/",
     "build-after-copy-overrides-dist-beta": "cpx --verbose \"overrides/after-build/dist/mytbbeta/**/*.*\" dist/static/mytbbeta/ && cpx \"overrides/after-build/dist/mytbbeta**/*.*\" dist/mytbbeta-server/",
@@ -62,6 +67,26 @@
     "init-frontendserver-cache-dev-de": "node dist/frontendserver-dev-de/frontendserverAdmin.js --localSitemapUrl http://localhost:4001/mytbdev/de/sitemap-pdoc-de.xml --sitemapbase http://localhost:4001/mytbdev/de/ -c config/backend.dev.json --frontend config/frontend.dev.json",
     "init-frontendserver-cache-beta-de": "node dist/frontendserver-beta-de/frontendserverAdmin.js -c config/backend.beta.json --frontend config/frontend.beta.json",
     "init-frontendserver-cache-prod-de": "node dist/frontendserver-de/frontendserverAdmin.js -c config/backend.prod.json --frontend config/frontend.prod.json",
+    "install-solr": "npm run install-solr-clear && npm run install-solr-download && npm run install-solr-unpack && npm run install-solr-cleanout && npm run install-solr-download-langfiles && npm run install-solr-convert-langfiles && npm run install-solr-download-dataimport",
+    "install-solr-clear": "cross-os install-solr-clear-os",
+    "install-solr-clear-os": {
+      "darwin": "./node_modules/.bin/rimraf contrib/solr && ./node_modules/.bin/mkdirp contrib/solr && ./node_modules/.bin/mkdirp contrib/solr/contrib/dataimporthandler/lib && ./node_modules/.bin/mkdirp contrib/solr/contrib/lang",
+      "linux": "./node_modules/.bin/rimraf contrib/solr && ./node_modules/.bin/mkdirp contrib/solr && ./node_modules/.bin/mkdirp contrib/solr/contrib/dataimporthandler/lib && ./node_modules/.bin/mkdirp contrib/solr/contrib/lang",
+      "win32": "node_modules\\.bin\\rimraf contrib/solr && node_modules\\.bin\\mkdirp contrib/solr && node_modules\\.bin\\mkdirp contrib/solr/contrib/dataimporthandler/lib && node_modules\\.bin\\mkdirp contrib/solr/contrib/lang"
+    },
+    "install-solr-download": "cd contrib && cross-var curl $npm_package_config_solrdownloadurl -o solr.tgz",
+    "install-solr-download-langfiles": "cd contrib && curl https://raw.githubusercontent.com/elastic/hunspell/master/dicts/de_DE/de_DE.dic -o solr/contrib/lang/hunspell_de_DE.dic && curl https://raw.githubusercontent.com/elastic/hunspell/master/dicts/de_DE/de_DE.aff -o solr/contrib/lang/hunspell_de_DE.aff && curl https://netix.dl.sourceforge.net/project/germandict/german.7z -o solr/contrib/lang/german.7z",
+    "install-solr-convert-langfiles": "sed \"s/\\\\/.*//g\" contrib/solr/contrib/lang/hunspell_de_DE.dic > contrib/solr/contrib/lang/dictionary.txt && iconv -f \"windows-1252\" -t \"UTF-8\" contrib/solr/contrib/lang/dictionary.txt > contrib/solr/contrib/lang/dictionary_de.txt",
+    "install-solr-download-dataimport": "npm run install-solr-download-dataimport-mysql",
+    "install-solr-download-dataimport-mysql": "cd contrib && curl https://downloads.mariadb.com/Connectors/java/connector-java-2.7.1/mariadb-java-client-2.7.1.jar -o solr/contrib/dataimporthandler/lib/mariadb-java-client.jar",
+    "install-solr-download-dataimport-sqlite": "cd contrib && curl https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.34.0/sqlite-jdbc-3.34.0.jar -o solr/contrib/dataimporthandler/lib/sqlite-jdbc.jar",
+    "install-solr-unpack": "cd contrib && tar xzf solr.tgz -C solr --strip-components=1",
+    "install-solr-cleanout": "cross-os install-solr-cleanout-os",
+    "install-solr-cleanout-os": {
+      "darwin": "./node_modules/.bin/rimraf contrib/solr.tgz contrib/solr/example",
+      "linux": "./node_modules/.bin/rimraf contrib/solr.tgz contrib/solr/example",
+      "win32": "node_modules\\.bin\\rimraf contrib/solr.tgz contrib/solr/example"
+    },
     "lint": "ng lint",
     "ng": "ng",
     "prepare": "patch-package && npm run prepare-symlinks && npm run prepare-build && npm run prepare-build-before-copy-overrides-installer && npm run prepare-build-before-copy-overrides-sbin && npm run prepare-build-before-copy-overrides-src && npm run prepare-build-before-copy-overrides-devtools",
@@ -187,6 +212,7 @@
     "codelyzer": "5.2.2",
     "cpx": "1.5.0",
     "cross-os": "1.3.0",
+    "cross-var-no-babel": "1.2.0",
     "db-migrate": "0.11.11",
     "db-migrate-mysql": "2.1.1",
     "db-migrate-sqlite3": "0.4.0",
