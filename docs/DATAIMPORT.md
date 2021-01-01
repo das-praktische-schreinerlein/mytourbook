@@ -88,22 +88,9 @@ cd sbin
 ## export to beta-solr
 - import from mytbdb to mytbexportbetadb
 ```bash
-mysql -u testmytbexportbetadb -p testmytbexportbetadb
-use testmytbexportbetadb
-source installer/db/mysql/mytbexportdb/import_01_create-model.sql;
-source installer/db/mysql/mytbexportdb/import_02_configure-mytbdb-to-mytbexportbetadb;
-source installer/db/mysql/mytbexportdb/import_02_import-data-from-mytbdb-to-mytbexportbetadb.sql;
-exit;
-```
-- manually run sql-scripts to manipulate data
-```bash
-mysql -u testmytbexportbetadb -p testmytbexportbetadb
-use testmytbexportbetadb
-source installer/db/mysql/mytbexportdb/import_02_manage-common-data.sql;
-source installer/db/mysql/mytbexportdb/import_02_manage-private-data.sql;
-source installer/db/mysql/mytbexportdb/import_02_merge-person-object-fields.sql;
-source installer/db/mysql/mytbexportdb/import_02_update-desc.sql;
-exit;
+npm run dbpublish-mytbexportbetadb_mysql
+# or
+npm run dbpublish-mytbexportbetadb_sqlite
 ```
 - import from mytbexportbetadb to beta-solr
 ```bash
@@ -113,14 +100,11 @@ curl --user mytbadmin:SolrRocks "http://localhost:8983/solr/coremytbbeta/dataimp
 ## export to prod-solr
 - import from mytbexportbetadb to mytbexportproddb
 ```bash
-mysql -u testmytbexportproddb -p testmytbexportproddb
-use testmytbexportproddb
-source installer/db/mysql/mytbexportdb/import_01_create-model.sql;
-source installer/db/mysql/mytbexportdb/import_03_import-data-from-mytbexportbetadb-to-mytbexportproddb.sql;
-source installer/db/mysql/mytbexportdb/import_03_clean-private-data;
+npm run dbpublish-mytbexportproddb_mysql
+# or
+npm run dbpublish-mytbexportproddb_sqlite
 ```
-- manually run sql-scripts to manipulate data
-- import from mytbexportbetadb to beta-solr
+- import from mytbexportproddb to prod-solr
 ```bash
 curl --user mytbadmin:SolrRocks "http://localhost:8983/solr/coremytbprod/dataimport?command=full-import&clean=true&commit=true&optimize=true&synchronous=true&verbose=true"
 ```

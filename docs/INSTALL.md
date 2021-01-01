@@ -10,9 +10,17 @@ npm prune && npm install
 ### prepare solr
 
 #### install-solr
+- run install script
+```
+npm install 
+npm run install-solr
+```
+
+##### OR do it manually install-solr
 - install solr 6.6.0 [Download](http://mirror.netcologne.de/apache.org/lucene/solr/6.6.0/)
 - add mysql-downloader
-    - solr-6.6.0/contrib/dataimporthandler/libmysql-connector-java-5.1.40-bin.jar
+    - solr-6.6.0/contrib/dataimporthandler/lib/mysql-connector-java-5.1.40-bin.jar
+    - solr-6.6.0/contrib/dataimporthandler/lib/sqlite-jdbc-3.31.1.jar
 - add cores from mytb
 - download [hunspell-language-files](https://github.com/elastic/hunspell/tree/master/dicts/de_DE) and put them as *lang/hunspell_de_DE.dic* and *lang/hunspell_de_DE.aff* into core-config
 - download [grman dictionary](https://netix.dl.sourceforge.net/project/germandict/german.7z) and put as *lang/dictionary_de.txt* into core-config
@@ -24,41 +32,75 @@ iconv -f "windows-1252" -t "UTF-8" dictionary.txt -o dictionary_de.txt
 rm dictionary.txt dictionary.txt.bak
 ```
 
-#### secure solr
+##### OR manually secure solr
 - create an seen on [Enable Authentification](https://cwiki.apache.org/confluence/display/solr/Authentication+and+Authorization+Plugins#AuthenticationandAuthorizationPlugins-EnabledPluginswithsecurity.json)
     - file on server.solr/security.json
 - with [Basic-Athentfication[https://cwiki.apache.org/confluence/display/solr/Basic+Authentication+Plugin]
-    - solr-6.6.0/server/solr/security.json
+    - solr-6.6.0/server/solr/security.json -> see mytourbook/installer/solr/security.json with default-password SolrRocks
 ```json
 {
-  "authentication":{
-    "blockUnknown":true,
-    "class":"solr.BasicAuthPlugin",
-    "credentials":{
-      "alladmin":"XXXXX",
-      "mytbadmin":"XXXXX",
-      "mytbread":"XXXXX"}},
-  "authorization":{
-    "class":"solr.RuleBasedAuthorizationPlugin",
-    "permissions":[
-      {
-        "name":"all",
-        "role":"role_alladmin",
-        "index":1},
-      {
-        "name":"update",
-        "role":"role_mytbupdate",
-        "index":2},
-      {
-        "name":"read",
-        "role":"role_mytbread",
-        "index":2}
-    ],
-    "user-role":{
-      "alladmin":["role_alladmin"],
-      "mytbadmin":["role_mytbread", "role_mytbupdate"],
-      "mytbread":"role_mytbread"},
-    "":{"v":0}}}
+    "authentication": {
+        "blockUnknown": true,
+        "class": "solr.BasicAuthPlugin",
+        "credentials": {
+            "alladmin": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mycmsadmin": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mycmsupdate": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mycmsread": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mytbadmin": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mytbupdate": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c=",
+            "mytbread": "IV0EHq1OnNrj6gvRCwvFwTrZ1+z1oBbnQdiVC3otuq0= Ndd7LKvVBAaZIF0QAVi1ekCfAJXr1GGfLtRUXhgrF8c="
+        }
+    },
+    "authorization": {
+        "class": "solr.RuleBasedAuthorizationPlugin",
+        "permissions": [
+            {
+                "role": "role_dataimport",
+                "path":"/dataimport",
+                "collection": null,
+                "method": ["GET", "POST"],
+                "index": 1
+            },
+            {
+                "role": "role_update",
+                "name": "update",
+                "index": 2
+            },
+            {
+                "role": "role_read",
+                "name": "read",
+                "index": 2
+            },
+            {
+                "role": "role_alladmin",
+                "name": "all",
+                "index": 3
+            }
+        ],
+        "user-role": {
+            "alladmin": [
+                "role_alladmin"
+            ],
+            "mycmsadmin": [
+                "role_read",
+                "role_update",
+                "role_dataimport"
+            ],
+            "mycmsupdate": [
+                "role_read",
+                "role_update"
+            ],
+            "mycmsread": "role_read",
+            "mytbadmin": [
+                "role_read",
+                "role_update",
+                "role_dataimport"
+            ],
+            "mytbread": "role_read"
+        }
+    }
+}
 ```
 - set roles as seen on (Rule-Based autorisation)[https://cwiki.apache.org/confluence/display/solr/Rule-Based+Authorization+Plugin]
 

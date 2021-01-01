@@ -466,8 +466,6 @@ WHERE toupdate.v_id=grouped.v_id**/;
 -- ##################
 -- update id-summary-fields
 -- ##################
-SET SESSION group_concat_max_len = 200000000;
-
 
 -- calc location: kat/tour-ids
 UPDATE location SET l_tids='0';
@@ -692,8 +690,10 @@ UPDATE tour toupdate,
  (SELECT tour.t_id, tour.t_name, GROUP_CONCAT(kategorie_full.k_id SEPARATOR ',,') AS t_kids, CHAR_LENGTH(GROUP_CONCAT(kategorie_full.k_id SEPARATOR ',,'))
   FROM tour left join kategorie_full ON tour.t_id=kategorie_full.t_id GROUP BY tour.t_id ORDER BY tour.t_id) grouped
 SET toupdate.t_k_ids=grouped.t_kids
-WHERE toupdate.t_id=grouped.t_id AND toupdate.t_id > 1 AND CHAR_LENGTH(t_kids) < 2000;
+WHERE toupdate.t_id=grouped.t_id AND toupdate.t_id > 1 AND CHAR_LENGTH(t_kids) < 2000**/;
 
+-- TODO
+/**
 UPDATE tour toupdate,
   (SELECT mjoin.t_id AS t_id, GROUP_CONCAT(CAST(mjoin.k_id AS char(100)) SEPARATOR  ',,') AS k_ids
    FROM importmytbdb_kategorie_tour mjoin

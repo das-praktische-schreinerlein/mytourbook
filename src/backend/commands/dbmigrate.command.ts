@@ -8,11 +8,13 @@ export class DbMigrateCommand implements AbstractCommand {
             console.error('ERROR - parameters required migrationDbConfigFile: "--migrationDbConfigFile"');
             process.exit(-1);
         }
+
         const migrationsDir = argv['migrationsDir'];
         if (migrationsDir === undefined) {
             console.error('ERROR - parameters required migrationsDir: "--migrationsDir"');
             process.exit(-1);
         }
+
         const migrationEnv = argv['migrationEnv'];
         if (migrationEnv === undefined) {
             console.error('ERROR - parameters required migrationEnv: "--migrationEnv"');
@@ -28,6 +30,7 @@ export class DbMigrateCommand implements AbstractCommand {
             throwUncatched: true
         };
         const dbMigrate = DBMigrate.getInstance(true, options);
+
         return dbMigrate.up();
     }
 }

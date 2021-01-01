@@ -25,7 +25,7 @@
     "playlistExportUseVideoAssetStoreUrls": false,
     "playlistExportMaxM3uRecordAllowed": 10000,
     "imageMagicAppPath": "F:\\ProgrammeShared\\ImageMagick\\",
-    "tdocDataStoreAdapter": "TourDocSqlMytbDbAdapter",
+    "tdocDataStoreAdapter": "TourDocSolrAdapter",
     "tdocWritable": true,
     "mapperConfig": {
         "allowedKeywordPatterns": ["KW_.*", "TODO.*","Harry", "Booga", "Buddy", "Micha"],

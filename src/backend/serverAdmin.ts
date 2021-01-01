@@ -9,6 +9,7 @@ import {RedirectGeneratorCommand} from './commands/redirect-generator.command';
 import {ObjectDetectionManagerCommand} from './commands/objectdetector.command';
 import {FacetCacheManagerCommand} from './commands/facetcache.command';
 import {DbMigrateCommand} from './commands/dbmigrate.command';
+import {DbPublishCommand} from './commands/dbPublishCommand';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -31,6 +32,7 @@ const redirectGenerator = new RedirectGeneratorCommand();
 const objectDetectionManager = new ObjectDetectionManagerCommand();
 const facetCacheManager = new FacetCacheManagerCommand();
 const dbMigrateCommand = new DbMigrateCommand();
+const dbPublishCommand = new DbPublishCommand()
 
 let promise: Promise<any>;
 switch (argv['command']) {
@@ -63,6 +65,9 @@ switch (argv['command']) {
         break;
     case 'dbMigrate':
         promise = dbMigrateCommand.process(argv);
+        break;
+    case 'dbPublish':
+        promise = dbPublishCommand.process(argv);
         break;
     default:
         console.error('unknown command:', argv);

@@ -7,37 +7,37 @@ ATTACH DATABASE 'F:/playground/mytb-test/mytbbase/import/mytbexportbetadb.sqlite
 -- ##################
 -- copy tables
 -- ##################
-TRUNCATE TABLE location;
+DELETE FROM location;
 INSERT INTO location SELECT * FROM importmytbexportbetadb.location;
 
-TRUNCATE TABLE news;
+DELETE FROM news;
 INSERT INTO news SELECT * FROM importmytbexportbetadb.news;
 
-TRUNCATE TABLE info;
+DELETE FROM info;
 INSERT INTO info SELECT * FROM importmytbexportbetadb.info;
 
-TRUNCATE TABLE location_info;
+DELETE FROM location_info;
 INSERT INTO location_info SELECT * FROM importmytbexportbetadb.location_info;
 
-TRUNCATE TABLE trip;
+DELETE FROM trip;
 INSERT INTO trip SELECT * FROM importmytbexportbetadb.trip;
 
-TRUNCATE TABLE kategorie_full;
+DELETE FROM kategorie_full;
 INSERT INTO kategorie_full SELECT * FROM importmytbexportbetadb.kategorie_full;
 
-TRUNCATE TABLE destination;
+DELETE FROM destination;
 INSERT INTO destination SELECT * FROM importmytbexportbetadb.destination;
 
-TRUNCATE TABLE tour;
+DELETE FROM tour;
 INSERT INTO tour SELECT * FROM importmytbexportbetadb.tour;
 
-TRUNCATE TABLE tour_info;
+DELETE FROM tour_info;
 INSERT INTO tour_info SELECT * FROM importmytbexportbetadb.tour_info;
 
-TRUNCATE TABLE image;
+DELETE FROM image;
 INSERT INTO image SELECT * FROM importmytbexportbetadb.image;
 
-TRUNCATE TABLE video;
+DELETE FROM video;
 INSERT INTO video SELECT * FROM importmytbexportbetadb.video;
 
 -- ##################
