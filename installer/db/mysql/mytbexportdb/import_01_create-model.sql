@@ -271,7 +271,7 @@ CREATE TABLE IF NOT EXISTS location_info (
 DROP TABLE IF EXISTS destination;
 CREATE TABLE destination (
   d_id VARCHAR(80),
-  l_id int(11) NOT NULL,
+  l_id int(11),
   d_k_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   d_t_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   d_datevon date DEFAULT NULL,
@@ -326,7 +326,7 @@ CREATE TABLE destination (
 DROP TABLE IF EXISTS tour;
 CREATE TABLE tour (
   t_id int(11) NOT NULL AUTO_INCREMENT,
-  l_id int(11) NOT NULL,
+  l_id int(11),
   k_id int(11) DEFAULT NULL,
   d_id VARCHAR(80),
   t_k_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
@@ -419,15 +419,15 @@ CREATE TABLE IF NOT EXISTS tour_info (
 DROP TABLE IF EXISTS kategorie_full;
 CREATE TABLE kategorie_full (
   k_id int(11) NOT NULL AUTO_INCREMENT,
-  t_id int(11) NOT NULL,
+  t_id int(11),
   d_id VARCHAR(80) DEFAULT NULL,
   k_t_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   k_t_ids_full varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   k_d_ids varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   k_d_ids_full varchar(2000) COLLATE latin1_general_ci DEFAULT NULL,
   i_id int(11) DEFAULT NULL,
-  l_id int(11) NOT NULL,
-  tr_id int(11) NOT NULL,
+  l_id int(11),
+  tr_id int(11),
   k_gesperrt int(11) DEFAULT NULL,
   k_datebis datetime DEFAULT NULL,
   k_datevon datetime DEFAULT NULL,

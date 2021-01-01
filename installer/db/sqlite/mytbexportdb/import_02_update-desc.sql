@@ -1,4 +1,6 @@
 -- track: calc desc
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id, location.l_gps_lat, location.l_gps_lon, location.l_lochirarchietxt
   FROM kategorie_full INNER JOIN location ON kategorie_full.l_id=location.l_id
@@ -25,24 +27,31 @@ SET
                            '<label>k_rate_gesamt</label><span>k_rate_gesamt_', COALESCE(k_rate_gesamt, ''), '</span>\n',
                            '<label>k_type</label><span>k_type_', COALESCE(k_type, ''), '</span>\n',
                            '')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
+
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id, tour.t_name
   FROM kategorie_full INNER JOIN tour ON kategorie_full.t_id=tour.t_id
   GROUP BY kategorie_full.k_id) grouped
 SET
     toupdate.k_html=CONCAT(COALESCE(k_html, ''), '<label>tour</label><span>k_type_', COALESCE(t_name, ''), '</span>\n')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
   (SELECT mjoin.k_id AS k_id, GROUP_CONCAT(CAST(tour.t_name AS char(200)) SEPARATOR  '</li><li>') AS t_names
-   FROM importmytbdb_kategorie_tour mjoin INNER JOIN tour ON mjoin.t_id = tour.t_id
+   FROM testmytbdb.kategorie_tour mjoin INNER JOIN tour ON mjoin.t_id = tour.t_id
    GROUP BY mjoin.k_id) grouped
 SET toupdate.k_html=CONCAT(COALESCE(k_html, ''), '<label>tour</label><ul><li>', COALESCE(grouped.t_names, ''), '</li></ul>\n')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- tour: calc desc
+-- TODO
+/**
 UPDATE tour toupdate,
  (SELECT tour.t_id, location.l_gps_lat, location.l_gps_lon, location.l_lochirarchietxt
   FROM tour INNER JOIN location ON tour.l_id=location.l_id
@@ -95,12 +104,4 @@ SET
                             '<label>t_route_m</label><span>', COALESCE(t_route_m, ''), '</span>\n',
                             '<label>t_typ</label><span>t_typ_', COALESCE(t_typ, ''), '</span>\n',
                            '')
-WHERE toupdate.t_id=grouped.t_id;
-
--- ##################
--- optimize tables
--- ##################
-ANALYZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
-REPAIR TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
-OPTIMIZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
-ANALYZE TABLE destination, image, kategorie_full, location, news, numbers, tour, trip, video;
+WHERE toupdate.t_id=grouped.t_id**/;

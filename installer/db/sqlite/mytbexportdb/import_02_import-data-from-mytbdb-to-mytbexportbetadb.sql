@@ -4,22 +4,25 @@
 INSERT INTO location (l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ)
      SELECT l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ FROM importmytbdb_location;
 
-UPDATE location SET l_lochirarchietxt=GetLocationNameAncestry(location.l_id, location.l_name, ' -> '), l_lochirarchieids=GetLocationIdAncestry(location.l_id, ',');
+-- TODO UPDATE location SET l_lochirarchietxt=GetLocationNameAncestry(location.l_id, location.l_name, ' -> '), l_lochirarchieids=GetLocationIdAncestry(location.l_id, ',');
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, 'OFFEN -> ', '');
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, ' -> ', ',,');
 UPDATE location SET l_lochirarchietxt=TRIM(l_lochirarchietxt);
-UPDATE location SET l_lochirarchieids=REGEXP_REPLACE(l_lochirarchieids, '^1,', '');
+
+UPDATE location SET l_lochirarchieids='0,';
+-- TODO UPDATE location SET l_lochirarchieids=REGEXP_REPLACE(l_lochirarchieids, '^1,', '');
 UPDATE location SET l_lochirarchieids=REPLACE(l_lochirarchieids, ',', ',,');
 UPDATE location SET l_lochirarchieids=TRIM(l_lochirarchieids);
 
 -- calc keywords
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS l_keywords, location.l_id AS l_id
   FROM location LEFT JOIN importmytbdb_location_keyword mjoin ON location.l_id=mjoin.l_id LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
   GROUP BY location.l_id) grouped
 SET toupdate.l_keywords=grouped.l_keywords
-WHERE toupdate.l_id=grouped.l_id;
-
+WHERE toupdate.l_id=grouped.l_id **/;
 
 -- remove todos
 UPDATE location SET l_meta_shortdesc=REPLACE(l_meta_shortdesc, 'TODODESC', '');
@@ -28,14 +31,14 @@ UPDATE location SET l_keywords=REPLACE(l_keywords, ',KW_TODOKEYWORDS', '');
 UPDATE location SET l_keywords=REPLACE(l_keywords, 'KW_TODOKEYWORDS', '');
 
 -- calc desc
-UPDATE location toupdate
+UPDATE location
 SET
-    toupdate.l_meta_shortdesc_md=l_meta_shortdesc,
-    toupdate.l_meta_shortdesc_html=l_meta_shortdesc,
-    toupdate.l_html=CONCAT(COALESCE(l_name, ''), ' ',
-                           COALESCE(l_lochirarchietxt, ''), ' ',
-                           COALESCE(l_meta_shortdesc, ''), ' ',
-                           COALESCE(l_keywords, ''), ' ');
+    l_meta_shortdesc_md=l_meta_shortdesc,
+    l_meta_shortdesc_html=l_meta_shortdesc,
+    l_html=COALESCE(l_name, '') || ' ' ||
+                           COALESCE(l_lochirarchietxt, '') || ' ' ||
+                           COALESCE(l_meta_shortdesc, '') || ' ' ||
+                           COALESCE(l_keywords, '') || ' ';
 
 -- ##################
 -- import info
@@ -45,12 +48,14 @@ INSERT INTO info (if_id, l_id, if_gesperrt, if_meta_desc, if_meta_shortdesc, if_
     FROM importmytbdb_info;
 
 -- calc keywords
+-- TODO
+/**
 UPDATE info toupdate,
  (SELECT info.if_id AS if_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS if_keywords
   FROM info LEFT JOIN importmytbdb_info_keyword mjoin ON info.if_id=mjoin.if_id LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
    GROUP BY info.if_id) grouped
 SET toupdate.if_keywords=grouped.if_keywords
-WHERE toupdate.if_id=grouped.if_id;
+WHERE toupdate.if_id=grouped.if_id**/;
 
 -- remove todos
 UPDATE info SET if_meta_desc=REPLACE(if_meta_desc, 'TODODESC', '');
@@ -109,14 +114,18 @@ INSERT into kategorie_full (k_id, t_id, l_id, tr_id, k_gesperrt, k_datebis, k_da
     FROM importmytbdb_kategorie WHERE (importmytbdb_kategorie.k_gesperrt=0 OR importmytbdb_kategorie.k_gesperrt IS NULL);
 
 -- calc keywords
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id AS k_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS k_keywords
   FROM kategorie_full LEFT JOIN importmytbdb_kategorie_keyword mjoin ON kategorie_full.k_id=mjoin.k_id LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
    GROUP BY kategorie_full.k_id) grouped
 SET toupdate.k_keywords=grouped.k_keywords
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- calc master-image
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
     (SELECT importmytbdb_kategorie.k_id, importmytbdb_image.i_id
      FROM importmytbdb_image INNER JOIN importmytbdb_kategorie ON importmytbdb_kategorie.k_id=importmytbdb_image.k_id
@@ -125,7 +134,7 @@ UPDATE kategorie_full toupdate,
            AND (importmytbdb_image.i_gesperrt=0 OR importmytbdb_image.i_gesperrt IS NULL)
            AND importmytbdb_image_playlist.p_id=18) grouped
 SET toupdate.i_id=grouped.i_id
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- remove todos
 UPDATE kategorie_full SET k_meta_shortdesc=REPLACE(k_meta_shortdesc, 'TODODESC', '');
@@ -134,6 +143,8 @@ UPDATE kategorie_full SET k_keywords=REPLACE(k_keywords, ',KW_TODOKEYWORDS', '')
 UPDATE kategorie_full SET k_keywords=REPLACE(k_keywords, 'KW_TODOKEYWORDS', '');
 
 -- calc desc+dates+coords
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id, location.l_gps_lat, location.l_gps_lon, location.l_lochirarchietxt
   FROM kategorie_full INNER JOIN location ON kategorie_full.l_id=location.l_id
@@ -148,9 +159,11 @@ SET
                            COALESCE(grouped.l_lochirarchietxt, ''), ' ',
                            COALESCE(k_meta_shortdesc, ''), ' ',
                            COALESCE(k_keywords, ''), ' ')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- calc news.id
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id, news.n_id
   FROM kategorie_full, news
@@ -158,7 +171,7 @@ UPDATE kategorie_full toupdate,
   GROUP BY kategorie_full.k_id) grouped
 SET
     toupdate.n_id=grouped.n_id
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- ##################
 -- import routes
@@ -168,15 +181,20 @@ INSERT into tour (t_id, l_id, k_id, t_datevon, t_name, t_desc_gefahren, t_desc_f
     FROM importmytbdb_tour;
 
 -- calc tour: d-ids
-UPDATE tour SET d_id=MD5(CONCAT(tour.l_id, "_", t_desc_gebiet, "_", t_desc_ziel, "_", t_typ));
+UPDATE tour SET d_id=REPLACE(REPLACE(LOWER(COALESCE(tour.l_id, "") || "_" ||
+            COALESCE(t_desc_gebiet, "") || "_" ||
+            COALESCE(t_desc_ziel, "") || "_" ||
+            COALESCE(t_typ, "")), " ", "_"), "/", "_");
 
 -- calc keywords
+-- TODO
+/**
 UPDATE tour toupdate,
  (SELECT tour.t_id AS t_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS t_keywords
   FROM tour LEFT JOIN importmytbdb_tour_keyword mjoin ON tour.t_id=mjoin.t_id LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
    GROUP BY tour.t_id) grouped
 SET toupdate.t_keywords=grouped.t_keywords
-WHERE toupdate.t_id=grouped.t_id;
+WHERE toupdate.t_id=grouped.t_id**/;
 
 -- remove todos
 UPDATE tour SET t_meta_shortdesc=REPLACE(t_meta_shortdesc, 'TODODESC', '');
@@ -185,6 +203,8 @@ UPDATE tour SET t_keywords=REPLACE(t_keywords, ',KW_TODOKEYWORDS', '');
 UPDATE tour SET t_keywords=REPLACE(t_keywords, 'KW_TODOKEYWORDS', '');
 
 -- calc desc+dates+coords
+-- TODO
+/**
 UPDATE tour toupdate,
  (SELECT tour.t_id, location.l_gps_lat, location.l_gps_lon, location.l_lochirarchietxt
   FROM tour INNER JOIN location ON tour.l_id=location.l_id
@@ -200,7 +220,7 @@ SET
                            COALESCE(grouped.l_lochirarchietxt, ''), ' ',
                            COALESCE(t_meta_shortdesc, ''), ' ',
                            COALESCE(t_keywords, ''), ' ')
-WHERE toupdate.t_id=grouped.t_id;
+WHERE toupdate.t_id=grouped.t_id**/;
 
 -- ##################
 -- import-trackroutes
@@ -249,7 +269,10 @@ INSERT INTO destination (d_id,
        d_rate_schneeschuh,
        d_route_dauer
        )
-SELECT MD5(CONCAT(tour.l_id, "_", t_desc_gebiet, "_", t_desc_ziel, "_", t_typ))                    AS d_id,
+SELECT REPLACE(REPLACE(LOWER(COALESCE(tour.l_id, "") || "_" ||
+            COALESCE(t_desc_gebiet, "") || "_" ||
+            COALESCE(t_desc_ziel, "") || "_" ||
+            COALESCE(t_typ, "")), " ", "_"), "/", "_")                    AS d_id,
        tour.l_id,
        t_desc_gebiet AS d_desc_gebiet,
        t_desc_ziel AS d_desc_ziel,
@@ -280,6 +303,8 @@ FROM tour
 GROUP BY d_id;
 
 -- calc desc+dates+coords
+-- TODO
+/**
 UPDATE destination toupdate,
  (SELECT destination.d_id, location.l_gps_lat, location.l_gps_lon, location.l_lochirarchietxt
   FROM destination INNER JOIN location ON destination.l_id=location.l_id
@@ -288,7 +313,7 @@ SET
     toupdate.d_gps_lat=grouped.l_gps_lat,
     toupdate.d_gps_lon=grouped.l_gps_lon,
     toupdate.d_dateshow=d_datevon
-WHERE toupdate.d_id=grouped.d_id;
+WHERE toupdate.d_id=grouped.d_id**/;
 
 
 -- ##################
@@ -303,40 +328,47 @@ INSERT into image (i_id, k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_g
           AND importmytbdb_image_playlist.p_id=17;
 
 -- calc keywords
+-- TODO
+/**
 UPDATE image toupdate,
     (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS i_keywords, image.i_id AS i_id
      FROM image LEFT JOIN importmytbdb_image_keyword mjoin ON image.i_id=mjoin.i_id LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
      GROUP BY image.i_id) grouped
 SET toupdate.i_keywords=grouped.i_keywords
-WHERE toupdate.i_id=grouped.i_id;
+WHERE toupdate.i_id=grouped.i_id**/;
 
 -- image calc persons
+-- TODO
+/**
 UPDATE image toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ',') AS i_persons, image.i_id AS i_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS i_persons, image.i_id AS i_id
      FROM image INNER JOIN importmytbdb_image_object ON image.i_id=importmytbdb_image_object.i_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) LIKE 'person'
         AND (importmytbdb_image_object.io_precision = 1
              OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
      GROUP BY image.i_id) grouped
 SET toupdate.i_persons=grouped.i_persons
-WHERE toupdate.i_id=grouped.i_id;
+WHERE toupdate.i_id=grouped.i_id**/;
+
 
 -- image calc objects
+-- TODO
+/**
 UPDATE image toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ',') AS i_objects, image.i_id AS i_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS i_objects, image.i_id AS i_id
      FROM image INNER JOIN importmytbdb_image_object ON image.i_id=importmytbdb_image_object.i_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) NOT LIKE 'person'
         AND (importmytbdb_image_object.io_precision = 1
              OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
      GROUP BY image.i_id) grouped
 SET toupdate.i_objects=grouped.i_objects
-WHERE toupdate.i_id=grouped.i_id;
+WHERE toupdate.i_id=grouped.i_id**/;
 
 -- remove todos
 UPDATE image SET i_keywords=REPLACE(i_keywords, 'KW_TODOKEYWORDS,', '');
@@ -344,6 +376,8 @@ UPDATE image SET i_keywords=REPLACE(i_keywords, ',KW_TODOKEYWORDS', '');
 UPDATE image SET i_keywords=REPLACE(i_keywords, 'KW_TODOKEYWORDS', '');
 
 -- image calc desc+dates+coords
+-- TODO
+/**
 UPDATE image toupdate,
  (SELECT image.i_id, kategorie_full.k_id, kategorie_full.t_id, k_name, kategorie_full.k_meta_shortdesc, location.l_lochirarchietxt
   FROM image INNER JOIN kategorie_full ON image.k_Id=kategorie_full.k_id INNER JOIN location ON kategorie_full.l_id=location.l_id
@@ -354,7 +388,7 @@ SET
     toupdate.i_katname=grouped.k_name,
     toupdate.i_katdesc=grouped.k_meta_shortdesc,
     toupdate.i_lochirarchie=grouped.l_lochirarchietxt
-WHERE toupdate.i_id=grouped.i_id;
+WHERE toupdate.i_id=grouped.i_id**/;
 
 -- ##################
 -- import videos
@@ -368,40 +402,46 @@ INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_g
           AND importmytbdb_video_playlist.p_id=17;
 
 -- calc keywords
+-- TODO
+/**
 UPDATE video toupdate,
     (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS v_keywords, video.v_id AS v_id
      FROM video LEFT JOIN importmytbdb_video_keyword mjoin ON video.v_id=mjoin.v_id LEFT JOIN importmytbdb_keyword mk ON mjoin.kw_id=mk.kw_id
      GROUP BY video.v_id) grouped
 SET toupdate.v_keywords=grouped.v_keywords
-WHERE toupdate.v_id=grouped.v_id;
+WHERE toupdate.v_id=grouped.v_id**/;
 
 -- video calc persons
+-- TODO
+/**
 UPDATE video toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ',') AS v_persons, video.v_id AS v_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_persons, video.v_id AS v_id
      FROM video INNER JOIN importmytbdb_video_object ON video.v_id=importmytbdb_video_object.v_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) LIKE 'person'
         AND (importmytbdb_video_object.vo_precision = 1
              OR importmytbdb_video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
      GROUP BY video.v_id) grouped
 SET toupdate.v_persons=grouped.v_persons
-WHERE toupdate.v_id=grouped.v_id;
+WHERE toupdate.v_id=grouped.v_id**/;
 
 -- video calc objects
+-- TODO
+/**
 UPDATE video toupdate,
-    (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ',') AS v_objects, video.v_id AS v_id
+    (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_objects, video.v_id AS v_id
      FROM video INNER JOIN importmytbdb_video_object ON video.v_id=importmytbdb_video_object.v_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) NOT LIKE 'person'
         AND (importmytbdb_video_object.vo_precision = 1
              OR importmytbdb_video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
                                           'DONE_APPROVAL_PROCESSED', 'DONE_CORRECTION_PROCESSED', 'DONE_DETAIL_PROCESSED'))
      GROUP BY video.v_id) grouped
 SET toupdate.v_objects=grouped.v_objects
-WHERE toupdate.v_id=grouped.v_id;
+WHERE toupdate.v_id=grouped.v_id**/;
 
 -- remove todos
 UPDATE video SET v_keywords=REPLACE(v_keywords, 'KW_TODOKEYWORDS,', '');
@@ -409,6 +449,8 @@ UPDATE video SET v_keywords=REPLACE(v_keywords, ',KW_TODOKEYWORDS', '');
 UPDATE video SET v_keywords=REPLACE(v_keywords, 'KW_TODOKEYWORDS', '');
 
 -- video calc desc+dates+coords
+-- TODO
+/**
 UPDATE video toupdate,
  (SELECT video.v_id, kategorie_full.k_id, kategorie_full.t_id, k_name, kategorie_full.k_meta_shortdesc, location.l_lochirarchietxt
   FROM video INNER JOIN kategorie_full ON video.k_Id=kategorie_full.k_id INNER JOIN location ON kategorie_full.l_id=location.l_id
@@ -419,7 +461,7 @@ SET
     toupdate.v_katname=grouped.k_name,
     toupdate.v_katdesc=grouped.k_meta_shortdesc,
     toupdate.v_lochirarchie=grouped.l_lochirarchietxt
-WHERE toupdate.v_id=grouped.v_id;
+WHERE toupdate.v_id=grouped.v_id**/;
 
 -- ##################
 -- update id-summary-fields
@@ -431,24 +473,32 @@ SET SESSION group_concat_max_len = 200000000;
 UPDATE location SET l_tids='0';
 UPDATE location SET l_dids='0';
 UPDATE location SET l_katids='0';
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT tour.l_id AS l_id, GROUP_CONCAT(t_id SEPARATOR ',,') AS l_t_ids
   FROM tour GROUP BY tour.l_id) grouped
 SET toupdate.l_tids=grouped.l_t_ids
-WHERE toupdate.l_id=grouped.l_id;
+WHERE toupdate.l_id=grouped.l_id**/;
 
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT destination.l_id AS l_id, GROUP_CONCAT(d_id SEPARATOR ',,') AS l_d_ids
   FROM destination GROUP BY destination.l_id) grouped
 SET toupdate.l_dids=grouped.l_d_ids
-WHERE toupdate.l_id=grouped.l_id;
+WHERE toupdate.l_id=grouped.l_id**/;
 
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT kategorie_full.l_id AS l_id, GROUP_CONCAT(k_id SEPARATOR ',,') AS l_k_ids
   FROM kategorie_full GROUP BY kategorie_full.l_id) grouped
 SET toupdate.l_katids=grouped.l_k_ids
-WHERE toupdate.l_id=grouped.l_id;
+WHERE toupdate.l_id=grouped.l_id**/;
 
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT location.l_parent_id AS l_parent_id,
     GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
@@ -464,11 +514,36 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             CHAR_LENGTH(l_lochirarchietxt)
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
-    )=7;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+    )=7**/;
 
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+
+-- TODO
+/**UPDATE location toupdate,
+ (SELECT location.l_parent_id AS l_parent_id,
+    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
+    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
+    GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
+  FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
+SET
+  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
+  toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
+  toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
+WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
+        (
+            CHAR_LENGTH(l_lochirarchietxt)
+            - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
+        ) / CHAR_LENGTH(',,')
+    )=6**/;
+
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT location.l_parent_id AS l_parent_id,
     GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
@@ -484,12 +559,14 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             CHAR_LENGTH(l_lochirarchietxt)
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
-    )=6;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+    )=5**/;
 
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT location.l_parent_id AS l_parent_id,
     GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
@@ -505,12 +582,14 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             CHAR_LENGTH(l_lochirarchietxt)
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
-    )=5;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+    )=4**/;
 
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT location.l_parent_id AS l_parent_id,
     GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
@@ -526,12 +605,14 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             CHAR_LENGTH(l_lochirarchietxt)
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
-    )=4;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+    )=3**/;
 
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT location.l_parent_id AS l_parent_id,
     GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
@@ -547,12 +628,14 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             CHAR_LENGTH(l_lochirarchietxt)
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
-    )=3;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+    )=2**/;
 
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT location.l_parent_id AS l_parent_id,
     GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
@@ -568,11 +651,14 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             CHAR_LENGTH(l_lochirarchietxt)
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
-    )=2;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+    )=1**/;
 
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+
+-- TODO
+/**
 UPDATE location toupdate,
  (SELECT location.l_parent_id AS l_parent_id,
     GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
@@ -588,37 +674,20 @@ WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
             CHAR_LENGTH(l_lochirarchietxt)
             - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
         ) / CHAR_LENGTH(',,')
-    )=1;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+    )=0**/;
 
-UPDATE location toupdate,
- (SELECT location.l_parent_id AS l_parent_id,
-    GROUP_CONCAT(COALESCE(l_dids, '') SEPARATOR ',,') AS l_d_ids,
-    GROUP_CONCAT(COALESCE(l_tids, '') SEPARATOR ',,') AS l_t_ids,
-    GROUP_CONCAT(COALESCE(l_katids, '') SEPARATOR ',,') AS l_k_ids
-  FROM location where l_id <> 1 GROUP BY location.l_parent_id ORDER BY l_typ desc, l_parent_id desc) grouped
-SET
-  toupdate.l_dids=CONCAT(COALESCE(l_dids, ''), ',,', COALESCE(grouped.l_d_ids, '')),
-  toupdate.l_tids=CONCAT(COALESCE(l_tids, ''), ',,', COALESCE(grouped.l_t_ids, '')),
-  toupdate.l_katids=CONCAT(COALESCE(l_katids, ''), ',,', COALESCE(grouped.l_k_ids, ''))
-WHERE toupdate.l_id=grouped.l_parent_id AND ROUND (
-        (
-            CHAR_LENGTH(l_lochirarchietxt)
-            - CHAR_LENGTH( REPLACE ( l_lochirarchietxt, ',,', '') )
-        ) / CHAR_LENGTH(',,')
-    )=0;
-UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_dids=REGEXP_REPLACE(REGEXP_REPLACE(l_dids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_tids=REGEXP_REPLACE(REGEXP_REPLACE(l_tids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE location SET l_katids=REGEXP_REPLACE(REGEXP_REPLACE(l_katids, '^,*(.*),*$', '\\1'), ',+', ',');
 
-UPDATE location SET l_dids=CONCAT(l_dids, ',');
-UPDATE location SET l_tids=CONCAT(l_tids, ',');
-UPDATE location SET l_katids=CONCAT(l_katids, ',');
+UPDATE location SET l_dids=l_dids || ',';
+UPDATE location SET l_tids=l_tids || ',';
+UPDATE location SET l_katids=l_katids  || ',';
 
 -- calc tour: kat-ids
 UPDATE tour SET t_k_ids='0';
+-- TODO
+/**
 UPDATE tour toupdate,
  (SELECT tour.t_id, tour.t_name, GROUP_CONCAT(kategorie_full.k_id SEPARATOR ',,') AS t_kids, CHAR_LENGTH(GROUP_CONCAT(kategorie_full.k_id SEPARATOR ',,'))
   FROM tour left join kategorie_full ON tour.t_id=kategorie_full.t_id GROUP BY tour.t_id ORDER BY tour.t_id) grouped
@@ -630,27 +699,31 @@ UPDATE tour toupdate,
    FROM importmytbdb_kategorie_tour mjoin
    GROUP BY mjoin.t_id) grouped
 SET toupdate.t_k_ids=CONCAT(COALESCE(t_k_ids, ''), ',,', COALESCE(grouped.k_ids, ''))
-WHERE toupdate.t_id=grouped.t_id;
+WHERE toupdate.t_id=grouped.t_id**/;
 
 
-UPDATE tour SET t_k_ids=REGEXP_REPLACE(REGEXP_REPLACE(t_k_ids, '^,*(.*),*$', '\\1'), ',+', ',');
-UPDATE tour SET t_k_ids=CONCAT(t_k_ids, ',');
+-- TODO UPDATE tour SET t_k_ids=REGEXP_REPLACE(REGEXP_REPLACE(t_k_ids, '^,*(.*),*$', '\\1'), ',+', ',');
+UPDATE tour SET t_k_ids=t_k_ids || ',';
 UPDATE tour SET k_id=0 WHERE K_ID IS NULL;
-UPDATE tour SET t_k_ids=REGEXP_REPLACE(REGEXP_REPLACE(t_k_ids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODO UPDATE tour SET t_k_ids=REGEXP_REPLACE(REGEXP_REPLACE(t_k_ids, '^,*(.*),*$', '\\1'), ',+', ',');
 
 
 -- calc track: d_id
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id, tour.d_id
   FROM kategorie_full INNER JOIN tour ON kategorie_full.t_id=tour.t_id
   GROUP BY kategorie_full.k_id) grouped
 SET
     toupdate.d_id=grouped.d_id
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- calc track: destination/tour-ids
 UPDATE kategorie_full SET k_t_ids=COALESCE(t_id, '0');
-UPDATE kategorie_full SET k_d_ids=CONCAT('"', COALESCE(d_id, '0'));
+UPDATE kategorie_full SET k_d_ids='"' || COALESCE(d_id, '0');
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
   (SELECT mjoin.k_id AS k_id,
     GROUP_CONCAT(CAST(mjoin.t_id AS char(100)) SEPARATOR  ',,') AS t_ids,
@@ -659,17 +732,20 @@ UPDATE kategorie_full toupdate,
    GROUP BY mjoin.k_id) grouped
 SET toupdate.k_t_ids=CONCAT(COALESCE(k_t_ids, ''), ',,', COALESCE(grouped.t_ids, '')),
     toupdate.k_d_ids=CONCAT(COALESCE(k_d_ids, ''), '",,"', COALESCE(grouped.d_ids, ''))
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
-UPDATE kategorie_full SET k_t_ids=REGEXP_REPLACE(REGEXP_REPLACE(k_t_ids, '^,*(.*),*$', '\\1'), ',+', ',');
+-- TODOUPDATE kategorie_full SET k_t_ids=REGEXP_REPLACE(REGEXP_REPLACE(k_t_ids, '^,*(.*),*$', '\\1'), ',+', ',');
 UPDATE kategorie_full SET k_t_ids_full=COALESCE(k_t_ids, '');
-UPDATE kategorie_full SET k_d_ids=REGEXP_REPLACE(REGEXP_REPLACE(k_d_ids, '^",*(.*),"*$', '\\1'), ',+', ',');
-UPDATE kategorie_full SET k_d_ids=CONCAT(k_d_ids, '"');
+-- TODOUPDATE kategorie_full SET k_d_ids=REGEXP_REPLACE(REGEXP_REPLACE(k_d_ids, '^",*(.*),"*$', '\\1'), ',+', ',');
+UPDATE kategorie_full SET k_d_ids=k_d_ids || '"';
 UPDATE kategorie_full SET k_d_ids_full=COALESCE(k_d_ids, '');
+
 
 --
 -- update trackdata
 -- track calc keywords-persons
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
  (SELECT kategorie_full.k_id AS k_id, GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS k_persons
   FROM kategorie_full LEFT JOIN importmytbdb_kategorie_keyword mjoin ON kategorie_full.k_id=mjoin.k_id
@@ -677,14 +753,16 @@ UPDATE kategorie_full toupdate,
        INNER JOIN importmytbdb_person mp ON LOWER(mp.pn_shortname) like LOWER(mk.kw_name)
   GROUP BY kategorie_full.k_id) grouped
 SET toupdate.k_persons=grouped.k_persons
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- track calc image-persons
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ', ') AS i_persons, image.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ', ') AS i_persons, image.k_id AS k_id
      FROM image INNER JOIN importmytbdb_image_object ON image.i_id=importmytbdb_image_object.i_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) LIKE 'person'
         AND (importmytbdb_image_object.io_precision = 1
              OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
@@ -692,14 +770,16 @@ UPDATE kategorie_full toupdate,
      GROUP BY image.k_id) grouped
 SET toupdate.k_persons=CONCAT(COALESCE(toupdate.k_persons, ''), ',',
                               COALESCE(grouped.i_persons, ''), '')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- track calc video-persons
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ',') AS v_persons, video.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_persons, video.k_id AS k_id
      FROM video INNER JOIN importmytbdb_video_object ON video.v_id=importmytbdb_video_object.v_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) LIKE 'person'
         AND (importmytbdb_video_object.vo_precision = 1
              OR importmytbdb_video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
@@ -707,14 +787,16 @@ UPDATE kategorie_full toupdate,
      GROUP BY video.k_id) grouped
 SET toupdate.k_persons=CONCAT(COALESCE(toupdate.k_persons, ''), ',',
                               COALESCE(grouped.v_persons, ''), '')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- track calc image-objects
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ', ') AS i_objects, image.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ', ') AS i_objects, image.k_id AS k_id
      FROM image INNER JOIN importmytbdb_image_object ON image.i_id=importmytbdb_image_object.i_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_image_object.io_obj_type=objects_key.ok_key AND importmytbdb_image_object.io_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) NOT LIKE 'person'
         AND (importmytbdb_image_object.io_precision = 1
              OR importmytbdb_image_object.io_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
@@ -722,14 +804,16 @@ UPDATE kategorie_full toupdate,
      GROUP BY image.k_id) grouped
 SET toupdate.k_objects=CONCAT(COALESCE(toupdate.k_objects, ''), ',',
                               COALESCE(grouped.i_objects, ''), '')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;
 
 -- track calc video-objects
+-- TODO
+/**
 UPDATE kategorie_full toupdate,
-  (SELECT GROUP_CONCAT(DISTINCT importmytbdb_objects.o_name ORDER BY importmytbdb_objects.o_name SEPARATOR ',') AS v_objects, video.k_id AS k_id
+  (SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ',') AS v_objects, video.k_id AS k_id
      FROM video INNER JOIN importmytbdb_video_object ON video.v_id=importmytbdb_video_object.v_id
-        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=importmytbdb_objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
-        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=importmytbdb_objects.o_id
+        INNER JOIN importmytbdb_objects_key ON importmytbdb_video_object.vo_obj_type=objects_key.ok_key AND importmytbdb_video_object.vo_detector=importmytbdb_objects_key.ok_detector
+        INNER JOIN importmytbdb_objects ON importmytbdb_objects_key.o_id=objects.o_id
      WHERE LOWER(o_category) NOT LIKE 'person'
         AND (importmytbdb_video_object.vo_precision = 1
              OR importmytbdb_video_object.vo_state in ('RUNNING_MANUAL_APPROVED', 'RUNNING_MANUAL_CORRECTED', 'RUNNING_MANUAL_DETAILED',
@@ -737,4 +821,4 @@ UPDATE kategorie_full toupdate,
      GROUP BY video.k_id) grouped
 SET toupdate.k_objects=CONCAT(COALESCE(toupdate.k_objects, ''), ',',
                               COALESCE(grouped.v_objects, ''), '')
-WHERE toupdate.k_id=grouped.k_id;
+WHERE toupdate.k_id=grouped.k_id**/;

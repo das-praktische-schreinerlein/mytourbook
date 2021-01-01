@@ -1,6 +1,6 @@
------------------
---- configuration-tables
------------------
+-- ---------------
+-- configuration-tables
+-- ---------------
 DROP TABLE IF EXISTS rates;
 CREATE TABLE rates (
   r_id int(11) NOT NULL,
@@ -10,9 +10,9 @@ CREATE TABLE rates (
   r_grade_desc varchar(80) DEFAULT NULL
 );
 
------------------
---- news-data
------------------
+-- ---------------
+-- news-data
+-- ---------------
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
   n_id int(11) NOT NULL PRIMARY KEY,
@@ -24,16 +24,45 @@ CREATE TABLE news (
   n_datebis date DEFAULT NULL,
   n_message_md text,
   n_message_html text,
-  n_keywords text
+  n_keywords text,
+  n_persons text,
+  n_objects text,
+  countImages int(11) DEFAULT 0,
+  countImagesTop int(11) DEFAULT 0,
+  countRoutes int(11) DEFAULT 0,
+  countTrips int(11) DEFAULT 0,
+  countTracks int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0
 );
 
------------------
---- trip-data
------------------
+-- ---------------
+-- info-data
+-- ---------------
+DROP TABLE IF EXISTS info;
+CREATE TABLE info (
+  if_id int(11) NOT NULL PRIMARY KEY,
+  l_id int(11) DEFAULT null,
+  kw_id int(11) DEFAULT NULL,
+  countRoutes int(11) DEFAULT 0,
+  countLocations int(11) DEFAULT 0,
+  if_gesperrt int(2) DEFAULT 0,
+  if_keywords text,
+  if_meta_desc text,
+  if_meta_shortdesc varchar(255) DEFAULT NULL,
+  if_name varchar(255) DEFAULT NULL,
+  if_publisher varchar(255) DEFAULT NULL,
+  if_typ int(11) DEFAULT NULL,
+  if_url varchar(255) NULL
+);
+
+-- ---------------
+-- trip-data
+-- ---------------
 DROP TABLE IF EXISTS trip;
 CREATE TABLE trip (
   tr_id int(11) NOT NULL PRIMARY KEY,
   i_id int(11) DEFAULT NULL,
+  l_id int(11) DEFAULT NULL,
   tr_datebis datetime DEFAULT NULL,
   tr_datevon datetime DEFAULT NULL,
   tr_geo_poly text,
@@ -47,12 +76,19 @@ CREATE TABLE trip (
   tr_meta_shortdesc_md text,
   tr_meta_shortdesc_html text,
   tr_keywords text,
-  tr_dateshow date DEFAULT NULL
+  tr_persons text,
+  tr_objects text,
+  tr_dateshow date DEFAULT NULL,
+  countImages int(11) DEFAULT 0,
+  countImagesTop int(11) DEFAULT 0,
+  countRoutes int(11) DEFAULT 0,
+  countTracks int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0
 );
 
------------------
---- location-data
------------------
+-- ---------------
+-- location-data
+-- ---------------
 DROP TABLE IF EXISTS location;
 CREATE TABLE location (
   l_id int(11) DEFAULT NULL PRIMARY KEY,
@@ -70,19 +106,89 @@ CREATE TABLE location (
   l_typ int(11) DEFAULT NULL,
   l_katids text,
   l_tids text,
+  l_dids text,
   l_meta_shortdesc_md text,
   l_meta_shortdesc_html text,
-  l_keywords text
+  l_keywords text,
+  l_persons text,
+  l_objects text,
+  countImages int(11) DEFAULT 0,
+  countImagesTop int(11) DEFAULT 0,
+  countInfos int(11) DEFAULT 0,
+  countNews int(11) DEFAULT 0,
+  countRoutes int(11) DEFAULT 0,
+  countTrips int(11) DEFAULT 0,
+  countTracks int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0
 );
 
------------------
---- tour-data
------------------
+DROP TABLE IF EXISTS location_info;
+CREATE TABLE IF NOT EXISTS location_info (
+  lif_id int(11) NOT NULL PRIMARY KEY,
+  if_id int(11) NOT NULL,
+  l_id int(11) NOT NULL,
+  lif_linked_details varchar(255) DEFAULT NULL
+);
+
+-- ---------------
+-- destination-data
+-- ---------------
+DROP TABLE IF EXISTS destination;
+CREATE TABLE destination (
+  d_id VARCHAR(80) PRIMARY KEY,
+  l_id int(11),
+  d_k_ids varchar(2000) DEFAULT NULL,
+  d_t_ids varchar(2000) DEFAULT NULL,
+  d_datevon date DEFAULT NULL,
+  d_name char(255) DEFAULT NULL,
+  d_desc_gebiet varchar(255) DEFAULT NULL,
+  d_desc_ziel varchar(255) DEFAULT NULL,
+  d_keywords text,
+  d_persons text,
+  d_objects text,
+  d_ele_max double DEFAULT NULL,
+  d_gps_lat float DEFAULT NULL,
+  d_gps_lon float DEFAULT NULL,
+  d_html_list mediumtext,
+  d_rate varchar(255) DEFAULT NULL,
+  d_rate_ks varchar(255) DEFAULT NULL,
+  d_rate_firn varchar(255) DEFAULT NULL,
+  d_rate_gletscher varchar(255) DEFAULT NULL,
+  d_rate_klettern varchar(255) DEFAULT NULL,
+  d_rate_bergtour varchar(255) DEFAULT NULL,
+  d_rate_schneeschuh varchar(255) DEFAULT NULL,
+  d_rate_ausdauer int(11) DEFAULT '0',
+  d_rate_bildung int(11) DEFAULT '0',
+  d_rate_gesamt int(11) DEFAULT '0',
+  d_rate_kraft int(11) DEFAULT '0',
+  d_rate_mental int(11) DEFAULT '0',
+  d_rate_motive int(11) DEFAULT '0',
+  d_rate_schwierigkeit int(11) DEFAULT '0',
+  d_rate_wichtigkeit int(11) DEFAULT '0',
+  d_route_dauer double DEFAULT NULL,
+  d_route_hm double DEFAULT NULL,
+  d_route_m double DEFAULT NULL,
+  d_typ int(11) DEFAULT NULL,
+  d_dateshow date DEFAULT NULL,
+  countImages int(11) DEFAULT 0,
+  countImagesTop int(11) DEFAULT 0,
+  countInfos int(11) DEFAULT 0,
+  countNews int(11) DEFAULT 0,
+  countRoutes int(11) DEFAULT 0,
+  countTrips int(11) DEFAULT 0,
+  countTracks int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0
+);
+
+-- ---------------
+-- tour-data
+-- ---------------
 DROP TABLE IF EXISTS tour;
 CREATE TABLE tour (
   t_id int(11) NOT NULL PRIMARY KEY,
-  l_id int(11) NOT NULL,
+  l_id int(11),
   k_id int(11) DEFAULT NULL,
+  d_id VARCHAR(80),
   t_k_ids varchar(2000) DEFAULT NULL,
   t_datevon date DEFAULT NULL,
   t_name char(255) DEFAULT NULL,
@@ -94,6 +200,8 @@ CREATE TABLE tour (
   t_desc_ziel varchar(255) DEFAULT NULL,
   t_meta_shortdesc mediumtext,
   t_keywords text,
+  t_persons text,
+  t_objects text,
   t_ele_max double DEFAULT NULL,
   t_gps_lat float DEFAULT NULL,
   t_gps_lon float DEFAULT NULL,
@@ -137,21 +245,39 @@ CREATE TABLE tour (
   t_typ int(11) DEFAULT NULL,
   t_meta_shortdesc_md text,
   t_meta_shortdesc_html text,
-  t_dateshow date DEFAULT NULL
+  t_dateshow date DEFAULT NULL,
+  countImages int(11) DEFAULT 0,
+  countImagesTop int(11) DEFAULT 0,
+  countInfos int(11) DEFAULT 0,
+  countNews int(11) DEFAULT 0,
+  countTrips int(11) DEFAULT 0,
+  countTracks int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0
 );
 
------------------
---- track-data
------------------
+DROP TABLE IF EXISTS tour_info;
+CREATE TABLE IF NOT EXISTS tour_info (
+  tif_id int(11) NOT NULL PRIMARY KEY,
+  if_id int(11) NOT NULL,
+  t_id int(11) NOT NULL,
+  tif_linked_details varchar(255) DEFAULT NULL
+);
+
+-- ---------------
+-- track-data
+-- ---------------
 DROP TABLE IF EXISTS kategorie_full;
 CREATE TABLE kategorie_full (
   k_id int(11) NOT NULL PRIMARY KEY,
-  t_id int(11) NOT NULL,
+  t_id int(11),
+  d_id VARCHAR(80) DEFAULT NULL,
   k_t_ids varchar(2000) DEFAULT NULL,
   k_t_ids_full varchar(2000) DEFAULT NULL,
+  k_d_ids varchar(2000) DEFAULT NULL,
+  k_d_ids_full varchar(2000) DEFAULT NULL,
   i_id int(11) DEFAULT NULL,
-  l_id int(11) NOT NULL,
-  tr_id int(11) NOT NULL,
+  l_id int(11),
+  tr_id int(11),
   k_gesperrt int(11) DEFAULT NULL,
   k_datebis datetime DEFAULT NULL,
   k_datevon datetime DEFAULT NULL,
@@ -181,17 +307,28 @@ CREATE TABLE kategorie_full (
   k_meta_shortdesc_md text,
   k_meta_shortdesc_html text,
   n_id int(11) DEFAULT NULL,
-  k_dateshow date DEFAULT NULL
+  k_dateshow date DEFAULT NULL,
+  countImages int(11) DEFAULT 0,
+  countImagesTop int(11) DEFAULT 0,
+  countRoutes int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0
 );
 
------------------
---- image-data
------------------
+DROP TABLE IF EXISTS kategorie_tour;
+CREATE TABLE kategorie_tour (
+  t_id int(11) NOT NULL,
+  k_id int(11) NOT NULL
+);
+
+-- ---------------
+-- image-data
+-- ---------------
 DROP TABLE IF EXISTS image;
 CREATE TABLE image (
   i_id int(11) NOT NULL PRIMARY KEY,
   k_id int(11) NOT NULL,
   t_id int(11) DEFAULT NULL,
+  d_id VARCHAR(80) DEFAULT NULL,
   i_katname text,
   i_katdesc text,
   i_gesperrt int(11) DEFAULT NULL,
@@ -212,14 +349,15 @@ CREATE TABLE image (
   i_dateshow date DEFAULT NULL
 );
 
------------------
---- video-data
------------------
+-- ---------------
+-- video-data
+-- ---------------
 DROP TABLE IF EXISTS video;
 CREATE TABLE video (
   v_id int(11) NOT NULL PRIMARY KEY,
   k_id int(11) NOT NULL,
   t_id int(11) DEFAULT NULL,
+  d_id VARCHAR(80) DEFAULT NULL,
   v_katname text,
   v_katdesc text,
   v_gesperrt int(11) DEFAULT NULL,
@@ -239,4 +377,3 @@ CREATE TABLE video (
   v_video_objects text,
   v_dateshow date DEFAULT NULL
 );
-
