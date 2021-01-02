@@ -9,8 +9,7 @@ export class ObjectDetectionManagerCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const filePathConfigJson = argv['c'] || argv['backend'];
         if (filePathConfigJson === undefined) {
-            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
-            process.exit(-1);
+            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend"');
         }
 
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));

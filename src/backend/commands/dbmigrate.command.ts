@@ -5,20 +5,17 @@ export class DbMigrateCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const migrationDbConfigFile = argv['migrationDbConfigFile'];
         if (migrationDbConfigFile === undefined) {
-            console.error('ERROR - parameters required migrationDbConfigFile: "--migrationDbConfigFile"');
-            process.exit(-1);
+            return Promise.reject('ERROR - parameters required migrationDbConfigFile: "--migrationDbConfigFile"');
         }
 
         const migrationsDir = argv['migrationsDir'];
         if (migrationsDir === undefined) {
-            console.error('ERROR - parameters required migrationsDir: "--migrationsDir"');
-            process.exit(-1);
+            return Promise.reject('ERROR - parameters required migrationsDir: "--migrationsDir"');
         }
 
         const migrationEnv = argv['migrationEnv'];
         if (migrationEnv === undefined) {
-            console.error('ERROR - parameters required migrationEnv: "--migrationEnv"');
-            process.exit(-1);
+            return Promise.reject('ERROR - parameters required migrationEnv: "--migrationEnv"');
         }
 
         const options = {

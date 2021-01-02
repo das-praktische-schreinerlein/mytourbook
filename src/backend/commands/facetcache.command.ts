@@ -19,8 +19,7 @@ export class FacetCacheManagerCommand extends AbstractFacetCacheManagerCommand i
     protected configureCommonFacetCacheService(argv: string[]): FacetCacheService {
         const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.dev.json';
         if (filePathConfigJson === undefined) {
-            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
-            process.exit(-1);
+            throw new Error('ERROR - parameters required backendConfig: "-c | --backend"');
         }
 
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' }));

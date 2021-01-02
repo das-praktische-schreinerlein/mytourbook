@@ -26,16 +26,14 @@ export class MediaManagerCommand implements AbstractCommand {
 
         const filePathConfigJson = argv['c'] || argv['backend'];
         if (filePathConfigJson === undefined) {
-            console.error('ERROR - parameters required backendConfig: "-c | --backend"');
-            process.exit(-1);
+            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend"');
         }
 
         const action = argv['action'];
         const importDir = argv['importDir'];
         const outputFile = argv['outputFile'];
         if (outputFile !== undefined && fs.existsSync(outputFile)) {
-            console.error(action + ' outputFile must not exist', argv);
-            return utils.reject(action + ' outputFile must not exist');
+            return Promise.reject(action + ' outputFile must not exist');
         }
 
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));

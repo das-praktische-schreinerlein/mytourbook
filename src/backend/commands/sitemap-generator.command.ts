@@ -16,8 +16,7 @@ export class SiteMapGeneratorCommand implements AbstractCommand {
         const filePathConfigJson = argv['c'] || argv['backend'];
         const filePathSitemapConfigJson = argv['s'] || argv['sitemap'] || argv['_'][0];
         if (filePathConfigJson === undefined || filePathSitemapConfigJson === undefined) {
-            console.error('ERROR - parameters required backendConfig: "-c | --backend" sitemapConfig: "-s | --sitemap"');
-            process.exit(-1);
+            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend" sitemapConfig: "-s | --sitemap"');
         }
 
         const generatorConfig = {
