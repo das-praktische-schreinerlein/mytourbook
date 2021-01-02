@@ -39,8 +39,8 @@
         "client": "mysql",
         "connection": {
             "host": "localhost",
-            "user": "root",
-            "password": "",
+            "user": "testmytbexportbetadb",
+            "password": "testmytbexportbetadb",
             "database": "testmytbexportbetadb",
             "port": "3306",
             "filename": "F:/playground/mytb-test/mytdatabase/mytbexportdbbeta.sqlite"

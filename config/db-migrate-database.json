@@ -10,8 +10,8 @@
     "mytbdb_mysql": {
         "driver": "mysql",
         "host": "localhost",
-        "user": "root",
-        "password": "",
+        "user": "testmytbdb",
+        "password": "testmytbdb",
         "database": "testmytbdb",
         "port": "3306",
         "multipleStatements": true

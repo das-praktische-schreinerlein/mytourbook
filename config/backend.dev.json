@@ -35,8 +35,8 @@
         "client": "mysql",
         "connection": {
             "host": "localhost",
-            "user": "root",
-            "password": "",
+            "user": "testmytbdb",
+            "password": "testmytbdb",
             "database": "testmytbdb",
             "port": "3306",
             "filename": "F:/playground/mytb-test/mytdatabase/mytbdb.sqlite"
@@ -68,9 +68,9 @@
         "client": "mysql",
         "connection": {
             "host": "localhost",
-            "user": "root",
-            "password": "",
-            "database": "mytbexportbetadb",
+            "user": "testmytbexportbetadb",
+            "password": "testmytbexportbetadb",
+            "database": "testmytbexportbetadb",
             "port": "3306",
             "filename": "F:/playground/mytb-test/mytdatabase/mytbexportbetadb.sqlite"
         }
