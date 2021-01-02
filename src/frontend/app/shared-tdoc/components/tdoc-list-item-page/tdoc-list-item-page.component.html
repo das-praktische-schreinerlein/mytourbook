@@ -38,7 +38,7 @@
                 <div class="picture-with-objects-container"
                      [style.width]="'100%'">
                     <img #mainImage class="picture-big" [style.max-height]="maxImageHeight"
-                         [src]="listItem.previewUrl"
+                         [src]="listItem.fullUrl"
                          alt="{{listItem.image.name}}"
                          (resize)="onResizeMainImage()"
                          (load)="onResizeMainImage()">
