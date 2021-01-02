@@ -26,8 +26,7 @@ export class TourDocLoaderCommand implements AbstractCommand {
 
         const dataFileName = TourDocFileUtils.normalizeCygwinPath(argv['f'] || argv['file']);
         if (dataFileName === undefined) {
-            console.error('option --file expected');
-            return;
+            return Promise.reject('option --file expected');
         }
 
         const dataService: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
