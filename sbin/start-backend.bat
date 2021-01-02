@@ -5,6 +5,6 @@ call %SCRIPTPATH%configure-environment.cmd
 
 cd %SCRIPTPATH%
 cd %MYCMS%
-npm run backend-serve-%1%
+call npm run backend-serve-%1%
 cd %CWD%
 

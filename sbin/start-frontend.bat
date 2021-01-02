@@ -5,6 +5,6 @@ call %SCRIPTPATH%configure-environment.cmd
 
 cd %SCRIPTPATH%
 cd %MYCMS%
-npm run frontendserver-serve-%1%-de
+call npm run frontendserver-serve-%1%-de
 cd %CWD%
 
