@@ -1,4 +1,10 @@
 -- ##################
+-- create views
+-- ##################
+DROP VIEW IF EXISTS importmytbdb_kategorie_tour;
+CREATE VIEW importmytbdb_kategorie_tour AS SELECT * FROM testmytbdb.kategorie_tour;
+
+-- ##################
 -- copy tables
 -- ##################
 TRUNCATE TABLE location;
