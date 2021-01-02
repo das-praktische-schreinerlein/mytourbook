@@ -79,6 +79,7 @@ export class DbPublishCommand implements AbstractCommand {
                 functionFiles.push(profilePath + 'import_01_create-functions.sql');
                 sqlFiles.push(profilePath + 'import_01_create-model.sql');
                 sqlFiles.push(profilePath + 'import_03_import-data-from-mytbexportbetadb-to-mytbexportproddb.sql');
+                sqlFiles.push(profilePath + 'import_03_clean-blocked-data.sql');
                 sqlFiles.push(profilePath + 'import_03_clean-private-data.sql');
                 break;
             case 'mytbexportbetadb_update':

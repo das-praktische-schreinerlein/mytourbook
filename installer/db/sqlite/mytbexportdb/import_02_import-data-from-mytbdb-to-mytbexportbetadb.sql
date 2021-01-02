@@ -1,8 +1,8 @@
 -- ##################
 -- import location
 -- ##################
-INSERT INTO location (l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ)
-     SELECT l_id, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ FROM importmytbdb_location;
+INSERT INTO location (l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_gps_lat, l_gps_lon, l_geo_area, l_typ)
+     SELECT l_id, l_gesperrt, l_meta_shortdesc, l_name, l_url_homepage, l_parent_id, l_geo_latdeg, l_geo_longdeg, l_geo_area, l_typ FROM importmytbdb_location;
 
 -- TODO UPDATE location SET l_lochirarchietxt=GetLocationNameAncestry(location.l_id, location.l_name, ' -> '), l_lochirarchieids=GetLocationIdAncestry(location.l_id, ',');
 UPDATE location SET l_lochirarchietxt=REPLACE(l_lochirarchietxt, 'OFFEN -> ', '');
@@ -71,8 +71,8 @@ INSERT into location_info (lif_id, if_id, l_id, lif_linked_details)
 -- ##################
 -- import news
 -- ##################
-INSERT INTO news (n_id, w_id, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords)
-    SELECT n_id, w_id, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords FROM importmytbdb_news;
+INSERT INTO news (n_id, w_id, n_gesperrt, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords)
+    SELECT n_id, w_id, n_gesperrt, n_date, n_datevon, n_datebis, n_message, n_message_md, n_message_html, n_headline, n_keywords FROM importmytbdb_news;
 
 -- remove todos
 UPDATE news SET n_message=REPLACE(n_message, 'TODODESC', '');
@@ -91,8 +91,8 @@ SET
 -- ##################
 -- import trip
 -- ##################
-INSERT INTO trip (tr_id, i_id, l_id, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url)
-    SELECT tr_id, i_id, l_id, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url
+INSERT INTO trip (tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url)
+    SELECT tr_id, i_id, l_id, tr_gesperrt, tr_datebis, tr_datevon, tr_geo_poly, tr_katname_replace, tr_l_ids, tr_meta_desc, tr_meta_shortdesc, tr_name, tr_typ, tr_url
 FROM importmytbdb_trip;
 
 -- remove todos
@@ -176,8 +176,8 @@ WHERE toupdate.k_id=grouped.k_id**/;
 -- ##################
 -- import routes
 -- ##################
-INSERT into tour (t_id, l_id, k_id, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ)
-    SELECT t_id, l_id, k_id, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ
+INSERT into tour (t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ)
+    SELECT t_id, l_id, k_id, t_gesperrt, t_datevon, t_name, t_desc_gefahren, t_desc_fuehrer, t_desc_gebiet, t_desc_talort, t_desc_ziel, t_meta_shortdesc, t_ele_max, t_gpstracks_basefile, t_rate, t_rate_ks, t_rate_firn, t_rate_gletscher, t_rate_klettern, t_rate_bergtour, t_rate_schneeschuh, t_rate_ausdauer, t_rate_bildung, t_rate_gesamt, t_rate_kraft, t_rate_mental, t_rate_motive, t_rate_schwierigkeit, t_rate_wichtigkeit, t_route_aufstieg_name, t_route_aufstieg_dauer, t_route_aufstieg_hm, t_route_aufstieg_km, t_route_aufstieg_sl, t_route_aufstieg_m, t_route_abstieg_name, t_route_abstieg_dauer, t_route_abstieg_hm, t_route_abstieg_m, t_route_huette_name, t_route_huette_dauer, t_route_huette_hm, t_route_huette_m, t_route_zustieg_dauer, t_route_zustieg_hm, t_route_zustieg_m, t_route_dauer, t_route_hm, t_route_m, t_typ
     FROM importmytbdb_tour;
 
 -- calc tour: d-ids
@@ -244,6 +244,7 @@ INSERT into tour_info (tif_id, if_id, t_id, tif_linked_details)
 -- ##################
 INSERT INTO destination (d_id,
        l_id,
+       d_gesperrt,
        d_desc_gebiet,
        d_desc_ziel,
        d_name,
@@ -274,6 +275,7 @@ SELECT REPLACE(REPLACE(LOWER(COALESCE(tour.l_id, "") || "_" ||
             COALESCE(t_desc_ziel, "") || "_" ||
             COALESCE(t_typ, "")), " ", "_"), "/", "_")                    AS d_id,
        tour.l_id,
+       t_gesperrt AS d_gesperrt,
        t_desc_gebiet AS d_desc_gebiet,
        t_desc_ziel AS d_desc_ziel,
        t_desc_ziel AS d_name,
