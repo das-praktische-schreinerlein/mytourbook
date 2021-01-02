@@ -5,52 +5,64 @@ import * as knex from 'knex';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 
 export class DbPublishCommand implements AbstractCommand {
+    protected static TARGETS = ['mytbexportbetadb', 'mytbexportproddb', 'mytbexportbetadb_update', 'mytbexportproddb_update'];
+    protected static PROFILES = ['sqlite', 'mysql'];
+
     public process(argv): Promise<any> {
         const profile = argv['profile'];
-        if (profile === undefined || (profile !== 'sqlite' && profile !== 'mysql')) {
-            console.error('ERROR - parameters required profile: "--profile sqlite|mysql"');
-            process.exit(-1);
+        if (profile === undefined || (!DbPublishCommand.PROFILES.includes(profile))) {
+            return Promise.reject('ERROR - parameters required profile: "--profile ' + DbPublishCommand.PROFILES + '"');
         }
 
         const target = argv['target'];
-        if (target === undefined || (target !== 'mytbexportbetadb' && target !== 'mytbexportproddb')) {
-            console.error('ERROR - parameters required target: "--target mytbexportbetadb|mytbexportproddb"');
-            process.exit(-1);
+        if (target === undefined || (!DbPublishCommand.TARGETS.includes(target))) {
+            return Promise.reject('ERROR - parameters required target: "--target ' + DbPublishCommand.TARGETS + '"');
         }
 
         const publishConfigFile = argv['publishConfigFile'];
         if (publishConfigFile === undefined || !fs.existsSync(publishConfigFile) || !fs.lstatSync(publishConfigFile).isFile()) {
-            console.error('ERROR - parameters required publishConfigFile: "--publishConfigFile"');
-            process.exit(-1);
+            return Promise.reject('ERROR - parameters required publishConfigFile: "--publishConfigFile"');
         }
 
         const publishConfig = JSON.parse(fs.readFileSync(publishConfigFile, { encoding: 'utf8' }));
-        const targetProfile = target + '_' + profile;
+        const targetProfile = this.configureTargetProfile(target, profile);
         if (publishConfig === undefined || !publishConfig['environments'] || !publishConfig['environments'][targetProfile]) {
-            console.error('ERROR - invalid publishConfigFile or targetProfile', publishConfigFile, targetProfile);
-            process.exit(-1);
+            return Promise.reject('ERROR - invalid publishConfigFile: "' + publishConfigFile + '"' +
+                ' or targetProfile: "' + targetProfile + '"');
         }
 
         const basePath = publishConfig['basePath'];
         if (basePath === undefined) {
-            console.error('ERROR - invalid publishConfigFile required basePath: "--basePath"');
-            process.exit(-1);
+            return Promise.reject('ERROR - invalid publishConfigFile required basePath: "--basePath"');
         }
 
+        const functionFiles: string[] = [];
+        const sqlFiles: string[] = [];
+        return this.configureProcessingFiles(basePath, target, profile, functionFiles, sqlFiles).then(() => {
+            const knexConfig = publishConfig['environments'][targetProfile];
+            const knexOpts = {
+                client: knexConfig['client'],
+                connection: knexConfig['connection']
+            };
+
+            let sqls = [];
+            for (const file of functionFiles) {
+                sqls = sqls.concat(DatabaseService.extractSqlFileOnScriptPath(file, '$$'));
+            }
+            for (const file of sqlFiles) {
+                sqls = sqls.concat(DatabaseService.extractSqlFileOnScriptPath(file, ';'));
+            }
+
+            const databaseService = new DatabaseService(knex(knexOpts), new SqlQueryBuilder());
+
+            console.log('dbPublish - executing sqls', profile, target, basePath, sqls.length, sqlFiles);
+            return databaseService.executeSqls(sqls);
+        })
+    }
+
+    protected configureProcessingFiles(basePath: string, target: string, profile: string, functionFiles: string[], sqlFiles: string[])
+        : Promise<any> {
         const profilePath = basePath + '/' + profile + '/mytbexportdb/';
-        if (!fs.existsSync(profilePath) || !fs.lstatSync(profilePath).isDirectory()) {
-            console.error('ERROR - profilePath not exists', profilePath);
-            process.exit(-1);
-        }
-
-        const knexConfig = publishConfig['environments'][targetProfile];
-        const knexOpts = {
-            client: knexConfig['client'],
-            connection: knexConfig['connection']
-        };
-
-        const functionFiles = [];
-        const sqlFiles = [];
         switch (target) {
             case 'mytbexportbetadb':
                 functionFiles.push(profilePath + 'import_01_create-functions.sql');
@@ -69,22 +81,39 @@ export class DbPublishCommand implements AbstractCommand {
                 sqlFiles.push(profilePath + 'import_03_import-data-from-mytbexportbetadb-to-mytbexportproddb.sql');
                 sqlFiles.push(profilePath + 'import_03_clean-private-data.sql');
                 break;
+            case 'mytbexportbetadb_update':
+                sqlFiles.push(profilePath + 'import_02_manage-common-data.sql');
+                sqlFiles.push(profilePath + 'import_02_manage-private-data.sql');
+                sqlFiles.push(profilePath + 'import_02_merge-person-object-fields.sql');
+                sqlFiles.push(profilePath + 'import_02_update-desc.sql');
+                break;
+            case 'mytbexportproddb_update':
+                sqlFiles.push(profilePath + 'import_02_manage-common-data.sql');
+                sqlFiles.push(profilePath + 'import_02_manage-private-data.sql');
+                sqlFiles.push(profilePath + 'import_02_merge-person-object-fields.sql');
+                sqlFiles.push(profilePath + 'import_02_update-desc.sql');
+                break;
             default:
-                console.error('ERROR - parameters required target: "--target mytbexportbetadb|mytbexportproddb"');
-                process.exit(-1);
+                return Promise.reject('ERROR - unknown target: "' + target + '"');
         }
 
-        let sqls = [];
-        for (const file of functionFiles) {
-            sqls = sqls.concat(DatabaseService.extractSqlFileOnScriptPath(file, '$$'));
-        }
-        for (const file of sqlFiles) {
-            sqls = sqls.concat(DatabaseService.extractSqlFileOnScriptPath(file, ';'));
+        if (!fs.existsSync(profilePath) || !fs.lstatSync(profilePath).isDirectory()) {
+            return Promise.reject('ERROR - profilePath not exists: "' + profilePath + '"');
         }
 
-        const databaseService = new DatabaseService(knex(knexOpts), new SqlQueryBuilder());
+        return Promise.resolve();
+    }
 
-        console.log('dbPublish - executing sqls', profile, target, basePath, sqls.length, sqlFiles);
-        return databaseService.executeSqls(sqls);
+    protected configureTargetProfile(target: string, profile: string): string {
+        switch (target) {
+            case 'mytbexportbetadb':
+            case 'mytbexportbetadb_update':
+                return 'mytbexportbetadb_' + profile;
+            case 'mytbexportproddb':
+            case 'mytbexportproddb_update':
+                return 'mytbexportproddb_' + profile;
+            default:
+                return undefined;
+        }
     }
 }
