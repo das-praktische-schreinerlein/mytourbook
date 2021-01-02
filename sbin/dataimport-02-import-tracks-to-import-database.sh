@@ -31,7 +31,7 @@ source ${SCRIPTPATH}/configure-environment.bash
 
 echo "now: initialize import-database (sqlite)"
 cd ${MYTB}
-node_modules/.bin/db-migrate up --migrations-dir migrations/mytbdb --config ${CONFIG_BASEDIR}db-migrate-database.json --env mytbdb_import_sqlite3
+node dist/backend/serverAdmin.js --command dbMigrate --migrationDbConfigFile ${CONFIG_BASEDIR}/db-migrate-database.json --migrationsDir migrations/mytbdb --migrationEnv mytbdb_import_sqlite3
 cd $CWD
 
 echo "YOUR TODO: start facetcache for import-database in separate shell: 'cd ${MYTB} && npm run backend-start-server-managed-facetcache-dev-import && cd $CWD'"
