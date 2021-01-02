@@ -297,12 +297,9 @@ WHERE toupdate.d_id=grouped.d_id;
 -- import images
 -- ##################
 INSERT into image (i_id, k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit)
-    SELECT distinct importmytbdb_image.i_id, importmytbdb_kategorie.k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit
-    FROM importmytbdb_image INNER JOIN importmytbdb_kategorie ON importmytbdb_kategorie.k_id=importmytbdb_image.k_id
-                       INNER JOIN importmytbdb_image_playlist ON importmytbdb_image_playlist.i_id=importmytbdb_image.i_id
-    WHERE (importmytbdb_kategorie.k_gesperrt=0 OR importmytbdb_kategorie.k_gesperrt IS NULL)
-          AND (importmytbdb_image.i_gesperrt=0 OR importmytbdb_image.i_gesperrt IS NULL)
-          AND importmytbdb_image_playlist.p_id=17;
+    SELECT distinct importmytbdb_image.i_id, importmytbdb_image.k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_gps_lon, i_gps_ele, i_rate, i_rate_motive, i_rate_wichtigkeit
+    FROM importmytbdb_image INNER JOIN importmytbdb_image_playlist ON importmytbdb_image_playlist.i_id=importmytbdb_image.i_id
+    WHERE importmytbdb_image_playlist.p_id=17;
 
 -- calc keywords
 UPDATE image toupdate,
@@ -362,12 +359,9 @@ WHERE toupdate.i_id=grouped.i_id;
 -- import videos
 -- ##################
 INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit)
-    SELECT distinct importmytbdb_video.v_id, importmytbdb_kategorie.k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit
-    FROM importmytbdb_video INNER JOIN importmytbdb_kategorie ON importmytbdb_kategorie.k_id=importmytbdb_video.k_id
-                       INNER JOIN importmytbdb_video_playlist ON importmytbdb_video_playlist.v_id=importmytbdb_video.v_id
-    WHERE (importmytbdb_kategorie.k_gesperrt=0 OR importmytbdb_kategorie.k_gesperrt IS NULL)
-          AND (importmytbdb_video.v_gesperrt=0 OR importmytbdb_video.v_gesperrt IS NULL)
-          AND importmytbdb_video_playlist.p_id=17;
+    SELECT distinct importmytbdb_video.v_id, importmytbdb_video.k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit
+    FROM importmytbdb_video INNER JOIN importmytbdb_video_playlist ON importmytbdb_video_playlist.v_id=importmytbdb_video.v_id
+    WHERE importmytbdb_video_playlist.p_id=17;
 
 -- calc keywords
 UPDATE video toupdate,
