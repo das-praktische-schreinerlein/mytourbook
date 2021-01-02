@@ -36,7 +36,7 @@
         <div class="image-container">
             <ng-container *ngIf="listItem.image !== undefined">
                 <div class="picture-with-objects-container"
-                     [style.width]="imageWidth > 0 ? imageWidth + 'px' : '100%'">
+                     [style.width]="'100%'">
                     <img #mainImage class="picture-big" [style.max-height]="maxImageHeight"
                          [src]="listItem.previewUrl"
                          alt="{{listItem.image.name}}"

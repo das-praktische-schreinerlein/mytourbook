@@ -101,7 +101,7 @@ done
 
 echo "now: create scaled image-copies"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command imageManager --action scaleImages --debug true -c config/backend.import.json
+node dist/backend/serverAdmin.js --command imageManager --action scaleImages --debug true -c ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "now: create scaled video-copies"
