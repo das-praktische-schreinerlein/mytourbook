@@ -1,6 +1,7 @@
 import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 const DBMigrate = require('db-migrate');
 
+// TODO move to commons
 export class DbMigrateCommand implements AbstractCommand {
     public process(argv): Promise<any> {
         const migrationDbConfigFile = argv['migrationDbConfigFile'];
