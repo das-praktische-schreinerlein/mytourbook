@@ -4,6 +4,7 @@ import {utils} from 'js-data';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
 import {SqlUtils} from '@dps/mycms-commons/dist/search-commons/services/sql-utils';
 
+// TODO move to commons
 export class DatabaseService {
     protected knex: any;
     protected sqlQueryBuilder: SqlQueryBuilder;

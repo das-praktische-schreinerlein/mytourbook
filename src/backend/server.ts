@@ -29,9 +29,10 @@ const app = express();
 // load modules
 ServerModuleLoader.loadModules(app, serverConfig);
 
-// start server
-app.listen(serverConfig.backendConfig.port, function () {
-    console.log('MyTB app listening on port ' + serverConfig.backendConfig.port);
+// start server as seen on https://nodejs.org/api/net.html#net_server_listen
+const bindIp = serverConfig.backendConfig.bindIp ? serverConfig.backendConfig.bindIp : '127.0.0.1';
+app.listen(serverConfig.backendConfig.port, bindIp,  511, function () {
+    console.log('MyTB app listening on ip/port', bindIp, serverConfig.backendConfig.port);
     if (!debug) {
         console.log = function() {};
     }

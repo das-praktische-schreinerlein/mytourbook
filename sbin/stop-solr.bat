@@ -9,7 +9,7 @@ echo *****************************************************************
 echo stop solr
 echo *****************************************************************
 
-set CMD=dist\contrib\solr\bin\solr.cmd stop -p %SOL_PORT%
+set CMD=dist\contrib\solr\bin\solr.cmd stop -p %SOLR_PORT%
 echo stop solr "%CMD%"
 %CMD%
 cd %CWD%

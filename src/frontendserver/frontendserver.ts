@@ -31,6 +31,7 @@ export interface ServerConfig {
     backendConfig: BackendConfigType;
     firewallConfig: FirewallConfig;
     frontendConfig: {
+        bindIp: string,
         port: number,
         cacheFolder: string,
         redirectFileJson?: string,
@@ -64,9 +65,10 @@ DnsBLModule.configureDnsBL(app, serverConfig.firewallConfig, serverConfig.filePa
 SimpleFrontendServerModule.configureDefaultServer(app, frontendConfig);
 ConfigureServerModule.configureDefaultErrorHandler(app);
 
-// Start up the Node server
-app.listen(serverConfig.frontendConfig.port, function () {
-    console.log('MyTB app listening on port ' + serverConfig.frontendConfig.port);
+// start server as seen on https://nodejs.org/api/net.html#net_server_listen
+const bindIp = serverConfig.frontendConfig.bindIp ? serverConfig.frontendConfig.bindIp : '127.0.0.1';
+app.listen(serverConfig.frontendConfig.port, bindIp,  511, function () {
+    console.log('MyTB app listening on ip/port', bindIp, serverConfig.frontendConfig.port);
 
     // disable debug-logging
     if (!debug) {

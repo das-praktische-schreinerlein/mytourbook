@@ -9,7 +9,7 @@ echo *****************************************************************
 echo start solr
 echo *****************************************************************
 
-set CMD=dist\contrib\solr\bin\solr.cmd start -V -f -q -p %SOL_PORT%
+set CMD=dist\contrib\solr\bin\solr.cmd start -V -f -q -p %SOLR_PORT%
 echo start solr "%CMD%"
 %CMD%
 cd %CWD%

@@ -1,5 +1,6 @@
 {
     "port": 4002,
+    "bindIp": "127.0.0.1",
     "cacheFolder": "cache/mytbbeta/",
     "redirectFileJson": "config/redirects.beta.json",
     "redirectOnlyCached": false

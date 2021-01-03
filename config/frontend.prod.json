@@ -1,5 +1,6 @@
 {
     "port": 4003,
+    "bindIp": "127.0.0.1",
     "cacheFolder": "cache/mytb/",
     "redirectFileJson": "config/redirects.prod.json",
     "redirectOnlyCached": false
