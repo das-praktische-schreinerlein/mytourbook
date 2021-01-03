@@ -2,6 +2,31 @@
  
 # Versions
  
+## 6.1.0
+- improved security
+- backend: run db-migrations, db-publish from serverAdmin
+
+### new features
+- backend: run db-publish from serverAdmin
+- backend: run db-migrations from serverAdmin
+ 
+### improvements
+- security: bind on localhost only by default
+- config: improved db-config
+- backend: improved structure
+- backend: improved error-handling
+- export: improved sql
+- export: introduced sqlite-export
+- install: use local solr
+
+### bug fixes
+- scripts: fixed start-scripts
+- frontend: fixed imagesize in list-page
+
+### breaking changes
+- none
+
+
 ## 6.0.0
 - upgraded all dev-dependencies to latest
 - upgraded to angular 7
