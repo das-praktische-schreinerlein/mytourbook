@@ -1,0 +1,15 @@
+{
+    "adminWritable": true,
+    "commands": [
+        "loadTourDoc",
+        "exportTourDoc",
+        "imageManager",
+        "mediaManager",
+        "facetCacheManager",
+        "dbMigrate"
+    ],
+    "actions": ["*"],
+    "constantParameters": {
+        "noOverrides": "use all parameters as put to commandline"
+    }
+}

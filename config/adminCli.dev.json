@@ -1,0 +1,19 @@
+{
+    "adminWritable": true,
+    "commands": ["initCache",
+        "generateSitemap",
+        "generateRedirects",
+        "loadTourDoc",
+        "exportTourDoc",
+        "imageManager",
+        "mediaManager",
+        "objectDetectionManager",
+        "facetCacheManager",
+        "dbMigrate",
+        "dbPublish"
+    ],
+    "actions": ["*"],
+    "constantParameters": {
+        "noOverrides": "use all parameters as put to commandline"
+    }
+}

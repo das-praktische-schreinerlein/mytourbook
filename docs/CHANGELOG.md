@@ -2,13 +2,15 @@
  
 # Versions
  
-## 6.1.0
+## 7.0.0
 - improved security
-- backend: run db-migrations, db-publish from serverAdmin
+- run db-migrations, db-publish from serverAdmin
+- added admin-server
 
 ### new features
 - backend: run db-publish from serverAdmin
 - backend: run db-migrations from serverAdmin
+- backend: added admin-server
  
 ### improvements
 - security: bind on localhost only by default
@@ -18,6 +20,7 @@
 - export: improved sql
 - export: introduced sqlite-export
 - install: use local solr
+- backend: added parameter-validation and configurable command-restrictions to serverAdmin
 
 ### bug fixes
 - scripts: fixed start-scripts

@@ -47,7 +47,7 @@ echo "now: export import-database"
 if [[ ! -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" && ! -f "${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json" ]]; then
   echo "now: create image-export-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command exportTourDoc  -c ${CONFIG_BASEDIR}backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+  node dist/backend/serverAdmin.js --debug --command exportTourDoc --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json -c ${CONFIG_BASEDIR}backend.import.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
   cd $CWD
 else
   if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json" ]; then
@@ -77,7 +77,7 @@ done
 
 echo "now: import into production-database"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command loadTourDoc  -c ${CONFIG_BASEDIR}backend.dev.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
+node dist/backend/serverAdmin.js --debug --command loadTourDoc --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json -c ${CONFIG_BASEDIR}backend.dev.json -f ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json
 mv ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-dump.json ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-dump.json
 cd $CWD
 

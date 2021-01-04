@@ -43,12 +43,12 @@ if [ "${USESIMILARITYINDEX}" != "" ]; then
     echo "now: check images and image-index-result with database: ${SEARCHDIR}"
     cd ${MYTB}
 
-    node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --additionalMappingsFile $SEARCHDIR/findFilesInLireIndex.json --debug true --outputFile $SEARCHDIR/findFilesInDb.json > "$SEARCHDIR/findFilesInDb.log"
+    node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --additionalMappingsFile $SEARCHDIR/findFilesInLireIndex.json --debug true --outputFile $SEARCHDIR/findFilesInDb.json > "$SEARCHDIR/findFilesInDb.log"
     cd ${CWD}
 else
     echo "now: check images with database: ${SEARCHDIR}"
     cd ${MYTB}
-    node dist/backend/serverAdmin.js -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --debug true --outputFile $SEARCHDIR/findFilesInDb.json > "$SEARCHDIR/findFilesInDb.log"
+    node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.dev.json -c ${CONFIG_BASEDIR}backend.dev.json --command mediaManager --action findCorrespondingTourDocRecordsForMedia --importDir $SEARCHDIR  --debug true --outputFile $SEARCHDIR/findFilesInDb.json > "$SEARCHDIR/findFilesInDb.log"
     cd ${CWD}
 fi
 rm -f "$SEARCHDIR/findFilesInLireIndex.tmp"

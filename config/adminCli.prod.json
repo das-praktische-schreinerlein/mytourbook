@@ -1,0 +1,14 @@
+{
+    "adminWritable": true,
+    "commands": ["initCache",
+        "generateSitemap",
+        "generateRedirects",
+        "imageManager",
+        "mediaManager",
+        "dbPublish"
+    ],
+    "actions": ["*"],
+    "constantParameters": {
+        "noOverrides": "use all parameters as put to commandline"
+    }
+}

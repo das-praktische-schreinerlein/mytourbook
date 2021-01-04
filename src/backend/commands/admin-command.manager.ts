@@ -9,8 +9,15 @@ import {ObjectDetectionManagerCommand} from './objectdetector.command';
 import {FacetCacheManagerCommand} from './facetcache.command';
 import {DbMigrateCommand} from './dbmigrate.command';
 import {DbPublishCommand} from './dbPublishCommand';
+import {CommonAdminCommandConfigType, CommonAdminCommandManager, CommonAdminParameterConfigType} from './common-admin-command.manager';
 
-export class AdminCommandManager {
+export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
+}
+
+export interface AdminParameterConfigType extends CommonAdminParameterConfigType {
+}
+
+export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandConfigType, AdminParameterConfigType> {
     protected cacheInitializer: CacheInitializerCommand;
     protected siteMapGenerator: SiteMapGeneratorCommand;
     protected tdocLoader: TourDocLoaderCommand;
@@ -22,7 +29,8 @@ export class AdminCommandManager {
     protected dbMigrateCommand: DbMigrateCommand;
     protected dbPublishCommand: DbPublishCommand;
 
-    constructor() {
+    constructor(adminCommandConfig: AdminCommandConfigType) {
+        super(adminCommandConfig);
         this.cacheInitializer = new CacheInitializerCommand();
         this.siteMapGenerator = new SiteMapGeneratorCommand();
         this.tdocLoader = new TourDocLoaderCommand();
@@ -35,7 +43,7 @@ export class AdminCommandManager {
         this.dbPublishCommand = new DbPublishCommand()
     }
 
-    public process(argv): Promise<any> {
+    protected processCommandArgs(argv: {}): Promise<any> {
         let promise: Promise<any>;
         switch (argv['command']) {
             case 'initCache':
@@ -77,6 +85,10 @@ export class AdminCommandManager {
         }
 
         return promise;
+    }
+
+    protected getParameterConfiguration(): AdminParameterConfigType {
+        return undefined;
     }
 }
 

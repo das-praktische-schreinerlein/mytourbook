@@ -1,0 +1,44 @@
+{
+    "commandConfig": {
+        "adminWritable": true,
+        "commands": ["initCache",
+            "imageManager",
+            "mediaManager",
+            "objectDetectionManager",
+            "dbPublish"
+        ],
+        "actions": [
+            "sendQueueRequests", "sendImageQueueRequests", "sendVideoQueueRequests",
+            "readImageDates", "scaleImages"
+        ],
+        "constantParameters": {
+            "overrides": "override this parameters from request",
+            "importDir": "notexists",
+            "exportDir": "notexists",
+            "exportName": "notexists",
+            "outputDir": "notexists",
+            "outputFile": "notexists",
+            "publishConfigFile": "notexists",
+            "migrationDbConfigFile": "notexists",
+            "migrationsDir": "notexists",
+            "additionalMappingsFile": "notexists",
+            "srcBaseUrl": "notexists",
+            "destBaseUrl": "notexists",
+            "backend": "config/backend.dev.json",
+            "sitemap": "config/sitemap-de.json"
+        }
+    },
+    "importDir": "notexists",
+    "exportDir": "notexists",
+    "exportName": "notexists",
+    "outputDir": "notexists",
+    "outputFile": "notexists",
+    "publishConfigFile": "notexists",
+    "srcBaseUrl": "notexists",
+    "destBaseUrl": "notexists",
+    "backend": "config/backend.dev.json",
+    "sitemap": "config/sitemap-de.json",
+    "port": 4100,
+    "bindIp": "127.0.0.1",
+    "corsOrigin": true
+}

@@ -43,6 +43,10 @@ CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
 if [ ! -f "${CONFGFILE}" ]; then
     dofail "USAGE: dataexport-playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE \nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
 fi
+CLICONFGFILE="${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json"
+if [ ! -f "${CLICONFGFILE}" ]; then
+    dofail "USAGE: dataexport-playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE \nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
+fi
 
 if [ "${AUTOSTARTEXPORT}" != "true" ]; then
   echo "OPEN: Do you want to start image export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' m3u='${PLAYLISTFILE}'  directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'?"
@@ -56,7 +60,7 @@ fi
 
 echo "now: generate export"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
 
 echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"
