@@ -31,8 +31,9 @@ ServerModuleLoader.loadModules(app, serverConfig);
 
 // start server as seen on https://nodejs.org/api/net.html#net_server_listen
 const bindIp = serverConfig.backendConfig.bindIp ? serverConfig.backendConfig.bindIp : '127.0.0.1';
-app.listen(serverConfig.backendConfig.port, bindIp,  511, function () {
-    console.log('MyTB app listening on ip/port', bindIp, serverConfig.backendConfig.port);
+const tcpBacklog = serverConfig.backendConfig.tcpBacklog ? serverConfig.backendConfig.tcpBacklog : 511;
+app.listen(serverConfig.backendConfig.port, bindIp,  tcpBacklog, function () {
+    console.log('MyTB app listening on ip/port/tcpBacklog', bindIp, serverConfig.backendConfig.port, tcpBacklog);
     if (!debug) {
         console.log = function() {};
     }

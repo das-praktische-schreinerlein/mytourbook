@@ -35,6 +35,7 @@ export interface ServerConfig {
     frontendConfig: {
         bindIp: string,
         port: number,
+        tcpBacklog: number,
         cacheFolder: string,
         redirectFileJson?: string,
         redirectOnlyCached?: boolean
@@ -69,8 +70,9 @@ ConfigureServerModule.configureDefaultErrorHandler(app);
 
 // Start up the Node server
 const bindIp = serverConfig.frontendConfig.bindIp ? serverConfig.frontendConfig.bindIp : '127.0.0.1';
-app.listen(serverConfig.frontendConfig.port, bindIp,  511, function () {
-    console.log('MyTB app listening on ip/port', bindIp, serverConfig.frontendConfig.port);
+const tcpBacklog = serverConfig.frontendConfig.tcpBacklog ? serverConfig.frontendConfig.tcpBacklog : 511;
+app.listen(serverConfig.frontendConfig.port, bindIp,  tcpBacklog, function () {
+    console.log('MyTB app listening on ip/port/tcpBacklog', bindIp, serverConfig.frontendConfig.port, tcpBacklog);
 
     // disable debug-logging
     if (!debug) {

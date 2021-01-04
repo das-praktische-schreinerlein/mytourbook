@@ -45,5 +45,6 @@ export interface BackendConfigType extends CommonBackendConfigType<KeywordMapper
         solrCoreTourDocReadUsername: string,
         solrCoreTourDocReadPassword: string
     },
-    bindIp: string  // TODO move to CommonBackendConfigType
+    bindIp: string,  // TODO move to CommonBackendConfigType
+    tcpBacklog: number
 }
