@@ -19,6 +19,22 @@
             ]
         },
         "preparedCommands": {
+            "dbPublish_mytbexportbetadb_mysql": {
+                "parameters": {
+                    "command": "dbPublish",
+                    "publishConfigFile": "config/dbpublish.json",
+                    "profile": "mysql",
+                    "target": "mytbexportbetadb"
+                }
+            },
+            "dbPublish_mytbexportproddb_mysql": {
+                "parameters": {
+                    "command": "dbPublish",
+                    "publishConfigFile": "config/dbpublish.json",
+                    "profile": "mysql",
+                    "target": "mytbexportproddb"
+                }
+            }
         },
         "constantParameters": {
             "overrides": "override this parameters from request",
@@ -47,7 +63,7 @@
     "destBaseUrl": "notexists",
     "backend": "config/backend.dev.json",
     "sitemap": "config/sitemap-de.json",
-    "port": 4100,
+    "port": 4900,
     "bindIp": "127.0.0.1",
     "corsOrigin": true
 }

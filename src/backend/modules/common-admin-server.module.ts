@@ -40,7 +40,9 @@ export class AdminServerModule {
                     return next('not found');
                 }
 
-                const argv = JSON.parse(commandSrc).execommand;
+                const argv = typeof commandSrc === 'string'
+                    ? JSON.parse(commandSrc).execommand
+                    : commandSrc;
                 // TODO: create multiresponse with showing ... till end
                 adminCommandManager.process(argv).then(value => {
                     console.log('DONE - adminequest finished:', value, argv);
@@ -49,7 +51,7 @@ export class AdminServerModule {
                 }).catch(reason => {
                     console.error('ERROR - adminequest failed:', reason, argv);
                     res.status(403);
-                    res.json();
+                    res.json({'resultmsg': 'adminequest failed'});
                     return next('not found');
                 });
             });

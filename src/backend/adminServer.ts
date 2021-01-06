@@ -15,7 +15,7 @@ if (filePathConfigJson === undefined || filePathFirewallConfigJson === undefined
 }
 
 const serverConfig: AdminServerConfig = {
-    apiAdminPrefix: '/api/v1',
+    apiAdminPrefix: '/adminapi/v1',
     adminBackendConfig: JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' })),
     filePathErrorDocs: './error_docs/',
     firewallConfig: JSON.parse(fs.readFileSync(filePathFirewallConfigJson, { encoding: 'utf8' }))

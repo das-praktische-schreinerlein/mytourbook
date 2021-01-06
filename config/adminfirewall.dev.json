@@ -1,0 +1,68 @@
+{
+    "routerErrorsConfigs" : {
+        "pdocsearch_de": {
+            "pattern": "/api/v1/de/pdocsearch.*",
+            "file": "pdocsearch.json"
+        },
+        "pdocsearch_en": {
+            "pattern": "/api/v1/en/pdocsearch.*",
+            "file": "pdocsearch.json"
+        },
+        "pdoc_de": {
+            "pattern": "/api/v1/de/pdoc/$",
+            "file": "pdocsearch.json"
+        },
+        "pdoc_en": {
+            "pattern": "/api/v1/de/pdoc/$",
+            "file": "pdocsearch.json"
+        },
+        "pdoc_params_de": {
+            "pattern": "/api/v1/de/pdoc/.+",
+            "file": "pdoc.json"
+        },
+        "pdoc_params_en": {
+            "pattern": "/api/v1/de/pdoc/.+",
+            "file": "pdoc.json"
+        },
+        "tdocsearch_de": {
+            "pattern": "/api/v1/de/tdocsearch.*",
+            "file": "tdocsearch.json"
+        },
+        "tdocsearch_en": {
+            "pattern": "/api/v1/en/tdocsearch.*",
+            "file": "tdocsearch.json"
+        },
+        "tdoc_de": {
+            "pattern": "/api/v1/de/tdoc/$",
+            "file": "tdocsearch.json"
+        },
+        "tdoc_en": {
+            "pattern": "/api/v1/de/tdoc/$",
+            "file": "tdocsearch.json"
+        },
+        "tdoc_params_de": {
+            "pattern": "/api/v1/de/tdoc/.+",
+            "file": "tdoc.json"
+        },
+        "tdoc_params_en": {
+            "pattern": "/api/v1/de/tdoc/.+",
+            "file": "tdoc.json"
+        },
+        "tracks": {
+            "pattern": "/tracks/.*",
+            "file": "track.gpx"
+        },
+        "digifotos": {
+            "pattern": "/digifotos/.*",
+            "file": "image.png"
+        }
+    },
+    "allowLocalHostOnly": true,
+    "allowLocalNetOnly": false,
+    "whiteListIps": [
+    ],
+    "blackListIps": [
+    ],
+    "dnsBLConfig": {
+    }
+}
