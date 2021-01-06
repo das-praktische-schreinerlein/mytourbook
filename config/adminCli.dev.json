@@ -2,10 +2,10 @@
     "adminWritable": true,
     "availableCommands": {
         "*": "*"
-
     },
     "preparedCommands": {
         "dbMigrate": {
+            "description": "migrate database mytbdb_mysql",
             "parameters": {
                 "command": "dbMigrate",
                 "migrationDbConfigFile": "config/db-migrate-database.json",

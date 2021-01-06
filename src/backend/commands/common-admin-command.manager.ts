@@ -1,15 +1,16 @@
 import {CommonAdminCommand} from './common-admin.command';
 
 // TODO move to commons
-export interface CommonAdminParameterConfigType {
+export interface CommonAdminPreparedCommandConfigType {
     parameters: {[key: string]: string};
+    description: string;
 }
 
 // TODO move to commons
 export interface CommonAdminCommandConfigType {
     adminWritable: boolean;
     availableCommands: {[key: string]: string[]};
-    preparedCommands: {[key: string]: CommonAdminParameterConfigType};
+    preparedCommands: {[key: string]: CommonAdminPreparedCommandConfigType};
     constantParameters: {[key: string]: string};
 }
 
@@ -20,13 +21,62 @@ export interface CommonAdminCommandsRequestType {
 }
 
 // TODO move to commons
-export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConfigType, P extends CommonAdminParameterConfigType> {
+export interface CommonAdminCommandsListResponseType {
+    command: string;
+    actions?: string[];
+    parameters?: string[];
+    description?: string;
+}
+
+// TODO move to commons
+export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConfigType> {
     protected commands: {[key: string]: CommonAdminCommand};
     protected adminCommandConfig: A;
 
     constructor(commands: {[key: string]: CommonAdminCommand}, adminCommandConfig: A) {
         this.commands = commands;
         this.adminCommandConfig = adminCommandConfig;
+    }
+
+    public listPreparedCommands(): {[key: string]: CommonAdminCommandsListResponseType} {
+        const res: {[key: string]: CommonAdminCommandsListResponseType} = {};
+        for (const key in this.adminCommandConfig.preparedCommands) {
+            if (!this.adminCommandConfig.preparedCommands.hasOwnProperty(key)) {
+                continue;
+            }
+
+            res[key] = {
+                command: key,
+                description: this.adminCommandConfig.preparedCommands[key].description
+            };
+        }
+
+        return res;
+    }
+
+    public listAvailableCommands(): {[key: string]: CommonAdminCommandsListResponseType} {
+        const res: {[key: string]: CommonAdminCommandsListResponseType} = {};
+        if (this.adminCommandConfig === undefined || this.adminCommandConfig.availableCommands === undefined
+            || this.commands === undefined) {
+            return res;
+        }
+
+        for (const key in this.adminCommandConfig.availableCommands) {
+            if (!this.adminCommandConfig.availableCommands.hasOwnProperty(key)) {
+                continue;
+            }
+
+            res[key] = {
+                command: key,
+                actions: this.adminCommandConfig.availableCommands[key],
+            };
+
+            if (this.commands[key] !== undefined) {
+                res[key].parameters = this.commands[key].listCommandParameters();
+            }
+        }
+
+        return res;
     }
 
     public process(argv): Promise<any> {

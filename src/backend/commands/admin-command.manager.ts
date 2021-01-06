@@ -8,15 +8,12 @@ import {ObjectDetectionManagerCommand} from './objectdetector.command';
 import {FacetCacheManagerCommand} from './facetcache.command';
 import {DbMigrateCommand} from './dbmigrate.command';
 import {DbPublishCommand} from './dbPublishCommand';
-import {CommonAdminCommandConfigType, CommonAdminCommandManager, CommonAdminParameterConfigType} from './common-admin-command.manager';
+import {CommonAdminCommandConfigType, CommonAdminCommandManager} from './common-admin-command.manager';
 
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
 }
 
-export interface AdminParameterConfigType extends CommonAdminParameterConfigType {
-}
-
-export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandConfigType, AdminParameterConfigType> {
+export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandConfigType> {
     constructor(adminCommandConfig: AdminCommandConfigType) {
         super({
             'initCache': new CacheInitializerCommand(),

@@ -5,7 +5,6 @@ import {ObjectDetectionManagerCommand} from './objectdetector.command';
 import {DbPublishCommand} from './dbPublishCommand';
 import {AdminCommandConfigType} from './admin-command.manager';
 import {CommonServerAdminCommandConfigType, CommonServerAdminCommandManager} from './common-serveradmin-command.manager';
-import {CommonAdminParameterConfigType} from './common-admin-command.manager';
 import {CacheInitializerCommand} from './cache-initializer.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
@@ -18,7 +17,7 @@ export interface ServerAdminCommandConfigType extends CommonServerAdminCommandCo
 }
 
 export class ServerAdminCommandManager
-    extends CommonServerAdminCommandManager<ServerAdminCommandConfigType, CommonAdminParameterConfigType> {
+    extends CommonServerAdminCommandManager<ServerAdminCommandConfigType> {
 
     constructor(adminCommandConfig: ServerAdminCommandConfigType) {
         // only define a subset of commands

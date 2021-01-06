@@ -11,6 +11,12 @@ if (filePathConfigJson === undefined) {
 }
 
 const adminBackendConfig: AdminCommandConfigType = JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' }));
+const adminCommandManager = new AdminCommandManager(adminBackendConfig);
+if (argv['help'] || argv['usage']) {
+    console.error('help -> prepared commands: ', JSON.stringify(adminCommandManager.listPreparedCommands(), null, 2));
+    console.error('help -> available commands and parameters: ', JSON.stringify(adminCommandManager.listAvailableCommands(), null, 2));
+    process.exit(0);
+}
 
 // disable debug-logging
 const debug = argv['debug'] || false;
@@ -22,7 +28,6 @@ if (!debug || debug === false || parseInt(debug, 10) < 1) {
     console.debug = function() {};
 }
 
-const adminCommandManager = new AdminCommandManager(adminBackendConfig);
 adminCommandManager.process(argv).then(value => {
     console.log('DONE - command finished:', value, argv);
     process.exit(0);

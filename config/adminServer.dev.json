@@ -20,6 +20,7 @@
         },
         "preparedCommands": {
             "dbPublish_mytbexportbetadb_mysql": {
+                "description": "publish mytbexportbetadb mysql",
                 "parameters": {
                     "command": "dbPublish",
                     "publishConfigFile": "config/dbpublish.json",
@@ -28,6 +29,7 @@
                 }
             },
             "dbPublish_mytbexportproddb_mysql": {
+                "description": "publish mytbexportproddb mysql",
                 "parameters": {
                     "command": "dbPublish",
                     "publishConfigFile": "config/dbpublish.json",

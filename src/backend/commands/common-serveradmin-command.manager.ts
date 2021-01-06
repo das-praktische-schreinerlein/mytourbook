@@ -1,9 +1,4 @@
-import {
-    CommonAdminCommandConfigType,
-    CommonAdminCommandManager,
-    CommonAdminCommandsRequestType,
-    CommonAdminParameterConfigType
-} from './common-admin-command.manager';
+import {CommonAdminCommandConfigType, CommonAdminCommandManager, CommonAdminCommandsRequestType} from './common-admin-command.manager';
 import {CommonAdminCommand} from './common-admin.command';
 
 // TODO move to commons
@@ -15,8 +10,7 @@ export interface CommonServerAdminCommandConfigType extends CommonAdminCommandCo
 }
 
 // TODO move to commons
-export abstract class CommonServerAdminCommandManager<A extends CommonServerAdminCommandConfigType,
-    P extends CommonAdminParameterConfigType> extends CommonAdminCommandManager<A, P> {
+export abstract class CommonServerAdminCommandManager<A extends CommonServerAdminCommandConfigType> extends CommonAdminCommandManager<A> {
 
     protected restrictedCommandActions: string[];
 

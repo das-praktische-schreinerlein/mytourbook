@@ -37,6 +37,10 @@ export abstract class CommonAdminCommand implements AbstractCommand {
         });
     }
 
+    public listCommandParameters(): string[] {
+        return Object.keys(this.parameterValidations);
+    }
+
     public validateCommandParameters(argv: {}): Promise<{}> {
         const errors = [];
         for (const key of Object.keys(this.parameterValidations)) {

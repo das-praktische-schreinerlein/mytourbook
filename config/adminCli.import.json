@@ -22,6 +22,7 @@
     },
     "preparedCommands": {
         "dbMigrate": {
+            "description": "migrate database mytbdb_import_sqlite3",
             "parameters": {
                 "command": "dbMigrate",
                 "migrationDbConfigFile": "config/db-migrate-database.json",
