@@ -1,14 +1,35 @@
 {
     "adminWritable": true,
-    "commands": [
-        "loadTourDoc",
-        "exportTourDoc",
-        "imageManager",
-        "mediaManager",
-        "facetCacheManager",
-        "dbMigrate"
-    ],
-    "actions": ["*"],
+    "availableCommands": {
+        "loadTourDoc": [
+            "*"
+        ],
+        "exportTourDoc": [
+            "*"
+        ],
+        "imageManager": [
+            "*"
+        ],
+        "mediaManager": [
+            "*"
+        ],
+        "facetCacheManager": [
+            "*"
+        ],
+        "dbMigrate": [
+            "*"
+        ]
+    },
+    "preparedCommands": {
+        "dbMigrate": {
+            "parameters": {
+                "command": "dbMigrate",
+                "migrationDbConfigFile": "config/db-migrate-database.json",
+                "migrationsDir": "migrations/mytbdb",
+                "migrationEnv": "mytbdb_import_sqlite3"
+            }
+        }
+    },
     "constantParameters": {
         "noOverrides": "use all parameters as put to commandline"
     }

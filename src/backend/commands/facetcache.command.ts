@@ -14,12 +14,29 @@ import {MysqlFacetCacheAdapter} from '@dps/mycms-commons/dist/facetcache-commons
 import {Sqlite3FacetCacheAdapter} from '@dps/mycms-commons/dist/facetcache-commons/model/sqlite3-facetcache.adapter';
 import {TourDocFacetCacheService} from '../modules/tdoc-facetcache.service';
 import {BackendConfigType} from '../modules/backend.commons';
+import {KeywordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {CommonAdminCommand, SimpleConfigFilePathValidationRule} from './common-admin.command';
 
-export class FacetCacheManagerCommand extends AbstractFacetCacheManagerCommand implements AbstractCommand {
+export class FacetCacheManagerCommand extends CommonAdminCommand {
+    protected facetCacheManagerCommandWrapper = new FacetCacheManagerCommandWrapper();
+
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            action: new KeywordValidationRule(true),
+            backend: new SimpleConfigFilePathValidationRule(true)
+        };
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
+        return this.facetCacheManagerCommandWrapper.process(argv);
+    }
+}
+
+export class FacetCacheManagerCommandWrapper extends AbstractFacetCacheManagerCommand implements AbstractCommand {
     protected configureCommonFacetCacheService(argv: string[]): FacetCacheService {
-        const filePathConfigJson = argv['c'] || argv['backend'] || 'config/backend.dev.json';
+        const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
-            throw new Error('ERROR - parameters required backendConfig: "-c | --backend"');
+            throw new Error('ERROR - parameters required backendConfig: "--backend"');
         }
 
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, { encoding: 'utf8' }));

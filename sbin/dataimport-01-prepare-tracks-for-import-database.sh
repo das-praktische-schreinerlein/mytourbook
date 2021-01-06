@@ -134,11 +134,11 @@ fi
 
 echo "now: convert videos: avi/mov... to mp4"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --debug true
+node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action convertVideosFromMediaDirToMP4 --importDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/ --debug true
 cd $CWD
 
 echo "now: rotate mp4-videos"
-echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json -c ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/${IMPORTKEY}_Blablum/CIMG6228.MOV.MP4 && cd $CWD'"
+echo "OPTIONAL YOUR TODO: rotate mp4-videos run this command in a shell 'cd ${MYTB} && node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action rotateVideo  --rotate 270 --debug true --srcFile ${MYTB_IMPORT_MEDIADIR}${IMPORTKEY}/video_full/${IMPORTKEY}_Blablum/CIMG6228.MOV.MP4 && cd $CWD'"
 echo "OPEN: Can we poceed the next steps ?"
 select yn in "Yes"; do
     case $yn in
@@ -164,8 +164,8 @@ rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log"
 rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json"
 rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log"
 rm -f "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json"
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log"
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json -c ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log"
+node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/pics_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.log"
+node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json  --command mediaManager --action generateTourDocsFromMediaDir --importDir ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/video_full/ --debug true --outputFile ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json > "${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.log"
 
 echo "OPTIONAL YOUR TODO: fix import-files (location-names...)"
 echo "OPEN: Did fix this files in editor '${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-images.json ${MYTB_IMPORT_MEDIADIR}/${IMPORTKEY}/mytbdb_import-import-videos.json'?"

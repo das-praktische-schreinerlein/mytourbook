@@ -1,16 +1,25 @@
 {
     "commandConfig": {
         "adminWritable": true,
-        "commands": ["initCache",
-            "imageManager",
-            "mediaManager",
-            "objectDetectionManager",
-            "dbPublish"
-        ],
-        "actions": [
-            "sendQueueRequests", "sendImageQueueRequests", "sendVideoQueueRequests",
-            "readImageDates", "scaleImages"
-        ],
+        "availableCommands": {
+            "initCache": [
+                "*"
+            ],
+            "imageManager": [
+                "readImageDates", "scaleImages"
+            ],
+            "mediaManager": [
+                "readImageDates", "scaleImages"
+            ],
+            "objectDetectionManager": [
+                "sendQueueRequests", "sendImageQueueRequests", "sendVideoQueueRequests"
+            ],
+            "dbPublish": [
+                "*"
+            ]
+        },
+        "preparedCommands": {
+        },
         "constantParameters": {
             "overrides": "override this parameters from request",
             "importDir": "notexists",

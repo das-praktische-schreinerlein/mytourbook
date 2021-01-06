@@ -1,15 +1,29 @@
 import * as fs from 'fs';
-import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {TourDocObjectDetectionManagerModule} from '../modules/tdoc-objectdetection-manager.module';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {utils} from 'js-data';
 import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
+import {CommonAdminCommand, SimpleConfigFilePathValidationRule} from './common-admin.command';
+import {
+    KeywordValidationRule,
+    NumberValidationRule,
+    ValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class ObjectDetectionManagerCommand implements AbstractCommand {
-    public process(argv): Promise<any> {
-        const filePathConfigJson = argv['c'] || argv['backend'];
+export class ObjectDetectionManagerCommand extends CommonAdminCommand {
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            action: new KeywordValidationRule(true),
+            backend: new SimpleConfigFilePathValidationRule(true),
+            maxPerRun: new NumberValidationRule(false, 1, 999999999, 1),
+            detector: new KeywordValidationRule(false)
+        };
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
+        const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
-            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend"');
+            return Promise.reject('ERROR - parameters required backendConfig: "--backend"');
         }
 
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));

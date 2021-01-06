@@ -41,6 +41,7 @@ export class AdminServerModule {
                 }
 
                 const argv = JSON.parse(commandSrc).execommand;
+                // TODO: create multiresponse with showing ... till end
                 adminCommandManager.process(argv).then(value => {
                     console.log('DONE - adminequest finished:', value, argv);
                     res.json({'resultmsg': 'DONE'});

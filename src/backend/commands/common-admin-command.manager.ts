@@ -1,75 +1,156 @@
-import {BaseEntityRecordFieldConfig} from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
+import {CommonAdminCommand} from './common-admin.command';
 
+// TODO move to commons
+export interface CommonAdminParameterConfigType {
+    parameters: {[key: string]: string};
+}
+
+// TODO move to commons
 export interface CommonAdminCommandConfigType {
     adminWritable: boolean;
-    commands: string[];
-    actions: string[];
+    availableCommands: {[key: string]: string[]};
+    preparedCommands: {[key: string]: CommonAdminParameterConfigType};
     constantParameters: {[key: string]: string};
 }
 
-export interface CommonAdminParameterConfigType {
-    parameters: {[key: string]: BaseEntityRecordFieldConfig};
+// TODO move to commons
+export interface CommonAdminCommandsRequestType {
+    command: CommonAdminCommand;
+    parameters: {[key: string]: string};
 }
 
+// TODO move to commons
 export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConfigType, P extends CommonAdminParameterConfigType> {
+    protected commands: {[key: string]: CommonAdminCommand};
     protected adminCommandConfig: A;
 
-    constructor(adminCommandConfig: A) {
+    constructor(commands: {[key: string]: CommonAdminCommand}, adminCommandConfig: A) {
+        this.commands = commands;
         this.adminCommandConfig = adminCommandConfig;
     }
 
     public process(argv): Promise<any> {
         const me = this;
         return this.initializeArgs(argv).then(initializedArgs => {
-            return me.validateCommand(initializedArgs);
-        }).then(validatedCommandArgs => {
-            return me.validateCommandParameters(validatedCommandArgs);
-        }).then(validatedArgs => {
-            return me.processCommandArgs(validatedArgs);
+            if (initializedArgs['preparedCommand']) {
+                return me.initializePreparedCommand(initializedArgs);
+            }
+
+            return me.initializeCommand(initializedArgs);
+        }).then(commandRequest => {
+            return me.validateCommandParameters(commandRequest);
+        }).then(commandRequest => {
+            return me.processCommandArgs(commandRequest);
         });
     }
 
-    // TODO
     protected initializeArgs(argv: {}): Promise<{}> {
-        return Promise.resolve(argv);
+        const initializedArgs = {...argv};
+        for (const key in this.adminCommandConfig.constantParameters) {
+            if (!this.adminCommandConfig.constantParameters.hasOwnProperty(key)) {
+                continue;
+            }
+
+            initializedArgs[key] = this.adminCommandConfig.constantParameters[key];
+        }
+
+        return Promise.resolve(initializedArgs);
     }
 
-    protected validateCommand(argv: {}): Promise<{}> {
+    protected initializePreparedCommand(argv: {}): Promise<CommonAdminCommandsRequestType> {
+        const preparedCommandName = argv['preparedCommand'];
+        if (preparedCommandName === undefined) {
+            return Promise.reject('preparedCommand not defined');
+        }
+
         if (this.adminCommandConfig === undefined || this.adminCommandConfig.adminWritable !== true) {
             return Promise.reject('adminCommandConfig.adminWritable not active');
         }
 
-        if (this.adminCommandConfig.commands === undefined ||
-            !Array.isArray(this.adminCommandConfig.commands)) {
+        if (this.commands === undefined || Object.keys(this.commands).length < 1) {
+            return Promise.reject('no commands defined');
+        }
+
+        if (this.adminCommandConfig.preparedCommands === undefined
+            || Object.keys(this.adminCommandConfig.preparedCommands).length < 1) {
+            return Promise.reject('adminCommandConfig.preparedCommands not defined');
+        }
+
+        const preparedCommand = this.adminCommandConfig.preparedCommands[preparedCommandName];
+        if (preparedCommand === undefined) {
+            return Promise.reject('preparedCommand not found');
+        }
+
+        const initializedArgs = {};
+        for (const key in preparedCommand.parameters) {
+            if (!preparedCommand.parameters.hasOwnProperty(key)) {
+                continue;
+            }
+
+            initializedArgs[key] = preparedCommand.parameters[key];
+        }
+
+        const requestedCommand = initializedArgs['command'];
+        if (this.commands[requestedCommand] === undefined) {
+            return Promise.reject('command not defined');
+        }
+
+        return Promise.resolve({
+            command: this.commands[requestedCommand],
+            parameters: initializedArgs
+        });
+    }
+
+    protected initializeCommand(argv: {}): Promise<CommonAdminCommandsRequestType> {
+        if (this.adminCommandConfig === undefined || this.adminCommandConfig.adminWritable !== true) {
+            return Promise.reject('adminCommandConfig.adminWritable not active');
+        }
+
+        if (this.adminCommandConfig.availableCommands === undefined
+            || Object.keys(this.adminCommandConfig.availableCommands).length < 1) {
             return Promise.reject('adminCommandConfig.commands not defined');
         }
 
-        if (this.adminCommandConfig.actions === undefined ||
-            !Array.isArray(this.adminCommandConfig.actions)) {
-            return Promise.reject('adminCommandConfig.actions not defined');
+        if (this.commands === undefined || Object.keys(this.commands).length < 1) {
+            return Promise.reject('no commands defined');
         }
 
-        if (!(this.adminCommandConfig.commands.length === 1 && this.adminCommandConfig.commands[0] === '*')
-            && !this.adminCommandConfig.commands.includes(argv['command'])) {
+        let availableCommandActions;
+        const requestedCommand = argv['command'];
+        if (Object.keys(this.adminCommandConfig.availableCommands).length === 1
+            && this.adminCommandConfig.availableCommands['*'] !== undefined) {
+            availableCommandActions = this.adminCommandConfig.availableCommands['*'];
+        } else if (this.adminCommandConfig.availableCommands[requestedCommand] !== undefined) {
+            availableCommandActions = this.adminCommandConfig.availableCommands[requestedCommand];
+        } else {
             return Promise.reject('command not allowed');
         }
 
-        if (argv['action'] !== undefined
-            && !(this.adminCommandConfig.actions.length === 1 && this.adminCommandConfig.actions[0] === '*')
-            && !this.adminCommandConfig.actions.includes(argv['action'])) {
+        const requestedAction = argv['action'];
+        if (requestedAction !== undefined
+            && !(availableCommandActions.length === 1 && availableCommandActions[0] === '*')
+            && !availableCommandActions.includes(requestedAction)) {
             return Promise.reject('action not allowed');
         }
 
-        return Promise.resolve(argv);
+        if (this.commands[requestedCommand] === undefined) {
+            return Promise.reject('command not defined');
+        }
+
+        return Promise.resolve({
+            command: this.commands[requestedCommand],
+            parameters: argv
+        });
     }
 
-    // TODO
-    protected validateCommandParameters(argv: {}): Promise<{}> {
-        return Promise.resolve(argv);
+    protected validateCommandParameters(commandRequest: CommonAdminCommandsRequestType): Promise<CommonAdminCommandsRequestType> {
+        return commandRequest.command.validateCommandParameters(commandRequest.parameters).then(() => {
+            return Promise.resolve(commandRequest);
+        });
     }
 
-    protected abstract processCommandArgs(argv: {}): Promise<any>;
-
-    protected abstract getParameterConfiguration(): P;
+    protected processCommandArgs(commandRequest: CommonAdminCommandsRequestType): Promise<any> {
+        return commandRequest.command.process(commandRequest.parameters);
+    }
 }
 

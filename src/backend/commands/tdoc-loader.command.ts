@@ -1,4 +1,3 @@
-import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import * as fs from 'fs';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
@@ -9,14 +8,23 @@ import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/servi
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
 import {CommonDocTransportModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-transport.module';
+import {CommonAdminCommand, SimpleConfigFilePathValidationRule, SimpleFilePathValidationRule} from './common-admin.command';
+import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class TourDocLoaderCommand implements AbstractCommand {
-    public process(argv): Promise<any> {
+export class TourDocLoaderCommand extends CommonAdminCommand {
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            backend: new SimpleConfigFilePathValidationRule(true),
+            file: new SimpleFilePathValidationRule(true)
+        };
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
         const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];
 
-        const filePathConfigJson = argv['c'] || argv['backend'];
+        const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
-            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend"');
+            return Promise.reject('ERROR - parameters required backendConfig: "--backend"');
         }
 
         const serverConfig = {
@@ -24,7 +32,7 @@ export class TourDocLoaderCommand implements AbstractCommand {
             readOnly: false
         };
 
-        const dataFileName = TourDocFileUtils.normalizeCygwinPath(argv['f'] || argv['file']);
+        const dataFileName = TourDocFileUtils.normalizeCygwinPath(argv['file']);
         if (dataFileName === undefined) {
             return Promise.reject('option --file expected');
         }

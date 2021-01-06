@@ -1,5 +1,4 @@
 import {TourDocLoaderCommand} from './tdoc-loader.command';
-import {utils} from 'js-data';
 import {MediaManagerCommand} from './media-manager.command';
 import {TourDocExporterCommand} from './tdoc-exporter.command';
 import {ObjectDetectionManagerCommand} from './objectdetector.command';
@@ -20,51 +19,49 @@ export interface ServerAdminCommandConfigType extends CommonServerAdminCommandCo
 
 export class ServerAdminCommandManager
     extends CommonServerAdminCommandManager<ServerAdminCommandConfigType, CommonAdminParameterConfigType> {
-    protected cacheInitializer: CacheInitializerCommand;
-    protected tdocLoader: TourDocLoaderCommand;
-    protected tdocExporter: TourDocExporterCommand;
-    protected imageManager: MediaManagerCommand;
-    protected objectDetectionManager: ObjectDetectionManagerCommand;
-    protected dbPublishCommand: DbPublishCommand;
 
     constructor(adminCommandConfig: ServerAdminCommandConfigType) {
-        super(adminCommandConfig);
+        // only define a subset of commands
+        super({
+                'initCache': new CacheInitializerCommand(),
+                'loadTourDoc': new TourDocLoaderCommand(),
+                'exportTourDoc': new TourDocExporterCommand(),
+                'imageManager': new MediaManagerCommand(),
+                'mediaManager': new MediaManagerCommand(),
+                'objectDetectionManager': new ObjectDetectionManagerCommand(),
+                'dbPublish': new DbPublishCommand()
+            },
+            adminCommandConfig,
+            // only allow a subset of actions
+            ['sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
+                'readImageDates', 'scaleImages']);
     }
 
-    protected processCommandArgs(argv: {}): Promise<any> {
-        let promise: Promise<any>;
-        switch (argv['command']) {
-            case 'initCache':
-                promise = this.cacheInitializer.process(argv);
-                break;
-            case 'loadTourDoc':
-                promise = this.tdocLoader.process(argv);
-                break;
-            case 'exportTourDoc':
-                promise = this.tdocExporter.process(argv);
-                break;
-            case 'imageManager':
-                promise = this.imageManager.process(argv);
-                break;
-            case 'mediaManager':
-                promise = this.imageManager.process(argv);
-                break;
-            case 'objectDetectionManager':
-                promise = this.objectDetectionManager.process(argv);
-                break;
-            case 'dbPublish':
-                promise = this.dbPublishCommand.process(argv);
-                break;
-            default:
-                console.error('unknown command:', argv);
-                promise = utils.reject('unknown command');
-        }
+    protected initializeArgs(argv: {}): Promise<{}> {
+        return super.initializeArgs(argv).then(initializedArgs => {
+            // set configured parameter constants
+            initializedArgs['backend'] = this.adminCommandConfig.backend;
+            initializedArgs['publishConfigFile'] = this.adminCommandConfig.publishConfigFile;
 
-        return promise;
+            initializedArgs['importDir'] = this.adminCommandConfig.importDir;
+            initializedArgs['exportDir'] = this.adminCommandConfig.exportDir;
+            initializedArgs['exportName'] = this.adminCommandConfig.exportName;
+            initializedArgs['outputDir'] = this.adminCommandConfig.outputDir;
+            initializedArgs['outputFile'] = this.adminCommandConfig.outputFile;
+
+            initializedArgs['srcBaseUrl'] = this.adminCommandConfig.srcBaseUrl;
+            initializedArgs['destBaseUrl'] = this.adminCommandConfig.destBaseUrl;
+
+            // reset dangerous parameters
+            initializedArgs['srcFile'] = undefined;
+            initializedArgs['sitemap'] = undefined;
+            initializedArgs['file'] = undefined;
+
+            // TODO check and reset
+
+            return Promise.resolve(initializedArgs);
+        })
     }
 
-    protected getParameterConfiguration(): CommonAdminParameterConfigType {
-        throw new Error('Method not implemented.');
-    }
 }
 

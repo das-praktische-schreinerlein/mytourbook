@@ -19,10 +19,10 @@ const staticFolder = join(process.cwd(), 'dist/static');
 const distProfile = 'DIST_PROFILE';
 const distServerProfile = 'DIST_SERVER_PROFILE';
 const filePathConfigJson = argv['frontend'];
-const filePathBackendConfigJson = argv['c'] || argv['backend'];
-const filePathFirewallConfigJson = argv['f'] || argv['firewall'];
+const filePathBackendConfigJson = argv['backend'];
+const filePathFirewallConfigJson = argv['firewall'];
 if (filePathConfigJson === undefined || filePathBackendConfigJson === undefined || filePathFirewallConfigJson === undefined) {
-    console.error('ERROR - parameters required frontendConfig:  "--frontend" backendConfig: "-c | --backend" firewallConfig: "-f | --firewall"');
+    console.error('ERROR - parameters required frontendConfig:  "--frontend" backendConfig: "--backend" firewallConfig: "--firewall"');
     process.exit(-1);
 }
 

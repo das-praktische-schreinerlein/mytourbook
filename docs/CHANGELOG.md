@@ -27,7 +27,7 @@
 - frontend: fixed imagesize in list-page
 
 ### breaking changes
-- none
+- backend: removed short-parameters for configfiles -c -> --backend, -f -> --firewall or --file, -s -> --sitemap 
 
 
 ## 6.0.0

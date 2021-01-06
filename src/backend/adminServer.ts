@@ -7,10 +7,10 @@ import {AdminServerConfig, AdminServerModuleLoader} from './adminserver-module.l
 const argv = minimist(process.argv.slice(2));
 
 const debug = argv['debug'] || false;
-const filePathConfigJson = argv['c'] || argv['adminbackend'];
-const filePathFirewallConfigJson = argv['f'] || argv['firewall'];
+const filePathConfigJson = argv['adminbackend'];
+const filePathFirewallConfigJson = argv['firewall'];
 if (filePathConfigJson === undefined || filePathFirewallConfigJson === undefined) {
-    console.error('ERROR - parameters required adminbackend: "-c | --adminbackend" firewallConfig: "-f | --firewall"');
+    console.error('ERROR - parameters required adminbackend: "--adminbackend" firewallConfig: "--firewall"');
     process.exit(-1);
 }
 

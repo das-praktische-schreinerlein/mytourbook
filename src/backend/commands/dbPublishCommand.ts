@@ -1,14 +1,23 @@
 import * as fs from 'fs';
-import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {DatabaseService} from '../modules/database.service';
 import * as knex from 'knex';
 import {SqlQueryBuilder} from '@dps/mycms-commons/dist/search-commons/services/sql-query.builder';
+import {CommonAdminCommand, SimpleConfigFilePathValidationRule} from './common-admin.command';
+import {NameValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class DbPublishCommand implements AbstractCommand {
+export class DbPublishCommand extends CommonAdminCommand {
     protected static TARGETS = ['mytbexportbetadb', 'mytbexportproddb', 'mytbexportbetadb_update', 'mytbexportproddb_update'];
     protected static PROFILES = ['sqlite', 'mysql'];
 
-    public process(argv): Promise<any> {
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            publishConfigFile: new SimpleConfigFilePathValidationRule(true),
+            profile: new NameValidationRule(true),
+            target: new NameValidationRule(true)
+        };
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
         const profile = argv['profile'];
         if (profile === undefined || (!DbPublishCommand.PROFILES.includes(profile))) {
             return Promise.reject('ERROR - parameters required profile: "--profile ' + DbPublishCommand.PROFILES + '"');

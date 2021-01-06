@@ -1,18 +1,19 @@
 {
     "adminWritable": true,
-    "commands": ["initCache",
-        "generateSitemap",
-        "generateRedirects",
-        "loadTourDoc",
-        "exportTourDoc",
-        "imageManager",
-        "mediaManager",
-        "objectDetectionManager",
-        "facetCacheManager",
-        "dbMigrate",
-        "dbPublish"
-    ],
-    "actions": ["*"],
+    "availableCommands": {
+        "*": "*"
+
+    },
+    "preparedCommands": {
+        "dbMigrate": {
+            "parameters": {
+                "command": "dbMigrate",
+                "migrationDbConfigFile": "config/db-migrate-database.json",
+                "migrationsDir": "migrations/mytbdb",
+                "migrationEnv": "mytbdb_mysql"
+            }
+        }
+    },
     "constantParameters": {
         "noOverrides": "use all parameters as put to commandline"
     }

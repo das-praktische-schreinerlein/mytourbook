@@ -1,13 +1,25 @@
 {
     "adminWritable": true,
-    "commands": ["initCache",
-        "generateSitemap",
-        "generateRedirects",
-        "imageManager",
-        "mediaManager",
-        "dbPublish"
-    ],
-    "actions": ["*"],
+    "availableCommands": {
+        "initCache": [
+            "*"
+        ],
+        "generateSitemap": [
+            "*"
+        ],
+        "generateRedirects": [
+            "*"
+        ],
+        "imageManager": [
+            "exportImageFiles", "exportVideoFiles"
+        ],
+        "mediaManager": [
+            "exportImageFiles", "exportVideoFiles"
+        ],
+        "dbPublish": [
+            "*"
+        ]
+    },
     "constantParameters": {
         "noOverrides": "use all parameters as put to commandline"
     }

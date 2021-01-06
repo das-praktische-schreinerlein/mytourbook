@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import {PDocRecord} from '@dps/mycms-commons/dist/pdoc-commons/model/records/pdoc-record';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
-import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {RedirectConfig, RedirectGeneratorModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/redirect-generator.module';
 import {utils} from 'js-data';
 import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/records/cdoc-entity-record';
@@ -9,12 +8,24 @@ import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
+import {CommonAdminCommand, SimpleConfigFilePathValidationRule, SimpleFilePathValidationRule} from './common-admin.command';
+import {KeywordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class RedirectGeneratorCommand implements AbstractCommand {
-    public process(argv): Promise<any> {
-        const filePathConfigJson = argv['c'] || argv['backend'];
+export class RedirectGeneratorCommand extends CommonAdminCommand {
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            backend: new SimpleConfigFilePathValidationRule(true),
+            types: new KeywordValidationRule(false),
+            profiles: new KeywordValidationRule(false),
+            srcBaseUrl: new SimpleFilePathValidationRule(false),
+            destBaseUrl: new SimpleFilePathValidationRule(false)
+        };
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
+        const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
-            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend"');
+            return Promise.reject('ERROR - parameters required backendConfig: "--backend"');
         }
 
         const generatorConfig = {

@@ -1,16 +1,24 @@
-import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {ServerConfig} from '../server-module.loader';
 import * as fs from 'fs';
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {DataCacheModule} from '@dps/mycms-server-commons/dist/server-commons/datacache.module';
 import {TourDocServerModule} from '../modules/tdoc-server.module';
 import {TourDocDataService} from '../shared/tdoc-commons/services/tdoc-data.service';
+import {CommonAdminCommand, SimpleConfigFilePathValidationRule} from './common-admin.command';
+import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class CacheInitializerCommand implements AbstractCommand {
-    public process(argv): Promise<any> {
-        const filePathConfigJson = argv['c'] || argv['backend'];
+export class CacheInitializerCommand extends CommonAdminCommand {
+
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            backend: new SimpleConfigFilePathValidationRule(true)
+        };
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
+        const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
-            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend"');
+            return Promise.reject('ERROR - parameters required backendConfig: "--backend"');
         }
 
         const serverConfig: ServerConfig = {

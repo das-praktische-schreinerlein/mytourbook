@@ -7,7 +7,6 @@ import {TourDocAdapterResponseMapper} from '../shared/tdoc-commons/services/tdoc
 import * as os from 'os';
 import {MediaManagerModule} from '@dps/mycms-server-commons/dist/media-commons/modules/media-manager.module';
 import {CommonMediaManagerCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-media-manager.command';
-import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {FileSystemDBSyncType} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-media-manager.module';
 import {ProcessingOptions} from '@dps/mycms-commons/dist/search-commons/services/cdoc-search.service';
@@ -16,17 +15,47 @@ import {MediaExportResolutionProfiles, TourDocExportService} from '../modules/td
 import {TourDocServerPlaylistService, TourDocServerPlaylistServiceConfig} from '../modules/tdoc-serverplaylist.service';
 import {TourDocMediaFileImportManager} from '../modules/tdoc-mediafile-import.service';
 import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-mediafile-export.service';
+import {CommonAdminCommand, SimpleConfigFilePathValidationRule, SimpleFilePathValidationRule} from './common-admin.command';
+import {
+    KeywordValidationRule,
+    NumberValidationRule,
+    ValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
-export class MediaManagerCommand implements AbstractCommand {
-    public process(argv): Promise<any> {
+export class MediaManagerCommand extends CommonAdminCommand {
+    protected createValidationRules(): {[key: string]: ValidationRule} {
+        return {
+            action: new KeywordValidationRule(true),
+            backend: new SimpleConfigFilePathValidationRule(true),
+            importDir: new SimpleFilePathValidationRule(false),
+            srcFile: new SimpleFilePathValidationRule(false),
+            outputDir: new SimpleFilePathValidationRule(false),
+            outputFile: new SimpleFilePathValidationRule(false),
+            ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
+            parallel: new NumberValidationRule(false, 1, 999, 10),
+            pageNum: new NumberValidationRule(false, 1, 999999999, 1),
+            playlists: new KeywordValidationRule(false),
+            personalRateOverall: new KeywordValidationRule(false),
+            directoryProfile: new KeywordValidationRule(false),
+            fileNameProfile: new KeywordValidationRule(false),
+            resolutionProfile: new KeywordValidationRule(false),
+            rateMinFilter: new KeywordValidationRule(false),
+            showNonBlockedOnly: new KeywordValidationRule(false),
+            additionalMappingsFile: new SimpleConfigFilePathValidationRule(false),
+            rotate: new NumberValidationRule(false, 1, 360, 0),
+            force: new KeywordValidationRule(false)
+        };
+    }
+
+    protected processCommandArgs(argv: {}): Promise<any> {
         // importDir and outputDir are used in CommonMediaManagerCommand too
         argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);
         argv['outputDir'] = TourDocFileUtils.normalizeCygwinPath(argv['outputDir']);
         argv['outputFile'] = TourDocFileUtils.normalizeCygwinPath(argv['outputFile']);
 
-        const filePathConfigJson = argv['c'] || argv['backend'];
+        const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
-            return Promise.reject('ERROR - parameters required backendConfig: "-c | --backend"');
+            return Promise.reject('ERROR - parameters required backendConfig: "--backend"');
         }
 
         const action = argv['action'];

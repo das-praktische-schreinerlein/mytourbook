@@ -7,10 +7,10 @@ import {ServerConfig, ServerModuleLoader} from './server-module.loader';
 const argv = minimist(process.argv.slice(2));
 
 const debug = argv['debug'] || false;
-const filePathConfigJson = argv['c'] || argv['backend'];
-const filePathFirewallConfigJson = argv['f'] || argv['firewall'];
+const filePathConfigJson = argv['backend'];
+const filePathFirewallConfigJson = argv['firewall'];
 if (filePathConfigJson === undefined || filePathFirewallConfigJson === undefined) {
-    console.error('ERROR - parameters required backendConfig: "-c | --backend" firewallConfig: "-f | --firewall"');
+    console.error('ERROR - parameters required backendConfig: "--backend" firewallConfig: "--firewall"');
     process.exit(-1);
 }
 

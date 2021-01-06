@@ -60,7 +60,7 @@ fi
 
 echo "now: generate export"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
-node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" -c "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportImageFiles  --exportName "${PLAYLISTFILE}-images" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
+node dist/backend/serverAdmin.js --debug --command mediaManager --action exportVideoFiles  --exportName "${PLAYLISTFILE}-videos" --adminclibackend "${CLICONFGFILE}" --backend "${CONFGFILE}" --exportDir "$EXPORTDIR" --directoryProfile "${DIPROFILE}" --fileNameProfile "${FILEPROFILE}" --resolutionProfile "${RESOLUTIONPROFILE}" --parallel 20 --playlists "${PLAYLISTNAMEFILTER}" --rateMinFilter "${RATEMINFILTER}" --showNonBlockedOnly ${SHOWNONBLOCKEDONLY}
 
 echo "done - file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}'"
