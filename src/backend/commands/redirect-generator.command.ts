@@ -22,6 +22,10 @@ export class RedirectGeneratorCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['generateRedirects'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {

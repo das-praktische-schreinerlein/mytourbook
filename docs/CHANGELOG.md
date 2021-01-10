@@ -28,7 +28,8 @@
 
 ### breaking changes
 - backend: removed short-parameters for configfiles -c -> --backend, -f -> --firewall or --file, -s -> --sitemap 
-
+- backend: serverAdmin requires action-parameters
+- backend: removed imageManager-command
 
 ## 6.0.0
 - upgraded all dev-dependencies to latest
@@ -103,7 +104,7 @@
 - frontend: configure preview-resolution in environment
 - common: used x300 instead of x600 for image-preview -> run scaleImages to create non-existing images
 ```
-run node dist/backend/serverAdmin.js --command imageManager --action scaleImages -c config/backend.dev.json --debug --parallel 10
+run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages -c config/backend.dev.json --debug --parallel 10
 ```
 - backend: dont map text to html-fields because markdown-fields should be rendered
 

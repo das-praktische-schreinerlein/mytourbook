@@ -34,18 +34,6 @@ export class AdminServerModule {
                 res.json({'resultmsg': 'DONE', 'preparedCommands': value});
                 return next();
             });
-        app.route(apiPrefix + '/:locale' + '/' + 'listAvailableCommands')
-            .all(function(req, res, next) {
-                if (req.method !== 'POST') {
-                    return next('not allowed');
-                }
-                return next();
-            })
-            .post(function(req, res, next) {
-                const value = adminCommandManager.listAvailableCommands();
-                res.json({'resultmsg': 'DONE', 'commands': value});
-                return next();
-            });
         app.route(apiPrefix + '/:locale' + '/' + 'execCommand')
             .all(function(req, res, next) {
                 if (req.method !== 'POST') {

@@ -1,41 +1,57 @@
 {
     "commandConfig": {
         "adminWritable": true,
-        "availableCommands": {
-            "initCache": [
-                "*"
-            ],
-            "imageManager": [
-                "readImageDates", "scaleImages"
-            ],
-            "mediaManager": [
-                "readImageDates", "scaleImages"
-            ],
-            "objectDetectionManager": [
-                "sendQueueRequests", "sendImageQueueRequests", "sendVideoQueueRequests"
-            ],
-            "dbPublish": [
-                "*"
-            ]
-        },
         "preparedCommands": {
             "dbPublish_mytbexportbetadb_mysql": {
                 "description": "publish mytbexportbetadb mysql",
-                "parameters": {
-                    "command": "dbPublish",
-                    "publishConfigFile": "config/dbpublish.json",
-                    "profile": "mysql",
-                    "target": "mytbexportbetadb"
-                }
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    }
+                ]
             },
             "dbPublish_mytbexportproddb_mysql": {
                 "description": "publish mytbexportproddb mysql",
-                "parameters": {
-                    "command": "dbPublish",
-                    "publishConfigFile": "config/dbpublish.json",
-                    "profile": "mysql",
-                    "target": "mytbexportproddb"
-                }
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
+            },
+            "dbPublish_mytbexport_mysql": {
+                "description": "publish mytbexportproddb+mytbexportproddb mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
             }
         },
         "constantParameters": {

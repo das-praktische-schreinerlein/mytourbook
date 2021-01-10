@@ -21,7 +21,6 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
             'generateRedirects': new RedirectGeneratorCommand(),
             'loadTourDoc': new TourDocLoaderCommand(),
             'exportTourDoc': new TourDocExporterCommand(),
-            'imageManager': new MediaManagerCommand(),
             'mediaManager': new MediaManagerCommand(),
             'objectDetectionManager': new ObjectDetectionManagerCommand(),
             'facetCacheManager': new FacetCacheManagerCommand(),

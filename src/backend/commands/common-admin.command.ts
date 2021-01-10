@@ -1,5 +1,9 @@
 import {AbstractCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract.command';
-import {RegExValidationReplaceRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {
+    KeywordValidationRule,
+    RegExValidationReplaceRule,
+    ValidationRule
+} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import * as XRegExp from 'xregexp';
 
 // TODO move to commons
@@ -23,9 +27,15 @@ export class SimpleFilePathValidationRule extends RegExValidationReplaceRule {
 // TODO move to commons
 export abstract class CommonAdminCommand implements AbstractCommand {
     protected parameterValidations: {[key: string]: ValidationRule};
+    protected availableActions: string[];
 
     constructor() {
-        this.parameterValidations = this.createValidationRules();
+        this.parameterValidations = {
+            command: new KeywordValidationRule(true),
+            action: new KeywordValidationRule(true),
+            ...this.createValidationRules()
+        };
+        this.availableActions = this.definePossibleActions();
     }
 
     public process(argv): Promise<any> {
@@ -40,6 +50,12 @@ export abstract class CommonAdminCommand implements AbstractCommand {
     public listCommandParameters(): string[] {
         return Object.keys(this.parameterValidations);
     }
+
+    public validateCommandAction(action: string): Promise<{}> {
+        return this.availableActions.includes(action)
+            ? Promise.resolve(action)
+            : Promise.reject('action not defined');
+    };
 
     public validateCommandParameters(argv: {}): Promise<{}> {
         const errors = [];
@@ -74,5 +90,6 @@ export abstract class CommonAdminCommand implements AbstractCommand {
 
     protected abstract processCommandArgs(argv: {}): Promise<any>;
     protected abstract createValidationRules(): {[key: string]: ValidationRule};
+    protected abstract definePossibleActions(): string[];
 }
 

@@ -16,6 +16,7 @@ export abstract class CommonServerAdminCommandManager<A extends CommonServerAdmi
 
     constructor(commands: {[key: string]: CommonAdminCommand}, adminCommandConfig: A, restrictedCommandActions: string[]) {
         super(commands, adminCommandConfig);
+        this.adminCommandConfig.availableCommands = {};
         this.restrictedCommandActions = restrictedCommandActions;
     }
 

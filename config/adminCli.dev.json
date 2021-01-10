@@ -6,12 +6,18 @@
     "preparedCommands": {
         "dbMigrate": {
             "description": "migrate database mytbdb_mysql",
-            "parameters": {
-                "command": "dbMigrate",
-                "migrationDbConfigFile": "config/db-migrate-database.json",
-                "migrationsDir": "migrations/mytbdb",
-                "migrationEnv": "mytbdb_mysql"
-            }
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "dbMigrate",
+                        "action": "migrateDB",
+                        "migrationDbConfigFile": "config/db-migrate-database.json",
+                        "migrationsDir": "migrations/mytbdb",
+                        "migrationEnv": "mytbdb_mysql"
+                    }
+
+                }
+            ]
         }
     },
     "constantParameters": {

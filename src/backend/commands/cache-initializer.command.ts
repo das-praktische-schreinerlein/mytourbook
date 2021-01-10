@@ -15,6 +15,10 @@ export class CacheInitializerCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['initCache'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {
@@ -37,4 +41,5 @@ export class CacheInitializerCommand extends CommonAdminCommand {
 
         return tdocServerModule.initCache();
     }
+
 }

@@ -13,6 +13,10 @@ export class DbMigrateCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['migrateDB'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const migrationDbConfigFile = argv['migrationDbConfigFile'];
         if (migrationDbConfigFile === undefined) {

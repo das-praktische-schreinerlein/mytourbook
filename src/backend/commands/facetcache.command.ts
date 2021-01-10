@@ -27,6 +27,16 @@ export class FacetCacheManagerCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['prepareAndStartDatabaseManagedFacets', 'prepareAndStartServerManagedFacets', 'dropDatabaseRequirements',
+            'createDatabaseRequirements', 'showCreateDatabaseRequirementsSql', 'showDropDatabaseRequirementsSql',
+            'stopAndDropDatabaseManagedFacets', 'showStopAndDropDatabaseManagedFacets', 'createAndStartDatabaseManagedFacets',
+            'showCreateAndStartDatabaseManagedFacets', 'dropServerManagedFacets', 'showDropDatabaseManagedFacets',
+            'createAndStartServerManagedFacets', 'startServerManagedFacets', 'showCreateServerManagedFacets', 'removedFacetsCacheConfigs',
+            'createFacetsCacheConfigs'
+        ];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         return this.facetCacheManagerCommandWrapper.process(argv);
     }

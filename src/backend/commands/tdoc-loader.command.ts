@@ -19,6 +19,10 @@ export class TourDocLoaderCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['loadDocs'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];
 

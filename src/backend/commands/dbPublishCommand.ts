@@ -17,6 +17,10 @@ export class DbPublishCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['publishDB'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const profile = argv['profile'];
         if (profile === undefined || (!DbPublishCommand.PROFILES.includes(profile))) {

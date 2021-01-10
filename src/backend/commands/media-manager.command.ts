@@ -47,6 +47,17 @@ export class MediaManagerCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['readImageDates', 'readVideoDates', 'scaleImages',
+            'exportImageFiles', 'exportVideoFiles', 'generateTourDocsFromMediaDir',
+            'findCorrespondingTourDocRecordsForMedia', 'insertSimilarMatchings',
+            'convertVideosFromMediaDirToMP4',
+            'scaleVideosFromMediaDirToMP4',
+            'generateVideoScreenshotFromMediaDir',
+            'generateVideoPreviewFromMediaDir',
+            'rotateVideo'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         // importDir and outputDir are used in CommonMediaManagerCommand too
         argv['importDir'] = TourDocFileUtils.normalizeCygwinPath(argv['importDir']);

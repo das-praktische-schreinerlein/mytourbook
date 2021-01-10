@@ -20,6 +20,10 @@ export class SiteMapGeneratorCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['generateSitemap'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const filePathConfigJson = argv['backend'];
         const filePathSitemapConfigJson = argv['sitemap'];

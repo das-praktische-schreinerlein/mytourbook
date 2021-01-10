@@ -31,7 +31,7 @@ source ${SCRIPTPATH}/configure-environment.bash
 
 echo "now: initialize import-database (sqlite)"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command dbMigrate --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --migrationDbConfigFile ${CONFIG_BASEDIR}/db-migrate-database.json --migrationsDir migrations/mytbdb --migrationEnv mytbdb_import_sqlite3
+node dist/backend/serverAdmin.js --command dbMigrate --action migrateDB --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --migrationDbConfigFile ${CONFIG_BASEDIR}/db-migrate-database.json --migrationsDir migrations/mytbdb --migrationEnv mytbdb_import_sqlite3
 cd $CWD
 
 echo "YOUR TODO: start facetcache for import-database in separate shell: 'cd ${MYTB} && npm run backend-start-server-managed-facetcache-dev-import && cd $CWD'"
@@ -46,7 +46,7 @@ echo "now: load import-files"
 if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json" ]; then
   echo "now: load image-import-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command loadTourDoc --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
+  node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json
   mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-images.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-images.json
   cd $CWD
 else
@@ -65,7 +65,7 @@ fi
 if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
   echo "now: load video-import-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command loadTourDoc  --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
+  node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
   mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-videos.json
   cd $CWD
 else
@@ -85,7 +85,7 @@ echo "OPTIONAL: read image-dates"
 echo "OPEN: Do you want to read the image-dates?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command imageManager --action readImageDates --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json  --backend ${CONFIG_BASEDIR}backend.import.json; break;;
+        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command mediaManager --action readImageDates --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json  --backend ${CONFIG_BASEDIR}backend.import.json; break;;
         No) break;;
     esac
 done
@@ -94,14 +94,14 @@ echo "OPTIONAL: read video-dates"
 echo "OPEN: Do you want to read the video-dates?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command imageManager --action readVideoDates --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json  --backend ${CONFIG_BASEDIR}backend.import.json; break;;
+        Yes ) cd ${MYTB} && node dist/backend/serverAdmin.js --command mediaManager --action readVideoDates --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json  --backend ${CONFIG_BASEDIR}backend.import.json; break;;
         No) break;;
     esac
 done
 
 echo "now: create scaled image-copies"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command imageManager --action scaleImages --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
+node dist/backend/serverAdmin.js --command mediaManager --action scaleImages --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "now: create scaled video-copies"

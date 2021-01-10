@@ -7,9 +7,6 @@
         "exportTourDoc": [
             "*"
         ],
-        "imageManager": [
-            "*"
-        ],
         "mediaManager": [
             "*"
         ],
@@ -23,12 +20,17 @@
     "preparedCommands": {
         "dbMigrate": {
             "description": "migrate database mytbdb_import_sqlite3",
-            "parameters": {
-                "command": "dbMigrate",
-                "migrationDbConfigFile": "config/db-migrate-database.json",
-                "migrationsDir": "migrations/mytbdb",
-                "migrationEnv": "mytbdb_import_sqlite3"
-            }
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "dbMigrate",
+                        "action": "migrateDB",
+                        "migrationDbConfigFile": "config/db-migrate-database.json",
+                        "migrationsDir": "migrations/mytbdb",
+                        "migrationEnv": "mytbdb_import_sqlite3"
+                    }
+                }
+            ]
         }
     },
     "constantParameters": {

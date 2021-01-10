@@ -20,6 +20,10 @@ export class TourDocExporterCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['exportDocs'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const perRun = 999;
         const typeOrder = ['location', 'news', 'trip', 'route', 'track', 'image', 'video'];

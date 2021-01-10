@@ -20,6 +20,10 @@ export class ObjectDetectionManagerCommand extends CommonAdminCommand {
         };
     }
 
+    protected definePossibleActions(): string[] {
+        return ['sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests', 'receiveQueueResponses'];
+    }
+
     protected processCommandArgs(argv: {}): Promise<any> {
         const filePathConfigJson = argv['backend'];
         if (filePathConfigJson === undefined) {

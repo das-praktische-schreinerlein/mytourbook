@@ -10,9 +10,6 @@
         "generateRedirects": [
             "*"
         ],
-        "imageManager": [
-            "exportImageFiles", "exportVideoFiles"
-        ],
         "mediaManager": [
             "exportImageFiles", "exportVideoFiles"
         ],

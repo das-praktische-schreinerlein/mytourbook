@@ -1,6 +1,4 @@
-import {TourDocLoaderCommand} from './tdoc-loader.command';
 import {MediaManagerCommand} from './media-manager.command';
-import {TourDocExporterCommand} from './tdoc-exporter.command';
 import {ObjectDetectionManagerCommand} from './objectdetector.command';
 import {DbPublishCommand} from './dbPublishCommand';
 import {AdminCommandConfigType} from './admin-command.manager';
@@ -23,17 +21,14 @@ export class ServerAdminCommandManager
         // only define a subset of commands
         super({
                 'initCache': new CacheInitializerCommand(),
-                'loadTourDoc': new TourDocLoaderCommand(),
-                'exportTourDoc': new TourDocExporterCommand(),
-                'imageManager': new MediaManagerCommand(),
                 'mediaManager': new MediaManagerCommand(),
                 'objectDetectionManager': new ObjectDetectionManagerCommand(),
                 'dbPublish': new DbPublishCommand()
             },
             adminCommandConfig,
             // only allow a subset of actions
-            ['sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
-                'readImageDates', 'scaleImages']);
+            ['initCache', 'sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
+                'readImageDates', 'scaleImages', 'publishDB']);
     }
 
     protected initializeArgs(argv: {}): Promise<{}> {
