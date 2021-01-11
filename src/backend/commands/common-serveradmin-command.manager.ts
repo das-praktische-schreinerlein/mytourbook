@@ -9,7 +9,6 @@ export interface CommonServerAdminCommandConfigType extends CommonAdminCommandCo
     sitemap: string
 }
 
-// TODO move to commons
 export abstract class CommonServerAdminCommandManager<A extends CommonServerAdminCommandConfigType> extends CommonAdminCommandManager<A> {
 
     protected restrictedCommandActions: string[];

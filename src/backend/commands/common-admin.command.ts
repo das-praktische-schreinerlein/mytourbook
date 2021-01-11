@@ -5,6 +5,8 @@ import {
     ValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import * as XRegExp from 'xregexp';
+import {CommonAdminCommandResultState, CommonAdminCommandStateType} from '../shared/tdoc-commons/model/container/admin-response';
+import {CommonCommandStateService} from './common-command-state.service';
 
 // TODO move to commons
 export class SimpleConfigFilePathValidationRule extends RegExValidationReplaceRule {
@@ -15,7 +17,6 @@ export class SimpleConfigFilePathValidationRule extends RegExValidationReplaceRu
     }
 }
 
-// TODO move to commons
 export class SimpleFilePathValidationRule extends RegExValidationReplaceRule {
     constructor(required: boolean) {
         super(required,
@@ -24,10 +25,11 @@ export class SimpleFilePathValidationRule extends RegExValidationReplaceRule {
     }
 }
 
-// TODO move to commons
 export abstract class CommonAdminCommand implements AbstractCommand {
     protected parameterValidations: {[key: string]: ValidationRule};
     protected availableActions: string[];
+    protected actionRunStates: {[key: string]: CommonAdminCommandStateType} = {};
+    protected commandStateService: CommonCommandStateService;
 
     constructor() {
         this.parameterValidations = {
@@ -36,14 +38,25 @@ export abstract class CommonAdminCommand implements AbstractCommand {
             ...this.createValidationRules()
         };
         this.availableActions = this.definePossibleActions();
+        this.commandStateService = new CommonCommandStateService(this.availableActions)
     }
 
-    public process(argv): Promise<any> {
+    public process(argv): Promise<CommonAdminCommandStateType> {
         const me = this;
         return this.initializeArgs(argv).then(initializedArgs => {
             return me.validateCommandParameters(initializedArgs);
         }).then(validatedArgs => {
-            return me.processCommandArgs(validatedArgs);
+            return me.commandStateService.setCommandStarted(validatedArgs['action'], validatedArgs).then(() => {
+                return me.processCommandArgs(validatedArgs).then(resultMsg => {
+                    return me.commandStateService.setCommandEnded(validatedArgs['action'], validatedArgs, resultMsg,
+                        CommonAdminCommandResultState.DONE);
+                }).catch(reason => {
+                    return me.commandStateService.setCommandEnded(validatedArgs['action'], validatedArgs, reason,
+                        CommonAdminCommandResultState.ERROR).then(() => {
+                        return Promise.reject(reason);
+                    })
+                })
+            })
         });
     }
 
@@ -55,6 +68,14 @@ export abstract class CommonAdminCommand implements AbstractCommand {
         return this.availableActions.includes(action)
             ? Promise.resolve(action)
             : Promise.reject('action not defined');
+    };
+
+    public isRunning(action: string): Promise<boolean> {
+        return this.commandStateService.isRunning(action);
+    };
+
+    public isStartable(action: string): Promise<boolean> {
+        return this.commandStateService.isStartable(action);
     };
 
     public validateCommandParameters(argv: {}): Promise<{}> {

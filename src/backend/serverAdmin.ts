@@ -2,7 +2,7 @@ import minimist from 'minimist';
 import {AdminCommandConfigType, AdminCommandManager} from './commands/admin-command.manager';
 import fs from 'fs';
 
-const argv = minimist(process.argv.slice(2));
+const argv: string[] = minimist(process.argv.slice(2));
 
 const filePathConfigJson = argv['adminclibackend'];
 if (filePathConfigJson === undefined) {
@@ -28,7 +28,7 @@ if (!debug || debug === false || parseInt(debug, 10) < 1) {
     console.debug = function() {};
 }
 
-adminCommandManager.process(argv).then(value => {
+adminCommandManager.runCommand(argv).then(value => {
     console.log('DONE - command finished:', value, argv);
     process.exit(0);
 }).catch(reason => {

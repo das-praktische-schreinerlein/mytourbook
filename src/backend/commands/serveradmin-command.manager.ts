@@ -14,8 +14,7 @@ export interface ServerAdminCommandConfigType extends CommonServerAdminCommandCo
     publishConfigFile: string,
 }
 
-export class ServerAdminCommandManager
-    extends CommonServerAdminCommandManager<ServerAdminCommandConfigType> {
+export class ServerAdminCommandManager extends CommonServerAdminCommandManager<ServerAdminCommandConfigType> {
 
     constructor(adminCommandConfig: ServerAdminCommandConfigType) {
         // only define a subset of commands
@@ -58,4 +57,3 @@ export class ServerAdminCommandManager
     }
 
 }
-

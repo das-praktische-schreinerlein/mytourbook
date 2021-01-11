@@ -1,5 +1,11 @@
 import {CommonAdminCommand} from './common-admin.command';
 import * as Promise_serial from 'promise-serial';
+import {
+    CommonAdminCommandResultState,
+    CommonAdminCommandsListResponseType,
+    CommonAdminCommandStateType
+} from '../shared/tdoc-commons/model/container/admin-response';
+import {CommonCommandStateService} from './common-command-state.service';
 
 // TODO move to commons
 export interface CommonAdminPreparedCommandCommandConfigType {
@@ -11,7 +17,6 @@ export interface CommonAdminPreparedCommandConfigType {
     description: string;
 }
 
-// TODO move to commons
 export interface CommonAdminCommandConfigType {
     adminWritable: boolean;
     availableCommands?: {[key: string]: string[]};
@@ -19,28 +24,20 @@ export interface CommonAdminCommandConfigType {
     constantParameters?: {[key: string]: string};
 }
 
-// TODO move to commons
 export interface CommonAdminCommandsRequestType {
     command: CommonAdminCommand;
     parameters: {[key: string]: string};
 }
 
-// TODO move to commons
-export interface CommonAdminCommandsListResponseType {
-    command: string;
-    actions?: string[];
-    parameters?: string[];
-    description?: string;
-}
-
-// TODO move to commons
 export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConfigType> {
     protected commands: {[key: string]: CommonAdminCommand};
     protected adminCommandConfig: A;
+    protected commandStateService: CommonCommandStateService;
 
     constructor(commands: {[key: string]: CommonAdminCommand}, adminCommandConfig: A) {
         this.commands = commands;
         this.adminCommandConfig = adminCommandConfig;
+        this.commandStateService = new CommonCommandStateService(Object.keys(this.adminCommandConfig.preparedCommands));
     }
 
     public listPreparedCommands(): {[key: string]: CommonAdminCommandsListResponseType} {
@@ -57,6 +54,10 @@ export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConf
         }
 
         return res;
+    }
+
+    public listCommandStatus(): Promise<{[key: string]: CommonAdminCommandStateType}> {
+        return Promise.resolve(this.commandStateService.getAllRunInformation());
     }
 
     public listAvailableCommands(): {[key: string]: CommonAdminCommandsListResponseType} {
@@ -84,14 +85,24 @@ export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConf
         return res;
     }
 
-    public process(argv): Promise<any> {
+    public runCommand(argv: string[]): Promise<CommonAdminCommandStateType> {
+        return this.process(argv, true);
+    }
+
+    public startCommand(argv: string[]): Promise<CommonAdminCommandStateType> {
+        return this.process(argv, false);
+    }
+
+    protected process(argv: string[], modal: boolean): Promise<CommonAdminCommandStateType> {
         const me = this;
+        let preparedCommandName = argv['preparedCommand'];
         return this.initializeArgs(argv).then(initializedArgs => {
-            if (initializedArgs['preparedCommand']) {
+            if (preparedCommandName) {
                 return me.initializePreparedCommand(initializedArgs);
             }
 
             return me.initializeCommand(initializedArgs).then(commandRequest => {
+                preparedCommandName = initializedArgs['command'] + '.' + initializedArgs['action'];
                 return Promise.resolve([commandRequest]);
             });
         }).then(commandRequests => {
@@ -107,11 +118,36 @@ export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConf
             const promises = [];
             for (const commandRequest of commandRequests) {
                 promises.push(function() {
-                    return me.processCommandArgs(commandRequest);
+                    return me.validateStartable(commandRequest);
                 });
             }
 
             return Promise_serial(promises, {parallelize: 1});
+        }).then(commandRequests => {
+            const promises = [];
+            for (const commandRequest of commandRequests) {
+                promises.push(function() {
+                    return me.processCommandArgs(commandRequest);
+                });
+            }
+
+            return me.commandStateService.setCommandStarted(preparedCommandName, undefined).then(startResult => {
+                const runResult = Promise_serial(promises, {parallelize: 1}).then(resultArray => {
+                    return me.commandStateService.setCommandEnded(preparedCommandName, undefined, resultArray,
+                        CommonAdminCommandResultState.DONE);
+                }).catch(reason => {
+                    return me.commandStateService.setCommandEnded(preparedCommandName, undefined, reason,
+                        CommonAdminCommandResultState.ERROR).then(() => {
+                        return Promise.reject(reason);
+                    })
+                });
+
+                if (modal) {
+                    return runResult;
+                }
+
+                return Promise.resolve(startResult)
+            });
         });
     }
 
@@ -189,13 +225,21 @@ export abstract class CommonAdminCommandManager<A extends CommonAdminCommandConf
         })
     }
 
+    protected validateStartable(commandRequest: CommonAdminCommandsRequestType): Promise<CommonAdminCommandsRequestType> {
+        return commandRequest.command.isStartable(commandRequest.parameters['action']).then(startable => {
+            return startable
+                ? Promise.resolve(commandRequest)
+                : Promise.reject('BLOCKED: action is not startable - maybe already running');
+        });
+    }
+
     protected validateCommandParameters(commandRequest: CommonAdminCommandsRequestType): Promise<CommonAdminCommandsRequestType> {
         return commandRequest.command.validateCommandParameters(commandRequest.parameters).then(() => {
             return Promise.resolve(commandRequest);
         });
     }
 
-    protected processCommandArgs(commandRequest: CommonAdminCommandsRequestType): Promise<any> {
+    protected processCommandArgs(commandRequest: CommonAdminCommandsRequestType): Promise<CommonAdminCommandStateType> {
         return commandRequest.command.process(commandRequest.parameters);
     }
 
