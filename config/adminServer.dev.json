@@ -2,8 +2,8 @@
     "commandConfig": {
         "adminWritable": true,
         "preparedCommands": {
-            "dbPublish_mytbexportbetadb_mysql": {
-                "description": "publish mytbexportbetadb mysql",
+            "dbPublish_beta_mysql": {
+                "description": "publish database mytbexportbetadb mysql",
                 "commands": [
                     {
                         "parameters": {
@@ -16,7 +16,21 @@
                     }
                 ]
             },
-            "dbPublish_mytbexportproddb_mysql": {
+            "solrPublish_beta_mysql": {
+                "description": "publish solr mytbexportbeta mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    }
+                ]
+            },
+            "dbPublish_prod_mysql": {
                 "description": "publish mytbexportproddb mysql",
                 "commands": [
                     {
@@ -30,7 +44,21 @@
                     }
                 ]
             },
-            "dbPublish_mytbexport_mysql": {
+            "solrPublish_prod_mysql": {
+                "description": "publish solr mytbexportprod mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
+            },
+            "publish_beta/prod_mysql": {
                 "description": "publish mytbexportproddb+mytbexportproddb mysql",
                 "commands": [
                     {
@@ -44,8 +72,26 @@
                     },
                     {
                         "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
                             "command": "dbPublish",
                             "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
                             "publishConfigFile": "config/dbpublish.json",
                             "profile": "mysql",
                             "target": "mytbexportproddb"

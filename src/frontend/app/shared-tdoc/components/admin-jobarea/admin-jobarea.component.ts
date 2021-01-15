@@ -151,6 +151,7 @@ export class AdminJobAreaComponent extends AbstractInlineComponent
             me.intervalRunning = false;
         }
 
+        me.doCheckServerState();
         this.cd.markForCheck();
 
         return false;

@@ -38,8 +38,9 @@
         <h5><span class="fx-bg-type" i18n="heading adminjobs|Heading to adminjobs@@heading.adminJobArea.adminJobs">Admin-Jobs</span></h5>
 
         <form [formGroup]="intervalFormGroup">
-            <button class="btn btn-sm btn-action" (click)="doRunInterval(true)" *ngIf="!intervalRunning" i18n="button updateStatus start|Buttontext to start updateStatus@@button.adminJobs.updateStatus">Update status &#x25b6;</button>
-            <button class="btn btn-sm btn-action" (click)="doRunInterval(false)" *ngIf="intervalRunning" i18n="button updateStatus stop|Buttontext to stop updateStatus@@button.adminJobs.updateStatus">Update status &#10074;&#10074;</button>
+            <button class="btn btn-sm btn-action" (click)="doCheckServerState()" i18n="button updateStatus start|Buttontext to start updateStatus@@button.adminJobs.updateStatus">Update status</button>
+            <button class="btn btn-sm btn-action" (click)="doRunInterval(true)" *ngIf="!intervalRunning" i18n="button autoUpdateStatus start|Buttontext to start autoUpdateStatus@@button.adminJobs.autoUpdateStatusStart">Auto Update status &#x25b6;</button>
+            <button class="btn btn-sm btn-action" (click)="doRunInterval(false)" *ngIf="intervalRunning" i18n="button autoUpdateStatus stop|Buttontext to stop autoUpdateStatus@@button.adminJobs.autoUpdateStatusStop">Auto Update status &#10074;&#10074;</button>
             <select class="" name="intervalTimeout" id="intervalTimeout" formControlName="intervalTimeout" (change)="onIntervalTimeoutChange($event)">
                 <ng-container *ngFor="let intervalValue of [1, 5, 10]">
                     <option [value]="intervalValue">{{ intervalValue }}min</option>

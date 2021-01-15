@@ -1,9 +1,10 @@
 import {MediaManagerCommand} from './media-manager.command';
 import {ObjectDetectionManagerCommand} from './objectdetector.command';
-import {DbPublishCommand} from './dbPublishCommand';
+import {DbPublishCommand} from './dbpublish.command';
 import {AdminCommandConfigType} from './admin-command.manager';
 import {CommonServerAdminCommandConfigType, CommonServerAdminCommandManager} from './common-serveradmin-command.manager';
 import {CacheInitializerCommand} from './cache-initializer.command';
+import {SolrPublishCommand} from './solrpublish.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
     importDir: string,
@@ -22,12 +23,13 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
                 'initCache': new CacheInitializerCommand(),
                 'mediaManager': new MediaManagerCommand(),
                 'objectDetectionManager': new ObjectDetectionManagerCommand(),
-                'dbPublish': new DbPublishCommand()
+                'dbPublish': new DbPublishCommand(),
+                'solrPublish': new SolrPublishCommand()
             },
             adminCommandConfig,
             // only allow a subset of actions
             ['initCache', 'sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
-                'readImageDates', 'scaleImages', 'publishDB']);
+                'readImageDates', 'scaleImages', 'publishDB', 'publishSolr']);
     }
 
     protected initializeArgs(argv: {}): Promise<{}> {

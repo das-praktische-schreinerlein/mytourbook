@@ -5,6 +5,11 @@
             "client": "sqlite3",
             "connection": {
                 "filename": "F:/playground/mytb-test/mytbbase/import/mytbexportbetadb.sqlite"
+            },
+            "solr": {
+                "core": "http://localhost:9999/solr/coremytbbeta/",
+                "username": "mytbadmin",
+                "password": "SolrRocks"
             }
         },
         "mytbexportbetadb_mysql": {
@@ -15,12 +20,22 @@
                 "password": "testmytbexportbetadb",
                 "database": "testmytbexportbetadb",
                 "port": "3306"
+            },
+            "solr": {
+                "core": "http://localhost:9999/solr/coremytbbeta/",
+                "username": "mytbadmin",
+                "password": "SolrRocks"
             }
         },
         "mytbexportproddb_sqlite": {
             "client": "sqlite3",
             "connection": {
                 "filename": "F:/playground/mytb-test/mytbbase/import/mytbexportproddb.sqlite"
+            },
+            "solr": {
+                "core": "http://localhost:9999/solr/coremytbprod/",
+                "username": "mytbadmin",
+                "password": "SolrRocks"
             }
         },
         "mytbexportproddb_mysql": {
@@ -31,6 +46,11 @@
                 "password": "testmytbexportproddb",
                 "database": "testmytbexportproddb",
                 "port": "3306"
+            },
+            "solr": {
+                "core": "http://localhost:9999/solr/coremytbprod/",
+                "username": "mytbadmin",
+                "password": "SolrRocks"
             }
         }
     }

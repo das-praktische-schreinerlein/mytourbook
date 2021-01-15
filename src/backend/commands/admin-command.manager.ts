@@ -7,8 +7,9 @@ import {RedirectGeneratorCommand} from './redirect-generator.command';
 import {ObjectDetectionManagerCommand} from './objectdetector.command';
 import {FacetCacheManagerCommand} from './facetcache.command';
 import {DbMigrateCommand} from './dbmigrate.command';
-import {DbPublishCommand} from './dbPublishCommand';
+import {DbPublishCommand} from './dbpublish.command';
 import {CommonAdminCommandConfigType, CommonAdminCommandManager} from './common-admin-command.manager';
+import {SolrPublishCommand} from './solrpublish.command';
 
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
 }
@@ -25,7 +26,8 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
             'objectDetectionManager': new ObjectDetectionManagerCommand(),
             'facetCacheManager': new FacetCacheManagerCommand(),
             'dbMigrate': new DbMigrateCommand(),
-            'dbPublish': new DbPublishCommand()
+            'dbPublish': new DbPublishCommand(),
+            'solrPublish': new SolrPublishCommand()
         }, adminCommandConfig);
     }
 
