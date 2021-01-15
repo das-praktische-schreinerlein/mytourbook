@@ -83,6 +83,7 @@ export class AdminServerModule {
             return Promise.resolve({
                 resultMsg: resultMsg,
                 resultState: resultState,
+                resultDate: new Date(),
                 preparedCommands: preparedCommands,
                 commandsStates: value
             });
@@ -91,6 +92,7 @@ export class AdminServerModule {
             return Promise.resolve({
                 resultMsg: resultMsg,
                 resultState: resultState,
+                resultDate: new Date(),
                 preparedCommands: preparedCommands,
                 commandsStates: {}
             });

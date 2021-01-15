@@ -14,6 +14,7 @@ import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/
 @Injectable()
 export class AppService extends GenericAppService {
     private appConfig = {
+        adminBackendApiBaseUrl: environment.adminBackendApiBaseUrl,
         backendApiBaseUrl: environment.backendApiBaseUrl,
         tracksBaseUrl: environment.tracksBaseUrl,
         picsBaseUrl: environment.picsBaseUrl,
@@ -21,6 +22,7 @@ export class AppService extends GenericAppService {
         useAssetStoreUrls: environment.useAssetStoreUrls,
         useVideoAssetStoreUrls: environment.useVideoAssetStoreUrls,
         permissions: {
+            adminWritable: environment.adminWritable,
             tdocWritable: environment.tdocWritable,
             tdocActionTagWritable: environment.tdocActionTagWritable,
             allowAutoPlay: environment.allowAutoPlay,

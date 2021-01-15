@@ -1981,6 +1981,9 @@
         },
         "serverItemExport": {
             "maxAllowedM3UItems": 1000
+        },
+        "adminJobArea": {
+            "jobsAllowed": true
         }
     }
 }

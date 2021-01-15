@@ -196,6 +196,10 @@
 
 </ng-template>
 
+<ng-template #adminArea>
+    <app-admin-jobarea></app-admin-jobarea>
+</ng-template>
+
 <ng-template #bestMatching>
     <h5><span class="fx-bg-type" i18n="heading relevance-results sectionPage|Heading to relevance-results sectionPage@@heading.sectionPage.relevanceResults">Best Matching</span></h5>
     <ngb-tabset>
@@ -471,6 +475,7 @@
             <ng-container *ngTemplateOutlet="bestMatching"></ng-container>
             <ng-container *ngTemplateOutlet="favorites"></ng-container>
             <ng-container *ngTemplateOutlet="dashBoard"></ng-container>
+            <ng-container *ngTemplateOutlet="adminArea"></ng-container>
 
             <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
         </div>

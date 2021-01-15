@@ -1,0 +1,43 @@
+h5 {
+    display: inline-block;
+}
+
+table, table th, table td {
+    border: lightgray solid 1px;
+    text-align: left;
+    vertical-align: top;
+}
+
+table th {
+    background: #dee9ef;
+}
+
+table td {
+    font-size: 0.8em;
+}
+
+table.table-updatestatus {
+    display: inline-block;
+}
+
+
+table.table-adminjobs {
+    width: 100%;
+}
+table.table-adminjobs th:first-child, table.table-adminjobs td:first-child {
+    width: 250px;
+}
+
+.jobstate-RUNNING, .jobresultstate-RUNNING {
+    background: yellow;
+}
+.jobstate-AVAILABLE, .jobresultstate-DONE {
+    background: greenyellow;
+}
+.jobstate-UNKNOWN, .jobresultstate-UNKNOWN {
+    background: yellow;
+}
+.jobresultstate-ERROR {
+    background: orangered;
+}
+

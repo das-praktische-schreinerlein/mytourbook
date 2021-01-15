@@ -6,6 +6,7 @@ set MYTBTOOLS=%MYTB%\sbin\
 set LIRETOOLS=F:\Projekte\liretools\
 set SOLR_PORT=9999
 set SOLR_JETTY_HOST=127.0.0.1
+set START_ADMINSERVER=true
 
 set DIGIFOTOS_BASEDIR=F:\playground\mytb-test\Bilder\digifotos\
 set VIDEOS_BASEDIR=F:\playground\mytb-test\Bilder\Videos\

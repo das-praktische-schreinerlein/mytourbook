@@ -27,5 +27,7 @@ export const environment: AppEnvironment = {
     tdocMaxItemsPerAlbum: 20000,
     m3uAvailable: true,
     cookieLawSeenName: 'cookieLawSeenV20180525',
-    trackingProviders: [Angulartics2Piwik]
+    trackingProviders: [Angulartics2Piwik],
+    adminBackendApiBaseUrl: 'http://localhost:4900/adminapi/v1/',
+    adminWritable: true
 };

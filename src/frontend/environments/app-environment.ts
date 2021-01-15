@@ -14,4 +14,6 @@ export interface AppEnvironment extends CommonEnvironment {
     tdocActionTagWritable: boolean;
     tdocMaxItemsPerAlbum: number;
     m3uAvailable: boolean;
+    adminBackendApiBaseUrl?: string;
+    adminWritable?: boolean;
 }

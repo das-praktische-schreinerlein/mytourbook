@@ -32,6 +32,7 @@ export enum CommonAdminResponseResultState {
 export interface CommonAdminResponseType {
     resultState: CommonAdminResponseResultState,
     resultMsg: string,
+    resultDate: Date,
     preparedCommands: {[key: string]: CommonAdminCommandsListResponseType},
-    commandsStates?: {[key: string]: CommonAdminCommandStateType}
+    commandsStates?: {[key: string]: CommonAdminCommandStateType},
 }
