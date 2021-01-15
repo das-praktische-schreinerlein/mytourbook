@@ -1915,7 +1915,6 @@
                 [" \\d\\d\\.\\d\\d\\.\\d\\d\\d\\d", ""],
                 ["mit .*? (ab |am |an |auf |bei |durch |im |in |nach |von )+", "$1"]
             ]
-
         },
         "tdoc-location-desc-suggester": {
             "nameReplacements": [
