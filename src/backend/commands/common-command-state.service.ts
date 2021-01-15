@@ -4,6 +4,7 @@ import {
     CommonAdminCommandStateType
 } from '../shared/tdoc-commons/model/container/admin-response';
 
+// TODO move to commons
 export class CommonCommandStateService {
     protected availableCommands: string[];
     protected commandRunStates: {[key: string]: CommonAdminCommandStateType} = {};

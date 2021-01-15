@@ -11,6 +11,7 @@ export interface DbCommandOptions {
     }
 }
 
+// TODO move to commons
 export abstract class AbstractDbCommand<O extends DbCommandOptions> extends CommonAdminCommand {
 
     protected abstract configureDbCommandOptions(argv: {}): Promise<O>;

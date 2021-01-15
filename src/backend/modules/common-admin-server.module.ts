@@ -19,6 +19,7 @@ export interface CommonAdminServerConfigType<A extends CommonAdminBackendConfigT
     firewallConfig: F;
 }
 
+// TODO move to commons
 export class AdminServerModule {
     public static configureRoutes(app: express.Application, apiPrefix: string,
                                   adminCommandManager: CommonServerAdminCommandManager<CommonServerAdminCommandConfigType>) {

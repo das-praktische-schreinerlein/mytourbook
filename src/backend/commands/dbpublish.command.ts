@@ -45,6 +45,10 @@ export class DbPublishCommand extends AbstractDbCommand<DbPublishCommandOptions>
                 sqlFiles.push(profilePath + 'import_03_import-data-from-mytbexportbetadb-to-mytbexportproddb.sql');
                 sqlFiles.push(profilePath + 'import_03_clean-blocked-data.sql');
                 sqlFiles.push(profilePath + 'import_03_clean-private-data.sql');
+                sqlFiles.push(profilePath + 'import_02_manage-common-data.sql');
+                sqlFiles.push(profilePath + 'import_02_manage-private-data.sql');
+                sqlFiles.push(profilePath + 'import_02_merge-person-object-fields.sql');
+                sqlFiles.push(profilePath + 'import_02_update-desc.sql');
                 break;
             case 'mytbexportbetadb_update':
             case 'mytbexportproddb_update':

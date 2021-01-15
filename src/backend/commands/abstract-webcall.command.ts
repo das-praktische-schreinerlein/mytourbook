@@ -18,6 +18,7 @@ export interface SingleWebRequestConfigType {
     data?: {[key: string]: any}
 }
 
+// TODO move to commons
 export abstract class AbstractWebRequestCommand<O extends WebRequestCommandOptions> extends CommonAdminCommand {
 
     protected abstract configureWebRequestCommandOptions(argv: {}): Promise<O>;

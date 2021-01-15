@@ -18,6 +18,7 @@ export interface AdminJobAreaComponentConfig {
     jobsAllowed: boolean;
 }
 
+// TODO move to commons
 @Component({
     selector: 'app-admin-jobarea',
     templateUrl: './admin-jobarea.component.html',
@@ -39,6 +40,7 @@ export class AdminJobAreaComponent extends AbstractInlineComponent
     intervalRunning = false;
     interval = undefined;
     intervalTimeout = 5;
+
     public intervalFormGroup: FormGroup = this.fb.group({
         intervalTimeout: [5]
     });
