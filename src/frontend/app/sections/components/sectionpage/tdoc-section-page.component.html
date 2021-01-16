@@ -11,6 +11,8 @@
                 <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
                 <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
                 <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="dashBoardContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
             </div>
         </ng-container>
         <ng-container *ngSwitchDefault="">
@@ -19,6 +21,8 @@
             <ng-container *ngTemplateOutlet="newsContainer"></ng-container>
             <ng-container *ngTemplateOutlet="sectionsContainer"></ng-container>
             <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="dashBoardContainer"></ng-container>
+            <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
             <ng-container *ngIf="pdoc.flgShowTopTen">
                 <div class="container content-container hidden-print">
                     <ng-container *ngTemplateOutlet="tagcloudContainer"></ng-container>
@@ -474,9 +478,24 @@
 
             <ng-container *ngTemplateOutlet="bestMatching"></ng-container>
             <ng-container *ngTemplateOutlet="favorites"></ng-container>
-            <ng-container *ngTemplateOutlet="dashBoard"></ng-container>
-            <ng-container *ngTemplateOutlet="adminArea"></ng-container>
+            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+        </div>
+    </ng-container>
+</ng-template>
 
+<ng-template #dashBoardContainer>
+    <ng-container *ngIf="pdoc.flgShowDashboard">
+        <div class="container content-container sectionpage-dashBoard-container">
+            <ng-container *ngTemplateOutlet="dashBoard"></ng-container>
+            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+        </div>
+    </ng-container>
+</ng-template>
+
+<ng-template #adminAreaContainer>
+    <ng-container *ngIf="pdoc.flgShowAdminArea">
+        <div class="container content-container sectionpage-dashBoard-container">
+            <ng-container *ngTemplateOutlet="adminArea"></ng-container>
             <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
         </div>
     </ng-container>

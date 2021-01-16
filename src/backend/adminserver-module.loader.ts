@@ -2,9 +2,12 @@ import {ConfigureServerModule} from '@dps/mycms-server-commons/dist/server-commo
 import {FirewallConfig} from '@dps/mycms-server-commons/dist/server-commons/firewall.commons';
 import {DnsBLModule} from '@dps/mycms-server-commons/dist/server-commons/dnsbl.module';
 import {FirewallModule} from '@dps/mycms-server-commons/dist/server-commons/firewall.module';
-import {AdminServerModule, CommonAdminBackendConfigType} from './modules/common-admin-server.module';
+import {
+    AdminServerModule,
+    CommonAdminBackendConfigType
+} from '@dps/mycms-server-commons/dist/backend-commons/modules/common-admin-server.module';
 import {ServerAdminCommandConfigType, ServerAdminCommandManager} from './commands/serveradmin-command.manager';
-import {CommonServerAdminCommandConfigType} from './commands/common-serveradmin-command.manager';
+import {CommonServerAdminCommandConfigType} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-serveradmin-command.manager';
 
 export interface CommonAdminServerConfigType<A extends CommonAdminBackendConfigType<C>,
     C extends CommonServerAdminCommandConfigType, F extends FirewallConfig> {

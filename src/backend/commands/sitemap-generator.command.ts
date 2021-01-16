@@ -9,7 +9,10 @@ import {CommonDocRecord} from '@dps/mycms-commons/dist/search-commons/model/reco
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
-import {CommonAdminCommand, SimpleConfigFilePathValidationRule} from './common-admin.command';
+import {
+    CommonAdminCommand,
+    SimpleConfigFilePathValidationRule
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export class SiteMapGeneratorCommand extends CommonAdminCommand {

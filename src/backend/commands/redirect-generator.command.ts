@@ -8,7 +8,11 @@ import {CommonDocSearchForm} from '@dps/mycms-commons/dist/search-commons/model/
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/services/cdoc-data.service';
 import {StringUtils} from '@dps/mycms-commons/dist/commons/utils/string.utils';
-import {CommonAdminCommand, SimpleConfigFilePathValidationRule, SimpleFilePathValidationRule} from './common-admin.command';
+import {
+    CommonAdminCommand,
+    SimpleConfigFilePathValidationRule,
+    SimpleFilePathValidationRule
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {KeywordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export class RedirectGeneratorCommand extends CommonAdminCommand {

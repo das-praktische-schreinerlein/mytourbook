@@ -1,7 +1,11 @@
 import * as fs from 'fs';
-import {SimpleConfigFilePathValidationRule} from './common-admin.command';
+import {SimpleConfigFilePathValidationRule} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {NameValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {AbstractWebRequestCommand, SingleWebRequestConfigType, WebRequestCommandOptions} from './abstract-webcall.command';
+import {
+    AbstractWebRequestCommand,
+    SingleWebRequestConfigType,
+    WebRequestCommandOptions
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/abstract-webcall.command';
 
 export interface SolrPublishCommandOptions extends WebRequestCommandOptions {
     profile: string,

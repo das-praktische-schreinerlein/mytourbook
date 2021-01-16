@@ -9,7 +9,11 @@ import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commo
 import {CommonDocTransportModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-transport.module';
 import {utils} from 'js-data';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
-import {CommonAdminCommand, SimpleConfigFilePathValidationRule, SimpleFilePathValidationRule} from './common-admin.command';
+import {
+    CommonAdminCommand,
+    SimpleConfigFilePathValidationRule,
+    SimpleFilePathValidationRule
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
 export class TourDocExporterCommand extends CommonAdminCommand {

@@ -3,7 +3,10 @@ import {TourDocObjectDetectionManagerModule} from '../modules/tdoc-objectdetecti
 import {TourDocDataServiceModule} from '../modules/tdoc-dataservice.module';
 import {utils} from 'js-data';
 import {CommonObjectDetectionProcessingDatastore} from '@dps/mycms-commons/dist/commons/model/common-object-detection-processing-datastore';
-import {CommonAdminCommand, SimpleConfigFilePathValidationRule} from './common-admin.command';
+import {
+    CommonAdminCommand,
+    SimpleConfigFilePathValidationRule
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
     KeywordValidationRule,
     NumberValidationRule,

@@ -4,6 +4,8 @@
    "id": "start",
    "descMd": "Welcome to MyTB the portal for tour planning in selected countries of the world. It is a mixture of tour guides, travel wiki (regions), illustrated diary (reports), picture search (pictures).",
    "flgShowTopTen": true,
+   "flgShowDashboard": true,
+   "flgShowAdminArea": true,
    "flgShowNews": true,
    "flgShowSearch": true,
    "heading": "Thats MyTB",

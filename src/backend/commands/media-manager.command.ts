@@ -15,7 +15,11 @@ import {MediaExportResolutionProfiles, TourDocExportService} from '../modules/td
 import {TourDocServerPlaylistService, TourDocServerPlaylistServiceConfig} from '../modules/tdoc-serverplaylist.service';
 import {TourDocMediaFileImportManager} from '../modules/tdoc-mediafile-import.service';
 import {MediaExportProcessingOptions} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-mediafile-export.service';
-import {CommonAdminCommand, SimpleConfigFilePathValidationRule, SimpleFilePathValidationRule} from './common-admin.command';
+import {
+    CommonAdminCommand,
+    SimpleConfigFilePathValidationRule,
+    SimpleFilePathValidationRule
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 import {
     KeywordValidationRule,
     NumberValidationRule,

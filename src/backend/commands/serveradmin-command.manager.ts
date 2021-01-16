@@ -2,7 +2,10 @@ import {MediaManagerCommand} from './media-manager.command';
 import {ObjectDetectionManagerCommand} from './objectdetector.command';
 import {DbPublishCommand} from './dbpublish.command';
 import {AdminCommandConfigType} from './admin-command.manager';
-import {CommonServerAdminCommandConfigType, CommonServerAdminCommandManager} from './common-serveradmin-command.manager';
+import {
+    CommonServerAdminCommandConfigType,
+    CommonServerAdminCommandManager
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-serveradmin-command.manager';
 import {CacheInitializerCommand} from './cache-initializer.command';
 import {SolrPublishCommand} from './solrpublish.command';
 

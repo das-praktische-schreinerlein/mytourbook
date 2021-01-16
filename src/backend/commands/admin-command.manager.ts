@@ -6,9 +6,12 @@ import {TourDocExporterCommand} from './tdoc-exporter.command';
 import {RedirectGeneratorCommand} from './redirect-generator.command';
 import {ObjectDetectionManagerCommand} from './objectdetector.command';
 import {FacetCacheManagerCommand} from './facetcache.command';
-import {DbMigrateCommand} from './dbmigrate.command';
+import {DbMigrateCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/dbmigrate.command';
 import {DbPublishCommand} from './dbpublish.command';
-import {CommonAdminCommandConfigType, CommonAdminCommandManager} from './common-admin-command.manager';
+import {
+    CommonAdminCommandConfigType,
+    CommonAdminCommandManager
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin-command.manager';
 import {SolrPublishCommand} from './solrpublish.command';
 
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {

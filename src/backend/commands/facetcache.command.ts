@@ -15,7 +15,10 @@ import {Sqlite3FacetCacheAdapter} from '@dps/mycms-commons/dist/facetcache-commo
 import {TourDocFacetCacheService} from '../modules/tdoc-facetcache.service';
 import {BackendConfigType} from '../modules/backend.commons';
 import {KeywordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
-import {CommonAdminCommand, SimpleConfigFilePathValidationRule} from './common-admin.command';
+import {
+    CommonAdminCommand,
+    SimpleConfigFilePathValidationRule
+} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
 
 export class FacetCacheManagerCommand extends CommonAdminCommand {
     protected facetCacheManagerCommandWrapper = new FacetCacheManagerCommandWrapper();
