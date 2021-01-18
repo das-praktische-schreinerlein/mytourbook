@@ -32,7 +32,7 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
             adminCommandConfig,
             // only allow a subset of actions
             ['initCache', 'sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
-                'readImageDates', 'scaleImages', 'publishDB', 'publishSolr']);
+                'readImageDates', 'scaleImages', 'scaleVideos', 'publishDB', 'publishSolr']);
     }
 
     protected initializeArgs(argv: {}): Promise<{}> {

@@ -65,14 +65,19 @@ export class TourDocMediaManagerModule extends CommonDocMediaManagerModule<TourD
         return utils.resolve({});
     }
 
-    public scaleCommonDocRecordMediaWidth(tdoc: TourDocRecord, width: number): Promise<{}> {
-        const tdocImages = tdoc.get('tdocimages');
-        if (tdocImages === undefined  || tdocImages.length === 0) {
-            console.warn('no image found for ' + tdoc.id);
-            return utils.resolve({});
+    public scaleCommonDocRecordMediaWidth(tdoc: TourDocRecord, width: number, addResolutionType?: string): Promise<{}> {
+        const tdocVideos = tdoc.get('tdocvideos');
+        if (tdocVideos !== undefined  && tdocVideos.length > 0) {
+            return this.scaleCommonDocVideoRecord(tdocVideos[0], width, addResolutionType);
         }
 
-        return this.scaleCommonDocImageRecord(tdocImages[0], width);
+        const tdocImages = tdoc.get('tdocimages');
+        if (tdocImages !== undefined  && tdocImages.length > 0) {
+            return this.scaleCommonDocImageRecord(tdocImages[0], width);
+        }
+
+        console.warn('no image/video found for ' + tdoc.id);
+        return utils.resolve({});
     }
 
     public prepareAdditionalMappings(additionalMappingsSrc: string, mapKeyTo: boolean): {[key: string]: FileSystemDBSyncType} {

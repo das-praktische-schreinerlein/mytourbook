@@ -65,7 +65,7 @@ fi
 if [ -f "${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json" ]; then
   echo "now: load video-import-file"
   cd ${MYTB}
-  node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
+  node dist/backend/serverAdmin.js --debug --command loadTourDoc --action loadDocs --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --file ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json
   mv  ${MYTB_IMPORT_MEDIADIR}import/mytbdb_import-import-videos.json  ${MYTB_IMPORT_MEDIADIR}import/DONE-mytbdb_import-import-videos.json
   cd $CWD
 else
@@ -106,9 +106,7 @@ cd $CWD
 
 echo "now: create scaled video-copies"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action generateVideoScreenshotFromMediaDir --debug true --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_screenshot/ --debug true
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action generateVideoPreviewFromMediaDir --debug true --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_thumbnail/ --debug true
-node dist/backend/serverAdmin.js --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json --command mediaManager --action scaleVideosFromMediaDirToMP4 --debug true --importDir ${MYTB_IMPORT_MEDIADIR}import/video_full/ --outputDir ${MYTB_IMPORT_MEDIADIR}import/video_x600/ --debug true
+node dist/backend/serverAdmin.js --command mediaManager --action scaleVideos --debug true --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "OPTIONAL YOUR TODO: fix image/track-date if needed (via gui or cli and run script manually)"

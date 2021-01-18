@@ -52,7 +52,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
     }
 
     protected definePossibleActions(): string[] {
-        return ['readImageDates', 'readVideoDates', 'scaleImages',
+        return ['readImageDates', 'readVideoDates', 'scaleImages', 'scaleVideos',
             'exportImageFiles', 'exportVideoFiles', 'generateTourDocsFromMediaDir',
             'findCorrespondingTourDocRecordsForMedia', 'insertSimilarMatchings',
             'convertVideosFromMediaDirToMP4',
@@ -138,6 +138,15 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 console.log('START processing: scaleImages', searchForm, processingOptions);
 
                 promise = tdocManagerModule.scaleImagesToDefaultWidth(searchForm, processingOptions);
+
+                break;
+            case 'scaleVideos':
+                processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 5;
+                searchForm = new TourDocSearchForm({ type: 'video', sort: 'dateAsc',
+                    pageNum: Number.isInteger(pageNum) ? pageNum : 1});
+                console.log('START processing: scaleVideos', searchForm, processingOptions);
+
+                promise = tdocManagerModule.scaleVideosToDefaultWidth(searchForm, processingOptions);
 
                 break;
             case 'exportImageFiles':

@@ -21,6 +21,7 @@
 - export: introduced sqlite-export
 - install: use local solr
 - backend: added parameter-validation and configurable command-restrictions to serverAdmin
+- backend: added and use scaleVideos to serverAdmin instead generating by directory
 
 ### bug fixes
 - scripts: fixed start-scripts
