@@ -11,6 +11,7 @@
 - backend: run db-publish from serverAdmin
 - backend: run db-migrations from serverAdmin
 - backend: added admin-server
+- frontend: added admin-area
  
 ### improvements
 - security: bind on localhost only by default

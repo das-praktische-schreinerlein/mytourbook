@@ -21,7 +21,7 @@ export class PDocServerModule {
         app.use(apiPrefix + '/' + locale + '/pdoc', new Router(mapper, config).router);
 
         // use own wrapper for search
-        console.log('configure route pdocsearch:', apiPrefix + '/' + locale + '/tdocsearch');
+        console.log('configure route pdocsearch:', apiPrefix + '/' + locale + '/pdocsearch');
         app.route(apiPrefix + '/' + locale + '/pdocsearch')
             .all(function(req, res, next) {
                 if (req.method !== 'GET') {
