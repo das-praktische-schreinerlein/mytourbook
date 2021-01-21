@@ -1,7 +1,6 @@
 -- ##################
 -- attach master-database
 -- ##################
--- DETACH DATABASE importmytbdb;
 ATTACH DATABASE 'F:/playground/mytb-test/mytbbase/import/mytbdb_import.sqlite' AS importmytbdb;
 
 -- ##################

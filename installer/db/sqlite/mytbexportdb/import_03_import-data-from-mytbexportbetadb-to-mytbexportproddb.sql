@@ -1,7 +1,6 @@
 -- ##################
 -- attach mytbexportbetadb-database
 -- ##################
--- DETACH DATABASE importmytbexportbetadb;
 ATTACH DATABASE 'F:/playground/mytb-test/mytbbase/import/mytbexportbetadb.sqlite' AS importmytbexportbetadb;
 
 -- ##################

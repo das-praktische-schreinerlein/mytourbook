@@ -4,7 +4,10 @@
   "license": "Apache-2.0",
   "angular-cli": {},
   "config": {
-    "solrdownloadurl": "https://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz"
+    "solrgoal": "install-solr-doit",
+    "solrdownloadurl": "https://archive.apache.org/dist/lucene/solr/6.6.0/solr-6.6.0.tgz",
+    "set_this_for_solrgoal_withsolr": "install-solr-doit",
+    "set_this_for_solrgoal_withouthsolr": "noop"
   },
   "scripts": {
     "adminserver-serve-dev": "node dist/backend/adminServer.js --adminbackend config/adminServer.dev.json --firewall config/adminfirewall.dev.json --debug true",
@@ -85,7 +88,8 @@
     "init-frontendserver-cache-dev-de": "node dist/frontendserver-dev-de/frontendserverAdmin.js --localSitemapUrl http://localhost:4001/mytbdev/de/sitemap-pdoc-de.xml --sitemapbase http://localhost:4001/mytbdev/de/ --backend config/backend.dev.json --frontend config/frontend.dev.json",
     "init-frontendserver-cache-beta-de": "node dist/frontendserver-beta-de/frontendserverAdmin.js --backend config/backend.beta.json --frontend config/frontend.beta.json",
     "init-frontendserver-cache-prod-de": "node dist/frontendserver-de/frontendserverAdmin.js --backend config/backend.prod.json --frontend config/frontend.prod.json",
-    "install-solr": "npm run install-solr-clear && npm run install-solr-download && npm run install-solr-unpack && npm run install-solr-cleanout && npm run install-solr-download-langfiles && npm run install-solr-convert-langfiles && npm run install-solr-download-dataimport",
+    "install-solr": "cross-var npm run $npm_package_config_solrgoal",
+    "install-solr-doit": "npm run install-solr-clear && npm run install-solr-download && npm run install-solr-unpack && npm run install-solr-cleanout && npm run install-solr-download-langfiles && npm run install-solr-convert-langfiles && npm run install-solr-download-dataimport",
     "install-solr-clear": "cross-os install-solr-clear-os",
     "install-solr-clear-os": {
       "darwin": "./node_modules/.bin/rimraf contrib/solr && ./node_modules/.bin/mkdirp contrib/solr && ./node_modules/.bin/mkdirp contrib/solr/contrib/dataimporthandler/lib && ./node_modules/.bin/mkdirp contrib/solr/contrib/lang",
@@ -95,7 +99,7 @@
     "install-solr-download": "cd contrib && cross-var curl $npm_package_config_solrdownloadurl -o solr.tgz",
     "install-solr-download-langfiles": "cd contrib && curl https://raw.githubusercontent.com/elastic/hunspell/master/dicts/de_DE/de_DE.dic -o solr/contrib/lang/hunspell_de_DE.dic && curl https://raw.githubusercontent.com/elastic/hunspell/master/dicts/de_DE/de_DE.aff -o solr/contrib/lang/hunspell_de_DE.aff && curl https://netix.dl.sourceforge.net/project/germandict/german.7z -o solr/contrib/lang/german.7z",
     "install-solr-convert-langfiles": "sed \"s/\\\\/.*//g\" contrib/solr/contrib/lang/hunspell_de_DE.dic > contrib/solr/contrib/lang/dictionary.txt && iconv -f \"windows-1252\" -t \"UTF-8\" contrib/solr/contrib/lang/dictionary.txt > contrib/solr/contrib/lang/dictionary_de.txt",
-    "install-solr-download-dataimport": "npm run install-solr-download-dataimport-mysql",
+    "install-solr-download-dataimport": "npm run install-solr-download-dataimport-mysql && npm run install-solr-download-dataimport-sqlite",
     "install-solr-download-dataimport-mysql": "cd contrib && curl https://downloads.mariadb.com/Connectors/java/connector-java-2.7.1/mariadb-java-client-2.7.1.jar -o solr/contrib/dataimporthandler/lib/mariadb-java-client.jar",
     "install-solr-download-dataimport-sqlite": "cd contrib && curl https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.34.0/sqlite-jdbc-3.34.0.jar -o solr/contrib/dataimporthandler/lib/sqlite-jdbc.jar",
     "install-solr-unpack": "cd contrib && tar xzf solr.tgz -C solr --strip-components=1",
@@ -128,7 +132,8 @@
     "testwatch": "ng test frontend --preserveSymlinks=true --environment=dev --watch=true",
     "version": "ng -v",
     "xi18n": "ng xi18n frontend --locale de --out-file messages.de.xlf --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
-    "xi18n-en": "ng xi18n frontend --locale en --out-file messages.en.xlf --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress"
+    "xi18n-en": "ng xi18n frontend --locale en --out-file messages.en.xlf --output-path src/frontend/locales/ --i18n-format xlf --verbose --progress",
+    "noop": "npm version"
   },
   "private": true,
   "dependencies": {

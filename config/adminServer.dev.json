@@ -98,6 +98,47 @@
                         }
                     }
                 ]
+            },
+            "publish_beta/prod_sqlite": {
+                "description": "publish mytbexportproddb+mytbexportproddb sqlite",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportproddb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
             }
         },
         "constantParameters": {
