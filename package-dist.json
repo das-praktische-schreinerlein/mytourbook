@@ -6,9 +6,12 @@
   "scripts": {
     "electron-rebuild": "npm run electron-rebuild-sqlite3",
     "electron-rebuild-sqlite3": "..\\node_modules\\.bin\\electron-rebuild -f -w sqlite3",
+    "adminserver-serve-dev": "node dist/backend/adminServer.js --adminbackend config/adminServer.dev.json --firewall config/adminfirewall.dev.json --debug true",
+    "adminserver-serve-beta": "node dist/backend/adminServer.js --adminbackend config/admin.beta.json --firewall config/adminfirewall.beta.json",
+    "adminserver-serve-prod": "node dist/backend/adminServer.js --adminbackend config/admin.prod.json --firewall config/adminfirewall.prod.json",
     "backend-serve-dev": "node dist/backend/backend.js --backend config/backend.dev.json --firewall config/firewall.dev.json",
     "backend-serve-beta": "node dist/backend/backend.js --backend config/backend.beta.json --firewall config/firewall.beta.json",
-    "backend-serve-prod": "node dist/backend/backend.js --backend config/backend.prod.json --firewall config/firewall.beta.json",
+    "backend-serve-prod": "node dist/backend/backend.js --backend config/backend.prod.json --firewall config/firewall.prod.json",
     "frontendserver-serve-dev-de": "node dist/frontendserver-dev-de/frontendserver.js --backend config/backend.dev.json --firewall config/firewall.dev.json --frontend config/frontend.dev.json",
     "frontendserver-serve-beta-de": "node dist/frontendserver-beta-de/frontendserver.js --backend config/backend.beta.json --firewall config/firewall.beta.json --frontend config/frontend.beta.json",
     "frontendserver-serve-prod-de": "node dist/frontendserver-de/frontendserver.js --backend config/backend.prod.json --firewall config/firewall.prod.json --frontend config/frontend.prod.json",
