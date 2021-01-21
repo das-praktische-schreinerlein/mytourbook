@@ -33,6 +33,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             backend: new SimpleConfigFilePathValidationRule(true),
             importDir: new SimpleFilePathValidationRule(false),
             srcFile: new SimpleFilePathValidationRule(false),
+            exportDir: new SimpleFilePathValidationRule(false),
             outputDir: new SimpleFilePathValidationRule(false),
             outputFile: new SimpleFilePathValidationRule(false),
             ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),

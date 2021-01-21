@@ -25,5 +25,9 @@ W_MYTB_MEDIADIR="F:\\playground\\mytb-test\\mytbmediabase\\"
 W_MYTB_INDEXDIR="F:\\playground\\mytb-test\\mytbindex\\"
 W_MYTB_INDEXSRC_MEDIADIR="${W_MYTB_MEDIADIR}pics_x100\\"
 
+SOLR_PORT=9999
+SOLR_JETTY_HOST=127.0.0.1
+START_ADMINSERVER=true
+
 AUTOSTARTIMPORT=false
 AUTOSTARTEXPORT=true

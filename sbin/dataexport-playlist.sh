@@ -25,28 +25,28 @@ FILEPROFILE=${7:-default}
 RATEMINFILTER=${8}
 SHOWNONBLOCKEDONLY=${9:showall}
 
-# check parameters
-if [ ! -d "${EXPORTDIR}" ]; then
-    dofail "USAGE: dataexport.playlist.sh EXPORTDIR \nFATAL: EXPORTDIR not exists " 1
-fi
-if [ -d "${EXPORTDIR}/${PLAYLISTFILE}" ]; then
-    dofail "USAGE: dataexport.playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE \nFATAL: PLAYLISTFILE is directory " 1
-fi
-
-echo "start - prepare file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
-
 echo "now: configure linux vars: run sbin/configure-environment.sh"
 source ${SCRIPTPATH}/configure-environment.bash
 
 # check parameters
+cd ${MYTB}
+if [ ! -d "${EXPORTDIR}" ]; then
+    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: EXPORTDIR not exists " 1
+fi
+if [ -d "${EXPORTDIR}/${PLAYLISTFILE}" ]; then
+    dofail "USAGE: dataexport.playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: PLAYLISTFILE is directory " 1
+fi
+
 CONFGFILE="${CONFIG_BASEDIR}backend.${CONFIGPROFILE}.json"
 if [ ! -f "${CONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE \nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
+    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: CONFGFILE not exists '${CONFGFILE}' " 1
 fi
 CLICONFGFILE="${CONFIG_BASEDIR}adminCli.${CONFIGPROFILE}.json"
 if [ ! -f "${CLICONFGFILE}" ]; then
-    dofail "USAGE: dataexport-playlist.sh EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE CONFIGPROFILE \nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
+    dofail "USAGE: dataexport-playlist.sh CONFIGPROFILE EXPORTDIR PLAYLISTNAMEFILTER PLAYLISTFILE RESOLUTIONPROFILE DIPROFILE FILEPROFILE RATEMINFILTER SHOWNONBLOCKEDONLY \nFATAL: CLICONFGFILE not exists '${CLICONFGFILE}' " 1
 fi
+
+echo "start - prepare file export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' fileBase='${PLAYLISTFILE}' directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'"
 
 if [ "${AUTOSTARTEXPORT}" != "true" ]; then
   echo "OPEN: Do you want to start image export: playlist='${PLAYLISTNAMEFILTER}' to '${EXPORTDIR}' m3u='${PLAYLISTFILE}'  directoryProfile='${DIPROFILE}' fileNameProfile='${FILEPROFILE}'?"
