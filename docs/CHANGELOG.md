@@ -23,6 +23,8 @@
 - install: use local solr
 - backend: added parameter-validation and configurable command-restrictions to serverAdmin
 - backend: added and use scaleVideos to serverAdmin instead generating by directory
+- backend: improved commands to optionally rename existing outputfiles
+- backend: improved mediafile-importer to optionally check if file aleady eixsts in database
 
 ### bug fixes
 - scripts: fixed start-scripts

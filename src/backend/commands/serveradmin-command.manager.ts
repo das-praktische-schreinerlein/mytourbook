@@ -8,6 +8,8 @@ import {
 } from '@dps/mycms-server-commons/dist/backend-commons/commands/common-serveradmin-command.manager';
 import {CacheInitializerCommand} from './cache-initializer.command';
 import {SolrPublishCommand} from './solrpublish.command';
+import {TourDocLoaderCommand} from './tdoc-loader.command';
+import {TourDocExporterCommand} from './tdoc-exporter.command';
 
 export interface ServerAdminCommandConfigType extends CommonServerAdminCommandConfigType, AdminCommandConfigType {
     importDir: string,
@@ -24,6 +26,8 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
         // only define a subset of commands
         super({
                 'initCache': new CacheInitializerCommand(),
+                'loadTourDoc': new TourDocLoaderCommand(),
+                'exportTourDoc': new TourDocExporterCommand(),
                 'mediaManager': new MediaManagerCommand(),
                 'objectDetectionManager': new ObjectDetectionManagerCommand(),
                 'dbPublish': new DbPublishCommand(),
@@ -32,7 +36,9 @@ export class ServerAdminCommandManager extends CommonServerAdminCommandManager<S
             adminCommandConfig,
             // only allow a subset of actions
             ['initCache', 'sendQueueRequests', 'sendImageQueueRequests', 'sendVideoQueueRequests',
-                'readImageDates', 'scaleImages', 'scaleVideos', 'publishDB', 'publishSolr']);
+                'readImageDates', 'scaleImages', 'scaleVideos',
+                'publishDB', 'publishSolr'
+                ]);
     }
 
     protected initializeArgs(argv: {}): Promise<{}> {

@@ -2,6 +2,84 @@
     "commandConfig": {
         "adminWritable": true,
         "preparedCommands": {
+            "importMedia": {
+                "description": "import media from media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "generateTourDocsFromMediaDir",
+                            "backend": "config/backend.dev.json",
+                            "importDir": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\",
+                            "outputFile": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\mytbdb_import-import-images.json",
+                            "renameFileIfExists": "true"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "generateTourDocsFromMediaDir",
+                            "backend": "config/backend.dev.json",
+                            "importDir": "F:\\playground\\mytb-test\\mytbmediabase\\video_full\\",
+                            "outputFile": "F:\\playground\\mytb-test\\mytbmediabase\\video_full\\mytbdb_import-import-videos.json",
+                            "renameFileIfExists": "true"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "loadTourDoc",
+                            "action": "loadDocs",
+                            "backend": "config/backend.dev.json",
+                            "file": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\mytbdb_import-import-images.json",
+                            "renameFileAfterSuccess": true
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "loadTourDoc",
+                            "action": "loadDocs",
+                            "backend": "config/backend.dev.json",
+                            "file": "F:\\playground\\mytb-test\\mytbmediabase\\video_full\\mytbdb_import-import-videos.json",
+                            "renameFileAfterSuccess": true
+                        }
+                    }
+                ]
+            },
+            "exportMediaFavorites": {
+                "description": "export media-favorites from export-media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "exportImageFiles",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "favorites-top",
+                            "exportDir": "F:\\playground\\mytb-test\\exports\\favorites\\",
+                            "directoryProfile": "default",
+                            "fileNameProfile": "default",
+                            "playlists": "",
+                            "rateMinFilter": "",
+                            "resolutionProfile": "default",
+                            "showNonBlockedOnly": "showall"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "exportVideoFiles",
+                            "backend": "config/backend.dev.json",
+                            "exportName": "favorites-top",
+                            "exportDir": "F:\\playground\\mytb-test\\exports\\favorites\\",
+                            "directoryProfile": "default",
+                            "fileNameProfile": "default",
+                            "playlists": "",
+                            "rateMinFilter": "",
+                            "resolutionProfile": "default",
+                            "showNonBlockedOnly": "showall"
+                        }
+                    }
+                ]
+            },
             "dbPublish_beta_mysql": {
                 "description": "publish database mytbexportbetadb mysql",
                 "commands": [

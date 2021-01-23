@@ -14,13 +14,16 @@ import {
     SimpleConfigFilePathValidationRule,
     SimpleFilePathValidationRule
 } from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
-import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {ValidationRule, WhiteListValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
+import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 
 export class TourDocExporterCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
         return {
             backend: new SimpleConfigFilePathValidationRule(true),
-            file: new SimpleFilePathValidationRule(true)
+            file: new SimpleFilePathValidationRule(true),
+            renameFileIfExists: new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)
         };
     }
 
@@ -57,10 +60,28 @@ export class TourDocExporterCommand extends CommonAdminCommand {
         };
         const transporter: CommonDocTransportModule = new CommonDocTransportModule();
 
-        fs.writeFileSync(dataFileName, '{"tdocs": [');
-        return transporter.exportDocs(typeOrder, perRun, writerCallback, responseMapper, dataService).then(value => {
-            writerCallback(']}');
-            return utils.resolve(value);
-        });
+        const renameFileIfExists = !!argv['renameFileIfExists'];
+        let fileCheckPromise: Promise<any>;
+        if (fs.existsSync(dataFileName)) {
+            if (!renameFileIfExists) {
+                return Promise.reject('exportfile already exists');
+            }
+
+            const newFile = dataFileName + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-export.MOVED';
+            fileCheckPromise = FileUtils.moveFile(dataFileName, newFile, false);
+        } else {
+            fileCheckPromise = Promise.resolve();
+        }
+
+        return fileCheckPromise.then(() => {
+            fs.writeFileSync(dataFileName, '{"tdocs": [');
+            return transporter.exportDocs(typeOrder, perRun, writerCallback, responseMapper, dataService).then(value => {
+                writerCallback(']}');
+                return utils.resolve(value);
+            });
+        }).catch(reason => {
+            return Promise.reject('exportfile already exists and cant be renamed: ' + reason);
+        })
+
     }
 }

@@ -13,13 +13,16 @@ import {
     SimpleConfigFilePathValidationRule,
     SimpleFilePathValidationRule
 } from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
-import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {ValidationRule, WhiteListValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
+import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 
 export class TourDocLoaderCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
         return {
             backend: new SimpleConfigFilePathValidationRule(true),
-            file: new SimpleFilePathValidationRule(true)
+            file: new SimpleFilePathValidationRule(true),
+            renameFileAfterSuccess:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)
         };
     }
 
@@ -45,6 +48,7 @@ export class TourDocLoaderCommand extends CommonAdminCommand {
             return Promise.reject('option --file expected');
         }
 
+        const renameFileOption = !!argv['renameFileAfterSuccess'];
         const dataService: CommonDocDataService<CommonDocRecord, CommonDocSearchForm,
             CommonDocSearchResult<CommonDocRecord, CommonDocSearchForm>> =
             TourDocDataServiceModule.getDataService('tdocSolr', serverConfig.backendConfig);
@@ -53,6 +57,20 @@ export class TourDocLoaderCommand extends CommonAdminCommand {
         const transporter: CommonDocTransportModule = new CommonDocTransportModule();
 
         const recordSrcs = TourDocFileUtils.parseRecordSourceFromJson(fs.readFileSync(dataFileName, { encoding: 'utf8' }));
-        return transporter.loadDocs(recordSrcs, typeOrder, responseMapper, dataService);
+        return transporter.loadDocs(recordSrcs, typeOrder, responseMapper, dataService).then(() => {
+            let promise: Promise<any>;
+            if (renameFileOption) {
+                const newFile = dataFileName + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-import.DONE';
+                promise = FileUtils.moveFile(dataFileName, newFile, false);
+            } else {
+                promise = Promise.resolve();
+            }
+
+            return promise.then(() => {
+                return Promise.resolve('file imported');
+            }).catch(reason => {
+                return Promise.resolve('file imported but cant be renamed: ' + reason);
+            })
+        });
     }
 }

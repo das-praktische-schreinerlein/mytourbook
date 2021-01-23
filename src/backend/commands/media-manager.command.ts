@@ -23,8 +23,11 @@ import {
 import {
     KeywordValidationRule,
     NumberValidationRule,
-    ValidationRule
+    ValidationRule,
+    WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {DateUtils} from '@dps/mycms-commons/dist/commons/utils/date.utils';
+import {FileUtils} from '@dps/mycms-commons/dist/commons/utils/file.utils';
 
 export class MediaManagerCommand extends CommonAdminCommand {
     protected createValidationRules(): {[key: string]: ValidationRule} {
@@ -48,7 +51,8 @@ export class MediaManagerCommand extends CommonAdminCommand {
             showNonBlockedOnly: new KeywordValidationRule(false),
             additionalMappingsFile: new SimpleConfigFilePathValidationRule(false),
             rotate: new NumberValidationRule(false, 1, 360, 0),
-            force: new KeywordValidationRule(false)
+            force: new KeywordValidationRule(false),
+            renameFileIfExists:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)
         };
     }
 
@@ -77,33 +81,12 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const action = argv['action'];
         const importDir = argv['importDir'];
         const outputFile = argv['outputFile'];
-        if (outputFile !== undefined && fs.existsSync(outputFile)) {
-            return Promise.reject(action + ' outputFile must not exist');
-        }
-
         const backendConfig = JSON.parse(fs.readFileSync(filePathConfigJson, {encoding: 'utf8'}));
         const writable = backendConfig.tdocWritable === true || backendConfig.tdocWritable === 'true';
         const dataService = TourDocDataServiceModule.getDataService('tdocSolrReadOnly', backendConfig);
         if (writable) {
             dataService.setWritable(true);
         }
-        const playlistConfig: TourDocServerPlaylistServiceConfig = {
-            audioBaseUrl: backendConfig.playlistExportAudioBaseUrl,
-            imageBaseUrl: backendConfig.playlistExportImageBaseUrl,
-            videoBaseUrl: backendConfig.playlistExportVideoBaseUrl,
-            useAudioAssetStoreUrls: backendConfig.playlistExportUseAudioAssetStoreUrls,
-            useImageAssetStoreUrls: backendConfig.playlistExportUseImageAssetStoreUrls,
-            useVideoAssetStoreUrls: backendConfig.playlistExportUseVideoAssetStoreUrls
-        };
-        const playlistService = new TourDocServerPlaylistService(playlistConfig);
-        const tourDocMediaFileExportManager = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService);
-        const tourDocExportManager = new TourDocExportService(backendConfig, dataService, playlistService, tourDocMediaFileExportManager,
-            new TourDocAdapterResponseMapper(backendConfig));
-        const tourDocMediaFileImportManager = new TourDocMediaFileImportManager(backendConfig, dataService);
-        const mediaManagerModule = new MediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
-        const tdocManagerModule = new TourDocMediaManagerModule(backendConfig, dataService, mediaManagerModule, tourDocExportManager,
-            tourDocMediaFileImportManager, {});
-        const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
 
         let promise: Promise<any>;
         let searchForm: TourDocSearchForm;
@@ -114,6 +97,29 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const pageNum = Number.parseInt(argv['pageNum'], 10);
         const playlists = argv['playlists'];
         const personalRateOverall = argv['personalRateOverall'];
+        const skipCheckForExistingFilesInDataBase = argv['skipCheckForExistingFilesInDataBase'] === true
+            || argv['skipCheckForExistingFilesInDataBase'] === ' true';
+        const renameFileIfExists = !!argv['renameFileIfExists'];
+
+        const mediaManagerModule = new MediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
+        const playlistConfig: TourDocServerPlaylistServiceConfig = {
+            audioBaseUrl: backendConfig.playlistExportAudioBaseUrl,
+            imageBaseUrl: backendConfig.playlistExportImageBaseUrl,
+            videoBaseUrl: backendConfig.playlistExportVideoBaseUrl,
+            useAudioAssetStoreUrls: backendConfig.playlistExportUseAudioAssetStoreUrls,
+            useImageAssetStoreUrls: backendConfig.playlistExportUseImageAssetStoreUrls,
+            useVideoAssetStoreUrls: backendConfig.playlistExportUseVideoAssetStoreUrls
+        };
+        const playlistService = new TourDocServerPlaylistService(playlistConfig);
+        const tourDocMediaFileExportManager = new TourDocMediaFileExportManager(backendConfig.apiRoutePicturesStaticDir, playlistService);
+        const tourDocMediaFileImportManager = new TourDocMediaFileImportManager(backendConfig, dataService,
+            skipCheckForExistingFilesInDataBase);
+        const tourDocExportManager = new TourDocExportService(backendConfig, dataService, playlistService, tourDocMediaFileExportManager,
+            new TourDocAdapterResponseMapper(backendConfig));
+        const tdocManagerModule = new TourDocMediaManagerModule(backendConfig, dataService, mediaManagerModule, tourDocExportManager,
+            tourDocMediaFileImportManager, {});
+        const commonMediadManagerCommand = new CommonMediaManagerCommand(backendConfig);
+
         switch (action) {
             case 'readImageDates':
                 processingOptions.parallel = Number.isInteger(processingOptions.parallel) ? processingOptions.parallel : 1;
@@ -155,20 +161,20 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 const exportDir = argv['exportDir'];
                 if (exportDir === undefined) {
                     console.error(action + ' missing parameter - usage: --exportDir EXPORTDIR', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --exportDir EXPORTDIR [-force true/false]');
+                    promise = Promise.reject(action + ' missing parameter - usage: --exportDir EXPORTDIR [-force true/false]');
                     return promise;
                 }
                 const directoryProfile = argv['directoryProfile'];
                 if (directoryProfile === undefined) {
                     console.error(action + ' missing parameter - usage: --directoryProfile directoryProfile', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --directoryProfile directoryProfile');
+                    promise = Promise.reject(action + ' missing parameter - usage: --directoryProfile directoryProfile');
                     return promise;
                 }
 
                 const fileNameProfile = argv['fileNameProfile'];
                 if (fileNameProfile === undefined) {
                     console.error(action + ' missing parameter - usage: --fileNameProfile fileNameProfile', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --fileNameProfile fileNameProfile');
+                    promise = Promise.reject(action + ' missing parameter - usage: --fileNameProfile fileNameProfile');
                     return promise;
                 }
 
@@ -176,7 +182,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 if (resolutionProfile === undefined || !Object.keys(MediaExportResolutionProfiles).includes(resolutionProfile)) {
                     console.error(action + ' missing parameter - usage: --resolutionProfile {' +
                         Object.keys(MediaExportResolutionProfiles).join(', ') + '}', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --resolutionProfile {' +
+                    promise = Promise.reject(action + ' missing parameter - usage: --resolutionProfile {' +
                         Object.keys(MediaExportResolutionProfiles).join(', ') + '}');
                     return promise;
                 }
@@ -205,7 +211,6 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 if (blockedFilter !== undefined && blockedFilter.toLowerCase() !== 'showall') {
                     searchForm.moreFilter = 'blocked_i:null,0';
                 }
-
                 console.log('START processing: ' + action, searchForm, exportDir, processingOptions);
 
                 promise = tdocManagerModule.exportMediaFiles(searchForm, <MediaExportProcessingOptions & ProcessingOptions> {
@@ -220,19 +225,33 @@ export class MediaManagerCommand extends CommonAdminCommand {
             case 'generateTourDocsFromMediaDir':
                 if (importDir === undefined) {
                     console.error(action + ' missing parameter - usage: --importDir INPUTDIR', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputFile outputFile [-force true/false]');
+                    promise = Promise.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputFile outputFile [-force true/false]');
                     return promise;
                 }
                 if (outputFile === undefined) {
                     console.error(action + ' missing parameter - usage: --outputFile OUTPUTFILE', argv);
-                    promise = utils.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputFile outputFile [-force true/false]');
+                    promise = Promise.reject(action + ' missing parameter - usage: --importDir INPUTDIR --outputFile outputFile [-force true/false]');
                     return promise;
                 }
 
-                console.log('START processing: generateTourDocRecordsFromMediaDir', importDir);
+                let fileCheckPromise2: Promise<any>;
+                if (fs.existsSync(outputFile)) {
+                    if (!renameFileIfExists) {
+                        console.error(action + ' outputFile must not exist', argv);
+                        promise = Promise.reject('outputFile must not exist');
+                        return promise;
+                    }
 
-                promise = tdocManagerModule.generateTourDocRecordsFromMediaDir(importDir);
-                promise.then(value => {
+                    const newFile = outputFile + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-export.MOVED';
+                    fileCheckPromise2 = FileUtils.moveFile(outputFile, newFile, false);
+                } else {
+                    fileCheckPromise2 = Promise.resolve();
+                }
+
+                promise = fileCheckPromise2.then(() => {
+                    console.log('START processing: generateTourDocRecordsFromMediaDir', importDir);
+                    return promise = tdocManagerModule.generateTourDocRecordsFromMediaDir(importDir);
+                }).then(value => {
                     const responseMapper = new TourDocAdapterResponseMapper(backendConfig);
                     const tdocs = [];
                     for (const tdoc of value) {
@@ -255,16 +274,30 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 }
 
                 const additionalMappingsJson = argv['additionalMappingsFile'];
-                console.log('START processing: findCorrespondingTourDocRecordsForMedia', additionalMappingsJson);
-
                 let additionalMappings: {[key: string]: FileSystemDBSyncType};
                 if (additionalMappingsJson) {
                     const additionalMappingsSrc = JSON.parse(fs.readFileSync(additionalMappingsJson, {encoding: 'utf8'}));
                     additionalMappings = tdocManagerModule.prepareAdditionalMappings(additionalMappingsSrc, false);
                 }
 
-                promise = tdocManagerModule.findCorrespondingCommonDocRecordsForMedia(importDir, additionalMappings);
-                promise.then(value => {
+                let fileCheckPromise: Promise<any>;
+                if (fs.existsSync(outputFile)) {
+                    if (!renameFileIfExists) {
+                        console.error(action + ' outputFile must not exist', argv);
+                        promise = Promise.reject('outputFile must not exist');
+                        return promise;
+                    }
+
+                    const newFile = outputFile + '.' + DateUtils.formatToFileNameDate(new Date(), '', '-', '') + '-export.MOVED';
+                    fileCheckPromise = FileUtils.moveFile(outputFile, newFile, false);
+                } else {
+                    fileCheckPromise = Promise.resolve();
+                }
+
+                promise = fileCheckPromise.then(() => {
+                    console.log('START processing: findCorrespondingTourDocRecordsForMedia', additionalMappingsJson);
+                    return tdocManagerModule.findCorrespondingCommonDocRecordsForMedia(importDir, additionalMappings);
+                }).then(value => {
                     fs.writeFileSync(outputFile, JSON.stringify({
                         tdocs: value,
                         fileBaseDir: importDir,
@@ -285,7 +318,6 @@ export class MediaManagerCommand extends CommonAdminCommand {
                 }
 
                 console.log('START processing: insertSimilarMatchings', additionalImportMappingsJson);
-
                 let additionalImportMappings: {[key: string]: FileSystemDBSyncType};
                 if (additionalImportMappingsJson) {
                     const additionalImportMappingsSrc = JSON.parse(fs.readFileSync(additionalImportMappingsJson, {encoding: 'utf8'}));
@@ -297,6 +329,10 @@ export class MediaManagerCommand extends CommonAdminCommand {
 
                 break;
             default:
+                if (outputFile !== undefined && fs.existsSync(outputFile)) {
+                    return Promise.reject(action + ' outputFile must not exist');
+                }
+
                 return commonMediadManagerCommand.process(argv);
         }
 
