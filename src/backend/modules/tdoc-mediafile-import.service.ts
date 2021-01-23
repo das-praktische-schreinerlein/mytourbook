@@ -93,7 +93,7 @@ export class TourDocMediaFileImportManager  {
         });
     }
 
-    private generateTourDocForImportContainer(container: TourMediaImportContainerType, mediaTypes: {},
+    public generateTourDocForImportContainer(container: TourMediaImportContainerType, mediaTypes: {},
                                               mapper: Mapper, responseMapper: TourDocAdapterResponseMapper): Promise<TourDocRecord[]> {
         const me = this;
         const funcs = [];
