@@ -11,9 +11,9 @@
   },
   "scripts": {
     "adminserver-serve-dev": "node dist/backend/adminServer.js --adminbackend config/adminServer.dev.json --firewall config/adminfirewall.dev.json --debug true",
-    "adminserver-serve-dev-import": "node dist/backend/adminServer.js --adminbackend config/admin.import.json --firewall config/adminfirewall.dev.json",
-    "adminserver-serve-beta": "node dist/backend/adminServer.js --adminbackend config/admin.beta.json --firewall config/adminfirewall.beta.json",
-    "adminserver-serve-prod": "node dist/backend/adminServer.js --adminbackend config/admin.prod.json --firewall config/adminfirewall.prod.json",
+    "adminserver-serve-dev-import": "node dist/backend/adminServer.js --adminbackend config/adminServer.import.json --firewall config/adminfirewall.dev.json",
+    "adminserver-serve-beta": "node dist/backend/adminServer.js --adminbackend config/adminServer.beta.json --firewall config/adminfirewall.beta.json",
+    "adminserver-serve-prod": "node dist/backend/adminServer.js --adminbackend config/adminServer.prod.json --firewall config/adminfirewall.prod.json",
     "backend-build": "tsc -p src/backend && webpack --config backend-webpack.config.js && webpack --config serverAdmin-webpack.config.js && webpack --config adminServer-webpack.config.js && npm run build-after-copy-contrib && npm run build-after-copy-contrib-solrlang && npm run build-after-copy-overrides-config",
     "backend-build-and-serve-dev": "npm run backend-build && npm run backend-serve-dev",
     "backend-serve-dev": "node dist/backend/backend.js --backend config/backend.dev.json --firewall config/firewall.dev.json",
