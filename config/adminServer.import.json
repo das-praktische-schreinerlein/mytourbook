@@ -1,0 +1,285 @@
+{
+    "commandConfig": {
+        "adminWritable": true,
+        "preparedCommands": {
+            "importMedia": {
+                "description": "import media from media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "generateTourDocsFromMediaDir",
+                            "backend": "config/backend.import.json",
+                            "importDir": "F:/playground/mytb-test/mytbbase/import/pics_full/",
+                            "outputFile": "F:/playground/mytb-test/mytbbase/import/pics_full/mytbdb_import-import-images.json",
+                            "renameFileIfExists": "true"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "generateTourDocsFromMediaDir",
+                            "backend": "config/backend.import.json",
+                            "importDir": "F:/playground/mytb-test/mytbbase/import/video_full/",
+                            "outputFile": "F:/playground/mytb-test/mytbbase/import/video_full/mytbdb_import-import-videos.json",
+                            "renameFileIfExists": "true"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "loadTourDoc",
+                            "action": "loadDocs",
+                            "backend": "config/backend.import.json",
+                            "file": "F:/playground/mytb-test/mytbbase/import/pics_full/mytbdb_import-import-images.json",
+                            "renameFileAfterSuccess": true
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "loadTourDoc",
+                            "action": "loadDocs",
+                            "backend": "config/backend.import.json",
+                            "file": "F:/playground/mytb-test/mytbbase/import/video_full/mytbdb_import-import-videos.json",
+                            "renameFileAfterSuccess": true
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "scaleImages",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "scaleVideos",
+                            "backend": "config/backend.import.json"
+                        }
+                    }
+                ]
+            },
+            "scaleMedia": {
+                "description": "export media-favorites from export-media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "scaleImages",
+                            "backend": "config/backend.import.json"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "scaleVideos",
+                            "backend": "config/backend.import.json"
+                        }
+                    }
+                ]
+            },
+            "exportMediaFavorites": {
+                "description": "export media-favorites from export-media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "exportImageFiles",
+                            "backend": "config/backend.import.json",
+                            "exportName": "favorites-top",
+                            "exportDir": "F:\\playground\\mytb-test\\exports\\favorites\\",
+                            "directoryProfile": "default",
+                            "fileNameProfile": "default",
+                            "playlists": "",
+                            "rateMinFilter": "",
+                            "resolutionProfile": "default",
+                            "showNonBlockedOnly": "showall"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "exportVideoFiles",
+                            "backend": "config/backend.import.json",
+                            "exportName": "favorites-top",
+                            "exportDir": "F:\\playground\\mytb-test\\exports\\favorites\\",
+                            "directoryProfile": "default",
+                            "fileNameProfile": "default",
+                            "playlists": "",
+                            "rateMinFilter": "",
+                            "resolutionProfile": "default",
+                            "showNonBlockedOnly": "showall"
+                        }
+                    }
+                ]
+            },
+            "dbPublish_beta_mysql": {
+                "description": "publish database mytbexportbetadb mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    }
+                ]
+            },
+            "solrPublish_beta_mysql": {
+                "description": "publish solr mytbexportbeta mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    }
+                ]
+            },
+            "dbPublish_prod_mysql": {
+                "description": "publish mytbexportproddb mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
+            },
+            "solrPublish_prod_mysql": {
+                "description": "publish solr mytbexportprod mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
+            },
+            "publish_beta/prod_mysql": {
+                "description": "publish mytbexportproddb+mytbexportproddb mysql",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "mysql",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
+            },
+            "publish_beta/prod_sqlite": {
+                "description": "publish mytbexportproddb+mytbexportproddb sqlite",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportbetadb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "dbPublish",
+                            "action": "publishDB",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportproddb"
+                        }
+                    },
+                    {
+                        "parameters": {
+                            "command": "solrPublish",
+                            "action": "publishSolr",
+                            "publishConfigFile": "config/dbpublish.json",
+                            "profile": "sqlite",
+                            "target": "mytbexportproddb"
+                        }
+                    }
+                ]
+            }
+        },
+        "constantParameters": {
+            "overrides": "override this parameters from request",
+            "importDir": "notexists",
+            "exportDir": "notexists",
+            "exportName": "notexists",
+            "outputDir": "notexists",
+            "outputFile": "notexists",
+            "publishConfigFile": "notexists",
+            "migrationDbConfigFile": "notexists",
+            "migrationsDir": "notexists",
+            "additionalMappingsFile": "notexists",
+            "srcBaseUrl": "notexists",
+            "destBaseUrl": "notexists",
+            "backend": "config/backend.import.json",
+            "sitemap": "config/sitemap-de.json"
+        }
+    },
+    "importDir": "notexists",
+    "exportDir": "notexists",
+    "exportName": "notexists",
+    "outputDir": "notexists",
+    "outputFile": "notexists",
+    "publishConfigFile": "notexists",
+    "srcBaseUrl": "notexists",
+    "destBaseUrl": "notexists",
+    "backend": "config/backend.import.json",
+    "sitemap": "config/sitemap-de.json",
+    "port": 4900,
+    "bindIp": "127.0.0.1",
+    "corsOrigin": true
+}

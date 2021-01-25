@@ -37,6 +37,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
             importDir: new SimpleFilePathValidationRule(false),
             srcFile: new SimpleFilePathValidationRule(false),
             exportDir: new SimpleFilePathValidationRule(false),
+            exportName: new SimpleFilePathValidationRule(false),
             outputDir: new SimpleFilePathValidationRule(false),
             outputFile: new SimpleFilePathValidationRule(false),
             ignoreErrors: new NumberValidationRule(false, 1, 999999999, 10),
@@ -47,11 +48,12 @@ export class MediaManagerCommand extends CommonAdminCommand {
             directoryProfile: new KeywordValidationRule(false),
             fileNameProfile: new KeywordValidationRule(false),
             resolutionProfile: new KeywordValidationRule(false),
-            rateMinFilter: new KeywordValidationRule(false),
+            rateMinFilter: new NumberValidationRule(false, 0, 15, undefined),
             showNonBlockedOnly: new KeywordValidationRule(false),
             additionalMappingsFile: new SimpleConfigFilePathValidationRule(false),
             rotate: new NumberValidationRule(false, 1, 360, 0),
             force: new KeywordValidationRule(false),
+            skipCheckForExistingFilesInDataBase : new KeywordValidationRule(false),
             renameFileIfExists:  new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)
         };
     }

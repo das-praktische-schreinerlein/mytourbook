@@ -8,6 +8,7 @@ LIRETOOLS=/cygdrive/f/Projekte/liretools/
 
 DIGIFOTOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/digifotos/
 VIDEOS_BASEDIR=/cygdrive/f/playground/mytb-test/Bilder/Videos/
+EXPORT_BASEDIR=/cygdrive/f/playground/mytb-test/export/
 MYTB_IMPORT_MEDIADIR=/cygdrive/f/playground/mytb-test/mytbbase/
 MYTB_MEDIADIR=/cygdrive/f/playground/mytb-test/mytbmediabase/
 MYTB_INDEXDIR=/cygdrive/f/playground/mytb-test/mytbindex/
@@ -20,6 +21,7 @@ W_LIREOOLS="F:\\Projekte\\liretools\\"
 
 W_DIGIFOTOS_BASEDIR="F:\\playground\\mytb-test\\Bilder\\digifotos\\"
 W_VIDEOS_BASEDIR="F:\\playground\\mytb-test\\Bilder\\Videos\\"
+W_EXPORT_BASEDIR="F:\\playground\\mytb-test\\export\\"
 W_MYTB_IMPORT_MEDIADIR="F:\\playground\\mytb-test\\mytbbase\\"
 W_MYTB_MEDIADIR="F:\\playground\\mytb-test\\mytbmediabase\\"
 W_MYTB_INDEXDIR="F:\\playground\\mytb-test\\mytbindex\\"

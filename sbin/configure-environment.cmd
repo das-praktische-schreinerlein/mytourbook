@@ -7,6 +7,7 @@ set LIRETOOLS=F:\Projekte\liretools\
 
 set DIGIFOTOS_BASEDIR=F:\playground\mytb-test\Bilder\digifotos\
 set VIDEOS_BASEDIR=F:\playground\mytb-test\Bilder\Videos\
+set EXPORT_BASEDIR=F:\playground\mytb-test\export\
 set MYTB_IMPORT_MEDIADIR=F:\playground\mytb-test\mytbbase\
 set MYTB_MEDIADIR=F:\playground\mytb-test\mytbmediabase\
 set MYTB_INDEXDIR=F:\playground\mytb-test\mytbindex\
