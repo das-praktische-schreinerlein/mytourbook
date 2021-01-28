@@ -34,7 +34,7 @@ cd ${MYTB}
 node dist/backend/serverAdmin.js --preparedCommand prepareAppEnv --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
-echo "YOUR TODO: start facetcache for import-database in separate shell: 'cd ${MYTB} && npm run backend-start-server-managed-facetcache-dev-import && cd $CWD'"
+echo "YOUR TODO: start facetcache for import-database in separate shell: 'cd ${MYTB} && npm run backend-start-server-managed-facetcache-import && cd $CWD'"
 echo "OPEN: Did you start the facetcache?"
 select yn in "Yes"; do
     case $yn in
@@ -121,7 +121,7 @@ select yn in "Yes"; do
     esac
 done
 
-echo "YOUR TODO: start backend with import-profile in separate shell 'cd ${MYTB} && npm run backend-serve-dev-import && cd $CWD'"
+echo "YOUR TODO: start backend with import-profile in separate shell 'cd ${MYTB} && npm run backend-serve-import && cd $CWD'"
 echo "YOUR TODO: start frontend with import-profile in separate shell 'cd ${MYTB} && npm run frontendserver-serve-dev-de && cd $CWD'"
 echo "YOUR TODO: manage import-data on http://localhost:4001/mytbdev/de/"
 
