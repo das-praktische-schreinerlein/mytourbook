@@ -4,8 +4,8 @@
         "*": "*"
     },
     "preparedCommands": {
-        "dbMigrate": {
-            "description": "migrate database mytbdb_mysql",
+        "prepareAppEnv": {
+            "description": "prepare app-environment (do database-migrations...)",
             "commands": [
                 {
                     "parameters": {

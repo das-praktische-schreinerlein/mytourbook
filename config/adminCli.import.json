@@ -21,8 +21,8 @@
         ]
     },
     "preparedCommands": {
-        "dbMigrate": {
-            "description": "migrate database mytbdb_import_sqlite3",
+        "prepareAppEnv": {
+            "description": "prepare app-environment (do database-migrations...)",
             "commands": [
                 {
                     "parameters": {

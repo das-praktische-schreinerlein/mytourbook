@@ -29,9 +29,9 @@ echo "start - import track to import-database"
 echo "now: configure linux vars: run configure-environment.bash"
 source ${SCRIPTPATH}/configure-environment.bash
 
-echo "now: initialize import-database (sqlite)"
+echo "now: prepare app-environment (database-migrations...)"
 cd ${MYTB}
-node dist/backend/serverAdmin.js --command dbMigrate --action migrateDB --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --migrationDbConfigFile ${CONFIG_BASEDIR}/db-migrate-database.json --migrationsDir migrations/mytbdb --migrationEnv mytbdb_import_sqlite3
+node dist/backend/serverAdmin.js --preparedCommand prepareAppEnv --adminclibackend ${CONFIG_BASEDIR}adminCli.import.json --backend ${CONFIG_BASEDIR}backend.import.json
 cd $CWD
 
 echo "YOUR TODO: start facetcache for import-database in separate shell: 'cd ${MYTB} && npm run backend-start-server-managed-facetcache-dev-import && cd $CWD'"

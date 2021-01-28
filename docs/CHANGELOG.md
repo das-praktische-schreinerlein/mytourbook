@@ -25,6 +25,7 @@
 - backend: added and use scaleVideos to serverAdmin instead generating by directory
 - backend: improved commands to optionally rename existing outputfiles
 - backend: improved mediafile-importer to optionally check if file already exists in database
+- backend: added scripts to prepare app-environment on startup
 
 ### bug fixes
 - scripts: fixed start-scripts
