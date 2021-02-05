@@ -36,6 +36,8 @@
 - backend: serverAdmin requires action-parameters
 - backend: removed imageManager-command
 
+
+
 ## 6.0.0
 - upgraded all dev-dependencies to latest
 - upgraded to angular 7
