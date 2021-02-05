@@ -251,7 +251,67 @@ Configure the mapping of the section-page-ids to specifiv filters a "berge -> KW
    "klettern": { "keywords_txt": { "in": ["kw_klettern", "kw_sachsenklettern", "kw_sportklettern", "kw_alpinklettern"] } }
 }
 ```
- 
+
+### Admin-API-Server Config: config/adminServer.PROFILE.json
+- port
+```
+    "port": 4900,
+```
+- the flag that admin is available and the available predefined admin-commands to execute via web
+```
+    "commandConfig": {
+    "commandConfig": {
+        "adminWritable": true,
+        "preparedCommands": {
+            "importMedia": {
+                "description": "import media from media-directory",
+                "commands": [
+                    {
+                        "parameters": {
+                            "command": "mediaManager",
+                            "action": "generateTourDocsFromMediaDir",
+                            "backend": "config/backend.dev.json",
+                            "importDir": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\",
+                            "outputFile": "F:\\playground\\mytb-test\\mytbmediabase\\pics_full\\mytbdb_import-import-images.json",
+                            "renameFileIfExists": "true"
+                        }
+                    },
+                ]
+            }
+        }
+    }
+```
+
+### CLI Config: config/adminCli.PROFILE.json
+- the flag that admin is available and the available admin-commands to execute via cli
+```
+    "adminWritable": true,
+    "availableCommands": {
+        "*": "*"
+    },
+    "preparedCommands": {
+        "prepareAppEnv": {
+            "description": "prepare app-environment (do database-migrations...)",
+            "commands": [
+                {
+                    "description": "do db-migration",
+                    "parameters": {
+                        "command": "dbMigrate",
+                        "action": "migrateDB",
+                        "migrationDbConfigFile": "config/db-migrate-database.json",
+                        "migrationsDir": "migrations/mytbdb",
+                        "migrationEnv": "mytbdb_mysql"
+                    }
+
+                }
+            ]
+        }
+    },
+    "constantParameters": {
+        "noOverrides": "use all parameters as put to commandline"
+    }
+```
+
 ## Frontend
 
 ### Build-Environment: src/frontend/environments/environment.*.ts
