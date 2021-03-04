@@ -1,7 +1,24 @@
 # Changelog of MyTourBook
  
 # Versions
- 
+
+## 7.1.0
+- improved security with tools to reset service-passwords
+
+### new features
+- config: run ConfigInitializerCommand to reset service-passwords
+
+### improvements
+- none
+
+### bug fixes
+- backend: use fixed facetcache 
+
+### breaking changes
+- none
+
+
+
 ## 7.0.0
 - improved security
 - run db-migrations, db-publish from serverAdmin

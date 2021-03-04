@@ -7,7 +7,6 @@ import {CommonDocDataService} from '@dps/mycms-commons/dist/search-commons/servi
 import {CommonDocSearchResult} from '@dps/mycms-commons/dist/search-commons/model/container/cdoc-searchresult';
 import {GenericAdapterResponseMapper} from '@dps/mycms-commons/dist/search-commons/services/generic-adapter-response.mapper';
 import {CommonDocTransportModule} from '@dps/mycms-server-commons/dist/backend-commons/modules/cdoc-transport.module';
-import {utils} from 'js-data';
 import {TourDocFileUtils} from '../shared/tdoc-commons/services/tdoc-file.utils';
 import {
     CommonAdminCommand,
@@ -77,7 +76,7 @@ export class TourDocExporterCommand extends CommonAdminCommand {
             fs.writeFileSync(dataFileName, '{"tdocs": [');
             return transporter.exportDocs(typeOrder, perRun, writerCallback, responseMapper, dataService).then(value => {
                 writerCallback(']}');
-                return utils.resolve(value);
+                return Promise.resolve(value);
             });
         }).catch(reason => {
             return Promise.reject('exportfile already exists and cant be renamed: ' + reason);

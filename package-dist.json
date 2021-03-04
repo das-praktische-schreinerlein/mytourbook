@@ -1,6 +1,6 @@
 {
   "name": "mytourbook-frontend",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "license": "Apache-2.0",
   "angular-cli": {},
   "scripts": {
@@ -43,6 +43,7 @@
     "init-cache-dev": "node dist/backend/serverAdmin.js --adminclibackend config/adminCli.dev.json --backend config/backend.dev.json --command initCache --action initCache",
     "init-cache-beta": "node dist/backend/serverAdmin.js --adminclibackend config/adminCli.beta.json --backend config/backend.beta.json --command initCache --action initCache",
     "init-cache-prod": "node dist/backend/serverAdmin.js --adminclibackend config/adminCli.prod.json --backend config/backend.prod.json --command initCache --action initCache",
+    "init-config-reset-servicepasswords": "node dist/backend/serverAdmin.js --adminclibackend config/adminCli.dev.json --command initConfig --action resetServicePasswords",
     "init-frontendserver-cache-dev-de": "node dist/frontendserver-dev-de/frontendserverAdmin.js --localSitemapUrl http://localhost:4001/mytbdev/de/sitemap-pdoc-de.xml --sitemapbase http://localhost:4001/mytbdev/de/ --backend config/backend.dev.json --frontend config/frontend.dev.json",
     "init-frontendserver-cache-beta-de": "node dist/frontendserver-beta-de/frontendserverAdmin.js --backend config/backend.beta.json --frontend config/frontend.beta.json",
     "init-frontendserver-cache-prod-de": "node dist/frontendserver-de/frontendserverAdmin.js --backend config/backend.prod.json --frontend config/frontend.prod.json"

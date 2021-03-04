@@ -13,6 +13,7 @@ import {
     CommonAdminCommandManager
 } from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin-command.manager';
 import {SolrPublishCommand} from './solrpublish.command';
+import {ConfigInitializerCommand} from './config-initializer.command';
 
 export interface AdminCommandConfigType extends CommonAdminCommandConfigType {
 }
@@ -21,6 +22,7 @@ export class AdminCommandManager extends CommonAdminCommandManager<AdminCommandC
     constructor(adminCommandConfig: AdminCommandConfigType) {
         super({
             'initCache': new CacheInitializerCommand(),
+            'initConfig': new ConfigInitializerCommand(),
             'generateSitemap': new SiteMapGeneratorCommand(),
             'generateRedirects': new RedirectGeneratorCommand(),
             'loadTourDoc': new TourDocLoaderCommand(),
