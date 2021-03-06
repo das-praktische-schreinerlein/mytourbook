@@ -2,10 +2,9 @@ import {
     CommonAdminCommand,
     SimpleConfigFilePathValidationRule
 } from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
-import {RegExValidationReplaceRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {PasswordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {PasswordUtils} from '@dps/mycms-commons/dist/commons/utils/password.utils';
 import {ConfigInitializerUtil} from '@dps/mycms-commons/dist/tools/config-initializer.util';
-import * as XRegExp from 'xregexp';
 import * as Promise_serial from 'promise-serial';
 
 export class ConfigInitializerCommand extends CommonAdminCommand {
@@ -19,12 +18,8 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
 
     protected createValidationRules(): {[key: string]: ValidationRule} {
         return {
-            'newpassword': new RegExValidationReplaceRule(false,
-                new XRegExp('^[-A-Za-z0-9_@\(\)<>:]*$', 'gi'),
-                new XRegExp('[^-A-Za-z0-9_@\(\)<>:]*', 'gi'), '', 50),
-            'tokenkey': new RegExValidationReplaceRule(false,
-                new XRegExp('^[-A-Za-z0-9_@\(\)<>:]*$', 'gi'),
-                new XRegExp('[^-A-Za-z0-9_@\(\)<>:]*', 'gi'), '', 50),
+            'newpassword': new PasswordValidationRule(false),
+            'tokenkey': new PasswordValidationRule(false),
             'configbasepath': new SimpleConfigFilePathValidationRule(false),
             'solrconfigbasepath': new SimpleConfigFilePathValidationRule(false),
             'installerdbbasepath': new SimpleConfigFilePathValidationRule(false)
@@ -103,15 +98,15 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
             });
             promises.push(function () {
                 return ConfigInitializerUtil.replaceSolrPasswordInDbPublishConfig(
-                    me.configbasepath + '/dbpublish.json', newpassword, true);
+                    me.configbasepath + '/dbpublish.json', newpassword, false);
             });
             promises.push(function () {
                 return ConfigInitializerUtil.replaceSolrDefaultPasswordHashInSolrConfig(
-                    me.solrconfigbasepath + '/security.json', solrPasswordHash, true);
+                    me.solrconfigbasepath + '/security.json', solrPasswordHash, false);
             });
             promises.push(function () {
                 return ConfigInitializerUtil.replaceSolrUserPasswordInSolrConfig(
-                    me.solrconfigbasepath + '/security.json', 'mytbread', solrPasswordHash, true);
+                    me.solrconfigbasepath + '/security.json', 'mytbread', solrPasswordHash, false);
             });
             promises.push(function () {
                 return ConfigInitializerUtil.replaceSolrUserPasswordInSolrConfig(
@@ -137,13 +132,19 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
             return ConfigInitializerUtil.replaceMysqlPasswordInBackendConfig(
                 me.configbasepath + '/backend.dev.json',
                 'TourDocSqlMytbDbAdapter',
-                newpassword, true);
+                newpassword, false);
         });
         promises.push(function () {
             return ConfigInitializerUtil.replaceMysqlPasswordInCreateUserSql(
                 me.installerdbbasepath + '/mysql/mytbdb/init_02_create-user.sql',
                 '.*?',
-                newpassword, true);
+                newpassword, false);
+        });
+        promises.push(function () {
+            return ConfigInitializerUtil.replaceMysqlPasswordInDbMigrateConfig(
+                me.configbasepath + '/db-migrate-database.json',
+                'mytbdb_mysql',
+                newpassword, false);
         });
 
         return Promise_serial(promises, {parallelize: 1}).then(() => {
@@ -170,24 +171,24 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
             return ConfigInitializerUtil.replaceMysqlPasswordInBackendConfig(
                 me.configbasepath + '/backend.beta.json',
                 'TourDocSqlMytbExportDbAdapter',
-                newpassword, true);
+                newpassword, false);
         });
         promises.push(function () {
             return ConfigInitializerUtil.replaceMysqlPasswordInBackendConfig(
                 me.configbasepath + '/dbpublish.json',
                 'mytbexportbetadb_mysql',
-                newpassword, true);
+                newpassword, false);
         });
         promises.push(function () {
             return ConfigInitializerUtil.replaceMysqlPasswordInCreateUserSql(
                 me.installerdbbasepath + '/mysql/mytbexportdb/init_02_create-user.sql',
                 'testmytbexportbetadb',
-                newpassword, true);
+                newpassword, false);
         });
         promises.push(function () {
             return ConfigInitializerUtil.replaceMysqlPasswordInSolrCoreConfig(
                 me.solrconfigbasepath + '/coremytbbeta/core.properties',
-                newpassword, true);
+                newpassword, false);
         });
 
         return Promise_serial(promises, {parallelize: 1}).then(() => {
@@ -208,24 +209,24 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
             return ConfigInitializerUtil.replaceMysqlPasswordInBackendConfig(
                 me.configbasepath + '/backend.prod.json',
                 'TourDocSqlMytbExportDbAdapter',
-                newpassword, true);
+                newpassword, false);
         });
         promises.push(function () {
             return ConfigInitializerUtil.replaceMysqlPasswordInBackendConfig(
                 me.configbasepath + '/dbpublish.json',
                 'mytbexportproddb_mysql',
-                newpassword, true);
+                newpassword, false);
         });
         promises.push(function () {
             return ConfigInitializerUtil.replaceMysqlPasswordInCreateUserSql(
                 me.installerdbbasepath + '/mysql/mytbexportdb/init_02_create-user.sql',
                 'testmytbexportproddb',
-                newpassword, true);
+                newpassword, false);
         });
         promises.push(function () {
             return ConfigInitializerUtil.replaceMysqlPasswordInSolrCoreConfig(
                 me.solrconfigbasepath + '/coremytbprod/core.properties',
-                newpassword, true);
+                newpassword, false);
         });
 
         return Promise_serial(promises, {parallelize: 1}).then(() => {
