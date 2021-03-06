@@ -6,7 +6,11 @@ Run initially to copy overrides into project
 bash
 npm prune && npm install && ./build-dev.bash
 ```
- 
+
+Run scripts to initially reset database-passwords... 
+```bash
+npm run backend-prepare-appenv-beforebuild
+```
 
 Run to build and start the backend. Navigate to [api](http://localhost:4100/api/v1/de/pdoc/) to get the pdocs.
 ```bash
