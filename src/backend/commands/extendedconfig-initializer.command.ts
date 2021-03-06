@@ -1,14 +1,11 @@
-import {
-    CommonAdminCommand,
-    SimpleConfigFilePathValidationRule
-} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
-import {PasswordValidationRule, ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+import {SimpleConfigFilePathValidationRule} from '@dps/mycms-server-commons/dist/backend-commons/commands/common-admin.command';
+import {ValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {PasswordUtils} from '@dps/mycms-commons/dist/commons/utils/password.utils';
 import {ConfigInitializerUtil} from '@dps/mycms-commons/dist/tools/config-initializer.util';
 import * as Promise_serial from 'promise-serial';
+import {ConfigInitializerCommand} from '@dps/mycms-server-commons/dist/backend-commons/commands/config-initializer.command';
 
-export class ConfigInitializerCommand extends CommonAdminCommand {
-    protected configbasepath: string;
+export class ExtendedConfigInitializerCommand extends ConfigInitializerCommand {
     protected solrconfigbasepath: string;
     protected installerdbbasepath: string;
 
@@ -18,19 +15,16 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
 
     protected createValidationRules(): {[key: string]: ValidationRule} {
         return {
-            'newpassword': new PasswordValidationRule(false),
-            'tokenkey': new PasswordValidationRule(false),
-            'configbasepath': new SimpleConfigFilePathValidationRule(false),
+            ...super.createValidationRules(),
             'solrconfigbasepath': new SimpleConfigFilePathValidationRule(false),
             'installerdbbasepath': new SimpleConfigFilePathValidationRule(false)
         };
     }
 
     protected definePossibleActions(): string[] {
-        return ['resetServicePasswords',
-            'resetTokenCookie', 'setTokenCookie',
+        return super.definePossibleActions().concat([
             'resetSolrPasswords', 'resetMysqlDevPasswords', 'resetMysqlExportBetaPasswords', 'resetMysqlExportProdPasswords',
-            'setSolrPasswords', 'setMysqlDevPasswords', 'setMysqlExportBetaPasswords', 'setMysqlExportProdPasswords'];
+            'setSolrPasswords', 'setMysqlDevPasswords', 'setMysqlExportBetaPasswords', 'setMysqlExportProdPasswords']);
     }
 
     protected processCommandArgs(argv: {}): Promise<any> {
@@ -71,8 +65,7 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
             case 'setTokenCookie':
                 return this.setTokenCookie(tokenkey, newpassword);
             default:
-                console.error('unknown action:', argv);
-                return Promise.reject('unknown action');
+                return super.processCommandArgs(argv);
         }
     }
 
@@ -85,15 +78,15 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
             const me = this;
             const promises = [];
             promises.push(function () {
-                return ConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
+                return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
                     me.configbasepath + '/backend.dev.json', newpassword, false);
             });
             promises.push(function () {
-                return ConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
+                return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
                     me.configbasepath + '/backend.beta.json', newpassword, false);
             });
             promises.push(function () {
-                return ConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
+                return ExtendedConfigInitializerCommand.replaceTourDocSolrPasswordInBackendConfig(
                     me.configbasepath + '/backend.prod.json', newpassword, false);
             });
             promises.push(function () {
@@ -231,42 +224,6 @@ export class ConfigInitializerCommand extends CommonAdminCommand {
 
         return Promise_serial(promises, {parallelize: 1}).then(() => {
             return Promise.resolve('DONE - setMysqlExportProdPasswords');
-        }).catch(reason => {
-            return Promise.reject(reason);
-        });
-    }
-
-    protected setTokenCookie(tokenkey: string, newpassword: string): Promise<any> {
-        if (tokenkey === undefined || tokenkey.length < 8) {
-            return Promise.reject('valid tokenkey required');
-        }
-        if (newpassword === undefined || newpassword.length < 8) {
-            return Promise.reject('valid newpassword required');
-        }
-
-        const me = this;
-        const promises = [];
-        promises.push(function () {
-            return ConfigInitializerUtil.replaceTokenCookieInFirewallConfig(
-                me.configbasepath + '/firewall.beta.json',
-                tokenkey,
-                newpassword, false);
-        });
-        promises.push(function () {
-            return ConfigInitializerUtil.replaceTokenCookieInFirewallConfig(
-                me.configbasepath + '/firewall.dev.json',
-                tokenkey,
-                newpassword, false);
-        });
-        promises.push(function () {
-            return ConfigInitializerUtil.replaceTokenCookieInFirewallConfig(
-                me.configbasepath + '/firewall.prod.json',
-                tokenkey,
-                newpassword, false);
-        });
-
-        return Promise_serial(promises, {parallelize: 1}).then(() => {
-            return Promise.resolve('DONE - setTokenCookie');
         }).catch(reason => {
             return Promise.reject(reason);
         });

@@ -103,6 +103,16 @@ rm dictionary.txt dictionary.txt.bak
 }
 ```
 - set roles as seen on (Rule-Based autorisation)[https://cwiki.apache.org/confluence/display/solr/Rule-Based+Authorization+Plugin]
+- IMPORTANT if you use an external solr you must remove the solrPasswordReset on startup in the config/adminCli.PROFILE.json !!!!!
+```
+    {
+        "parameters": {
+            "command": "initConfig",
+            "action": "resetSolrPasswords",
+            "solrconfigbasepath": "dist/contrib/solr/server/solr"
+        }
+    }
+```
 
 ### install redis
 - make redis
