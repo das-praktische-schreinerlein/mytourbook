@@ -4,8 +4,50 @@
         "*": "*"
     },
     "preparedCommands": {
+        "prepareAppEnvBeforeBuild": {
+            "description": "prepare app-environment before build (reset master passwords)",
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetServicePasswords"
+                    }
+                },
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetTokenCookie",
+                        "tokenkey": "blimblam"
+                    }
+                }
+            ]
+        },
+        "prepareAppEnvAfterInstall": {
+            "description": "prepare app-environment after install (reset master runtime passwords)",
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetServicePasswords",
+                        "solrconfigbasepath": "dist/contrib/solr/server/solr"
+                    }
+                }
+            ]
+        },
+        "prepareAppEnvAfterUpdate": {
+            "description": "prepare app-environment after update (reset solr passwords)",
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetSolrPasswords",
+                        "solrconfigbasepath": "dist/contrib/solr/server/solr"
+                    }
+                }
+            ]
+        },
         "prepareAppEnv": {
-            "description": "prepare app-environment (do database-migrations...)",
+            "description": "prepare app-environment on every startup (do database-migrations, reset runtime passwords)",
             "commands": [
                 {
                     "parameters": {
@@ -15,7 +57,20 @@
                         "migrationsDir": "migrations/mytbdb",
                         "migrationEnv": "mytbdb_mysql"
                     }
-
+                },
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetSolrPasswords",
+                        "solrconfigbasepath": "dist/contrib/solr/server/solr"
+                    }
+                },
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetTokenCookie",
+                        "tokenkey": "blimblam"
+                    }
                 }
             ]
         }

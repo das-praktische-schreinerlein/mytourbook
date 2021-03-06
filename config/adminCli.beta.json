@@ -21,9 +21,52 @@
         ]
     },
     "preparedCommands": {
-        "prepareAppEnv": {
+        "prepareAppEnvBeforeBuild": {
             "description": "prepare app-environment (no actions required)",
             "commands": [
+            ]
+        },
+        "prepareAppEnvAfterInstall": {
+            "description": "prepare app-environment (reset master runtime passwords)",
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetServicePasswords",
+                        "solrconfigbasepath": "dist/contrib/solr/server/solr"
+                    }
+                }
+            ]
+        },
+        "prepareAppEnvAfterUpdate": {
+            "description": "prepare app-environment after update (reset solr passwords)",
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetSolrPasswords",
+                        "solrconfigbasepath": "dist/contrib/solr/server/solr"
+                    }
+                }
+            ]
+        },
+        "prepareAppEnv": {
+            "description": "prepare app-environment on every startup (reset runtime passwords)",
+            "commands": [
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetSolrPasswords",
+                        "solrconfigbasepath": "dist/contrib/solr/server/solr"
+                    }
+                },
+                {
+                    "parameters": {
+                        "command": "initConfig",
+                        "action": "resetTokenCookie",
+                        "tokenkey": "blimblam"
+                    }
+                }
             ]
         }
     },

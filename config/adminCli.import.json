@@ -21,8 +21,23 @@
         ]
     },
     "preparedCommands": {
+        "prepareAppEnvBeforeBuild": {
+            "description": "prepare app-environment (no actions required)",
+            "commands": [
+            ]
+        },
+        "prepareAppEnvAfterInstall": {
+            "description": "prepare app-environment (no actions required)",
+            "commands": [
+            ]
+        },
+        "prepareAppEnvAfterUpdate": {
+            "description": "prepare app-environment after update (no actions required)",
+            "commands": [
+            ]
+        },
         "prepareAppEnv": {
-            "description": "prepare app-environment (do database-migrations...)",
+            "description": "prepare app-environment (do database-migrations)",
             "commands": [
                 {
                     "parameters": {
