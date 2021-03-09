@@ -321,7 +321,7 @@ Configure the mapping of the section-page-ids to specifiv filters a "berge -> KW
         "noOverrides": "use all parameters as put to commandline"
     }
 ```
-- IMPORTANT if you don't want to reset passwords -> remove such actions from config/adminCli.PROFILE.json !!!!!
+- **IMPORTANT if you DON'T want to reset passwords -> remove such actions from config/adminCli.PROFILE.json !!!!!**
 ```
     {
         "parameters": {
@@ -331,7 +331,7 @@ Configure the mapping of the section-page-ids to specifiv filters a "berge -> KW
         }
     }
 ```
-- IMPORTANT if you use an external solr you must remove the solrPasswordReset on startup in the config/adminCli.PROFILE.json !!!!!
+- **IMPORTANT if you use an external solr you must remove the solrPasswordReset on startup in the config/adminCli.PROFILE.json !!!!!**
 ```
     {
         "parameters": {

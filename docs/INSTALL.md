@@ -180,6 +180,11 @@ bash
 ./build-dev.bash
 ```
 
+## Run scripts to initially reset database-passwords...
+```bash
+npm run backend-prepare-appenv-beforebuild
+```
+
 ## Build beta
 Run for the beta-versions in `dist/`.
 ```bash
