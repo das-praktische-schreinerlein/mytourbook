@@ -2,6 +2,15 @@
 
 ## prepare-dev
 
+### prepare build-scripts
+- build-dev.bash, build-beta.bash, build-prod.bash
+```bash
+#!/usr/bin/env bash
+
+WORKSPACE="/cygdrive/f/Projekte/"
+MYCMSPROJECT="mytourbook"
+```
+
 ### prepare src-directory
 ```bash
 npm prune && npm install

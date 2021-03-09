@@ -1,5 +1,16 @@
 # Develop MyTourBook
 
+## prepare
+
+### prepare build-scripts
+- build-dev.bash, build-beta.bash, build-prod.bash
+```bash
+#!/usr/bin/env bash
+
+WORKSPACE="/cygdrive/f/Projekte/"
+MYCMSPROJECT="mytourbook"
+```
+
 ## Development server
 Run initially to copy overrides into project
 ```bash
