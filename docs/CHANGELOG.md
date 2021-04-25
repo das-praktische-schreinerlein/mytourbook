@@ -19,7 +19,7 @@
 
 
 
-## 7.0.0
+## 7.0.0 (2021-02-05)
 - improved security
 - run db-migrations, db-publish from serverAdmin
 - added admin-server
@@ -55,7 +55,7 @@
 
 
 
-## 6.0.0
+## 6.0.0 (2020-12-20)
 - upgraded all dev-dependencies to latest
 - upgraded to angular 7
 - added media-export
@@ -92,7 +92,7 @@
 
 
 
-## 5.0.0
+## 5.0.0 (2020-09-05)
 - upgraded all dev-dependencies to latest
 - upgraded to angular 6
 - build: use peerDependencies
@@ -137,7 +137,7 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 
 
 
-## 4.3.0
+## 4.3.0 (2020-07-11)
 - added new tourdoc-type: destination
 - improved create-doc-handling
 - common: added new field for entity-flags
@@ -166,7 +166,7 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 - frontendserver: angularuniversal-support broken
 
 
-## 4.2.0
+## 4.2.0 (2020-05-24)
 - improved and fixed charts, maps and dashboard
 
 ### new features
@@ -190,7 +190,7 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 - frontendserver: angularuniversal-support broken
 
 
-## 4.1.0
+## 4.1.0 (2020-04-04)
 - moved facetcache to commons
 - improved search, dashboard and data-management
 - improved data-import and documentation
@@ -234,7 +234,7 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 - frontendserver: angularuniversal-support broken
 
 
-## 4.0.0
+## 4.0.0 (2019-09-07)
 - added new type+features for managing object-detection image-objects
 - improved trackmanagement and added dashboard
 - improved performance by adding facetcaching
@@ -264,7 +264,7 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 - frontendserver: angularuniversal-support broken
 
 
-## 3.0.0
+## 3.0.0 (2019-02-11)
 - upgraded packages to be angular5/6-compatible
 - moved common layout-styles to commons
 - improved naming
@@ -302,7 +302,7 @@ run node dist/backend/serverAdmin.js --command mediaManager --action scaleImages
 - frontendserver: angularuniversal-support broken
 
 
-## 2.0.0
+## 2.0.0 (2018-10-10)
 - changed namespace
 - moved functionality to external mycms-modules
 - bumped dependency-versions
@@ -340,7 +340,7 @@ components.cdoc-persontags...
 - frontend: IE till 11 not functional (can block rendering sometimes)
 
 
-## 1.5.0
+## 1.5.0 (2018-09-02)
 - layout-improvements 
  
 ### new features
@@ -366,7 +366,7 @@ components.cdoc-persontags...
 - frontend: IE till 11 not functional (can block rendering sometimes)
  
  
-## 1.4.0
+## 1.4.0 (2018-05-02)
 - added video-support and many layout-improvements
  
 ### new features
@@ -391,7 +391,7 @@ components.cdoc-persontags...
 - frontend: IE till 11 not functional (can block rendering sometimes)
  
  
-## 1.3.0
+## 1.3.0 (2018-04-14)
 - many improvements on layout, usability, code
  
 ### new features
@@ -436,7 +436,7 @@ components.cdoc-persontags...
 - frontend: IE till 11 not functional (can block rendering sometimes)
  
  
-## 1.2.0
+## 1.2.0 (2018-03-19)
 - added admin-ui to manage data, data-exporter, image-manager
 - added many new features like tagclouds, topimages, persontags, more responsive layouts
 - many improvements on layout, performance, code
@@ -489,7 +489,7 @@ components.cdoc-persontags...
 - frontend: IE till 11 not functional (can block rendering sometimes)
  
  
-## 1.1.0
+## 1.1.0 (2018-01-14)
 - added database-support, data-importer, frontendserver with page-cache
 - many improvements on layout, performance, code
  
@@ -517,7 +517,7 @@ components.cdoc-persontags...
 - none
  
  
-## 1.0.0
+## 1.0.0 (2017-12-07)
 - initial version with frontend, backend, datastore and many features
  
 ### new features
