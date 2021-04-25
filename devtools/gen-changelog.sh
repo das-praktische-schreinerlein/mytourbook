@@ -45,6 +45,6 @@ git log --grep=released --date=short --reverse --format="%s (%ad)" > ${DISTBASE}
 # get only summary see https://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed
 sed -e "s/\r//gm" ${DOCBASE}CHANGELOG.md | sed 's/^[[:blank:]]*//;s/[[:blank:]]*$//' | grep -Pzo "(?s)## (\d.\d.\d \(.*?\))[\r\n]+(.*?)+[\r\n]+#" | sed -e "s/#\x00//gm"> ${DISTBASE}CHANGELOG-summary.md
 sed ':a;N;$!ba;s/\n/__/g' ${DISTBASE}CHANGELOG-summary.md | sed -e "s/__-/; -/gm" | sed -r -e "s/(__)+/\n/gm" | sed -e "s/^##/## ${GITPROJECT}/gm"  > ${DISTBASE}CHANGELOG-summary-short.md
-sed -r -e 's/## ([^\s\\]+?) ([^\s\\]+?) \((.+?)-(.+?)-(.+?)\); (.*)/- \4 \3: :\|:  \1 - [\2](https:\/\/github.com\/das-praktische-schreinerlein\/\1\/releases\/tag\/\2) \6/gm' ${DISTBASE}CHANGELOG-summary-short.md > ${DISTBASE}CHANGELOG-news.md
+sed -r -e 's/## ([-a-zA-Z0-9_.]+?) ([0-9.]+?) \(([0-9]+?)-([0-9]+?)-([0-9]+?)\); (.*)/- \4 \3: :\|: [\1 - \2](https:\/\/github.com\/das-praktische-schreinerlein\/\1\/releases\/tag\/\2) \6/gm' ${DISTBASE}CHANGELOG-summary-short.md > ${DISTBASE}CHANGELOG-news.md
 
 cd $CWD
