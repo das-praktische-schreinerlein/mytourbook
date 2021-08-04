@@ -166,6 +166,9 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'location': {
                 'sort': 'loc_lochirarchie_s asc'
             },
+            'name': {
+                'sort': 'name_s asc'
+            },
             'countImages': {
                 'sort': 'count_images_i asc'
             },
