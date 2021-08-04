@@ -318,7 +318,7 @@ export class SqlMytbDbDestinationConfig {
                     '                  from (' +
                     '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ)     as name,' +
                     '                                           T_TYP           as type,' +
-                    '                                           year(K_DATEVON) as year,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
@@ -331,7 +331,7 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ)     as name,' +
                     '                                           T_TYP           as type,' +
-                    '                                           year(K_DATEVON) as year,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
@@ -371,7 +371,7 @@ export class SqlMytbDbDestinationConfig {
                     '                  from (' +
                     '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as       name,' +
                     '                                           T_TYP       as       type,' +
-                    '                                           min(year(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
@@ -387,7 +387,7 @@ export class SqlMytbDbDestinationConfig {
                     '                  from (' +
                     '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as       name,' +
                     '                                           T_TYP       as       type,' +
-                    '                                           min(year(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +

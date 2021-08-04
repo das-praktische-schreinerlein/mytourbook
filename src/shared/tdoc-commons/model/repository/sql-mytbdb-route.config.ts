@@ -458,7 +458,7 @@ export class SqlMytbDbRouteConfig {
                     '                  from (' +
                     '                           select distinct t_name          as name,' +
                     '                                           T_TYP           as type,' +
-                    '                                           year(K_DATEVON) as year,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
@@ -471,7 +471,7 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                           select distinct t_name          as name,' +
                     '                                           T_TYP           as type,' +
-                    '                                           year(K_DATEVON) as year,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
@@ -511,7 +511,7 @@ export class SqlMytbDbRouteConfig {
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
                     '                                           T_TYP  as            type,' +
-                    '                                           min(year(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
@@ -527,7 +527,7 @@ export class SqlMytbDbRouteConfig {
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
                     '                                           T_TYP  as            type,' +
-                    '                                           min(year(t_DATEVON)) year' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +

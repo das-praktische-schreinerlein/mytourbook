@@ -158,7 +158,8 @@
              let-availableDashboardColumns="availableDashboardColumns"
              let-dashboardColumns="dashboardColumns"
              let-dashboardTitle="dashboardTitle">
-    <ng-container *ngIf="objectKeys(availableDashboardRows).length > 0 && objectKeys(availableDashboardColumns).length > 0">
+    <ng-container *ngIf="availableDashboardRows && availableDashboardColumns
+        && objectKeys(availableDashboardRows).length > 0 && objectKeys(availableDashboardColumns).length > 0">
         <h5><span class="fx-bg-type">{{dashboardTitle}}</span></h5>
         <table class="table-dashboard">
             <tr>
@@ -206,7 +207,7 @@
              let-statisticBoardTitle="statisticBoardTitle"
              let-statisticSearchForm="statisticSearchForm"
              >
-    <ng-container *ngIf="statisticBoardData.length > 0">
+    <ng-container *ngIf="statisticBoardData && statisticBoardData.length > 0">
         <h5><span class="fx-bg-type">{{statisticBoardTitle}}</span></h5>
         <table [ngClass]="'table-statisticBoard ' + (statisticSearchForm ? 'statisticBoard-linked' : '')">
             <tr>
