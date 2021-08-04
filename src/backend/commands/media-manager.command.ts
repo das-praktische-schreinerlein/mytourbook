@@ -100,7 +100,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
         const playlists = argv['playlists'];
         const personalRateOverall = argv['personalRateOverall'];
         const skipCheckForExistingFilesInDataBase = argv['skipCheckForExistingFilesInDataBase'] === true
-            || argv['skipCheckForExistingFilesInDataBase'] === ' true';
+            || argv['skipCheckForExistingFilesInDataBase'] === 'true';
         const renameFileIfExists = !!argv['renameFileIfExists'];
 
         const mediaManagerModule = new MediaManagerModule(backendConfig.imageMagicAppPath, os.tmpdir());
@@ -252,7 +252,7 @@ export class MediaManagerCommand extends CommonAdminCommand {
 
                 promise = fileCheckPromise2.then(() => {
                     console.log('START processing: generateTourDocRecordsFromMediaDir', importDir);
-                    return promise = tdocManagerModule.generateTourDocRecordsFromMediaDir(importDir);
+                    return tdocManagerModule.generateTourDocRecordsFromMediaDir(importDir);
                 }).then(value => {
                     const responseMapper = new TourDocAdapterResponseMapper(backendConfig);
                     const tdocs = [];
