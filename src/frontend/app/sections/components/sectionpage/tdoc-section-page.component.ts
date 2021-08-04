@@ -10,7 +10,7 @@ import {TourDocSearchForm, TourDocSearchFormFactory} from '../../../../shared/td
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {PageUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/page.utils';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
-import {Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
+import {Facet, Facets} from '@dps/mycms-commons/dist/search-commons/model/container/facets';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
@@ -19,6 +19,8 @@ import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {environment} from '../../../../environments/environment';
 import {SectionPageComponent} from '@dps/mycms-frontend-commons/dist/frontend-pdoc-commons/components/sectionpage/section-page.component';
+import {TranslateService} from '@ngx-translate/core';
+import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 
 export interface TourDocSectionPageComponentAvailableTabs {
     DESTINATION?: boolean;
@@ -57,6 +59,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     tdocSearchForm: TourDocSearchForm = new TourDocSearchForm({});
     tdocSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
     routeSearchResult: TourDocSearchResult = new TourDocSearchResult(this.tdocSearchForm, 0, undefined, new Facets());
+    statistics: {} = [];
     availableTabs: TourDocSectionPageComponentAvailableTabs = {
         DESTINATION: true,
         IMAGE: true,
@@ -86,13 +89,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     };
     private layoutSize: LayoutSizeData;
 
-    constructor(route: ActivatedRoute, pdocDataService: PDocDataService,
+    constructor(route: ActivatedRoute, pdocDataService: PDocDataService, private cdocDataService: TourDocDataService,
                 commonRoutingService: CommonRoutingService, private searchFormConverter: TourDocSearchFormConverter,
                 errorResolver: ErrorResolver, private tdocRoutingService: CommonDocRoutingService,
                 toastr: ToastrService, pageUtils: PageUtils,
                 angularMarkdownService: AngularMarkdownService, angularHtmlService: AngularHtmlService,
                 cd: ChangeDetectorRef, trackingProvider: GenericTrackingService, platformService: PlatformService,
-                layoutService: LayoutService, appService: GenericAppService) {
+                layoutService: LayoutService, appService: GenericAppService, private translateService: TranslateService) {
         super(route, pdocDataService, commonRoutingService, errorResolver, toastr,
             pageUtils, angularMarkdownService, angularHtmlService, cd, trackingProvider, platformService,
             layoutService, appService);
@@ -260,6 +263,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         this.tdocSearchForm = tdocSearchForm;
         this.tdocRoutingService.setLastSearchUrl(this.getToSearchUrl());
         this.cd.markForCheck();
+
         return false;
     }
 
@@ -268,12 +272,111 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             this.tdocSearchResult = tdocSearchResult;
         }
         this.cd.markForCheck();
+
         return false;
     }
 
     onTopTenRouteResultFound(tdocSearchResult: TourDocSearchResult) {
         this.routeSearchResult = tdocSearchResult;
         this.onTopTenResultFound(tdocSearchResult);
+    }
+
+    onTopTenDestinationResultFound(tdocSearchResult: TourDocSearchResult) {
+        this.onTopTenResultFound(tdocSearchResult);
+    }
+
+    doStatisticSearch(type: string): Promise<TourDocSearchResult> {
+        const me = this;
+        const searchForm = this.cdocDataService.newSearchForm({ type: type});
+        return this.cdocDataService.search(searchForm, {
+            loadDetailsMode: '',
+            showFacets: [ 'statistics' ],
+            loadTrack: false,
+            showForm: false
+        }).then(function doneSearch(cdocSearchResult) {
+            if (cdocSearchResult === undefined) {
+                me.statistics[type] = {};
+            } else {
+                if (cdocSearchResult && cdocSearchResult.facets && cdocSearchResult.facets.facets.get('statistics')) {
+                    me.statistics[type] = me.mapFacetStatistics(cdocSearchResult.facets.facets.get('statistics'));
+                } else {
+                    me.statistics[type] = {};
+                }
+            }
+
+            me.cd.markForCheck();
+
+            return Promise.resolve(cdocSearchResult);
+        }).catch(function errorSearch(reason) {
+            me.toastr.error('Es gibt leider Probleme bei der Statistik-Suche - am besten noch einmal probieren :-(', 'Oje!');
+            console.error('doSearch statistics failed:', reason);
+
+            me.statistics[type] = {};
+            me.cd.markForCheck();
+
+            return Promise.reject(reason);
+        });
+    }
+
+    mapFacetStatistics(facet: Facet): {} {
+        const statistics = {};
+        const types = {};
+        const actions = {};
+        const years = {};
+        if (facet) {
+            facet.facet.forEach(value => {
+                const key = value[0];
+                const count = value[1];
+                const data = key.split('-');
+                if (data.length === 3) {
+                    if (!types[data[0]]) {
+                        types[data[0]] = {};
+                    }
+
+                    if (!types[data[0]][data[1]]) {
+                        types[data[0]][data[1]] = {}
+                    }
+
+                    types[data[0]][data[1]][data[2]] = count;
+                    actions[data[1]] = data[1];
+                    years[data[2]] = data[2];
+                }
+            })
+        }
+
+        for (const keyType of Object.keys(types).sort()) {
+            statistics[keyType] = [];
+
+            const headerValue = ['', '']
+            for (const year of Object.keys(years).sort()) {
+                headerValue.push(year);
+            }
+            statistics[keyType].push(headerValue);
+
+            for (const action of Object.keys(actions).sort()) {
+                if (!types[keyType][action]) {
+                    continue;
+                }
+
+                const actionValues = [action, this.translateService.instant('ac_' + action)]
+                for (const year of Object.keys(years).sort()) {
+                    if (!types[keyType][action][year]) {
+                        actionValues.push(undefined);
+                        continue;
+                    }
+
+                    actionValues.push(types[keyType][action][year]);
+                }
+
+                statistics[keyType].push(actionValues);
+            }
+
+            statistics[keyType].sort((a, b) => {
+                return a[1].localeCompare(b[1]);
+            })
+        }
+
+        return statistics;
     }
 
     onTagcloudClicked(filterValue: any, filter: string) {
@@ -296,6 +399,33 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             techDataAscent: this.tdocSearchForm.techDataAscent,
             nearbyAddress: this.tdocSearchForm.nearbyAddress,
             fulltext: this.tdocSearchForm.fulltext
+        }));
+        this.commonRoutingService.navigateByUrl(url);
+
+        return false;
+    }
+
+    onStatisticClicked(statisticSearchForm: any, statisticBoardData: {}, action: string, columnIndex: number) {
+        if (!statisticSearchForm) {
+            return false;
+        }
+
+        let when = undefined;
+        if (columnIndex) {
+          if (statisticBoardData[0][columnIndex] === 'ALLOVER') {
+              when = 'doneDONE1';
+          } else {
+              when = 'year' + statisticBoardData[0][columnIndex].toString();
+          }
+        }
+
+        const url = this.searchFormConverter.searchFormToUrl('/sections/start/', TourDocSearchFormFactory.createSanitized({
+            ...statisticSearchForm,
+            perPage: 10,
+            actiontype: action
+                ? action.toString()
+                : undefined,
+            when: when,
         }));
         this.commonRoutingService.navigateByUrl(url);
 
@@ -351,6 +481,11 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
     protected doProcessAfterResolvedData(config: {}): void {
         this.tdocRoutingService.setLastBaseUrl(this.baseSearchUrl);
         this.tdocRoutingService.setLastSearchUrl(this.getToSearchUrl());
+
+        if (this.pdoc.flags && this.pdoc.flags.toString().includes('flgShowStatisticBoard')) {
+            this.doStatisticSearch('ROUTE');
+            this.doStatisticSearch('DESTINATION');
+        }
     }
 
 }

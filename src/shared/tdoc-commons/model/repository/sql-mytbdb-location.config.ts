@@ -353,6 +353,7 @@ export class SqlMytbDbLocationConfig {
             'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour t_sort WHERE t_sort.l_id = location.l_id) DESC',
             'distance': 'geodist ASC',
             'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC',
+            'name': 'l_name ASC',
             'location': 'l_lochirarchietxt ASC',
             'relevance': 'l_name ASC'
         },

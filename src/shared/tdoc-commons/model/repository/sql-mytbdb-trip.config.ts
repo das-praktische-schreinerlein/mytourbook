@@ -368,6 +368,7 @@ export class SqlMytbDbTripConfig {
             'date': 'tr_datevon DESC',
             'dateAsc': 'tr_datevon ASC',
             'forExport': 'tr_datevon ASC',
+            'name': 'tr_name ASC',
             'location': 'l_lochirarchietxt ASC',
             'relevance': 'tr_datevon DESC'
         },

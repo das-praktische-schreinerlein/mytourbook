@@ -481,6 +481,7 @@ export class SqlMytbDbTrackConfig {
             'dataTechMaxAsc': 'k_altitude_max ASC',
             'dataTechDistAsc': 'k_distance ASC',
             'forExport': 'k_datevon ASC',
+            'name': 'k_name ASC',
             'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
             'location': 'l_lochirarchietxt ASC',
             'relevance': 'k_datevon DESC'

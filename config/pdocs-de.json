@@ -32,7 +32,7 @@
    "flgShowSearch": false,
    "heading": "Hauptmenü",
    "name": "Hauptmenü",
-   "subSectionIds": "sections,locations",
+   "subSectionIds": "sections,locations,statistics",
    "teaser": "Hauptmenü",
    "type": "SectionOverviewPage"
   },
@@ -56,6 +56,15 @@
    "name": "Regionen",
    "subSectionIds": "deutschland,alpen,usa",
    "teaser": "Die wichtigsten Regionen",
+   "type": "SectionOverviewPage"
+  },
+  {
+   "id": "statistics",
+   "descMd": "Ein paar Statistiken zu den Begehungen der Routen/Ziele.",
+   "flags": ["flgShowStatisticBoard"],
+   "heading": "Statistics",
+   "name": "Statistiken",
+   "teaser": "Statistiken",
    "type": "SectionOverviewPage"
   },
   {

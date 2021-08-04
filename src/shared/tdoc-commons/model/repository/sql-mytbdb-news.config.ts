@@ -344,6 +344,7 @@ export class SqlMytbDbNewsConfig {
                 '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC',
             'date': 'n_date DESC',
             'dateAsc': 'n_date ASC',
+            'name': 'n_headline ASC',
             'forExport': 'n_date ASC',
             'relevance': 'n_date DESC'
         },

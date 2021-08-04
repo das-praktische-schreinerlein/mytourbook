@@ -27,6 +27,8 @@ import {AppServiceStub} from '@dps/mycms-frontend-commons/dist/angular-commons/t
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
+import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
+import {TourDocDataServiceStub} from '../../../../testing/tdoc-dataservice-stubs';
 
 describe('SectionPageComponent', () => {
     let component: TourDocSectionPageComponent;
@@ -47,6 +49,7 @@ describe('SectionPageComponent', () => {
                 CommonRoutingService,
                 PlatformService,
                 TourDocSearchFormConverter,
+                { provide: TourDocDataService, useValue: new TourDocDataServiceStub() },
                 CommonDocRoutingService,
                 SearchParameterUtils,
                 { provide: ToastrService, useValue: new ToastrServiceStub() },

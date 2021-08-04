@@ -2,6 +2,22 @@
  
 # Versions
 
+## 7.2.0 (OPEN)
+- added statistics-section
+
+### new features
+- backend/frontend: added statistics-section
+
+### improvements
+- backend: added sort by name
+
+### bug fixes
+- backend: fixed invalid argument-check in cli
+
+### breaking changes
+- none
+
+
 ## 7.1.0 (2021-05-13)
 - improved security with tools to reset service-passwords
 

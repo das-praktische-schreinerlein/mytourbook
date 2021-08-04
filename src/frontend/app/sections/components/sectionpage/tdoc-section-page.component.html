@@ -13,6 +13,7 @@
                 <ng-container *ngTemplateOutlet="topTenContainer"></ng-container>
                 <ng-container *ngTemplateOutlet="dashBoardContainer"></ng-container>
                 <ng-container *ngTemplateOutlet="adminAreaContainer"></ng-container>
+                <ng-container *ngTemplateOutlet="statisticBoardContainer"></ng-container>
             </div>
         </ng-container>
         <ng-container *ngSwitchDefault="">
@@ -29,6 +30,7 @@
                     <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
                 </div>
             </ng-container>
+            <ng-container *ngTemplateOutlet="statisticBoardContainer"></ng-container>
         </ng-container>
     </ng-container>
 </ng-container>
@@ -200,6 +202,68 @@
 
 </ng-template>
 
+<ng-template #statisticBoardTable let-statisticBoardData="statisticBoardData"
+             let-statisticBoardTitle="statisticBoardTitle"
+             let-statisticSearchForm="statisticSearchForm"
+             >
+    <ng-container *ngIf="statisticBoardData.length > 0">
+        <h5><span class="fx-bg-type">{{statisticBoardTitle}}</span></h5>
+        <table [ngClass]="'table-statisticBoard ' + (statisticSearchForm ? 'statisticBoard-linked' : '')">
+            <tr>
+                <ng-container *ngFor="let header of statisticBoardData[0].slice(1); let index = index">
+                    <th>
+                        <a (click)="onStatisticClicked(statisticSearchForm, statisticBoardData, '', index + 1)">{{header}}</a>
+                    </th>
+                </ng-container>
+            </tr>
+
+            <ng-container *ngFor="let row of statisticBoardData.slice(1)">
+                <tr>
+                    <td>
+                        <a (click)="onStatisticClicked(statisticSearchForm, statisticBoardData, 'ac_' + row[0], undefined)">{{row[1]}}</a>
+                    </td>
+
+                    <ng-container *ngFor="let column of row.slice(2); let index = index">
+                        <td [ngClass]="column > 0 ? 'statisticBoardcolumn-available' : 'statisticBoardcolumn-unavailable'">
+                            <a (click)="onStatisticClicked(statisticSearchForm, statisticBoardData, 'ac_' + row[0], index + 2)">{{column}}</a>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-container>
+        </table>
+    </ng-container>
+</ng-template>
+
+<ng-template #statisticBoard let-baseSearchUrl="baseSearchUrl">
+    <ng-container *ngIf="statistics && statistics['ROUTE']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Neu Begangene Routen',
+                        statisticType: 'ROUTE',
+                        statisticSearchForm: { type: 'ROUTE'},
+                        statisticBoardData: statistics['ROUTE']['ROUTE_NEW']
+                        }"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="statistics && statistics['DESTINATION']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Neu Begangene Ziele',
+                        statisticType: 'DESTINATION',
+                        statisticSearchForm: { type: 'DESTINATION'},
+                        statisticBoardData: statistics['DESTINATION']['DESTINATION_NEW']
+                        }"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="statistics && statistics['ROUTE']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Wiederholte Routen',
+                        statisticType: 'DESTINATION',
+                        statisticBoardData: statistics['ROUTE']['ROUTE_DONE']
+                        }"></ng-container>
+    </ng-container>
+    <ng-container *ngIf="statistics && statistics['DESTINATION']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Wiederholte Ziele',
+                        statisticType: 'DESTINATION',
+                        statisticBoardData: statistics['DESTINATION']['DESTINATION_DONE']
+                        }"></ng-container>
+    </ng-container>
+</ng-template>
+
+
 <ng-template #adminArea>
     <app-admin-jobarea></app-admin-jobarea>
 </ng-template>
@@ -237,7 +301,7 @@
                                             [showResultList]="true"
                                             [loadFacets]="true"
                                             [layout]="Layout.BIG"
-                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            (searchResultFound)="onTopTenDestinationResultFound($event)"
                                             [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
             </ng-template>
         </ngb-tab>
@@ -484,9 +548,20 @@
 </ng-template>
 
 <ng-template #dashBoardContainer>
-    <ng-container *ngIf="pdoc.flgShowDashboard">
+    <ng-container *ngIf="pdoc.flgShowDashboard
+     && ((availableToDoDashboardRows && objectKeys(availableToDoDashboardRows).length > 0)
+        || (availableDoneDashboardRows && objectKeys(availableDoneDashboardRows).length > 0))">
         <div class="container content-container sectionpage-dashBoard-container">
             <ng-container *ngTemplateOutlet="dashBoard"></ng-container>
+            <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
+        </div>
+    </ng-container>
+</ng-template>
+
+<ng-template #statisticBoardContainer>
+    <ng-container *ngIf="statistics && objectKeys(statistics).length > 0">
+        <div class="container content-container sectionpage-statisticBoard-container">
+            <ng-container *ngTemplateOutlet="statisticBoard"></ng-container>
             <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
         </div>
     </ng-container>

@@ -32,3 +32,30 @@ table.table-dashboard th:first-child, table.table-dashboard td:first-child {
 .dashboardcolumn-unavailable {
     background: linear-gradient( to top left, white 48%, #eceaea, white 52% );
 }
+
+
+table.table-statisticBoard {
+    width: 100%;
+}
+table.table-statisticBoard, table.table-statisticBoard th, table.table-statisticBoard td {
+    border: lightgray solid 1px;
+    text-align: right;
+}
+table.table-statisticBoard th {
+    background: #dee9ef;
+}
+table.table-statisticBoard th:first-child, table.table-statisticBoard td:first-child {
+    width: 250px;
+    text-align: center;
+}
+
+.statisticBoard-linked {
+    color: cornflowerblue;
+}
+
+.statisticBoardcolumn-available {
+}
+
+.statisticBoardcolumn-unavailable {
+    background: linear-gradient( to top left, white 48%, #eceaea, white 52% );
+}

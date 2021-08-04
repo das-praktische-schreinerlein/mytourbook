@@ -309,6 +309,94 @@ export class SqlMytbDbDestinationConfig {
             'year_is': {
                 selectField: 'YEAR(d_datevon)',
                 orderBy: 'value asc'
+            },
+            // statistics
+            'statistics': {
+                selectSql: 'select CONCAT(typ, "-", type, "-", year) as value, count' +
+                    '         from (' +
+                    '                  select \'DESTINATION_DONE\' typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ)     as name,' +
+                    '                                           T_TYP           as type,' +
+                    '                                           year(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ)     as name,' +
+                    '                                           T_TYP           as type,' +
+                    '                                           year(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                       ) x' +
+                    '                  where year is not null' +
+                    '                  group by type, year' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select \'DESTINATION_DONE\' typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as name, T_TYP as type, K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as name, T_TYP as type, K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                       ) x' +
+                    '                  group by type' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select \'DESTINATION_NEW\' typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as       name,' +
+                    '                                           T_TYP       as       type,' +
+                    '                                           min(year(t_DATEVON)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and T_DATEVON is not null' +
+                    '                           group by name, type' +
+                    '                       ) x' +
+                    '                  where year is not null' +
+                    '                  group by type, year' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select \'DESTINATION_NEW\' typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as       name,' +
+                    '                                           T_TYP       as       type,' +
+                    '                                           min(year(t_DATEVON)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and T_DATEVON is not null' +
+                    '                           group by name, type' +
+                    '                       ) x' +
+                    '                  group by type' +
+                    '              ) allover' +
+                    '        order by value, count'
             }
         },
         sortMapping: {
@@ -325,6 +413,7 @@ export class SqlMytbDbDestinationConfig {
             'dataTechDistAsc': 'd_route_m ASC',
             'forExport': 'destination.d_id ASC',
             'ratePers': 'd_rate_gesamt DESC, d_datevon DESC',
+            'name': 'd_name ASC',
             'location': 'l_lochirarchietxt ASC',
             'relevance': 'd_datevon DESC'
         },
