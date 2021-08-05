@@ -235,7 +235,14 @@
     </ng-container>
 </ng-template>
 
-<ng-template #statisticBoard let-baseSearchUrl="baseSearchUrl">
+<ng-template #statisticBoard>
+    <ng-container *ngIf="statistics && statistics['TRACK']">
+        <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Begehungen',
+                        statisticType: 'TRACK',
+                        statisticSearchForm: { type: 'TRACK'},
+                        statisticBoardData: statistics['TRACK']['TRACK_NEW']
+                        }"></ng-container>
+    </ng-container>
     <ng-container *ngIf="statistics && statistics['ROUTE']">
         <ng-container *ngTemplateOutlet="statisticBoardTable;context:{statisticBoardTitle: 'Neu Begangene Routen',
                         statisticType: 'ROUTE',

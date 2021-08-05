@@ -334,7 +334,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                     }
 
                     if (!types[data[0]][data[1]]) {
-                        types[data[0]][data[1]] = {}
+                        types[data[0]][data[1]] = {};
                     }
 
                     types[data[0]][data[1]][data[2]] = count;
@@ -347,8 +347,10 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         for (const keyType of Object.keys(types).sort()) {
             statistics[keyType] = [];
 
+            const yearValues = {};
             const headerValue = ['', '']
             for (const year of Object.keys(years).sort()) {
+                yearValues[year] = 0;
                 headerValue.push(year);
             }
             statistics[keyType].push(headerValue);
@@ -365,6 +367,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                         continue;
                     }
 
+                    yearValues[year] += types[keyType][action][year]
                     actionValues.push(types[keyType][action][year]);
                 }
 
@@ -374,6 +377,13 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
             statistics[keyType].sort((a, b) => {
                 return a[1].localeCompare(b[1]);
             })
+
+            const yearRow = [undefined, undefined];
+            for (const year of Object.keys(years).sort()) {
+                yearRow.push(yearValues[year]);
+            }
+            statistics[keyType].push(yearRow);
+
         }
 
         return statistics;
@@ -422,7 +432,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         const url = this.searchFormConverter.searchFormToUrl('/sections/start/', TourDocSearchFormFactory.createSanitized({
             ...statisticSearchForm,
             perPage: 10,
-            actiontype: action
+            actiontype: action && action !== 'ac_undefined'
                 ? action.toString()
                 : undefined,
             when: when,
@@ -485,6 +495,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         if (this.pdoc.flags && this.pdoc.flags.toString().includes('flgShowStatisticBoard')) {
             this.doStatisticSearch('ROUTE');
             this.doStatisticSearch('DESTINATION');
+            this.doStatisticSearch('TRACK');
         }
     }
 

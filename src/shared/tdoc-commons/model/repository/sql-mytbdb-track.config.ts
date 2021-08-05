@@ -454,6 +454,21 @@ export class SqlMytbDbTrackConfig {
             'year_is': {
                 selectField: 'YEAR(k_datevon)',
                 orderBy: 'value asc'
+            },
+            // statistics
+            'statistics': {
+                selectSql: 'select CONCAT(typ, "-", type, "-", year) as value, count' +
+                    '         from (' +
+                    '              select distinct \'TRACK_NEW\' typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct k_name as            name,' +
+                    '                                           K_TYPE  as            type,' +
+                    '                                           year(k_DATEVON) year' +
+                    '                           from kategorie k' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '              ) allover' +
+                    '        order by value, count'
             }
         },
         sortMapping: {
