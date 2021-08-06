@@ -463,7 +463,7 @@ export class SqlMytbDbTrackConfig {
                     '                  from (' +
                     '                           select distinct k_name as            name,' +
                     '                                           K_TYPE  as            type,' +
-                    '                                           year(k_DATEVON) year' +
+                    '                                           YEAR(k_DATEVON) year' +
                     '                           from kategorie k' +
                     '                       ) x' +
                     '                  group by type, year' +
