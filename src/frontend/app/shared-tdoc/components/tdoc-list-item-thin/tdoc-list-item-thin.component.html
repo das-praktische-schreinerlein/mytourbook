@@ -51,6 +51,7 @@
                 <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>
                 <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                 <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+                <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
             </div>
             <div class="col-2 layout-big">
                 <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
@@ -94,6 +95,7 @@
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>
             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+            <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
         </div>
         <div class="col-4 layout-small">
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>
@@ -146,6 +148,7 @@
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="record.type === 'INFO'"></app-tdoc-info>
             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+            <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
         </div>
         <div class="col-4 layout-verysmall">
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a>

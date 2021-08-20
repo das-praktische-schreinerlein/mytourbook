@@ -63,6 +63,7 @@
         <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
         </ng-container>
+        <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
         <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
         <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
         <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
@@ -141,6 +142,7 @@
                             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                         </ng-container>
                         <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                            <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
                             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
                             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                             <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
@@ -203,6 +205,7 @@
                     <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                 </ng-container>
                 <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
+                    <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
                     <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
                     <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
                     <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>

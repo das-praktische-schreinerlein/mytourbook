@@ -338,6 +338,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 const newIdx = idx + 1;
                 this.editFormGroup.registerControl(joinName + 'Id' + newIdx, this.fb.control(undefined, undefined));
                 this.editFormGroup.registerControl(joinName + 'Full' + newIdx, this.fb.control(undefined, undefined));
+                this.editFormGroup.registerControl(joinName + 'LinkedRouteAttr' + newIdx, this.fb.control(undefined, undefined));
                 this.editFormGroup.registerControl(joinName + 'LinkedDetails' + newIdx, this.fb.control(undefined, undefined));
                 indexes.push(newIdx);
             }
@@ -494,6 +495,30 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocratetech.schneeschuh': {
                     'facetName': 'rate_tech_schneeschuh_ss'
                 },
+                'linkedRoutesLinkedRouteAttr0': {
+                    'facetName': 'route_attr_ss'
+                },
+                'linkedRoutesLinkedRouteAttr1': {
+                    'facetName': 'route_attr_ss'
+                },
+                'linkedRoutesLinkedRouteAttr2': {
+                    'facetName': 'route_attr_ss'
+                },
+                'linkedRoutesLinkedRouteAttr3': {
+                    'facetName': 'route_attr_ss'
+                },
+                'linkedRoutesLinkedRouteAttr4': {
+                    'facetName': 'route_attr_ss'
+                },
+                'linkedRoutesLinkedRouteAttr5': {
+                    'facetName': 'route_attr_ss'
+                },
+                'linkedRoutesLinkedRouteAttr6': {
+                    'facetName': 'route_attr_ss'
+                },
+                'linkedRoutesLinkedRouteAttr7': {
+                    'facetName': 'route_attr_ss'
+                }
             },
             optionsSelect: {
                 'tdocratepers.gesamt': [],
@@ -546,12 +571,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         for (let idx = 1; idx <= routeJoinIndexes.length; idx ++) {
             const refId = this.getStringFormValue(values, joinName + 'Id' + idx);
             const full = this.getStringFormValue(values, joinName + 'Full' + idx);
+            const linkedRouteAttr = this.getStringFormValue(values, joinName + 'LinkedRouteAttr' + idx);
             if (refId !== undefined && refId !== 'undefined') {
                 joins.push({
                     tdoc_id: this.record.id,
                     name: 'dummy',
                     refId: refId,
                     full: full ? true : false,
+                    linkedRouteAttr: linkedRouteAttr,
                     type: 'subRoute'
                 })
             }
@@ -606,11 +633,13 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             indexes.push(idx);
             valueConfig[joinName + 'Id' + idx] = [joinRecords[idx - 1].refId];
             valueConfig[joinName + 'Full' + idx] = [joinRecords[idx - 1].full];
+            valueConfig[joinName + 'LinkedRouteAttr' + idx] = [joinRecords[idx - 1].linkedRouteAttr];
         }
 
         indexes.push(idx);
         valueConfig[joinName + 'Id' + idx] = [];
         valueConfig[joinName + 'Full' + idx] = [];
+        valueConfig[joinName + 'LinkedRouteAttr' + idx] = [];
         this.joinIndexes[joinName] = indexes;
     }
 

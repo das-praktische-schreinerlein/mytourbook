@@ -111,6 +111,7 @@
         <app-tdoc-info [record]="listItem.currentRecord" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
         <div id="desc"></div>
         {{ renderDesc() }}
+        <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
         <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
         <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord"></app-tdoc-ratepers-difficulty>
         <app-tdoc-ratetech [record]="listItem.currentRecord"></app-tdoc-ratetech>

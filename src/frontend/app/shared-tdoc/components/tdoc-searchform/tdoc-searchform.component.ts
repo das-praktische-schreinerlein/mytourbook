@@ -21,7 +21,8 @@ import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-
     styleUrls: ['./tdoc-searchform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TourDocSearchformComponent extends CommonDocSearchformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
+export class TourDocSearchformComponent
+    extends CommonDocSearchformComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
     // initialize a private variable _searchForm, it's a BehaviorSubject
     private geoLocationService = new GeoLocationService();
 
@@ -42,6 +43,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     public optionsSelectObjectDetectionKey: IMultiSelectOption[] = [];
     public optionsSelectObjectDetectionPrecision: IMultiSelectOption[] = [];
     public optionsSelectObjectDetectionState: IMultiSelectOption[] = [];
+    public optionsSelectRouteAttr: IMultiSelectOption[] = [];
     public optionsSelectDashboardFilter: IMultiSelectOption[] = [];
 
     public settingsSelectWhen = this.defaultSeLectSettings;
@@ -69,6 +71,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     public settingsSelectObjectDetectionKey = this.defaultSeLectSettings;
     public settingsSelectObjectDetectionPrecision = this.defaultSeLectSettings;
     public settingsSelectObjectDetectionState = this.defaultSeLectSettings;
+    public settingsSelectRouteAttr = this.defaultSeLectSettings;
     public settingsSelectDashboardFilter = {dynamicTitleMaxItems: 1,
         buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
         containerClasses: 'dropdown-inline fullwidth',
@@ -169,6 +172,13 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'Alle'};
+    public textsSelectRouteAttr: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Attribute ausgewählt',
+        checkedPlural: 'Attribute ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
     public textsSelectObjectDetectionCategory: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Katgorie ausgewählt',
@@ -211,16 +221,16 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
     public showDashboardFilterAvailable = true;
 
     @Input()
-    public showObjectDetection? = this.showForm;
+    public showObjectDetection ? = this.showForm;
 
     @Input()
-    public showDashboardFilter? = this.showForm;
+    public showDashboardFilter ? = this.showForm;
 
     @Input()
-    public showWhere? = this.showForm;
+    public showWhere ? = this.showForm;
 
     @Input()
-    public showWhen? = this.showForm;
+    public showWhen ? = this.showForm;
 
     constructor(sanitizer: DomSanitizer, fb: FormBuilder, searchFormUtils: SearchFormUtils,
                 private tdocSearchFormUtils: TourDocSearchFormUtils, searchFormConverter: TourDocSearchFormConverter,
@@ -259,6 +269,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             objectDetectionKey: [],
             objectDetectionPrecision: [],
             objectDetectionState: [],
+            routeAttr: [],
             actionType: [],
             type: [],
             sort: '',
@@ -323,6 +334,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             objectDetectionKey: [(values.objectDetectionKey ? values.objectDetectionKey.split(/,/) : [])],
             objectDetectionPrecision: [(values.objectDetectionPrecision ? values.objectDetectionPrecision.split(/,/) : [])],
             objectDetectionState: [(values.objectDetectionState ? values.objectDetectionState.split(/,/) : [])],
+            routeAttr: [(values.routeAttr ? values.routeAttr.split(/;;/) : [])],
             playlists: [(values.playlists ? values.playlists.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]
         });
@@ -393,6 +405,8 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
             this.tdocSearchFormUtils.getObjectDetectionPrecisionValues(tdocSearchSearchResult), true, [], false);
         this.optionsSelectObjectDetectionState = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getObjectDetectionStateValues(tdocSearchSearchResult), true, [], true);
+        this.optionsSelectRouteAttr = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getRouteAttrValues(tdocSearchSearchResult), true, [], false);
         const values: TourDocSearchForm = tdocSearchSearchResult.searchForm;
         const [lat, lon, dist] = this.tdocSearchFormUtils.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
@@ -414,7 +428,7 @@ export class TourDocSearchformComponent extends CommonDocSearchformComponent<Tou
         this.showWhenAvailable = (this.optionsSelectWhen.length > 0 || this.optionsSelectTechDataDuration.length > 0);
         this.showDetailsAvailable = (this.optionsSelectWhat.length > 0 || this.optionsSelectTechRateOverall.length > 0 ||
             this.optionsSelectTechDataDistance.length > 0 || this.optionsSelectTechDataAltitudeMax.length > 0 ||
-            this.optionsSelectTechDataAscent.length > 0);
+            this.optionsSelectTechDataAscent.length > 0 || this.optionsSelectRouteAttr.length > 0);
         this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0 || this.optionsSelectPersons.length > 0 ||
             this.optionsSelectObjects.length > 0 || this.optionsSelectPersonalRateDifficulty.length > 0 ||
             this.optionsSelectPersonalRateOverall.length > 0);

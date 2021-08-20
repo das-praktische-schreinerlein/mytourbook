@@ -53,6 +53,7 @@ import {VisJsProfileChartComponent} from './components/visjs-profilechart/visjs-
 import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-profilechart.component';
 import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
 import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
+import {TourDocRouteAttributeComponent} from './components/tdoc-routeattr/tdoc-routeattr.component';
 
 @NgModule({
     declarations: [
@@ -96,7 +97,8 @@ import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/t
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
         TourDocInfoComponent,
-        TourDocAssignJoinFormComponent
+        TourDocAssignJoinFormComponent,
+        TourDocRouteAttributeComponent
     ],
     imports: [
         ToastrModule,
@@ -158,7 +160,8 @@ import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/t
         VisJsProfileChartComponent,
         TourDocProfileChartComponent,
         TourDocInfoComponent,
-        TourDocAssignJoinFormComponent
+        TourDocAssignJoinFormComponent,
+        TourDocRouteAttributeComponent
     ]
 })
 export class SharedTourDocModule {}

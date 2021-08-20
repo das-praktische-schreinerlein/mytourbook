@@ -137,6 +137,7 @@
                 </div>
             </div>
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+            <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
             <p class="card-text">
                 {{listItem.currentRecord.descTxt | truncate : 300 }}
@@ -154,6 +155,7 @@
                         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
                         <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
+                        <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
                         <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
                         <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
                             <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>

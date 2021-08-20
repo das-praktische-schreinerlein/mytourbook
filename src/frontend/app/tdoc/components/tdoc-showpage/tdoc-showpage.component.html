@@ -60,6 +60,7 @@
                 <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
                 <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
                 <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
+                <app-tdoc-routeattr [record]="record" [small]="true"></app-tdoc-routeattr>
                 <ng-container *ngIf="record.type !== 'INFO'">
                     <app-tdoc-info [record]="record"></app-tdoc-info>
                 </ng-container>

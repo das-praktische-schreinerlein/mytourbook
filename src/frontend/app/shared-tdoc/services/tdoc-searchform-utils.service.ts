@@ -95,6 +95,10 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
         return this.searchFormUtils.getFacetValues(searchResult, 'odstates_ss', '', 'label.odimgobject.state.');
     }
 
+    getRouteAttrValues(searchResult: TourDocSearchResult): any[] {
+        return this.searchFormUtils.getFacetValues(searchResult, 'route_attr_ss', '', '');
+    }
+
     getPersonValues(searchResult: TourDocSearchResult): any[] {
          return this.searchFormUtils.getFacetValues(searchResult, 'persons_txt', '', '');
     }
