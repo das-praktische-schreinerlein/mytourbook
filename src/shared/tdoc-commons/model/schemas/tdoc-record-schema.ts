@@ -38,6 +38,7 @@ export const TourDocRecordSchema = new Schema({
         name: {type: 'string', minLength: 1, maxLength: 255},
         objects: {type: 'string'},
         persons: {type: 'string'},
+        linkedRouteAttr: {type: 'string'},
         playlists: {type: 'string'},
         subtype: {type: 'string'},
         type: {type: 'string', minLength: 1, maxLength: 255}

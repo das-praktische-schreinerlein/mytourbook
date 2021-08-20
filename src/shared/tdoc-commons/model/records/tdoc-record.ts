@@ -72,6 +72,7 @@ export interface TourDocRecordType extends BaseEntityRecordType {
     locHirarchieIds: string;
     objects: string;
     persons: string;
+    linkedRouteAttr: string;
     techName: string;
 }
 
@@ -232,6 +233,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
         locHirarchieIds: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID_CSV, new IdCsvValidationRule(false)),
         objects: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         persons: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
+        linkedRouteAttr: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         techName: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
     };
 
@@ -257,6 +259,7 @@ export class TourDocRecord extends CommonDocRecord implements TourDocRecordType 
     locHirarchieIds: string;
     objects: string;
     persons: string;
+    linkedRouteAttr: string;
     techName: string;
 
     static cloneToSerializeToJsonObj(baseRecord: TourDocRecord, anonymizeMedia?: boolean): {}  {

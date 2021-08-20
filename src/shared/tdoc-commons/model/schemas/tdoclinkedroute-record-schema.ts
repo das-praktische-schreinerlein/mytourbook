@@ -11,6 +11,7 @@ export const TourDocLinkedRouteRecordSchema = new Schema({
         type: {type: 'string'},
         name: {type: 'string'},
         full: {type: 'boolean'},
+        linkedRouteAttr: {type: 'string'},
         refId: {type: 'string', indexed: true},
         tdoc_id: {type: 'string', indexed: true}
     }

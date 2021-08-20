@@ -8,6 +8,7 @@ import {BaseJoinRecord, BaseJoinRecordType} from '@dps/mycms-commons/dist/search
 import {
     GenericValidatorDatatypes,
     IdValidationRule,
+    NameValidationRule,
     WhiteListValidationRule
 } from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 
@@ -20,11 +21,14 @@ export class TourDocLinkedRouteRecord extends BaseJoinRecord implements TourDocL
     static routeFields = {...BaseJoinRecord.joinFields,
         full: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME,
             new WhiteListValidationRule(false, [true, false, 'true', 'false'], false)),
+        linkedRouteAttr: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NAME,
+            new NameValidationRule(false)),
         tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
     tdoc_id: string;
     full: boolean;
+    linkedRouteAttr: string;
 
     getMediaId(): string {
         return this.tdoc_id;
@@ -37,6 +41,7 @@ export class TourDocLinkedRouteRecord extends BaseJoinRecord implements TourDocL
             '  name: ' + this.name + ',\n' +
             '  type: ' + this.type + ',\n' +
             '  full: ' + this.full + '\n' +
+            '  linkedRouteAttr: ' + this.linkedRouteAttr + '\n' +
             '  tdoc_id: ' + this.tdoc_id + '' +
             '}';
     }

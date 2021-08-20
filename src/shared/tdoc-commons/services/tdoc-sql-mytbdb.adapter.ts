@@ -171,6 +171,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
     }
 
     protected transformToSqlDialect(sql: string): string {
+        console.error("check sql", sql);
         if (this.config.knexOpts.client !== 'mysql') {
             sql = TourDocSqlUtils.transformToSqliteDialect(sql);
         }

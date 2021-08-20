@@ -72,6 +72,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             (props.objects ? props.objects.split(', ').join(',,') : '');
         values['persons_txt'] =
             (props.persons ? props.persons.split(', ').join(',,') : '');
+        values['linked_route_attr_s'] = BeanUtils.getValue(props, 'linkedRouteAttr');
+        values['route_attr_s'] = props.linkedRouteAttr;
         values['playlists_txt'] =
             (props.playlists ? props.playlists.split(', ').join(',,') : '');
         values['type_s'] = props.type;
@@ -149,7 +151,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                         routesSrc.push('type=subroute' + this._fieldSeparator +
                             'name=' + routes[idx].name + this._fieldSeparator +
                             'refId=' + routes[idx].refId + this._fieldSeparator +
-                            'full=' + routes[idx].full);
+                            'full=' + routes[idx].full + this._fieldSeparator +
+                            'linkedRouteAttr=' + routes[idx].linkedRouteAttr);
                     }
 
                     result['linkedroutes_txt'] = routesSrc.join(this._objectSeparator);
@@ -270,6 +273,14 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['locHirarchieIds'] = this.mapperUtils.getMappedAdapterValue(mapping, doc, 'loc_lochirarchie_ids_s', '')
             .replace(/_/g, ' ').trim()
             .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
+
+        for (const refDetail of [this.mapperUtils.getMappedAdapterValue(mapping, doc, 'linked_route_attr_s', undefined)]) {
+            if (refDetail === undefined) {
+                continue;
+            }
+            values['linkedRouteAttr'] = values['linkedRouteAttr'] || '';
+            values['linkedRouteAttr'] += refDetail;
+        }
 
         // console.log('mapResponseDocument values:', values);
         const record: TourDocRecord = <TourDocRecord>mapper.createRecord(

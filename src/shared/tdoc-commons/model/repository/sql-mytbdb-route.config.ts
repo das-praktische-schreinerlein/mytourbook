@@ -28,9 +28,11 @@ export class SqlMytbDbRouteConfig {
             {
                 from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ' +
                     'LEFT JOIN kategorie ON kategorie_tour.k_id=kategorie.k_id OR kategorie.t_id=tour.t_id ',
-                triggerParams: ['id', 'track_id_i', 'track_id_is'],
+                triggerParams: ['id', 'track_id_i', 'track_id_is', 'route_attr_ss'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_k_ids',
-                    'GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_kt_ids']
+                    'GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_kt_ids',
+                    'GROUP_CONCAT(DISTINCT COALESCE(kategorie.k_route_attr, "") ORDER BY kategorie.k_route_attr SEPARATOR ";; ") AS t_k_route_attr',
+                    'GROUP_CONCAT(DISTINCT COALESCE(kategorie_tour.kt_route_attr, "") ORDER BY kategorie_tour.kt_route_attr SEPARATOR ";; ") AS t_kt_route_attr']
             },
             {
                 from: 'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(tour.l_id, "_", tour.t_desc_gebiet, "_", tour.t_desc_ziel, "_", tour.t_typ)))',
@@ -413,6 +415,16 @@ export class SqlMytbDbRouteConfig {
                 selectField: 't_rate',
                 orderBy: 'value asc'
             },
+            'route_attr_ss': {
+                // TODO: union kategorie_k_route_attr
+                selectSql: 'SELECT COUNT(kt.kt_route_attr) AS count, kt.kt_route_attr AS value,' +
+                    ' kt.kt_route_attr AS label, kt.kt_route_attr AS id' +
+                    ' FROM tour INNER JOIN kategorie_tour kt ON tour.t_id = kt.t_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                filterFields: ['kategorie_tour.kt_route_attr'],
+                action: AdapterFilterActions.IN_CSV
+            },
             'subtype_ss': {
                 selectField: 'CONCAT("ac_", tour.t_typ)'
             },
@@ -722,6 +734,8 @@ export class SqlMytbDbRouteConfig {
             keywords_txt: 't_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            route_attr_s: 'k_route_attr',
+            linked_route_attr_s: 't_kt_route_attr',
             name_s: 't_name',
             type_s: 'type',
             actiontype_s: 'actionType',

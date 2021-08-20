@@ -208,6 +208,13 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
             };
         }
 
+        if (searchForm.routeAttr !== undefined && searchForm.routeAttr.length > 0) {
+            filter = filter || {};
+            filter['route_attr_ss'] = {
+                'in': searchForm.routeAttr.split(/;;/)
+            };
+        }
+
         if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
             filter = filter || {};
             const moreFilters = searchForm.moreFilter.split(/;/);

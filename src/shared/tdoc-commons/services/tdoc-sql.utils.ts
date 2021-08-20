@@ -27,6 +27,7 @@ export class TourDocSqlUtils {
         sql = sql.replace(/REGEXP_REPLACE\(/g, 'REPLACE(');
         sql = sql.replace(/MD5\(CONCAT\(([a-zA-Z0-9_.]+), "_", ([a-zA-Z0-9_.]+), "_", ([a-zA-Z0-9_.]+), "_", ([a-zA-Z0-9_.]+)\)\)/g,
             'REPLACE(REPLACE(LOWER($1 || "_" || $2 || "_" || $3 || "_" || $4), " ", "_"), "/", "_")');
+        // TODO: add linkedRouteAttr
         sql = sql.replace(/\(SELECT CONCAT\("type=subroute:::name=", COALESCE\(t_name, "null"\), ":::refId=", CAST\(tour.t_id AS CHAR\),   ":::full=", CAST\(COALESCE\(kt_full, "false"\) AS CHAR\)\)/g,
             'SELECT linkedroutes FROM (SELECT "type=subroute:::name="  ||  COALESCE(t_name, "null")  ||  ":::refId="  ||  CAST(tour.t_id AS CHAR)  || ' +
             '   ":::full="  ||  CAST(COALESCE(kt_full, "false") AS CHAR)');

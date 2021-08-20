@@ -22,7 +22,7 @@ export class SqlMytbDbTrackConfig {
             {
                 from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
                     'LEFT JOIN tour kt ON kategorie_tour.t_id=kt.t_id OR kategorie.t_id=kt.t_id ',
-                triggerParams: ['route_id_i', 'route_id_is', 'destination_id_s', 'destination_id_ss'],
+                triggerParams: ['id', 'route_id_i', 'route_id_is', 'destination_id_s', 'destination_id_ss', 'route_attr_ss'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT kt.t_id ORDER BY kt.t_id SEPARATOR ", ") AS k_kt_ids']
             },
             {
@@ -100,7 +100,7 @@ export class SqlMytbDbTrackConfig {
             {
                 profile: 'linkedroutes',
                 sql: '(SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),' +
-                    '   ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR))' +
+                    '   ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR), ":::linkedRouteAttr=", COALESCE(kategorie_tour.kt_route_attr, "null"))' +
                     '  AS linkedroutes' +
                     '  FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (:id)' +
                     '  ORDER BY t_name) ',
@@ -433,6 +433,16 @@ export class SqlMytbDbTrackConfig {
                 filterFields: ['kt.t_id'],
                 action: AdapterFilterActions.IN_NUMBER
             },
+            'route_attr_ss': {
+                // TODO: union kategorie_k_route_attr
+                selectSql: 'SELECT COUNT(kt.kt_route_attr) AS count, kt.kt_route_attr AS value,' +
+                    ' kt.kt_route_attr AS label, kt.kt_route_attr AS id' +
+                    ' FROM kategorie INNER JOIN kategorie_tour kt ON kategorie.k_id = kt.k_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                filterFields: ['kategorie_tour.kt_route_attr'],
+                action: AdapterFilterActions.IN_CSV
+            },
             'trip_id_is': {
                 selectSql: 'SELECT COUNT(kategorie.tr_id) AS count, trip.tr_id AS value,' +
                     ' trip.tr_name AS label, trip.tr_id AS id' +
@@ -615,6 +625,7 @@ export class SqlMytbDbTrackConfig {
             keywords_txt: 'k_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            route_attr_s: 'k_route_attr',
             name_s: 'k_name',
             type_s: 'type',
             actiontype_s: 'actionType',
@@ -632,7 +643,8 @@ export class SqlMytbDbTrackConfig {
         joinTable: 'kategorie_tour',
         joinFieldMappings: {
             't_id': 'refId',
-            'kt_full': 'full'
+            'kt_full': 'full',
+            'kt_route_attr': 'linkedRouteAttr'
         }
     };
 
