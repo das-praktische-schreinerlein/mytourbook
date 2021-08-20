@@ -4,9 +4,11 @@
 
 ## 7.2.0 (OPEN)
 - added statistics-section
+- added linked route-attributes for track-routes
 
 ### new features
 - backend/frontend: added statistics-section
+- backend/frontend: added linked route-attributes for track-routes
 
 ### improvements
 - backend: added sort by name
