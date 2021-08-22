@@ -4,6 +4,7 @@ import {TourDocRecordResolver} from '../shared-tdoc/resolver/tdoc-details.resolv
 import {TourDocEditpageComponent} from './components/tdoc-editpage/tdoc-editpage.component';
 import {TourDocRecordCreateResolver} from '../shared-tdoc/resolver/tdoc-create.resolver';
 import {TourDocCreatepageComponent} from './components/tdoc-createpage/tdoc-createpage.component';
+import {TourDocModalCreatepageComponent} from './components/tdoc-createpage/tdoc-modal-createpage.component';
 
 const tdocAdminRoutes: Routes = [
     {
@@ -47,6 +48,22 @@ const tdocAdminRoutes: Routes = [
                 }
             }
         ]
+    },
+    {
+        path: 'modal',
+        children: [
+            {
+                path: 'create/:createByType/:createBaseId',
+                component: TourDocModalCreatepageComponent,
+                data: {
+                    baseSearchUrl: { data: 'tdoc/' }
+                },
+                resolve: {
+                    record: TourDocRecordCreateResolver
+                },
+            }
+        ],
+        outlet: 'modal',
     },
 ];
 

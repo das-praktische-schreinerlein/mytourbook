@@ -28,11 +28,13 @@ import {CommonDocSearchFormUtils} from '@dps/mycms-frontend-commons/dist/fronten
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocRoutingService} from '../../shared/tdoc-commons/services/tdoc-routing.service';
 import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/layout.service';
+import {TourDocModalCreatepageComponent} from './components/tdoc-createpage/tdoc-modal-createpage.component';
 
 @NgModule({
     declarations: [
         TourDocEditpageComponent,
-        TourDocCreatepageComponent
+        TourDocCreatepageComponent,
+        TourDocModalCreatepageComponent
     ],
     imports: [
         TranslateModule,
@@ -68,7 +70,8 @@ import {LayoutService} from '@dps/mycms-frontend-commons/dist/angular-commons/se
     ],
     exports: [
         TourDocEditpageComponent,
-        TourDocCreatepageComponent
+        TourDocCreatepageComponent,
+        TourDocModalCreatepageComponent
     ]
 })
 export class TourDocAdminModule {}

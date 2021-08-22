@@ -54,6 +54,7 @@ import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-
 import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
 import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 import {TourDocRouteAttributeComponent} from './components/tdoc-routeattr/tdoc-routeattr.component';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
     declarations: [
@@ -114,7 +115,8 @@ import {TourDocRouteAttributeComponent} from './components/tdoc-routeattr/tdoc-r
         AngularMapsModule,
         FrontendCommonDocCommonsModule,
         LightboxModule,
-        FileDropModule
+        FileDropModule,
+        RouterModule
     ],
     providers: [
         DatePipe

@@ -5,10 +5,12 @@
 ## 7.2.0 (OPEN)
 - added statistics-section
 - added linked route-attributes for track-routes
+- added modal window to create new entries and append them to selectbox
 
 ### new features
 - backend/frontend: added statistics-section
 - backend/frontend: added linked route-attributes for track-routes
+- frontend: added modal window to create new entries and append them to selectbox
 
 ### improvements
 - backend: added sort by name

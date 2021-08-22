@@ -54,6 +54,8 @@ import {TourDocLocationDescSuggesterService} from './shared-tdoc/services/tdoc-l
 import {TourDocNewsDescSuggesterService} from './shared-tdoc/services/tdoc-news-desc-suggester.service';
 import {TourDocRouteDescSuggesterService} from './shared-tdoc/services/tdoc-route-desc-suggester.service';
 import {TourDocTrackDescSuggesterService} from './shared-tdoc/services/tdoc-track-desc-suggester.service';
+import CustomUrlSerializer from './services/custom-url-serializer';
+import {UrlSerializer} from '@angular/router';
 
 registerLocaleData(localeDe);
 
@@ -66,6 +68,13 @@ export function createTranslateLoader(http: HttpClient, platformService: Platfor
 
 export function getAngulartics2Providers(): any {
     return TrackingService.getTrackingProvider();
+}
+
+// seen on https://stackoverflow.com/questions/39541185/custom-encoding-for-urls-using-angular-2-router-using-a-sign-in-place-of-a-sp
+const customUrlSerializer = new CustomUrlSerializer();
+const customUrlSerializerProvider = {
+    provide: UrlSerializer,
+    useValue: customUrlSerializer
 }
 
 @NgModule({
@@ -102,6 +111,7 @@ export function getAngulartics2Providers(): any {
     ],
     providers: [
         { provide: MinimalHttpBackendClient, useClass: BackendHttpClient },
+        // customUrlSerializerProvider, // activate this to get parenthes in parameters running, but then suburls dont run anymore
         CommonRoutingService,
         { provide: GenericAppService, useClass: AppService },
         DynamicComponentService,

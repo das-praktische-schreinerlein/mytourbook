@@ -32,6 +32,7 @@ import {
 export class TourDocCreatepageComponent
     extends CommonDocCreatepageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult, TourDocDataService> {
     tracks: TourDocRecord[] = [];
+    modal = false;
 
     constructor(protected route: ActivatedRoute, protected cdocRoutingService: TourDocRoutingService,
                 protected toastr: ToastrService, contentUtils: TourDocContentUtils,

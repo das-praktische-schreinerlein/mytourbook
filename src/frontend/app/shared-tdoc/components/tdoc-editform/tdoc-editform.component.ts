@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, Input, Output} from '@angular/core';
 import {TourDocRecord, TourDocRecordFactory, TourDocRecordValidator} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
 import {FormBuilder} from '@angular/forms';
 import {TourDocRecordSchema} from '../../../../shared/tdoc-commons/model/schemas/tdoc-record-schema';
@@ -33,6 +33,7 @@ import {TourDocDescSuggesterService} from '../../services/tdoc-desc-suggester.se
 import {PlatformService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/platform.service';
 import {AngularMarkdownService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-markdown.service';
 import {AngularHtmlService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/angular-html.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-tdoc-editform',
@@ -143,6 +144,12 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     personTagSuggestions: string[] = [];
     joinIndexes: {[key: string]: any[]} = {};
 
+    @Input()
+    public modal ? = false;
+
+    @Output()
+    public cancel: EventEmitter<boolean> = new EventEmitter();
+
     constructor(public fb: FormBuilder, protected toastr: ToastrService, protected cd: ChangeDetectorRef,
                 protected appService: GenericAppService, protected tdocSearchFormUtils: TourDocSearchFormUtils,
                 protected searchFormUtils: SearchFormUtils, protected tdocDataService: TourDocDataService,
@@ -150,7 +157,8 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 protected platformService: PlatformService,
                 protected angularMarkdownService: AngularMarkdownService, protected angularHtmlService: AngularHtmlService,
                 protected tourDocNameSuggesterService: TourDocNameSuggesterService,
-                protected tourDocDescSuggesterService: TourDocDescSuggesterService) {
+                protected tourDocDescSuggesterService: TourDocDescSuggesterService,
+                protected router: Router) {
         super(fb, toastr, cd, appService, tdocSearchFormUtils, searchFormUtils, tdocDataService, contentUtils);
     }
 
@@ -385,6 +393,27 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         }
 
         this.cd.markForCheck();
+
+        return false;
+    }
+
+    submitCancel(event: Event): boolean {
+        this.cancel.emit(false);
+
+        return false;
+    }
+
+    onCreateNewLink(key: string, id: string): boolean {
+        const me = this;
+        // open modal dialog
+        me.router.navigate([{ outlets: { 'modal': ['modal', 'create', key, id] } }]).then(value => {
+            // check for closing modal dialog and routechange -> update facets
+            const subscription = me.router.events.subscribe((val) => {
+                subscription.unsubscribe();
+                me.fillFacets(me.record)
+            });
+        });
+
 
         return false;
     }
@@ -825,4 +854,5 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
             return [values[formKey]];
         }
     }
+
 }
