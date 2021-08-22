@@ -434,13 +434,19 @@ export class SqlMytbDbTrackConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'route_attr_ss': {
-                // TODO: union kategorie_k_route_attr
-                selectSql: 'SELECT COUNT(kt.kt_route_attr) AS count, kt.kt_route_attr AS value,' +
-                    ' kt.kt_route_attr AS label, kt.kt_route_attr AS id' +
-                    ' FROM kategorie INNER JOIN kategorie_tour kt ON kategorie.k_id = kt.k_id ' +
+                selectSql: 'SELECT COUNT(DISTINCT K_id) as count, route_attr AS value, route_attr AS label, route_attr AS id' +
+                    ' FROM (' +
+                    '    SELECT kt.k_id AS k_id, kt.t_id AS t_id, kt_route_attr AS route_attr' +
+                    '      FROM tour INNER JOIN kategorie_tour kt ON tour.t_id = kt.t_id' +
+                    '      WHERE kt_route_attr IS NOT NULL' +
+                    '     UNION ALL' +
+                    '    SELECT k.k_id AS k_id, k.t_id AS t_id, k_route_attr AS route_attr' +
+                    '      FROM tour INNER JOIN kategorie k ON tour.t_id = k.t_id' +
+                    '      WHERE k_route_attr IS NOT NULL' +
+                    ' ) routeattrs' +
                     ' GROUP BY value, label, id' +
                     ' ORDER BY label',
-                filterFields: ['kategorie_tour.kt_route_attr'],
+                filterFields: ['kategorie_tour.kt_route_attr', 'kategorie.k_route_attr'],
                 action: AdapterFilterActions.IN_CSV
             },
             'trip_id_is': {

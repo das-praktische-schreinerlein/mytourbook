@@ -27,10 +27,9 @@ export class TourDocSqlUtils {
         sql = sql.replace(/REGEXP_REPLACE\(/g, 'REPLACE(');
         sql = sql.replace(/MD5\(CONCAT\(([a-zA-Z0-9_.]+), "_", ([a-zA-Z0-9_.]+), "_", ([a-zA-Z0-9_.]+), "_", ([a-zA-Z0-9_.]+)\)\)/g,
             'REPLACE(REPLACE(LOWER($1 || "_" || $2 || "_" || $3 || "_" || $4), " ", "_"), "/", "_")');
-        // TODO: add linkedRouteAttr
-        sql = sql.replace(/\(SELECT CONCAT\("type=subroute:::name=", COALESCE\(t_name, "null"\), ":::refId=", CAST\(tour.t_id AS CHAR\),   ":::full=", CAST\(COALESCE\(kt_full, "false"\) AS CHAR\)\)/g,
+        sql = sql.replace(/\(SELECT CONCAT\("type=subroute:::name=", COALESCE\(t_name, "null"\), ":::refId=", CAST\(tour.t_id AS CHAR\),   ":::full=", CAST\(COALESCE\(kt_full, "false"\) AS CHAR\), ":::linkedRouteAttr=", COALESCE\(kategorie_tour.kt_route_attr, "null"\)\)/g,
             'SELECT linkedroutes FROM (SELECT "type=subroute:::name="  ||  COALESCE(t_name, "null")  ||  ":::refId="  ||  CAST(tour.t_id AS CHAR)  || ' +
-            '   ":::full="  ||  CAST(COALESCE(kt_full, "false") AS CHAR)');
+            '   ":::full="  ||  CAST(COALESCE(kt_full, "false") AS CHAR) || ":::linkedRouteAttr=" || COALESCE(kategorie_tour.kt_route_attr, "null")');
         sql = sql.replace(/\(SELECT CONCAT\("type=", COALESCE\(if_typ, "null"\), ":::name=", COALESCE\(if_name, "null"\),    ":::refId=", CAST\(info.if_id AS CHAR\), ":::linkedDetails=", COALESCE\((.*?), "null"\)\)/g,
             'SELECT linkedinfos FROM (SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||' +
             '    ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE($1, "null")');
