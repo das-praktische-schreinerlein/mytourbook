@@ -144,9 +144,11 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     personTagSuggestions: string[] = [];
     joinIndexes: {[key: string]: any[]} = {};
 
+    // TODO add modal to commons
     @Input()
     public modal ? = false;
 
+    // TODO add cancel to commons
     @Output()
     public cancel: EventEmitter<boolean> = new EventEmitter();
 
@@ -397,12 +399,14 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         return false;
     }
 
+    // TODO add cancel to commons
     submitCancel(event: Event): boolean {
         this.cancel.emit(false);
 
         return false;
     }
 
+    // TODO add modal to commons
     onCreateNewLink(key: string, id: string): boolean {
         const me = this;
         // open modal dialog

@@ -438,8 +438,23 @@
                                                  (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
                     </ng-container>
                 </div>
+                <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectRouteAttrPart.length > 0">
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('routeAttrPart').value.length > 0 ? 'label-active' : 'label-inactive')"
+                           i18n="routeAttrPart label|Label for filter: routeAttrPart@@label.searchform.tdoc.routeAttrPart">Route AttrPart:</label>
+                    <ng-container *ngIf="optionsSelectRouteAttrPart.length > 0; else noFilterValues">
+                        <ss-multiselect-dropdown [options]="optionsSelectRouteAttrPart"
+                                                 [settings]="settingsSelectRouteAttrPart"
+                                                 [texts]="textsSelectRouteAttrPart"
+                                                 formControlName="routeAttrPart"
+                                                 ngDefaultControl
+                                                 class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth"
+                                                 (onAdded)="onChangeSelect()"
+                                                 (onRemoved)="onChangeSelect()"></ss-multiselect-dropdown>
+                    </ng-container>
+                </div>
                 <div [class]="(width4 + ' input-group input-group-sm')" *ngIf="optionsSelectRouteAttr.length > 0">
-                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('routeAttr').value.length > 0 ? 'label-active' : 'label-inactive')" i18n="routeAttr label|Label for filter: routeAttr@@label.searchform.tdoc.routeAttr">Route-Attribute:</label>
+                    <label [class]="'col-xs-2 col-form-label mr-2 ' + (searchFormGroup.get('routeAttr').value.length > 0 ? 'label-active' : 'label-inactive')"
+                           i18n="routeAttr label|Label for filter: routeAttr@@label.searchform.tdoc.routeAttr">Route Attribute:</label>
                     <ng-container *ngIf="optionsSelectRouteAttr.length > 0; else noFilterValues">
                         <ss-multiselect-dropdown [options]="optionsSelectRouteAttr"
                                                  [settings]="settingsSelectRouteAttr"
@@ -453,6 +468,7 @@
                 </div>
             </div>
         </fieldset>
+
         <fieldset class="hidden-print" *ngIf="showObjectDetection && showObjectDetectionAvailable">
             <legend i18n="objectDetection label|Label for fieldset: objectDetection@@label.searchform.tdoc.legend.objectDetection">&#x2315; Objekterkennung</legend>
             <div class="row">

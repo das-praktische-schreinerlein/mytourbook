@@ -33,6 +33,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         objectDetectionPrecision: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objectDetectionState: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         routeAttr: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
+        routeAttrPart: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.NAME, new NameValidationRule(false)),
         persons: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         objects: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false)),
         dashboardFilter: new GenericSearchFormFieldConfig(GenericValidatorDatatypes.WHAT_KEY_CSV, new TextValidationRule(false))
@@ -56,6 +57,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
     objectDetectionPrecision: string;
     objectDetectionState: string;
     routeAttr: string;
+    routeAttrPart: string;
     objects: string;
     persons: string;
     dashboardFilter: string;
@@ -80,6 +82,7 @@ export class TourDocSearchForm extends CommonDocSearchForm {
         this.objectDetectionPrecision = values['objectDetectionPrecision'] || '';
         this.objectDetectionState = values['objectDetectionState'] || '';
         this.routeAttr = values['routeAttr'] || '';
+        this.routeAttrPart = values['routeAttrPart'] || '';
         this.objects = values['objects'] || '';
         this.persons = values['persons'] || '';
         this.dashboardFilter = values['dashboardFilter'] || '';
@@ -135,6 +138,7 @@ export class TourDocSearchFormFactory {
         sanitizedValues.objectDetectionState =
             TourDocSearchForm.tdocFields.objectDetectionState.validator.sanitize(values['objectDetectionState']) || '';
         sanitizedValues.routeAttr = TourDocSearchForm.tdocFields.routeAttr.validator.sanitize(values['routeAttr']) || '';
+        sanitizedValues.routeAttrPart = TourDocSearchForm.tdocFields.routeAttrPart.validator.sanitize(values['routeAttrPart']) || '';
         sanitizedValues.objects = TourDocSearchForm.tdocFields.objects.validator.sanitize(values['objects']) || '';
         sanitizedValues.persons = TourDocSearchForm.tdocFields.persons.validator.sanitize(values['persons']) || '';
         sanitizedValues.dashboardFilter = TourDocSearchForm.tdocFields.dashboardFilter.validator.sanitize(values['dashboardFilter']) || '';
@@ -180,6 +184,7 @@ export class TourDocSearchFormValidator {
         state = TourDocSearchForm.tdocFields.objectDetectionPrecision.validator.isValid(values['objectDetectionPrecision']) && state;
         state = TourDocSearchForm.tdocFields.objectDetectionState.validator.isValid(values['objectDetectionState']) && state;
         state = TourDocSearchForm.tdocFields.routeAttr.validator.isValid(values['routeAttr']) && state;
+        state = TourDocSearchForm.tdocFields.routeAttrPart.validator.isValid(values['routeAttrPart']) && state;
         state = TourDocSearchForm.tdocFields.objects.validator.isValid(values['objects']) && state;
         state = TourDocSearchForm.tdocFields.persons.validator.isValid(values['persons']) && state;
         state = TourDocSearchForm.tdocFields.dashboardFilter.validator.isValid(values['dashboardFilter']) && state;

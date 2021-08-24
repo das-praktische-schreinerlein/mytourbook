@@ -44,6 +44,7 @@ export class TourDocSearchformComponent
     public optionsSelectObjectDetectionPrecision: IMultiSelectOption[] = [];
     public optionsSelectObjectDetectionState: IMultiSelectOption[] = [];
     public optionsSelectRouteAttr: IMultiSelectOption[] = [];
+    public optionsSelectRouteAttrPart: IMultiSelectOption[] = [];
     public optionsSelectDashboardFilter: IMultiSelectOption[] = [];
 
     public settingsSelectWhen = this.defaultSeLectSettings;
@@ -72,6 +73,7 @@ export class TourDocSearchformComponent
     public settingsSelectObjectDetectionPrecision = this.defaultSeLectSettings;
     public settingsSelectObjectDetectionState = this.defaultSeLectSettings;
     public settingsSelectRouteAttr = this.defaultSeLectSettings;
+    public settingsSelectRouteAttrPart = this.defaultSeLectSettings;
     public settingsSelectDashboardFilter = {dynamicTitleMaxItems: 1,
         buttonClasses: 'btn btn-default btn-secondary text-right fullwidth btn-sm multiselect-highlight-value',
         containerClasses: 'dropdown-inline fullwidth',
@@ -179,6 +181,13 @@ export class TourDocSearchformComponent
         searchPlaceholder: 'Find',
         defaultTitle: '',
         allSelected: 'Alle'};
+    public textsSelectRouteAttrPart: IMultiSelectTexts = { checkAll: 'Alle auswählen',
+        uncheckAll: 'Alle abwählen',
+        checked: 'Attribute ausgewählt',
+        checkedPlural: 'Attribute ausgewählt',
+        searchPlaceholder: 'Find',
+        defaultTitle: '',
+        allSelected: 'Alle'};
     public textsSelectObjectDetectionCategory: IMultiSelectTexts = { checkAll: 'Alle auswählen',
         uncheckAll: 'Alle abwählen',
         checked: 'Katgorie ausgewählt',
@@ -270,6 +279,7 @@ export class TourDocSearchformComponent
             objectDetectionPrecision: [],
             objectDetectionState: [],
             routeAttr: [],
+            routeAttrPart: [],
             actionType: [],
             type: [],
             sort: '',
@@ -335,6 +345,7 @@ export class TourDocSearchformComponent
             objectDetectionPrecision: [(values.objectDetectionPrecision ? values.objectDetectionPrecision.split(/,/) : [])],
             objectDetectionState: [(values.objectDetectionState ? values.objectDetectionState.split(/,/) : [])],
             routeAttr: [(values.routeAttr ? values.routeAttr.split(/;;/) : [])],
+            routeAttrPart: [(values.routeAttrPart ? values.routeAttrPart.split(/,/) : [])],
             playlists: [(values.playlists ? values.playlists.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]
         });
@@ -407,6 +418,9 @@ export class TourDocSearchformComponent
             this.tdocSearchFormUtils.getObjectDetectionStateValues(tdocSearchSearchResult), true, [], true);
         this.optionsSelectRouteAttr = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
             this.tdocSearchFormUtils.getRouteAttrValues(tdocSearchSearchResult), true, [], false);
+        this.optionsSelectRouteAttrPart = this.searchFormUtils.getIMultiSelectOptionsFromExtractedFacetValuesList(
+            this.tdocSearchFormUtils.getRouteAttrPartValues(tdocSearchSearchResult), false, [], false);
+
         const values: TourDocSearchForm = tdocSearchSearchResult.searchForm;
         const [lat, lon, dist] = this.tdocSearchFormUtils.extractNearbyPos(values.nearby);
         if (lat && lon && (values.nearbyAddress === undefined || values.nearbyAddress === '')) {
@@ -428,7 +442,8 @@ export class TourDocSearchformComponent
         this.showWhenAvailable = (this.optionsSelectWhen.length > 0 || this.optionsSelectTechDataDuration.length > 0);
         this.showDetailsAvailable = (this.optionsSelectWhat.length > 0 || this.optionsSelectTechRateOverall.length > 0 ||
             this.optionsSelectTechDataDistance.length > 0 || this.optionsSelectTechDataAltitudeMax.length > 0 ||
-            this.optionsSelectTechDataAscent.length > 0 || this.optionsSelectRouteAttr.length > 0);
+            this.optionsSelectTechDataAscent.length > 0 || this.optionsSelectRouteAttr.length > 0 ||
+            this.optionsSelectRouteAttrPart.length > 0);
         this.showMetaAvailable = (this.optionsSelectPlaylists.length > 0 || this.optionsSelectPersons.length > 0 ||
             this.optionsSelectObjects.length > 0 || this.optionsSelectPersonalRateDifficulty.length > 0 ||
             this.optionsSelectPersonalRateOverall.length > 0);

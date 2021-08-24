@@ -35,40 +35,40 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
     }
 
     getWhereValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'loc_lochirarchie_txt', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'loc_lochirarchie_txt', '', '');
     }
 
     getActionTypeValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'actiontype_ss', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'actiontype_ss', '', '');
     }
 
     getPersonalRateOverallValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'rate_pers_gesamt_is', '', 'filter.tdocratepers.gesamt.');
+        return this.searchFormUtils.getFacetValues(searchResult, 'rate_pers_gesamt_is', '', 'filter.tdocratepers.gesamt.');
     }
 
     getPersonalRateDifficultyValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'rate_pers_schwierigkeit_is', '',
-                'label.tdocratepers.schwierigkeit.');
+        return this.searchFormUtils.getFacetValues(searchResult, 'rate_pers_schwierigkeit_is', '',
+            'label.tdocratepers.schwierigkeit.');
     }
 
     getTechRateOverallValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'rate_tech_overall_ss', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'rate_tech_overall_ss', '', '');
     }
 
     getTechDataAscentValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_alt_asc_facet_is', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_alt_asc_facet_is', '', '');
     }
 
     getTechDataAltitudeMaxValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_alt_max_facet_is', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_alt_max_facet_is', '', '');
     }
 
     getTechDataDistanceValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_dist_facets_fs', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_dist_facets_fs', '', '');
     }
 
     getTechDataDurationValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_dur_facet_fs', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'data_tech_dur_facet_fs', '', '');
     }
 
     getObjectsValues(searchResult: TourDocSearchResult): any[] {
@@ -96,15 +96,49 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
     }
 
     getRouteAttrValues(searchResult: TourDocSearchResult): any[] {
-        return this.searchFormUtils.getFacetValues(searchResult, 'route_attr_ss', '', '');
+        const facetValues = this.searchFormUtils.getFacetValues(searchResult, 'route_attr_ss', '', '');
+        facetValues.forEach(row => {
+            row[1] = row[1].replace(/[ ()\[\]]/gs, ' ');
+            if (row.length > 5) {
+                row[5] = row[5].replace(/[ ()\[\]]/gs, ' ');
+            }
+        })
+
+        return facetValues;
+    }
+
+    getRouteAttrPartValues(searchResult: TourDocSearchResult): any[] {
+        const splittedfacetKeys = {};
+        const facetValues = this.getRouteAttrValues(searchResult);
+        facetValues.forEach(row => {
+            row[1].split(/[ ,();]/).forEach(key => {
+                if (key !== undefined && key !== '' && !splittedfacetKeys[key]) {
+                    splittedfacetKeys[key] = 0;
+                }
+            })
+        });
+
+        const splittedFacetValues = [];
+        Object.keys(splittedfacetKeys).sort().forEach(key => {
+            let count = 0;
+            facetValues.forEach(row => {
+                if (row[1].includes(key)) {
+                    count = count + row[3];
+                }
+            })
+
+            splittedFacetValues.push(['', key, '', count])
+        });
+
+        return splittedFacetValues;
     }
 
     getPersonValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'persons_txt', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'persons_txt', '', '');
     }
 
     getRouteValues(searchResult: TourDocSearchResult): any[] {
-         return this.searchFormUtils.getFacetValues(searchResult, 'route_id_is', '', '');
+        return this.searchFormUtils.getFacetValues(searchResult, 'route_id_is', '', '');
     }
 
     getInfoValues(searchResult: TourDocSearchResult): any[] {

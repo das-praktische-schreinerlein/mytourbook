@@ -41,7 +41,6 @@ export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent 
     submitSave(values: {}) {
         const me = this;
         this.cdocDataService.add(values).then(function doneDocCreated(cdoc: TourDocRecord) {
-                // TODO: update parent
                 me.closeModal();
             },
             function errorCreate(reason: any) {
@@ -52,12 +51,14 @@ export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent 
         return false;
     }
 
+    // TODO add cancel to commons
     submitCancel() {
         this.closeModal();
 
         return false;
     }
 
+    // TODO add modal to commons
     protected closeModal() {
         const me = this;
         me.router.navigate(['', { outlets: { 'modal': null }, primary: '' }],

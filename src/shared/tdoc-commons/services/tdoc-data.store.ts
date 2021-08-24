@@ -214,6 +214,12 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
                 'in': searchForm.routeAttr.split(/;;/)
             };
         }
+        if (searchForm.routeAttrPart !== undefined && searchForm.routeAttrPart.length > 0) {
+            filter = filter || {};
+            filter['route_attr_parts_ss'] = {
+                'like': searchForm.routeAttrPart.split(/,/)
+            };
+        }
 
         if (searchForm.moreFilter !== undefined && searchForm.moreFilter.length > 0) {
             filter = filter || {};

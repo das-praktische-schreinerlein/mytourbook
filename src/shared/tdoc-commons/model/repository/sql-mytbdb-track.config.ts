@@ -22,7 +22,8 @@ export class SqlMytbDbTrackConfig {
             {
                 from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
                     'LEFT JOIN tour kt ON kategorie_tour.t_id=kt.t_id OR kategorie.t_id=kt.t_id ',
-                triggerParams: ['id', 'route_id_i', 'route_id_is', 'destination_id_s', 'destination_id_ss', 'route_attr_ss'],
+                triggerParams: ['id', 'route_id_i', 'route_id_is', 'destination_id_s', 'destination_id_ss', 'route_attr_ss',
+                    'route_attr_parts_ss'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT kt.t_id ORDER BY kt.t_id SEPARATOR ", ") AS k_kt_ids']
             },
             {
@@ -448,6 +449,10 @@ export class SqlMytbDbTrackConfig {
                     ' ORDER BY label',
                 filterFields: ['kategorie_tour.kt_route_attr', 'kategorie.k_route_attr'],
                 action: AdapterFilterActions.IN_CSV
+            },
+            'route_attr_parts_ss': {
+                filterFields: ['kategorie_tour.kt_route_attr', 'kategorie.k_route_attr'],
+                action: AdapterFilterActions.LIKEIN
             },
             'trip_id_is': {
                 selectSql: 'SELECT COUNT(kategorie.tr_id) AS count, trip.tr_id AS value,' +
