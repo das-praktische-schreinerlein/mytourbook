@@ -180,10 +180,10 @@ export class TourDocSearchFormConverter implements GenericSearchFormSearchFormCo
                 ',') : '');
         const routeAttr: string = (moreFilterValues.has('routeAttr:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('routeAttr:'), 'routeAttr:',
-                ';;') : '');
+                ',') : '');
         const routeAttrPart: string = (moreFilterValues.has('routeAttrPart:') ?
             this.searchParameterUtils.joinValuesAndReplacePrefix(moreFilterValues.get('routeAttrPart:'), 'routeAttrPart:',
-                ';;') : '');
+                ',') : '');
         const dashboardFilter: string = (params.dashboardFilter
             ? params.dashboardFilter
             : ( moreFilterValues.has('dashboardFilter:') ?

@@ -344,7 +344,7 @@ export class TourDocSearchformComponent
             objectDetectionKey: [(values.objectDetectionKey ? values.objectDetectionKey.split(/,/) : [])],
             objectDetectionPrecision: [(values.objectDetectionPrecision ? values.objectDetectionPrecision.split(/,/) : [])],
             objectDetectionState: [(values.objectDetectionState ? values.objectDetectionState.split(/,/) : [])],
-            routeAttr: [(values.routeAttr ? values.routeAttr.split(/;;/) : [])],
+            routeAttr: [(values.routeAttr ? values.routeAttr.split(/,/) : [])],
             routeAttrPart: [(values.routeAttrPart ? values.routeAttrPart.split(/,/) : [])],
             playlists: [(values.playlists ? values.playlists.split(/,/) : [])],
             type: [(values.type ? values.type.split(/,/) : [])]

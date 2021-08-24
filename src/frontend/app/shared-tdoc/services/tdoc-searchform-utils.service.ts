@@ -98,9 +98,9 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
     getRouteAttrValues(searchResult: TourDocSearchResult): any[] {
         const facetValues = this.searchFormUtils.getFacetValues(searchResult, 'route_attr_ss', '', '');
         facetValues.forEach(row => {
-            row[1] = row[1].replace(/[ ()\[\]]/gs, ' ');
+            row[1] = row[1].replace(/[ ()\[\],;]/gs, ' ');
             if (row.length > 5) {
-                row[5] = row[5].replace(/[ ()\[\]]/gs, ' ');
+                row[5] = row[5].replace(/[ ()\[\],;]/gs, ' ');
             }
         })
 

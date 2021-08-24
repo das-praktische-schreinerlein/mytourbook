@@ -211,7 +211,7 @@ export class TourDocDataStore extends GenericDataStore<TourDocRecord, TourDocSea
         if (searchForm.routeAttr !== undefined && searchForm.routeAttr.length > 0) {
             filter = filter || {};
             filter['route_attr_ss'] = {
-                'in': searchForm.routeAttr.split(/;;/)
+                'in': searchForm.routeAttr.split(/,/)
             };
         }
         if (searchForm.routeAttrPart !== undefined && searchForm.routeAttrPart.length > 0) {
