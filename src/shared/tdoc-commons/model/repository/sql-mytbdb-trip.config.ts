@@ -319,6 +319,12 @@ export class SqlMytbDbTripConfig {
             'rate_tech_overall_ss': {
                 noFacet: true
             },
+            'route_attr_ss': {
+                noFacet: true
+            },
+            'route_attr_parts_ss': {
+                noFacet: true
+            },
             'subtype_ss': {
                 noFacet: true
             },

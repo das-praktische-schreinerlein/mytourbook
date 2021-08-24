@@ -187,6 +187,12 @@ export class SqlMytbExportDbImageConfig {
             'rate_tech_overall_ss': {
                 noFacet: true
             },
+            'route_attr_ss': {
+                noFacet: true
+            },
+            'route_attr_parts_ss': {
+                noFacet: true
+            },
             'subtype_ss': {
                 selectField: 'CONCAT("ac_", kategorie_full.k_type)',
                 selectFrom: 'image INNER JOIN kategorie_full ON kategorie_full.k_id=image.k_id',

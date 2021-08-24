@@ -430,7 +430,7 @@ export class SqlMytbDbRouteConfig {
                     ' ORDER BY label',
                 filterFields: ['REGEXP_REPLACE(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(kategorie_tour.kt_route_attr, "(", " "), ")", " "), ",", " "), ";", " ")), "[[:space:]]+", " ")',
                     'REGEXP_REPLACE(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(kategorie.k_route_attr, "(", " "), ")", " "), ",", " "), ";", " ")), "[[:space:]]+", " ")'],
-                action: AdapterFilterActions.IN_CSV
+                action: AdapterFilterActions.IN
             },
             'route_attr_parts_ss': {
                 filterFields: ['kategorie_tour.kt_route_attr', 'kategorie.k_route_attr'],

@@ -418,22 +418,6 @@ export class SqlMytbDbTrackConfig {
             'rate_tech_overall_ss': {
                 noFacet: true
             },
-            'subtype_ss': {
-                selectField: 'CONCAT("ac_", kategorie.k_type)'
-            },
-            'route_id_i': {
-                filterFields: ['kt.t_id'],
-                action: AdapterFilterActions.IN_NUMBER
-            },
-            'route_id_is': {
-                selectSql: 'SELECT COUNT(kategorie.t_id) AS count, tour.t_id AS value,' +
-                    ' tour.t_name AS label, tour.t_id AS id' +
-                    ' FROM tour LEFT JOIN kategorie ON kategorie.t_id = tour.t_id ' +
-                    ' GROUP BY value, label, id' +
-                    ' ORDER BY label',
-                filterFields: ['kt.t_id'],
-                action: AdapterFilterActions.IN_NUMBER
-            },
             'route_attr_ss': {
                 selectSql: 'SELECT COUNT(DISTINCT K_id) as count, route_attr AS value, route_attr AS label, route_attr AS id' +
                     ' FROM (' +
@@ -449,11 +433,27 @@ export class SqlMytbDbTrackConfig {
                     ' ORDER BY label',
                 filterFields: ['REGEXP_REPLACE(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(kategorie_tour.kt_route_attr, "(", " "), ")", " "), ",", " "), ";", " ")), "[[:space:]]+", " ")',
                     'REGEXP_REPLACE(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(kategorie.k_route_attr, "(", " "), ")", " "), ",", " "), ";", " ")), "[[:space:]]+", " ")'],
-                action: AdapterFilterActions.IN_CSV
+                action: AdapterFilterActions.IN
             },
             'route_attr_parts_ss': {
                 filterFields: ['kategorie_tour.kt_route_attr', 'kategorie.k_route_attr'],
                 action: AdapterFilterActions.LIKEIN
+            },
+            'route_id_i': {
+                filterFields: ['kt.t_id'],
+                action: AdapterFilterActions.IN_NUMBER
+            },
+            'route_id_is': {
+                selectSql: 'SELECT COUNT(kategorie.t_id) AS count, tour.t_id AS value,' +
+                    ' tour.t_name AS label, tour.t_id AS id' +
+                    ' FROM tour LEFT JOIN kategorie ON kategorie.t_id = tour.t_id ' +
+                    ' GROUP BY value, label, id' +
+                    ' ORDER BY label',
+                filterFields: ['kt.t_id'],
+                action: AdapterFilterActions.IN_NUMBER
+            },
+            'subtype_ss': {
+                selectField: 'CONCAT("ac_", kategorie.k_type)'
             },
             'trip_id_is': {
                 selectSql: 'SELECT COUNT(kategorie.tr_id) AS count, trip.tr_id AS value,' +

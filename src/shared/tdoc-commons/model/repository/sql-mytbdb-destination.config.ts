@@ -285,6 +285,12 @@ export class SqlMytbDbDestinationConfig {
                 selectField: 'd_rate',
                 orderBy: 'value asc'
             },
+            'route_attr_ss': {
+                noFacet: true
+            },
+            'route_attr_parts_ss': {
+                noFacet: true
+            },
             'subtype_ss': {
                 selectField: 'd_typ',
                 orderBy: 'value asc'

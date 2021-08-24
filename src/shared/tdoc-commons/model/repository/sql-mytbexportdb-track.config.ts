@@ -185,8 +185,11 @@ export class SqlMytbExportDbTrackConfig {
             'rate_tech_overall_ss': {
                 noFacet: true
             },
-            'subtype_ss': {
-                selectField: 'CONCAT("ac_", kategorie_full.k_type)'
+            'route_attr_ss': {
+                noFacet: true
+            },
+            'route_attr_parts_ss': {
+                noFacet: true
             },
             'route_id_i': {
                 filterFields: ['kategorie_full.k_t_ids'],
@@ -200,6 +203,9 @@ export class SqlMytbExportDbTrackConfig {
                     ' ORDER BY label',
                 filterFields: ['kategorie_full.k_t_ids'],
                 action: AdapterFilterActions.IN_CSV
+            },
+            'subtype_ss': {
+                selectField: 'CONCAT("ac_", kategorie_full.k_type)'
             },
             'trip_id_is': {
                 selectSql: 'SELECT COUNT(kategorie_full.tr_id) AS count, trip.tr_id AS value,' +

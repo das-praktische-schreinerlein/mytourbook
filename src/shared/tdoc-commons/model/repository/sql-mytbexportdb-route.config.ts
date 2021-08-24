@@ -213,6 +213,12 @@ export class SqlMytbExportDbRouteConfig {
                 selectField: 't_rate',
                 orderBy: 'value asc'
             },
+            'route_attr_ss': {
+                noFacet: true
+            },
+            'route_attr_parts_ss': {
+                noFacet: true
+            },
             'subtype_ss': {
                 selectField: 'CONCAT("ac_", tour.t_typ)'
             },
