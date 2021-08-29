@@ -61,7 +61,7 @@ export class TourDocModalCreatepageComponent extends TourDocCreatepageComponent 
     // TODO add modal to commons
     protected closeModal() {
         const me = this;
-        me.router.navigate(['', { outlets: { 'modal': null }, primary: '' }],
+        me.router.navigate(['', { outlets: { 'modaledit': null }, primary: '' }],
             { relativeTo: me.route.parent // <--- PARENT activated route.
             }
         ).then(value => {

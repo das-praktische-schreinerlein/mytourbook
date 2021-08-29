@@ -32,12 +32,14 @@ import {TourDocContentUtils} from '../shared-tdoc/services/tdoc-contentutils.ser
 import {CommonDocSearchFormUtils} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-searchform-utils.service';
 import {FrontendCommonDocCommonsModule} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/frontend-cdoc-commons.module';
 import {TourDocRoutingService} from '../../../shared/tdoc-commons/services/tdoc-routing.service';
+import {TourDocModalShowpageComponent} from './components/tdoc-showpage/tdoc-modal-showpage.component';
 
 @NgModule({
     declarations: [
         TourDocSearchpageComponent,
         TourDocShowpageComponent,
-        TourDocAlbumpageComponent
+        TourDocAlbumpageComponent,
+        TourDocModalShowpageComponent
     ],
     imports: [
         TranslateModule,

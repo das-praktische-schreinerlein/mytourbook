@@ -50,7 +50,7 @@ const tdocAdminRoutes: Routes = [
         ]
     },
     {
-        path: 'modal',
+        path: 'modaledit',
         children: [
             {
                 path: 'create/:createByType/:createBaseId',
@@ -63,7 +63,7 @@ const tdocAdminRoutes: Routes = [
                 },
             }
         ],
-        outlet: 'modal',
+        outlet: 'modaledit',
     },
 ];
 

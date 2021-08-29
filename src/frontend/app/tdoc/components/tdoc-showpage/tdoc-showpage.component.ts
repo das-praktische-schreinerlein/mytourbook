@@ -55,6 +55,7 @@ export interface TourDocShowpageComponentAvailableTabs {
 })
 export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
     TourDocDataService> {
+    modal = false;
     tracks: TourDocRecord[] = [];
     geoTracks: {
         IMAGE?: TourDocRecord[];

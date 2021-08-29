@@ -365,6 +365,13 @@
         <a (click)="onCreateNewLink(key, id)" *ngIf="modal === false">->*</a>
     </ng-template>
 
+    <ng-template #linkShowEntity let-key="key" let-formElementName="formElementName">
+        <a (click)="onShowEntityLink(key, editFormGroup.getRawValue()[formElementName][0])"
+           *ngIf="editFormGroup.getRawValue()[formElementName] !== undefined
+            && editFormGroup.getRawValue()[formElementName] !== null
+            && editFormGroup.getRawValue()[formElementName].length === 1">&#x1F50E;</a>
+    </ng-template>
+
     <ng-template #inputName>
         <div class="col-sm-6 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="name label|Label for field: name@@label.editform.tdoc.name">Name:</label>
@@ -414,6 +421,7 @@
                                      formControlName="locId"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'LOCATION', id: record.id}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'LOCATION', formElementName: 'locId'}"></ng-container>
         </div>
     </ng-template>
 
@@ -428,6 +436,7 @@
                                      formControlName="locIdParent"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'LOCATION', id: record.id}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'LOCATION', formElementName: 'locIdParent'}"></ng-container>
         </div>
     </ng-template>
 
@@ -481,6 +490,7 @@
                                      formControlName="routeId"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'ROUTE', id: record.id}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'ROUTE', formElementName: 'routeId'}"></ng-container>
         </div>
     </ng-template>
 
@@ -497,6 +507,7 @@
                                      formControlName="{{joinName + 'Id' + idx}}"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'ROUTE', id: record.id}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'ROUTE', formElementName: joinName + 'Id' + idx}"></ng-container>
         </div>
         <ng-container *ngTemplateOutlet="inputTextTech;context:{key: joinName + 'LinkedRouteAttr', formControlName: joinName + 'LinkedRouteAttr'  + idx}"></ng-container>
         <div class="col-sm-3 input-group input-group-sm">
@@ -518,6 +529,7 @@
                                      formControlName="{{joinName + 'Id' + idx}}"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'INFO', id: record.id}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'INFO', formElementName: joinName + 'Id' + idx}"></ng-container>
         </div>
         <ng-container *ngTemplateOutlet="inputText;context:{key: joinName + 'LinkedDetails', formControlName: joinName + 'LinkedDetails'  + idx}"></ng-container>
     </ng-template>
@@ -546,6 +558,7 @@
                                      formControlName="tripId"
                                      ngDefaultControl></ss-multiselect-dropdown>
             <ng-container *ngTemplateOutlet="linkCreateNew;context:{key: 'TRIP', id: record.id}"></ng-container>
+            <ng-container *ngTemplateOutlet="linkShowEntity;context:{key: 'TRIP', formElementName: 'tripId'}"></ng-container>
         </div>
     </ng-template>
 

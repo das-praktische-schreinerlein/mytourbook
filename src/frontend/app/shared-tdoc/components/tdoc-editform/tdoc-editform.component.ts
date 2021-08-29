@@ -410,7 +410,23 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
     onCreateNewLink(key: string, id: string): boolean {
         const me = this;
         // open modal dialog
-        me.router.navigate([{ outlets: { 'modal': ['modal', 'create', key, id] } }]).then(value => {
+        me.router.navigate([{ outlets: { 'modaledit': ['modaledit', 'create', key, id] } }]).then(value => {
+            // check for closing modal dialog and routechange -> update facets
+            const subscription = me.router.events.subscribe((val) => {
+                subscription.unsubscribe();
+                me.fillFacets(me.record)
+            });
+        });
+
+
+        return false;
+    }
+
+    // TODO add modal to commons
+    onShowEntityLink(key: string, id: string): boolean {
+        const me = this;
+        // open modal dialog
+        me.router.navigate([{ outlets: { 'modalshow': ['modalshow', 'show', key, key + '_' + id] } }]).then(value => {
             // check for closing modal dialog and routechange -> update facets
             const subscription = me.router.events.subscribe((val) => {
                 subscription.unsubscribe();

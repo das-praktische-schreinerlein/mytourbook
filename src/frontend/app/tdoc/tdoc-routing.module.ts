@@ -6,6 +6,7 @@ import {TourDocSearchFormResolver} from '../shared-tdoc/resolver/tdoc-searchform
 import {TourDocSearchpageComponent} from './components/tdoc-searchpage/tdoc-searchpage.component';
 import {TourDocAlbumResolver} from '../shared-tdoc/resolver/tdoc-album.resolver';
 import {TourDocAlbumpageComponent} from './components/tdoc-albumpage/tdoc-albumpage.component';
+import {TourDocModalShowpageComponent} from './components/tdoc-showpage/tdoc-modal-showpage.component';
 
 const tdocRoutes: Routes = [
     {
@@ -94,6 +95,22 @@ const tdocRoutes: Routes = [
                 }
             }
         ]
+    },
+    {
+        path: 'modalshow',
+        children: [
+            {
+                path: 'show/:name/:id',
+                component: TourDocModalShowpageComponent,
+                data: {
+                    baseSearchUrl: { data: 'tdoc/' }
+                },
+                resolve: {
+                    record: TourDocRecordResolver
+                }
+            }
+        ],
+        outlet: 'modalshow',
     },
 ];
 
