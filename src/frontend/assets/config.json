@@ -171,7 +171,7 @@
                     "key": "createBy",
                     "type": "createBy",
                     "name": "New Route by Track",
-                    "shortName": "->*Route",
+                    "shortName": "\uD83D\uDC23Route",
                     "payload": {
                         "type": "ROUTE"
                     },
@@ -774,7 +774,7 @@
                     "key": "createBy",
                     "type": "createBy",
                     "name": "New Trip by Track",
-                    "shortName": "->*Trip",
+                    "shortName": "\uD83D\uDC23Trip",
                     "payload": {
                         "type": "TRIP"
                     },
@@ -804,7 +804,7 @@
                     "key": "createBy",
                     "type": "createBy",
                     "name": "New News by Track",
-                    "shortName": "->*News",
+                    "shortName": "\uD83D\uDC23News",
                     "payload": {
                         "type": "NEWS"
                     },

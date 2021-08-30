@@ -362,14 +362,14 @@
     </ng-template>
 
     <ng-template #linkCreateNew let-key="key" let-id="id">
-        <a (click)="onCreateNewLink(key, id)" *ngIf="modal === false">->*</a>
+        <a (click)="onCreateNewLink(key, id)" *ngIf="modal === false">🐣</a>
     </ng-template>
 
     <ng-template #linkShowEntity let-key="key" let-formElementName="formElementName">
         <a (click)="onShowEntityLink(key, editFormGroup.getRawValue()[formElementName][0])"
            *ngIf="editFormGroup.getRawValue()[formElementName] !== undefined
             && editFormGroup.getRawValue()[formElementName] !== null
-            && editFormGroup.getRawValue()[formElementName].length === 1">&#x1F50E;</a>
+            && editFormGroup.getRawValue()[formElementName].length === 1">🔎</a>
     </ng-template>
 
     <ng-template #inputName>
@@ -496,7 +496,8 @@
 
     <ng-template #inputLinkedRoute let-key="key" let-idx="idx" let-joinName="joinName">
         <div class="col-sm-6 input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2" i18n="linkedRoutesId label|Label for filter: linkedRoutesId@@label.searchform.tdoc.linkedRoutesId">LinkedRoutes:</label>
+            <label class="col-xs-3 col-form-label mr-2"
+                   i18n="linkedRoutesId label|Label for filter: linkedRoutesId@@label.searchform.tdoc.linkedRoutesId">LinkedRoutes:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['routeId']"
                                      [settings]="settingsSelectRoute"
                                      [texts]="textsSelectRoute"
@@ -511,14 +512,16 @@
         </div>
         <ng-container *ngTemplateOutlet="inputTextTech;context:{key: joinName + 'LinkedRouteAttr', formControlName: joinName + 'LinkedRouteAttr'  + idx}"></ng-container>
         <div class="col-sm-3 input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2" i18n="linkedRoutesFull label|Label for filter: linkedRoutesFull@@label.searchform.tdoc.linkedRoutesFull">Umfasst gesamten Track:</label>
+            <label class="col-xs-3 col-form-label mr-2"
+                   i18n="linkedRoutesFull label|Label for filter: linkedRoutesFull@@label.searchform.tdoc.linkedRoutesFull">Umfasst gesamten Track:</label>
             <input type="checkbox" formControlName="{{joinName + 'Full'  + idx}}">
         </div>
     </ng-template>
 
     <ng-template #inputLinkedInfo let-key="key" let-idx="idx" let-joinName="joinName">
         <div class="col-sm-6 input-group input-group-sm">
-            <label class="col-xs-3 col-form-label mr-2" i18n="linkedInfosId label|Label for filter: linkedInfosId@@label.searchform.tdoc.linkedInfosId">LinkedInfos:</label>
+            <label class="col-xs-3 col-form-label mr-2"
+                   i18n="linkedInfosId label|Label for filter: linkedInfosId@@label.searchform.tdoc.linkedInfosId">LinkedInfos:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['infoId']"
                                      [settings]="settingsSelectInfo"
                                      [texts]="textsSelectInfo"
@@ -566,10 +569,13 @@
         <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-form-block">
             <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Markdown:</label>
             <span class="" *ngIf="recommend === true" (click)="recommendDesc()">&#x27F8; Generate</span>
-            <textarea formControlName="descTxt" class="form-control recommended-desc-form" type="text" placeholder="description" i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.tdoc.desc"></textarea>
+            <textarea formControlName="descTxt" class="form-control recommended-desc-form" type="text"
+                      placeholder="description"
+                      i18n-placeholder="desc placeholder|Placeholder for desc@@placeholder.form.tdoc.desc"></textarea>
         </div>
         <div class="col-sm-12 form-inline input-group input-group-sm recommended-desc-preview-block">
-            <label class="col-xs-3 col-form-label mr-2" i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Vorschau:</label>
+            <label class="col-xs-3 col-form-label mr-2"
+                   i18n="descMd label|Label for field: descMd@@label.editform.tdoc.descMd">Beschreibung Vorschau:</label>
             <span class="" (click)="renderRecommendedDesc(true)">&#x27F8; Update</span>
             <div id="recommendedDesc">{{renderRecommendedDesc(false)}}</div>
         </div>
@@ -579,7 +585,8 @@
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key | translate}}</label>
             <input formControlName="{{formControlName}}" class="form-control" type="number" step="0.01" placeholder="{{key}}">
-            <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend" (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
+            <span class="" *ngIf="recommend && editFormGroup.get(formControlName).value != recommend"
+                  (click)="setValue(formControlName, recommend)">&#x27F8; {{recommend}} GPX</span>
         </div>
     </ng-template>
 
@@ -596,12 +603,17 @@
             </div>
             <div class="input-group input-group-sm align-top">
                 <label class="col-xs-3 col-form-label mr-2">{{ 'label.' + key + 'Area' | translate}}</label>
-                <button (click)="createNewGeoLocArea()" *ngIf="editFormGroup.get('geoLoc').value && !editFormGroup.get('gpsTrackSrc').value" type="button" i18n="updateGeoLocNewArea label|Label for button: updateGeoLocNewArea@@label.editform.tdoc.updateGeoLocNewArea">*Area</button>
-                <button (click)="updateGeoLocMap()" type="button" i18n="updateGeoLocMap label|Label for button: updateGeoLocMap@@label.editform.tdoc.updateGeoLocMap">Daten -> Karte</button>
-                <button (click)="updateGeoLocArea()" type="button" i18n="updateGeoLocArea label|Label for button: updateGeoLocArea@@label.editform.tdoc.updateGeoLocArea">Karte -> Daten</button>
+                <button (click)="createNewGeoLocArea()" *ngIf="editFormGroup.get('geoLoc').value && !editFormGroup.get('gpsTrackSrc').value"
+                        type="button" i18n="updateGeoLocNewArea label|Label for button: updateGeoLocNewArea@@label.editform.tdoc.updateGeoLocNewArea">*Area</button>
+                <button (click)="updateGeoLocMap()"
+                        type="button" i18n="updateGeoLocMap label|Label for button: updateGeoLocMap@@label.editform.tdoc.updateGeoLocMap">Daten -> Karte</button>
+                <button (click)="updateGeoLocArea()" type="button"
+                        i18n="updateGeoLocArea label|Label for button: updateGeoLocArea@@label.editform.tdoc.updateGeoLocArea">Karte -> Daten</button>
             </div>
             <div class="input-group input-group-sm align-top">
-                <textarea formControlName="gpsTrackSrc" class="form-control float-left" type="text" placeholder="geoLocArea" i18n-placeholder="geoLocArea placeholder|Placeholder for geoLocArea@@placeholder.form.tdoc.geoLocArea"></textarea>
+                <textarea formControlName="gpsTrackSrc" class="form-control float-left" type="text"
+                          placeholder="geoLocArea"
+                          i18n-placeholder="geoLocArea placeholder|Placeholder for geoLocArea@@placeholder.form.tdoc.geoLocArea"></textarea>
             </div>
         </div>
         <div class="col-sm-6" *ngIf="geoLocRecords.length > 0">
