@@ -74,7 +74,7 @@ describe('TourDocMediaManagerModule', () => {
             ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
             ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
             '      ? AS matchingDetails, 0 AS matchingScore' +
-            '  FROM image  WHERE BINARY LOWER(CONCAT(I_dir, "_", i_file)) = BINARY LOWER(?)',
+            '  FROM image  WHERE BINARY i_calced_path2 = BINARY LOWER(?)',
         parameters: [
             'filename:testfile.jpg',
             'testfile.jpg']
@@ -84,7 +84,7 @@ describe('TourDocMediaManagerModule', () => {
         ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type, "FILEDIRANDNAME" AS matching,' +
         '      ? AS matchingDetails, 0 AS matchingScore' +
-        '  FROM image  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)';
+        '  FROM image  WHERE BINARY i_calced_path = BINARY LOWER(?)';
     preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
         'dir: testdir filename:testfile.jpg',
         'testdir/testfile.jpg'
@@ -94,7 +94,7 @@ describe('TourDocMediaManagerModule', () => {
         ' i_date AS created,      i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type, "FILENAMEANDDATE" AS matching,' +
         '      ? AS matchingDetails,      0.25 AS matchingScore' +
-        '  FROM image  WHERE LOWER(i_file) = LOWER(?)' +
+        '  FROM image  WHERE i_calced_file = LOWER(?)' +
         '      AND (   UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?' +
         '           OR UNIX_TIMESTAMP(i_date) BETWEEN ? AND ?)';
     preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
@@ -110,7 +110,7 @@ describe('TourDocMediaManagerModule', () => {
         ' v_date AS created, v_date AS lastModified,      v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
         '      ? AS matchingDetails, 0 AS matchingScore' +
-        '  FROM video  WHERE LOWER(CONCAT(V_dir, "_", v_file)) = LOWER(?)';
+        '  FROM video  WHERE v_calced_path2 = LOWER(?)';
     preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
         'filename:testfile.jpg',
         'testfile.jpg'
@@ -120,7 +120,7 @@ describe('TourDocMediaManagerModule', () => {
         ' v_date AS created, v_date AS lastModified,      v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILEDIRANDNAME" AS matching,' +
         '      ? AS matchingDetails, 0 AS matchingScore' +
-        '  FROM video  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER(?)';
+        '  FROM video  WHERE v_calced_path = LOWER(?)';
     preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
         'dir: testdir filename:testfile.jpg',
         'testdir/testfile.jpg'
@@ -130,7 +130,7 @@ describe('TourDocMediaManagerModule', () => {
         ' v_date AS created, v_date AS lastModified,      v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILENAMEANDDATE" AS matching,' +
         '      ? AS matchingDetails,      0.25 AS matchingScore' +
-        '  FROM video  WHERE LOWER(v_file) = LOWER(?)' +
+        '  FROM video  WHERE v_calced_file = LOWER(?)' +
         '      AND (   UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?' +
         '           OR UNIX_TIMESTAMP(v_date) BETWEEN ? AND ?)';
     preferedMatchingSql.parameters =  preferedMatchingSql.parameters.concat([
@@ -145,7 +145,7 @@ describe('TourDocMediaManagerModule', () => {
         sql: 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
             ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
             ' "IMAGE" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
-            '  FROM image  WHERE LOWER(i_file) = LOWER(?)',
+            '  FROM image  WHERE i_calced_file = LOWER(?)',
         parameters: [
             'filename:testfile.jpg',
             'testfile.jpg'
@@ -168,7 +168,7 @@ describe('TourDocMediaManagerModule', () => {
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
-        '  FROM video  WHERE LOWER(v_file) = LOWER(?)';
+        '  FROM video  WHERE v_calced_file = LOWER(?)';
     fallbackMatchingSql.parameters =  fallbackMatchingSql.parameters.concat([
         'filename:testfile.jpg',
         'testfile.jpg'
@@ -190,7 +190,7 @@ describe('TourDocMediaManagerModule', () => {
         sql: 'SELECT DISTINCT CONCAT("IMAGE_", i_id) as id, i_file AS name, i_dir AS dir,' +
             ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
             ' "IMAGE" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
-            '  FROM image  WHERE LOWER(i_file) = LOWER(?)',
+            '  FROM image  WHERE i_calced_file = LOWER(?)',
         parameters: [
             'filename:testfile.jpg',
             'testfile.jpg']
@@ -213,7 +213,7 @@ describe('TourDocMediaManagerModule', () => {
         'SELECT DISTINCT CONCAT("VIDEO_", v_id) as id, v_file AS name, v_dir AS dir,' +
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
         ' "VIDEO" AS type, "FILENAME" AS matching,       ? AS matchingDetails, 0.5 AS matchingScore' +
-        '  FROM video  WHERE LOWER(v_file) = LOWER(?)';
+        '  FROM video  WHERE v_calced_file = LOWER(?)';
     fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
         'filename:testfile.jpg',
         'testfile.jpg'
@@ -236,7 +236,7 @@ describe('TourDocMediaManagerModule', () => {
         ' i_date AS created,       i_date AS lastModified, i_date AS exifDate,' +
         ' "IMAGE" AS type,       ? AS matching,' +
         '       ? AS matchingDetails,       ? AS matchingScore' +
-        '  FROM image  WHERE BINARY LOWER(CONCAT(I_dir, "/", i_file)) = BINARY LOWER(?)';
+        '  FROM image  WHERE BINARY i_calced_path = BINARY LOWER(?)';
     fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
         'SIMILARITY',
         'OpponentHistogram',
@@ -248,7 +248,7 @@ describe('TourDocMediaManagerModule', () => {
         ' v_date AS created,       v_date AS lastModified, v_date AS exifDate,' +
         ' "VIDEO" AS type,       ? AS matching,' +
         '       ? AS matchingDetails,       ? AS matchingScore' +
-        '  FROM video  WHERE LOWER(CONCAT(v_dir, "/", v_file)) = LOWER(?)';
+        '  FROM video  WHERE v_calced_path = LOWER(?)';
     fallBackMatchingWithExternals.parameters =  fallBackMatchingWithExternals.parameters.concat([
         'SIMILARITY',
         'OpponentHistogram',

@@ -7,6 +7,7 @@
 - added linked route-attributes for track-routes
 - added modal window to create new entries and append them to selectbox
 - added modal window to show entries short in popup
+- improved sql for similarity-search
 
 ### new features
 - backend/frontend: added statistics-section
@@ -16,6 +17,7 @@
 
 ### improvements
 - backend: added sort by name
+- backend: improved sql for similarity-search
 
 ### bug fixes
 - backend: fixed invalid argument-check in cli
