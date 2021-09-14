@@ -142,7 +142,7 @@ export class SqlMytbExportDbNewsConfig {
             'route_attr_ss': {
                 noFacet: true
             },
-            'route_attr_parts_ss': {
+            'route_attr_txt': {
                 noFacet: true
             },
             'subtype_ss': {

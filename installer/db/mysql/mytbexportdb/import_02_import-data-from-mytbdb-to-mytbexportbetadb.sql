@@ -104,8 +104,8 @@ SET
 -- ##################
 -- import tracks
 -- ##################
-INSERT into kategorie_full (k_id, t_id, l_id, tr_id, k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_type)
-    SELECT k_id, t_id, l_id, COALESCE(tr_id, 0), k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_type
+INSERT into kategorie_full (k_id, t_id, l_id, tr_id, k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type)
+    SELECT k_id, t_id, l_id, COALESCE(tr_id, 0), k_gesperrt, k_datebis, k_datevon, k_gpstracks_basefile, k_meta_shortdesc, k_name, k_distance, k_altitude_asc, k_altitude_desc, k_altitude_min, k_altitude_max, k_rate_schwierigkeit, k_rate_ausdauer, k_rate_kraft, k_rate_mental, k_rate_bildung, k_rate_motive, k_rate_wichtigkeit, k_rate_gesamt, k_route_attr, k_type
     FROM importmytbdb_kategorie WHERE (importmytbdb_kategorie.k_gesperrt=0 OR importmytbdb_kategorie.k_gesperrt IS NULL);
 
 -- calc keywords
@@ -205,11 +205,11 @@ WHERE toupdate.t_id=grouped.t_id;
 -- ##################
 -- import-trackroutes
 -- ##################
-INSERT into kategorie_tour (t_id, k_id)
-    SELECT t_id, k_id
+INSERT into kategorie_tour (t_id, k_id, kt_route_attr)
+    SELECT t_id, k_id, kt_route_attr
     FROM importmytbdb_kategorie_tour where k_id IS NOT NULL AND t_ID IS NOT NULL;
-INSERT into kategorie_tour (t_id, k_id)
-    SELECT t_id, k_id
+INSERT into kategorie_tour (t_id, k_id, kt_route_attr)
+    SELECT t_id, k_id, k_route_attr
     FROM importmytbdb_kategorie where k_id IS NOT NULL AND t_ID IS NOT NULL;
 
 -- ##################

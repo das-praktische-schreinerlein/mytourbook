@@ -99,8 +99,8 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
         const facetValues = this.searchFormUtils.getFacetValues(searchResult, 'route_attr_ss', '', '');
         facetValues.forEach(row => {
             row[1] = row[1].replace(/[ ()\[\],;]/gs, ' ');
-            if (row.length > 5) {
-                row[5] = row[5].replace(/[ ()\[\],;]/gs, ' ');
+            if (row.length > 5 && row[5] !== undefined) {
+                row[5] = (row[5] + '').replace(/[ ()\[\],;]/gs, ' ');
             }
         })
 
@@ -108,8 +108,13 @@ export class TourDocSearchFormUtils extends CommonDocSearchFormUtils {
     }
 
     getRouteAttrPartValues(searchResult: TourDocSearchResult): any[] {
+        let facetValues = this.searchFormUtils.getFacetValues(searchResult, 'route_attr_txt', '', '');
+        if (facetValues && facetValues.length > 0) {
+            return facetValues;
+        }
+
         const splittedfacetKeys = {};
-        const facetValues = this.getRouteAttrValues(searchResult);
+        facetValues = this.getRouteAttrValues(searchResult);
         facetValues.forEach(row => {
             row[1].split(/[ ,();]/).forEach(key => {
                 if (key !== undefined && key !== '' && !splittedfacetKeys[key]) {

@@ -311,6 +311,7 @@ CREATE TABLE kategorie_full (
   k_type int(11) DEFAULT NULL,
   k_meta_shortdesc_md text,
   k_meta_shortdesc_html text,
+  k_route_attr VARCHAR(255) DEFAULT NULL,
   n_id int(11) DEFAULT NULL,
   k_dateshow date DEFAULT NULL,
   countImages int(11) DEFAULT 0,
@@ -322,7 +323,9 @@ CREATE TABLE kategorie_full (
 DROP TABLE IF EXISTS kategorie_tour;
 CREATE TABLE kategorie_tour (
   t_id int(11) NOT NULL,
-  k_id int(11) NOT NULL
+  k_id int(11) NOT NULL,
+  kt_full int(11) DEFAULT '0',
+  kt_route_attr VARCHAR(255) DEFAULT NULL
 );
 
 -- ---------------

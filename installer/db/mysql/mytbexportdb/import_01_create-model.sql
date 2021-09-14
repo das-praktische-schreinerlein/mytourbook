@@ -369,6 +369,7 @@ CREATE TABLE kategorie_full (
   k_type int(11) DEFAULT NULL,
   k_meta_shortdesc_md text COLLATE latin1_general_ci,
   k_meta_shortdesc_html text COLLATE latin1_general_ci,
+  k_route_attr VARCHAR(255) COLLATE latin1_general_ci DEFAULT NULL,
   n_id int(11) DEFAULT NULL,
   k_dateshow date DEFAULT NULL,
   countImages int(11) DEFAULT 0,
@@ -399,6 +400,8 @@ DROP TABLE IF EXISTS kategorie_tour;
 CREATE TABLE kategorie_tour (
   t_id int(11) NOT NULL,
   k_id int(11) NOT NULL,
+  kt_full int(11) DEFAULT '0',
+  kt_route_attr VARCHAR(255) COLLATE latin1_general_ci DEFAULT NULL,
   KEY t_id (t_id),
   KEY k_id (k_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;

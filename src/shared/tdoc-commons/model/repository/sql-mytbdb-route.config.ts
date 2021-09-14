@@ -28,7 +28,7 @@ export class SqlMytbDbRouteConfig {
             {
                 from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ' +
                     'LEFT JOIN kategorie ON kategorie_tour.k_id=kategorie.k_id OR kategorie.t_id=tour.t_id ',
-                triggerParams: ['id', 'track_id_i', 'track_id_is', 'route_attr_ss', 'route_attr_parts_ss'],
+                triggerParams: ['id', 'track_id_i', 'track_id_is', 'route_attr_ss', 'route_attr_txt'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_k_ids',
                     'GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_kt_ids',
                     'GROUP_CONCAT(DISTINCT COALESCE(kategorie.k_route_attr, "") ORDER BY kategorie.k_route_attr SEPARATOR ";; ") AS t_k_route_attr',
@@ -432,7 +432,7 @@ export class SqlMytbDbRouteConfig {
                     'REGEXP_REPLACE(TRIM(REPLACE(REPLACE(REPLACE(REPLACE(kategorie.k_route_attr, "(", " "), ")", " "), ",", " "), ";", " ")), "[[:space:]]+", " ")'],
                 action: AdapterFilterActions.IN
             },
-            'route_attr_parts_ss': {
+            'route_attr_txt': {
                 filterFields: ['kategorie_tour.kt_route_attr', 'kategorie.k_route_attr'],
                 action: AdapterFilterActions.LIKEIN
             },

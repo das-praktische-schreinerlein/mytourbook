@@ -24,8 +24,8 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'rate_tech_overall_s', 'rate_tech_ks_s', 'rate_tech_firn_s', 'rate_tech_gletscher_s', 'rate_tech_klettern_s',
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
-            'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt',
-            'navigation_objects_txt', 'extended_object_properties_txt'],
+            'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt', 'route_attr_ss',
+            'navigation_objects_txt', 'extended_object_properties_txt', 'linkedroutes_txt'],
         facetConfigs: {
             'id_notin_is': {
                 filterField: 'id',
@@ -106,6 +106,14 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'subtype_ss': {
                 'f.subtype_ss.facet.limit': '-1',
                 'f.subtype_ss.facet.sort': 'index'
+            },
+            'route_attr_ss': {
+                'f.route_attr_ss.facet.limit': '-1',
+                'f.route_attr_ss.facet.sort': 'index'
+            },
+            'route_attr_txt': {
+                'f.route_attr_txt.facet.limit': '-1',
+                'f.route_attr_txt.facet.sort': 'index'
             },
             'type_txt': {},
             'week_is': {
