@@ -545,6 +545,7 @@
                            k_meta_shortdesc_html,
                            k_meta_shortdesc_html                                                                          AS k_meta_shortdesc_html2,
                            k_rate_gesamt,
+                           k_route_attr,
                            k_gps_lat,
                            k_gps_lon,
                            CONCAT(k_gps_lat, ',', k_gps_lon)                                                              AS k_gps_loc,
@@ -705,6 +706,8 @@
             <field column="countImagesTop" name="count_images_top_i" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countVideos" name="count_videos_i" />
+            <field column="k_route_attr" name="route_attr_ss" />
+            <field column="k_route_attr" name="route_attr_txt" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -742,6 +745,19 @@
                               WHERE kategorie_full.k_id IN (${track.k_id})
                         '>
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+            <entity name='linkedroutes'
+                    query='
+                    (SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),
+                       ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR), ":::linkedRouteAttr=", COALESCE(kategorie_tour.kt_route_attr, "null"))
+                      AS linkedroutes,
+                      kt_route_attr
+                      FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (${track.k_id})
+                      ORDER BY t_name)'>
+                <field column="linkedroutes" name="linkedroutes_txt"/>
+                <field column="kt_route_attr" name="route_attr_ss"/>
+                <field column="kt_route_attr" name="route_attr_txt"/>
             </entity>
 
             <entity name='image'
@@ -1052,6 +1068,19 @@
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
+            <entity name='linkedroutes'
+                    query='
+                    (SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),
+                       ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR), ":::linkedRouteAttr=", COALESCE(kategorie_tour.kt_route_attr, "null"))
+                      AS linkedroutes,
+                      kt_route_attr
+                      FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
+                      ORDER BY t_name)'>
+                <field column="linkedroutes" name="linkedroutes_txt"/>
+                <field column="kt_route_attr" name="route_attr_ss"/>
+                <field column="kt_route_attr" name="route_attr_txt"/>
+            </entity>
+
             <entity name='image'
                     query="
                         SELECT
@@ -1083,7 +1112,8 @@
                                MONTH(k_datevon) AS month,
                                YEAR(k_datevon)  AS year,
                                k_persons,
-                               k_objects
+                               k_objects,
+                               k_route_attr
                         FROM kategorie_full
                             INNER JOIN kategorie_tour ON kategorie_full.k_id = kategorie_tour.k_id
                         WHERE kategorie_tour.t_id = ${route.t_id}
@@ -1096,7 +1126,8 @@
                                MONTH(k_datevon) AS month,
                                YEAR(k_datevon)  AS year,
                                k_persons,
-                               k_objects
+                               k_objects,
+                               k_route_attr
                         FROM kategorie_full
                         WHERE k_id = '${dih.delta.id}'"
                     deltaQuery="SELECT k_id FROM kategorie_full'"
@@ -1110,6 +1141,8 @@
                 <field column="year" name="year_is" />
                 <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_route_attr" name="route_attr_ss"/>
+                <field column="k_route_attr" name="route_attr_txt"/>
             </entity>
             <entity name='destination'
                     query="select d_id FROM destination WHERE d_id = '${route.d_id}'"
