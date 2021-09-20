@@ -360,14 +360,17 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
                     continue;
                 }
 
-                const actionValues = [action, this.translateService.instant('ac_' + action)]
+                const actionValues = [action, this.translateService.instant(action)]
                 for (const year of Object.keys(years).sort()) {
                     if (!types[keyType][action][year]) {
                         actionValues.push(undefined);
                         continue;
                     }
 
-                    yearValues[year] += types[keyType][action][year]
+                    if (action.startsWith('ac_')) {
+                        yearValues[year] += types[keyType][action][year]
+                    }
+
                     actionValues.push(types[keyType][action][year]);
                 }
 
@@ -432,7 +435,10 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         const url = this.searchFormConverter.searchFormToUrl('/sections/start/', TourDocSearchFormFactory.createSanitized({
             ...statisticSearchForm,
             perPage: 10,
-            actiontype: action && action !== 'ac_undefined'
+            techDataAltitudeMax: action && action.startsWith('ele_')
+                ? '' + Number(action.replace(/[^0-9]/gs, ''))
+                : undefined,
+            actiontype: action && action !== 'ac_undefined' && action.startsWith('ac_')
                 ? action.toString()
                 : undefined,
             when: when,

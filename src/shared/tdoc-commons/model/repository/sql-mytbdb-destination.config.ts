@@ -320,10 +320,10 @@ export class SqlMytbDbDestinationConfig {
             'statistics': {
                 selectSql: 'select CONCAT(typ, "-", type, "-", year) as value, count' +
                     '         from (' +
-                    '                  select \'DESTINATION_DONE\' typ, type, year, count(*) count' +
+                    '                  select \'DESTINATION_DONE\' as typ, type, year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ)     as name,' +
-                    '                                           T_TYP           as type,' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ)     as name,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -335,8 +335,8 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ)     as name,' +
-                    '                                           T_TYP           as type,' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ)     as name,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -344,15 +344,44 @@ export class SqlMytbDbDestinationConfig {
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
                     '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t_ele_max)     as name,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t_ele_max)     as name,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
                     '                       ) x' +
                     '                  where year is not null' +
                     '                  group by type, year' +
                     '' +
                     '                  UNION' +
                     '' +
-                    '                  select \'DESTINATION_DONE\' typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  select \'DESTINATION_DONE\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as name, T_TYP as type, K_DATEVON' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as name,' +
+                    '                                CONCAT("ac_", T_TYP) as type,' +
+'                                                    K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
@@ -362,26 +391,65 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as name, T_TYP as type, K_DATEVON' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as name,' +
+                    '                                CONCAT("ac_", T_TYP) as type,' +
+                '                                    K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
                     '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as name,' +
+                    '                               CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                               K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as name,' +
+                    '                               CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                               K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
                     '                       ) x' +
                     '                  group by type' +
                     '' +
                     '                  UNION' +
                     '' +
-                    '                  select \'DESTINATION_NEW\' typ, type, year, count(*) count' +
+                    '                  select \'DESTINATION_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as       name,' +
-                    '                                           T_TYP       as       type,' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as       name,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
                     '                             and T_DATEVON is not null' +
+                    '                           group by name, type' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as       name,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and T_DATEVON is not null' +
+                    '                             and t_ele_max is not null' +
                     '                           group by name, type' +
                     '                       ) x' +
                     '                  where year is not null' +
@@ -389,15 +457,27 @@ export class SqlMytbDbDestinationConfig {
                     '' +
                     '                  UNION' +
                     '' +
-                    '                  select \'DESTINATION_NEW\' typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  select \'DESTINATION_NEW\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_", t.t_typ) as       name,' +
-                    '                                           T_TYP       as       type,' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ac_", t.t_typ) as       name,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
                     '                             and T_DATEVON is not null' +
+                    '                           group by name, type' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct CONCAT(t.l_id, "_", t.t_desc_gebiet, "_", t.t_desc_ziel, "_ele_", t.t_ele_max) as       name,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type,' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and T_DATEVON is not null' +
+                    '                             and t_ele_max is not null' +
                     '                           group by name, type' +
                     '                       ) x' +
                     '                  group by type' +

@@ -477,10 +477,10 @@ export class SqlMytbDbRouteConfig {
             'statistics': {
                 selectSql: 'select CONCAT(typ, "-", type, "-", year) as value, count' +
                     '         from (' +
-                    '                  select distinct \'ROUTE_DONE\' typ, type, year, count(*) count' +
+                    '                  select distinct \'ROUTE_DONE\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name          as name,' +
-                    '                                           T_TYP           as type,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -493,7 +493,7 @@ export class SqlMytbDbRouteConfig {
                     '                           union all' +
                     '' +
                     '                           select distinct t_name          as name,' +
-                    '                                           T_TYP           as type,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
                     '                                           YEAR(K_DATEVON) as year,' +
                     '                                           K_DATEVON' +
                     '                           from kategorie k' +
@@ -501,15 +501,42 @@ export class SqlMytbDbRouteConfig {
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
                     '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct t_name          as name,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)   as type,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct t_name          as name,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)  as type,' +
+                    '                                           YEAR(K_DATEVON) as year,' +
+                    '                                           K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
                     '                       ) x' +
                     '                  where year is not null' +
                     '                  group by type, year' +
                     '' +
                     '                  UNION' +
                     '' +
-                    '                  select distinct \'ROUTE_DONE\' typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  select distinct \'ROUTE_DONE\' as typ, type, \'ALLOVER\' year, count(*) count' +
                     '                  from (' +
-                    '                           select distinct t_name as name, T_TYP as type, K_DATEVON' +
+                    '                           select distinct t_name as name, CONCAT("ac_", T_TYP) as type, K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
                     '                                    inner join tour t on kt.t_ID = t.t_ID' +
@@ -519,21 +546,42 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                           union all' +
                     '' +
-                    '                           select distinct t_name as name, T_TYP as type, K_DATEVON' +
+                    '                           select distinct t_name as name, CONCAT("ac_", T_TYP) as type, K_DATEVON' +
                     '                           from kategorie k' +
                     '                                    inner join tour t on k.t_ID = t.t_ID' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
                     '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct t_name as name, CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type, K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join kategorie_tour kt on k.K_ID = kt.K_ID' +
+                    '                                    inner join tour t on kt.t_ID = t.t_ID' +
+                    '                           where kt.t_id > 1' +
+                    '                             and kt.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
+                    '' +
+                    '                           union all' +
+                    '' +
+                    '                           select distinct t_name as name, CONCAT("ele_", ROUND((t_ele_max / 500))*500) as type, K_DATEVON' +
+                    '                           from kategorie k' +
+                    '                                    inner join tour t on k.t_ID = t.t_ID' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and DATE(k_datevon) > DATE(t_datevon)' +
+                    '                             and t_ele_max is not null' +
                     '                       ) x' +
                     '                  group by type' +
                     '' +
                     '                  UNION' +
                     '' +
-                    '                  select \'ROUTE_NEW\' typ, type, year, count(*) count' +
+                    '                  select \'ROUTE_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
-                    '                                           T_TYP  as            type,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
@@ -546,15 +594,49 @@ export class SqlMytbDbRouteConfig {
                     '' +
                     '                  UNION' +
                     '' +
-                    '                  select \'ROUTE_NEW\' typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  select \'ROUTE_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct t_name as            name,' +
-                    '                                           T_TYP  as            type,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)  as         type,' +
                     '                                           min(YEAR(t_DATEVON)) year' +
                     '                           from tour t' +
                     '                           where t.t_id > 1' +
                     '                             and t.t_id not in (1, 1681)' +
                     '                             and T_DATEVON is not null' +
+                    '                             and t_ele_max is not null' +
+                    '                           group by name, type' +
+                    '                       ) x' +
+                    '                  where year is not null' +
+                    '                  group by type, year' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select \'ROUTE_NEW\' as typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct t_name as            name,' +
+                    '                                           CONCAT("ac_", T_TYP) as type,' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and T_DATEVON is not null' +
+                    '                           group by name, type' +
+                    '                       ) x' +
+                    '                  where year is not null' +
+                    '                  group by type, type' +
+                    '' +
+                    '                  UNION' +
+                    '' +
+                    '                  select \'ROUTE_NEW\' as typ, type, \'ALLOVER\' year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct t_name as            name,' +
+                    '                                           CONCAT("ele_", ROUND((t_ele_max / 500))*500)  as            type,' +
+                    '                                           min(YEAR(t_DATEVON)) year' +
+                    '                           from tour t' +
+                    '                           where t.t_id > 1' +
+                    '                             and t.t_id not in (1, 1681)' +
+                    '                             and T_DATEVON is not null' +
+                    '                             and t_ele_max is not null' +
                     '                           group by name, type' +
                     '                       ) x' +
                     '                  where year is not null' +

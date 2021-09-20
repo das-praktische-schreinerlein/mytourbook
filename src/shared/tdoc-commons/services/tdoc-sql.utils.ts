@@ -41,6 +41,9 @@ export class TourDocSqlUtils {
             '$1 || CAST(COUNT(DISTINCT $2) AS CHAR(50))');
         sql = sql.replace(/CONCAT\((.*?), CAST\(COUNT\(DISTINCT (.*?)\) AS CHAR\)\)/g,
             '$1 || CAST(COUNT(DISTINCT $2) AS CHAR(50))');
+        sql = sql.replace(/CONCAT\("ele_", ROUND\(\((.*?) \/ 500\)\)\*500\)/g,
+            '"ele_" || CAST(ROUND(($1 / 500))*500 AS INTEGER)');
+
         return sql;
     }
 }

@@ -221,12 +221,12 @@
             <ng-container *ngFor="let row of statisticBoardData.slice(1)">
                 <tr>
                     <td>
-                        <a (click)="onStatisticClicked(statisticSearchForm, statisticBoardData, 'ac_' + row[0], undefined)">{{row[1]}}</a>
+                        <a (click)="onStatisticClicked(statisticSearchForm, statisticBoardData, row[0], undefined)">{{row[1]}}</a>
                     </td>
 
                     <ng-container *ngFor="let column of row.slice(2); let index = index">
                         <td [ngClass]="column > 0 ? 'statisticBoardcolumn-available' : 'statisticBoardcolumn-unavailable'">
-                            <a (click)="onStatisticClicked(statisticSearchForm, statisticBoardData, 'ac_' + row[0], index + 2)">{{column}}</a>
+                            <a (click)="onStatisticClicked(statisticSearchForm, statisticBoardData, row[0], index + 2)">{{column}}</a>
                         </td>
                     </ng-container>
                 </tr>

@@ -481,11 +481,42 @@ export class SqlMytbDbTrackConfig {
             'statistics': {
                 selectSql: 'select CONCAT(typ, "-", type, "-", year) as value, count' +
                     '         from (' +
-                    '              select distinct \'TRACK_NEW\' typ, type, year, count(*) count' +
+                    '              select distinct \'TRACK_NEW\' as typ, type, year, count(*) count' +
                     '                  from (' +
                     '                           select distinct k_name as            name,' +
-                    '                                           K_TYPE  as            type,' +
+                    '                                           CONCAT("ac_", K_TYPE)  as type,' +
                     '                                           YEAR(k_DATEVON) year' +
+                    '                           from kategorie k' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'TRACK_NEW\' as typ, type, \'ALLOVER\' as year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct k_name as            name,' +
+                    '                                           CONCAT("ac_", K_TYPE)  as type' +
+                    '                           from kategorie k' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'TRACK_NEW\' as typ, type, year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct k_name as            name,' +
+                    '                                           CONCAT("ele_", ROUND((k_altitude_max / 500))*500) as type,' +
+                    '                                           YEAR(k_DATEVON) year' +
+                    '                           from kategorie k' +
+                    '                       ) x' +
+                    '                  group by type, year' +
+                    '' +
+                    '              union all' +
+                    '' +
+                    '              select distinct \'TRACK_NEW\' as typ, type, \'ALLOVER\' as year, count(*) count' +
+                    '                  from (' +
+                    '                           select distinct k_name as            name,' +
+                    '                                           CONCAT("ele_", ROUND((k_altitude_max / 500))*500) as type' +
                     '                           from kategorie k' +
                     '                       ) x' +
                     '                  group by type, year' +
