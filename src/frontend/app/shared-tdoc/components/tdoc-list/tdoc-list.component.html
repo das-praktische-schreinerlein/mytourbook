@@ -13,42 +13,49 @@
                                       (playerStopped)="onPlayerStopped($event)"
                                       *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-page>
         </ng-container>
+
         <ng-container *ngSwitchCase="Layout.SMALL">
-            <app-tdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-small"
-                                [record]="record"
-                                [idx]="idx"
-                                [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
-                                [layout]="layout"
-                                [short]="short"
-                                [showItemMapFlag]="showItemMapFlag"
-                                [showItemObjectsFlag]="showItemObjectsFlag"
-                                [backToSearchUrl]="getBackToSearchUrl(searchResult)"
-                                [multiActionManager]="multiActionManager"
-                                (show)="onShow($event)"
-                                (showImage)="onShowImage($event)"
-                                (playerStarted)="onPlayerStarted($event)"
-                                (playerStopped)="onPlayerStopped($event)"
-                                (showItemOnMap)="onShowItemOnMap($event)"
-                                *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-small>
+            <ng-container *ngFor="let record of searchResult.currentRecords; let idx = index;">
+                <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
+                <app-tdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-small"
+                                    [record]="record"
+                                    [idx]="idx"
+                                    [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
+                                    [layout]="layout"
+                                    [short]="short"
+                                    [showItemMapFlag]="showItemMapFlag"
+                                    [showItemObjectsFlag]="showItemObjectsFlag"
+                                    [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                    [multiActionManager]="multiActionManager"
+                                    (show)="onShow($event)"
+                                    (showImage)="onShowImage($event)"
+                                    (playerStarted)="onPlayerStarted($event)"
+                                    (playerStopped)="onPlayerStopped($event)"
+                                    (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list-item-small>
+            </ng-container>
         </ng-container>
+
         <ng-container *ngSwitchCase="Layout.FLAT">
-            <app-tdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-flat"
-                                      [record]="record"
-                                      [idx]="idx"
-                                      [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
-                                      [layout]="layout"
-                                      [short]="short"
-                                      [showItemMapFlag]="showItemMapFlag"
-                                      [showItemObjectsFlag]="showItemObjectsFlag"
-                                      [backToSearchUrl]="getBackToSearchUrl(searchResult)"
-                                      [multiActionManager]="multiActionManager"
-                                      (show)="onShow($event)"
-                                      (showImage)="onShowImage($event)"
-                                      (playerStarted)="onPlayerStarted($event)"
-                                      (playerStopped)="onPlayerStopped($event)"
-                                      (showItemOnMap)="onShowItemOnMap($event)"
-                                      *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-flat>
+            <ng-container *ngFor="let record of searchResult.currentRecords; let idx = index;">
+                <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
+                <app-tdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-flat"
+                                          [record]="record"
+                                          [idx]="idx"
+                                          [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
+                                          [layout]="layout"
+                                          [short]="short"
+                                          [showItemMapFlag]="showItemMapFlag"
+                                          [showItemObjectsFlag]="showItemObjectsFlag"
+                                          [backToSearchUrl]="getBackToSearchUrl(searchResult)"
+                                          [multiActionManager]="multiActionManager"
+                                          (show)="onShow($event)"
+                                          (showImage)="onShowImage($event)"
+                                          (playerStarted)="onPlayerStarted($event)"
+                                          (playerStopped)="onPlayerStopped($event)"
+                                          (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list-item-flat>
+            </ng-container>
         </ng-container>
+
         <ng-container *ngSwitchCase="Layout.THIN">
             <app-tdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-thin"
                                      [record]="record"
@@ -67,8 +74,11 @@
                                      (showItemOnMap)="onShowItemOnMap($event)"
                                      *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-thin>
         </ng-container>
+
         <ng-container *ngSwitchDefault>
-            <app-tdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-big"
+            <ng-container *ngFor="let record of searchResult.currentRecords; let idx = index;">
+                <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
+                <app-tdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-big"
                                 [record]="record"
                                 [idx]="idx"
                                 [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
@@ -82,8 +92,29 @@
                                 (showImage)="onShowImage($event)"
                                 (playerStarted)="onPlayerStarted($event)"
                                 (playerStopped)="onPlayerStopped($event)"
-                                (showItemOnMap)="onShowItemOnMap($event)"
-                                *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item>
+                                (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list-item>
+            </ng-container>
         </ng-container>
     </ng-container>
 </div>
+
+<ng-template #showTripLine let-record="record" let-idx="idx">
+    <ng-container *ngIf="searchResult.searchForm.type==='track' && (searchResult.searchForm.sort==='tripDate' || searchResult.searchForm.sort==='tripDateAsc')">
+        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] === undefined && idx > 0 && record.tripId !== searchResult.currentRecords[idx - 1].tripId">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px" class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
+            </div>
+        </ng-container>
+        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] !== undefined && (idx === 0 || (idx > 0 && record.tripId !== searchResult.currentRecords[idx - 1].tripId))">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px" class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
+                <app-tdoc-inline-searchpage [label]="'Trip'"
+                                            i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.tdoc.TRIP"
+                                            [params]="{'moreFilter': 'trip_id_is:' + record['tripId'], type: 'TRIP'}"
+                                            [htmlId]="'TRIP'"
+                                            [showForm]="false"
+                                            [layout]="Layout.FLAT"
+                                            [showResultList]="true"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>

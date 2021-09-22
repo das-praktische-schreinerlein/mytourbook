@@ -539,6 +539,8 @@ export class SqlMytbDbTrackConfig {
             'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.k_id = kategorie.k_id) DESC',
             'date': 'k_datevon DESC',
             'dateAsc': 'k_datevon ASC',
+            'tripDate': 'k_datevon DESC',
+            'tripDateAsc': 'k_datevon ASC',
             'distance': 'geodist ASC',
             'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
             'dataTechAltDesc': 'k_altitude_asc DESC',

@@ -8,12 +8,14 @@
 - added modal window to create new entries and append them to selectbox
 - added modal window to show entries short in popup
 - improved sql for similarity-search
+- added groupby trip for track-list
 
 ### new features
 - backend/frontend: added statistics-section
 - backend/frontend: added linked route-attributes for track-routes
 - frontend: added modal window to create new entries and append them to selectbox
 - frontend: added modal window to show entries short in popup
+- frontend: added groupby trip for track-list
 
 ### improvements
 - backend: added sort by name
