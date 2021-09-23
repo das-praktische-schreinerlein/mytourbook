@@ -17,6 +17,7 @@
         <ng-container *ngSwitchCase="Layout.SMALL">
             <ng-container *ngFor="let record of searchResult.currentRecords; let idx = index;">
                 <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
                 <app-tdoc-list-item-small style="min-width: 130px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-small"
                                     [record]="record"
                                     [idx]="idx"
@@ -38,6 +39,7 @@
         <ng-container *ngSwitchCase="Layout.FLAT">
             <ng-container *ngFor="let record of searchResult.currentRecords; let idx = index;">
                 <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
                 <app-tdoc-list-item-flat style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-flat"
                                           [record]="record"
                                           [idx]="idx"
@@ -57,7 +59,10 @@
         </ng-container>
 
         <ng-container *ngSwitchCase="Layout.THIN">
-            <app-tdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-thin"
+            <ng-container *ngFor="let record of searchResult.currentRecords; let idx = index;">
+                <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
+                <app-tdoc-list-item-thin style="min-width: 130px; margin-bottom: 10px; clear: both; width: 100%" class="app-tdoc-list-item app-tdoc-list-item-thin"
                                      [record]="record"
                                      [idx]="idx"
                                      [rowNr]="((searchResult.searchForm.pageNum - 1) * searchResult.searchForm.perPage) + idx"
@@ -71,13 +76,14 @@
                                      (showImage)="onShowImage($event)"
                                      (playerStarted)="onPlayerStarted($event)"
                                      (playerStopped)="onPlayerStopped($event)"
-                                     (showItemOnMap)="onShowItemOnMap($event)"
-                                     *ngFor="let record of searchResult.currentRecords; let idx = index"></app-tdoc-list-item-thin>
+                                     (showItemOnMap)="onShowItemOnMap($event)"></app-tdoc-list-item-thin>
+            </ng-container>
         </ng-container>
 
         <ng-container *ngSwitchDefault>
             <ng-container *ngFor="let record of searchResult.currentRecords; let idx = index;">
                 <ng-container *ngTemplateOutlet="showTripLine;context:{record: record, idx: idx}"></ng-container>
+                <ng-container *ngTemplateOutlet="showRegionLine;context:{record: record, idx: idx}"></ng-container>
                 <app-tdoc-list-item style="min-width: 300px; margin-bottom: 10px" class="card app-tdoc-list-item app-tdoc-list-item-big"
                                 [record]="record"
                                 [idx]="idx"
@@ -99,13 +105,19 @@
 </div>
 
 <ng-template #showTripLine let-record="record" let-idx="idx">
-    <ng-container *ngIf="searchResult.searchForm.type==='track' && (searchResult.searchForm.sort==='tripDate' || searchResult.searchForm.sort==='tripDateAsc')">
-        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] === undefined && idx > 0 && record.tripId !== searchResult.currentRecords[idx - 1].tripId">
-            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px" class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
+    <ng-container *ngIf="searchResult.searchForm.type==='track' &&
+                    (searchResult.searchForm.sort==='tripDate' || searchResult.searchForm.sort==='tripDateAsc')">
+        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] === undefined && idx > 0 &&
+                        record.tripId !== searchResult.currentRecords[idx - 1].tripId">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
+                 class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-notripline">
+                <span i18n="label tdoc-list showTripLine no trip|Label tdoc-list showTripLine no trip@@tdoc-list.showTripLine.label.noTrip">Tagestrips</span>
             </div>
         </ng-container>
-        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] !== undefined && (idx === 0 || (idx > 0 && record.tripId !== searchResult.currentRecords[idx - 1].tripId))">
-            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px" class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
+        <ng-container *ngIf="record['type'] === 'TRACK' && record['tripId'] !== undefined &&
+                        (idx === 0 || (idx > 0 && record.tripId !== searchResult.currentRecords[idx - 1].tripId))">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
+                 class="container content-container app-tdoc-list-item app-tdoc-list-item-flat app-tdoc-list-tripline">
                 <app-tdoc-inline-searchpage [label]="'Trip'"
                                             i18n-label="label inline-searchpage TRIP|Label inline-searchpage TRIP@@linline-search.label.tdoc.TRIP"
                                             [params]="{'moreFilter': 'trip_id_is:' + record['tripId'], type: 'TRIP'}"
@@ -114,6 +126,26 @@
                                             [layout]="Layout.FLAT"
                                             [showResultList]="true"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-template>
+
+<ng-template #showRegionLine let-record="record" let-idx="idx">
+    <ng-container *ngIf="searchResult.searchForm.type==='route' &&
+                    searchResult.searchForm.sort==='region'">
+        <ng-container *ngIf="record['type'] === 'ROUTE' && calcRegion(record) === undefined &&
+                        idx > 0 && (calcRegion(record) !== calcRegion(searchResult.currentRecords[idx - 1]))">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
+                 class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
+                <span i18n="label tdoc-list showRegionLine no region|Label tdoc-list showRegionLine no region@@tdoc-list.showRegionLine.label.noRegion">Kein Gebiet</span>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="record['type'] === 'ROUTE' && calcRegion(record)  &&
+                        (idx === 0 || (idx > 0 && calcRegion(record) !== calcRegion(searchResult.currentRecords[idx - 1])))">
+            <div style="min-width: 130px; clear: both; width: 100%; margin-right: -15px; margin-left: -15px"
+                 class="container content-container app-tdoc-list-item app-tdoc-list-item-flat">
+                <h5 class="">{{ record['tdocdatainfo']['region'] }}</h5>
             </div>
         </ng-container>
     </ng-container>

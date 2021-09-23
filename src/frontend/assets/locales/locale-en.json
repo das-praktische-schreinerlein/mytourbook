@@ -160,6 +160,7 @@
     "listSorts_forExport": "for export",
     "listSorts_distance": "distance to search",
     "listSorts_location": "location",
+    "listSorts_region": "region",
     "listSorts_date": "date",
     "listSorts_dateDesc": "date",
     "listSorts_dateAsc": "date asc",

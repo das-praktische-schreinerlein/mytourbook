@@ -58,4 +58,10 @@ export class TourDocListComponent extends CommonDocListComponent<TourDocRecord, 
     protected updateData(): void {
         this.lightboxAlbumConfig = this.lightboxService.createAlbumConfig(this.searchResult);
     }
+
+    protected calcRegion(tdoc: TourDocRecord): string {
+        return tdoc['tdocdatainfo'] !== undefined
+            ? tdoc['tdocdatainfo']['region']
+            : undefined;
+    }
 }

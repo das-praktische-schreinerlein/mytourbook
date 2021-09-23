@@ -343,40 +343,40 @@ export class SqlMytbDbTripConfig {
         sortMapping: {
             'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE k_sort.tr_id = trip.tr_id) ASC',
+                '     WHERE k_sort.tr_id = trip.tr_id) ASC, tr_name ASC',
             'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE k_sort.tr_id = trip.tr_id) DESC',
+                '     WHERE k_sort.tr_id = trip.tr_id) DESC, tr_name ASC',
             'countImagesTop': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE k_sort.tr_id = trip.tr_id AND i_sort.i_rate >= 6) ASC',
+                '     WHERE k_sort.tr_id = trip.tr_id AND i_sort.i_rate >= 6) ASC, tr_name ASC',
             'countImagesTopDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE k_sort.tr_id = trip.tr_id AND i_sort.i_rate >= 6) DESC',
+                '     WHERE k_sort.tr_id = trip.tr_id AND i_sort.i_rate >= 6) DESC, tr_name ASC',
             'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +
-                '      WHERE k_sort.tr_id = trip.tr_id) ASC',
+                '      WHERE k_sort.tr_id = trip.tr_id) ASC, tr_name ASC',
             'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +
-                '      WHERE k_sort.tr_id = trip.tr_id) DESC',
+                '      WHERE k_sort.tr_id = trip.tr_id) DESC, tr_name ASC',
             'countTracks': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
-                '     WHERE k_sort.tr_id = trip.tr_id) ASC',
+                '     WHERE k_sort.tr_id = trip.tr_id) ASC, tr_name ASC',
             'countTracksDesc': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
-                '     WHERE k_sort.tr_id = trip.tr_id) DESC',
+                '     WHERE k_sort.tr_id = trip.tr_id) DESC, tr_name ASC',
             'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort' +
                 '     INNER JOIN kategorie k_sort ON v_sort.k_id = k_sort.k_id ' +
-                '     WHERE k_sort.tr_id = trip.tr_id) ASC',
+                '     WHERE k_sort.tr_id = trip.tr_id) ASC, tr_name ASC',
             'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort' +
                 '     INNER JOIN kategorie k_sort ON v_sort.k_id = k_sort.k_id' +
-                '     WHERE k_sort.tr_id = trip.tr_id) DESC',
-            'date': 'tr_datevon DESC',
-            'dateAsc': 'tr_datevon ASC',
-            'forExport': 'tr_datevon ASC',
+                '     WHERE k_sort.tr_id = trip.tr_id) DESC, tr_name ASC',
+            'date': 'tr_datevon DESC, tr_name ASC',
+            'dateAsc': 'tr_datevon ASC, tr_name ASC',
+            'forExport': 'tr_datevon ASC, tr_name ASC',
             'name': 'tr_name ASC',
-            'location': 'l_lochirarchietxt ASC',
-            'relevance': 'tr_datevon DESC'
+            'location': 'l_lochirarchietxt ASC, tr_name ASC',
+            'relevance': 'tr_datevon DESC, tr_name ASC'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',

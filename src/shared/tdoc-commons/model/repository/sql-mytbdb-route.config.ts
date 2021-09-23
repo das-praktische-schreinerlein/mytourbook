@@ -649,51 +649,52 @@ export class SqlMytbDbRouteConfig {
             'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '      INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC, t_name ASC',
             'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '      INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC',
-            'countInfos': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) ASC',
-            'countInfosDesc': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) DESC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC, t_name ASC',
+            'countInfos': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) ASC, t_name ASC',
+            'countInfosDesc': '(SELECT COUNT(DISTINCT if_sort.if_id) FROM tour_info if_sort WHERE if_sort.t_id = tour.t_id) DESC, t_name ASC',
             'countTracks': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC, t_name ASC',
             'countTracksDesc': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC, t_name ASC',
             'countTrips': '(SELECT COUNT(DISTINCT tr_sort.tr_id) FROM trip tr_sort' +
                 '      INNER JOIN kategorie k_sort ON tr_sort.tr_id = k_sort.tr_id' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC, t_name ASC',
             'countTripsDesc': '(SELECT COUNT(DISTINCT tr_sort.tr_id) FROM trip tr_sort' +
                 '      INNER JOIN kategorie k_sort ON tr_sort.tr_id = k_sort.tr_id' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC, t_name ASC',
             'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort' +
                 '      INNER JOIN kategorie k_sort ON v_sort.k_id = k_sort.k_id' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) ASC, t_name ASC',
             'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort' +
                 '      INNER JOIN kategorie k_sort ON v_sort.k_id = k_sort.k_id' +
                 '      LEFT JOIN kategorie_tour kt_sort ON k_sort.k_id = kt_sort.k_id' +
-                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC',
-            'date': 't_datevon DESC',
-            'dateAsc': 't_datevon ASC',
-            'distance': 'geodist ASC',
-            'dataTechDurDesc': 't_route_dauer DESC',
-            'dataTechAltDesc': 't_route_hm DESC',
-            'dataTechMaxDesc': 't_ele_max DESC',
-            'dataTechDistDesc': 't_route_m DESC',
-            'dataTechDurAsc': 't_route_dauer ASC',
-            'dataTechAltAsc': 't_route_hm ASC',
-            'dataTechMaxAsc': 't_ele_max ASC',
-            'dataTechDistAsc': 't_route_m ASC',
+                '      WHERE kt_sort.t_id = tour.t_id OR k_sort.t_id = tour.t_id) DESC, t_name ASC',
+            'date': 't_datevon DESC, t_name ASC',
+            'dateAsc': 't_datevon ASC, t_name ASC',
+            'distance': 'geodist ASC, t_name ASC',
+            'dataTechDurDesc': 't_route_dauer DESC, t_name ASC',
+            'dataTechAltDesc': 't_route_hm DESC, t_name ASC',
+            'dataTechMaxDesc': 't_ele_max DESC, t_name ASC',
+            'dataTechDistDesc': 't_route_m DESC, t_name ASC',
+            'dataTechDurAsc': 't_route_dauer ASC, t_name ASC',
+            'dataTechAltAsc': 't_route_hm ASC, t_name ASC',
+            'dataTechMaxAsc': 't_ele_max ASC, t_name ASC',
+            'dataTechDistAsc': 't_route_m ASC, t_name ASC',
             'forExport': 'tour.t_id ASC',
             'name': 't_name ASC',
-            'ratePers': 't_rate_gesamt DESC, t_datevon DESC',
-            'location': 'l_lochirarchietxt ASC',
-            'relevance': 't_datevon DESC'
+            'ratePers': 't_rate_gesamt DESC, t_datevon DESC, t_name ASC',
+            'location': 'l_lochirarchietxt ASC, t_name ASC',
+            'region': 't_desc_gebiet ASC, l_lochirarchietxt ASC, t_name ASC',
+            'relevance': 't_datevon DESC, t_name ASC'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',

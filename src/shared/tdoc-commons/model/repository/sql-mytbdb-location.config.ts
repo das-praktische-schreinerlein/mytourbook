@@ -343,25 +343,25 @@ export class SqlMytbDbLocationConfig {
             }
         },
         sortMapping: {
-            'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) ASC',
-            'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) DESC',
+            'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) ASC, l_name ASC',
+            'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.l_id = location.l_id) DESC, l_name ASC',
             'countImagesTop': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
-                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) ASC',
+                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) ASC, l_name ASC',
             'countImagesTopDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
-                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) DESC',
-            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC',
-            'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) DESC',
+                ' WHERE i_sort.l_id = location.l_id AND i_sort.i_rate >= 6) DESC, l_name ASC',
+            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) ASC, l_name ASC',
+            'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.l_id = location.l_id) DESC, l_name ASC',
             'countInfos': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +
-                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) ASC',
+                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) ASC, l_name ASC',
             'countInfosDesc': '(SELECT COUNT(DISTINCT info.if_id) FROM info LEFT JOIN location_info ON info.if_id = location_info.if_id ' +
-                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) DESC',
-            'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id)  tour t_sort WHERE t_sort.l_id = location.l_id) ASC',
-            'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour t_sort WHERE t_sort.l_id = location.l_id) DESC',
-            'distance': 'geodist ASC',
-            'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC',
+                ' INNER JOIN location ON location.l_id = info.l_id OR location.l_id = location_info.l_id) DESC, l_name ASC',
+            'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id)  tour t_sort WHERE t_sort.l_id = location.l_id) ASC, l_name ASC',
+            'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour t_sort WHERE t_sort.l_id = location.l_id) DESC, l_name ASC',
+            'distance': 'geodist ASC, l_name ASC',
+            'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC, l_name ASC',
             'name': 'l_name ASC',
-            'location': 'l_lochirarchietxt ASC',
-            'relevance': 'l_name ASC'
+            'location': 'l_lochirarchietxt ASC, l_name ASC',
+            'relevance': 'l_name ASC, l_name ASC'
         },
         spartialConfig: {
             lat: 'l_geo_latdeg',

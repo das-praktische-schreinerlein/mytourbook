@@ -134,43 +134,43 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
         },
         sortMapping: {
             'date': {
-                'sort': 'datesort_dt desc'
+                'sort': 'datesort_dt desc, name_s ASC'
             },
             'dateAsc': {
-                'sort': 'datesort_dt asc'
+                'sort': 'datesort_dt asc, name_s ASC'
             },
             'tripDate': {
-                'sort': 'datesort_dt desc'
+                'sort': 'datesort_dt desc, name_s ASC'
             },
             'tripDateAsc': {
-                'sort': 'datesort_dt asc'
+                'sort': 'datesort_dt asc, name_s ASC'
             },
             'distance': {
-                'sort': 'geodist() asc'
+                'sort': 'geodist() asc, name_s ASC'
             },
             'dataTechDurDesc': {
-                'sort': 'data_tech_dur_f desc'
+                'sort': 'data_tech_dur_f desc, name_s ASC'
             },
             'dataTechAltDesc': {
-                'sort': 'data_tech_alt_asc_i desc'
+                'sort': 'data_tech_alt_asc_i desc, name_s ASC'
             },
             'dataTechMaxDesc': {
-                'sort': 'data_tech_alt_max_i desc'
+                'sort': 'data_tech_alt_max_i desc, name_s ASC'
             },
             'dataTechDistDesc': {
-                'sort': 'data_tech_dist_f desc'
+                'sort': 'data_tech_dist_f desc, name_s ASC'
             },
             'dataTechDurAsc': {
-                'sort': 'data_tech_dur_f asc'
+                'sort': 'data_tech_dur_f asc, name_s ASC'
             },
             'dataTechAltAsc': {
-                'sort': 'data_tech_alt_asc_i asc'
+                'sort': 'data_tech_alt_asc_i asc, name_s ASC'
             },
             'dataTechMaxAsc': {
-                'sort': 'data_tech_alt_max_i asc'
+                'sort': 'data_tech_alt_max_i asc, name_s ASC'
             },
             'dataTechDistAsc': {
-                'sort': 'data_tech_dist_f asc'
+                'sort': 'data_tech_dist_f asc, name_s ASC'
             },
             'ratePers': {
                 'sort': 'sub(15, rate_pers_gesamt_i) asc, datesort_dt desc',
@@ -178,64 +178,67 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
                 'boost': 'product( recip( rord(date_dts), 1, 1000, 1000), 1)'
             },
             'location': {
-                'sort': 'loc_lochirarchie_s asc'
+                'sort': 'loc_lochirarchie_s asc, name_s ASC'
+            },
+            'region': {
+                'sort': 'data_info_region_s asc, loc_lochirarchie_s asc, name_s ASC'
             },
             'name': {
                 'sort': 'name_s asc'
             },
             'countImages': {
-                'sort': 'count_images_i asc'
+                'sort': 'count_images_i asc, name_s ASC'
             },
             'countImagesDesc': {
-                'sort': 'count_images_i desc'
+                'sort': 'count_images_i desc, name_s ASC'
             },
             'countImagesTop': {
-                'sort': 'count_images_top_i asc'
+                'sort': 'count_images_top_i asc, name_s ASC'
             },
             'countImagesTopDesc': {
-                'sort': 'count_images_top_i desc'
+                'sort': 'count_images_top_i desc, name_s ASC'
             },
             'countInfos': {
-                'sort': 'count_infos_i asc'
+                'sort': 'count_infos_i asc, name_s ASC'
             },
             'countInfosDesc': {
-                'sort': 'count_infos_i desc'
+                'sort': 'count_infos_i desc, name_s ASC'
             },
             'countLocations': {
-                'sort': 'count_locations_i asc'
+                'sort': 'count_locations_i asc, name_s ASC'
             },
             'countLocationsDesc': {
-                'sort': 'count_locations_i desc'
+                'sort': 'count_locations_i desc, name_s ASC'
             },
             'countNews': {
-                'sort': 'count_news_i asc'
+                'sort': 'count_news_i asc, name_s ASC'
             },
             'countNewsDesc': {
-                'sort': 'count_news_i desc'
+                'sort': 'count_news_i desc, name_s ASC'
             },
             'countRoutes': {
-                'sort': 'count_routes_i asc'
+                'sort': 'count_routes_i asc, name_s ASC'
             },
             'countRoutesDesc': {
-                'sort': 'count_routes_i desc'
+                'sort': 'count_routes_i desc, name_s ASC'
             },
             'countTracks': {
-                'sort': 'count_tracks_i asc'
+                'sort': 'count_tracks_i asc, name_s ASC'
             },
             'countTracksDesc': {
-                'sort': 'count_tracks_i desc'
+                'sort': 'count_tracks_i desc, name_s ASC'
             },
             'countTrips': {
-                'sort': 'count_trips_i asc'
+                'sort': 'count_trips_i asc, name_s ASC'
             },
             'countTripsDesc': {
-                'sort': 'count_trips_i desc'
+                'sort': 'count_trips_i desc, name_s ASC'
             },
             'countVideos': {
-                'sort': 'count_videos_i asc'
+                'sort': 'count_videos_i asc, name_s ASC'
             },
             'countVideosDesc': {
-                'sort': 'count_videos_i desc'
+                'sort': 'count_videos_i desc, name_s ASC'
             },
             'relevance': {
             }

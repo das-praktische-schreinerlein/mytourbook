@@ -525,36 +525,36 @@ export class SqlMytbDbTrackConfig {
             }
         },
         sortMapping: {
-            'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.k_id = kategorie.k_id) ASC',
-            'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.k_id = kategorie.k_id) DESC',
+            'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.k_id = kategorie.k_id) ASC, k_name ASC',
+            'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort WHERE i_sort.k_id = kategorie.k_id) DESC, k_name ASC',
             'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +
-                '      WHERE k_sort.k_id = kategorie.k_id) ASC',
+                '      WHERE k_sort.k_id = kategorie.k_id) ASC, k_name ASC',
             'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +
-                '      WHERE k_sort.k_id = kategorie.k_id) DESC',
-            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.k_id = kategorie.k_id) ASC',
-            'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.k_id = kategorie.k_id) DESC',
-            'date': 'k_datevon DESC',
-            'dateAsc': 'k_datevon ASC',
-            'tripDate': 'k_datevon DESC',
-            'tripDateAsc': 'k_datevon ASC',
-            'distance': 'geodist ASC',
-            'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC',
-            'dataTechAltDesc': 'k_altitude_asc DESC',
-            'dataTechMaxDesc': 'k_altitude_max DESC',
-            'dataTechDistDesc': 'k_distance DESC',
-            'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC',
-            'dataTechAltAsc': 'k_altitude_asc ASC',
-            'dataTechMaxAsc': 'k_altitude_max ASC',
-            'dataTechDistAsc': 'k_distance ASC',
-            'forExport': 'k_datevon ASC',
+                '      WHERE k_sort.k_id = kategorie.k_id) DESC, k_name ASC',
+            'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.k_id = kategorie.k_id) ASC, k_name ASC',
+            'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort WHERE v_sort.k_id = kategorie.k_id) DESC, k_name ASC',
+            'date': 'k_datevon DESC, k_name ASC',
+            'dateAsc': 'k_datevon ASC, k_name ASC',
+            'tripDate': 'k_datevon DESC, k_name ASC',
+            'tripDateAsc': 'k_datevon ASC, k_name ASC',
+            'distance': 'geodist ASC, k_name ASC',
+            'dataTechDurDesc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevON))/3600 DESC, k_name ASC',
+            'dataTechAltDesc': 'k_altitude_asc DESC, k_name ASC',
+            'dataTechMaxDesc': 'k_altitude_max DESC, k_name ASC',
+            'dataTechDistDesc': 'k_distance DESC, k_name ASC',
+            'dataTechDurAsc': 'TIME_TO_SEC(TIMEDIFF(k_datebis, k_datevon))/3600 ASC, k_name ASC',
+            'dataTechAltAsc': 'k_altitude_asc ASC, k_name ASC',
+            'dataTechMaxAsc': 'k_altitude_max ASC, k_name ASC',
+            'dataTechDistAsc': 'k_distance ASC, k_name ASC',
+            'forExport': 'k_datevon ASC, k_name ASC',
             'name': 'k_name ASC',
-            'ratePers': 'k_rate_gesamt DESC, k_datevon DESC',
-            'location': 'l_lochirarchietxt ASC',
-            'relevance': 'k_datevon DESC'
+            'ratePers': 'k_rate_gesamt DESC, k_datevon DESC, k_name ASC',
+            'location': 'l_lochirarchietxt ASC, k_name ASC',
+            'relevance': 'k_datevon DESC, k_name ASC'
         },
         filterMapping: {
             // dashboard

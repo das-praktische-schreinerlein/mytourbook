@@ -321,19 +321,19 @@ export class SqlMytbDbInfoConfig {
             }
         },
         sortMapping: {
-            'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) ASC',
-            'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) DESC',
+            'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) ASC, if_name ASC',
+            'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM tour_info t_sort WHERE t_sort.if_id = info.if_id) DESC, if_name ASC',
             'countLocations': '(SELECT COUNT(DISTINCT location.l_id) FROM location' +
                 ' LEFT JOIN location_info ON location.l_id = location_info.l_id' +
-                ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) ASC',
+                ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) ASC, if_name ASC',
             'countLocationsDesc': '(SELECT COUNT(DISTINCT location.l_id) FROM location' +
                 ' LEFT JOIN location_info ON location.l_id = location_info.l_id' +
-                ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) DESC',
+                ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) DESC, if_name ASC',
             'name': 'if_name ASC',
-            'type': 'if_typ ASC',
-            'forExport': 'info.if_id ASC',
-            'location': 'l_lochirarchietxt ASC, if_name ASC',
-            'relevance': 'info.if_id DESC'
+            'type': 'if_typ ASC, if_name ASC',
+            'forExport': 'info.if_id ASC, if_name ASC',
+            'location': 'l_lochirarchietxt ASC, if_name ASC, if_name ASC',
+            'relevance': 'info.if_id DESC, if_name ASC'
         },
         spartialConfig: {
             lat: 'location.l_geo_latdeg',

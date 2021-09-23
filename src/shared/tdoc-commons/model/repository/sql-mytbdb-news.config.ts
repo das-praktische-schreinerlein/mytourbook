@@ -314,45 +314,45 @@ export class SqlMytbDbNewsConfig {
         sortMapping: {
             'countImages': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC, n_headline ASC',
             'countImagesDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC, n_headline ASC',
             'countImagesTop': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis AND i_sort.i_rate >= 6)) ASC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis AND i_sort.i_rate >= 6)) ASC, n_headline ASC',
             'countImagesTopDesc': '(SELECT COUNT(DISTINCT i_sort.i_id) FROM image i_sort' +
                 '     INNER JOIN kategorie k_sort ON i_sort.k_id = k_sort.k_id' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis AND i_sort.i_rate >= 6)) DESC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis AND i_sort.i_rate >= 6)) DESC, n_headline ASC',
             'countRoutes': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +
-                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC',
+                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC, n_headline ASC',
             'countRoutesDesc': '(SELECT COUNT(DISTINCT t_sort.t_id) FROM kategorie k_sort' +
                 '      LEFT JOIN kategorie_tour kt_sort ON kt_sort.k_id = k_sort.k_id' +
                 '      INNER JOIN tour t_sort ON t_sort.t_id = k_sort.t_id OR t_sort.t_id = kt_sort.t_id' +
-                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC',
+                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC, n_headline ASC',
             'countTracks': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC, n_headline ASC',
             'countTracksDesc': '(SELECT COUNT(DISTINCT k_sort.k_id) FROM kategorie k_sort ' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC, n_headline ASC',
             'countTrips': '(SELECT COUNT(DISTINCT tr_sort.tr_id) FROM trip tr_sort' +
                 '      INNER JOIN kategorie k_sort ON tr_sort.tr_id = k_sort.tr_id' +
-                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC',
+                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC, n_headline ASC',
             'countTripsDesc': '(SELECT COUNT(DISTINCT tr_sort.tr_id) FROM trip tr_sort' +
                 '      INNER JOIN kategorie k_sort ON tr_sort.tr_id = k_sort.tr_id' +
-                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC',
+                '      WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC, n_headline ASC',
             'countVideos': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort' +
                 '     INNER JOIN kategorie k_sort ON v_sort.k_id = k_sort.k_id ' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) ASC, n_headline ASC',
             'countVideosDesc': '(SELECT COUNT(DISTINCT v_sort.v_id) FROM video v_sort' +
                 '     INNER JOIN kategorie k_sort ON v_sort.k_id = k_sort.k_id' +
-                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC',
-            'date': 'n_date DESC',
-            'dateAsc': 'n_date ASC',
+                '     WHERE (k_sort.k_datevon >= news.n_datevon AND k_sort.k_datevon <= news.n_datebis)) DESC, n_headline ASC',
+            'date': 'n_date DESC, n_headline ASC',
+            'dateAsc': 'n_date ASC, n_headline ASC',
             'name': 'n_headline ASC',
-            'forExport': 'n_date ASC',
-            'relevance': 'n_date DESC'
+            'forExport': 'n_date ASC, n_headline ASC',
+            'relevance': 'n_date DESC, n_headline ASC'
         },
         filterMapping: {
             // dashboard
