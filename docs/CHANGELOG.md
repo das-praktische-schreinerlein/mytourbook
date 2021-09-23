@@ -9,6 +9,7 @@
 - added modal window to show entries short in popup
 - improved sql for similarity-search
 - added groupby trip for track-list
+- backend: fixed solr-import
 
 ### new features
 - backend/frontend: added statistics-section
@@ -23,6 +24,7 @@
 
 ### bug fixes
 - backend: fixed invalid argument-check in cli
+- backend: fixed solr-import
 
 ### breaking changes
 - none

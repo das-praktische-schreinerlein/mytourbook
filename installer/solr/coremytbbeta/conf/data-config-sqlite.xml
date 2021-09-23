@@ -301,6 +301,7 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
 
             <field column="d_name" name="name_s" stripHTML="true" />
             <field column="d_name" name="name_txt" stripHTML="true" />
@@ -647,6 +648,7 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="n_id" name="news_id_i"/>
             <field column="n_id" name="news_id_is"/>
 
@@ -705,6 +707,8 @@
             <field column="countImagesTop" name="count_images_top_i" />
             <field column="countRoutes" name="count_routes_i" />
             <field column="countVideos" name="count_videos_i" />
+            <field column="k_route_attr" name="route_attr_ss" />
+            <field column="k_route_attr" name="route_attr_txt" />
 
             <!-- child='true' -->
             <entity name='navigation_objects'
@@ -742,6 +746,19 @@
                               WHERE kategorie_full.k_id IN (${track.k_id})
                         '>
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+            <entity name='linkedroutes'
+                    query='
+                    SELECT "type=subroute:::name=" || COALESCE(t_name, "null") || ":::refId=" || CAST(tour.t_id AS CHAR) ||
+                       ":::full=" || CAST(COALESCE(kt_full, "false") AS CHAR) || ":::linkedRouteAttr=" || COALESCE(kategorie_tour.kt_route_attr, "null")
+                      AS linkedroutes,
+                      kt_route_attr
+                      FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (${track.k_id})
+                      ORDER BY t_name'>
+                <field column="linkedroutes" name="linkedroutes_txt"/>
+                <field column="kt_route_attr" name="route_attr_ss"/>
+                <field column="kt_route_attr" name="route_attr_txt"/>
             </entity>
 
             <entity name='image'
@@ -934,6 +951,7 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
 
             <field column="t_name" name="name_s" stripHTML="true" />
             <field column="t_name" name="name_txt" stripHTML="true" />
@@ -1052,6 +1070,19 @@
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
+            <entity name='linkedroutes'
+                    query='
+                    SELECT "type=subroute:::name=" || COALESCE(t_name, "null") || ":::refId=" || CAST(tour.t_id AS CHAR) ||
+                       ":::full=" || CAST(COALESCE(kt_full, "false") AS CHAR) || ":::linkedRouteAttr=" || COALESCE(kategorie_tour.kt_route_attr, "null")
+                      AS linkedroutes,
+                      kt_route_attr
+                      FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
+                      ORDER BY t_name'>
+                <field column="linkedroutes" name="linkedroutes_txt"/>
+                <field column="kt_route_attr" name="route_attr_ss"/>
+                <field column="kt_route_attr" name="route_attr_txt"/>
+            </entity>
+
             <entity name='image'
                     query="
                         SELECT
@@ -1083,7 +1114,8 @@
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
                                k_persons,
-                               k_objects
+                               k_objects,
+                               k_route_attr
                         FROM kategorie_full
                             INNER JOIN kategorie_tour ON kategorie_full.k_id = kategorie_tour.k_id
                         WHERE kategorie_tour.t_id = ${route.t_id}
@@ -1096,7 +1128,8 @@
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
                                k_persons,
-                               k_objects
+                               k_objects,
+                               k_route_attr
                         FROM kategorie_full
                         WHERE k_id = '${dih.delta.id}'"
                     deltaQuery="SELECT k_id FROM kategorie_full'"
@@ -1110,6 +1143,8 @@
                 <field column="year" name="year_is" />
                 <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
+                <field column="k_route_attr" name="route_attr_ss"/>
+                <field column="k_route_attr" name="route_attr_txt"/>
             </entity>
             <entity name='destination'
                     query="select d_id FROM destination WHERE d_id = '${route.d_id}'"
@@ -1205,6 +1240,7 @@
         >
             <field column="id" name="id"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="l_parent_id" name="loc_parent_id_i"/>
 
             <field column="l_name" name="name_s" stripHTML="true" />
@@ -1472,6 +1508,7 @@
         >
             <field column="id" name="id"/>
             <field column="i_id" name="image_id_i"/>
+            <field column="i_id" name="image_id_is"/>
             <field column="k_id" name="track_id_i"/>
             <field column="k_id" name="track_id_is"/>
             <field column="t_id" name="route_id_i"/>
@@ -1479,7 +1516,9 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="tr_id" name="trip_id_i"/>
+            <field column="tr_id" name="trip_id_is"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="n_id" name="news_id_i"/>
             <field column="n_id" name="news_id_is"/>
 
@@ -1629,6 +1668,7 @@
         >
             <field column="id" name="id"/>
             <field column="v_id" name="video_id_i"/>
+            <field column="v_id" name="video_id_is"/>
             <field column="k_id" name="track_id_i"/>
             <field column="k_id" name="track_id_is"/>
             <field column="d_id" name="destination_id_s"/>
@@ -1636,7 +1676,9 @@
             <field column="t_id" name="route_id_i"/>
             <field column="t_id" name="route_id_is"/>
             <field column="tr_id" name="trip_id_i"/>
+            <field column="tr_id" name="trip_id_is"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="n_id" name="news_id_i"/>
             <field column="n_id" name="news_id_is"/>
 
@@ -1786,7 +1828,9 @@
         >
             <field column="id" name="id"/>
             <field column="tr_id" name="trip_id_i"/>
+            <field column="tr_id" name="trip_id_is"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
 
             <field column="tr_name" name="name_s" stripHTML="true" />
             <field column="tr_name" name="name_txt" stripHTML="true" />

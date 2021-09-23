@@ -301,6 +301,7 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
 
             <field column="d_name" name="name_s" stripHTML="true" />
             <field column="d_name" name="name_txt" stripHTML="true" />
@@ -648,6 +649,7 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="n_id" name="news_id_i"/>
             <field column="n_id" name="news_id_is"/>
 
@@ -950,6 +952,7 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
 
             <field column="t_name" name="name_s" stripHTML="true" />
             <field column="t_name" name="name_txt" stripHTML="true" />
@@ -1238,6 +1241,7 @@
         >
             <field column="id" name="id"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="l_parent_id" name="loc_parent_id_i"/>
 
             <field column="l_name" name="name_s" stripHTML="true" />
@@ -1505,6 +1509,7 @@
         >
             <field column="id" name="id"/>
             <field column="i_id" name="image_id_i"/>
+            <field column="i_id" name="image_id_is"/>
             <field column="k_id" name="track_id_i"/>
             <field column="k_id" name="track_id_is"/>
             <field column="t_id" name="route_id_i"/>
@@ -1512,7 +1517,9 @@
             <field column="d_id" name="destination_id_s"/>
             <field column="d_id" name="destination_id_ss"/>
             <field column="tr_id" name="trip_id_i"/>
+            <field column="tr_id" name="trip_id_is"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="n_id" name="news_id_i"/>
             <field column="n_id" name="news_id_is"/>
 
@@ -1662,6 +1669,7 @@
         >
             <field column="id" name="id"/>
             <field column="v_id" name="video_id_i"/>
+            <field column="v_id" name="video_id_is"/>
             <field column="k_id" name="track_id_i"/>
             <field column="k_id" name="track_id_is"/>
             <field column="d_id" name="destination_id_s"/>
@@ -1669,7 +1677,9 @@
             <field column="t_id" name="route_id_i"/>
             <field column="t_id" name="route_id_is"/>
             <field column="tr_id" name="trip_id_i"/>
+            <field column="tr_id" name="trip_id_is"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
             <field column="n_id" name="news_id_i"/>
             <field column="n_id" name="news_id_is"/>
 
@@ -1819,7 +1829,9 @@
         >
             <field column="id" name="id"/>
             <field column="tr_id" name="trip_id_i"/>
+            <field column="tr_id" name="trip_id_is"/>
             <field column="l_id" name="loc_id_i"/>
+            <field column="l_id" name="loc_id_is"/>
 
             <field column="tr_name" name="name_s" stripHTML="true" />
             <field column="tr_name" name="name_txt" stripHTML="true" />
