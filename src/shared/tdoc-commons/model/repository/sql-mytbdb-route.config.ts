@@ -828,7 +828,7 @@ export class SqlMytbDbRouteConfig {
             keywords_txt: 't_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
-            route_attr_s: 'k_route_attr',
+            // will also map routeAttr of other main routes :-( route_attr_s: 't_k_route_attr',
             linked_route_attr_s: 't_kt_route_attr',
             name_s: 't_name',
             type_s: 'type',

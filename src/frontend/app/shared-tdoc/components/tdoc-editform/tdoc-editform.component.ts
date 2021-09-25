@@ -504,8 +504,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocratetech.klettern': {},
                 'tdocratetech.ks': {},
                 'tdocratetech.overall': {},
-                'tdocratetech.schneeschuh': {},
-                'linkedRouteAttr': {}
+                'tdocratetech.schneeschuh': {}
             },
             stringArrayBeanFieldConfig: {
                 'persons': {},
@@ -683,17 +682,29 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         const indexes = [];
         let idx = 1;
         for (; idx <= joinRecords.length; idx ++) {
-            if (joinRecords[idx - 1].type !== 'subroute') {
+            const joinRecord = joinRecords[idx - 1];
+            if (joinRecord.type === 'mainroute') {
+                valueConfig['linkedRouteAttr'] =
+                    [
+                        joinRecord.linkedRouteAttr && joinRecord.linkedRouteAttr !== 'null'
+                            ? joinRecord.linkedRouteAttr
+                            : ''
+                    ];
+                continue;
+            }
+
+            if (joinRecord.type !== 'subroute') {
                 continue;
             }
 
             indexes.push(idx);
-            valueConfig[joinName + 'Id' + idx] = [joinRecords[idx - 1].refId];
-            valueConfig[joinName + 'Full' + idx] = [joinRecords[idx - 1].full];
+            valueConfig[joinName + 'Id' + idx] = [joinRecord.refId];
+            valueConfig[joinName + 'Full' + idx] = [joinRecord.full];
             valueConfig[joinName + 'LinkedRouteAttr' + idx] =
-                [joinRecords[idx - 1].linkedRouteAttr && joinRecords[idx - 1].linkedRouteAttr !== 'null'
-                    ? joinRecords[idx - 1].linkedRouteAttr
-                    : ''
+                [
+                    joinRecord.linkedRouteAttr && joinRecord.linkedRouteAttr !== 'null'
+                        ? joinRecord.linkedRouteAttr
+                        : ''
                 ];
         }
 
@@ -711,9 +722,10 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         const indexes = [];
         let idx = 1;
         for (; idx <= joinRecords.length; idx ++) {
+            const joinRecord = joinRecords[idx - 1];
             indexes.push(idx);
-            valueConfig[joinName + 'Id' + idx] = [joinRecords[idx - 1].refId];
-            valueConfig[joinName + 'LinkedDetails' + idx] = [joinRecords[idx - 1].linkedDetails];
+            valueConfig[joinName + 'Id' + idx] = [joinRecord.refId];
+            valueConfig[joinName + 'LinkedDetails' + idx] = [joinRecord.linkedDetails];
         }
 
         indexes.push(idx);

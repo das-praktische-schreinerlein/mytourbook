@@ -629,6 +629,7 @@ export class SqlMytbDbTrackConfig {
             'kategorie.k_rate_wichtigkeit': ':rate_pers_wichtigkeit_i:',
             'kategorie.k_gpstracks_basefile': ':gpstracks_basefile_s:',
             'kategorie.k_gpstracks_gpx_source': ':gpstrack_src_s:',
+            'kategorie.k_route_attr': ':linked_route_attr_s:',
             'kategorie.k_name': ':name_s:',
             'kategorie.k_type': ':subtype_s:'
         },
@@ -676,7 +677,6 @@ export class SqlMytbDbTrackConfig {
             keywords_txt: 'k_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
-            route_attr_s: 'k_route_attr',
             name_s: 'k_name',
             type_s: 'type',
             actiontype_s: 'actionType',

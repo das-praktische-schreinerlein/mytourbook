@@ -73,7 +73,6 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         values['persons_txt'] =
             (props.persons ? props.persons.split(', ').join(',,') : '');
         values['linked_route_attr_s'] = BeanUtils.getValue(props, 'linkedRouteAttr');
-        values['route_attr_s'] = props.linkedRouteAttr;
         values['playlists_txt'] =
             (props.playlists ? props.playlists.split(', ').join(',,') : '');
         values['type_s'] = props.type;
@@ -274,12 +273,17 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             .replace(/_/g, ' ').trim()
             .replace(/[,]+/g, ',').replace(/(^,)|(,$)/g, '');
 
-        for (const refDetail of [this.mapperUtils.getMappedAdapterValue(mapping, doc, 'linked_route_attr_s', undefined)]) {
+        const refs = [this.mapperUtils.getMappedAdapterValue(mapping, doc, 'linked_route_attr_s', undefined),
+            this.mapperUtils.getMappedAdapterValue(mapping, doc, 'route_attr_s', undefined)
+        ];
+        for (const refDetail of refs) {
             if (refDetail === undefined) {
                 continue;
             }
-            values['linkedRouteAttr'] = values['linkedRouteAttr'] || '';
-            values['linkedRouteAttr'] += refDetail;
+
+            values['linkedRouteAttr'] = values['linkedRouteAttr']
+                ? values['linkedRouteAttr'] + ';;' + refDetail
+                : refDetail;
         }
 
         // console.log('mapResponseDocument values:', values);
