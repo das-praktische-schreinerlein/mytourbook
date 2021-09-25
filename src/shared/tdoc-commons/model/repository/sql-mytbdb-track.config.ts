@@ -100,7 +100,13 @@ export class SqlMytbDbTrackConfig {
             },
             {
                 profile: 'linkedroutes',
-                sql: '(SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),' +
+                sql: '(SELECT CONCAT("type=mainroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),' +
+                    '   ":::full=true:::linkedRouteAttr=", COALESCE(kategorie.k_route_attr, "null"))' +
+                    '  AS linkedroutes' +
+                    '  FROM tour INNER JOIN kategorie ON kategorie.t_id = tour.t_id WHERE kategorie.k_id IN (:id)' +
+                    '  ORDER BY t_name)' +
+                    ' UNION ' +
+                    '(SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),' +
                     '   ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR), ":::linkedRouteAttr=", COALESCE(kategorie_tour.kt_route_attr, "null"))' +
                     '  AS linkedroutes' +
                     '  FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (:id)' +

@@ -54,7 +54,9 @@ import {TourDocProfileChartComponent} from './components/tdoc-profilechart/tdoc-
 import {TourDocInfoComponent} from './components/tdoc-info/tdoc-info.component';
 import {TourDocAssignJoinFormComponent} from './components/tdoc-assignjoinform/tdoc-assignjoinform.component';
 import {TourDocRouteAttributeComponent} from './components/tdoc-routeattr/tdoc-routeattr.component';
+import {TourDocLinkedRoutesComponent} from './components/tdoc-linked-routes/tdoc-linked-routes.component';
 import {RouterModule} from '@angular/router';
+import {TourDocLinkedInfosComponent} from './components/tdoc-linked-infos/tdoc-linked-infos.component';
 
 @NgModule({
     declarations: [
@@ -99,7 +101,9 @@ import {RouterModule} from '@angular/router';
         TourDocProfileChartComponent,
         TourDocInfoComponent,
         TourDocAssignJoinFormComponent,
-        TourDocRouteAttributeComponent
+        TourDocRouteAttributeComponent,
+        TourDocLinkedRoutesComponent,
+        TourDocLinkedInfosComponent
     ],
     imports: [
         ToastrModule,
@@ -163,7 +167,9 @@ import {RouterModule} from '@angular/router';
         TourDocProfileChartComponent,
         TourDocInfoComponent,
         TourDocAssignJoinFormComponent,
-        TourDocRouteAttributeComponent
+        TourDocRouteAttributeComponent,
+        TourDocLinkedRoutesComponent,
+        TourDocLinkedInfosComponent
     ]
 })
 export class SharedTourDocModule {}

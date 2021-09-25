@@ -1,0 +1,20 @@
+<ng-container *ngIf="linkedInfos !== undefined && linkedInfos.length > 0">
+    <table class="techvaluetable">
+        <tr *ngIf="!small"><th class="label" colspan="2">Infos:</th></tr>
+        <ng-container *ngFor="let linkedInfo of linkedInfos; let i = index">
+            <tr>
+                <td class="entry" [colSpan]="linkedInfo.linkedDetails && linkedInfo.linkedDetails !== 'null' ? '' : 2"><a [href]="getShowUrl(linkedInfo)" (click)="submitShow($event, linkedInfo)" [title]="linkedInfo.name">{{ linkedInfo.name }}</a></td>
+                <ng-container *ngIf="linkedInfo.linkedDetails && linkedInfo.linkedDetails !== 'null'">
+                    <ng-container [ngSwitch]="linkedInfo.type">
+                        <ng-container *ngSwitchCase="'1'">
+                            <td class="value"><a [href]="linkedInfo.linkedDetails" [title]="linkedInfo.linkedDetails" target="_blank">{{ linkedInfo.linkedDetails }}</a></td>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                            <td class="value" [title]="linkedInfo.linkedDetails">{{ linkedInfo.linkedDetails }}</td>
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+            </tr>
+        </ng-container>
+    </table>
+</ng-container>

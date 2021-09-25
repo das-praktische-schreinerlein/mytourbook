@@ -505,6 +505,7 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 'tdocratetech.ks': {},
                 'tdocratetech.overall': {},
                 'tdocratetech.schneeschuh': {},
+                'linkedRouteAttr': {}
             },
             stringArrayBeanFieldConfig: {
                 'persons': {},
@@ -543,6 +544,9 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
                 },
                 'tdocratetech.schneeschuh': {
                     'facetName': 'rate_tech_schneeschuh_ss'
+                },
+                'linkedRouteAttr': {
+                    'facetName': 'route_attr_ss'
                 },
                 'linkedRoutesLinkedRouteAttr0': {
                     'facetName': 'route_attr_ss'
@@ -679,10 +683,18 @@ export class TourDocEditformComponent extends CommonDocEditformComponent<TourDoc
         const indexes = [];
         let idx = 1;
         for (; idx <= joinRecords.length; idx ++) {
+            if (joinRecords[idx - 1].type !== 'subroute') {
+                continue;
+            }
+
             indexes.push(idx);
             valueConfig[joinName + 'Id' + idx] = [joinRecords[idx - 1].refId];
             valueConfig[joinName + 'Full' + idx] = [joinRecords[idx - 1].full];
-            valueConfig[joinName + 'LinkedRouteAttr' + idx] = [joinRecords[idx - 1].linkedRouteAttr];
+            valueConfig[joinName + 'LinkedRouteAttr' + idx] =
+                [joinRecords[idx - 1].linkedRouteAttr && joinRecords[idx - 1].linkedRouteAttr !== 'null'
+                    ? joinRecords[idx - 1].linkedRouteAttr
+                    : ''
+                ];
         }
 
         indexes.push(idx);

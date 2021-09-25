@@ -59,13 +59,17 @@
         </ng-container>
     </div>
     <div class="col-4 layout-big">
-        <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>
+        <h5 class="card-title"><a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)">{{listItem.currentRecord.name}}</a><app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action></h5>
         <ng-container *ngIf="listItem.currentRecord.type === 'ODIMGOBJECT'">
             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
         </ng-container>
+
         <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
+        <app-tdoc-linked-routes [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-routes>
+
         <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
-        <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsFlat'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
+        <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-infos>
+
         <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
             <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
         </ng-container>
@@ -142,11 +146,15 @@
                             <app-cdoc-odobjectdetails [objects]="listItem.objectdetections"></app-cdoc-odobjectdetails>
                         </ng-container>
                         <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
-                            <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
-                            <app-tdoc-info [record]="listItem.currentRecord" [small]="true" *ngIf="listItem.currentRecord.type === 'INFO'"></app-tdoc-info>
                             <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers>
                             <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers-difficulty >
                             <app-tdoc-ratetech [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratetech>
+
+                            <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
+                            <app-tdoc-linked-routes [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-routes>
+
+                            <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
+                            <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-infos>
                         </ng-container>
                         <h5><app-tdoc-linked-loc-hierarchy [record]="listItem.currentRecord" [lastOnly]="true"></app-tdoc-linked-loc-hierarchy></h5>
                         <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord | tdocdate}}</h5></a>

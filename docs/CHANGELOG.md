@@ -10,6 +10,7 @@
 - improved sql for similarity-search
 - added groupby trip for track-list, region for routes
 - fixed solr-import
+- show details in list+show-view
 
 ### new features
 - backend/frontend: added statistics-section
@@ -17,6 +18,7 @@
 - frontend: added modal window to create new entries and append them to selectbox
 - frontend: added modal window to show entries short in popup
 - backend/frontend: added groupby trip for track-list, region for routes
+- frontend: show details in list+show-view
 
 ### improvements
 - backend: added sort by name

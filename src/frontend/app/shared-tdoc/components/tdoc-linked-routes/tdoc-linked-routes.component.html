@@ -1,0 +1,11 @@
+<ng-container *ngIf="linkedRoutes !== undefined && linkedRoutes.length > 0">
+    <table class="techvaluetable">
+        <tr *ngIf="!small"><th class="label" colspan="2">Routen:</th></tr>
+        <ng-container *ngFor="let linkedRoute of linkedRoutes; let i = index">
+            <tr>
+                <td class="entry" [colSpan]="linkedRoute.linkedRouteAttr && linkedRoute.linkedRouteAttr !== 'null' ? '' : 2"><a [href]="getShowUrl(linkedRoute)" (click)="submitShow($event, linkedRoute)" [title]="linkedRoute.name">{{ linkedRoute.name }}</a></td>
+                <td *ngIf="linkedRoute.linkedRouteAttr && linkedRoute.linkedRouteAttr !== 'null'" class="value" >{{ linkedRoute.linkedRouteAttr }}</td>
+            </tr>
+        </ng-container>
+    </table>
+</ng-container>

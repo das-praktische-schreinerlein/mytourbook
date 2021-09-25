@@ -1,5 +1,15 @@
-<ng-container *ngIf="record.linkedRouteAttr !== undefined">
+<ng-container *ngIf="routeAttrs !== undefined && routeAttrs.length > 0">
     <div class="techvaluetable">
-        <div *ngIf="record.linkedRouteAttr !== undefined && record.linkedRouteAttr.length > 0" class="entry"><div class="label">Begehung:</div><div class="value">{{record.linkedRouteAttr}}</div></div>
+        <ng-container *ngIf="routeAttrs.length === 1">
+            <ng-container *ngFor="let routeAttr of routeAttrs; let i = index">
+                <div class="entry"><div class="label">Begehungen:</div><div class="value">{{routeAttr}}</div></div>
+            </ng-container>
+        </ng-container>
+        <ng-container *ngIf="routeAttrs.length > 1">
+            <div class="entry"><div class="label">Begehungen:</div></div>
+            <ng-container *ngFor="let routeAttr of routeAttrs; let i = index">
+                <div class="entry"><div class="value">{{routeAttr}}</div></div>
+            </ng-container>
+        </ng-container>
     </div>
 </ng-container>

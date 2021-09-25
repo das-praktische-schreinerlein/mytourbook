@@ -11,6 +11,7 @@ import {TourDocInfoRecordType} from '../../../../shared/tdoc-commons/model/recor
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocRouteAttributeComponent extends AbstractInlineComponent {
+    routeAttrs: any[];
 
     @Input()
     public record: TourDocRecord;
@@ -23,5 +24,11 @@ export class TourDocRouteAttributeComponent extends AbstractInlineComponent {
     }
 
     protected updateData(): void {
+        if (this.record === undefined || this.record.linkedRouteAttr === undefined || this.record.linkedRouteAttr.length <= 0) {
+            this.routeAttrs = [];
+            return;
+        }
+
+        this.routeAttrs = this.record.linkedRouteAttr.split(/;;/);
     }
 }

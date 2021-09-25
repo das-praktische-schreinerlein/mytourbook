@@ -148,7 +148,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     const routes: TourDocLinkedRouteRecord[] = props.get('tdoclinkedroutes');
                     const routesSrc: string [] = [];
                     for (let idx = 0; idx < routes.length; idx++) {
-                        routesSrc.push('type=subroute' + this._fieldSeparator +
+                        routesSrc.push('type=' + routes[idx].type + this._fieldSeparator +
                             'name=' + routes[idx].name + this._fieldSeparator +
                             'refId=' + routes[idx].refId + this._fieldSeparator +
                             'full=' + routes[idx].full + this._fieldSeparator +

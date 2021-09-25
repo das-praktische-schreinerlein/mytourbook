@@ -63,10 +63,7 @@
                 <app-tdoc-ratetech [record]="record"></app-tdoc-ratetech>
                 <app-tdoc-datatech [record]="record"></app-tdoc-datatech >
                 <app-tdoc-datainfo [record]="record"></app-tdoc-datainfo >
-                <app-tdoc-routeattr [record]="record" [small]="true"></app-tdoc-routeattr>
-                <ng-container *ngIf="record.type !== 'INFO'">
-                    <app-tdoc-info [record]="record"></app-tdoc-info>
-                </ng-container>
+
                 <div class="tagcloud-container" *ngIf="record.type === 'LOCATION'">
                     <app-cdoc-tagcloud [searchResult]="tagcloudSearchResult" [facetName]="'actiontype_ss'"
                                        [label]="'Was kann man hier tun?'"
@@ -79,9 +76,19 @@
                                        (columnClicked)="onTagcloudClicked($event, 'actiontype')"></app-cdoc-tagcloud>
                 </div>
                 -->
+
                 <app-tdoc-keywords [record]="record"></app-tdoc-keywords>
                 <app-tdoc-persontags [record]="record"></app-tdoc-persontags>
                 <app-tdoc-datameta [record]="record"></app-tdoc-datameta>
+
+                <app-tdoc-routeattr [record]="record" [small]="false"></app-tdoc-routeattr>
+                <app-tdoc-linked-routes [record]="record" [small]="false"></app-tdoc-linked-routes>
+
+                <ng-container *ngIf="record.type !== 'INFO'">
+                    <app-tdoc-info [record]="record"></app-tdoc-info>
+                </ng-container>
+                <app-tdoc-linked-infos [record]="record" [small]="false"></app-tdoc-linked-infos>
+
                 <app-cdoc-extended-object-properties [extendedObjectProperties]="record.tdocextendedobjectproperties"
                                                      [categories]="['ENTITYCOUNT']"
                                                      [profile]="'show-big'"></app-cdoc-extended-object-properties>

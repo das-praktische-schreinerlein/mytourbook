@@ -32,6 +32,7 @@ export class TourDocLinkedLocHierarchyComponent extends AbstractInlineComponent 
             this.locations = [];
             return;
         }
+
         this.locations = this.contentUtils.getLocationHierarchy(this.record, this.lastOnly);
     }
 

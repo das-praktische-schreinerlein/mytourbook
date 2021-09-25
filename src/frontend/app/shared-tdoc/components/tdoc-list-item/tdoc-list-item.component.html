@@ -152,14 +152,20 @@
                         <app-tdoc-ratepers-difficulty [record]="listItem.currentRecord"></app-tdoc-ratepers-difficulty>
                         <app-tdoc-ratetech [record]="listItem.currentRecord"></app-tdoc-ratetech>
                         <app-tdoc-datatech [record]="listItem.currentRecord"></app-tdoc-datatech >
+                        <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
+
                         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
-                        <app-tdoc-datainfo [record]="listItem.currentRecord"></app-tdoc-datainfo >
-                        <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
-                        <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
                         <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
                             <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
                         </ng-container>
+
+                        <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
+                        <app-tdoc-linked-routes [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-routes>
+
+                        <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
+                        <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-infos>
+
                         <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
                                                              [categories]="['ENTITYCOUNT']"
                                                              [profile]="'list-item-flat-big'"></app-cdoc-extended-object-properties>
