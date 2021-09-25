@@ -11,6 +11,7 @@
 - added groupby trip for track-list, region for routes
 - fixed solr-import
 - show details in list+show-view
+- improved layout
 
 ### new features
 - backend/frontend: added statistics-section
@@ -23,6 +24,7 @@
 ### improvements
 - backend: added sort by name
 - backend: improved sql for similarity-search
+- frontend: improved layout
 
 ### bug fixes
 - backend: fixed invalid argument-check in cli

@@ -78,10 +78,12 @@
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
-                <ng-container *ngTemplateOutlet="inputTrip"></ng-container>
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputActiontype"></ng-container>
+                <ng-container *ngTemplateOutlet="inputTrip"></ng-container>
+            </div>
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputRoute"></ng-container>
                 <ng-container *ngTemplateOutlet="inputTextTech;context:{key: 'linkedRouteAttr', formControlName: 'linkedRouteAttr'}"></ng-container>
             </div>
@@ -215,6 +217,8 @@
             </div>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputLocation"></ng-container>
+            </div>
+            <div class="row">
                 <ng-container *ngTemplateOutlet="inputTrack"></ng-container>
             </div>
         </fieldset>
@@ -391,7 +395,7 @@
     <ng-template #inputDateStart let-recommend=recommend>
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="datestart label|Label for field: datestart@@label.editform.tdoc.datestart">Startdatum:</label>
-            <span class="" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</span>
+            <span class="recommend" *ngIf="recommend && editFormGroup.get('datestart').value != recommend" (click)="setValue('datestart', recommend)">&#x27F8; {{ recommend }} GPX</span>
             <input formControlName="datestart" required="required" type="datetime-local" placeholder="datestart" i18n-placeholder="datestart placeholder|Placeholder for datestart@@placeholder.form.tdoc.datestart">
         </div>
     </ng-template>
@@ -406,13 +410,13 @@
     <ng-template #inputDateEnd let-recommend=recommend>
         <div class="col-sm-3 form-inline input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="dateend label|Label for field: dateend@@label.editform.tdoc.dateend">Enddatum:</label>
-            <span class="" *ngIf="recommend && editFormGroup.get('dateend').value != recommend" (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</span>
+            <span class="recommend" *ngIf="recommend && editFormGroup.get('dateend').value != recommend" (click)="setValue('dateend', recommend)">&#x27F8; {{ recommend }} GPX</span>
             <input formControlName="dateend" required="required" type="datetime-local" placeholder="dateend" i18n-placeholder="dateend placeholder|Placeholder for dateend@@placeholder.form.tdoc.dateend">
         </div>
     </ng-template>
 
     <ng-template #inputLocation>
-        <div class="col-sm-6 input-group input-group-sm">
+        <div class="col-sm-9 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['locId']"
                                      [settings]="settingsSelectWhere"
@@ -427,7 +431,7 @@
     </ng-template>
 
     <ng-template #inputLocationParent>
-        <div class="col-sm-6 input-group input-group-sm">
+        <div class="col-sm-9 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="where label|Label for filter: where@@label.searchform.tdoc.where">Where:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['locIdParent']"
                                      [settings]="settingsSelectWhere"
@@ -539,7 +543,7 @@
     </ng-template>
 
     <ng-template #inputTrack>
-        <div class="col-sm-6 input-group input-group-sm">
+        <div class="col-sm-9 input-group input-group-sm">
             <label class="col-xs-3 col-form-label mr-2" i18n="track label|Label for filter: track@@label.searchform.tdoc.trackId">Track:</label>
             <ss-multiselect-dropdown [options]="optionsSelect['trackId']"
                                      [settings]="settingsSelectTrack"

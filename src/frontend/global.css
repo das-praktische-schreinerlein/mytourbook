@@ -23,6 +23,12 @@ h5 {
     z-index: -1;
 }
 
+
+.dropdown-toggle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /*******************
  * Common Style Elements
  *******************/

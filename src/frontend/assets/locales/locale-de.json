@@ -307,6 +307,7 @@
     "label.dashboardColumn.objectDetectionDone": "Bilderkennung abgeschlossen",
     "label.linkedInfosLinkedDetails": "Details:",
     "label.linkedRoutesLinkedRouteAttr": "Details:",
+    "label.linkedRouteAttr": "Routen-Details:",
     "label.tdoc.geoLoc": "Zentrums-Koordinate:",
     "label.tdoc.geoLocArea": "Area-Koordinaten (Gpx):",
     "label.tdoc.geoLocSource": "Ortssuche:",
