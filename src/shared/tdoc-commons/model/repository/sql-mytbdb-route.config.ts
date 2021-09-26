@@ -26,13 +26,16 @@ export class SqlMytbDbRouteConfig {
                 groupByFields: ['GROUP_CONCAT(DISTINCT tif.if_id ORDER BY tif.if_id SEPARATOR ", ") AS t_if_ids']
             },
             {
-                from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ' +
-                    'LEFT JOIN kategorie ON kategorie_tour.k_id=kategorie.k_id OR kategorie.t_id=tour.t_id ',
+                from: 'LEFT JOIN kategorie_tour ON tour.t_id=kategorie_tour.t_id ',
                 triggerParams: ['id', 'track_id_i', 'track_id_is', 'route_attr_ss', 'route_attr_txt'],
-                groupByFields: ['GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_k_ids',
-                    'GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_kt_ids',
-                    'GROUP_CONCAT(DISTINCT COALESCE(kategorie.k_route_attr, "") ORDER BY kategorie.k_route_attr SEPARATOR ";; ") AS t_k_route_attr',
+                groupByFields: ['GROUP_CONCAT(DISTINCT kategorie_tour.k_id ORDER BY kategorie_tour.k_id SEPARATOR ", ") AS t_kt_ids',
                     'GROUP_CONCAT(DISTINCT COALESCE(kategorie_tour.kt_route_attr, "") ORDER BY kategorie_tour.kt_route_attr SEPARATOR ";; ") AS t_kt_route_attr']
+            },
+            {
+                from: 'LEFT JOIN kategorie2 ON kategorie.t_id=tour.t_id ',
+                triggerParams: ['id', 'track_id_i', 'track_id_is', 'route_attr_ss', 'route_attr_txt'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT kategorie2.k_id ORDER BY kategorie2.k_id SEPARATOR ", ") AS t_k_ids',
+                    'GROUP_CONCAT(DISTINCT COALESCE(kategorie2.k_route_attr, "") ORDER BY kategorie2.k_route_attr SEPARATOR ";; ") AS t_k_route_attr']
             },
             {
                 from: 'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(tour.l_id, "_", tour.t_desc_gebiet, "_", tour.t_desc_ziel, "_", tour.t_typ)))',
@@ -828,7 +831,7 @@ export class SqlMytbDbRouteConfig {
             keywords_txt: 't_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
-            // will also map routeAttr of other main routes :-( route_attr_s: 't_k_route_attr',
+            route_attr_s: 't_k_route_attr',
             linked_route_attr_s: 't_kt_route_attr',
             name_s: 't_name',
             type_s: 'type',
