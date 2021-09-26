@@ -32,10 +32,10 @@ export class SqlMytbDbRouteConfig {
                     'GROUP_CONCAT(DISTINCT COALESCE(kategorie_tour.kt_route_attr, "") ORDER BY kategorie_tour.kt_route_attr SEPARATOR ";; ") AS t_kt_route_attr']
             },
             {
-                from: 'LEFT JOIN kategorie2 ON kategorie.t_id=tour.t_id ',
+                from: 'LEFT JOIN kategorie ON kategorie.t_id=tour.t_id ',
                 triggerParams: ['id', 'track_id_i', 'track_id_is', 'route_attr_ss', 'route_attr_txt'],
-                groupByFields: ['GROUP_CONCAT(DISTINCT kategorie2.k_id ORDER BY kategorie2.k_id SEPARATOR ", ") AS t_k_ids',
-                    'GROUP_CONCAT(DISTINCT COALESCE(kategorie2.k_route_attr, "") ORDER BY kategorie2.k_route_attr SEPARATOR ";; ") AS t_k_route_attr']
+                groupByFields: ['GROUP_CONCAT(DISTINCT kategorie.k_id ORDER BY kategorie.k_id SEPARATOR ", ") AS t_k_ids',
+                    'GROUP_CONCAT(DISTINCT COALESCE(kategorie.k_route_attr, "") ORDER BY kategorie.k_route_attr SEPARATOR ";; ") AS t_k_route_attr']
             },
             {
                 from: 'LEFT JOIN destination dt ON dt.d_id in (MD5(CONCAT(tour.l_id, "_", tour.t_desc_gebiet, "_", tour.t_desc_ziel, "_", tour.t_typ)))',

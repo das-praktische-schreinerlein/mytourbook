@@ -278,7 +278,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             this.mapperUtils.getMappedAdapterValue(mapping, doc, 'route_attr_s', undefined)
         ];
         for (const refDetail of refs) {
-            if (refDetail === undefined) {
+            if (refDetail === undefined || refDetail === 'null' || refDetail.length === 0) {
                 continue;
             }
 
