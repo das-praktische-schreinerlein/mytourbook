@@ -751,17 +751,19 @@
 
             <entity name='linkedroutes'
                     query='
+                    SELECT * FROM (
                     (SELECT CONCAT("type=mainroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),
-                       ":::full=true:::linkedRouteAttr=", COALESCE(kategorie.k_route_attr, "null"))
+                       ":::full=true:::linkedRouteAttr=", COALESCE(kategorie_full.k_route_attr, "null"))
                       AS linkedroutes, k_route_attr as kt_route_attr
-                      FROM tour INNER JOIN kategorie ON kategorie.t_id = tour.t_id WHERE kategorie.k_id IN (${track.k_id})
+                      FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE kategorie_full.k_id IN (${track.k_id})
                       ORDER BY t_name)
                     UNION
                     (SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),
                        ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR), ":::linkedRouteAttr=", COALESCE(kategorie_tour.kt_route_attr, "null"))
                       AS linkedroutes, kt_route_attr
                       FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (${track.k_id})
-                      ORDER BY t_name)'>
+                      ORDER BY t_name)
+                    )  routessrc GROUP BY linkedroutes, kt_route_attr ORDER BY linkedroutes, kt_route_attr'>
                 <field column="linkedroutes" name="linkedroutes_txt"/>
                 <field column="kt_route_attr" name="route_attr_ss"/>
                 <field column="kt_route_attr" name="route_attr_txt"/>
@@ -1078,18 +1080,16 @@
 
             <entity name='linkedroutes'
                     query='
-                    (SELECT CONCAT("type=mainroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),
-                       ":::full=true:::linkedRouteAttr=", COALESCE(kategorie.k_route_attr, "null"))
-                      AS linkedroutes, k_route_attr as kt_route_attr
-                      FROM tour INNER JOIN kategorie ON kategorie.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
+                    SELECT * FROM (
+                    (SELECT k_route_attr as kt_route_attr
+                      FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
                       ORDER BY t_name)
                     UNION
-                    (SELECT CONCAT("type=subroute:::name=", COALESCE(t_name, "null"), ":::refId=", CAST(tour.t_id AS CHAR),
-                       ":::full=", CAST(COALESCE(kt_full, "false") AS CHAR), ":::linkedRouteAttr=", COALESCE(kategorie_tour.kt_route_attr, "null"))
-                      AS linkedroutes, kt_route_attr
+                    (SELECT kt_route_attr
                       FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
-                      ORDER BY t_name)'>
-                <field column="linkedroutes" name="linkedroutes_txt"/>
+                      ORDER BY t_name)
+                    )  routessrc GROUP BY kt_route_attr ORDER BY kt_route_attr'>
+                <field column="kt_route_attr" name="linked_route_attr_s"/>
                 <field column="kt_route_attr" name="route_attr_ss"/>
                 <field column="kt_route_attr" name="route_attr_txt"/>
             </entity>
