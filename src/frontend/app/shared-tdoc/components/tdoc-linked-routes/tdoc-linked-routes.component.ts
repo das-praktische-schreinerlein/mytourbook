@@ -34,7 +34,19 @@ export class TourDocLinkedRoutesComponent extends AbstractInlineComponent {
             return;
         }
 
-        this.linkedRoutes = this.record['tdoclinkedroutes'];
+        const routes = [];
+        const routeKeys = {};
+        for (const linkedRoute of this.record['tdoclinkedroutes']) {
+            const routeKey = linkedRoute.name + linkedRoute.refId + linkedRoute.linkedRouteAttr;
+            if (routeKeys[routeKey]) {
+                continue;
+            }
+
+            routeKeys[routeKey] = linkedRoute;
+            routes.push(linkedRoute);
+        }
+
+        this.linkedRoutes = routes;
     }
 
     public submitShow(event, route: TourDocLinkedRouteRecord): boolean {
