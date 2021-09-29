@@ -164,7 +164,9 @@
                         <app-tdoc-linked-routes [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-routes>
 
                         <app-tdoc-info [record]="listItem.currentRecord"></app-tdoc-info>
-                        <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="true"></app-tdoc-linked-infos>
+                        <ng-container *ngIf="record.type === 'ROUTE'">
+                            <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="false"></app-tdoc-linked-infos>
+                        </ng-container>
 
                         <app-cdoc-extended-object-properties [extendedObjectProperties]="listItem.currentRecord.tdocextendedobjectproperties"
                                                              [categories]="['ENTITYCOUNT']"

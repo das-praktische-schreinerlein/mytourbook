@@ -492,19 +492,18 @@
             >
                 <field column="t_id" name="route_id_is"/>
             </entity>
-            <entity name='info'
-                    query="
-                        SELECT info.if_id, GROUP_CONCAT(COALESCE(tif_linked_details, ''), ', ') AS tif_ref_details
-                          FROM tour
-                          INNER JOIN tour_info ON tour_info.t_id = tour.t_id
-                          INNER JOIN info ON tour_info.if_id = info.if_id
-                          WHERE tour.d_id IN ('${destination.d_id}') GROUP BY info.if_id"
-                    deltaImportQuery="select info.if_id FROM info WHERE if_id='${dih.delta.id}'"
-                    deltaQuery="SELECT if_id FROM info'"
-            >
+
+            <entity name='linkedinfos'
+                    query='
+                    SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||
+                        ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE(tour_info.tif_linked_details, "null")
+                        AS linkedinfos, info.if_id
+                    FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id
+                         INNER JOIN tour ON tour_info.t_id = tour.t_id WHERE tour.d_id = "${destination.d_id}"
+                        ORDER BY if_name'>
                 <field column="if_id" name="info_id_i"/>
                 <field column="if_id" name="info_id_is"/>
-                <field column="tif_ref_details" name="info_tif_linked_details_s"/>
+                <field column="linkedinfos" name="linkedinfos_txt"/>
             </entity>
         </entity>
 
@@ -546,6 +545,7 @@
                            k_meta_shortdesc_html,
                            k_meta_shortdesc_html                                                                          AS k_meta_shortdesc_html2,
                            k_rate_gesamt,
+                           k_route_attr,
                            k_gps_lat,
                            k_gps_lon,
                            k_gps_lat || ',' || k_gps_lon                                                              AS k_gps_loc,
@@ -755,14 +755,12 @@
                        ":::full=true:::linkedRouteAttr=" || COALESCE(kategorie_full.k_route_attr, "null")
                       AS linkedroutes, k_route_attr as kt_route_attr
                       FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE kategorie_full.k_id IN (${track.k_id})
-                      ORDER BY t_name
                     UNION
                     SELECT "type=subroute:::name=" || COALESCE(t_name, "null") || ":::refId=" || CAST(tour.t_id AS CHAR) ||
                        ":::full=" || CAST(COALESCE(kt_full, "false") AS CHAR) || ":::linkedRouteAttr=" || COALESCE(kategorie_tour.kt_route_attr, "null")
                       AS linkedroutes, kt_route_attr
                       FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE kategorie_tour.k_id IN (${track.k_id})
-                      ORDER BY t_name
-                    ) routessrc GROUP BY linkedroutes, kt_route_attr ORDER BY linkedroutes, kt_route_attr'>
+                    )  routessrc GROUP BY linkedroutes, kt_route_attr ORDER BY linkedroutes, kt_route_attr'>
                 <field column="linkedroutes" name="linkedroutes_txt"/>
                 <field column="kt_route_attr" name="route_attr_ss"/>
                 <field column="kt_route_attr" name="route_attr_txt"/>
@@ -1082,12 +1080,10 @@
                     SELECT * FROM (
                     SELECT k_route_attr as kt_route_attr
                       FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
-                      ORDER BY t_name
                     UNION
                     SELECT kt_route_attr
                       FROM tour INNER JOIN kategorie_tour ON kategorie_tour.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
-                      ORDER BY t_name
-                    ) routessrc GROUP BY kt_route_attr ORDER BY kt_route_attr'>
+                    )  routessrc GROUP BY kt_route_attr ORDER BY kt_route_attr'>
                 <field column="kt_route_attr" name="linked_route_attr_s"/>
                 <field column="kt_route_attr" name="route_attr_ss"/>
                 <field column="kt_route_attr" name="route_attr_txt"/>
@@ -1163,20 +1159,19 @@
             >
                 <field column="d_id" name="destination_id_ss"/>
             </entity>
-            <entity name='info'
-                    query="
-                        SELECT info.if_id, GROUP_CONCAT(COALESCE(tif_linked_details, ''), ', ') AS tif_ref_details
-                        FROM tour
-                        INNER JOIN tour_info ON tour_info.t_id = tour.t_id
-                        INNER JOIN info ON tour_info.if_id = info.if_id
-                        WHERE tour.t_id IN (${route.t_id}) GROUP BY info.if_id"
-                    deltaImportQuery="select info.if_id FROM info WHERE if_id='${dih.delta.id}'"
-                    deltaQuery="SELECT if_id FROM info'"
-            >
+
+            <entity name='linkedinfos'
+                    query='
+                    SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||
+                        ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE(tour_info.tif_linked_details, "null")
+                        AS linkedinfos, info.if_id
+                    FROM info INNER JOIN tour_info ON tour_info.if_id = info.if_id WHERE tour_info.t_id IN (${route.t_id})
+                        ORDER BY if_name'>
                 <field column="if_id" name="info_id_i"/>
                 <field column="if_id" name="info_id_is"/>
-                <field column="tif_ref_details" name="info_tif_linked_details_s"/>
+                <field column="linkedinfos" name="linkedinfos_txt"/>
             </entity>
+
         </entity>
 
         <entity name="location"
@@ -1397,6 +1392,22 @@
                 <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
             </entity>
+
+            <entity name='linkedinfos'
+                    query='
+                    SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||
+                        ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE(location_info.lif_linked_details, "null")
+                        AS linkedinfos, info.if_id
+                    FROM location
+                          INNER JOIN location_info ON location_info.l_id = location.l_id
+                          INNER JOIN info ON location_info.if_id = info.if_id
+                          WHERE location.l_id IN (${location.l_id}) GROUP BY info.if_id
+                        ORDER BY if_name'>
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+                <field column="linkedinfos" name="linkedinfos_txt"/>
+            </entity>
+
             <entity name='info'
                     query="
                         SELECT info.if_id, GROUP_CONCAT(COALESCE(lif_linked_details, ''), ', ') AS lif_ref_details
@@ -1412,6 +1423,17 @@
                 <field column="lif_ref_details" name="info_lif_linked_details_s"/>
             </entity>
 
+            <entity name='info2'
+                    query="
+                        SELECT info.if_id
+                          FROM info
+                          WHERE l_id IN (${location.l_id}) GROUP BY info.if_id"
+                    deltaImportQuery="select info.if_id FROM info WHERE if_id='${dih.delta.id}'"
+                    deltaQuery="SELECT if_id FROM info'"
+            >
+                <field column="if_id" name="info_id_i"/>
+                <field column="if_id" name="info_id_is"/>
+            </entity>
         </entity>
 
         <entity name="image"
