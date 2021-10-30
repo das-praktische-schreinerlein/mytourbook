@@ -36,6 +36,9 @@ export class TourDocSqlUtils {
         sql = sql.replace(/\(SELECT CONCAT\("type=", COALESCE\(if_typ, "null"\), ":::name=", COALESCE\(if_name, "null"\),    ":::refId=", CAST\(info.if_id AS CHAR\), ":::linkedDetails=", COALESCE\((.*?), "null"\)\)/g,
             'SELECT linkedinfos FROM (SELECT "type=" || COALESCE(if_typ, "null") || ":::name=" || COALESCE(if_name, "null") ||' +
             '    ":::refId=" || CAST(info.if_id AS CHAR) || ":::linkedDetails=" || COALESCE($1, "null")');
+        sql = sql.replace(/\(SELECT CONCAT\("type=playlist:::name=", COALESCE\(p_name, "null"\), ":::refId=", CAST\(playlist.p_id AS CHAR\),   ":::position=", COALESCE\((.*?), "null"\)\)/g,
+            'SELECT linkedplaylists FROM (SELECT "type=playlist:::name=" || COALESCE(p_name, "null") ||' +
+            '    ":::refId=" || CAST(playlist.p_id AS CHAR) || ":::position=" || COALESCE($1, "null")');
         sql = sql.replace(/\(SELECT CONCAT\("navid=(.*?)", (.*?), ":::name=", COALESCE\((.*?), "null"\), ":::navtype=", "/g,
             'SELECT navigation_objects FROM (SELECT ("navid=$1" || $2 || ":::name=" || COALESCE($3, "null") || ":::navtype=');
         sql = sql.replace(/CONCAT\((.*?), CAST\(COUNT\(DISTINCT (.*?)\) AS CHAR\)\)/g,
@@ -46,7 +49,6 @@ export class TourDocSqlUtils {
             '$1 || CAST(COUNT(DISTINCT $2) AS CHAR(50))');
         sql = sql.replace(/CONCAT\("ele_", ROUND\(\((.*?) \/ 500\)\)\*500\)/g,
             '"ele_" || CAST(ROUND(($1 / 500))*500 AS INTEGER)');
-
         return sql;
     }
 }
