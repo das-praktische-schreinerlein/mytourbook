@@ -30,7 +30,7 @@ export class SqlMytbDbVideoConfig {
             {
                 from: 'LEFT JOIN video_playlist ON video.v_id=video_playlist.v_id ' +
                     'LEFT JOIN playlist ON video_playlist.p_id=playlist.p_id',
-                triggerParams: ['playlists_txt'],
+                triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists']
             },
             {
@@ -129,6 +129,15 @@ export class SqlMytbDbVideoConfig {
                     '   ORDER BY v_date, v_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
+            },
+            {
+                profile: 'linkedplaylists',
+                sql: '(SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                    '   ":::position=", COALESCE(video_playlist.vp_pos, "null"))' +
+                    '  AS linkedplaylists' +
+                    '  FROM playlist INNER JOIN video_playlist ON playlist.p_id = video_playlist.p_id WHERE video_playlist.v_id IN (:id)' +
+                    '  ORDER BY p_name)',
+                parameterNames: ['id']
             }
         ],
         groupbBySelectFieldListIgnore: ['v_keywords', 'v_playlists', 'v_persons', 'v_objects'],
@@ -371,6 +380,16 @@ export class SqlMytbDbVideoConfig {
                 filterField: 'p_name',
                 action: AdapterFilterActions.IN
             },
+            'playlists_max_txt': {
+                selectSql: 'SELECT max(vp_pos) AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist LEFT OUTER JOIN video_playlist ON playlist.p_id = video_playlist.p_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
+            },
             'rate_pers_gesamt_is': {
                 selectField: 'v_rate',
                 orderBy: 'value asc'
@@ -423,6 +442,7 @@ export class SqlMytbDbVideoConfig {
             'forExport': 'v_date ASC, video.v_id ASC',
             'ratePers': 'v_rate DESC, v_date DESC',
             'location': 'l_lochirarchietxt ASC',
+            'playlistPos': 'video_playlist.vp_pos ASC',
             'relevance': 'v_date DESC'
         },
         spartialConfig: {
@@ -540,7 +560,7 @@ export class SqlMytbDbVideoConfig {
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
-        table: 'video', joinTable: 'video_playlist', fieldReference: 'v_id'
+        table: 'video', joinTable: 'video_playlist', fieldReference: 'v_id', positionField: 'vp_pos'
     };
 
     public static readonly rateModelConfigTypeVideo: RateModelConfigTableType = {

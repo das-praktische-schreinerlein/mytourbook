@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input} from '@angular/core';
-import {TourDocRecord, TourDocRecordType} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
-import {DomSanitizer, SafeHtml, SafeUrl} from '@angular/platform-browser';
+import {TourDocRecord} from '../../../../shared/tdoc-commons/model/records/tdoc-record';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {AbstractInlineComponent} from '@dps/mycms-frontend-commons/dist/angular-commons/components/inline.component';
-import {TourDocInfoRecordType} from '../../../../shared/tdoc-commons/model/records/tdocinfo-record';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';

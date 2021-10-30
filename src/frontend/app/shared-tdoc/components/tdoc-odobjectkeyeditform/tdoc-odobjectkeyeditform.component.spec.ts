@@ -15,7 +15,7 @@ import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
 import {TourDocObjectDetectionObjectKeyEditFormComponent} from './tdoc-odobjectkeyeditform.component';
 import {TourDocDateFormatPipe} from '../../pipes/tdoc-dateformat.pipe';
 import {FormBuilder} from '@angular/forms';
-import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../../shared/tdoc-commons/services/tdoc-data.store';
+import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../shared/tdoc-commons/services/tdoc-data.store';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
 import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/services/searchform-utils.service';

@@ -12,7 +12,7 @@ import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend
 import {Router} from '@angular/router';
 import {RouterStub} from '@dps/mycms-frontend-commons/dist/angular-commons/testing/router-stubs';
 import {TourDocContentUtils} from '../../services/tdoc-contentutils.service';
-import {TourDocAssignJoinFormComponent} from './tdoc-assignjoinform.component';
+import {TourDocAssignPlaylistFormComponent} from './tdoc-assignplaylistform.component';
 import {FormBuilder} from '@angular/forms';
 import {TourDocDataStore, TourDocTeamFilterConfig} from '../../../../shared/tdoc-commons/services/tdoc-data.store';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
@@ -21,13 +21,13 @@ import {SearchFormUtils} from '@dps/mycms-frontend-commons/dist/angular-commons/
 import {ToastrService} from 'ngx-toastr';
 import {ToastrServiceStub} from '@dps/mycms-frontend-commons/dist/testing/toasts-stubs';
 
-describe('TourDocAssignJoinFormComponent', () => {
-    let component: TourDocAssignJoinFormComponent;
-    let fixture: ComponentFixture<TourDocAssignJoinFormComponent>;
+describe('TourDocAssignPlaylistFormComponent', () => {
+    let component: TourDocAssignPlaylistFormComponent;
+    let fixture: ComponentFixture<TourDocAssignPlaylistFormComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TourDocAssignJoinFormComponent],
+            declarations: [TourDocAssignPlaylistFormComponent],
             schemas: [NO_ERRORS_SCHEMA],
             imports: [NgbModule.forRoot(),
                 TranslateModule.forRoot()],
@@ -52,7 +52,7 @@ describe('TourDocAssignJoinFormComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TourDocAssignJoinFormComponent);
+        fixture = TestBed.createComponent(TourDocAssignPlaylistFormComponent);
         component = fixture.componentInstance;
         component.records = [TourDocDataServiceStub.defaultRecord()];
         fixture.detectChanges();

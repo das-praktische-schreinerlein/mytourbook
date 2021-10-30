@@ -11,7 +11,7 @@ import {IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 import {CommonDocAssignJoinFormComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
 
 @Component({
-    selector: 'app-tdoc-assignform',
+    selector: 'app-tdoc-assignjoinform',
     templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component.html',
     styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush

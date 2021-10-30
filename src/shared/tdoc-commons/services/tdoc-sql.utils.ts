@@ -29,7 +29,7 @@ export class TourDocSqlUtils {
             'REPLACE(REPLACE(LOWER($1 || "_" || $2 || "_" || $3 || "_" || $4), " ", "_"), "/", "_")');
         sql = sql.replace(/\(SELECT CONCAT\("type=mainroute:::name=", COALESCE\(t_name, "null"\), ":::refId=", CAST\(tour.t_id AS CHAR\),   ":::full=true:::linkedRouteAttr=", COALESCE\(kategorie.k_route_attr, "null"\)\)/g,
             'SELECT linkedroutes FROM (SELECT "type=mainroute:::name="  ||  COALESCE(t_name, "null")  ||  ":::refId="  ||  CAST(tour.t_id AS CHAR)  || ' +
-            '   ":::full=true:::linkedRouteAttr=" || COALESCE(kategorie_tour.kt_route_attr, "null")');
+            '   ":::full=true:::linkedRouteAttr=" || COALESCE(kategorie.k_route_attr, "null")');
         sql = sql.replace(/\(SELECT CONCAT\("type=subroute:::name=", COALESCE\(t_name, "null"\), ":::refId=", CAST\(tour.t_id AS CHAR\),   ":::full=", CAST\(COALESCE\(kt_full, "false"\) AS CHAR\), ":::linkedRouteAttr=", COALESCE\(kategorie_tour.kt_route_attr, "null"\)\)/g,
             'SELECT linkedroutes FROM (SELECT "type=subroute:::name="  ||  COALESCE(t_name, "null")  ||  ":::refId="  ||  CAST(tour.t_id AS CHAR)  || ' +
             '   ":::full="  ||  CAST(COALESCE(kt_full, "false") AS CHAR) || ":::linkedRouteAttr=" || COALESCE(kategorie_tour.kt_route_attr, "null")');

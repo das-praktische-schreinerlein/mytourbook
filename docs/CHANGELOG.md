@@ -7,11 +7,13 @@
 - added linked route-attributes for track-routes
 - added modal window to create new entries and append them to selectbox
 - added modal window to show entries short in popup
+- added support to change/order by playlist-pos
 - improved sql for similarity-search
 - added groupby trip for track-list, region for routes
 - fixed solr-import
 - show details in list+show-view
 - improved layout
+- use commons 5.4.0
 
 ### new features
 - backend/frontend: added statistics-section
@@ -20,6 +22,7 @@
 - frontend: added modal window to show entries short in popup
 - backend/frontend: added groupby trip for track-list, region for routes
 - frontend: show details in list+show-view
+- backend/frontend: added support to change/order by playlist-pos
 
 ### improvements
 - backend: added sort by name

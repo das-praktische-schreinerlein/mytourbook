@@ -13,6 +13,7 @@ import {ObjectUtils} from '@dps/mycms-commons/dist/commons/utils/object.utils';
 import {TourDocLinkedRouteRecord} from '../model/records/tdoclinkedroute-record';
 import {TourDocInfoRecordFactory} from '../model/records/tdocinfo-record';
 import {TourDocLinkedInfoRecord} from '../model/records/tdoclinkedinfo-record';
+import {TourDocLinkedPlaylistRecord} from '../model/records/tdoclinkedplaylist-record';
 
 export class TourDocAdapterResponseMapper implements GenericAdapterResponseMapper {
     private readonly _objectSeparator = ';;';
@@ -98,6 +99,9 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
         if (props.get('tdoclinkedinfos') && props.get('tdoclinkedinfos').length > 0) {
             this.mapDetailDataToAdapterDocument({}, 'linkedinfos', props, values);
         }
+        if (props.get('tdoclinkedplaylists') && props.get('tdoclinkedplaylists').length > 0) {
+            this.mapDetailDataToAdapterDocument({}, 'linkedplaylists', props, values);
+        }
 
         values['data_tech_alt_asc_i'] = BeanUtils.getValue(props, 'tdocdatatech.altAsc');
         values['data_tech_alt_desc_i'] = BeanUtils.getValue(props, 'tdocdatatech.altDesc');
@@ -170,6 +174,20 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                     }
 
                     result['linkedinfos_txt'] = infosSrc.join(this._objectSeparator);
+                }
+                break;
+            case 'linkedplaylists':
+                if (props.get('tdoclinkedplaylists') && props.get('tdoclinkedplaylists').length > 0) {
+                    const playlists: TourDocLinkedPlaylistRecord[] = props.get('tdoclinkedplaylists');
+                    const playlistdSrc: string [] = [];
+                    for (let idx = 0; idx < playlists.length; idx++) {
+                        playlistdSrc.push('type=playlist' + this._fieldSeparator +
+                            'name=' + playlists[idx].name + this._fieldSeparator +
+                            'refId=' + playlists[idx].refId + this._fieldSeparator +
+                            'position=' + playlists[idx].position);
+                    }
+
+                    result['linkedplaylists_txt'] = playlistdSrc.join(this._objectSeparator);
                 }
                 break;
         }
@@ -315,6 +333,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             ObjectUtils.mapValueToObjects(
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedinfos_txt')],
                 'linkedinfos_txt'));
+        this.mapDetailResponseDocuments(mapper, 'linkedplaylists', record,
+            ObjectUtils.mapValueToObjects(
+                doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'playlists_txt')],
+                'playlists_txt'));
 
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
@@ -487,6 +509,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             case 'linkedinfos':
                 this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedinfo'],
                     ['linkedinfos', 'linkedinfos_txt'], record, docs);
+                break;
+            case 'linkedplaylists':
+                this.mapperUtils.explodeAndMapDetailResponseDocuments(mapper, TourDocRecordRelation.hasMany['tdoclinkedplaylist'],
+                    ['linkedplaylists', 'linkedplaylists_txt'], record, docs);
                 break;
             case 'video':
                 const videoDocs = [];

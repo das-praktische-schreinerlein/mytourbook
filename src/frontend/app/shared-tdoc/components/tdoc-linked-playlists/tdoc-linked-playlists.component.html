@@ -1,0 +1,32 @@
+<ng-container *ngIf="linkedPlaylists !== undefined && linkedPlaylists.length > 0">
+    <div class="techvaluetable">
+        <div class="entry">
+            <div class="label" *ngIf="!small">Playlists:</div>
+            <div class="value">
+                <ng-container *ngFor="let linkedPlaylist of linkedPlaylists; let i = index">
+                    <div class="playlist-entry">
+                        <a [href]="getShowUrl(linkedPlaylist)"
+                           *ngIf="showAvailable"
+                           (click)="submitShow($event, linkedPlaylist)"
+                           [title]="linkedPlaylist.name">{{ linkedPlaylist.name }}</a>
+                        <span *ngIf="!showAvailable"
+                           [title]="linkedPlaylist.name">{{ linkedPlaylist.name }}</span>
+                        (
+                        {{ linkedPlaylist.position }}
+                        <a (click)="submitChangePosition($event, linkedPlaylist)"
+                           *ngIf="editAvailable"
+                           i18n="link change Playlist|Linktext to change Playlist@@link.tourdoc.playlists.change.Playlist"
+                           i18n-title="link-title change Playlist|Linktitle to change Playlist@@linktitle.tourdoc.playlists.change.Playlist"
+                           title="Change position on Playlist">🖉</a>
+                        )
+                    </div>
+                </ng-container>
+                <div class="playlist-entry" *ngIf="appendAvailable">
+                    <a (click)="submitAddToPlaylist($event)"
+                       i18n="link add Playlist|Link to add Playlist@@link.tourdoc.playlists.add.Playlist"
+                       i18n-title="link-title add Playlist|Linktitle to add Playlist@@linktitle.tourdoc.playlists.add.Playlist"
+                       title="Add to Playlist">🐣</a></div>
+            </div>
+        </div>
+    </div>
+</ng-container>

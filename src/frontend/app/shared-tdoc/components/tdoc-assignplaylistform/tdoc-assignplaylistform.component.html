@@ -1,0 +1,52 @@
+<div class="modal-header" *ngIf="records !== undefined && records.length > 0">
+    <h5><span class="fx-bg-type">{{recordType | translate }}</span>
+        <span class="fx-bg-name">{{records.length === 1 ? records[0].name : ''}} {{records.length === 1 ? 'ID: ' + records[0].id : ''}}</span></h5>
+    <button type="button" class="close" aria-label="Close" (click)="onCancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="loading" *ngIf="showLoadingSpinner">Loading</div>
+    <form [formGroup]="assignFormGroup" class="form-control-sm" (ngSubmit)="onCancel()" *ngIf="records !== undefined && records.length > 0">
+        <fieldset>
+            <legend i18n="assignRecord label|Label for fieldset: assignRecord@@label.assignPlaylistform.cdoc.legend.assignRecord">🖉 Playlist zuordnen</legend>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <label class="col-sm-3 col-form-label mr-2 form-check-label"
+                           i18n="newId label|Label for field: newId@@label.assignPlaylistform.cdoc.newIdSelect">Playlist:</label>
+                    <ss-multiselect-dropdown [options]="optionsSelectNewId"
+                                             [settings]="settingsSelectNewId"
+                                             [texts]="textsSelectNewId"
+                                             (change)="onUpdateNewIdSelect()"
+                                             (dropdownClosed)="onUpdateNewIdSelect()"
+                                             (onRemoved)="onUpdateNewIdSelect()"
+                                             (onAdded)="onUpdateNewIdSelect()"
+                                             formControlName="newIdSelect"
+                                             ngDefaultControl
+                                             required="required"
+                                             class="ss-multiselect-dropdown ss-multiselect-dropdown-fullwidth">
+                    </ss-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <label class="col-sm-3 col-form-label mr-2 form-check-label"
+                           i18n="position label|Label for field: position@@label.assignPlaylistform.cdoc.position">Position:</label>
+                    <input formControlName="position" required="required" class="form-control" type="number" placeholder="position"
+                           (change)="checkFormAndSetValidFlag()"
+                           class="col-sm-3 mr-2"
+                           i18n-placeholder="position placeholder|Placeholder for position@@placeholder.assignPlaylistform.cdoc.position">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 form-inline input-group input-group-sm">
+                    <button type="submit" class="btn btn-action btn-sm"
+                            (click)="onSubmitAssignKey()"
+                            [disabled]="!validForSubmit"
+                            i18n="button assignRecord cdoc|Buttontext to assignRecord cdoc@@button.assignPlaylistform.cdoc.assignRecord">Zuordnen</button>
+                    <button type="button" (click)="onCancel()" class="btn btn-action btn-sm">Abbrechen</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

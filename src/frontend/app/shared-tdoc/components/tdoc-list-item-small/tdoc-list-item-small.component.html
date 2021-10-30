@@ -49,11 +49,14 @@
                 <ng-container *ngIf="listItem.currentRecord.type !== 'ODIMGOBJECT'">
                     <app-tdoc-ratepers [record]="listItem.currentRecord" [small]="'true'"></app-tdoc-ratepers >
                     <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                        <app-tdoc-linked-playlists [record]="listItem.currentRecord"
+                                                   (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
                     </ng-container>
                 </ng-container>
                 <ng-container *ngIf="!short">
-                    <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsSmall'" (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
+                    <app-tdoc-action [record]="listItem.currentRecord" [type]="'actionTagsSmall'"
+                                     (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-action>
                 </ng-container>
             </div>
         </div>
@@ -100,6 +103,8 @@
             <app-tdoc-routeattr [record]="listItem.currentRecord" [small]="true"></app-tdoc-routeattr>
             <app-tdoc-info [record]="listItem.currentRecord" [small]="true"></app-tdoc-info>
             <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
+                <app-tdoc-linked-playlists [record]="listItem.currentRecord"
+                                           (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                 <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
             </ng-container>
         </div>

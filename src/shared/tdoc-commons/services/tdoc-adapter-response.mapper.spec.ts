@@ -36,6 +36,8 @@ import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdo
 import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
 import {TourDocLinkedInfoRecordSchema} from '../model/schemas/tdoclinkedinfo-record-schema';
 import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordRelation} from '../model/records/tdoclinkedinfo-record';
+import {TourDocLinkedPlaylistRecord, TourDocLinkedPlaylistRecordRelation} from '../model/records/tdoclinkedplaylist-record';
+import {TourDocLinkedPlaylistRecordSchema} from '../model/schemas/tdoclinkedplaylist-record-schema';
 
 describe('TourDocAdapterResponseMapper', () => {
     let datastore: TourDocDataStore;
@@ -71,6 +73,8 @@ describe('TourDocAdapterResponseMapper', () => {
             TourDocLinkedRouteRecordSchema, TourDocLinkedRouteRecordRelation);
         datastore.defineMapper('tdoclinkedinfo', TourDocLinkedInfoRecord,
             TourDocLinkedInfoRecordSchema, TourDocLinkedInfoRecordRelation);
+        datastore.defineMapper('tdoclinkedplaylist', TourDocLinkedPlaylistRecord,
+            TourDocLinkedPlaylistRecordSchema, TourDocLinkedPlaylistRecordRelation);
         mapper = datastore.getMapper('tdoc');
     });
 
@@ -115,7 +119,8 @@ describe('TourDocAdapterResponseMapper', () => {
                 'tdocnavigationobjects': [],
                 'tdocextendedobjectproperties': [],
                 'tdoclinkedroutes': [],
-                'tdoclinkedinfos': []
+                'tdoclinkedinfos': [],
+                'tdoclinkedplaylists': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues,
                 TourDocSqlMytbDbConfig.tableConfigs.track.fieldMapping);
@@ -236,7 +241,8 @@ describe('TourDocAdapterResponseMapper', () => {
                         'id': '9000003TRACK_9'
                     }
                 ],
-                'tdoclinkedinfos': []
+                'tdoclinkedinfos': [],
+                'tdoclinkedplaylists': []
             };
             const res = <TourDocRecord>service.mapResponseDocument(mapper, sqlSrcValues, {});
 

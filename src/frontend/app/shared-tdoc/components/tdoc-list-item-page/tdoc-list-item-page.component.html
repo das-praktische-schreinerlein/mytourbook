@@ -120,6 +120,8 @@
         <app-tdoc-info [record]="listItem.currentRecord" *ngIf="listItem.currentRecord.type !== 'INFO'"></app-tdoc-info>
         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
+        <app-tdoc-linked-playlists [record]="listItem.currentRecord"
+                                   (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
         <br clear="all" />
     </div>

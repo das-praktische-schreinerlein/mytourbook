@@ -57,6 +57,8 @@ import {TourDocRouteAttributeComponent} from './components/tdoc-routeattr/tdoc-r
 import {TourDocLinkedRoutesComponent} from './components/tdoc-linked-routes/tdoc-linked-routes.component';
 import {RouterModule} from '@angular/router';
 import {TourDocLinkedInfosComponent} from './components/tdoc-linked-infos/tdoc-linked-infos.component';
+import {TourDocLinkedPlaylistsComponent} from './components/tdoc-linked-playlists/tdoc-linked-playlists.component';
+import {TourDocAssignPlaylistFormComponent} from './components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 
 @NgModule({
     declarations: [
@@ -103,7 +105,9 @@ import {TourDocLinkedInfosComponent} from './components/tdoc-linked-infos/tdoc-l
         TourDocAssignJoinFormComponent,
         TourDocRouteAttributeComponent,
         TourDocLinkedRoutesComponent,
-        TourDocLinkedInfosComponent
+        TourDocLinkedInfosComponent,
+        TourDocLinkedPlaylistsComponent,
+        TourDocAssignPlaylistFormComponent
     ],
     imports: [
         ToastrModule,
@@ -169,7 +173,9 @@ import {TourDocLinkedInfosComponent} from './components/tdoc-linked-infos/tdoc-l
         TourDocAssignJoinFormComponent,
         TourDocRouteAttributeComponent,
         TourDocLinkedRoutesComponent,
-        TourDocLinkedInfosComponent
+        TourDocLinkedInfosComponent,
+        TourDocLinkedPlaylistsComponent,
+        TourDocAssignPlaylistFormComponent
     ]
 })
 export class SharedTourDocModule {}

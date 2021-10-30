@@ -32,6 +32,7 @@ import {CommonDocKeywordTagFormComponentResultType} from '@dps/mycms-frontend-co
 import {TourDocKeywordTagFormComponent} from '../components/tdoc-keywordtagform/tdoc-keywordtagform.component';
 import {CommonDocAssignJoinFormComponentResultType} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-assignjoinform/cdoc-assignjoinform.component';
 import {TourDocAssignJoinFormComponent} from '../components/tdoc-assignjoinform/tdoc-assignjoinform.component';
+import {TourDocAssignPlaylistFormComponent} from '../components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 
 @Injectable()
 export class TourDocActionTagService extends CommonDocActionTagService<TourDocRecord, TourDocSearchForm, TourDocSearchResult,
@@ -59,6 +60,8 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
             return this.processActionTagEventAssign(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'assignjoin') {
             return this.processActionTagEventAssignJoin(actionTagEvent, actionTagEventEmitter);
+        } else if (actionTagEvent.config.type === 'assignplaylist') {
+            return this.processActionTagEventConfigureAssignPlaylist(actionTagEvent, actionTagEventEmitter);
         } else if (actionTagEvent.config.type === 'keyword') {
             return this.processActionTagEventKeywordTag(actionTagEvent, actionTagEventEmitter);
         } else {
@@ -180,6 +183,34 @@ export class TourDocActionTagService extends CommonDocActionTagService<TourDocRe
         const promise = this.processMultiActionFormTagEvent(multiActionTagEvent, multiActionTagEventEmitter, formResultObservable);
 
         const modalRef = this.modalService.open(TourDocAssignJoinFormComponent);
+        modalRef.componentInstance.records = multiActionTagEvent.records;
+        modalRef.componentInstance.resultObservable = formResultObservable;
+
+        return promise;
+    }
+
+    protected processActionTagEventConfigureAssignPlaylist(actionTagEvent: ActionTagEvent,
+                                                           actionTagEventEmitter: EventEmitter<ActionTagEvent>): Promise<TourDocRecord> {
+        return  new Promise<TourDocRecord>((resolve, reject) => {
+            this.processMultiActionTagEventConfigureAssignPlaylist(
+                CommonDocActionTagService.actionTagEventToMultiActionTagEvent(actionTagEvent),
+                CommonDocActionTagService.actionTagEventEmitterToMultiActionTagEventEmitter(actionTagEventEmitter)).then(value => {
+                resolve(value !== undefined && value.length > 0 ? value[0] : undefined);
+            }).catch(reason => {
+                reject(reason);
+            });
+        });
+    }
+
+    protected processMultiActionTagEventConfigureAssignPlaylist(multiActionTagEvent: MultiRecordActionTagEvent,
+                                                                multiActionTagEventEmitter: EventEmitter<MultiRecordActionTagEvent>):
+        Promise<TourDocRecord[]> {
+        const formResultObservable: Subject<CommonDocAssignJoinFormComponentResultType> =
+            new Subject<CommonDocAssignJoinFormComponentResultType>();
+        const promise = this.processMultiActionFormTagEvent(multiActionTagEvent, multiActionTagEventEmitter, formResultObservable);
+
+        const modalRef = this.modalService.open(TourDocAssignPlaylistFormComponent);
+        modalRef.componentInstance.actionTagEvent = multiActionTagEvent;
         modalRef.componentInstance.records = multiActionTagEvent.records;
         modalRef.componentInstance.resultObservable = formResultObservable;
 

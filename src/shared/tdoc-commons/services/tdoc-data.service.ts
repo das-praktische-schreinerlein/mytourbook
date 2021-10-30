@@ -37,6 +37,8 @@ import {TourDocInfoRecord, TourDocInfoRecordRelation} from '../model/records/tdo
 import {TourDocInfoRecordSchema} from '../model/schemas/tdocinfo-record-schema';
 import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordRelation} from '../model/records/tdoclinkedinfo-record';
 import {TourDocLinkedInfoRecordSchema} from '../model/schemas/tdoclinkedinfo-record-schema';
+import {TourDocLinkedPlaylistRecord, TourDocLinkedPlaylistRecordRelation} from '../model/records/tdoclinkedplaylist-record';
+import {TourDocLinkedPlaylistRecordSchema} from '../model/schemas/tdoclinkedplaylist-record-schema';
 
 export class TourDocDataService extends CommonDocDataService<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     public defaultLocIdParent = 1;
@@ -100,6 +102,8 @@ export class TourDocDataService extends CommonDocDataService<TourDocRecord, Tour
             TourDocLinkedRouteRecordSchema, TourDocLinkedRouteRecordRelation);
         this.dataStore.defineMapper('tdoclinkedinfo', TourDocLinkedInfoRecord,
             TourDocLinkedInfoRecordSchema, TourDocLinkedInfoRecordRelation);
+        this.dataStore.defineMapper('tdoclinkedplaylist', TourDocLinkedPlaylistRecord,
+            TourDocLinkedPlaylistRecordSchema, TourDocLinkedPlaylistRecordRelation);
     }
 
     protected defineIdMappingAlliases(): {} {

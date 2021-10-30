@@ -69,7 +69,7 @@ export class TourDocLinkedInfoRecordValidator extends BaseEntityRecordValidator 
         errFieldPrefix = errFieldPrefix !== undefined ? errFieldPrefix : '';
 
         const state = super.validateMyFieldRules(values, errors, fieldPrefix, errFieldPrefix);
-        return this.validateFieldRules(values, TourDocLinkedInfoRecord.joinFields, fieldPrefix, errors, errFieldPrefix) && state;
+        return this.validateFieldRules(values, TourDocLinkedInfoRecord.infoFields, fieldPrefix, errors, errFieldPrefix) && state;
     }
 }
 

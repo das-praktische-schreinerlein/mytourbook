@@ -30,7 +30,7 @@ export class SqlMytbDbImageConfig {
             {
                 from: 'LEFT JOIN image_playlist ON image.i_id=image_playlist.i_id ' +
                     'LEFT JOIN playlist ON image_playlist.p_id=playlist.p_id',
-                triggerParams: ['playlists_txt'],
+                triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists']
             },
             {
@@ -155,6 +155,15 @@ export class SqlMytbDbImageConfig {
                     '   ORDER BY i_date, i_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
+            },
+            {
+                profile: 'linkedplaylists',
+                sql: '(SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                    '   ":::position=", COALESCE(image_playlist.ip_pos, "null"))' +
+                    '  AS linkedplaylists' +
+                    '  FROM playlist INNER JOIN image_playlist ON playlist.p_id = image_playlist.p_id WHERE image_playlist.i_id IN (:id)' +
+                    '  ORDER BY p_name)',
+                parameterNames: ['id']
             }
         ],
         groupbBySelectFieldListIgnore: ['i_keywords', 'i_playlists', 'i_persons', 'i_objects', 'i_objectdetections'],
@@ -467,6 +476,16 @@ export class SqlMytbDbImageConfig {
                 filterField: 'p_name',
                 action: AdapterFilterActions.IN
             },
+            'playlists_max_txt': {
+                selectSql: 'SELECT max(ip_pos) AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist LEFT OUTER JOIN image_playlist ON playlist.p_id = image_playlist.p_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
+            },
             'rate_pers_gesamt_is': {
                 selectField: 'i_rate',
                 orderBy: 'value asc'
@@ -518,6 +537,7 @@ export class SqlMytbDbImageConfig {
             'dataTechDistAsc': 'k_distance ASC',
             'forExport': 'i_date ASC, image.i_id ASC',
             'ratePers': 'i_rate DESC, i_date DESC',
+            'playlistPos': 'image_playlist.ip_pos ASC',
             'location': 'l_lochirarchietxt ASC',
             'relevance': 'i_date DESC'
         },
@@ -637,7 +657,7 @@ export class SqlMytbDbImageConfig {
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
-        table: 'image', joinTable: 'image_playlist', fieldReference: 'i_id'
+        table: 'image', joinTable: 'image_playlist', fieldReference: 'i_id', positionField: 'ip_pos'
     };
 
     public static readonly rateModelConfigTypeImage: RateModelConfigTableType = {

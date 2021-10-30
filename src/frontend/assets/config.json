@@ -1,5 +1,10 @@
 {
     "components": {
+        "tdoc-linked-playlists": {
+            "appendAvailable": true,
+            "editAvailable": true,
+            "showAvailable": true
+        },
         "tdoc-keywords": {
             "editPrefix": "KW_",
             "possiblePrefixes": ["KW_", "", "kw_"],

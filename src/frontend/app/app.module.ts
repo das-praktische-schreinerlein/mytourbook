@@ -56,6 +56,7 @@ import {TourDocRouteDescSuggesterService} from './shared-tdoc/services/tdoc-rout
 import {TourDocTrackDescSuggesterService} from './shared-tdoc/services/tdoc-track-desc-suggester.service';
 import CustomUrlSerializer from './services/custom-url-serializer';
 import {UrlSerializer} from '@angular/router';
+import {TourDocAssignPlaylistFormComponent} from './shared-tdoc/components/tdoc-assignplaylistform/tdoc-assignplaylistform.component';
 
 registerLocaleData(localeDe);
 
@@ -88,7 +89,9 @@ const customUrlSerializerProvider = {
         TourDocReplaceFormComponent,
         TourDocAssignFormComponent,
         TourDocAssignJoinFormComponent,
-        TourDocKeywordTagFormComponent],
+        TourDocAssignPlaylistFormComponent,
+        TourDocKeywordTagFormComponent
+    ],
     imports: [
         HttpClientModule,
         NgbModule,

@@ -331,6 +331,8 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return this.actionTagAssignAdapter.executeActionTagAssign(table, id, <AssignActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'assignjoin' && actionTagForm.key.startsWith('assignjoin')) {
             return this.actionTagAssignJoinAdapter.executeActionTagAssignJoin(table, id, <AssignJoinActionTagForm> actionTagForm, opts);
+        } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'assignplaylist') {
+            return this.actionTagPlaylistAdapter.executeActionTagPlaylist(table, id, <PlaylistActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'keyword' && actionTagForm.key.startsWith('keyword')) {
             return this.actionTagKeywordAdapter.executeActionTagKeyword(table, id, <KeywordActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'replace' && actionTagForm.key.startsWith('replace')) {

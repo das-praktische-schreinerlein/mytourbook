@@ -79,6 +79,8 @@
 
                 <app-tdoc-keywords [record]="record"></app-tdoc-keywords>
                 <app-tdoc-persontags [record]="record"></app-tdoc-persontags>
+                <app-tdoc-linked-playlists [record]="record"
+                                           (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                 <app-tdoc-datameta [record]="record"></app-tdoc-datameta>
 
                 <app-tdoc-routeattr [record]="record" [small]="false"></app-tdoc-routeattr>

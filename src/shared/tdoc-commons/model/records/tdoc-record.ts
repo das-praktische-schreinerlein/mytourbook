@@ -48,6 +48,11 @@ import {
 import {TourDocLinkedRouteRecord, TourDocLinkedRouteRecordFactory, TourDocLinkedRouteRecordValidator} from './tdoclinkedroute-record';
 import {TourDocInfoRecord, TourDocInfoRecordFactory, TourDocInfoRecordValidator} from './tdocinfo-record';
 import {TourDocLinkedInfoRecord, TourDocLinkedInfoRecordFactory, TourDocLinkedInfoRecordValidator} from './tdoclinkedinfo-record';
+import {
+    TourDocLinkedPlaylistRecord,
+    TourDocLinkedPlaylistRecordFactory,
+    TourDocLinkedPlaylistRecordValidator
+} from './tdoclinkedplaylist-record';
 
 export interface TourDocRecordType extends BaseEntityRecordType {
     locId: number;
@@ -188,6 +193,15 @@ export let TourDocRecordRelation: BaseEntityRecordRelationsType = {
             mapperKey: 'tdoclinkedinfo',
             factory: TourDocLinkedInfoRecordFactory.instance,
             validator: TourDocLinkedInfoRecordValidator.instance
+        },
+        tdoclinkedplaylist: {
+            // database column
+            foreignKey: 'tdoc_id',
+            // reference to related objects in memory
+            localField: 'tdoclinkedplaylists',
+            mapperKey: 'tdoclinkedplaylist',
+            factory: TourDocLinkedPlaylistRecordFactory.instance,
+            validator: TourDocLinkedPlaylistRecordValidator.instance
         }
     }
 };
@@ -402,6 +416,8 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocLinkedRouteRecordValidator.instance.validate(<TourDocLinkedRouteRecord>doc, errFieldPrefix);
             case 'tdoclinkedinfos':
                 return TourDocLinkedInfoRecordValidator.instance.validate(<TourDocLinkedInfoRecord>doc, errFieldPrefix);
+            case 'tdoclinkedplaylist':
+                return TourDocLinkedPlaylistRecordValidator.instance.validate(<TourDocLinkedPlaylistRecord>doc, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validate(<TourDocObjectDetectionImageObjectRecord>doc,
                     errFieldPrefix);

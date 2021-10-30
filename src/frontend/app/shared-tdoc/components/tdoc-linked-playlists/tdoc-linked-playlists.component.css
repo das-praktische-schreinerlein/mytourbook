@@ -1,0 +1,24 @@
+table.techvaluetable {
+    font-size: 0.75rem;
+    display: inline-table;
+    border: 1px solid #bfccd3;
+    vertical-align: top;
+    width: 100%;
+    table-layout: fixed;
+    max-width: 500px;
+}
+td.label {
+    font-weight: bold;
+}
+td.entry, td.value {
+}
+td.entry {
+    width: 70%;
+}
+td.value {
+    width: 30%;
+}
+
+div.playlist-entry {
+    display: inline-block;
+}
