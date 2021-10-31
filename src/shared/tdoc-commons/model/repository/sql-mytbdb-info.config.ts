@@ -309,7 +309,7 @@ export class SqlMytbDbInfoConfig {
                 action: AdapterFilterActions.IN_NUMBER
             },
             'type_txt': {
-                constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination'],
+                constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'playlist'],
                 filterField: '"info"',
                 selectLimit: 1
             },

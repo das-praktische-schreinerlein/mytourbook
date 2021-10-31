@@ -331,7 +331,7 @@ export class SqlMytbDbLocationConfig {
                 noFacet: true
             },
             'type_txt': {
-                constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
+                constValues: ['location', 'track', 'route', 'trip', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist'],
                 filterField: '"location"',
                 selectLimit: 1
             },

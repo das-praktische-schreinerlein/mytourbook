@@ -414,7 +414,7 @@ export class SqlMytbDbVideoConfig {
                 orderBy: 'value asc'
             },
             'type_txt': {
-                constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject', 'destination', 'info'],
+                constValues: ['video', 'track', 'route', 'location', 'trip', 'news', 'image', 'odimgobject', 'destination', 'info', 'playlist'],
                 filterField: '"video"',
                 selectLimit: 1
             },

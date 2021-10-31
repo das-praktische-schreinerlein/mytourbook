@@ -232,7 +232,7 @@ export class SqlMytbDbPlaylistConfig {
                 filterField: '"666dummy999"'
             },
             'type_txt': {
-                constValues: ['info', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination'],
+                constValues: ['playlist', 'trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
                 filterField: '"playlist"',
                 selectLimit: 1
             },

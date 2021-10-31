@@ -300,7 +300,7 @@ export class SqlMytbDbNewsConfig {
                 noFacet: true
             },
             'type_txt': {
-                constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info'],
+                constValues: ['trip', 'location', 'track', 'route', 'image', 'odimgobject', 'video', 'news', 'destination', 'info', 'playlist'],
                 filterField: '"news"',
                 selectLimit: 1
             },

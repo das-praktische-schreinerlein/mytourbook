@@ -510,7 +510,7 @@ export class SqlMytbDbImageConfig {
                 orderBy: 'value asc'
             },
             'type_txt': {
-                constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info'],
+                constValues: ['image', 'odimgobject', 'video', 'track', 'route', 'location', 'trip', 'news', 'destination', 'info', 'playlist'],
                 filterField: '"image"',
                 selectLimit: 1
             },
