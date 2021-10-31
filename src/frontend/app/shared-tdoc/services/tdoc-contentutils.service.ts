@@ -259,6 +259,14 @@ export class TourDocContentUtils extends CommonDocContentUtils {
                 filters['perPage'] = 20;
                 filters['sort'] = 'dateAsc';
             }
+        } else if (record.type === 'PLAYLIST') {
+            filters['moreFilter'] = 'playlists_txt:' + record.name;
+            filters['sort'] = 'playlistPos';
+            if (type === 'IMAGE' || type === 'TOPIMAGE') {
+                filters['perPage'] = 12;
+            } else if (type === 'VIDEO' || type === 'TOPVIDEO') {
+                filters['perPage'] = 12;
+            }
         }
 
         if (type === 'TOPIMAGE') {

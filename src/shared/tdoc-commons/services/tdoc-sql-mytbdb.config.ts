@@ -18,6 +18,7 @@ import {SqlMytbDbDestinationConfig} from '../model/repository/sql-mytbdb-destina
 import {SqlMytbDbTripConfig} from '../model/repository/sql-mytbdb-trip.config';
 import {SqlMytbDbNewsConfig} from '../model/repository/sql-mytbdb-news.config';
 import {SqlMytbDbInfoConfig} from '../model/repository/sql-mytbdb-info.config';
+import {SqlMytbDbPlaylistConfig} from '../model/repository/sql-mytbdb-playlist.config';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly tableConfigs: TableConfigs = {
@@ -30,7 +31,8 @@ export class TourDocSqlMytbDbConfig {
         'location': SqlMytbDbLocationConfig.tableConfig,
         'trip': SqlMytbDbTripConfig.tableConfig,
         'info': SqlMytbDbInfoConfig.tableConfig,
-        'news': SqlMytbDbNewsConfig.tableConfig
+        'news': SqlMytbDbNewsConfig.tableConfig,
+        'playlist': SqlMytbDbPlaylistConfig.tableConfig,
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigType = {
@@ -189,7 +191,8 @@ export class TourDocSqlMytbDbConfig {
             'location': SqlMytbDbLocationConfig.actionTagReplaceConfig,
             'news': SqlMytbDbNewsConfig.actionTagReplaceConfig,
             'info': SqlMytbDbInfoConfig.actionTagReplaceConfig,
-            'trip': SqlMytbDbTripConfig.actionTagReplaceConfig
+            'trip': SqlMytbDbTripConfig.actionTagReplaceConfig,
+            'playlist': SqlMytbDbPlaylistConfig.actionTagReplaceConfig
         }
     };
 

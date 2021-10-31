@@ -8,6 +8,7 @@
 - added modal window to create new entries and append them to selectbox
 - added modal window to show entries short in popup
 - added support to change/order by playlist-pos
+- added playlist as entity
 - improved sql for similarity-search
 - added groupby trip for track-list, region for routes
 - fixed solr-import
@@ -23,6 +24,7 @@
 - backend/frontend: added groupby trip for track-list, region for routes
 - frontend: show details in list+show-view
 - backend/frontend: added support to change/order by playlist-pos
+- backend/frontend: added playlist as entity
 
 ### improvements
 - backend: added sort by name

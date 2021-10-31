@@ -949,6 +949,32 @@
                                             [layout]="Layout.FLAT"
                                             [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
             </ng-container>
+
+            <ng-container *ngSwitchCase="'PLAYLIST'">
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
+                                            [label]="'Bilder'"
+                                            i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.tdoc.IMAGE"
+                                            [params]="getFiltersForType(record, 'IMAGE')"
+                                            [htmlId]="'PLAYLISTIMAGE'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.IMAGE"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.VIDEO"
+                                            [label]="'Videos'"
+                                            i18n-label="label inline-searchpage VIDEO|Label inline-searchpage VIDEO@@linline-search.label.tdoc.VIDEO"
+                                            [params]="getFiltersForType(record, 'VIDEO')"
+                                            [htmlId]="'PLAYLISTVIDEO'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.VIDEO"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
+            </ng-container>
+
         </ng-container>
         <div (click)="onScrollToTop()" class="scroll-to-top-container hidden-print"><span></span></div>
     </div>
