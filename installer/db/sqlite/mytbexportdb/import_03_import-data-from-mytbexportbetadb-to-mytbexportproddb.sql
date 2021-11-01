@@ -6,6 +6,9 @@ ATTACH DATABASE 'F:/playground/mytb-test/mytbbase/import/mytbexportbetadb.sqlite
 -- ##################
 -- copy tables
 -- ##################
+DELETE FROM playlist;
+INSERT INTO playlist SELECT * FROM importmytbexportbetadb.playlist;
+
 DELETE FROM location;
 INSERT INTO location SELECT * FROM importmytbexportbetadb.location;
 
@@ -24,6 +27,9 @@ INSERT INTO trip SELECT * FROM importmytbexportbetadb.trip;
 DELETE FROM kategorie_full;
 INSERT INTO kategorie_full SELECT * FROM importmytbexportbetadb.kategorie_full;
 
+DELETE FROM kategorie_tour;
+INSERT INTO kategorie_tour SELECT * FROM importmytbexportbetadb.kategorie_tour;
+
 DELETE FROM destination;
 INSERT INTO destination SELECT * FROM importmytbexportbetadb.destination;
 
@@ -36,8 +42,14 @@ INSERT INTO tour_info SELECT * FROM importmytbexportbetadb.tour_info;
 DELETE FROM image;
 INSERT INTO image SELECT * FROM importmytbexportbetadb.image;
 
+DELETE FROM image_playlist;
+INSERT INTO image_playlist SELECT * FROM importmytbexportbetadb.image_playlist;
+
 DELETE FROM video;
 INSERT INTO video SELECT * FROM importmytbexportbetadb.video;
+
+DELETE FROM video_playlist;
+INSERT INTO video_playlist SELECT * FROM importmytbexportbetadb.video_playlist;
 
 -- ##################
 -- detach mytbexportbetadb-database

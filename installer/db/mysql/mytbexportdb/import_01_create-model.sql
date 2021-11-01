@@ -32,7 +32,22 @@ CREATE TABLE rates (
   r_fieldvalue int(11) DEFAULT NULL,
   r_grade varchar(80) COLLATE latin1_general_ci DEFAULT NULL,
   r_grade_desc varchar(80) COLLATE latin1_general_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+--
+-- playlist-data
+--
+DROP TABLE IF EXISTS playlist;
+CREATE TABLE IF NOT EXISTS playlist (
+  p_id int(11) NOT NULL,
+  p_meta_desc text COLLATE latin1_general_ci,
+  p_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  countImages int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0,
+  PRIMARY KEY (p_id),
+  KEY idx_p__p_id (p_id)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
 
 --
 -- news-data
@@ -122,7 +137,7 @@ CREATE TABLE trip (
   KEY idx_tr__tr_id (tr_id),
   KEY idx_tr__l_id (l_id),
   KEY idx_tr__i_id (i_id)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- location-data
@@ -446,6 +461,20 @@ CREATE TABLE image (
   KEY i_rate_wichtigkeit (i_rate_wichtigkeit)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
+DROP TABLE IF EXISTS image_playlist;
+CREATE TABLE IF NOT EXISTS image_playlist (
+  ip_id int(11) NOT NULL AUTO_INCREMENT,
+  i_id int(11) NOT NULL DEFAULT '0',
+  p_id int(11) NOT NULL DEFAULT '0',
+  ip_pos int(11) DEFAULT NULL,
+  PRIMARY KEY (ip_id),
+  KEY idx_ip__ip_id (ip_id),
+  KEY idx_ip__i_id (i_id),
+  KEY idx_ik__p_id (p_id),
+  CONSTRAINT image_playlist_ibfk_1 FOREIGN KEY (i_id) REFERENCES image (i_id) ON DELETE CASCADE,
+  CONSTRAINT image_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
 --
 -- video-data
 --
@@ -484,5 +513,19 @@ CREATE TABLE video (
   KEY v_rate (v_rate),
   KEY v_rate_motive (v_rate_motive),
   KEY v_rate_wichtigkeit (v_rate_wichtigkeit)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+DROP TABLE IF EXISTS video_playlist;
+CREATE TABLE IF NOT EXISTS video_playlist (
+  vp_id int(11) NOT NULL AUTO_INCREMENT,
+  v_id int(11) NOT NULL DEFAULT '0',
+  p_id int(11) NOT NULL DEFAULT '0',
+  vp_pos int(11) DEFAULT NULL,
+  PRIMARY KEY (vp_id),
+  KEY idx_vp__vp_id (vp_id),
+  KEY idx_vp__v_id (v_id),
+  KEY idx_vk__p_id (p_id),
+  CONSTRAINT video_playlist_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
+  CONSTRAINT video_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 

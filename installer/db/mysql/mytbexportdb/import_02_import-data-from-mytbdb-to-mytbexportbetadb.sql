@@ -20,7 +20,6 @@ UPDATE location toupdate,
 SET toupdate.l_keywords=grouped.l_keywords
 WHERE toupdate.l_id=grouped.l_id;
 
-
 -- remove todos
 UPDATE location SET l_meta_shortdesc=REPLACE(l_meta_shortdesc, 'TODODESC', '');
 UPDATE location SET l_keywords=REPLACE(l_keywords, 'KW_TODOKEYWORDS,', '');
@@ -36,6 +35,13 @@ SET
                            COALESCE(l_lochirarchietxt, ''), ' ',
                            COALESCE(l_meta_shortdesc, ''), ' ',
                            COALESCE(l_keywords, ''), ' ');
+
+-- ##################
+-- import playlist
+-- ##################
+INSERT INTO playlist (p_id, p_name, p_meta_desc)
+    SELECT p_id, p_name, p_meta_desc
+    FROM importmytbdb_playlist;
 
 -- ##################
 -- import info
@@ -301,6 +307,12 @@ INSERT into image (i_id, k_id, i_gesperrt, i_date, i_dir, i_file, i_gps_lat, i_g
     FROM importmytbdb_image INNER JOIN importmytbdb_image_playlist ON importmytbdb_image_playlist.i_id=importmytbdb_image.i_id
     WHERE importmytbdb_image_playlist.p_id=17;
 
+-- import playlist
+INSERT into image_playlist (ip_id, i_id, p_id, ip_pos)
+    SELECT ip_id, i_id, p_id, ip_pos
+    FROM importmytbdb_image_playlist
+    WHERE importmytbdb_image_playlist.i_id in (select i_id from importmytbdb_image_playlist where importmytbdb_image_playlist.p_id=17);
+
 -- calc keywords
 UPDATE image toupdate,
     (SELECT GROUP_CONCAT(mk.kw_name SEPARATOR ',') AS i_keywords, image.i_id AS i_id
@@ -362,6 +374,12 @@ INSERT into video (v_id, k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_g
     SELECT distinct importmytbdb_video.v_id, importmytbdb_video.k_id, v_gesperrt, v_date, v_dir, v_file, v_gps_lat, v_gps_lon, v_gps_ele, v_rate, v_rate_motive, v_rate_wichtigkeit
     FROM importmytbdb_video INNER JOIN importmytbdb_video_playlist ON importmytbdb_video_playlist.v_id=importmytbdb_video.v_id
     WHERE importmytbdb_video_playlist.p_id=17;
+
+-- import playlist
+INSERT into video_playlist (vp_id, v_id, p_id, vp_pos)
+    SELECT vp_id, v_id, p_id, vp_pos
+    FROM importmytbdb_video_playlist
+    WHERE importmytbdb_video_playlist.v_id in (select v_id from video);
 
 -- calc keywords
 UPDATE video toupdate,

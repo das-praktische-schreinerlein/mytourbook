@@ -10,6 +10,18 @@ CREATE TABLE rates (
   r_grade_desc varchar(80) DEFAULT NULL
 );
 
+--
+-- playlist-data
+--
+DROP TABLE IF EXISTS playlist;
+CREATE TABLE IF NOT EXISTS playlist (
+  p_id int(11) NOT NULL,
+  p_meta_desc text DEFAULT NULL,
+  p_name varchar(255) DEFAULT NULL,
+  countImages int(11) DEFAULT 0,
+  countVideos int(11) DEFAULT 0
+);
+
 -- ---------------
 -- news-data
 -- ---------------
@@ -357,6 +369,14 @@ CREATE TABLE image (
   i_dateshow date DEFAULT NULL
 );
 
+DROP TABLE IF EXISTS image_playlist;
+CREATE TABLE IF NOT EXISTS image_playlist (
+  ip_id int(11) NOT NULL PRIMARY KEY,
+  i_id int(11) NOT NULL DEFAULT '0',
+  p_id int(11) NOT NULL DEFAULT '0',
+  ip_pos int(11) DEFAULT NULL
+);
+
 -- ---------------
 -- video-data
 -- ---------------
@@ -384,4 +404,12 @@ CREATE TABLE video (
   v_rate_wichtigkeit int(11) DEFAULT NULL,
   v_video_objects text,
   v_dateshow date DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS video_playlist;
+CREATE TABLE IF NOT EXISTS video_playlist (
+  vp_id int(11) NOT NULL PRIMARY KEY,
+  v_id int(11) NOT NULL DEFAULT '0',
+  p_id int(11) NOT NULL DEFAULT '0',
+  vp_pos int(11) DEFAULT NULL
 );

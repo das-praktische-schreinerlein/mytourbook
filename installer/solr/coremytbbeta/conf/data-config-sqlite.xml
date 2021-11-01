@@ -7,6 +7,79 @@
 
     <document>
 
+        <entity name="playlist"
+                pk="id"
+                query="
+                    SELECT DISTINCT playlist.p_id,
+                                    'PLAYLIST'                                                   AS type,
+                                    'PLAYLIST' || '_' || playlist.p_id                          AS id,
+                                    playlist.countImages,
+                                    playlist.countVideos,
+                                    p_name,
+                                    p_meta_desc,
+                                    p_name  || ' ' || p_meta_desc AS html
+                    FROM playlist WHERE p_id IN (SELECT p_id FROM image_playlist UNION SELECT p_id FROM video_playlist)
+                    ORDER BY p_name"
+                deltaImportQuery="
+                    SELECT DISTINCT playlist.p_id,
+                                    'PLAYLIST'                                                   AS type,
+                                    'PLAYLIST' || '_' playlist.p_id                          AS id,
+                                    playlist.countImages,
+                                    playlist.countVideos,
+                                    p_name,
+                                    p_meta_desc,
+                                    p_name || ' ' || p_meta_desc AS html
+                    FROM playlist
+                    WHERE playlist.p_id = '${dih.delta.id}'"
+                deltaQuery="SELECT p_id FROM playlist ORDER BY p_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="id" name="id"/>
+            <field column="p_id" name="playlist_id_i"/>
+            <field column="p_id" name="playlist_id_is"/>
+
+            <field column="p_name" name="name_s" stripHTML="true" />
+            <field column="p_name" name="name_txt" stripHTML="true" />
+            <field column="p_meta_desc" name="desc_txt" stripHTML="true" />
+            <field column="p_meta_desc" name="desc_md_txt" stripHTML="false" />
+            <field column="html" name="html_txt" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="countImages" name="count_images_i" />
+            <field column="countVideos" name="count_videos_i" />
+
+            <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='
+                        SELECT navigation_objects FROM (SELECT "navid=PLAYLIST_" || p_id || ":::name=" || COALESCE(p_name, "null") || ":::navtype=" || "PREDECESSOR" AS navigation_objects
+                            FROM playlist
+                            WHERE p_name &lt; (SELECT p_name FROM playlist WHERE p_id IN (${playlist.p_id}))
+                            ORDER BY p_name DESC LIMIT 1
+                        )
+                        UNION
+                        SELECT navigation_objects FROM (SELECT "navid=PLAYLIST_" || p_id || ":::name=" || COALESCE(p_name, "null") || ":::navtype=" || "SUCCESSOR" AS navigation_objects
+                            FROM playlist
+                            WHERE p_name &gt; (SELECT p_name FROM playlist WHERE p_id IN (${playlist.p_id}))
+                            ORDER BY p_name LIMIT 1
+                        )'>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
+            </entity>
+
+            <entity name='extended_object_properties'
+                    query='
+                         SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                           UNION
+                         SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+        </entity>
+
         <entity name="info"
                 pk="id"
                 query="
@@ -193,9 +266,9 @@
                            destination.countVideos,
                            d_name,
                             d_name || ' ' || d_keywords || ' ' || l_lochirarchietxt AS html,
-                           d_dateshow || 'Z',
+                           d_dateshow || 'Z' AS d_dateshow,
                            d_datevon || 'Z'                                                                                           AS datesort,
-                           d_datevon || 'Z',
+                           d_datevon || 'Z' AS d_datevon,
                            DATETIME(d_datevon)                                                     AS dateonly,
                            'DONE' || (d_datevon IS NOT NULL)                                                             AS done,
                            d_keywords,
@@ -250,9 +323,9 @@
                            destination.countVideos,
                            d_name,
                             d_name || ' ' || d_keywords || ' ' || l_lochirarchietxt AS html,
-                           d_dateshow || 'Z',
+                           d_dateshow || 'Z' AS d_dateshow,
                            d_datevon || 'Z'                                                                                          AS datesort,
-                           d_datevon || 'Z',
+                           d_datevon || 'Z' AS d_datevon,
                            DATETIME(d_datevon)                                                     AS dateonly,
                            'DONE' || (d_datevon IS NOT NULL)                                                             AS done,
                            d_keywords,
@@ -427,7 +500,7 @@
             <entity name='image'
                     query="
                         SELECT
-                             image.i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                             image.i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id = kategorie_full.k_id
                              INNER JOIN tour ON tour.t_id=kategorie_full.t_id
                         WHERE
@@ -435,7 +508,7 @@
                             AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -450,8 +523,8 @@
                         SELECT kategorie_full.k_id,
                                tr_id,
                                n_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -464,8 +537,8 @@
                         ORDER BY k_datevon asc"
                     deltaImportQuery="
                         SELECT tr_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -529,9 +602,9 @@
                            k_name,
                            k_html,
                            k_html || ' ' || k_name || ' ' || k_keywords || ' ' || k_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
-                           k_dateshow || 'Z',
+                           k_dateshow || 'Z' AS k_dateshow,
                            k_datevon || 'Z'                                                                                      AS datesort,
-                           k_datevon || 'Z',
+                           k_datevon || 'Z' AS k_datevon,
                            DATETIME(k_datevon)                                                AS dateonly,
                            'DONE' || (k_datevon IS NOT NULL)                                                        AS done,
                            CAST(STRFTIME('%W', k_datevon) AS INT)                                                                                AS week,
@@ -592,9 +665,9 @@
                            k_name,
                            k_html,
                            k_html || ' ' || k_name || ' ' || k_keywords || ' ' || k_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
-                           k_dateshow || 'Z',
+                           k_dateshow || 'Z' AS k_dateshow,
                            k_datevon || 'Z'                                                                                      AS datesort,
-                           k_datevon || 'Z',
+                           k_datevon || 'Z' AS k_datevon,
                            DATETIME(k_datevon)                                                AS dateonly,
                            'DONE' || (k_datevon IS NOT NULL)                                                        AS done,
                            CAST(STRFTIME('%W', k_datevon) AS INT)                                                                                AS month,
@@ -768,13 +841,13 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image
                         WHERE k_id = '${track.k_id}'
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -828,9 +901,9 @@
                            t_name,
                            t_html_list,
                            t_html_list || ' ' || t_name || ' ' || t_keywords || ' ' || t_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
-                           t_dateshow || 'Z',
+                           t_dateshow || 'Z' as t_dateshow,
                            t_datevon || 'Z'                                                                                           AS datesort,
-                           t_datevon || 'Z',
+                           t_datevon || 'Z' AS t_datevon,
                            DATETIME(t_datevon)                                                     AS dateonly,
                            'DONE' || (t_datevon IS NOT NULL)                                                             AS done,
                            t_gpstracks_basefile,
@@ -895,9 +968,9 @@
                            t_name,
                            t_html_list,
                            t_html_list || ' ' || t_name || ' ' || t_keywords || ' ' || t_meta_shortdesc_md || ' ' || l_lochirarchietxt AS html,
-                           t_dateshow || 'Z',
+                           t_dateshow || 'Z' AS t_dateshow,
                            t_datevon || 'Z'                                                                                           AS datesort,
-                           t_datevon || 'Z',
+                           t_datevon || 'Z' AS t_datevon,
                            DATETIME(t_datevon)                                                     AS dateonly,
                            'DONE' || (t_datevon IS NOT NULL)                                                             AS done,
                            t_gpstracks_basefile,
@@ -1078,7 +1151,7 @@
             <entity name='linkedroutes'
                     query='
                     SELECT * FROM (
-                    SELECT k_route_attr as kt_route_attr
+                    SELECT k_route_attr AS kt_route_attr
                       FROM tour INNER JOIN kategorie_full ON kategorie_full.t_id = tour.t_id WHERE tour.t_id IN (${route.t_id})
                     UNION
                     SELECT kt_route_attr
@@ -1092,14 +1165,14 @@
             <entity name='image'
                     query="
                         SELECT
-                             image.i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                             image.i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image INNER JOIN kategorie_full ON image.k_id=kategorie_full.k_id
                         WHERE
                             kategorie_full.t_id = ${route.t_id}
                             AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, image.I_ID desc limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -1114,8 +1187,8 @@
                         SELECT kategorie_full.k_id,
                                tr_id,
                                n_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -1128,8 +1201,8 @@
                         ORDER BY k_datevon asc"
                     deltaImportQuery="
                         SELECT tr_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -1333,13 +1406,13 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image
                         WHERE k_id in (${location.l_katids} 0)
                           AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url, i_persons, i_objects
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url, i_persons, i_objects
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -1362,8 +1435,8 @@
             <entity name='bericht'
                     query="
                         SELECT tr_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -1374,8 +1447,8 @@
                         ORDER BY k_datevon asc"
                     deltaImportQuery="
                         SELECT tr_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -1458,9 +1531,9 @@
                            CAST(STRFTIME('%W', i_date) AS INT)                                                                                      AS week,
                            CAST(STRFTIME('%m', i_date) AS INT)                                                                                     AS month,
                            CAST(STRFTIME('%Y', i_date) AS INT)                                                                                      AS year,
-                           i_dateshow || 'Z',
+                           i_dateshow || 'Z' AS i_dateshow,
                            i_date || 'Z'                                                                                            AS datesort,
-                           i_date || 'Z',
+                           i_date || 'Z' AS i_date,
                            DATETIME(i_date)                                                      AS dateonly,
                            'DONE' || (i_date IS NOT NULL)                                                              AS done,
                            k_gpstracks_basefile,
@@ -1506,9 +1579,9 @@
                            CAST(STRFTIME('%W', i_date) AS INT)                                             AS week,
                            CAST(STRFTIME('%m', i_date) AS INT)                                            AS month,
                            CAST(STRFTIME('%Y', i_date) AS INT)                                             AS year,
-                           i_dateshow || 'Z',
+                           i_dateshow || 'Z' AS i_dateshow,
                            i_date || 'Z'                                                   AS datesort,
-                           i_date || 'Z',
+                           i_date || 'Z' AS i_date,
                            DATETIME(i_date)             AS dateonly,
                            'DONE' || (i_date IS NOT NULL)                     AS done,
                            k_gpstracks_basefile,
@@ -1594,6 +1667,21 @@
             <field column="motive" name="rate_pers_motive_i" />
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
+
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, image_playlist.ip_pos,
+                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=" || CAST(playlist.p_id AS CHAR) ||
+                           ":::position=" || COALESCE(image_playlist.ip_pos, "null")
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN image_playlist ON playlist.p_id = image_playlist.p_id WHERE image_playlist.i_id IN (${image.i_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="ip_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
+            </entity>
         </entity>
 
         <entity name="video"
@@ -1618,9 +1706,9 @@
                            CAST(STRFTIME('%W', v_date) AS INT)                                                                                      AS week,
                            CAST(STRFTIME('%m', v_date) AS INT)                                                                                     AS month,
                            CAST(STRFTIME('%Y', v_date) AS INT)                                                                                      AS year,
-                           v_dateshow || 'Z',
+                           v_dateshow || 'Z' AS v_dateshow,
                            v_date || 'Z'                                                                                            AS datesort,
-                           v_date || 'Z',
+                           v_date || 'Z' AS v_date,
                            DATETIME(v_date)                                                      AS dateonly,
                            'DONE' || (v_date IS NOT NULL)                                                              AS done,
                            k_gpstracks_basefile,
@@ -1666,9 +1754,9 @@
                            CAST(STRFTIME('%W', v_date) AS INT)                                             AS week,
                            CAST(STRFTIME('%m', v_date) AS INT)                                            AS month,
                            CAST(STRFTIME('%Y', v_date) AS INT)                                             AS year,
-                           v_dateshow || 'Z',
+                           v_dateshow || 'Z' AS v_dateshow,
                            v_date || 'Z'                                                   AS datesort,
-                           v_date || 'Z',
+                           v_date || 'Z' AS v_date,
                            DATETIME(v_date)             AS dateonly,
                            'DONE' || (v_date IS NOT NULL)                     AS done,
                            k_gpstracks_basefile,
@@ -1772,6 +1860,20 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, video_playlist.vp_pos,
+                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=" || CAST(playlist.p_id AS CHAR) ||
+                           ":::position=" || COALESCE(video_playlist.vp_pos, "null")
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN video_playlist ON playlist.p_id = video_playlist.p_id WHERE video_playlist.v_id IN (${video.v_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="vp_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
+            </entity>
         </entity>
 
         <entity name="trip"
@@ -1786,9 +1888,9 @@
                                     trip.countRoutes,
                                     trip.countTracks,
                                     trip.countVideos,
-                                    tr_dateshow || 'Z',
+                                    tr_dateshow || 'Z' AS tr_dateshow,
                                     tr_datevon || 'Z'                                                   AS datesort,
-                                    tr_datevon || 'Z',
+                                    tr_datevon || 'Z' AS tr_datevon,
                                     DATETIME(tr_datevon)             AS dateonly,
                                     'DONE' || (tr_datevon IS NOT NULL)                     AS done,
                                     (JULIANDAY(tr_datebis) - JULIANDAY(tr_datevon)) * 24         AS dur,
@@ -1825,9 +1927,9 @@
                                     trip.countRoutes,
                                     trip.countTracks,
                                     trip.countVideos,
-                                    tr_dateshow || 'Z',
+                                    tr_dateshow || 'Z' AS tr_dateshow,
                                     tr_datevon || 'Z'                                                   AS datesort,
-                                    tr_datevon || 'Z',
+                                    tr_datevon || 'Z' AS tr_datevon,
                                     DATETIME(tr_datevon)             AS dateonly,
                                     'DONE' || (tr_datevon IS NOT NULL)                     AS done,
                                     (JULIANDAY(tr_datebis) - JULIANDAY(tr_datevon)) * 24         AS dur,
@@ -1941,13 +2043,13 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
                         FROM image
                         WHERE k_id in (select k_id FROM kategorie_full WHERE tr_id in (${trip.tr_id}))
                           AND (I_IMAGE_OBJECTS is null or length(I_IMAGE_OBJECTS) &lt; 5)
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -1986,8 +2088,8 @@
                     query="
                         SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -2005,8 +2107,8 @@
                     deltaImportQuery="
                         SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -2055,7 +2157,7 @@
                                     news.countTracks,
                                     news.countTrips,
                                     news.countVideos,
-                                    n_date || 'Z',
+                                    n_date || 'Z' AS n_date,
                                     n_date || 'Z'                                                   AS dateshow,
                                     DATETIME(n_date)             AS dateonly,
                                     'DONE' || (n_date IS NOT NULL)                     AS done,
@@ -2089,7 +2191,7 @@
                                     news.countTracks,
                                     news.countTrips,
                                     news.countVideos,
-                                    n_date || 'Z',
+                                    n_date || 'Z' AS n_date,
                                     n_date || 'Z'                                                   AS dateshow,
                                     DATETIME(n_date)             AS dateonly,
                                     'DONE' || (n_date IS NOT NULL)                     AS done,
@@ -2197,13 +2299,13 @@
 
             <entity name='image'
                     query="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
                         FROM image
                         WHERE k_id in (select k_id FROM kategorie_full WHERE n_id in (${news.n_id}))
                         ORDER BY I_RATE_MOTIVE desc, I_RATE_WICHTIGKEIT desc, I_RATE desc, I_ID desc
                         limit 10"
                     deltaImportQuery="
-                        SELECT i_id, i_date || 'Z', i_dir || '/' || i_file AS i_url
+                        SELECT i_id, i_date || 'Z' AS i_date, i_dir || '/' || i_file AS i_url
                         FROM image WHERE i_id='${dih.delta.id}'"
                     deltaQuery="SELECT i_id FROM image'"
             >
@@ -2248,8 +2350,8 @@
                     query="
                         SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,
@@ -2267,8 +2369,8 @@
                     deltaImportQuery="
                         SELECT kategorie_full.l_id,
                                n_id,
-                               k_dateshow || 'Z',
-                               k_datevon || 'Z',
+                               k_dateshow || 'Z' AS k_dateshow,
+                               k_datevon || 'Z' AS k_datevon,
                                CAST(STRFTIME('%W', k_datevon) AS INT)  AS week,
                                CAST(STRFTIME('%m', k_datevon) AS INT) AS month,
                                CAST(STRFTIME('%Y', k_datevon) AS INT)  AS year,

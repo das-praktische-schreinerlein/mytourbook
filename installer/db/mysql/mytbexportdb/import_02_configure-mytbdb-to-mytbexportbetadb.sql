@@ -1,6 +1,8 @@
 -- ##################
 -- CREATE TEMP VIEW
 -- ##################
+DROP VIEW IF EXISTS importmytbdb_playlist;
+CREATE VIEW importmytbdb_playlist AS SELECT * FROM testmytbdb.playlist;
 DROP VIEW IF EXISTS importmytbdb_keyword;
 CREATE VIEW importmytbdb_keyword AS SELECT * FROM testmytbdb.keyword;
 DROP VIEW IF EXISTS importmytbdb_location;

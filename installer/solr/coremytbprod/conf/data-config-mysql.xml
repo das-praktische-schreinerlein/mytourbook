@@ -7,6 +7,79 @@
 
     <document>
 
+        <entity name="playlist"
+                pk="id"
+                query="
+                    SELECT DISTINCT playlist.p_id,
+                                    'PLAYLIST'                                                   AS type,
+                                    CONCAT('PLAYLIST', '_', playlist.p_id)                          AS id,
+                                    playlist.countImages,
+                                    playlist.countVideos,
+                                    p_name,
+                                    p_meta_desc,
+                                    CONCAT(p_name, ' ', p_meta_desc) AS html
+                    FROM playlist WHERE p_id IN (SELECT p_id FROM image_playlist UNION SELECT p_id FROM video_playlist)
+                    ORDER BY p_name"
+                deltaImportQuery="
+                    SELECT DISTINCT playlist.p_id,
+                                    'PLAYLIST'                                                   AS type,
+                                    CONCAT('PLAYLIST', '_', playlist.p_id)                          AS id,
+                                    playlist.countImages,
+                                    playlist.countVideos,
+                                    p_name,
+                                    p_meta_desc,
+                                    CONCAT(p_name, ' ', p_meta_desc) AS html
+                    FROM playlist
+                    WHERE playlist.p_id = '${dih.delta.id}'"
+                deltaQuery="SELECT p_id FROM playlist ORDER BY p_id'"
+                transformer="HTMLStripTransformer,RegexTransformer"
+        >
+            <field column="id" name="id"/>
+            <field column="p_id" name="playlist_id_i"/>
+            <field column="p_id" name="playlist_id_is"/>
+
+            <field column="p_name" name="name_s" stripHTML="true" />
+            <field column="p_name" name="name_txt" stripHTML="true" />
+            <field column="p_meta_desc" name="desc_txt" stripHTML="true" />
+            <field column="p_meta_desc" name="desc_md_txt" stripHTML="false" />
+            <field column="html" name="html_txt" />
+            <field column="type" name="type_s" />
+            <field column="type" name="type_txt" />
+            <field column="countImages" name="count_images_i" />
+            <field column="countVideos" name="count_videos_i" />
+
+            <!-- child='true' -->
+            <entity name='navigation_objects'
+                    query='
+                        (SELECT CONCAT("navid=PLAYLIST_", p_id, ":::name=", COALESCE(p_name, "null"), ":::navtype=", "PREDECESSOR") AS navigation_objects
+                            FROM playlist
+                            WHERE p_name &lt; (SELECT p_name FROM playlist WHERE p_id IN (${playlist.p_id}))
+                            ORDER BY p_name DESC LIMIT 1
+                        )
+                        UNION
+                        (SELECT CONCAT("navid=PLAYLIST_", p_id, ":::name=", COALESCE(p_name, "null"), ":::navtype=", "SUCCESSOR") AS navigation_objects
+                            FROM playlist
+                            WHERE p_name &gt; (SELECT p_name FROM playlist WHERE p_id IN (${playlist.p_id}))
+                            ORDER BY p_name LIMIT 1
+                        )'>
+                <field column="navigation_objects" name="navigation_objects_txt"/>
+            </entity>
+
+            <entity name='extended_object_properties'
+                    query='
+                         SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(countImages AS CHAR)) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                           UNION
+                         SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(countVideos AS CHAR)) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                    '>
+                <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+        </entity>
+
         <entity name="info"
                 pk="id"
                 query="
@@ -1598,6 +1671,21 @@
             <field column="motive" name="rate_pers_motive_i" />
             <field column="wichtigkeit" name="rate_pers_wichtigkeit_i" />
             <field column="gesamt" name="rate_pers_gesamt_is" />
+
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, image_playlist.ip_pos,
+                           CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),
+                           ":::position=", COALESCE(image_playlist.ip_pos, "null"))
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN image_playlist ON playlist.p_id = image_playlist.p_id WHERE image_playlist.i_id IN (${image.i_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="ip_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
+            </entity>
         </entity>
 
         <entity name="video"
@@ -1776,6 +1864,20 @@
                 <field column="navigation_objects" name="navigation_objects_txt"/>
             </entity>
 
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, video_playlist.vp_pos,
+                           CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),
+                           ":::position=", COALESCE(video_playlist.vp_pos, "null"))
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN video_playlist ON playlist.p_id = video_playlist.p_id WHERE video_playlist.v_id IN (${video.v_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="vp_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
+            </entity>
         </entity>
 
         <entity name="trip"

@@ -7,6 +7,9 @@ CREATE VIEW importmytbdb_kategorie_tour AS SELECT * FROM testmytbdb.kategorie_to
 -- ##################
 -- copy tables
 -- ##################
+TRUNCATE TABLE playlist;
+INSERT INTO playlist SELECT * FROM testmytbexportbetadb.playlist;
+
 TRUNCATE TABLE location;
 INSERT INTO location SELECT * FROM testmytbexportbetadb.location;
 
@@ -25,6 +28,9 @@ INSERT INTO trip SELECT * FROM testmytbexportbetadb.trip;
 TRUNCATE TABLE kategorie_full;
 INSERT INTO kategorie_full SELECT * FROM testmytbexportbetadb.kategorie_full;
 
+TRUNCATE TABLE kategorie_tour;
+INSERT INTO kategorie_tour SELECT * FROM testmytbexportbetadb.kategorie_tour;
+
 TRUNCATE TABLE destination;
 INSERT INTO destination SELECT * FROM testmytbexportbetadb.destination;
 
@@ -37,8 +43,14 @@ INSERT INTO tour_info SELECT * FROM testmytbexportbetadb.tour_info;
 TRUNCATE TABLE image;
 INSERT INTO image SELECT * FROM testmytbexportbetadb.image;
 
+TRUNCATE TABLE image_playlist;
+INSERT INTO image_playlist SELECT * FROM testmytbexportbetadb.image_playlist;
+
 TRUNCATE TABLE video;
 INSERT INTO video SELECT * FROM testmytbexportbetadb.video;
+
+TRUNCATE TABLE video_playlist;
+INSERT INTO video_playlist SELECT * FROM testmytbexportbetadb.video_playlist;
 
 -- ##################
 -- optimize tables
