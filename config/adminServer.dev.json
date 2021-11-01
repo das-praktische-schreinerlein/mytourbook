@@ -170,7 +170,7 @@
                 ]
             },
             "publish_beta/prod_mysql": {
-                "description": "publish mytbexportproddb+mytbexportproddb mysql",
+                "description": "publish mytbexportbetadb+mytbexportproddb mysql",
                 "commands": [
                     {
                         "parameters": {
