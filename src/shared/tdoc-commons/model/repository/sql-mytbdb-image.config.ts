@@ -158,11 +158,11 @@ export class SqlMytbDbImageConfig {
             },
             {
                 profile: 'linkedplaylists',
-                sql: '(SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
                     '   ":::position=", COALESCE(image_playlist.ip_pos, "null"))' +
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN image_playlist ON playlist.p_id = image_playlist.p_id WHERE image_playlist.i_id IN (:id)' +
-                    '  ORDER BY p_name)',
+                    '  ORDER BY p_name',
                 parameterNames: ['id']
             }
         ],

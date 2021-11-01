@@ -28,19 +28,14 @@ export class TourDocAssignFormComponent
         switch (type) {
             case 'IMAGE':
             case 'VIDEO':
+            case 'ROUTE':
                 return ['track_id_is', 'loc_lochirarchie_txt'];
             case 'TRACK':
                 return ['route_id_is', 'loc_lochirarchie_txt', 'trip_id_is'];
-            case 'ROUTE':
-                return ['track_id_is', 'loc_lochirarchie_txt'];
             case 'LOCATION':
-                return ['loc_lochirarchie_txt'];
-            case 'TRIP':
                 return ['loc_lochirarchie_txt'];
             case 'NEWS':
                 return [];
-            case 'INFO':
-                return ['loc_lochirarchie_txt'];
             default:
                 return undefined;
         }

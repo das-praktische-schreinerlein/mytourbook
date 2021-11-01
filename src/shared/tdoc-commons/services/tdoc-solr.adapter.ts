@@ -25,7 +25,7 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'rate_tech_bergtour_s', 'rate_tech_schneeschuh_s',
             'gpstracks_basefile_s', 'keywords_txt', 'loc_lochirarchie_s', 'loc_lochirarchie_ids_s', 'name_s', 'type_s',
             'objects_txt', 'persons_txt', 'actiontype_ss', 'subtype_s', 'i_fav_url_txt', 'v_fav_url_txt', 'route_attr_ss',
-            'navigation_objects_txt', 'extended_object_properties_txt', 'linkedroutes_txt', 'linkedinfos_txt'],
+            'navigation_objects_txt', 'extended_object_properties_txt', 'linkedroutes_txt', 'linkedinfos_txt', 'linkedplaylists_txt'],
         facetConfigs: {
             'id_notin_is': {
                 filterField: 'id',
@@ -90,6 +90,8 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
                 'f.persons_txt.facet.sort': 'index'
             },
             'playlists_txt': {
+                'f.playlists_txt.facet.limit': '-1',
+                'f.playlists_txt.facet.sort': 'index'
             },
             'rate_pers_gesamt_is': {
                 'f.rate_pers_gesamt_is.facet.limit': '-1',
@@ -175,6 +177,12 @@ export class TourDocSolrAdapter extends GenericSolrAdapter<TourDocRecord, TourDo
             'ratePers': {
                 'sort': 'sub(15, rate_pers_gesamt_i) asc, datesort_dt desc',
                 'bq':  'type_s:ROUTE^1.4 type_s:LOCATION^1.3 type_s:TRACK^1.2 type_s:TRIP^1.2 type_s:NEWS^1.1 type_s:VIDEO^1.1 type_s:IMAGE^1',
+                'boost': 'product( recip( rord(date_dts), 1, 1000, 1000), 1)'
+            },
+            'playlistPos': {
+                'sort': 'field(position_is, min) asc, datesort_dt desc',
+                // TODO check for using playlistpos 'sort': '{!parent which=doc_type:parent score=max v=’+doc_type:child +{!func}position’} asc',
+                'bq':  'type_s:VIDEO^1.1 type_s:IMAGE^1',
                 'boost': 'product( recip( rord(date_dts), 1, 1000, 1000), 1)'
             },
             'location': {

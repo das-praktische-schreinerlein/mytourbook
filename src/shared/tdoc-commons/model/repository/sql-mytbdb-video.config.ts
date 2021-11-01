@@ -132,11 +132,11 @@ export class SqlMytbDbVideoConfig {
             },
             {
                 profile: 'linkedplaylists',
-                sql: '(SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
                     '   ":::position=", COALESCE(video_playlist.vp_pos, "null"))' +
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN video_playlist ON playlist.p_id = video_playlist.p_id WHERE video_playlist.v_id IN (:id)' +
-                    '  ORDER BY p_name)',
+                    '  ORDER BY p_name',
                 parameterNames: ['id']
             }
         ],

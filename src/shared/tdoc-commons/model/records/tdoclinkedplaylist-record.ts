@@ -4,25 +4,21 @@ import {
     BaseEntityRecordRelationsType,
     BaseEntityRecordValidator
 } from '@dps/mycms-commons/dist/search-commons/model/records/base-entity-record';
-import {BaseJoinRecord, BaseJoinRecordType} from '@dps/mycms-commons/dist/search-commons/model/records/basejoin-record';
+import {GenericValidatorDatatypes, IdValidationRule} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
 import {
-    GenericValidatorDatatypes,
-    IdValidationRule,
-    NumberValidationRule
-} from '@dps/mycms-commons/dist/search-commons/model/forms/generic-validator.util';
+    BaseLinkedPlaylistRecord,
+    BaseLinkedPlaylistRecordType
+} from '@dps/mycms-commons/dist/search-commons/model/records/baselinkedplaylist-record';
 
-export interface TourDocLinkedPlaylistRecordType extends BaseJoinRecordType {
-    position: number;
+// tslint:disable-next-line:no-empty-interface
+export interface TourDocLinkedPlaylistRecordType extends BaseLinkedPlaylistRecordType {
 }
 
-export class TourDocLinkedPlaylistRecord extends BaseJoinRecord implements TourDocLinkedPlaylistRecordType {
-    static playlistFields = {...BaseJoinRecord.joinFields,
-        position: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.NUMBER,
-            new NumberValidationRule(false, 1, 999999999999, undefined)),
+export class TourDocLinkedPlaylistRecord extends BaseLinkedPlaylistRecord implements TourDocLinkedPlaylistRecordType {
+    static linkedPlaylistFields = {...BaseLinkedPlaylistRecord.baseLinkedPlaylistFields,
         tdoc_id: new BaseEntityRecordFieldConfig(GenericValidatorDatatypes.ID, new IdValidationRule(false))
     };
 
-    position: number;
     tdoc_id: string;
 
     getMediaId(): string {
@@ -55,7 +51,7 @@ export class TourDocLinkedPlaylistRecordFactory extends BaseEntityRecordFactory 
 
     getSanitizedValues(values: {}, result: {}): {} {
         super.getSanitizedValues(values, result);
-        this.sanitizeFieldValues(values, TourDocLinkedPlaylistRecord.playlistFields, result, '');
+        this.sanitizeFieldValues(values, TourDocLinkedPlaylistRecord.linkedPlaylistFields, result, '');
 
         return result;
     }
@@ -69,7 +65,7 @@ export class TourDocLinkedPlaylistRecordValidator extends BaseEntityRecordValida
         errFieldPrefix = errFieldPrefix !== undefined ? errFieldPrefix : '';
 
         const state = super.validateMyFieldRules(values, errors, fieldPrefix, errFieldPrefix);
-        return this.validateFieldRules(values, TourDocLinkedPlaylistRecord.playlistFields, fieldPrefix, errors, errFieldPrefix) && state;
+        return this.validateFieldRules(values, TourDocLinkedPlaylistRecord.linkedPlaylistFields, fieldPrefix, errors, errFieldPrefix) && state;
     }
 }
 

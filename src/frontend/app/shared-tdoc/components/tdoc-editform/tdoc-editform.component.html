@@ -31,6 +31,10 @@
         <ng-container *ngSwitchCase="'INFO'">
             <ng-container *ngTemplateOutlet="formInfo"></ng-container>
         </ng-container>
+
+        <ng-container *ngSwitchCase="'PLAYLIST'">
+            <ng-container *ngTemplateOutlet="formPlaylist"></ng-container>
+        </ng-container>
     </ng-container>
 
     <ng-template #formLocation>
@@ -359,6 +363,21 @@
                 <ng-container *ngTemplateOutlet="inputKeywords"></ng-container>
             </div>
         </fieldset>
+        <fieldset>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputDesc"></ng-container>
+            </div>
+        </fieldset>
+    </ng-template>
+
+    <ng-template #formPlaylist>
+        <fieldset>
+            <legend i18n="base label|Label for fieldset: base@@label.editform.tdoc.legend.base">&#x26bd; Stammdaten</legend>
+            <div class="row">
+                <ng-container *ngTemplateOutlet="inputName"></ng-container>
+            </div>
+        </fieldset>
+        <ng-container *ngTemplateOutlet="submitRow"></ng-container>
         <fieldset>
             <div class="row">
                 <ng-container *ngTemplateOutlet="inputDesc"></ng-container>

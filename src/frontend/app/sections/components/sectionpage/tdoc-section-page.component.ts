@@ -30,6 +30,7 @@ export interface TourDocSectionPageComponentAvailableTabs {
     VIDEO?: boolean;
     LOCATION?: boolean;
     NEWS?: boolean;
+    PLAYLIST?: boolean;
     ROUTE?: boolean;
     TRACK?: boolean;
     TRIP?: boolean;
@@ -64,6 +65,7 @@ export class TourDocSectionPageComponent extends SectionPageComponent {
         DESTINATION: true,
         IMAGE: true,
         INFO: true,
+        PLAYLIST: true,
         ROUTE: true,
         TRACK: true,
         LOCATION: true,

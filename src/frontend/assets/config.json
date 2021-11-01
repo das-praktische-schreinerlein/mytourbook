@@ -161,7 +161,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                            "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info", "PLAYLIST", "playlist"]
                         }
                     ],
                     "configAvailability": [
@@ -853,7 +853,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info", "PLAYLIST", "playlist"]
                         }
                     ],
                     "configAvailability": [
@@ -1090,7 +1090,7 @@
                         {
                             "property": "type",
                             "command": "CSVIN",
-                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info"]
+                            "expectedValues": ["IMAGE", "image", "VIDEO", "video", "TRACK", "track", "LOCATION", "location", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info", "PLAYLIST", "playlist"]
                         }
                     ],
                     "configAvailability": [
@@ -1828,7 +1828,7 @@
             ]
         },
         "tdoc-searchpage": {
-            "availableCreateActionTypes": "ROUTE,LOCATION,NEWS,TRIP,INFO"
+            "availableCreateActionTypes": "ROUTE,LOCATION,NEWS,TRIP,INFO,PLAYLIST"
         },
         "tdoc-showpage": {
             "showBigImages": false,
@@ -1848,6 +1848,7 @@
                 "LOCATION_NEARBY": true,
                 "TRIP": true,
                 "NEWS": true,
+                "PLAYLIST": true,
                 "VIDEO": true
             }
         },
@@ -1867,6 +1868,7 @@
                 "TRACK": true,
                 "LOCATION": true,
                 "TRIP": true,
+                "PLAYLIST": true,
                 "ALL": true
             },
             "availableToDoDashboardRows": {

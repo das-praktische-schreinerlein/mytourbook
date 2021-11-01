@@ -416,6 +416,23 @@
             </ng-template>
         </ngb-tab>
 
+        <ngb-tab title="Playlists" *ngIf="availableTabs.PLAYLIST">
+            <ng-template ngbTabContent>
+                <app-tdoc-inline-searchpage [label]="'Playlists'"
+                                            i18n-label="label section-page PLAYLIST|Label section-page PLAYLIST@@linline-search.label.tdoc.PLAYLIST"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            i18n-searchLinkLabel="searchLinkLabel section-page PLAYLIST|SearchLinkLabel section-page PLAYLIST@@linline-search.searchLinkLabel.tdoc.PLAYLIST"
+                                            [baseSearchUrl]="baseSearchUrl"
+                                            [params]="getFiltersForType('PLAYLIST', 'relevance')"
+                                            [showForm]="false"
+                                            [showResultList]="true"
+                                            [loadFacets]="false"
+                                            [layout]="Layout.FLAT"
+                                            (searchResultFound)="onTopTenResultFound($event)"
+                                            [showOnlyIfRecordsFound]="false"></app-tdoc-inline-searchpage>
+            </ng-template>
+        </ngb-tab>
+
         <ngb-tab title="Alles" *ngIf="availableTabs.ALL">
             <ng-template ngbTabContent>
                 <app-tdoc-inline-searchpage [label]="'Alles'"

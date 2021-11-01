@@ -27,7 +27,6 @@ export class TourDocAssignJoinFormComponent
     protected getReferenceNamesForRecordType(type: string): string[] {
         switch (type) {
             case 'ROUTE':
-                return ['info_id_is'];
             case 'LOCATION':
                 return ['info_id_is'];
             default:

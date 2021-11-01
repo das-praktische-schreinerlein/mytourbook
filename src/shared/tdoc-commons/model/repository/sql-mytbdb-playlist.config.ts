@@ -141,7 +141,7 @@ export class SqlMytbDbPlaylistConfig {
                 noFacet: true
             },
             'blocked_is': {
-                selectField: 'p_gesperrt'
+                noFacet: true
             },
             'data_tech_alt_asc_facet_is': {
                 noFacet: true
