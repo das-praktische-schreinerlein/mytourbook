@@ -221,7 +221,7 @@
     "sitemap-stream-parser": "1.7.0",
     "sqlite3": "4.2.0",
     "tz-lookup": "6.1.25",
-    "validator": "13.1.1",
+    "validator": "13.7.0",
     "vid-streamer": "1.0.0",
     "vis": "4.21.0",
     "xregexp": "4.3.0",
