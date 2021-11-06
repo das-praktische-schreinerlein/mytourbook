@@ -1,5 +1,10 @@
 {
     "components": {
+        "cdoc-assignplaylistform": {
+            "detailsField": {
+                "type": "plain"
+            }
+        },
         "tdoc-linked-playlists": {
             "appendAvailable": true,
             "editAvailable": true,
@@ -162,6 +167,35 @@
                             "property": "type",
                             "command": "CSVIN",
                             "expectedValues": ["LOCATION", "location", "TRACK", "track", "ROUTE", "route", "TRIP", "trip", "NEWS", "news", "INFO", "info", "PLAYLIST", "playlist"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
+                    "key": "assignplaylist",
+                    "type": "assignplaylist",
+                    "name": "\uD83D\uDCC1 Playlists",
+                    "shortName": "\uD83D\uDCC1",
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "payload": {
+                    },
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "INFO", "info", "LOCATION", "location", "ROUTE", "route", "TRACK", "track", "TRIP", "trip", "VIDEO", "video"]
                         }
                     ],
                     "configAvailability": [
@@ -1229,6 +1263,35 @@
                     ]
                 },
                 {
+                    "key": "assignplaylist",
+                    "type": "assignplaylist",
+                    "name": "\uD83D\uDCC1 Playlists",
+                    "shortName": "\uD83D\uDCC1",
+                    "showFilter": [
+                        {
+                            "property": "dummy",
+                            "command": "EQ",
+                            "expectedValues": ["dummy"]
+                        }
+                    ],
+                    "payload": {
+                    },
+                    "recordAvailability": [
+                        {
+                            "property": "type",
+                            "command": "CSVIN",
+                            "expectedValues": ["IMAGE", "image", "INFO", "info", "LOCATION", "location", "ROUTE", "route", "TRACK", "track", "TRIP", "trip", "VIDEO", "video"]
+                        }
+                    ],
+                    "configAvailability": [
+                        {
+                            "property": "permissions.tdocWritable",
+                            "command": "EQ",
+                            "expectedValues": [true]
+                        }
+                    ]
+                },
+                {
                     "key": "set_playlists_all_album",
                     "type": "tag",
                     "name": "Playlists",
@@ -1834,6 +1897,7 @@
             "showBigImages": false,
             "allowedQueryParams": [],
             "availableTabs": {
+                "ALL_ENTRIES": true,
                 "IMAGE": true,
                 "IMAGE_FAVORITES": true,
                 "IMAGE_NEARBY": true,

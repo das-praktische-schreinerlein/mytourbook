@@ -12,6 +12,7 @@ export const TourDocLinkedPlaylistRecordSchema = new Schema({
         name: {type: 'string'},
         refId: {type: 'string', indexed: true},
         position: {type: 'number'},
+        details: {type: 'string'},
         tdoc_id: {type: 'string', indexed: true}
     }
 });

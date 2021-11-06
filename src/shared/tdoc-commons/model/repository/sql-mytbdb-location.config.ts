@@ -6,6 +6,7 @@ import {ActionTagAssignJoinTableConfigType} from '@dps/mycms-commons/dist/action
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
+import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 
 export class SqlMytbDbLocationConfig {
     public static readonly tableConfig: TableConfig = {
@@ -18,6 +19,12 @@ export class SqlMytbDbLocationConfig {
                     'LEFT JOIN keyword ON location_keyword.kw_id=keyword.kw_id',
                 triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
+            },
+            {
+                from: 'LEFT JOIN location_playlist ON kategorie.l_id=location_playlist.l_id ' +
+                    'LEFT JOIN playlist ON location_playlist.p_id=playlist.p_id',
+                triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS l_playlists']
             },
             {
                 from: 'LEFT JOIN location_info ON location.l_id=location_info.l_id ' +
@@ -57,22 +64,30 @@ export class SqlMytbDbLocationConfig {
                 groupByFields: ['l_geo_area']
             }
         ],
-        groupbBySelectFieldListIgnore: ['l_keywords'],
+        groupbBySelectFieldListIgnore: ['l_keywords', 'l_playlists'],
         loadDetailData: [
+            {
+                profile: 'location_playlist',
+                sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS l_playlists ' +
+                    'FROM location_playlist' +
+                    ' INNER JOIN playlist ON location_playlist.p_id=playlist.p_id ' +
+                    'WHERE location_playlist.l_id IN (:id)',
+                parameterNames: ['id']
+            },
             {
                 profile: 'image',
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                    'FROM location INNER JOIN kategorie ON location.l_id=kategorie.l_id' +
+                    'FROM kategorie' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
-                    'WHERE location.l_id IN (:id) order by i_rate desc limit 0, 1',
+                    'WHERE kategorie.l_id IN (:id) order by i_rate desc limit 0, 1',
                 parameterNames: ['id']
             },
             {
                 profile: 'keywords',
                 sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM location INNER JOIN location_keyword ON location.l_id=location_keyword.l_id' +
+                    'FROM location_keyword' +
                     ' INNER JOIN keyword ON location_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE location.l_id IN (:id)',
+                    'WHERE location_keyword.l_id IN (:id)',
                 parameterNames: ['id'],
                 modes: ['full']
             },
@@ -130,6 +145,15 @@ export class SqlMytbDbLocationConfig {
                     '  ORDER BY l_lochirarchietxt, l_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
+            },
+            {
+                profile: 'linkedplaylists',
+                sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                    '   ":::position=", COALESCE(location_playlist.lp_pos, "null"),   ":::details=", COALESCE(location_playlist.lp_details, "null"))' +
+                    '  AS linkedplaylists' +
+                    '  FROM playlist INNER JOIN location_playlist ON playlist.p_id = location_playlist.p_id WHERE location_playlist.l_id IN (:id)' +
+                    '  ORDER BY p_name',
+                parameterNames: ['id']
             }
         ],
         selectFieldList: [
@@ -310,7 +334,27 @@ export class SqlMytbDbLocationConfig {
                 noFacet: true
             },
             'playlists_txt': {
-                noFacet: true
+                selectSql: 'SELECT 0 AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
+            },
+            'playlists_max_txt': {
+                selectSql: 'SELECT max(pos) AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist LEFT OUTER JOIN all_entries_playlist_max ON playlist.p_id = all_entries_playlist_max.p_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                cache: {
+                    useCache: false
+                },
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
             },
             'rate_pers_gesamt_is': {
                 noFacet: true
@@ -360,6 +404,7 @@ export class SqlMytbDbLocationConfig {
             'distance': 'geodist ASC, l_name ASC',
             'forExport': 'l_typ ASC, l_parent_id ASC, l_id ASC, l_name ASC',
             'name': 'l_name ASC',
+            'playlistPos': 'location_playlist.lp_pos ASC',
             'location': 'l_lochirarchietxt ASC, l_name ASC',
             'relevance': 'l_name ASC, l_name ASC'
         },
@@ -425,6 +470,7 @@ export class SqlMytbDbLocationConfig {
             keywords_txt: 'l_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            playlists_txt: 'l_playlists',
             name_s: 'l_name',
             type_s: 'type',
             subtype_s: 'subtype'
@@ -433,6 +479,11 @@ export class SqlMytbDbLocationConfig {
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
         table: 'location', joinTable: 'location_keyword', fieldReference: 'l_id'
+    };
+
+    public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
+        table: 'location', joinTable: 'location_playlist', fieldReference: 'l_id', positionField: 'lp_pos',
+        detailsField: 'lp_details'
     };
 
     public static readonly joinModelConfigTypeLinkedInfos: JoinModelConfigTableType = {

@@ -12,10 +12,10 @@ import {
     CommonItemData
 } from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-contentutils.service';
 import {BaseObjectDetectionImageObjectRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseobjectdetectionimageobject-record';
-import LatLng = L.LatLng;
 import {ChartElement} from '../components/visjs-profilechart/visjs-profilechart.component';
 import {BaseImageRecord} from '@dps/mycms-commons/dist/search-commons/model/records/baseimage-record';
 import {environment} from '../../../environments/environment';
+import LatLng = L.LatLng;
 
 export interface TourDocItemData extends CommonItemData {
     tracks?: TourDocRecord[];
@@ -123,6 +123,10 @@ export class TourDocContentUtils extends CommonDocContentUtils {
             filters['theme'] = theme;
         }
         filters['sort'] = 'ratePers';
+
+        if (type === 'ALL_ENTRIES') {
+            filters['type'] = 'IMAGE,INFO,LOCATION,ROUTE,TRACK,TRIP,VIDEO';
+        }
 
         if (record.type === 'TRACK') {
             if ((type === 'IMAGE' || type === 'TOPIMAGE') && record.trackId

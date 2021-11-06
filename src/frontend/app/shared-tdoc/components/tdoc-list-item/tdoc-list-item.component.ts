@@ -52,6 +52,7 @@ export class TourDocListItemComponent  extends CommonDocListItemComponent {
         } else {
             this.mapFlagAvailable = false;
         }
+
         super.updateData();
         this.cd.markForCheck();
     }

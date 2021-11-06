@@ -45,6 +45,7 @@ describe('TourDocAssignPlaylistFormComponent', () => {
                 CommonDocContentUtils,
                 TourDocContentUtils,
                 SearchFormUtils,
+                { provide: GenericAppService, useValue: new AppServiceStub() },
                 { provide: ToastrService, useValue: new ToastrServiceStub() }
             ]
         })

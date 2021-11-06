@@ -27,6 +27,7 @@ import {TourDocRoutingService} from '../../../../shared/tdoc-commons/services/td
 import {environment} from '../../../../environments/environment';
 
 export interface TourDocShowpageComponentAvailableTabs {
+    ALL_ENTRIES?: boolean;
     IMAGE?: boolean;
     IMAGE_FAVORITES?: boolean;
     IMAGE_NEARBY?: boolean;
@@ -88,6 +89,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
     flgTopImagesAvailable = false;
     defaultSubImageLayout = Layout.SMALL;
     showResultListTrigger: {
+        ALL_ENTRIES?: boolean|number;
         IMAGE?: boolean|number;
         INFO?: boolean|number;
         ODIMGOBJECT?: boolean|number;
@@ -100,6 +102,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRACK?: boolean|number;
         TRIP?: boolean|number;
     } = {
+        ALL_ENTRIES: true,
         IMAGE: false,
         INFO: false,
         ODIMGOBJECT: false,
@@ -113,6 +116,7 @@ export class TourDocShowpageComponent extends CommonDocShowpageComponent<TourDoc
         TRIP: false
     };
     availableTabs: TourDocShowpageComponentAvailableTabs = {
+        ALL_ENTRIES: false,
         IMAGE: true,
         IMAGE_FAVORITES: false,
         IMAGE_NEARBY: true,

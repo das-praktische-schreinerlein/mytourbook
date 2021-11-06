@@ -77,9 +77,9 @@
                     <app-tdoc-ratepers [record]="listItem.currentRecord"></app-tdoc-ratepers>
                     <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                     <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
+                    <app-tdoc-linked-playlists [record]="listItem.currentRecord"
+                                               (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                     <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
-                        <app-tdoc-linked-playlists [record]="listItem.currentRecord"
-                                                   (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                         <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
                     </ng-container>
                 </ng-template>
@@ -158,9 +158,9 @@
 
                         <app-tdoc-keywords [record]="listItem.currentRecord"></app-tdoc-keywords>
                         <app-tdoc-persontags [record]="listItem.currentRecord"></app-tdoc-persontags>
+                        <app-tdoc-linked-playlists [record]="listItem.currentRecord"
+                                                   (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                         <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
-                            <app-tdoc-linked-playlists [record]="listItem.currentRecord"
-                                                       (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
                             <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta>
                         </ng-container>
 

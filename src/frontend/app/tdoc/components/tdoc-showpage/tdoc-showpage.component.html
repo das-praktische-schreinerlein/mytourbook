@@ -951,6 +951,17 @@
             </ng-container>
 
             <ng-container *ngSwitchCase="'PLAYLIST'">
+                <app-tdoc-inline-searchpage *ngIf="availableTabs.ALL_ENTRIES"
+                                            [label]="'Alles'"
+                                            i18n-label="label inline-searchpage ALL_ENTRIES|Label inline-searchpage ALL_ENTRIES@@linline-search.label.tdoc.ALL_ENTRIES"
+                                            [params]="getFiltersForType(record, 'ALL_ENTRIES')"
+                                            [htmlId]="'PLAYLISTALL_ENTRIES'"
+                                            [showForm]="false"
+                                            [showLayout]="true"
+                                            [layout]="defaultSubImageLayout"
+                                            [searchLinkLabel]="'Durchsuchen'"
+                                            [showResultList]="showResultListTrigger.ALL_ENTRIES"
+                                            [showOnlyIfRecordsFound]="true"></app-tdoc-inline-searchpage>
                 <app-tdoc-inline-searchpage *ngIf="availableTabs.IMAGE"
                                             [label]="'Bilder'"
                                             i18n-label="label inline-searchpage IMAGE|Label inline-searchpage IMAGE@@linline-search.label.tdoc.IMAGE"

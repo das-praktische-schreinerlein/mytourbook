@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {TourDocRecord} from '../model/records/tdoc-record';
 import {TourDocDataService} from './tdoc-data.service';
-import {from, forkJoin} from 'rxjs';
+import {forkJoin, from} from 'rxjs';
 import {TourDocDataStore, TourDocTeamFilterConfig} from './tdoc-data.store';
 import {SearchParameterUtils} from '@dps/mycms-commons/dist/search-commons/services/searchparameter.utils';
 

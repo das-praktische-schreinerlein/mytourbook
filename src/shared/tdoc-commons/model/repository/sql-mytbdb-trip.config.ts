@@ -4,6 +4,7 @@ import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-co
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {TourDocSqlUtils} from '../../services/tdoc-sql.utils';
+import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 
 export class SqlMytbDbTripConfig {
     public static readonly tableConfig: TableConfig = {
@@ -17,6 +18,12 @@ export class SqlMytbDbTripConfig {
                     'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id',
                 triggerParams: ['id', 'keywords_txt'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS tr_keywords']
+            },
+            {
+                from: 'LEFT JOIN trip_playlist ON trip.tr_id=trip_playlist.tr_id ' +
+                    'LEFT JOIN playlist ON trip_playlist.p_id=playlist.p_id',
+                triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS tr_playlists']
             },
             {
                 from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
@@ -70,16 +77,24 @@ export class SqlMytbDbTripConfig {
             }
         ],
         groupbBySelectFieldList: true,
-        groupbBySelectFieldListIgnore: ['tr_keywords', 'k_altitude_asc_sum', 'k_altitude_desc_sum', 'k_distance_sum',
+        groupbBySelectFieldListIgnore: ['tr_keywords', 'tr_playlists', 'k_altitude_asc_sum', 'k_altitude_desc_sum', 'k_distance_sum',
             'k_altitude_min', 'k_altitude_max'
         ],
         loadDetailData: [
             {
+                profile: 'trip_playlist',
+                sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS tr_playlists ' +
+                    'FROM trip_playlist' +
+                    ' INNER JOIN playlist ON trip_playlist.p_id=playlist.p_id ' +
+                    'WHERE trip_playlist.tr_id IN (:id)',
+                parameterNames: ['id']
+            },
+            {
                 profile: 'image',
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                    'FROM trip INNER JOIN kategorie ON trip.tr_id=kategorie.tr_id' +
+                    'FROM kategorie' +
                     ' INNER JOIN image ON kategorie.k_id=image.k_id ' +
-                    'WHERE trip.tr_id IN (:id) order by i_rate desc limit 0, 1',
+                    'WHERE kategorie.tr_id IN (:id) order by i_rate desc limit 0, 1',
                 parameterNames: ['id']
             },
             {
@@ -124,6 +139,15 @@ export class SqlMytbDbTripConfig {
                     '   ORDER BY tr_datevon, tr_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
+            },
+            {
+                profile: 'linkedplaylists',
+                sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                    '   ":::position=", COALESCE(trip_playlist.trp_pos, "null"),   ":::details=", COALESCE(trip_playlist.trp_details, "null"))' +
+                    '  AS linkedplaylists' +
+                    '  FROM playlist INNER JOIN trip_playlist ON playlist.p_id = trip_playlist.p_id WHERE trip_playlist.tr_id IN (:id)' +
+                    '  ORDER BY p_name',
+                parameterNames: ['id']
             }
         ],
         selectFieldList: [
@@ -308,7 +332,27 @@ export class SqlMytbDbTripConfig {
                 noFacet: true
             },
             'playlists_txt': {
-                noFacet: true
+                selectSql: 'SELECT 0 AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
+            },
+            'playlists_max_txt': {
+                selectSql: 'SELECT max(pos) AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist LEFT OUTER JOIN all_entries_playlist_max ON playlist.p_id = all_entries_playlist_max.p_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                cache: {
+                    useCache: false
+                },
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
             },
             'rate_pers_gesamt_is': {
                 noFacet: true
@@ -375,6 +419,7 @@ export class SqlMytbDbTripConfig {
             'dateAsc': 'tr_datevon ASC, tr_name ASC',
             'forExport': 'tr_datevon ASC, tr_name ASC',
             'name': 'tr_name ASC',
+            'playlistPos': 'trip_playlist.trp_pos ASC',
             'location': 'l_lochirarchietxt ASC, tr_name ASC',
             'relevance': 'tr_datevon DESC, tr_name ASC'
         },
@@ -437,6 +482,7 @@ export class SqlMytbDbTripConfig {
             loc_id_is: 'l_id',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            playlists_txt: 'tr_playlists',
             geo_lon_s: 'tr_gps_lon',
             geo_lat_s: 'tr_gps_lat',
             geo_loc_p: 'tr_gps_loc',
@@ -457,6 +503,11 @@ export class SqlMytbDbTripConfig {
             name_s: 'tr_name',
             type_s: 'type'
         }
+    };
+
+    public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
+        table: 'trip', joinTable: 'trip_playlist', fieldReference: 'tr_id', positionField: 'trp_pos',
+        detailsField: 'trp_details'
     };
 
     public static readonly actionTagAssignConfig: ActionTagAssignTableConfigType = {

@@ -15,6 +15,7 @@
 - show details in list+show-view
 - improved layout
 - use commons 5.4.0
+- added view all_entries to show all entries (especially from database) in one searchresult  
 
 ### new features
 - backend/frontend: added statistics-section
@@ -24,7 +25,9 @@
 - backend/frontend: added groupby trip for track-list, region for routes
 - frontend: show details in list+show-view
 - backend/frontend: added support to change/order by playlist-pos
+- backend/frontend: added to append details to playlist-entry
 - backend/frontend: added playlist as entity
+- backend/frontend: added view all_entries to show all entries (especially from database) in one searchresult
 
 ### improvements
 - backend: added sort by name

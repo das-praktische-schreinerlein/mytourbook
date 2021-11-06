@@ -11,7 +11,7 @@ export class SqlMytbExportDbTrackConfig {
             {
                 profile: 'image',
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                    'FROM image INNER JOIN kategorie_full ON kategorie_full.i_id=image.i_id ' +
+                    'FROM image' +
                     'WHERE image.k_id in (:id)',
                 parameterNames: ['id']
             },

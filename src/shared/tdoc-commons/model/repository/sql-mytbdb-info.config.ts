@@ -5,6 +5,7 @@ import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-com
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {TourDocSqlUtils} from '../../services/tdoc-sql.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
+import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 
 export class SqlMytbDbInfoConfig {
     public static readonly tableConfig: TableConfig = {
@@ -16,6 +17,12 @@ export class SqlMytbDbInfoConfig {
                 from: 'LEFT JOIN location lifl ON info.l_id=lifl.l_id ',
                 triggerParams: ['loc_id_i', 'loc_id_is', 'loc_lochirarchie_txt'],
                 groupByFields: ['lifl.l_id', 'lifl.l_name']
+            },
+            {
+                from: 'LEFT JOIN info_playlist ON info.if_id=info_playlist.if_id ' +
+                    'LEFT JOIN playlist ON trip_playlist.p_id=playlist.p_id',
+                triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS if_playlists']
             },
             {
                 from: 'LEFT JOIN tour_info tift ON info.if_id = tift.if_id ' +
@@ -75,8 +82,16 @@ export class SqlMytbDbInfoConfig {
             },
         ],
         groupbBySelectFieldList: true,
-        groupbBySelectFieldListIgnore: ['if_keywords'],
+        groupbBySelectFieldListIgnore: ['if_keywords', 'if_playlists'],
         loadDetailData: [
+            {
+                profile: 'info_playlist',
+                sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS tr_playlists ' +
+                    'FROM info_playlist' +
+                    ' INNER JOIN playlist ON info_playlist.p_id=playlist.p_id ' +
+                    'WHERE info_playlist.if_id IN (:id)',
+                parameterNames: ['id']
+            },
             {
                 profile: 'extended_object_properties',
                 sql: 'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour_info.t_id) AS CHAR)) AS extended_object_properties' +
@@ -104,6 +119,15 @@ export class SqlMytbDbInfoConfig {
                     '   ORDER BY if_id, if_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
+            },
+            {
+                profile: 'linkedplaylists',
+                sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                    '   ":::position=", COALESCE(info_playlist.ifp_pos, "null"),   ":::details=", COALESCE(info_playlist.ifp_details, "null"))' +
+                    '  AS linkedplaylists' +
+                    '  FROM playlist INNER JOIN info_playlist ON playlist.p_id = info_playlist.p_id WHERE info_playlist.if_id IN (:id)' +
+                    '  ORDER BY p_name',
+                parameterNames: ['id']
             }
         ],
         selectFieldList: [
@@ -280,7 +304,27 @@ export class SqlMytbDbInfoConfig {
                 noFacet: true
             },
             'playlists_txt': {
-                noFacet: true
+                selectSql: 'SELECT 0 AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
+            },
+            'playlists_max_txt': {
+                selectSql: 'SELECT max(pos) AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist LEFT OUTER JOIN all_entries_playlist_max ON playlist.p_id = all_entries_playlist_max.p_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                cache: {
+                    useCache: false
+                },
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
             },
             'rate_pers_gesamt_is': {
                 noFacet: true
@@ -330,6 +374,7 @@ export class SqlMytbDbInfoConfig {
                 ' LEFT JOIN location_info ON location.l_id = location_info.l_id' +
                 ' WHERE location_info.if_id = info.if_id OR location.l_id = info.l_id) DESC, if_name ASC',
             'name': 'if_name ASC',
+            'playlistPos': 'info_playlist.ifp_pos ASC',
             'type': 'if_typ ASC, if_name ASC',
             'forExport': 'info.if_id ASC, if_name ASC',
             'location': 'l_lochirarchietxt ASC, if_name ASC, if_name ASC',
@@ -398,6 +443,7 @@ export class SqlMytbDbInfoConfig {
             loc_id_is: 'if_l_id',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            playlists_txt: 'if_playlists',
             geo_lon_s: 'if_gps_lon',
             geo_lat_s: 'if_gps_lat',
             geo_loc_p: 'if_gps_loc',
@@ -418,6 +464,11 @@ export class SqlMytbDbInfoConfig {
             subtype_s: 'subtype',
             type_s: 'type'
         }
+    };
+
+    public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
+        table: 'info', joinTable: 'info_playlist', fieldReference: 'if_id', positionField: 'ifp_pos',
+        detailsField: 'ifp_details'
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {

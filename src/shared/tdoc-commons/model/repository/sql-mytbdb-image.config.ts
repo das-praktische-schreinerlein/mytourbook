@@ -81,35 +81,35 @@ export class SqlMytbDbImageConfig {
             {
                 profile: 'image_playlist',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS i_playlists ' +
-                    'FROM image INNER JOIN image_playlist ON image.i_id=image_playlist.i_id' +
+                    'FROM image_playlist' +
                     ' INNER JOIN playlist ON image_playlist.p_id=playlist.p_id ' +
-                    'WHERE image.i_id IN (:id)',
+                    'WHERE image_playlist.i_id IN (:id)',
                 parameterNames: ['id']
             },
             {
                 profile: 'image_persons',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_persons ' +
-                    'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
+                    'FROM image_object' +
                     ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                     ' AND image_object.io_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
                     ' AND LOWER(o_category) LIKE "person"' +
                     ' AND (image_object.io_precision = 1' +
                     '      OR image_object.io_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
-                    'WHERE image.i_id IN (:id)',
+                    'WHERE image_object.i_id IN (:id)',
                 parameterNames: ['id']
             },
             {
                 profile: 'image_objects',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS i_objects ' +
-                    'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
+                    'FROM image_object' +
                     ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                     ' AND image_object.io_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
                     ' AND LOWER(o_category) NOT LIKE "person"' +
                     ' AND (image_object.io_precision = 1' +
                     '      OR image_object.io_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
-                    'WHERE image.i_id IN (:id)',
+                    'WHERE image_object.i_id IN (:id)',
                 parameterNames: ['id']
             },
             {
@@ -126,19 +126,19 @@ export class SqlMytbDbImageConfig {
                     ' ":::category=", objects.o_category,' +
                     ' ":::precision=", image_object.io_precision,' +
                     ' ":::state=", image_object.io_state) SEPARATOR ";;") AS i_objectdetections ' +
-                    'FROM image INNER JOIN image_object ON image.i_id=image_object.i_id' +
+                    'FROM image_object' +
                     ' INNER JOIN objects_key ON image_object.io_obj_type=objects_key.ok_key' +
                     '            AND image_object.io_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
-                    'WHERE image.i_id IN (:id)',
+                    'WHERE image_object.i_id IN (:id)',
                 parameterNames: ['id']
             },
             {
                 profile: 'keywords',
                 sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM image INNER JOIN image_keyword ON image.i_id=image_keyword.i_id' +
+                    'FROM image_keyword' +
                     ' INNER JOIN keyword ON image_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE image.i_id IN (:id)',
+                    'WHERE image_keyword.i_id IN (:id)',
                 parameterNames: ['id'],
                 modes: ['full']
             },
@@ -159,7 +159,7 @@ export class SqlMytbDbImageConfig {
             {
                 profile: 'linkedplaylists',
                 sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
-                    '   ":::position=", COALESCE(image_playlist.ip_pos, "null"))' +
+                    '   ":::position=", COALESCE(image_playlist.ip_pos, "null"),   ":::details=", COALESCE(image_playlist.ip_details, "null"))' +
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN image_playlist ON playlist.p_id = image_playlist.p_id WHERE image_playlist.i_id IN (:id)' +
                     '  ORDER BY p_name',
@@ -477,12 +477,15 @@ export class SqlMytbDbImageConfig {
                 action: AdapterFilterActions.IN
             },
             'playlists_max_txt': {
-                selectSql: 'SELECT max(ip_pos) AS count, ' +
+                selectSql: 'SELECT max(pos) AS count, ' +
                     '  p_name AS value ' +
                     'FROM' +
-                    ' playlist LEFT OUTER JOIN image_playlist ON playlist.p_id = image_playlist.p_id' +
+                    ' playlist LEFT OUTER JOIN all_entries_playlist_max ON playlist.p_id = all_entries_playlist_max.p_id' +
                     ' GROUP BY value' +
                     ' ORDER BY value',
+                cache: {
+                    useCache: false
+                },
                 filterField: 'p_name',
                 action: AdapterFilterActions.IN
             },
@@ -657,7 +660,8 @@ export class SqlMytbDbImageConfig {
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
-        table: 'image', joinTable: 'image_playlist', fieldReference: 'i_id', positionField: 'ip_pos'
+        table: 'image', joinTable: 'image_playlist', fieldReference: 'i_id', positionField: 'ip_pos',
+        detailsField: 'ip_details'
     };
 
     public static readonly rateModelConfigTypeImage: RateModelConfigTableType = {

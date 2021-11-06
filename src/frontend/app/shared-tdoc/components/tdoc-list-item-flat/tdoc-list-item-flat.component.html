@@ -72,9 +72,9 @@
             <app-tdoc-linked-infos [record]="listItem.currentRecord" [small]="false"></app-tdoc-linked-infos>
         </ng-container>
 
+        <app-tdoc-linked-playlists [record]="listItem.currentRecord"
+                                   (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
         <ng-container *ngIf="listItem.currentRecord.type === 'IMAGE' || listItem.currentRecord.type === 'VIDEO'">
-            <app-tdoc-linked-playlists [record]="listItem.currentRecord"
-                                       (actionTagEvent)="onActionTagEvent($event)"></app-tdoc-linked-playlists>
             <app-tdoc-datameta [record]="listItem.currentRecord"></app-tdoc-datameta >
         </ng-container>
     </div>

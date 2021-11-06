@@ -14,9 +14,9 @@ export class SqlMytbExportDbTripConfig {
             {
                 profile: 'image',
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
-                    'FROM trip INNER JOIN kategorie_full on trip.tr_id=kategorie_full.tr_id' +
+                    'FROM kategorie_full' +
                     ' INNER JOIN image on kategorie_full.i_id=image.i_id ' +
-                    'WHERE trip.tr_id in (:id) order by i_rate desc limit 0, 1',
+                    'WHERE kategorie_full.tr_id in (:id) order by i_rate desc limit 0, 1',
                 parameterNames: ['id']
             },
             {

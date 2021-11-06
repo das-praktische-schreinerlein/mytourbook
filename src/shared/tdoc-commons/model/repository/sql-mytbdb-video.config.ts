@@ -76,43 +76,43 @@ export class SqlMytbDbVideoConfig {
             {
                 profile: 'video_playlist',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS v_playlists ' +
-                    'FROM video INNER JOIN video_playlist ON video.v_id=video_playlist.v_id' +
+                    'FROM video_playlist' +
                     ' INNER JOIN playlist ON video_playlist.p_id=playlist.p_id ' +
-                    'WHERE video.v_id IN (:id)',
+                    'WHERE video_playlist.v_id IN (:id)',
                 parameterNames: ['id']
             },
             {
                 profile: 'video_persons',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_persons ' +
-                    'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
+                    'FROM video_object' +
                     ' INNER JOIN objects_key ON video_object.vo_obj_type=objects_key.ok_key' +
                     ' AND video_object.vo_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
                     ' AND LOWER(o_category) LIKE "person"' +
                     ' AND (video_object.vo_precision = 1' +
                     '      OR video_object.vo_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
-                    'WHERE video.v_id IN (:id)',
+                    'WHERE video_object.v_id IN (:id)',
                 parameterNames: ['id']
             },
             {
                 profile: 'video_objects',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT objects.o_name ORDER BY objects.o_name SEPARATOR ", ") AS v_objects ' +
-                    'FROM video INNER JOIN video_object ON video.v_id=video_object.v_id' +
+                    'FROM video_object' +
                     ' INNER JOIN objects_key ON video_object.vo_obj_type=objects_key.ok_key' +
                     ' AND video_object.vo_detector=objects_key.ok_detector ' +
                     ' INNER JOIN objects ON objects_key.o_id=objects.o_id ' +
                     ' AND LOWER(o_category) NOT LIKE "person"' +
                     ' AND (video_object.vo_precision = 1' +
                     '      OR video_object.vo_state in ("' + Globals.detectionOkStates.join('", "') + '"))' +
-                    'WHERE video.v_id IN (:id)',
+                    'WHERE video_object.v_id IN (:id)',
                 parameterNames: ['id']
             },
             {
                 profile: 'keywords',
                 sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM video INNER JOIN video_keyword ON video.v_id=video_keyword.v_id' +
+                    'FROM video_keyword' +
                     ' INNER JOIN keyword ON video_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE video.v_id IN (:id)',
+                    'WHERE video_keyword.v_id IN (:id)',
                 parameterNames: ['id'],
                 modes: ['full']
             },
@@ -133,7 +133,7 @@ export class SqlMytbDbVideoConfig {
             {
                 profile: 'linkedplaylists',
                 sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
-                    '   ":::position=", COALESCE(video_playlist.vp_pos, "null"))' +
+                    '   ":::position=", COALESCE(video_playlist.vp_pos, "null"),   ":::details=", COALESCE(video_playlist.vp_details, "null"))' +
                     '  AS linkedplaylists' +
                     '  FROM playlist INNER JOIN video_playlist ON playlist.p_id = video_playlist.p_id WHERE video_playlist.v_id IN (:id)' +
                     '  ORDER BY p_name',
@@ -381,12 +381,15 @@ export class SqlMytbDbVideoConfig {
                 action: AdapterFilterActions.IN
             },
             'playlists_max_txt': {
-                selectSql: 'SELECT max(vp_pos) AS count, ' +
+                selectSql: 'SELECT max(pos) AS count, ' +
                     '  p_name AS value ' +
                     'FROM' +
-                    ' playlist LEFT OUTER JOIN video_playlist ON playlist.p_id = video_playlist.p_id' +
+                    ' playlist LEFT OUTER JOIN all_entries_playlist_max ON playlist.p_id = all_entries_playlist_max.p_id' +
                     ' GROUP BY value' +
                     ' ORDER BY value',
+                cache: {
+                    useCache: false
+                },
                 filterField: 'p_name',
                 action: AdapterFilterActions.IN
             },
@@ -560,7 +563,8 @@ export class SqlMytbDbVideoConfig {
     };
 
     public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
-        table: 'video', joinTable: 'video_playlist', fieldReference: 'v_id', positionField: 'vp_pos'
+        table: 'video', joinTable: 'video_playlist', fieldReference: 'v_id', positionField: 'vp_pos',
+        detailsField: 'vp_details'
     };
 
     public static readonly rateModelConfigTypeVideo: RateModelConfigTableType = {

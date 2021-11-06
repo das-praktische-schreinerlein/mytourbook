@@ -5,6 +5,7 @@ import {ActionTagReplaceTableConfigType} from '@dps/mycms-commons/dist/action-co
 import {ActionTagAssignTableConfigType} from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assign.adapter';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
+import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 
 export class SqlMytbDbTrackConfig {
     public static readonly tableConfig: TableConfig = {
@@ -18,6 +19,12 @@ export class SqlMytbDbTrackConfig {
                     'LEFT JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id ',
                 triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS k_keywords']
+            },
+            {
+                from: 'LEFT JOIN kategorie_playlist ON kategorie.k_id=kategorie_playlist.k_id ' +
+                    'LEFT JOIN playlist ON kategorie_playlist.p_id=playlist.p_id',
+                triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS k_playlists']
             },
             {
                 from: 'LEFT JOIN kategorie_tour ON kategorie.k_id=kategorie_tour.k_id ' +
@@ -89,8 +96,16 @@ export class SqlMytbDbTrackConfig {
                 groupByFields: ['k_gpstracks_gpx_source']
             }
         ],
-        groupbBySelectFieldListIgnore: ['k_keywords'],
+        groupbBySelectFieldListIgnore: ['k_keywords', 'k_playlists'],
         loadDetailData: [
+            {
+                profile: 'kategorie_playlist',
+                sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS k_playlists ' +
+                    'FROM kategorie_playlist' +
+                    ' INNER JOIN playlist ON kategorie_playlist.p_id=playlist.p_id ' +
+                    'WHERE kategorie_playlist.k_id IN (:id)',
+                parameterNames: ['id']
+            },
             {
                 profile: 'image',
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
@@ -116,9 +131,9 @@ export class SqlMytbDbTrackConfig {
             {
                 profile: 'keywords',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM kategorie INNER JOIN kategorie_keyword ON kategorie.k_id=kategorie_keyword.k_id' +
+                    'FROM kategorie_keyword' +
                     ' INNER JOIN keyword ON kategorie_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE kategorie.k_id IN (:id)',
+                    'WHERE kategorie_keyword.k_id IN (:id)',
                 parameterNames: ['id'],
                 modes: ['full']
             },
@@ -161,6 +176,15 @@ export class SqlMytbDbTrackConfig {
                     '   ORDER BY k_datevon, k_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
+            },
+            {
+                profile: 'linkedplaylists',
+                sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                    '   ":::position=", COALESCE(kategorie_playlist.kp_pos, "null"),   ":::details=", COALESCE(kategorie_playlist.kp_details, "null"))' +
+                    '  AS linkedplaylists' +
+                    '  FROM playlist INNER JOIN kategorie_playlist ON playlist.p_id = kategorie_playlist.p_id WHERE kategorie_playlist.k_id IN (:id)' +
+                    '  ORDER BY p_name',
+                parameterNames: ['id']
             }
         ],
         selectFieldList: [
@@ -411,7 +435,27 @@ export class SqlMytbDbTrackConfig {
                 noFacet: true
             },
             'playlists_txt': {
-                noFacet: true
+                selectSql: 'SELECT 0 AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
+            },
+            'playlists_max_txt': {
+                selectSql: 'SELECT max(pos) AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist LEFT OUTER JOIN all_entries_playlist_max ON playlist.p_id = all_entries_playlist_max.p_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                cache: {
+                    useCache: false
+                },
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
             },
             'rate_pers_gesamt_is': {
                 selectField: 'k_rate_gesamt',
@@ -559,6 +603,7 @@ export class SqlMytbDbTrackConfig {
             'forExport': 'k_datevon ASC, k_name ASC',
             'name': 'k_name ASC',
             'ratePers': 'k_rate_gesamt DESC, k_datevon DESC, k_name ASC',
+            'playlistPos': 'kategorie_playlist.kp_pos ASC',
             'location': 'l_lochirarchietxt ASC, k_name ASC',
             'relevance': 'k_datevon DESC, k_name ASC'
         },
@@ -677,6 +722,7 @@ export class SqlMytbDbTrackConfig {
             keywords_txt: 'k_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            playlists_txt: 'k_playlists',
             name_s: 'k_name',
             type_s: 'type',
             actiontype_s: 'actionType',
@@ -687,6 +733,11 @@ export class SqlMytbDbTrackConfig {
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
         table: 'kategorie', joinTable: 'kategorie_keyword', fieldReference: 'k_id'
+    };
+
+    public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
+        table: 'kategorie', joinTable: 'kategorie_playlist', fieldReference: 'k_id', positionField: 'kp_pos',
+        detailsField: 'kp_details'
     };
 
     public static readonly joinModelConfigTypeLinkedRoutes: JoinModelConfigTableType = {

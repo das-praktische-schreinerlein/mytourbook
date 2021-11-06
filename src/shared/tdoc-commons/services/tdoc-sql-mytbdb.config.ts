@@ -19,6 +19,7 @@ import {SqlMytbDbTripConfig} from '../model/repository/sql-mytbdb-trip.config';
 import {SqlMytbDbNewsConfig} from '../model/repository/sql-mytbdb-news.config';
 import {SqlMytbDbInfoConfig} from '../model/repository/sql-mytbdb-info.config';
 import {SqlMytbDbPlaylistConfig} from '../model/repository/sql-mytbdb-playlist.config';
+import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 
 export class TourDocSqlMytbDbConfig {
     public static readonly tableConfigs: TableConfigs = {
@@ -33,6 +34,7 @@ export class TourDocSqlMytbDbConfig {
         'info': SqlMytbDbInfoConfig.tableConfig,
         'news': SqlMytbDbNewsConfig.tableConfig,
         'playlist': SqlMytbDbPlaylistConfig.tableConfig,
+        'all': SqlMytbDbAllConfig.tableConfig,
     };
 
     public static readonly keywordModelConfigType: KeywordModelConfigType = {
@@ -55,8 +57,23 @@ export class TourDocSqlMytbDbConfig {
         fieldName: 'p_name',
         joins: {
             'image': SqlMytbDbImageConfig.playlistModelConfigType,
+            'info': SqlMytbDbInfoConfig.playlistModelConfigType,
+            'location': SqlMytbDbLocationConfig.playlistModelConfigType,
+            'route': SqlMytbDbRouteConfig.playlistModelConfigType,
+            'track': SqlMytbDbTrackConfig.playlistModelConfigType,
+            'trip': SqlMytbDbTripConfig.playlistModelConfigType,
             'video': SqlMytbDbVideoConfig.playlistModelConfigType
-        }
+        },
+        commonChangeSuccessorPosSqls: [
+            'UPDATE image_playlist SET ip_pos = ip_pos + ? WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND ip_pos >= ?',
+            'UPDATE info_playlist SET ifp_pos = ifp_pos + ? WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND ifp_pos >= ?',
+            'UPDATE kategorie_playlist SET kp_pos = kp_pos + ? WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND kp_pos >= ?',
+            'UPDATE location_playlist SET lp_pos = lp_pos + ? WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND lp_pos >= ?',
+            'UPDATE tour_playlist SET tp_pos = tp_pos + ? WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND tp_pos >= ?',
+            'UPDATE trip_playlist SET trp_pos = trp_pos + ? WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND trp_pos >= ?',
+            'UPDATE video_playlist SET vp_pos = vp_pos + ? WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?)) AND vp_pos >= ?'
+        ],
+        commonSelectMaxPositionSql: 'SELECT max(pos) AS maxPos FROM all_entries_playlist_max WHERE p_id IN     (SELECT p_id FROM playlist      WHERE p_name IN (?))'
     };
 
     public static readonly rateModelConfigType: RateModelConfigType = {
@@ -235,5 +252,6 @@ export class TourDocSqlMytbDbConfig {
     public getActionTagReplaceConfig(): ActionTagReplaceConfigType {
         return TourDocSqlMytbDbConfig.actionTagReplaceConfig;
     }
+
 }
 

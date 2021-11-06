@@ -184,7 +184,8 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                         playlistsSrc.push('type=playlist' + this._fieldSeparator +
                             'name=' + playlists[idx].name + this._fieldSeparator +
                             'refId=' + playlists[idx].refId + this._fieldSeparator +
-                            'position=' + playlists[idx].position);
+                            'position=' + playlists[idx].position + this._fieldSeparator +
+                            'details=' + playlists[idx].details);
                     }
 
                     result['linkedplaylists_txt'] = playlistsSrc.join(this._objectSeparator);
@@ -338,6 +339,7 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
                 doc[this.mapperUtils.mapToAdapterFieldName(mapping, 'linkedplaylists_txt')],
                 'linkedplaylists_txt'));
 
+
         const dataTechValues = {};
         dataTechValues['altAsc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_asc_i', undefined);
         dataTechValues['altDesc'] = this.mapperUtils.getMappedAdapterNumberValue(mapping, doc, 'data_tech_alt_desc_i', undefined);
@@ -472,6 +474,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             case 'image':
                 const imageDocs = [];
                 docs.forEach(doc => {
+                    if (doc['i_fav_url_txt'] === undefined || doc['i_fav_url_txt'] === null) {
+                        return;
+                    }
+
                     const imageDoc = {};
                     imageDoc['name'] = record.name;
                     imageDoc['fileName'] = doc['i_fav_url_txt'];
@@ -517,6 +523,10 @@ export class TourDocAdapterResponseMapper implements GenericAdapterResponseMappe
             case 'video':
                 const videoDocs = [];
                 docs.forEach(doc => {
+                    if (doc['v_fav_url_txt'] === undefined || doc['v_fav_url_txt'] === null) {
+                        return;
+                    }
+
                     const videoDoc = {};
                     videoDoc['name'] = record.name;
                     videoDoc['fileName'] = doc['v_fav_url_txt'];

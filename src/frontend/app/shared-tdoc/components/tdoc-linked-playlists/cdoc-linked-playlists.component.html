@@ -12,7 +12,7 @@
                         <span *ngIf="!showAvailable"
                            [title]="linkedPlaylist.name">{{ linkedPlaylist.name }}</span>
                         (
-                        {{ linkedPlaylist.position }}
+                        <span [title]="linkedPlaylist.details !== undefined && linkedPlaylist.details !== null ? linkedPlaylist.details : ''">{{ linkedPlaylist.position }}</span>
                         <a (click)="submitChangePosition($event, linkedPlaylist)"
                            *ngIf="editAvailable"
                            i18n="link change Playlist|Linktext to change Playlist@@link.tourdoc.playlists.change.Playlist"

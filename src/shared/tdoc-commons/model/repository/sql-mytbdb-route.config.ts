@@ -6,6 +6,7 @@ import {ActionTagAssignJoinTableConfigType} from '@dps/mycms-commons/dist/action
 import {AdapterFilterActions} from '@dps/mycms-commons/dist/search-commons/services/mapper.utils';
 import {KeywordModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-keyword.adapter';
 import {JoinModelConfigTableType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-join.adapter';
+import {PlaylistModelConfigJoinType} from '@dps/mycms-commons/dist/action-commons/actions/common-sql-playlist.adapter';
 
 export class SqlMytbDbRouteConfig {
     public static readonly tableConfig: TableConfig = {
@@ -18,6 +19,12 @@ export class SqlMytbDbRouteConfig {
                     'LEFT JOIN keyword ON tour_keyword.kw_id=keyword.kw_id ',
                 triggerParams: ['id', 'keywords_txt', 'todoKeywords'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS t_keywords']
+            },
+            {
+                from: 'LEFT JOIN tour_playlist ON tour.t_id=tour_playlist.t_id ' +
+                    'LEFT JOIN playlist ON tour_playlist.p_id=playlist.p_id',
+                triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
+                groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS t_playlists']
             },
             {
                 from: 'LEFT JOIN tour_info ON tour.t_id=tour_info.t_id ' +
@@ -79,8 +86,16 @@ export class SqlMytbDbRouteConfig {
                 groupByFields: ['t_gpstracks_gpx']
             }
         ],
-        groupbBySelectFieldListIgnore: ['t_keywords'],
+        groupbBySelectFieldListIgnore: ['t_keywords', 't_playlists'],
         loadDetailData: [
+            {
+                profile: 'tour_playlist',
+                sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS t_playlists ' +
+                    'FROM tour_playlist' +
+                    ' INNER JOIN playlist ON tour_playlist.p_id=playlist.p_id ' +
+                    'WHERE tour_playlist.t_id IN (:id)',
+                parameterNames: ['id']
+            },
             {
                 profile: 'image',
                 sql: 'SELECT CONCAT(image.i_dir, "/", image.i_file) AS i_fav_url_txt ' +
@@ -102,9 +117,9 @@ export class SqlMytbDbRouteConfig {
             {
                 profile: 'keywords',
                 sql: 'select GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS keywords ' +
-                    'FROM tour INNER JOIN tour_keyword ON tour.t_id=tour_keyword.t_id' +
+                    'FROM tour_keyword' +
                     ' INNER JOIN keyword ON tour_keyword.kw_id=keyword.kw_id ' +
-                    'WHERE tour.t_id IN (:id)',
+                    'WHERE tour_keyword.t_id IN (:id)',
                 parameterNames: ['id'],
                 modes: ['full']
             },
@@ -154,6 +169,15 @@ export class SqlMytbDbRouteConfig {
                     '   ORDER BY CONCAT(GetLocationNameAncestry(location.l_id, location.l_name, "->"), t_name), t_id LIMIT 1)',
                 parameterNames: ['id'],
                 modes: ['details']
+            },
+            {
+                profile: 'linkedplaylists',
+                sql: 'SELECT CONCAT("type=playlist:::name=", COALESCE(p_name, "null"), ":::refId=", CAST(playlist.p_id AS CHAR),' +
+                    '   ":::position=", COALESCE(tour_playlist.tp_pos, "null"),   ":::details=", COALESCE(tour_playlist.tp_details, "null"))' +
+                    '  AS linkedplaylists' +
+                    '  FROM playlist INNER JOIN tour_playlist ON playlist.p_id = tour_playlist.p_id WHERE tour_playlist.t_id IN (:id)' +
+                    '  ORDER BY p_name',
+                parameterNames: ['id']
             }
         ],
         selectFieldList: [
@@ -392,7 +416,27 @@ export class SqlMytbDbRouteConfig {
                 noFacet: true
             },
             'playlists_txt': {
-                noFacet: true
+                selectSql: 'SELECT 0 AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist' +
+                    ' GROUP BY count, value' +
+                    ' ORDER BY value',
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
+            },
+            'playlists_max_txt': {
+                selectSql: 'SELECT max(pos) AS count, ' +
+                    '  p_name AS value ' +
+                    'FROM' +
+                    ' playlist LEFT OUTER JOIN all_entries_playlist_max ON playlist.p_id = all_entries_playlist_max.p_id' +
+                    ' GROUP BY value' +
+                    ' ORDER BY value',
+                cache: {
+                    useCache: false
+                },
+                filterField: 'p_name',
+                action: AdapterFilterActions.IN
             },
             'rate_pers_gesamt_is': {
                 selectField: 't_rate_gesamt',
@@ -695,6 +739,7 @@ export class SqlMytbDbRouteConfig {
             'forExport': 'tour.t_id ASC',
             'name': 't_name ASC',
             'ratePers': 't_rate_gesamt DESC, t_datevon DESC, t_name ASC',
+            'playlistPos': 'tour_playlist.tp_pos ASC',
             'location': 'l_lochirarchietxt ASC, t_name ASC',
             'region': 't_desc_gebiet ASC, l_lochirarchietxt ASC, t_name ASC',
             'relevance': 't_datevon DESC, t_name ASC'
@@ -831,6 +876,7 @@ export class SqlMytbDbRouteConfig {
             keywords_txt: 't_keywords',
             loc_lochirarchie_s: 'l_lochirarchietxt',
             loc_lochirarchie_ids_s: 'l_lochirarchieids',
+            playlists_txt: 't_playlists',
             route_attr_s: 't_k_route_attr',
             linked_route_attr_s: 't_kt_route_attr',
             name_s: 't_name',
@@ -843,6 +889,11 @@ export class SqlMytbDbRouteConfig {
 
     public static readonly keywordModelConfigType: KeywordModelConfigJoinType = {
         table: 'tour', joinTable: 'tour_keyword', fieldReference: 't_id'
+    };
+
+    public static readonly playlistModelConfigType: PlaylistModelConfigJoinType = {
+        table: 'tour', joinTable: 'tour_playlist', fieldReference: 't_id', positionField: 'tp_pos',
+        detailsField: 'tp_details'
     };
 
     public static readonly joinModelConfigTypeLinkedInfos: JoinModelConfigTableType = {

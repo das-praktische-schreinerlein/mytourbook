@@ -1,4 +1,4 @@
-import { DefaultUrlSerializer, UrlSerializer, UrlTree } from '@angular/router';
+import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 
 // seen on https://stackoverflow.com/questions/39541185/custom-encoding-for-urls-using-angular-2-router-using-a-sign-in-place-of-a-sp
 export default class CustomUrlSerializer implements UrlSerializer {

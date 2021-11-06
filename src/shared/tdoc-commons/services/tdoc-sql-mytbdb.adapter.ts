@@ -56,6 +56,7 @@ import {
     AssignJoinActionTagForm,
     CommonSqlActionTagAssignJoinAdapter
 } from '@dps/mycms-commons/dist/action-commons/actiontags/common-sql-actiontag-assignjoin.adapter';
+import {SqlMytbDbAllConfig} from '../model/repository/sql-mytbdb-all.config';
 
 export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, TourDocSearchForm, TourDocSearchResult> {
     private readonly actionTagODAdapter: CommonSqlActionTagObjectDetectionAdapter;
@@ -127,6 +128,27 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
 
     protected getTableConfigForTableKey(table: string): TableConfig {
         return this.dbModelConfig.getTableConfigForTableKey(table);
+    }
+
+    protected extractTable(params: AdapterQuery): string {
+        let tabKey = super.extractTable(params);
+        if (tabKey !== undefined || params.where === undefined) {
+            return tabKey;
+        }
+
+        // fallback for several types
+        const types = params.where['type_txt'];
+        if (types === undefined || types.in === undefined ||
+            !Array.isArray(types.in) || types.in.length < 1) {
+            return undefined;
+        }
+
+        tabKey = SqlMytbDbAllConfig.tableConfig.key.toLocaleLowerCase();
+        if (this.getTableConfigForTableKey(tabKey) !== undefined) {
+            return tabKey;
+        }
+
+        return undefined;
     }
 
     protected getDefaultFacets(): Facets {
@@ -331,7 +353,7 @@ export class TourDocSqlMytbDbAdapter extends GenericSqlAdapter<TourDocRecord, To
             return this.actionTagAssignAdapter.executeActionTagAssign(table, id, <AssignActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'assignjoin' && actionTagForm.key.startsWith('assignjoin')) {
             return this.actionTagAssignJoinAdapter.executeActionTagAssignJoin(table, id, <AssignJoinActionTagForm> actionTagForm, opts);
-        } else if ((table === 'image' || table === 'video') && actionTagForm.type === 'assignplaylist') {
+        } else if (actionTagForm.type === 'assignplaylist') {
             return this.actionTagPlaylistAdapter.executeActionTagPlaylist(table, id, <PlaylistActionTagForm> actionTagForm, opts);
         } else if (actionTagForm.type === 'keyword' && actionTagForm.key.startsWith('keyword')) {
             return this.actionTagKeywordAdapter.executeActionTagKeyword(table, id, <KeywordActionTagForm> actionTagForm, opts);
