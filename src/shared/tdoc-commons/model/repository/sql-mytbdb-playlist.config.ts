@@ -266,8 +266,20 @@ export class SqlMytbDbPlaylistConfig {
             }
         },
         sortMapping: {
-            'countImage': '(SELECT COUNT(DISTINCT p_sort.p_id) FROM image_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
-            'countImageDesc': '(SELECT COUNT(DISTINCT p_sort.p_id) FROM image_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
+            'countImages': '(SELECT COUNT(DISTINCT p_sort.i_id) FROM image_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
+            'countImagesDesc': '(SELECT COUNT(DISTINCT p_sort.i_id) FROM image_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
+            'countInfos': '(SELECT COUNT(DISTINCT p_sort.if_id) FROM info_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
+            'countInfosDesc': '(SELECT COUNT(DISTINCT p_sort.if_id) FROM info_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
+            'countLocations': '(SELECT COUNT(DISTINCT p_sort.l_id) FROM location_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
+            'countLocationsDesc': '(SELECT COUNT(DISTINCT p_sort.l_id) FROM location_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
+            'countRoutes': '(SELECT COUNT(DISTINCT p_sort.t_id) FROM tour_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
+            'countRoutesDesc': '(SELECT COUNT(DISTINCT p_sort.t_id) FROM tour_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
+            'countTracks': '(SELECT COUNT(DISTINCT p_sort.k_id) FROM kategorie_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
+            'countTracksDesc': '(SELECT COUNT(DISTINCT p_sort.k_id) FROM kategorie_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
+            'countTrips': '(SELECT COUNT(DISTINCT p_sort.tr_id) FROM trip_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
+            'countTripsDesc': '(SELECT COUNT(DISTINCT p_sort.tr_id) FROM trip_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
+            'countVideos': '(SELECT COUNT(DISTINCT p_sort.v_id) FROM video_playlist p_sort WHERE p_sort.p_id = playlist.p_id) ASC, p_name ASC',
+            'countVideosDesc': '(SELECT COUNT(DISTINCT p_sort.v_id) FROM video_playlist p_sort WHERE p_sort.p_id = playlist.p_id) DESC, p_name ASC',
             'name': 'p_name ASC',
             'forExport': 'playlist.p_id ASC, p_name ASC',
             'relevance': 'playlist.p_id DESC, p_name ASC'
