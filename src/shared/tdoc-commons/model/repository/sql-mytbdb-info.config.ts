@@ -20,7 +20,7 @@ export class SqlMytbDbInfoConfig {
             },
             {
                 from: 'LEFT JOIN info_playlist ON info.if_id=info_playlist.if_id ' +
-                    'LEFT JOIN playlist ON trip_playlist.p_id=playlist.p_id',
+                    'LEFT JOIN playlist ON info_playlist.p_id=playlist.p_id',
                 triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS if_playlists']
             },
@@ -95,9 +95,8 @@ export class SqlMytbDbInfoConfig {
             {
                 profile: 'extended_object_properties',
                 sql: 'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour_info.t_id) AS CHAR)) AS extended_object_properties' +
-                    '      FROM info' +
-                    '      INNER JOIN tour_info ON tour_info.if_id = info.if_id' +
-                    '      WHERE info.if_id IN (:id)' +
+                    '      FROM tour_info' +
+                    '      WHERE tour_info.if_id IN (:id)' +
                     '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(COUNT(DISTINCT location.l_id) AS CHAR)) AS extended_object_properties' +
                     '      FROM info' +

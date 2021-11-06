@@ -21,7 +21,7 @@ export class SqlMytbDbLocationConfig {
                 groupByFields: ['GROUP_CONCAT(DISTINCT keyword.kw_name ORDER BY keyword.kw_name SEPARATOR ", ") AS l_keywords']
             },
             {
-                from: 'LEFT JOIN location_playlist ON kategorie.l_id=location_playlist.l_id ' +
+                from: 'LEFT JOIN location_playlist ON location.l_id=location_playlist.l_id ' +
                     'LEFT JOIN playlist ON location_playlist.p_id=playlist.p_id',
                 triggerParams: ['playlists_txt', 'playlists_max_txt', 'playlistPos'],
                 groupByFields: ['GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS l_playlists']

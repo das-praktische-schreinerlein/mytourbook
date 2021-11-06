@@ -37,14 +37,36 @@ export class SqlMytbDbPlaylistConfig {
             {
                 profile: 'extended_object_properties',
                 sql: 'SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=", CAST(COUNT(DISTINCT image_playlist.i_id) AS CHAR)) AS extended_object_properties' +
-                    '      FROM playlist' +
-                    '      INNER JOIN image_playlist ON image_playlist.p_id = playlist.p_id' +
-                    '      WHERE playlist.p_id IN (:id)' +
+                    '      FROM image_playlist' +
+                    '      WHERE image_playlist.p_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=IMAGE_TOP_COUNT:::value=", CAST(COUNT(DISTINCT image.i_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM image INNER JOIN image_playlist ON image.i_id = image_playlist.i_id' +
+                    '      WHERE image_playlist.p_id IN (:id) AND i_rate >= 6' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(COUNT(DISTINCT info_playlist.if_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM info_playlist ' +
+                    '      WHERE info_playlist.p_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=", CAST(COUNT(DISTINCT location_playlist.l_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM location_playlist ' +
+                    '      WHERE location_playlist.p_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie_playlist.k_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM kategorie_playlist' +
+                    '      WHERE kategorie_playlist.p_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=", CAST(COUNT(DISTINCT tour_playlist.t_id) AS CHAR)) AS extended_object_properties' +
+                    '       FROM tour_playlist ' +
+                    '       WHERE tour_playlist.p_id IN (:id)' +
+                    '   UNION ' +
+                    'SELECT CONCAT("category=ENTITYCOUNT:::name=TRIP_COUNT:::value=", CAST(COUNT(DISTINCT trip_playlist.tr_id) AS CHAR)) AS extended_object_properties' +
+                    '      FROM trip_playlist' +
+                    '      WHERE trip_playlist.p_id IN (:id)' +
                     '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=", CAST(COUNT(DISTINCT video_playlist.v_id) AS CHAR)) AS extended_object_properties' +
-                    '      FROM playlist' +
-                    '      INNER JOIN video_playlist ON video_playlist.p_id = playlist.p_id' +
-                    '      WHERE playlist.p_id IN (:id)',
+                    '      FROM video_playlist' +
+                    '      WHERE video_playlist.p_id IN (:id)',
                 parameterNames: ['id']
             },
             {

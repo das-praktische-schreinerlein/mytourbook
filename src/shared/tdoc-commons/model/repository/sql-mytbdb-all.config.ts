@@ -54,20 +54,6 @@ export class SqlMytbDbAllConfig {
                 modes: ['full']
             },
             {
-                profile: 'navigation_objects',
-                sql: '(SELECT CONCAT("navid=ALL_ENTRIES_", id, ":::name=", COALESCE(meta_name, "null"), ":::navtype=", "PREDECESSOR")' +
-                    '  AS navigation_objects' +
-                    '  FROM all_entries WHERE date < (SELECT date FROM all_entries WHERE origId IN (:id) AND type IN (":type"))' +
-                    '   ORDER BY date DESC, id DESC LIMIT 1) ' +
-                    'UNION ' +
-                    ' (SELECT CONCAT("navid=ALL_ENTRIES_", id, ":::name=", COALESCE(meta_name, "null"), ":::navtype=", "SUCCESSOR")' +
-                    '  AS navigation_objects' +
-                    '  FROM all_entries WHERE date > (SELECT date FROM all_entries WHERE origId IN (:id) AND type IN (":type"))' +
-                    '   ORDER BY date, id LIMIT 1)',
-                parameterNames: ['id', 'type'],
-                modes: ['details', 'type']
-            },
-            {
                 profile: 'all_entries_playlist',
                 sql: 'SELECT GROUP_CONCAT(DISTINCT playlist.p_name ORDER BY playlist.p_name SEPARATOR ", ") AS playlists ' +
                     'FROM all_entries_playlist' +

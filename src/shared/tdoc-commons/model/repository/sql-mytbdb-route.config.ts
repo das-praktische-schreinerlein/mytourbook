@@ -131,8 +131,7 @@ export class SqlMytbDbRouteConfig {
                     '       WHERE kategorie_tour.t_id IN (:id) OR kategorie.t_id IN (:id)' +
                     '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=INFO_COUNT:::value=", CAST(COUNT(DISTINCT tour_info.if_id) AS CHAR)) AS extended_object_properties' +
-                    '      FROM info' +
-                    '      INNER JOIN tour_info ON tour_info.if_id = info.if_id' +
+                    '      FROM tour_info' +
                     '      WHERE tour_info.t_id IN (:id)' +
                     '   UNION ' +
                     'SELECT CONCAT("category=ENTITYCOUNT:::name=TRACK_COUNT:::value=", CAST(COUNT(DISTINCT kategorie.k_id) AS CHAR)) AS extended_object_properties' +
