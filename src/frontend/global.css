@@ -167,11 +167,11 @@ div#TRIPIMAGE div.card-block-image h5.record-type {
 img.picture-thumbnail {
     border-radius: 5px;
 }
-img.picture, img.picture-thumbnail-big, img.picture-small, img.picture-big, video.picture-big  {
+img.picture, img.picture-thumbnail-big, img.picture-small, img.picture-big, video.picture-big, img.picture-teaser  {
     border-radius: 10px;
 }
 
-img.picture-small, img.picture-big, video.picture-big {
+img.picture-small, img.picture-big, video.picture-big , img.picture-teaser {
     display: block;
     margin-left: auto;
     margin-right: auto;

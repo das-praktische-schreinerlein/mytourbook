@@ -124,18 +124,20 @@
                     <span>{{listItem.currentRecord.type | translate }}</span>
                 </h5>
                 <div class="teaser-image-container-inner">
-                    <ng-container *ngIf="listItem.image">
-                        <img class="picture-thumbnail" width="270px"
-                             [src]="listItem.previewUrl"
-                             (click)="submitShowImage(listItem.currentRecord)"
-                             alt="{{listItem.image.name}}">
-                    </ng-container>
-                    <ng-container *ngIf="listItem.video">
-                        <img class="picture-thumbnail" width="270px"
-                             [src]="listItem.previewUrl"
-                             (click)="submitShow(listItem.currentRecord)"
-                             alt="{{listItem.video.name}}">
-                    </ng-container>
+                    <div class="picture-teaser">
+                        <ng-container *ngIf="listItem.image">
+                            <img class="picture-teaser" width="270px"
+                                 [src]="listItem.previewUrl"
+                                 (click)="submitShowImage(listItem.currentRecord)"
+                                 alt="{{listItem.image.name}}">
+                        </ng-container>
+                        <ng-container *ngIf="listItem.video">
+                            <img class="picture-teaser" width="270px"
+                                 [src]="listItem.previewUrl"
+                                 (click)="submitShow(listItem.currentRecord)"
+                                 alt="{{listItem.video.name}}">
+                        </ng-container>
+                        </div>
                 </div>
             </div>
             <a [href]="listItem.urlShow" (click)="submitShow(listItem.currentRecord)"><h5 class="card-title">{{listItem.currentRecord.name}}</h5></a>

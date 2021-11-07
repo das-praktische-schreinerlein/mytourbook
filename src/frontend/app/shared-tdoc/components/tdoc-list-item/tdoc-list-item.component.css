@@ -24,6 +24,14 @@ div.picture-small {
     border-radius: 10px;
 }
 
+div.picture-teaser {
+    width: 270px;
+    max-width: 95%;
+    max-height: 200px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
 div.teaser-image-container-outer {
     width: 100%;
     float: left
