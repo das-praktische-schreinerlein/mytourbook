@@ -42,7 +42,12 @@ CREATE TABLE IF NOT EXISTS playlist (
   p_id int(11) NOT NULL,
   p_meta_desc text COLLATE latin1_general_ci,
   p_name varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
+  countInfos int(11) DEFAULT 0,
   countImages int(11) DEFAULT 0,
+  countLocations int(11) DEFAULT 0,
+  countRoutes int(11) DEFAULT 0,
+  countTrips int(11) DEFAULT 0,
+  countTracks int(11) DEFAULT 0,
   countVideos int(11) DEFAULT 0,
   PRIMARY KEY (p_id),
   KEY idx_p__p_id (p_id)
@@ -103,6 +108,23 @@ CREATE TABLE IF NOT EXISTS info (
   KEY idx_if__if_gesperrt (if_gesperrt)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS info_playlist;
+CREATE TABLE info_playlist
+(
+    ifp_id  int(11) NOT NULL AUTO_INCREMENT,
+    if_id   int(11) NOT NULL DEFAULT '0',
+    p_id    int(11) NOT NULL DEFAULT '0',
+    ifp_pos int(11)          DEFAULT NULL,
+    ifp_details varchar(1000) COLLATE latin1_general_ci DEFAULT NULL,
+    PRIMARY KEY (ifp_id),
+    KEY idx_ifp__ifp_id (ifp_id),
+    KEY idx_ifp__t_id (if_id),
+    KEY idx_ifp__p_id (p_id),
+    CONSTRAINT info_playlist_ibfk_1 FOREIGN KEY (if_id) REFERENCES info (if_id) ON DELETE CASCADE,
+    CONSTRAINT info_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE INDEX IF NOT EXISTS idx_IFP__IFP_POS ON info_playlist (ifp_pos);
+
 --
 -- trip-data
 --
@@ -138,6 +160,23 @@ CREATE TABLE trip (
   KEY idx_tr__l_id (l_id),
   KEY idx_tr__i_id (i_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+DROP TABLE IF EXISTS trip_playlist;
+CREATE TABLE trip_playlist
+(
+    trp_id  int(11) NOT NULL AUTO_INCREMENT,
+    tr_id   int(11) NOT NULL DEFAULT '0',
+    p_id    int(11) NOT NULL DEFAULT '0',
+    trp_pos int(11)          DEFAULT NULL,
+    trp_details varchar(1000) COLLATE latin1_general_ci DEFAULT NULL,
+    PRIMARY KEY (trp_id),
+    KEY idx_trp__trp_id (trp_id),
+    KEY idx_trp__tr_id (tr_id),
+    KEY idx_trp__p_id (p_id),
+    CONSTRAINT trip_playlist_ibfk_1 FOREIGN KEY (tr_id) REFERENCES trip (tr_id) ON DELETE CASCADE,
+    CONSTRAINT trip_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE INDEX IF NOT EXISTS idx_TRP__TRP_POS ON trip_playlist (trp_pos);
 
 --
 -- location-data
@@ -180,7 +219,7 @@ CREATE TABLE location (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 DROP TABLE IF EXISTS location_info;
-CREATE TABLE IF NOT EXISTS location_info (
+CREATE TABLE location_info (
   lif_id int(11) NOT NULL AUTO_INCREMENT,
   if_id int(11) NOT NULL,
   l_id int(11) NOT NULL,
@@ -190,6 +229,23 @@ CREATE TABLE IF NOT EXISTS location_info (
   KEY idx_lif__if_id (if_id),
   KEY idx_lif__l_id (l_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+DROP TABLE IF EXISTS location_playlist;
+CREATE TABLE location_playlist
+(
+    lp_id  int(11) NOT NULL AUTO_INCREMENT,
+    l_id   int(11) NOT NULL DEFAULT '0',
+    p_id   int(11) NOT NULL DEFAULT '0',
+    lp_pos int(11)          DEFAULT NULL,
+    lp_details varchar(1000) COLLATE latin1_general_ci DEFAULT NULL,
+    PRIMARY KEY (lp_id),
+    KEY idx_lp__lp_id (lp_id),
+    KEY idx_lp__l_id (l_id),
+    KEY idx_lp__p_id (p_id),
+    CONSTRAINT location_playlist_ibfk_1 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE,
+    CONSTRAINT location_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE INDEX IF NOT EXISTS idx_LP__LP_POS ON location_playlist (lp_pos);
 
 --
 -- destination-data
@@ -330,7 +386,7 @@ CREATE TABLE tour (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 DROP TABLE IF EXISTS tour_info;
-CREATE TABLE IF NOT EXISTS tour_info (
+CREATE TABLE tour_info (
   tif_id int(11) NOT NULL AUTO_INCREMENT,
   if_id int(11) NOT NULL,
   t_id int(11) NOT NULL,
@@ -340,6 +396,23 @@ CREATE TABLE IF NOT EXISTS tour_info (
   KEY idx_tif__if_id (if_id),
   KEY idx_tif__t_id (t_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+DROP TABLE IF EXISTS tour_playlist;
+CREATE TABLE tour_playlist
+(
+    tp_id  int(11) NOT NULL AUTO_INCREMENT,
+    t_id   int(11) NOT NULL DEFAULT '0',
+    p_id   int(11) NOT NULL DEFAULT '0',
+    tp_pos int(11)          DEFAULT NULL,
+    tp_details varchar(1000) COLLATE latin1_general_ci DEFAULT NULL,
+    PRIMARY KEY (tp_id),
+    KEY idx_tp__tp_id (tp_id),
+    KEY idx_tp__t_id (t_id),
+    KEY idx_tp__p_id (p_id),
+    CONSTRAINT tour_playlist_ibfk_1 FOREIGN KEY (t_id) REFERENCES tour (t_id) ON DELETE CASCADE,
+    CONSTRAINT tour_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE INDEX IF NOT EXISTS idx_TP__TP_POS ON tour_playlist (tp_pos);
 
 --
 -- track-data
@@ -421,6 +494,23 @@ CREATE TABLE kategorie_tour (
   KEY k_id (k_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
+DROP TABLE IF EXISTS kategorie_playlist;
+CREATE TABLE kategorie_playlist
+(
+    kp_id  int(11) NOT NULL AUTO_INCREMENT,
+    k_id   int(11) NOT NULL DEFAULT '0',
+    p_id   int(11) NOT NULL DEFAULT '0',
+    kp_pos int(11)          DEFAULT NULL,
+    kp_details varchar(1000) COLLATE latin1_general_ci DEFAULT NULL,
+    PRIMARY KEY (kp_id),
+    KEY idx_kp__kp_id (kp_id),
+    KEY idx_kp__k_id (k_id),
+    KEY idx_kp__p_id (p_id),
+    CONSTRAINT kategorie_playlist_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
+    CONSTRAINT kategorie_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE INDEX IF NOT EXISTS idx_KP__KP_POS ON kategorie_playlist (kp_pos);
+
 --
 -- image-data
 --
@@ -462,11 +552,12 @@ CREATE TABLE image (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 DROP TABLE IF EXISTS image_playlist;
-CREATE TABLE IF NOT EXISTS image_playlist (
+CREATE TABLE image_playlist (
   ip_id int(11) NOT NULL AUTO_INCREMENT,
   i_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
   ip_pos int(11) DEFAULT NULL,
+  vp_details varchar(1000) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (ip_id),
   KEY idx_ip__ip_id (ip_id),
   KEY idx_ip__i_id (i_id),
@@ -474,6 +565,7 @@ CREATE TABLE IF NOT EXISTS image_playlist (
   CONSTRAINT image_playlist_ibfk_1 FOREIGN KEY (i_id) REFERENCES image (i_id) ON DELETE CASCADE,
   CONSTRAINT image_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE INDEX IF NOT EXISTS idx_IP__IP_POS ON image_playlist (ip_pos);
 
 --
 -- video-data
@@ -516,11 +608,12 @@ CREATE TABLE video (
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 DROP TABLE IF EXISTS video_playlist;
-CREATE TABLE IF NOT EXISTS video_playlist (
+CREATE TABLE video_playlist (
   vp_id int(11) NOT NULL AUTO_INCREMENT,
   v_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
   vp_pos int(11) DEFAULT NULL,
+  vp_details varchar(1000) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (vp_id),
   KEY idx_vp__vp_id (vp_id),
   KEY idx_vp__v_id (v_id),
@@ -528,4 +621,5 @@ CREATE TABLE IF NOT EXISTS video_playlist (
   CONSTRAINT video_playlist_ibfk_1 FOREIGN KEY (v_id) REFERENCES video (v_id) ON DELETE CASCADE,
   CONSTRAINT video_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+CREATE INDEX IF NOT EXISTS idx_VP__VP_POS ON video_playlist (Vp_pos);
 

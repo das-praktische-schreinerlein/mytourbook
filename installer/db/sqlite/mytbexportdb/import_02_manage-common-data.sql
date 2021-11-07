@@ -105,3 +105,14 @@ update info
 set
     countRoutes=(select COUNT(DISTINCT tour_info.t_id) FROM tour_info WHERE tour_info.if_id = info.if_id),
     countLocations=(select COUNT(DISTINCT location_info.l_id) FROM location_info WHERE location_info.if_id = info.if_id);
+
+-- add statistics: playlist
+update playlist
+set
+    countInfos=(select COUNT(DISTINCT info_playlist.if_id) FROM info_playlist WHERE info_playlist.p_id = playlist.p_id),
+    countImages=(select COUNT(DISTINCT image_playlist.i_id) FROM image_playlist WHERE image_playlist.p_id = playlist.p_id),
+    countLocations=(select COUNT(DISTINCT location_playlist.l_id) FROM location_playlist WHERE location_playlist.p_id = playlist.p_id),
+    countRoutes=(select COUNT(DISTINCT tour_playlist.t_id) FROM tour_playlist WHERE tour_playlist.p_id = playlist.p_id),
+    countTracks=(select COUNT(DISTINCT kategorie_playlist.k_id) FROM kategorie_playlist WHERE kategorie_playlist.p_id = playlist.p_id),
+    countTrips=(select COUNT(DISTINCT trip_playlist.tr_id) FROM trip_playlist WHERE trip_playlist.p_id = playlist.p_id),
+    countVideos=(select COUNT(DISTINCT video_playlist.v_id) FROM video_playlist WHERE video_playlist.p_id = playlist.p_id);

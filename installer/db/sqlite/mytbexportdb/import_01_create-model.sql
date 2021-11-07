@@ -14,11 +14,16 @@ CREATE TABLE rates (
 -- playlist-data
 --
 DROP TABLE IF EXISTS playlist;
-CREATE TABLE IF NOT EXISTS playlist (
+CREATE TABLE playlist (
   p_id int(11) NOT NULL,
   p_meta_desc text DEFAULT NULL,
   p_name varchar(255) DEFAULT NULL,
+  countInfos int(11) DEFAULT 0,
   countImages int(11) DEFAULT 0,
+  countLocations int(11) DEFAULT 0,
+  countRoutes int(11) DEFAULT 0,
+  countTrips int(11) DEFAULT 0,
+  countTracks int(11) DEFAULT 0,
   countVideos int(11) DEFAULT 0
 );
 
@@ -68,6 +73,19 @@ CREATE TABLE info (
   if_url varchar(255) NULL
 );
 
+DROP TABLE IF EXISTS info_playlist;
+CREATE TABLE info_playlist
+(
+    ifp_id  int(11) NOT NULL PRIMARY KEY,
+    if_id   int(11) NOT NULL DEFAULT '0',
+    p_id    int(11) NOT NULL DEFAULT '0',
+    ifp_pos int(11)          DEFAULT NULL,
+    ifp_details varchar(1000) DEFAULT NULL,
+    CONSTRAINT info_playlist_ibfk_1 FOREIGN KEY (if_id) REFERENCES info (if_id) ON DELETE CASCADE,
+    CONSTRAINT info_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ;
+CREATE INDEX IF NOT EXISTS idx_IFP__IFP_POS ON info_playlist (ifp_pos);
+
 -- ---------------
 -- trip-data
 -- ---------------
@@ -99,6 +117,19 @@ CREATE TABLE trip (
   countTracks int(11) DEFAULT 0,
   countVideos int(11) DEFAULT 0
 );
+
+DROP TABLE IF EXISTS trip_playlist;
+CREATE TABLE trip_playlist
+(
+    trp_id  int(11) NOT NULL PRIMARY KEY,
+    tr_id   int(11) NOT NULL DEFAULT '0',
+    p_id    int(11) NOT NULL DEFAULT '0',
+    trp_pos int(11)          DEFAULT NULL,
+    trp_details varchar(1000) DEFAULT NULL,
+    CONSTRAINT trip_playlist_ibfk_1 FOREIGN KEY (tr_id) REFERENCES trip (tr_id) ON DELETE CASCADE,
+    CONSTRAINT trip_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ;
+CREATE INDEX IF NOT EXISTS idx_TRP__TRP_POS ON trip_playlist (trp_pos);
 
 -- ---------------
 -- location-data
@@ -138,12 +169,25 @@ CREATE TABLE location (
 );
 
 DROP TABLE IF EXISTS location_info;
-CREATE TABLE IF NOT EXISTS location_info (
+CREATE TABLE location_info (
   lif_id int(11) NOT NULL PRIMARY KEY,
   if_id int(11) NOT NULL,
   l_id int(11) NOT NULL,
   lif_linked_details varchar(255) DEFAULT NULL
 );
+
+DROP TABLE IF EXISTS location_playlist;
+CREATE TABLE location_playlist
+(
+    lp_id  int(11) NOT NULL PRIMARY KEY,
+    l_id   int(11) NOT NULL DEFAULT '0',
+    p_id   int(11) NOT NULL DEFAULT '0',
+    lp_pos int(11)          DEFAULT NULL,
+    lp_details varchar(1000) DEFAULT NULL,
+    CONSTRAINT location_playlist_ibfk_1 FOREIGN KEY (l_id) REFERENCES location (l_id) ON DELETE CASCADE,
+    CONSTRAINT location_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ;
+CREATE INDEX IF NOT EXISTS idx_LP__LP_POS ON location_playlist (lp_pos);
 
 -- ---------------
 -- destination-data
@@ -273,12 +317,25 @@ CREATE TABLE tour (
 );
 
 DROP TABLE IF EXISTS tour_info;
-CREATE TABLE IF NOT EXISTS tour_info (
+CREATE TABLE tour_info (
   tif_id int(11) NOT NULL PRIMARY KEY,
   if_id int(11) NOT NULL,
   t_id int(11) NOT NULL,
   tif_linked_details varchar(255) DEFAULT NULL
 );
+
+DROP TABLE IF EXISTS tour_playlist;
+CREATE TABLE tour_playlist
+(
+    tp_id  int(11) NOT NULL PRIMARY KEY,
+    t_id   int(11) NOT NULL DEFAULT '0',
+    p_id   int(11) NOT NULL DEFAULT '0',
+    tp_pos int(11)          DEFAULT NULL,
+    tp_details varchar(1000) DEFAULT NULL,
+    CONSTRAINT tour_playlist_ibfk_1 FOREIGN KEY (t_id) REFERENCES tour (t_id) ON DELETE CASCADE,
+    CONSTRAINT tour_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_TP__TP_POS ON tour_playlist (tp_pos);
 
 -- ---------------
 -- track-data
@@ -340,6 +397,19 @@ CREATE TABLE kategorie_tour (
   kt_route_attr VARCHAR(255) DEFAULT NULL
 );
 
+DROP TABLE IF EXISTS kategorie_playlist;
+CREATE TABLE kategorie_playlist
+(
+    kp_id  int(11) NOT NULL PRIMARY KEY,
+    k_id   int(11) NOT NULL DEFAULT '0',
+    p_id   int(11) NOT NULL DEFAULT '0',
+    kp_pos int(11)          DEFAULT NULL,
+    kp_details varchar(1000) DEFAULT NULL,
+    CONSTRAINT kategorie_playlist_ibfk_1 FOREIGN KEY (k_id) REFERENCES kategorie (k_id) ON DELETE CASCADE,
+    CONSTRAINT kategorie_playlist_ibfk_2 FOREIGN KEY (p_id) REFERENCES playlist (p_id) ON DELETE CASCADE
+) ;
+CREATE INDEX IF NOT EXISTS idx_KP__KP_POS ON kategorie_playlist (kp_pos);
+
 -- ---------------
 -- image-data
 -- ---------------
@@ -370,12 +440,14 @@ CREATE TABLE image (
 );
 
 DROP TABLE IF EXISTS image_playlist;
-CREATE TABLE IF NOT EXISTS image_playlist (
+CREATE TABLE image_playlist (
   ip_id int(11) NOT NULL PRIMARY KEY,
   i_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
-  ip_pos int(11) DEFAULT NULL
+  ip_pos int(11) DEFAULT NULL,
+  ip_details varchar(1000) DEFAULT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_IP__IP_POS ON image_playlist (ip_pos);
 
 -- ---------------
 -- video-data
@@ -407,9 +479,11 @@ CREATE TABLE video (
 );
 
 DROP TABLE IF EXISTS video_playlist;
-CREATE TABLE IF NOT EXISTS video_playlist (
+CREATE TABLE video_playlist (
   vp_id int(11) NOT NULL PRIMARY KEY,
   v_id int(11) NOT NULL DEFAULT '0',
   p_id int(11) NOT NULL DEFAULT '0',
-  vp_pos int(11) DEFAULT NULL
+  vp_pos int(11) DEFAULT NULL,
+  vp_details varchar(1000) DEFAULT NULL
 );
+CREATE INDEX IF NOT EXISTS idx_VP__VP_POS ON video_playlist (Vp_pos);

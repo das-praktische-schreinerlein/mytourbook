@@ -19,17 +19,29 @@ INSERT INTO news SELECT * FROM testmytbexportbetadb.news;
 TRUNCATE TABLE info;
 INSERT INTO info SELECT * FROM testmytbexportbetadb.info;
 
+TRUNCATE TABLE info_playlist;
+INSERT INTO info_playlist SELECT * FROM testmytbexportbetadb.info_playlist;
+
 TRUNCATE TABLE location_info;
 INSERT INTO location_info SELECT * FROM testmytbexportbetadb.location_info;
 
+TRUNCATE TABLE location_playlist;
+INSERT INTO location_playlist SELECT * FROM testmytbexportbetadb.location_playlist;
+
 TRUNCATE TABLE trip;
 INSERT INTO trip SELECT * FROM testmytbexportbetadb.trip;
+
+TRUNCATE TABLE trip_playlist;
+INSERT INTO trip_playlist SELECT * FROM testmytbexportbetadb.trip_playlist;
 
 TRUNCATE TABLE kategorie_full;
 INSERT INTO kategorie_full SELECT * FROM testmytbexportbetadb.kategorie_full;
 
 TRUNCATE TABLE kategorie_tour;
 INSERT INTO kategorie_tour SELECT * FROM testmytbexportbetadb.kategorie_tour;
+
+TRUNCATE TABLE kategorie_playlist;
+INSERT INTO kategorie_playlist SELECT * FROM testmytbexportbetadb.kategorie_playlist;
 
 TRUNCATE TABLE destination;
 INSERT INTO destination SELECT * FROM testmytbexportbetadb.destination;
@@ -39,6 +51,9 @@ INSERT INTO tour SELECT * FROM testmytbexportbetadb.tour;
 
 TRUNCATE TABLE tour_info;
 INSERT INTO tour_info SELECT * FROM testmytbexportbetadb.tour_info;
+
+TRUNCATE TABLE tour_playlist;
+INSERT INTO tour_playlist SELECT * FROM testmytbexportbetadb.tour_playlist;
 
 TRUNCATE TABLE image;
 INSERT INTO image SELECT * FROM testmytbexportbetadb.image;

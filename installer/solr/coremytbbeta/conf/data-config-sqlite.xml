@@ -13,7 +13,12 @@
                     SELECT DISTINCT playlist.p_id,
                                     'PLAYLIST'                                                   AS type,
                                     'PLAYLIST' || '_' || playlist.p_id                          AS id,
+                                    playlist.countInfos,
                                     playlist.countImages,
+                                    playlist.countLocations,
+                                    playlist.countRoutes,
+                                    playlist.countTracks,
+                                    playlist.countTrips,
                                     playlist.countVideos,
                                     p_name,
                                     p_meta_desc,
@@ -24,7 +29,12 @@
                     SELECT DISTINCT playlist.p_id,
                                     'PLAYLIST'                                                   AS type,
                                     'PLAYLIST' || '_' playlist.p_id                          AS id,
+                                    playlist.countInfos,
                                     playlist.countImages,
+                                    playlist.countLocations,
+                                    playlist.countRoutes,
+                                    playlist.countTracks,
+                                    playlist.countTrips,
                                     playlist.countVideos,
                                     p_name,
                                     p_meta_desc,
@@ -45,7 +55,12 @@
             <field column="html" name="html_txt" />
             <field column="type" name="type_s" />
             <field column="type" name="type_txt" />
+            <field column="countInfos" name="count_infos_i" />
             <field column="countImages" name="count_images_i" />
+            <field column="countLocations" name="count_locations_i" />
+            <field column="countRoutes" name="count_routes_i" />
+            <field column="countTracks" name="count_tracks_i" />
+            <field column="countTrips" name="count_trips_i" />
             <field column="countVideos" name="count_videos_i" />
 
             <!-- child='true' -->
@@ -67,10 +82,30 @@
 
             <entity name='extended_object_properties'
                     query='
+                         SELECT "category=ENTITYCOUNT:::name=INFO_COUNT:::value=" || CAST(countInfos AS CHAR) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                            UNION
                          SELECT "category=ENTITYCOUNT:::name=IMAGE_COUNT:::value=" || CAST(countImages AS CHAR) AS extended_object_properties
                               FROM playlist
                               WHERE playlist.p_id IN (${playlist.p_id})
-                           UNION
+                            UNION
+                         SELECT "category=ENTITYCOUNT:::name=LOCATION_COUNT:::value=" || CAST(countLocations AS CHAR) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                            UNION
+                         SELECT "category=ENTITYCOUNT:::name=ROUTE_COUNT:::value=" || CAST(countRoutes AS CHAR) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                            UNION
+                         SELECT "category=ENTITYCOUNT:::name=TRACK_COUNT:::value=" || CAST(countTracks AS CHAR) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                            UNION
+                         SELECT "category=ENTITYCOUNT:::name=TRIP_COUNT:::value=" || CAST(countTrips AS CHAR) AS extended_object_properties
+                              FROM playlist
+                              WHERE playlist.p_id IN (${playlist.p_id})
+                            UNION
                          SELECT "category=ENTITYCOUNT:::name=VIDEO_COUNT:::value=" || CAST(countVideos AS CHAR) AS extended_object_properties
                               FROM playlist
                               WHERE playlist.p_id IN (${playlist.p_id})
@@ -180,6 +215,21 @@
                               WHERE info.if_id IN (${info.if_id})
                     '>
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, info_playlist.ifp_pos,
+                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
+                           ":::position=" || COALESCE(info_playlist.ifp_pos, "null")
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN info_playlist ON playlist.p_id = info_playlist.p_id WHERE info_playlist.if_id IN (${info.if_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="ifp_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name='tour'
@@ -821,6 +871,21 @@
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, kategorie_playlist.kp_pos,
+                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
+                           ":::position=" || COALESCE(kategorie_playlist.kp_pos, "null")
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN kategorie_playlist ON playlist.p_id = kategorie_playlist.p_id WHERE kategorie_playlist.k_id IN (${track.k_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="ifp_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
+            </entity>
+
             <entity name='linkedroutes'
                     query='
                     SELECT * FROM (
@@ -1148,6 +1213,21 @@
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
             </entity>
 
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, tour_playlist.tp_pos,
+                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
+                           ":::position=" || COALESCE(tour_playlist.tp_pos, "null")
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN tour_playlist ON playlist.p_id = tour_playlist.p_id WHERE tour_playlist.t_id IN (${route.t_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="tp_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
+            </entity>
+
             <entity name='linkedroutes'
                     query='
                     SELECT * FROM (
@@ -1464,6 +1544,21 @@
                 <field column="year" name="year_is" />
                 <field column="k_persons" name="persons_txt" regex="[ ]+" replaceWith=" " />
                 <field column="k_objects" name="objects_txt" regex="[ ]+" replaceWith=" " />
+            </entity>
+
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, location_playlist.lp_pos,
+                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
+                           ":::position=" || COALESCE(location_playlist.lp_pos, "null")
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN location_playlist ON playlist.p_id = location_playlist.p_id WHERE location_playlist.l_id IN (${location.l_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="lp_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name='linkedinfos'
@@ -2039,6 +2134,21 @@
                               WHERE trip.tr_id IN (${trip.tr_id})
                     '>
                 <field column="extended_object_properties" name="extended_object_properties_txt"/>
+            </entity>
+
+            <entity name='linkedplaylists'
+                    query='
+                        SELECT playlist.p_id, playlist.p_name, trip_playlist.trp_pos,
+                           "type=playlist:::name=" || COALESCE(p_name, "null") || ":::refId=", CAST(playlist.p_id AS CHAR) ||
+                           ":::position=" || COALESCE(trip_playlist.trp_pos, "null")
+                          AS linkedplaylists
+                          FROM playlist INNER JOIN trip_playlist ON playlist.p_id = trip_playlist.p_id WHERE trip_playlist.tr_id IN (${trip.tr_id})
+                          ORDER BY p_name'>
+                <field column="p_id" name="playlist_id_i"/>
+                <field column="p_id" name="playlist_id_is"/>
+                <field column="p_name" name="playlists_txt"/>
+                <field column="trp_pos" name="position_is"/>
+                <field column="linkedplaylists" name="linkedplaylists_txt"/>
             </entity>
 
             <entity name='image'

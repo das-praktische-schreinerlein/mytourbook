@@ -36,6 +36,11 @@ SET
                            COALESCE(l_meta_shortdesc, ''), ' ',
                            COALESCE(l_keywords, ''), ' ');
 
+-- import playlists
+INSERT into location_playlist (lp_id, l_id, p_id, lp_pos)
+    SELECT lp_id, l_id, p_id, lp_pos
+    FROM importmytbdb_location_playlist;
+
 -- ##################
 -- import playlist
 -- ##################
@@ -61,6 +66,11 @@ WHERE toupdate.if_id=grouped.if_id;
 -- remove todos
 UPDATE info SET if_meta_desc=REPLACE(if_meta_desc, 'TODODESC', '');
 UPDATE info SET if_meta_shortdesc=REPLACE(if_meta_shortdesc, 'TODODESC', '');
+
+-- import playlists
+INSERT into info_playlist (ifp_id, if_id, p_id, ifp_pos)
+    SELECT ifp_id, if_id, p_id, ifp_pos
+    FROM importmytbdb_info_playlist;
 
 -- ##################
 -- import-locationinfos
@@ -106,6 +116,11 @@ SET
     tr_meta_shortdesc_md=tr_meta_shortdesc,
     tr_meta_shortdesc_html=tr_meta_shortdesc,
     tr_dateshow=tr_datevon;
+
+-- import playlists
+INSERT into trip_playlist (trp_id, tr_id, p_id, trp_pos)
+    SELECT trp_id, tr_id, p_id, trp_pos
+    FROM importmytbdb_trip_playlist;
 
 -- ##################
 -- import tracks
@@ -166,6 +181,11 @@ SET
     toupdate.n_id=grouped.n_id
 WHERE toupdate.k_id=grouped.k_id;
 
+-- import playlists
+INSERT into kategorie_playlist(kp_id, k_id, p_id, kp_pos)
+    SELECT kp_id, k_id, p_id, kp_pos
+    FROM importmytbdb_kategorie_playlist;
+
 -- ##################
 -- import routes
 -- ##################
@@ -207,6 +227,11 @@ SET
                            COALESCE(t_meta_shortdesc, ''), ' ',
                            COALESCE(t_keywords, ''), ' ')
 WHERE toupdate.t_id=grouped.t_id;
+
+-- import playlists
+INSERT into tour_playlist(tp_id, t_id, p_id, tp_pos)
+    SELECT tp_id, t_id, p_id, tp_pos
+    FROM importmytbdb_tour_playlist;
 
 -- ##################
 -- import-trackroutes
