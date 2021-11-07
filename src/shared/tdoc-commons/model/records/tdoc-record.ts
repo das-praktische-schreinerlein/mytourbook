@@ -355,16 +355,18 @@ export class TourDocRecordFactory extends CommonDocRecordFactory {
                 return TourDocRatePersonalRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocratetech':
                 return TourDocRateTechRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdoclinkedroutes':
+                return TourDocLinkedRouteRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdoclinkedinfos':
+                return TourDocLinkedInfoRecordFactory.instance.getSanitizedValues(values, {});
+            case 'tdoclinkedplaylists':
+                return TourDocLinkedPlaylistRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocnavigationobjects':
                 return TourDocNavigationObjectRecordFactory.instance.getSanitizedValues(values, {});
             case 'tdocextendedobjectproperties':
                 return TourDocExtendedObjectPropertyRecordFactory.instance.getSanitizedValues(values, {});
-            case 'tdoclinkedroutes':
-                return TourDocLinkedRouteRecordFactory.instance.getSanitizedValues(values, {});
-            case 'tdoclinkedinfos':
-                return TourDocLinkedInfoRecordFactory.instance.getSanitizedValues(values, {});
             default:
                 return super.getSanitizedRelationValues(relation, values);
         }
@@ -446,16 +448,18 @@ export class TourDocRecordValidator extends CommonDocRecordValidator {
                 return TourDocRatePersonalRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocratetech':
                 return TourDocRateTechRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdoclinkedroutes':
+                return TourDocLinkedRouteRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdoclinkedinfos':
+                return TourDocLinkedInfoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
+            case 'tdoclinkedplaylist':
+                return TourDocLinkedPlaylistRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocodimageobjects':
                 return TourDocObjectDetectionImageObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocnavigationobjects':
                 return TourDocNavigationObjectRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             case 'tdocextendedobjectproperties':
                 return TourDocExtendedObjectPropertyRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
-            case 'tdoclinkedroutes':
-                return TourDocLinkedRouteRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
-            case 'tdoclinkedinfos':
-                return TourDocLinkedInfoRecordValidator.instance.validateValues(values, fieldPrefix, errFieldPrefix);
             default:
                 return super.validateValueRelationDoc(relation, values, fieldPrefix, errFieldPrefix);
         }
