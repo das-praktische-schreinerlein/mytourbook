@@ -4,19 +4,18 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {CommonRoutingService} from '@dps/mycms-frontend-commons/dist/angular-commons/services/common-routing.service';
 import {CommonDocRoutingService} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/services/cdoc-routing.service';
 import {TourDocLinkedPlaylistRecord} from '../../../../shared/tdoc-commons/model/records/tdoclinkedplaylist-record';
-import {BeanUtils} from '@dps/mycms-commons/dist/commons/utils/bean.utils';
 import {GenericAppService} from '@dps/mycms-commons/dist/commons/services/generic-app.service';
 import {TourDocActionTagService} from '../../services/tdoc-actiontag.service';
 import {ToastrService} from 'ngx-toastr';
 import {TourDocSearchForm} from '../../../../shared/tdoc-commons/model/forms/tdoc-searchform';
 import {TourDocSearchResult} from '../../../../shared/tdoc-commons/model/container/tdoc-searchresult';
 import {TourDocDataService} from '../../../../shared/tdoc-commons/services/tdoc-data.service';
-import {CommonDocLinkedPlaylistsComponent, CommonDocLinkedPlaylistsComponentConfig} from './cdoc-linked-playlists.component';
+import {CommonDocLinkedPlaylistsComponent} from '@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-linked-playlists/cdoc-linked-playlists.component';
 
 @Component({
     selector: 'app-tdoc-linked-playlists',
-    templateUrl: './cdoc-linked-playlists.component.html',
-    styleUrls: ['./cdoc-linked-playlists.component.css'],
+    templateUrl: './../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-linked-playlists/cdoc-linked-playlists.component.html',
+    styleUrls: ['./../../../../../../node_modules/@dps/mycms-frontend-commons/dist/frontend-cdoc-commons/components/cdoc-linked-playlists/cdoc-linked-playlists.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TourDocLinkedPlaylistsComponent extends CommonDocLinkedPlaylistsComponent<TourDocRecord, TourDocSearchForm,
@@ -39,29 +38,6 @@ export class TourDocLinkedPlaylistsComponent extends CommonDocLinkedPlaylistsCom
 
         this.maxPlaylistValues = {};
         this.linkedPlaylists = this.record['tdoclinkedplaylists'];
-    }
-
-    protected getComponentConfig(config: {}): CommonDocLinkedPlaylistsComponentConfig {
-        let appendAvailable = false;
-        if (BeanUtils.getValue(config, 'components.tdoc-linked-playlists.appendAvailable')) {
-            appendAvailable = BeanUtils.getValue(config, 'components.tdoc-linked-playlists.appendAvailable');
-        }
-
-        let editAvailable = false;
-        if (BeanUtils.getValue(config, 'components.tdoc-linked-playlists.editAvailable')) {
-            editAvailable = BeanUtils.getValue(config, 'components.tdoc-linked-playlists.editAvailable');
-        }
-
-        let showAvailable = false;
-        if (BeanUtils.getValue(config, 'components.tdoc-linked-playlists.showAvailable')) {
-            showAvailable = BeanUtils.getValue(config, 'components.tdoc-linked-playlists.showAvailable');
-        }
-
-        return {
-            editAvailable: editAvailable,
-            appendAvailable: appendAvailable,
-            showAvailable: showAvailable
-        };
     }
 
 }

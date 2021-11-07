@@ -5,7 +5,7 @@
                 "type": "plain"
             }
         },
-        "tdoc-linked-playlists": {
+        "cdoc-linked-playlists": {
             "appendAvailable": true,
             "editAvailable": true,
             "showAvailable": true
