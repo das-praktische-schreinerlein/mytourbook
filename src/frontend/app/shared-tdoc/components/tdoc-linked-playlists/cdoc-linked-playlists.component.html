@@ -11,14 +11,17 @@
                            [title]="linkedPlaylist.name">{{ linkedPlaylist.name }}</a>
                         <span *ngIf="!showAvailable"
                            [title]="linkedPlaylist.name">{{ linkedPlaylist.name }}</span>
-                        (
-                        <span [title]="linkedPlaylist.details !== undefined && linkedPlaylist.details !== null ? linkedPlaylist.details : ''">{{ linkedPlaylist.position }}</span>
-                        <a (click)="submitChangePosition($event, linkedPlaylist)"
-                           *ngIf="editAvailable"
-                           i18n="link change Playlist|Linktext to change Playlist@@link.tourdoc.playlists.change.Playlist"
-                           i18n-title="link-title change Playlist|Linktitle to change Playlist@@linktitle.tourdoc.playlists.change.Playlist"
-                           title="Change position on Playlist">🖉</a>
-                        )
+                        <ng-container *ngIf="(linkedPlaylist.position !== undefined && linkedPlaylist.position !== null) || editAvailable">
+                            (
+                            <span [title]="linkedPlaylist.details !== undefined && linkedPlaylist.details !== null ? linkedPlaylist.details : ''">{{ linkedPlaylist.position }}</span>
+                            <span *ngIf="maxPlaylistValues[linkedPlaylist.name] > 0">/ {{ maxPlaylistValues[linkedPlaylist.name] }}</span>
+                            <a (click)="submitChangePosition($event, linkedPlaylist)"
+                               *ngIf="editAvailable"
+                               i18n="link change Playlist|Linktext to change Playlist@@link.tourdoc.playlists.change.Playlist"
+                               i18n-title="link-title change Playlist|Linktitle to change Playlist@@linktitle.tourdoc.playlists.change.Playlist"
+                               title="Change position on Playlist">🖉</a>
+                            )
+                        </ng-container>
                     </div>
                 </ng-container>
                 <div class="playlist-entry" *ngIf="appendAvailable">

@@ -33,9 +33,11 @@ export class TourDocLinkedPlaylistsComponent extends CommonDocLinkedPlaylistsCom
         if (this.record === undefined || this.record['tdoclinkedplaylists'] === undefined
             || this.record['tdoclinkedplaylists'].length <= 0) {
             this.linkedPlaylists = [];
+            this.maxPlaylistValues = {};
             return;
         }
 
+        this.maxPlaylistValues = {};
         this.linkedPlaylists = this.record['tdoclinkedplaylists'];
     }
 

@@ -29,6 +29,7 @@ export abstract class CommonDocLinkedPlaylistsComponent<R extends CommonDocRecor
     editAvailable = false;
     linkedPlaylists: P[];
     showAvailable = false;
+    maxPlaylistValues = {};
 
     @Input()
     public record: R;
